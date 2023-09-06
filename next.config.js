@@ -4,12 +4,12 @@ module.exports = {
     return [
       {
         source: '/github',
-        destination: 'https://github.com/Nutlope/twitterbio',
+        destination: 'https://github.com/willmbennett/career_launcher_ai',
         permanent: false,
       },
       {
         source: '/deploy',
-        destination: 'https://vercel.com/templates/next.js/twitter-bio',
+        destination: 'https://vercel.com/willmbennett/career-launcher-ai-k8og',
         permanent: false,
       },
     ];
