@@ -3,41 +3,52 @@
 import Image from 'next/image';
 import { useRef, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
-import DropDown, { VibeType } from '../components/DropDown';
 import Footer from '../components/Footer';
 import Github from '../components/GitHub';
 import Header from '../components/Header';
-import { useChat } from 'ai/react';
+import { useCompletion } from 'ai/react';
+import profileData from '../examples/example_profile.json';
 
 export default function Page() {
-  const [bio, setBio] = useState('');
-  const [vibe, setVibe] = useState<VibeType>('Professional');
-  const bioRef = useRef<null | HTMLDivElement>(null);
+  const [jobDescription, setJobDescription] = useState('');
+  const summaryRef = useRef<null | HTMLDivElement>(null);
 
-  const scrollToBios = () => {
-    if (bioRef.current !== null) {
-      bioRef.current.scrollIntoView({ behavior: 'smooth' });
+  const scrollToSummaries = () => {
+    if (summaryRef.current !== null) {
+      summaryRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  const { input, handleInputChange, handleSubmit, isLoading, messages } =
-    useChat({
+  const { completion, input, handleInputChange, handleSubmit, isLoading } =
+  useCompletion({
       body: {
-        vibe,
-        bio,
+        message: [
+          {
+            role: "system",
+            content: 
+              `You are a professional resume writer.
+              You will be provided with a text job description and a user profile in json format.
+              Write a resume summary based on the data in user profile and tailor it to the job description.
+              Keep the length under 4 sentances. 
+              `
+        },
+        {
+          role: "user",
+          content: 
+            `User Profile: ${profileData}
+            Job description: ${jobDescription}     `
+        }
+        ]
       },
-      onResponse() {
-        scrollToBios();
+      onFinish() {
+        scrollToSummaries();
       },
     });
 
   const onSubmit = (e: any) => {
-    setBio(input);
+    setJobDescription(input);
     handleSubmit(e);
   };
-
-  const lastMessage = messages[messages.length - 1];
-  const generatedBios = lastMessage?.role === "assistant" ? lastMessage.content : null;
 
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
@@ -53,7 +64,7 @@ export default function Page() {
           <p>Star on GitHub</p>
         </a>
         <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
-          Generate your next Twitter bio using chatGPT
+          Customize your resume using chatGPT
         </h1>
         <p className="text-slate-500 mt-5">47,118 bios generated so far.</p>
         <form className="max-w-xl w-full" onSubmit={onSubmit}>
@@ -66,9 +77,9 @@ export default function Page() {
               className="mb-5 sm:mb-0"
             />
             <p className="text-left font-medium">
-              Copy your current bio{' '}
+              Add a job description{' '}
               <span className="text-slate-500">
-                (or write a few sentences about yourself)
+                (copy and paste from the website)
               </span>
               .
             </p>
@@ -79,37 +90,16 @@ export default function Page() {
             rows={4}
             className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
             placeholder={
-              'e.g. Senior Developer Advocate @vercel. Tweeting about web development, AI, and React / Next.js. Writing nutlope.substack.com.'
+              'e.g. Senior Developer Advocate @acmecorp...'
             }
           />
-          <div className="flex mb-5 items-center space-x-3">
-            <Image src="/2-black.png" width={30} height={30} alt="1 icon" />
-            <p className="text-left font-medium">Select your vibe.</p>
-          </div>
-          <div className="block">
-            <DropDown vibe={vibe} setVibe={(newVibe) => setVibe(newVibe)} />
-          </div>
-
-          {!isLoading && (
-            <button
+          <button
               className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
               type="submit"
+              disabled={isLoading}
             >
-              Generate your bio &rarr;
-            </button>
-          )}
-          {isLoading && (
-            <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
-              disabled
-            >
-              <span className="loading">
-                <span style={{ backgroundColor: 'white' }} />
-                <span style={{ backgroundColor: 'white' }} />
-                <span style={{ backgroundColor: 'white' }} />
-              </span>
-            </button>
-          )}
+              Generate your summary &rarr;
+          </button>
         </form>
         <Toaster
           position="top-center"
@@ -118,36 +108,29 @@ export default function Page() {
         />
         <hr className="h-px bg-gray-700 border-1 dark:bg-gray-700" />
         <output className="space-y-10 my-10">
-          {generatedBios && (
+          {completion && (
             <>
               <div>
                 <h2
                   className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto"
-                  ref={bioRef}
+                  ref={summaryRef}
                 >
-                  Your generated bios
+                  Your generated summary
                 </h2>
               </div>
               <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
-                {generatedBios
-                  .substring(generatedBios.indexOf('1') + 3)
-                  .split('2.')
-                  .map((generatedBio) => {
-                    return (
-                      <div
-                        className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
-                        onClick={() => {
-                          navigator.clipboard.writeText(generatedBio);
-                          toast('Bio copied to clipboard', {
-                            icon: '✂️',
-                          });
-                        }}
-                        key={generatedBio}
-                      >
-                        <p>{generatedBio}</p>
-                      </div>
-                    );
-                  })}
+                <div
+                  className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
+                  onClick={() => {
+                    navigator.clipboard.writeText(completion);
+                    toast('Summary copied to clipboard', {
+                      icon: '✂️',
+                    });
+                  }}
+                  key={completion}
+                >
+                  <p>{completion}</p>
+                </div>
               </div>
             </>
           )}

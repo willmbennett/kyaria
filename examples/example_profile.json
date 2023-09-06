@@ -1,0 +1,61 @@
+{
+  "name": "Alex Johnson",
+  "title": "Software Developer",
+  "email": "ajohnson@email.com",
+  "phone": "123-456-7890",
+  "social_links": {
+    "Github": "github.com/alexj",
+    "LinkedIn": "linkedin.com/in/alexj"
+  },
+  "location": "Seattle, WA",
+  "summary": "Detail-oriented Software Developer experienced in Full-stack technologies. Strong analytical and problem-solving skills with a focus on delivering high-quality code. Previously worked at TechSolve, contributing to key projects and product releases.",
+  "skills": [
+      "JavaScript", "React.js", "Node.js", "Python", "Java", "Spring", "Docker", "AWS", "Kubernetes", "MongoDB", "PostgreSQL", "Git", "CI/CD", "Jenkins", "Ansible", "GraphQL", "Redux", "Nginx", "Apache", "REST API", "OAuth", "Selenium", "JUnit"
+  ],
+  "professional_experience": [
+    {
+      "title": "Full-stack Developer",
+      "company": "TechSolve",
+      "location": "Seattle, WA",
+      "start_date": "05/2019",
+      "end_date": "08/2023",
+      "responsibilities": [
+        "Worked closely with cross-functional teams to implement new features for the main web application.",
+        "Optimized backend API, reducing latency by 20% and improving system scalability.",
+        "Implemented CI/CD pipelines that improved deployment frequency by 30%.",
+        "Contributed to migrating the monolithic application to microservices, reducing system complexity."
+      ]
+    },
+    {
+      "title": "Junior Software Developer",
+      "company": "CodeCrafters",
+      "location": "San Jose, CA",
+      "start_date": "02/2018",
+      "end_date": "05/2019",
+      "responsibilities": [
+        "Automated manual testing processes, reducing QA time by 15%.",
+        "Participated in code reviews, maintaining high-quality code standards.",
+        "Implemented user analytics using Google Analytics, improving UX/UI decisions."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "degree": "Bachelor of Computer Science",
+      "institution": "State University",
+      "location": "Anytown, USA",
+      "details": [
+        "Focused on Algorithms and Data Structures.",
+        "Participated in Hackathons, securing 2nd place in the University Hackathon."
+      ]
+    },
+    {
+      "degree": "Online Courses",
+      "institution": "Coursera",
+      "location": "Online",
+      "details": [
+        "Completed courses in Web Development, Cybersecurity, and Machine Learning."
+      ]
+    }
+  ]
+}
