@@ -1,12 +1,14 @@
 'use client'
 import demoJob from '../../../../examples/example_job.json'
 import ChatWithGPT from '../../../components/ChatWithGPT';
-import JobMenu from '../../../components/jobs/JobMenu';
 import demoProfile from '../../../../examples/example_profile.json'
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 export default function Page() {
-    const [updatedSummary, setUpdatedSummary] = useState('');
+    const demoSummary = "Results-driven Senior Software Engineer with 5+ years of experience in full-stack development, specializing in backend systems. Proficient in Java, Python, and JavaScript, with expertise in RESTful APIs and microservices architecture. Skilled in optimizing performance, implementing CI/CD pipelines, and migrating monolithic applications to scalable, modular systems. Strong problem-solving abilities and a collaborative mindset, combined with a Bachelor's Degree in Computer Science and a track record of delivering high-quality software solutions. Excited to leverage skills in Java, Spring, Docker, AWS, and Kubernetes to contribute to TechSolutions Inc.'s innovative software products.";
+    //const demoSummary = ''
+    const [summary, setSummary] = useState(demoSummary);
+
     
 
 const message = [
@@ -29,25 +31,23 @@ const message = [
     ]
 
   return (
-    <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
-        <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
-            <div className='flex flex-1 w-full'>
-                <div className="w-1/4 bg-white">
-                    <JobMenu />
-                </div>
-                <div className='flex flex-1 w-full flex-col items-center justify-center text-center'>
-                    <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
-                        Let's work on your Resume
-                    </h1>
-                    <p>
-                        {demoProfile.summary}
-                    </p>
-                    <ChatWithGPT
-                        message={message}
-                    />
-                </div>
-            </div>
-        </main>
+    <div>
+        <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
+            Let's work on your Resume
+        </h1>
+        <br/>
+        <h2>Your current summary: </h2>
+        <br/>
+        <div className="bg-white rounded-xl shadow-md p-4 transition border">
+            {demoProfile.summary}
+        </div>
+        <br/>
+        <h2>Your new summary: </h2>
+        <br/>
+        <ChatWithGPT
+            message={message}
+            response={summary}
+        />
     </div>
   );
 }

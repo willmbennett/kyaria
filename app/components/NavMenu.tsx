@@ -39,14 +39,14 @@ function AuthButton() {
 export default function NavMenu() {
   const pathname = usePathname();
   return (
-    <div className="bg-white shadow-md flex justify-between items-center p-4 rounded-xl">
+    <div className="bg-white shadow-md flex justify-between items-center p-4 rounded-xl sticky top-0 z-50">
       <div className="flex space-x-4">
         <Link href="/">
           <span
             className={
               pathname === "/"
-                ? "rounded-xl border border-gray-300 px-4 py-2 text-sm text-gray-600 shadow-md"
-                : "rounded-xl border border-gray-300 px-4 py-2 text-sm text-gray-600 shadow-md hover:bg-gray-100"
+                ? "px-4 py-2 text-sm text-gray-600"
+                : "x-4 py-2 text-sm text-gray-600 hover:text-black"
             }
           >
             Home
@@ -56,8 +56,8 @@ export default function NavMenu() {
           <span
             className={
               pathname === "/jobs"
-                ? "rounded-xl border border-gray-300 px-4 py-2 text-sm text-gray-600 shadow-md"
-                : "rounded-xl border border-gray-300 px-4 py-2 text-sm text-gray-600 shadow-md hover:bg-gray-100"
+                ? "px-4 py-2 text-sm text-gray-600"
+                : "x-4 py-2 text-sm text-gray-600 hover:text-black"
             }
           >
             Jobs

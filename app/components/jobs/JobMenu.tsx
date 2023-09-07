@@ -2,24 +2,25 @@
 
 import Link from "next/link";
 import { useSelectedLayoutSegment } from "next/navigation";
+import { usePathname } from 'next/navigation'
 
 export default function JobMenu() {
-  const activeSegment = useSelectedLayoutSegment();
+  const pathname = usePathname()
 
   const links = [
-    { label: "Job Description", path: "/jobs/job", targetSegment: null },
-    { label: "Resume", path: "/jobs/job/resume", targetSegment: "resume" },
-    { label: "Story", path: "/jobs/job/story", targetSegment: "story" },
+    { label: "Job Description", path: "/jobs/job"},
+    { label: "Resume", path: "/jobs/job/resume"},
+    { label: "Story", path: "/jobs/job/story"},
   ];
 
   return (
-    <div className="bg-white">
+    <div className="bg-white sticky top-40 z-50 bg-white p-4 rounded-lg">
       {links.map((l, i) => {
         return (
           <Link key={i} href={l.path}>
             <div
-              className={`cursor-pointer block rounded-xl border border-gray-300 px-4 py-2 text-sm text-gray-600 shadow-md mb-2 ${
-                activeSegment === l.targetSegment
+              className={`px-4 py-2 text-sm text-gray-600 ${
+                pathname === l.path
                   ? "bg-gray-100"
                   : "hover:bg-gray-100"
               }`}
