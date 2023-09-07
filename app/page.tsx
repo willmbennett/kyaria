@@ -8,7 +8,6 @@ import Github from '../components/GitHub';
 import Header from '../components/Header';
 import { useCompletion } from 'ai/react';
 import profileData from '../examples/example_profile.json';
-import { SessionProvider } from "next-auth/react"
 
 export default function Page() {
   const [jobDescription, setJobDescription] = useState('');
@@ -32,13 +31,13 @@ export default function Page() {
               Write a resume summary based on the data in user profile and tailor it to the job description.
               Keep the length under 4 sentances. 
               `
-        },
-        {
-          role: "user",
-          content: 
-            `User Profile: ${profileData}
-            Job description: ${jobDescription}     `
-        }
+          },
+          {
+            role: "user",
+            content: 
+              `User Profile: ${profileData}
+              Job description: ${jobDescription}     `
+          }
         ]
       },
       onFinish() {

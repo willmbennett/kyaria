@@ -36,8 +36,8 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         <SessionProvider>
-        <NavMenu />
-          {children}
+          <NavMenu />
+              {children}
         </SessionProvider>
         <Analytics />
       </body>
