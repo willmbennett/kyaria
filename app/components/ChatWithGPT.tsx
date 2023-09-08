@@ -8,12 +8,14 @@ export default function ChatWithGPT({ message, response }) {
 
   const { messages, append } = useChat();
   
-  // If you want to automatically send the pre-generated message when the component mounts
+  // Automatically send the API call to OpenAI when the component mounts
   useEffect(() => {
+    // If we haven't already stored a response
     if (response == '') {
+      // Send the messages to ChatGPT
       append(message)
     }
-  }, []); // Empty dependency array means this useEffect runs once when the component mounts
+  }, []);
 
   const lastMessage = messages[messages.length - 1];
   const generatedBios = lastMessage?.role === "assistant" ? lastMessage.content : null;
