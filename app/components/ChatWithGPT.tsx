@@ -4,7 +4,7 @@ import { useChat } from 'ai/react';
 import { useEffect } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 
-export default function ChatWithGPT({ message, response }) {
+export default function ChatWithGPT({ message, response } : { message: any, response : string }) {
 
   const { messages, append } = useChat();
   
