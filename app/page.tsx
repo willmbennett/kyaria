@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import Image from 'next/image';
 import { useRef, useState } from 'react';
@@ -31,13 +31,13 @@ export default function Page() {
               Write a resume summary based on the data in user profile and tailor it to the job description.
               Keep the length under 4 sentances. 
               `
-        },
-        {
-          role: "user",
-          content: 
-            `User Profile: ${profileData}
-            Job description: ${jobDescription}     `
-        }
+          },
+          {
+            role: "user",
+            content: 
+              `User Profile: ${profileData}
+              Job description: ${jobDescription}     `
+          }
         ]
       },
       onFinish() {

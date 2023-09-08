@@ -1,0 +1,25 @@
+{
+  "Job Title": "Senior Software Engineer",
+  "Company": "TechSolutions Inc.",
+  "Location": "New York City, NY",
+  "Employment Type": "Full-Time",
+  "Salary Range": "$120K-$150K",
+  "Remote": "Hybrid",
+  "About Company": "TechSolutions Inc. is a leading technology company specializing in software solutions for enterprise clients. With over a decade of experience, we've been recognized as an industry innovator and have received multiple awards for our products.",
+  "Job Description": "We are seeking a talented Senior Software Engineer with a strong background in backend development. The role involves designing, developing, and maintaining complex software solutions. A successful candidate will have excellent coding skills, a passion for problem-solving, and the ability to work in a fast-paced environment.",
+  "Mandatory Requrements": [
+    "Bachelor's Degree in Computer Science or equivalent experience",
+    "5+ years of experience in software development",
+    "Proficient in programming languages such as Java, Python, or C++",
+    "Strong knowledge of RESTful APIs and microservices architecture",
+    "Experience with relational databases like MySQL or PostgreSQL",
+    "Solid understanding of data structures, algorithms, and system design",
+    "Good communication skills and ability to collaborate with cross-functional teams"
+  ],
+  "Nice to Have": [
+    "Master's Degree in Computer Science",
+    "Experience in cloud technologies like AWS, Azure, or GCP",
+    "Familiarity with front-end technologies like React, Angular, or Vue",
+    "Knowledge of containerization and orchestration tools like Docker and Kubernetes"
+  ]
+}
