@@ -2,14 +2,11 @@
 import demoJob from '../../../../examples/example_job.json'
 import ChatWithGPT from '../../../components/ChatWithGPT';
 import demoProfile from '../../../../examples/example_profile.json'
-import { useState } from 'react';
+import { useContext } from 'react';
+import { JobContext } from '../../../components/jobs/JobContext';
 
 export default function Page() {
-    //const demoSummary = "Results-driven Senior Software Engineer with 5+ years of experience in full-stack development, specializing in backend systems. Proficient in Java, Python, and JavaScript, with expertise in RESTful APIs and microservices architecture. Skilled in optimizing performance, implementing CI/CD pipelines, and migrating monolithic applications to scalable, modular systems. Strong problem-solving abilities and a collaborative mindset, combined with a Bachelor's Degree in Computer Science and a track record of delivering high-quality software solutions. Excited to leverage skills in Java, Spring, Docker, AWS, and Kubernetes to contribute to TechSolutions Inc.'s innovative software products.";
-    const demoSummary = ''
-    const [summary, setSummary] = useState(demoSummary);
-
-    
+    let { summary, setSummary } = useContext(JobContext);
 
 const message = [
     {
@@ -46,7 +43,8 @@ const message = [
         <br/>
         <ChatWithGPT
             message={message}
-            response={summary}
+            currentState={summary}
+            updateState={setSummary}
         />
     </div>
   );

@@ -1,63 +1,80 @@
 'use client';
-
-import { useChat } from 'ai/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
+import { useChat } from 'ai/react';
 
-export default function ChatWithGPT({ message, response } : { message: any, response : string }) {
+export default function ChatWithGPT({
+  message,
+  currentState,
+  updateState,
+}: {
+  message: any;
+  currentState: any;
+  updateState: any;
+}) {
+  const [finishedLoading, setFinishedLoading] = useState(false)
 
-  const { messages, append } = useChat();
-  
-  // Automatically send the API call to OpenAI when the component mounts
+  const { messages, reload, append } = useChat({
+    onFinish() {
+      setFinishedLoading(true)
+    }
+  });
+
+  // Make a call to chatGPT
+  const chatGPT = async (message: any) => {
+    setFinishedLoading(false)
+    append(message);
+  };
+
+  // Reload the last call
+  const handleReload = () => {
+    setFinishedLoading(false)
+    reload();
+  };
+
+  // Initiate the API call on page load
   useEffect(() => {
-    // If we haven't already stored a response
-    if (response == '') {
-      // Send the messages to ChatGPT
-      append(message)
+    if (currentState === '') {
+      //callOpenAI(message);
+      chatGPT(message)
     }
   }, []);
 
-  const lastMessage = messages[messages.length - 1];
-  const generatedBios = lastMessage?.role === "assistant" ? lastMessage.content : null;
+  // Save the final message to context
+  useEffect(() => {
+    if(finishedLoading) {
+      updateState(messages[messages.length - 1].content);
+    }
+  }, [finishedLoading]);
+
   
+  const lastmessage = (messages.length >= 1) && (messages[messages.length-1].role == 'assistant') ? messages[messages.length-1].content : currentState;
+
   return (
     <div>
-      <Toaster
-          position="top-center"
-          reverseOrder={false}
-          toastOptions={{ duration: 2000 }}
-        />
-      {(response != '') && (
+      <Toaster position="top-center" reverseOrder={false} toastOptions={{ duration: 2000 }} />
+      {lastmessage && (
         <div className="flex flex-1 w-full flex-col items-center justify-center text-center">
           <div
             className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
             onClick={() => {
-              navigator.clipboard.writeText(response);
-              toast('Summary copied to clipboard', {
+              navigator.clipboard.writeText(lastmessage);
+              toast('Summary copied to jobSection', {
                 icon: '✂️',
               });
             }}
-            key={response}
+            key={lastmessage}
           >
-          <p>{response}</p>
-        </div>
-      </div>
-      )}
-      {generatedBios && (
-        <div className="flex flex-1 w-full flex-col items-center justify-center text-center p-8">
-          <div
-            className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
-            onClick={() => {
-              navigator.clipboard.writeText(lastMessage.content);
-              toast('Summary copied to clipboard', {
-                icon: '✂️',
-              });
-            }}
-            key={lastMessage.id}
+            <p>{lastmessage}</p>
+          </div>
+          {/* Refresh Button */}
+          <button
+            className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+            onClick={handleReload}
           >
-          <p>{lastMessage.content}</p>
+            Refresh Output
+          </button>
         </div>
-      </div>
       )}
     </div>
   );
