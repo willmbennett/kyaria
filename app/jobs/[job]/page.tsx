@@ -9,37 +9,37 @@ export default function Page({ params }: { params: { job: string } }) {
     return (
         <div>
             <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
-                {jobData["Job Title"]}
+                {jobData["jobTitle"]}
             </h1>
             <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-3xl">
                 <p className="text-left font-medium text-lg mb-4">
-                    <strong>Company:</strong> {jobData["Company"]}
+                    <strong>Company:</strong> {jobData["company"]}
                 </p>
                 <p className="text-left font-medium text-lg mb-4">
-                    <strong>Location:</strong> {jobData["Location"]}
+                    <strong>Location:</strong> {jobData["location"]}
                 </p>
                 <p className="text-left font-medium text-lg mb-4">
-                    <strong>Employment Type:</strong> {jobData["Employment Type"]}
+                    <strong>Employment Type:</strong> {jobData["employmentType"]}
                 </p>
                 <p className="text-left font-medium text-lg mb-4">
-                    <strong>Salary Range:</strong> {jobData["Salary Range"]}
+                    <strong>Salary Range:</strong> {jobData["salaryRange"]}
                 </p>
                 <p className="text-left font-medium text-lg mb-4">
-                    <strong>Remote:</strong> {jobData["Remote"]}
+                    <strong>Remote:</strong> {jobData["remote"]}
                 </p>
                 <h2 className="text-left font-bold text-2xl mb-4">Job Description</h2>
                 <p className="text-left mb-8">
-                    {jobData["Job Description"]}
+                    {jobData["jobDescription"]}
                 </p>
                 <h2 className="text-left font-bold text-2xl mb-4">Mandatory Requirements</h2>
                 <ul className="list-disc list-inside text-left mb-8">
-                    {jobData["Mandatory Requrements"].map((req, index) => (
+                    {jobData["mandatoryRequirements"].map((req: any, index: any) => (
                         <li key={index}>{req}</li>
                     ))}
                 </ul>
                 <h2 className="text-left font-bold text-2xl mb-4">Nice to Have</h2>
                 <ul className="list-disc list-inside text-left">
-                    {jobData["Nice to Have"].map((niceToHave, index) => (
+                    {jobData["niceToHave"].map((niceToHave: any, index: any) => (
                         <li key={index}>{niceToHave}</li>
                     ))}
                 </ul>

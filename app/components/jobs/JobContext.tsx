@@ -1,7 +1,8 @@
 'use client'
 
-import { createContext, useState } from 'react';
+import React, { createContext, useState } from 'react';
 import demoJob from '../../../examples/example_job.json'
+import emptyJob from '../../../examples/job_format.json'
 
 export function generateStaticParams() {
     return [{ job: 'demo' }]
@@ -11,7 +12,38 @@ export function getJob() {
     return demoJob
 }
 
-export const JobContext = createContext({});
+type jobFormat = {
+    jobTitle: string,
+    company: string,
+    location: string,
+    employmentType: string,
+    salaryRange: string,
+    remote: string,
+    aboutCompany: string,
+    jobDescription: string,
+    mandatoryRequirements: Array<string>,
+    niceToHave: Array<string>
+}
+
+type UserContextType = {
+    jobData: jobFormat,
+    summary: string | null,
+    setSummary: (newString: any) => void,
+    story: string | null,
+    setStory: (newString: any) => void
+}
+
+const iUserContextState = {
+    jobData: emptyJob,
+    summary: null,
+    setSummary: () => { },
+    story: null,
+    setStory: () => { },
+    context: null,
+    setContext: () => { }
+}
+
+export const JobContext = createContext<UserContextType>(iUserContextState);
 
 export default function JobContextProvider({
     children, // will be a page or nested layout
