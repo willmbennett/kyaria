@@ -3,7 +3,7 @@
 import { useContext } from 'react';
 import { JobContext } from '../../components/jobs/JobContext';
 
-export default function Page({ params }: { params: { job: string } }) {
+export default function Page() {
     let { jobData } = useContext(JobContext);
 
     return (

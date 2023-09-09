@@ -1,15 +1,15 @@
 'use client'
 
-import React, { createContext, useState } from 'react';
-import demoJob from '../../../examples/example_job.json'
-import emptyJob from '../../../examples/job_format.json'
+import React, { createContext, useState, FC } from 'react';
+import demoJob from '../../../examples/example_job.json';
+import emptyJob from '../../../examples/job_format.json';
 
 export function generateStaticParams() {
-    return [{ job: 'demo' }]
+    return [{ job: 'demo' }];
 }
 
 export function getJob() {
-    return demoJob
+    return demoJob as jobFormat;
 }
 
 type jobFormat = {
@@ -26,48 +26,44 @@ type jobFormat = {
 }
 
 type UserContextType = {
-    jobData: jobFormat,
-    summary: string | null,
-    setSummary: (newString: any) => void,
-    story: string | null,
-    setStory: (newString: any) => void
-}
+    jobData: jobFormat;
+    summary: string | null;
+    setSummary: (newString: string | null) => void;
+    story: string | null;
+    setStory: (newString: string | null) => void;
+    details: Array<string>;
+    setDetails: (newArray: Array<string>) => void;
+};
 
-const iUserContextState = {
-    jobData: emptyJob,
+const iUserContextState: UserContextType = {
+    jobData: emptyJob as jobFormat,  // Assuring TypeScript that this JSON matches our type
     summary: null,
-    setSummary: () => { },
+    setSummary: () => {},
     story: null,
-    setStory: () => { },
-    context: null,
-    setContext: () => { }
-}
+    setStory: () => {},
+    details: [''],
+    setDetails: () => {}
+};
 
 export const JobContext = createContext<UserContextType>(iUserContextState);
 
-export default function JobContextProvider({
-    children, // will be a page or nested layout
-}: {
-    children: React.ReactNode
-}) {
-    // Data on the job
-    const [jobData, setJobData] = useState(getJob());
+const JobContextProvider = ({ children }: { children: React.ReactNode }) => {
+    const [jobData, setJobData] = useState<jobFormat>(getJob());
+    const [summary, setSummary] = useState<string | null>(null);
+    const [story, setStory] = useState<string | null>(null);
+    const [details, setDetails] = useState<Array<string>>(['']);
+    
+    const exportValue: UserContextType = {
+        jobData,
+        summary,
+        setSummary,
+        story,
+        setStory,
+        details,
+        setDetails,
+    };
 
-    // The summary created by ChatGPT for the user
-    //const demoSummary = "Results-driven Senior Software Engineer with 5+ years of experience in full-stack development, specializing in backend systems. Proficient in Java, Python, and JavaScript, with expertise in RESTful APIs and microservices architecture. Skilled in optimizing performance, implementing CI/CD pipelines, and migrating monolithic applications to scalable, modular systems. Strong problem-solving abilities and a collaborative mindset, combined with a Bachelor's Degree in Computer Science and a track record of delivering high-quality software solutions. Excited to leverage skills in Java, Spring, Docker, AWS, and Kubernetes to contribute to TechSolutions Inc.'s innovative software products.";
-    const demoSummary = "";
-    const [summary, setSummary] = useState(demoSummary);
+    return <JobContext.Provider value={exportValue}>{children}</JobContext.Provider>;
+};
 
-    // The story created by ChatGPT for the user
-    //const demoStory = "Results-driven Senior Software Engineer with 5+ years of experience in full-stack development, specializing in backend systems. Proficient in Java, Python, and JavaScript, with expertise in RESTful APIs and microservices architecture. Skilled in optimizing performance, implementing CI/CD pipelines, and migrating monolithic applications to scalable, modular systems. Strong problem-solving abilities and a collaborative mindset, combined with a Bachelor's Degree in Computer Science and a track record of delivering high-quality software solutions. Excited to leverage skills in Java, Spring, Docker, AWS, and Kubernetes to contribute to TechSolutions Inc.'s innovative software products.";
-    const demoStory = "";
-    const [story, setStory] = useState(demoStory);
-
-    const exportValue = {
-        jobData, setJobData,
-        summary, setSummary,
-        story, setStory
-    }
-
-    return <JobContext.Provider value={exportValue}>{children}</JobContext.Provider>
-}
+export default JobContextProvider;

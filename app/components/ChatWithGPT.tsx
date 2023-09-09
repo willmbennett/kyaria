@@ -7,10 +7,12 @@ export default function ChatWithGPT({
   message,
   currentState,
   updateState,
+  refresh
 }: {
   message: any;
   currentState: any;
   updateState: any;
+  refresh: boolean
 }) {
   const [finishedLoading, setFinishedLoading] = useState(false)
 
@@ -34,7 +36,7 @@ export default function ChatWithGPT({
 
   // Initiate the API call on page load
   useEffect(() => {
-    if (currentState === '') {
+    if (!currentState) {
       //callOpenAI(message);
       chatGPT(message)
     }
@@ -43,12 +45,12 @@ export default function ChatWithGPT({
   // Save the final message to context
   useEffect(() => {
     if(finishedLoading) {
-      updateState(messages[messages.length - 1].content);
+      updateState(messages[messages.length - 1].content.replace(/^"|"$/g, ''));
     }
   }, [finishedLoading]);
 
   
-  const lastmessage = (messages.length >= 1) && (messages[messages.length-1].role == 'assistant') ? messages[messages.length-1].content : currentState;
+  const lastmessage = (messages.length >= 1) && (messages[messages.length-1].role == 'assistant') ? messages[messages.length-1].content.replace(/^"|"$/g, '') : currentState;
 
   return (
     <div>
@@ -68,12 +70,14 @@ export default function ChatWithGPT({
             <p>{lastmessage}</p>
           </div>
           {/* Refresh Button */}
+          {refresh && (
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
             onClick={handleReload}
           >
             Refresh Output
           </button>
+          )}
         </div>
       )}
     </div>

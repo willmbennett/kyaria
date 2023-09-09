@@ -8,6 +8,7 @@ export default function JobMenu({ jobName }: {jobName: string}) {
 
   const links = [
     { label: "Job Description", path: `/jobs/${jobName}`},
+    { label: "Company", path: `/jobs/${jobName}/company`},
     { label: "Resume", path: `/jobs/${jobName}/resume`},
     { label: "Story", path: `/jobs/${jobName}/story`},
   ];

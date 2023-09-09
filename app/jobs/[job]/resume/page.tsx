@@ -8,24 +8,24 @@ import { JobContext } from '../../../components/jobs/JobContext';
 export default function Page() {
     let { summary, setSummary } = useContext(JobContext);
 
-const message = [
-    {
-        role: "system",
-        content: 
-        `You are a professional resume writer.
-        `
-    },
-    {
-        role: "user",
-        content: `
-        Write me a resume summary tailored for this job description ${JSON.stringify(demoJob)} based on:
-        1. My experience: ${JSON.stringify(demoProfile.professional_experience)}
-        2. My skills: ${JSON.stringify(demoProfile.skills)}
-        3. My education: ${JSON.stringify(demoProfile.education)}
-        Keep the length under 4 sentances. 
-        `
-    }
+    const message = [
+        {
+            "role": "system",
+            "content": "You are a professional resume writer specialized in crafting personalized resume summaries. The goal is to write a summary tailored to a specific job description. The summary should capture the individual's experience, skills, and education and should not exceed four sentences."
+        },
+        {
+            "role": "user",
+            "content": `Please write me a tailored resume summary for the following job description: 
+            - Job description: ${JSON.stringify(demoJob)} 
+            Based on the following details: 
+            1. My professional experience: ${JSON.stringify(demoProfile.professional_experience)} 
+            2. My skills: ${JSON.stringify(demoProfile.skills)} 
+            3. My education: ${JSON.stringify(demoProfile.education)} 
+    
+            Remember to keep the summary under four sentences.`
+        }
     ]
+    
 
   return (
     <div>
