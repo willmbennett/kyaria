@@ -27,6 +27,10 @@ export default function Page() {
                 <p className="text-left font-medium text-lg mb-4">
                     <strong>Remote:</strong> {jobData["remote"]}
                 </p>
+                <h2 className="text-left font-bold text-2xl mb-4">About the Company</h2>
+                <p className="text-left mb-8">
+                    {jobData["aboutCompany"]}
+                </p>
                 <h2 className="text-left font-bold text-2xl mb-4">Job Description</h2>
                 <p className="text-left mb-8">
                     {jobData["jobDescription"]}

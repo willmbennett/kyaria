@@ -1,12 +1,11 @@
 'use client'
-import demoJob from '../../../../examples/example_job.json'
+
 import ChatWithGPT from '../../../components/ChatWithGPT';
-import demoProfile from '../../../../examples/example_profile.json'
 import { useContext } from 'react';
 import { JobContext } from '../../../components/jobs/JobContext';
 
 export default function Page() {
-    let { summary, setSummary } = useContext(JobContext);
+    let { summary, setSummary, jobData, profileData } = useContext(JobContext);
 
     const message = [
         {
@@ -16,11 +15,11 @@ export default function Page() {
         {
             "role": "user",
             "content": `Please write me a tailored resume summary for the following job description: 
-            - Job description: ${JSON.stringify(demoJob)} 
+            - Job description: ${JSON.stringify(jobData)} 
             Based on the following details: 
-            1. My professional experience: ${JSON.stringify(demoProfile.professional_experience)} 
-            2. My skills: ${JSON.stringify(demoProfile.skills)} 
-            3. My education: ${JSON.stringify(demoProfile.education)} 
+            1. My professional experience: ${JSON.stringify(profileData.professional_experience)} 
+            2. My skills: ${JSON.stringify(profileData.skills)} 
+            3. My education: ${JSON.stringify(profileData.education)} 
     
             Remember to keep the summary under four sentences.`
         }
@@ -36,7 +35,7 @@ export default function Page() {
         <h2>Your current summary: </h2>
         <br/>
         <div className="bg-white rounded-xl shadow-md p-4 transition border">
-            {demoProfile.summary}
+            {profileData.summary}
         </div>
         <br/>
         <h2>Your new summary: </h2>
@@ -45,6 +44,8 @@ export default function Page() {
             message={message}
             currentState={summary}
             updateState={setSummary}
+            refresh={true}
+            temp={0.3}
         />
     </div>
   );

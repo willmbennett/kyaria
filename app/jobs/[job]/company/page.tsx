@@ -1,6 +1,5 @@
 'use client'
 import ChatWithGPT from '../../../components/ChatWithGPT';
-import demoProfile from '../../../../examples/example_profile.json'
 import { useContext } from 'react';
 import { JobContext } from '../../../components/jobs/JobContext';
 
@@ -48,6 +47,7 @@ export default function Page() {
                         currentState={details[index]}
                         updateState={(newDetails: string) => updateDetails(index, newDetails)}
                         refresh={false}
+                        temp={0.3}
                     />
                     </div>
                     

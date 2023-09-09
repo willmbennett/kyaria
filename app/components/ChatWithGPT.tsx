@@ -7,16 +7,21 @@ export default function ChatWithGPT({
   message,
   currentState,
   updateState,
-  refresh
+  refresh,
+  temp
 }: {
   message: any;
   currentState: any;
   updateState: any;
-  refresh: boolean
+  refresh: boolean;
+  temp: number;
 }) {
   const [finishedLoading, setFinishedLoading] = useState(false)
 
   const { messages, reload, append } = useChat({
+    body: {
+      temp: temp
+    },
     onFinish() {
       setFinishedLoading(true)
     }
@@ -67,7 +72,7 @@ export default function ChatWithGPT({
             }}
             key={lastmessage}
           >
-            <p>{lastmessage}</p>
+            <div className="product-des" dangerouslySetInnerHTML={{ __html: lastmessage }}></div>
           </div>
           {/* Refresh Button */}
           {refresh && (
