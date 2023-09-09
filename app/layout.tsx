@@ -5,8 +5,8 @@ import SessionProvider from './components/SessionProvider'
 import NavMenu from './components/NavMenu';
 import '../styles/globals.css';
 
-const title = 'Twitter Bio Generator';
-const description = 'Generate your next Twitter bio in seconds.';
+const title = 'Launch Your Career';
+const description = 'Launch your career with the power of AI';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://twitterbio.io'),

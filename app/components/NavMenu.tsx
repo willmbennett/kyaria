@@ -46,7 +46,7 @@ export default function NavMenu() {
             className={
               pathname === "/"
                 ? "px-4 py-2 text-sm text-gray-600"
-                : "x-4 py-2 text-sm text-gray-600 hover:text-black"
+                : "px-4 py-2 text-sm text-gray-600 hover:text-black"
             }
           >
             Home
@@ -57,7 +57,7 @@ export default function NavMenu() {
             className={
               pathname === "/jobs"
                 ? "px-4 py-2 text-sm text-gray-600"
-                : "x-4 py-2 text-sm text-gray-600 hover:text-black"
+                : "px-4 py-2 text-sm text-gray-600 hover:text-black"
             }
           >
             Jobs

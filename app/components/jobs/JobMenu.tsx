@@ -1,16 +1,15 @@
 'use client';
 
 import Link from "next/link";
-import { useSelectedLayoutSegment } from "next/navigation";
 import { usePathname } from 'next/navigation'
 
-export default function JobMenu() {
+export default function JobMenu({ jobName }: {jobName: string}) {
   const pathname = usePathname()
 
   const links = [
-    { label: "Job Description", path: "/jobs/job"},
-    { label: "Resume", path: "/jobs/job/resume"},
-    { label: "Story", path: "/jobs/job/story"},
+    { label: "Job Description", path: `/jobs/${jobName}`},
+    { label: "Resume", path: `/jobs/${jobName}/resume`},
+    { label: "Story", path: `/jobs/${jobName}/story`},
   ];
 
   return (
