@@ -1,12 +1,12 @@
 {
   "jobTitle": "Senior Software Engineer",
-  "company": "TechSolutions Inc.",
+  "company": "Google",
   "location": "New York City, NY",
   "employmentType": "Full-Time",
   "salaryRange": "$120K-$150K",
   "remote": "Hybrid",
-  "aboutCompany": "TechSolutions Inc. is a leading technology company specializing in software solutions for enterprise clients. With over a decade of experience, we've been recognized as an industry innovator and have received multiple awards for our products.",
-  "jobDescription": "We are seeking a talented Senior Software Engineer with a strong background in backend development. The role involves designing, developing, and maintaining complex software solutions. A successful candidate will have excellent coding skills, a passion for problem-solving, and the ability to work in a fast-paced environment.",
+  "aboutCompany": "Google is a multinational technology company specializing in Internet-related services and products. These include search engines, cloud computing, software, and hardware. Known for fostering an open and collaborative work environment, Google has consistently been named one of the 'Best Places to Work' worldwide.",
+  "jobDescription": "We are looking for a Senior Software Engineer with a strong background in backend development. The role involves designing, developing, and maintaining complex software solutions that contribute to our diverse range of products and services. The successful candidate will have excellent coding skills, a passion for problem-solving, and the ability to work in a fast-paced, innovative environment.",
   "mandatoryRequirements": [
       "Bachelor's Degree in Computer Science or equivalent experience",
       "5+ years of experience in software development",
@@ -18,7 +18,7 @@
   ],
   "niceToHave": [
       "Master's Degree in Computer Science",
-      "Experience in cloud technologies like AWS, Azure, or GCP",
+      "Experience in cloud technologies like Google Cloud Platform (GCP)",
       "Familiarity with front-end technologies like React, Angular, or Vue",
       "Knowledge of containerization and orchestration tools like Docker and Kubernetes"
   ]

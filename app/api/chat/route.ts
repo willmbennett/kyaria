@@ -11,13 +11,18 @@ const openai = new OpenAIApi(config);
 export const runtime = 'edge';
 
 export async function POST(req: Request) {
-  const { messages } = await req.json();
+  const { messages, temp } = await req.json();
 
   // Ask OpenAI for a streaming completion given the prompt
   const response = await openai.createChatCompletion({
-    model: 'gpt-3.5-turbo',
-    stream: true,
-    messages: messages,
+    model: 'gpt-4',  // Use the GPT-4 model for better performance
+    temperature: temp, // Lower temperature for more deterministic output
+    top_p: 1,         // Controls diversity. Lower values like 0.9 or 1 will make the output more focused, only change this OR temperature
+    frequency_penalty: 0, // Optional: You may tweak this for more domain-specific answers
+    presence_penalty: 0,  // Optional: You may tweak this to make the model more "present" in the conversation
+    max_tokens: 500,      // Limit the response length
+    stream: true,         // Enable streaming
+    messages: messages    // Your conversation history
   });
 
   // Convert the response into a friendly text-stream

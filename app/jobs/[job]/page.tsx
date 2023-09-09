@@ -3,7 +3,7 @@
 import { useContext } from 'react';
 import { JobContext } from '../../components/jobs/JobContext';
 
-export default function Page({ params }: { params: { job: string } }) {
+export default function Page() {
     let { jobData } = useContext(JobContext);
 
     return (
@@ -26,6 +26,10 @@ export default function Page({ params }: { params: { job: string } }) {
                 </p>
                 <p className="text-left font-medium text-lg mb-4">
                     <strong>Remote:</strong> {jobData["remote"]}
+                </p>
+                <h2 className="text-left font-bold text-2xl mb-4">About the Company</h2>
+                <p className="text-left mb-8">
+                    {jobData["aboutCompany"]}
                 </p>
                 <h2 className="text-left font-bold text-2xl mb-4">Job Description</h2>
                 <p className="text-left mb-8">
