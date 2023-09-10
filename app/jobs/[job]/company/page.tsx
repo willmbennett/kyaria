@@ -26,7 +26,7 @@ export default function Page() {
                 const message = [
                     {
                         role: "system",
-                        content: "You are a business intelligence bot that provides detailed information about companies."
+                        content: "You are a business intelligence bot that provides detailed information about companies. Style the results using HTML format."
                     },
                     {
                         role: "user",
@@ -47,7 +47,7 @@ export default function Page() {
                         currentState={details[index]}
                         updateState={(newDetails: string) => updateDetails(index, newDetails)}
                         refresh={false}
-                        temp={0.3}
+                        copy={false}
                     />
                     </div>
                     

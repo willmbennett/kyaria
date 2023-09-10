@@ -44,8 +44,6 @@ export default function Page() {
             message={message}
             currentState={summary}
             updateState={setSummary}
-            refresh={true}
-            temp={0.3}
         />
     </div>
   );
