@@ -60,7 +60,7 @@ export default function NavMenu() {
           </Link>
         </button>
         <button
-          className=' inline-flex p-3 hover:bg-green-600 rounded lg:hidden text-gray-600 ml-auto hover:text-gray-600 outline-none'
+          className=' inline-flex p-3 hover:bg-gray-600 rounded lg:hidden text-gray-600 ml-auto hover:text-gray-600 outline-none'
           onClick={handleClick}
         >
           <svg
@@ -80,8 +80,7 @@ export default function NavMenu() {
         </button>
         {/*Note that in this div we will use a ternary operator to decide whether or not to display the content of the div  */}
         <div
-          className={`${active ? '' : 'hidden'
-            }   w-full lg:inline-flex lg:flex-grow lg:w-auto`}
+          className={`${active ? '' : 'hidden'}  w-full lg:inline-flex lg:flex-grow lg:w-auto`}
         >
           <div className='lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full items-center items-start  flex flex-col lg:h-auto'>
             <button onClick={handleLinkClick}>
