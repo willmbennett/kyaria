@@ -15,14 +15,14 @@ export default function JobsLayout({
     <section>
       <JobContextProvider>
       <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen bg-gray-100">
-        <div className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-6 sm:mt-10">
+        <div className="flex flex-1 w-full flex-col items-center justify-center text-center lg:px-4 lg:mt-6">
           <div className="flex flex-1 w-full">
               <div className="w-1/4 hidden lg:flex lg:flex-col">
                 <JobMenu
                   jobName={job}
                 />
               </div>
-              <div className="flex flex-1 w-full flex-col items-center text-center p-8">
+              <div className="flex flex-1 w-full flex-col items-center text-center p-1 lg:p-8">
                 {children}
               </div>
           </div>
