@@ -47,6 +47,7 @@ export default function Page() {
                     [`${expIndex}-${respIndex}`]: newStory
                   });
                 }}
+                copy={false}
                 temp={0.5}
               />
               <br />

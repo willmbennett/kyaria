@@ -10,6 +10,7 @@ export default function JobMenu({ jobName }: {jobName: string}) {
     { label: "Job Description", path: `/jobs/${jobName}`},
     { label: "Company", path: `/jobs/${jobName}/company`},
     { label: "Resume", path: `/jobs/${jobName}/resume`},
+    { label: "Cover Letter", path: `/jobs/${jobName}/coverletter`},
     { label: "Story", path: `/jobs/${jobName}/story`},
     { label: "Experience", path: `/jobs/${jobName}/experience`},
   ];
