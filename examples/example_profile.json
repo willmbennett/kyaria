@@ -9,6 +9,14 @@
   },
   "location": "Seattle, WA",
   "summary": "Detail-oriented Software Developer experienced in Full-stack technologies. Strong analytical and problem-solving skills with a focus on delivering high-quality code. Previously worked at TechSolve, contributing to key projects and product releases.",
+  "areas_of_expertise": [
+    "Backend Development",
+    "Frontend Development",
+    "DevOps",
+    "Automated Testing",
+    "Cloud Computing",
+    "API Design"
+  ],
   "skills": [
       "JavaScript", "React.js", "Node.js", "Python", "Java", "Spring", "Docker", "AWS", "Kubernetes", "MongoDB", "PostgreSQL", "Git", "CI/CD", "Jenkins", "Ansible", "GraphQL", "Redux", "Nginx", "Apache", "REST API", "OAuth", "Selenium", "JUnit"
   ],

@@ -8,6 +8,11 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
     "./app/**/*.{js,ts,jsx,tsx}",
   ],
+  variants: {
+    extend: {
+      display: ["group-hover"],
+    },
+  },
   theme: {
     extend: {},
   },

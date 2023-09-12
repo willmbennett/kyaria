@@ -3,9 +3,10 @@
     "title": "",
     "email": "",
     "phone": "",
-    "social_links": {"": "", "": ""},
+    "social_links": {"": ""},
     "location": "",
     "summary": "",
+    "areas_of_expertise": ["",""],
     "skills": ["", ""],
     "professional_experience": [
         {

@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,
-    max_tokens: 200,
+    max_tokens: 4000,
     stream: false,
     n: 1,
   };
@@ -43,6 +43,8 @@ export async function POST(request: NextRequest) {
 
   console.log("res")
   console.log(OpenAIResData)
+
+  console.log(OpenAIResData.choices[0].message.content)
 
   return NextResponse.json(OpenAIResData)
 }

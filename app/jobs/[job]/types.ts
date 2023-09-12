@@ -16,8 +16,8 @@ export interface UserContextType {
     jobData: jobFormat;
     profileData: profileFormat;
     companyData: companyFormat;
-    summary: string | null;
-    setSummary: (newString: string | null) => void;
+    newResume: profileFormat;
+    setNewResume: (newResume: profileFormat) => void;
     coverLetter: string | null;
     setCoverLetter: (newString: string | null) => void;
     story: string | null;
