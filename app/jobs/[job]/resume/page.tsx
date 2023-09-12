@@ -1,6 +1,6 @@
 'use client'
 
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { JobContext } from '../../../components/jobs/JobContext';
 import { Resume } from '../../../components/jobs/Resume';
 
