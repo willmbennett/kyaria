@@ -8,7 +8,7 @@ export default function Page() {
 
     return (
         <div className='w-full'>
-            <h1 className="sm:text-6xl text-4xlmax-w-[708px] font-bold text-slate-900 mb-8">
+            <h1 className="text-4xl sm:text-6xl text-4xlmax-w-[708px] font-bold text-slate-900 mb-8">
                 {companyData.name}
             </h1>
             <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-3xl">

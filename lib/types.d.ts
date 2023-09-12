@@ -7,6 +7,7 @@ interface profileFormat {
     social_links: Record<string, string>;
     location: string;
     summary: string;
+    areas_of_expertise: string[];
     skills: string[];
     professional_experience: {
         title: string;

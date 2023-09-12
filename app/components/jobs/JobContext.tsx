@@ -35,8 +35,8 @@ const iUserContextState: UserContextType = {
     jobData: emptyJob as jobFormat,  // Assuring TypeScript that this JSON matches our type
     profileData: emptyProfile as profileFormat,  // Assuring TypeScript that this JSON matches our type
     companyData: emptyCompany as companyFormat,  // Assuring TypeScript that this JSON matches our type
-    summary: null,
-    setSummary: () => { },
+    newResume: emptyProfile as profileFormat,
+    setNewResume: () => { },
     coverLetter: null,
     setCoverLetter: () => { },
     story: null,
@@ -48,11 +48,11 @@ const iUserContextState: UserContextType = {
 export const JobContext = createContext<UserContextType>(iUserContextState);
 
 const JobContextProvider = ({ children }: { children: React.ReactNode }) => {
-    const [jobData, setJobData] = useState<jobFormat>(getJob());
-    const [profileData, setProfileData] = useState<profileFormat>(getProfile());
-    const [companyData, setCompanyData] = useState<companyFormat>(getCompanies());
+    const jobData = getJob();
+    const profileData = getProfile();
+    const companyData = getCompanies();
 
-    const [summary, setSummary] = useState<string | null>(demoSummary);
+    const [newResume, setNewResume] = useState<profileFormat>(demoProfile);
 
     const [coverLetter, setCoverLetter] = useState<string | null>(demoCoverLetter);
 
@@ -64,8 +64,8 @@ const JobContextProvider = ({ children }: { children: React.ReactNode }) => {
         jobData,
         profileData,
         companyData,
-        summary,
-        setSummary,
+        newResume,
+        setNewResume,
         coverLetter,
         setCoverLetter,
         story,

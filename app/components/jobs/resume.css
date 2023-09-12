@@ -1,0 +1,285 @@
+.template {
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+
+.template .div {
+    background-color: var(--white);
+    height: 792px;
+    position: relative;
+    width: 612px;
+}
+
+.template .title {
+    align-items: flex-start;
+    display: inline-flex;
+    flex-direction: column;
+    left: 40px;
+    position: absolute;
+    top: 40px;
+}
+
+.template .text-wrapper {
+    color: var(--blue);
+    font-family: "Arima Madurai-Bold", Helvetica;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: normal;
+    margin-top: -1px;
+    position: relative;
+    width: fit-content;
+}
+
+.template .text-wrapper-2 {
+    color: var(--black);
+    font-family: "Mulish-Regular", Helvetica;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: normal;
+    position: relative;
+    width: fit-content;
+}
+
+.template .auto-layout-left {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    left: 40px;
+    position: absolute;
+    top: 100px;
+    width: 324px;
+}
+
+.template .p {
+    color: var(--black);
+    font-family: "Mulish-Italic", Helvetica;
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-top: -1px;
+    position: relative;
+    width: 323px;
+}
+
+.template .div-2 {
+    align-items: flex-start;
+    display: inline-flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+}
+
+.template .title-2 {
+    color: var(--black);
+    font-family: "Mulish-Bold", Helvetica;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: normal;
+    margin-top: -1px;
+    position: relative;
+    width: fit-content;
+}
+
+.template .work-education {
+    align-items: flex-start;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    width: 324px;
+}
+
+.template .header {
+    align-items: flex-start;
+    align-self: stretch;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: 4px;
+    position: relative;
+    width: 100%;
+}
+
+.template .place-title {
+    align-items: flex-start;
+    align-self: stretch;
+    display: flex;
+    flex: 0 0 auto;
+    gap: 2px;
+    position: relative;
+    width: 100%;
+}
+
+.template .place-name {
+    color: var(--blue);
+    font-family: "Mulish-Bold", Helvetica;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: normal;
+    margin-top: -1px;
+    position: relative;
+    width: fit-content;
+}
+
+.template .place-name-2 {
+    color: var(--blue);
+    font-family: "Mulish-SemiBold", Helvetica;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: normal;
+    margin-top: -1px;
+    position: relative;
+    width: fit-content;
+}
+
+.template .title-3 {
+    color: var(--black);
+    font-family: "Mulish-Regular", Helvetica;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: normal;
+    margin-top: -1px;
+    position: relative;
+    width: fit-content;
+}
+
+.template .timeline {
+    align-self: stretch;
+    color: var(--black);
+    font-family: "Mulish-Italic", Helvetica;
+    font-size: 8px;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: 0.16px;
+    line-height: normal;
+    opacity: 0.8;
+    position: relative;
+}
+
+.template .desc {
+    align-self: stretch;
+    color: var(--grey);
+    font-family: "Mulish-Regular", Helvetica;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 16px;
+    position: relative;
+}
+
+.template .education {
+    align-items: flex-start;
+    display: inline-flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+}
+
+.template .auto-layout-right {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    left: 388px;
+    position: absolute;
+    top: 100px;
+    width: 184px;
+}
+
+.template .div-3 {
+    align-items: flex-start;
+    align-self: stretch;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    width: 100%;
+}
+
+.template .contact {
+    align-items: flex-start;
+    display: inline-flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+}
+
+.template .portfolio-link {
+    color: var(--black);
+    font-family: "Mulish-Regular", Helvetica;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 16px;
+    margin-top: -1px;
+    position: relative;
+    text-decoration: underline;
+    white-space: nowrap;
+    width: fit-content;
+}
+
+.template .mail-to-link {
+    color: var(--black);
+    font-family: "Mulish-Regular", Helvetica;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 16px;
+    position: relative;
+    text-decoration: underline;
+    white-space: nowrap;
+    width: fit-content;
+}
+
+.template .phone-number {
+    color: var(--black);
+    font-family: "Mulish-Regular", Helvetica;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 16px;
+    position: relative;
+    white-space: nowrap;
+    width: fit-content;
+}
+
+.template .div-wrapper {
+    align-items: flex-start;
+    align-self: stretch;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    width: 100%;
+}
+
+.template .text-wrapper-3 {
+    align-self: stretch;
+    color: var(--grey);
+    font-family: "Mulish-Regular", Helvetica;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 16px;
+    margin-top: -1px;
+    position: relative;
+    word-wrap: normal
+}

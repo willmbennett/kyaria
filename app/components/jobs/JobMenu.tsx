@@ -36,8 +36,9 @@ export default function JobMenu({ jobName }: { jobName: string }) {
               <button
                 onClick={handleLinkClick}
                 className="inline"
+                key={i}
               >
-                <Link key={i} href={l.path}>
+                <Link href={l.path}>
                   <div
                     className={`px-4 py-2 text-sm text-gray-600 ${pathname === l.path
                       ? "bg-gray-100"
