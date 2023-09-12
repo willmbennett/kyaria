@@ -7,7 +7,7 @@ export default function Page() {
     let { jobData } = useContext(JobContext);
 
     return (
-        <div>
+        <div className='w-full'>
             <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
                 {jobData["jobTitle"]}
             </h1>
