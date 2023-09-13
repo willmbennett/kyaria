@@ -2,7 +2,7 @@ import JobMenu from '../../components/jobs/JobMenu';
 import JobContextProvider from '../../components/jobs/JobContext';
 
 
-export default function JobsLayout({
+export default function JobLayout({
   children, // will be a page or nested layout
   params
 }: {

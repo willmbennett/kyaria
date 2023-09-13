@@ -1,39 +1,11 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { signIn, signOut, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import AuthButton from "./auth/AuthButton";
 
 const ACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-2 rounded text-xl lg:text-lg text-gray-600 bg-gray-200 font-bold items-center justify-center hover:bg-gray-600 hover:text-white";
 const INACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-2 rounded text-xl lg:text-lg text-gray-600 font-bold items-center justify-center hover:bg-gray-600 hover:text-white";
-
-function AuthButton() {
-  const { data: session } = useSession();
-
-  if (session) {
-    return (
-      <>
-        <span className="text-slate-500 items-center justify-center px-3 py-2 ">{session?.user?.name}</span>
-        <button
-          onClick={() => signOut()}
-          className="bg-black rounded-xl text-white font-medium px-3 py-2 px-4 py-2 hover:bg-black/80"
-        >
-          Sign out
-        </button>
-      </>
-    );
-  }
-  return (
-    <>
-      <button
-        onClick={() => signIn()}
-        className="bg-black rounded-xl text-white font-medium px-4 py-2 hover:bg-black/80"
-      >
-        Sign in
-      </button>
-    </>
-  );
-}
 
 export default function NavMenu() {
   const [active, setActive] = useState(false);
