@@ -1,16 +1,42 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import AuthButton from "./auth/AuthButton";
-import { useSession } from 'next-auth/react';
 
 const ACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-2 rounded text-xl lg:text-lg text-gray-600 bg-gray-200 font-bold items-center justify-center hover:bg-gray-600 hover:text-white";
 const INACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-2 rounded text-xl lg:text-lg text-gray-600 font-bold items-center justify-center hover:bg-gray-600 hover:text-white";
 
+function AuthButton() {
+  const { data: session } = useSession();
+
+  if (session) {
+    return (
+      <>
+        <span className="text-slate-500 items-center justify-center px-3 py-2 ">{session?.user?.name}</span>
+        <button
+          onClick={() => signOut()}
+          className="bg-black rounded-xl text-white font-medium px-3 py-2 px-4 py-2 hover:bg-black/80"
+        >
+          Sign out
+        </button>
+      </>
+    );
+  }
+  return (
+    <>
+      <button
+        onClick={() => signIn()}
+        className="bg-black rounded-xl text-white font-medium px-4 py-2 hover:bg-black/80"
+      >
+        Sign in
+      </button>
+    </>
+  );
+}
+
 export default function NavMenu() {
   const [active, setActive] = useState(false);
-  const { data: session } = useSession();
 
   const handleClick = () => {
     setActive(!active);
@@ -65,9 +91,16 @@ export default function NavMenu() {
               </Link>
             </button>
             <button onClick={handleLinkClick}>
-              <Link href={`/profile/${session?.user?.id}`}>
-              <span className= {pathname === `/profile/${session?.user?.id}` ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
-                  PROFILE
+              <Link href='/'>
+              <span className= {pathname === '/about' ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
+                  ABOUT
+                </span>
+              </Link>
+            </button>
+            <button onClick={handleLinkClick}>
+              <Link href='/'>
+              <span className= {pathname === '/contact' ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
+                  CONTACT
                 </span>
               </Link>
             </button>
