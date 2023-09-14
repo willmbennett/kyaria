@@ -87,7 +87,7 @@ const JobContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     const [story, setStory] = useState<string | null>('');
 
-    const [starStories, setStarStories] = useState<{ [key: string]: string }>('');
+    const [starStories, setStarStories] = useState<{ [key: string]: string }>({});
 
     const exportValue: UserContextType = {
         jobData,
