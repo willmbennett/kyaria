@@ -81,13 +81,13 @@ const JobContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     const companyData = getCompanies();
 
-    const [newResume, setNewResume] = useState<profileFormat>(emptyProfile);
+    const [newResume, setNewResume] = useState<profileFormat>(profileData);
 
-    const [coverLetter, setCoverLetter] = useState<string | null>(demoCoverLetter);
+    const [coverLetter, setCoverLetter] = useState<string | null>('');
 
-    const [story, setStory] = useState<string | null>(demoStory);
+    const [story, setStory] = useState<string | null>('');
 
-    const [starStories, setStarStories] = useState<{ [key: string]: string }>(demoStarStories);
+    const [starStories, setStarStories] = useState<{ [key: string]: string }>('');
 
     const exportValue: UserContextType = {
         jobData,

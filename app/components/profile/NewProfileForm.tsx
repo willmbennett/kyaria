@@ -1,48 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, useFieldArray, Controller, SubmitHandler } from 'react-hook-form';
 import NestedFieldArray from './NestedFieldArray';
-import demoProfile from '../../../examples/will_profile.json';
+import emptyProfile from '../../../examples/profile_format.json';
+import { FormFields, createUserProfile } from '../../profile/profile-helper';
+//import { redirect } from 'next/navigation'
 
 const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'
 
-type FormFields = {
-    name: string;
-    title: string;
-    email: string;
-    phone: string;
-    social_links: { [key: string]: string };
-    location: string;
-    summary: string;
-    areas_of_expertise: string[];
-    skills: string[];
-    professional_experience: {
-        title: string;
-        company: string;
-        location: string;
-        start_date: string;
-        end_date: string;
-        responsibilities: string[];
-    }[];
-    education: {
-        degree: string;
-        institution: string;
-        location: string;
-        details: string[];
-    }[];
-};
-
 export default function NewProfileForm({
-    userProfile,
+    defaultValue,
     setUserProfile,
+    setHasProfile,
     userId
 }: {
-    userProfile: any,
-    setUserProfile: any
+    defaultValue: any,
+    setUserProfile: any,
+    setHasProfile: any,
     userId: string
 }) {
 
     const { register, handleSubmit, control } = useForm<FormFields>({
-        defaultValues: { ...demoProfile }
+        defaultValues: { ...defaultValue }
     });
 
     const { fields: experienceFields, append: appendExperience } = useFieldArray({
@@ -55,35 +33,12 @@ export default function NewProfileForm({
         name: 'education',
     });
 
-    const createUserProfile = async (data: FormFields) => {
-        try {
-            const response = await fetch('/api/db/profile/new', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ ...data, userId: userId }), // Sending form data
-            });
-
-            if (!response.ok) {
-                throw new Error(response.statusText);
-            }
-
-            const createdUserProfile = await response.json();
-
-            //console.log("Created User Profile")
-            //console.log(createdUserProfile.insertedId)
-
-            if (createdUserProfile.insertedId) {
-                setUserProfile({ ...data, _id: createdUserProfile.insertedId, userId: userId }); // Assuming setUserProfile is a function that sets user profile in your app state
-            }
-        } catch (error) {
-            console.error('Failed to create user profile:', error);
-        }
-    };
-
-    const onSubmit: SubmitHandler<FormFields> = (data) => {
-        createUserProfile(data)
+    const onSubmit: SubmitHandler<FormFields> = async (data) => {
+        const newUser = await createUserProfile({data, userId});
+        console.log(newUser)
+        setUserProfile(newUser);
+        setHasProfile(true)
+        //redirect(`/`) // Navigate to new route
     };
 
     return (
@@ -186,7 +141,14 @@ export default function NewProfileForm({
                         </div>
                     ))}
                     <div className={BASIC_FIELD_STYLE}>
-                        <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4" type="button" onClick={() => appendExperience({})}>
+                        <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4" type="button" onClick={() => appendExperience({
+                            title: "Title",
+                            company: "Company",
+                            location: "Title",
+                            start_date: "Start Date",
+                            end_date: "End Date",
+                            responsibilities: ['']
+                        })}>
                             Add Experience
                         </button>
                     </div>
@@ -213,7 +175,12 @@ export default function NewProfileForm({
                         </div>
                     ))}
                     <div className={BASIC_FIELD_STYLE}>
-                        <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4" type="button" onClick={() => appendEducation({})}>
+                        <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4" type="button" onClick={() => appendEducation({
+                            degree: "Degree",
+                            institution: "Institution",
+                            location: "Location",
+                            details: [''],
+                        })}>
                             Add Education
                         </button>
                     </div>
