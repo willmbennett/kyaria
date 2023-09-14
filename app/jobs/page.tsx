@@ -3,7 +3,6 @@ import Link from "next/link";
 import { useState } from "react";
 
 export default function Page() {
-
   const [jobs, setJobs] = useState([
     {
       id: 1,

@@ -1,5 +1,4 @@
 {
-    "_id": "",
     "name": "",
     "title": "",
     "email": "",
@@ -26,6 +25,5 @@
         "location": "",
         "details": ["", ""]
         }
-    ],
-    "userId": ""
+    ]
 }
