@@ -3,12 +3,14 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import AuthButton from "./auth/AuthButton";
+import { useSession } from 'next-auth/react';
 
 const ACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-2 rounded text-xl lg:text-lg text-gray-600 bg-gray-200 font-bold items-center justify-center hover:bg-gray-600 hover:text-white";
 const INACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-2 rounded text-xl lg:text-lg text-gray-600 font-bold items-center justify-center hover:bg-gray-600 hover:text-white";
 
 export default function NavMenu() {
   const [active, setActive] = useState(false);
+  const { data: session } = useSession();
 
   const handleClick = () => {
     setActive(!active);
@@ -63,16 +65,9 @@ export default function NavMenu() {
               </Link>
             </button>
             <button onClick={handleLinkClick}>
-              <Link href='/'>
-              <span className= {pathname === '/about' ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
-                  ABOUT
-                </span>
-              </Link>
-            </button>
-            <button onClick={handleLinkClick}>
-              <Link href='/'>
-              <span className= {pathname === '/contact' ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
-                  CONTACT
+              <Link href={`/profile/${session?.user?.id}`}>
+              <span className= {pathname === `/profile/${session?.user?.id}` ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
+                  PROFILE
                 </span>
               </Link>
             </button>
