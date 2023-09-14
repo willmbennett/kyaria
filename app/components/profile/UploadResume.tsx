@@ -108,7 +108,7 @@ Dartmouth College - Hanover, NH
 export default function UploadResume({ setDefaultValue }: { setDefaultValue: any }) {
     const [loading, setLoading] = useState(false);
     const { register, handleSubmit, control } = useForm<FormFields>({
-        defaultValues: {resume: ''}
+        defaultValues: {resume: defaultFormValue}
     });
 
     const callOpenAI = async (data: any) => {
