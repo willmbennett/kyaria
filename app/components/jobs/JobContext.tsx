@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useState, FC } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import demoJob from '../../../examples/example_job.json';
 import emptyJob from '../../../examples/job_format.json';
 import demoProfile from '../../../examples/example_profile.json';
@@ -9,6 +9,7 @@ import demoCompany from '../../../examples/example_company.json';
 import emptyCompany from '../../../examples/company_format.json';
 import { jobFormat, UserContextType } from '../../jobs/[job]/types';
 import { demoCoverLetter, demoStory, demoSummary, demoStarStories } from '../../jobs/[job]/demoData';
+import { useSession } from 'next-auth/react';
 
 // Get all the potential links for jobs
 export function generateStaticParams() {
@@ -18,11 +19,6 @@ export function generateStaticParams() {
 // Get the job data
 export function getJob() {
     return demoJob;
-}
-
-// Get the user's profile
-export function getProfile() {
-    return demoProfile;
 }
 
 // Get the company
@@ -48,17 +44,50 @@ const iUserContextState: UserContextType = {
 export const JobContext = createContext<UserContextType>(iUserContextState);
 
 const JobContextProvider = ({ children }: { children: React.ReactNode }) => {
+    const { data: session } = useSession();
+
     const jobData = getJob();
-    const profileData = getProfile();
+
+    const [profileData, setProfileData] = useState<profileFormat>(emptyProfile);
+    const fetchUserProfile = async () => {
+        try {
+          const response = await fetch(`/api/db/profile/${session?.user?.id}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          });
+    
+          if (!response.ok) {
+            throw new Error(response.statusText);
+          }
+    
+          const fetchedUserProfile = await response.json();
+    
+          if (fetchedUserProfile.length > 0) {
+            setNewResume(fetchedUserProfile[0]);
+            setProfileData(fetchedUserProfile[0]);
+          }
+        } catch (error) {
+          console.error('Failed to fetch user profile:', error);
+        }
+      };
+    
+      useEffect(() => {
+        if (session?.user?.id) {
+          fetchUserProfile();
+        }
+      }, [session?.user?.id]); // Empty dependency array ensures this useEffect runs only once when component mounts.
+
     const companyData = getCompanies();
 
-    const [newResume, setNewResume] = useState<profileFormat>(demoProfile);
+    const [newResume, setNewResume] = useState<profileFormat>(profileData);
 
-    const [coverLetter, setCoverLetter] = useState<string | null>(demoCoverLetter);
+    const [coverLetter, setCoverLetter] = useState<string | null>('');
 
-    const [story, setStory] = useState<string | null>(demoStory);
+    const [story, setStory] = useState<string | null>('');
 
-    const [starStories, setStarStories] = useState<{ [key: string]: string }>(demoStarStories);
+    const [starStories, setStarStories] = useState<{ [key: string]: string }>({});
 
     const exportValue: UserContextType = {
         jobData,

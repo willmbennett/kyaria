@@ -1,0 +1,88 @@
+{
+    "name": "Will Bennett",
+    "title": "Product Manager",
+    "email": "wbennett711@gmail.com",
+    "phone": "207-239-0234",
+    "social_links": {
+      "Github": "github.com/willmbennett",
+      "LinkedIn": "linkedin.com/in/willmbennett/"
+    },
+    "location": "Cupertino, CA",
+    "summary": "Adaptable and growth-oriented Product Manager specializing in B2B SaaS and Technical Product Management. Known for creative problem-solving and a track record of driving sustainable growth at Doximity. Committed to building structured systems and processes for long-term success.",
+    "areas_of_expertise": [
+        "Technical Product Management",
+        "Agile Project Management",
+        "Startup Growth Strategies",
+        "Web Development Fundamentals",
+        "Customer-Driven Roadmapping",
+        "Process and System Building"
+      ],
+    "skills": [
+        "Jira", "Roadmapping", "Agile Development", "Wireframing", "Scrum", "Salesforce", "SQL", "Looker", "Colab", "Mixpanel", "Tableau", "Snowflake", "BigQuery", "Excel", "Python", "TensorFlow", "Keras", "Object", "scikit-learn", "Spark", "pandas", "numpy", "React.js", "Node.js", "JavaScript", "HTML", "CSS", "Markup"
+    ],
+    "professional_experience": [
+      {
+        "title": "Technical Product Manager, B2B SaaS",
+        "company": "Doximity",
+        "location": "San Francisco, CA",
+        "start_date": "01/2022",
+        "end_date": "03/2023",
+        "responsibilities": [
+          "Collaborated cross-functionally with engineering, data, design, sales, and marketing teams to revamp B2B SaaS ad targeting product for pharma clients.",
+          "Launched an over high-priority tool for sales team with data and engineering within 10 days, enabling over $5M in sales in first 3 months.",
+          "Reduced Salesforce pricing errors by $200K by working with engineers to fix issues with auto-generated pricing.",
+          "Improved client ROIs by designing and implementing framework with data scientist to target users with ad inventory."
+        ]
+      },
+      {
+        "title": "Business Analyst",
+        "company": "Doximity",
+        "location": "San Francisco, CA",
+        "start_date": "02/2020",
+        "end_date": "01/2022",
+        "responsibilities": [
+          "Analyzed business impact with SQL and worked with pricing director to offer Telemedicine product ad-free during COVID-19.",
+          "Optimized ad performance reviews, elevating goal attainment from 95% to 99% by leveraging Salesforce, Excel, and Looker analytics.",
+          "Generated $60M+ in revenue working with pricing director and Biz Ops SVP on price changes by analyzing user activity in SQL."
+        ]
+      },
+      {
+        "title": "Associate Product Manager",
+        "company": "Doximity",
+        "location": "San Francisco, CA",
+        "start_date": "01/2018",
+        "end_date": "02/2020",
+        "responsibilities": [
+          "Provided robust support for the rollout of a major user flow change impacting 300k monthly active users (MAU).",
+          "Improved marketing email CTR by 3% with an AB test working with design team that is now current email gold standard.",
+          "Worked with data scientists to build dimensional models, built BI dashboard for goals and KPI monitoring, planned and executed switch to Looker."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "degree": "Data Science Immersive (Student)",
+        "institution": "Flatiron",
+        "location": "Remote",
+        "details": [
+          "Applied machine learning methodologies to end stage liver disease to improve outcome prediction (0.86 C-statistic vs. 0.78 gold standard MELD score).",
+          "Built ALS Spark recommendation systems in python using the MovieLens dataset (0.87 RMSE vs Netflix competition winner 0.8567 RMSE).",
+          "Predicted h1n1 vaccination status of 26k survey respondents using machine learning."
+        ]
+      },
+      {
+        "degree": "Online Learning with Certificates of Completion",
+        "institution": "Udemy",
+        "location": "Online",
+        "details": [
+          "Business Analysis, Advanced Web Development, Algorithms, Data Structures"
+        ]
+      },
+      {
+        "degree": "AB in Engineering Science, BE in Electrical Engineering",
+        "institution": "Dartmouth College",
+        "location": "Hanover, NH",
+        "details": []
+      }
+    ]
+  }
