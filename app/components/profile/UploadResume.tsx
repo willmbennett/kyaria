@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { useChat } from 'ai/react';
 
 const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'
 
@@ -38,8 +39,8 @@ const expectedJson = {
     ]
 }
 
-const defaultFormValue = 
-`Will Bennett
+const defaultFormValue =
+    `Will Bennett
 Product Manager Profile
 
 
@@ -106,47 +107,51 @@ Dartmouth College - Hanover, NH
 `
 
 export default function UploadResume({ setDefaultValue }: { setDefaultValue: any }) {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false)
+    const [finishedLoading, setFinishedLoading] = useState(false)
+    const [jsonString, setJsonString] = useState('')
     const { register, handleSubmit, control } = useForm<FormFields>({
-        defaultValues: {resume: defaultFormValue}
+        defaultValues: { resume: '' }
     });
 
-    const callOpenAI = async (data: any) => {
-        setLoading(true);
+    const { messages, reload, append } = useChat({
+        body: {
+            temp: 0.1
+        },
+        onFinish() {
+            setFinishedLoading(true)
+        }
+    });
 
-        const message_list = [
+    // Make a call to chatGPT
+    const chatGPT = async (message: any) => {
+        setLoading(true)
+        append(message);
+    };
+
+    // Save the final message to context
+    useEffect(() => {
+        if (finishedLoading) {
+            setJsonString(messages[messages.length - 1].content);
+            console.log(messages[messages.length - 1].content)
+            setDefaultValue(JSON.parse(messages[messages.length - 1].content));
+            setLoading(false)
+        }
+    }, [finishedLoading]);
+
+    const onSubmit: SubmitHandler<FormFields> = async (data) => {
+        const message = [
             {
                 "role": "system",
                 "content": `You will be provided with unstructured data, and your task is to extract data from it. Return the data in the following format: ${JSON.stringify(expectedJson)}. If fields are empy simply return them as such.`
             },
             {
                 "role": "user",
-                "content": `Extract the resume details from this ${data} text and return it in json format following this format: ${JSON.stringify(expectedJson)}`
+                "content": `Extract the resume details from this ${data.resume} text and return it in json format following this format: ${JSON.stringify(expectedJson)}`
             }
         ]
-
-        const response = await fetch('/api/openai', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ data: message_list }),
-        });
-
-        if (!response.ok) {
-            throw new Error(response.statusText);
-        }
-
-        const answer = await response.json();
-        setLoading(false);
-        return JSON.parse(answer.choices[0].message.content)
-    };
-
-    const onSubmit: SubmitHandler<FormFields> = async (data) => {
-        console.log(data.resume)
-        const jsonResponse = await callOpenAI(data.resume)
-        console.log(jsonResponse)
-        setDefaultValue(jsonResponse);
+        console.log(message)
+        chatGPT(message)
     };
 
     return (
