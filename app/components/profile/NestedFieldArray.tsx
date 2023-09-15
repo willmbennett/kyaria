@@ -20,7 +20,7 @@ export default (
 
     const { fields: childItem, append: appendChildItem } = useFieldArray({
         control,
-        name: childName,
+        name: `${parentName}.${parentIndex}.${childName}`,
     });
 
   return (
