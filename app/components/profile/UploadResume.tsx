@@ -111,7 +111,7 @@ export default function UploadResume({ setDefaultValue }: { setDefaultValue: any
     const [finishedLoading, setFinishedLoading] = useState(false)
     const [jsonString, setJsonString] = useState('')
     const { register, handleSubmit, control } = useForm<FormFields>({
-        defaultValues: { resume: '' }
+        defaultValues: { resume: defaultFormValue }
     });
 
     const { messages, reload, append } = useChat({
