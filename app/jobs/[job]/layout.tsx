@@ -1,8 +1,7 @@
 import JobMenu from '../../components/jobs/JobMenu';
-import JobContextProvider from '../../components/jobs/JobContext';
 
 
-export default function JobsLayout({
+export default function JobLayout({
   children, // will be a page or nested layout
   params
 }: {
@@ -13,7 +12,6 @@ export default function JobsLayout({
 
   return (
     <section>
-      <JobContextProvider>
       <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen bg-gray-100">
         <div className="flex flex-1 w-full flex-col items-center justify-center text-center lg:px-4 lg:mt-6">
           <div className="flex flex-1 w-full">
@@ -33,7 +31,6 @@ export default function JobsLayout({
           jobName={job}
         />
       </div>
-      </JobContextProvider>
     </section>
   )
 }
