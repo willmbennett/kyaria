@@ -1,5 +1,10 @@
+declare module mongodb {
+    export = ObjectID;
+  }
+
 // User profile data format
 interface profileFormat {
+    _id: ObjectID;
     name: string;
     title: string;
     email: string;
@@ -23,6 +28,7 @@ interface profileFormat {
         location: string;
         details: string[];
     }[];
+    userId: ObjectID;
 };
 
 interface companyFormat {
