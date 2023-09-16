@@ -7,20 +7,16 @@ export default (
     { 
         control, 
         register,
-        parentIndex,
-        parentName,
-        childName,
+        name,
     }: {
         control: any, 
         register: any,
-        parentIndex: number,
-        parentName: string,
-        childName: string,
+        name: string,
     }) => {
 
     const { fields: childItem, append: appendChildItem } = useFieldArray({
         control,
-        name: `${parentName}.${parentIndex}.${childName}`,
+        name: `${name}`,
     });
 
   return (
@@ -28,16 +24,13 @@ export default (
             {childItem.map((field, index) => (
                 <div key={field.id} className="ext-left font-bold text-2xl mb-4">
                     <div className={BASIC_FIELD_STYLE}>
-                        <input {...register(`${parentName}.${parentIndex}.${childName}.${index}.content`)} placeholder={`${childName} ${index+1}`} />
-                    </div>
-                    <div className={BASIC_FIELD_STYLE}>
-                        <textarea {...register(`${parentName}.${parentIndex}.${childName}.${index}.starStory`)} placeholder={`${childName} Star Story ${index+1}`} />
+                        <input {...register(`${name}.${index}`)} placeholder={""} />
                     </div>
                 </div>
             ))}
             <div className={BASIC_FIELD_STYLE}>
                 <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4" type="button" onClick={() => appendChildItem({})}>
-                    Add {childName == 'responsibilities'? 'Responsibility': 'New'}
+                    Add New
                 </button>
             </div>
         </>

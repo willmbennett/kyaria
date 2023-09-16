@@ -9,7 +9,7 @@ const title = 'Launch Your Career';
 const description = 'Launch your career with the power of AI';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://twitterbio.io'),
+  metadataBase: new URL('https://career-launcher-ai-k8og.vercel.app/'),
   title,
   description,
   openGraph: {

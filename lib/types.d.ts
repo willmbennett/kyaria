@@ -20,16 +20,44 @@ interface profileFormat {
         location: string;
         start_date: string;
         end_date: string;
-        responsibilities: string[];
+        responsibilities: {
+            content: string;
+            starStory: strong
+        }[];
     }[];
     education: {
         degree: string;
         institution: string;
         location: string;
-        details: string[];
+        details: {
+            content: string;
+            starStory: strong
+        }[];
     }[];
     userId: ObjectID;
 };
+
+interface jobFormat {
+    _id: ObjectID,
+    jobTitle: string;
+    company: string;
+    location: string;
+    employmentType: string;
+    salaryRange: string;
+    remote: string;
+    aboutCompany: string;
+    jobDescription: string;
+    qualifications: string[];
+    responsibilities: string[];
+    userId: ObjectID;
+    userCoverLetter: string;
+    userStory: string;
+    userResume: profileFormat;
+    userQuestions: {
+        question: string;
+        answer: string;
+    }[]
+}
 
 interface companyFormat {
     name: string,

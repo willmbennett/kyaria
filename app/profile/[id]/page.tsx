@@ -5,8 +5,8 @@ import { useSession } from 'next-auth/react';
 import emptyProfile from '../../../examples/profile_format.json';
 import NewProfileForm from '../../components/profile/NewProfileForm';
 import UserProfile from '../../components/profile/UserProfile';
-import { fetchUserProfile } from '../profile-helper';
-import UploadResume from '../../components/profile/UploadResume';
+import { fetchUserProfile, expectedJson, defaultTextInput, demoJSON } from '../profile-helper';
+import TextToJSON from '../../components/TextToJSON';
 
 export default function ProfilePage({ params }: { params: { id: number } }) {
 
@@ -42,19 +42,28 @@ export default function ProfilePage({ params }: { params: { id: number } }) {
         )}
         {!hasProfile && (
           <>
-            <div>
-              <UploadResume
-                setDefaultValue={setDefaultValue}
-              />
+            <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+              <div className="bg-white p-6 rounded-lg shadow-md flex flex-col w-full max-w-3xl">
+                <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">Create Your Profile</h1>
+                {defaultValue.name.length == 0 && (
+                  <TextToJSON
+                    setDefaultValue={setDefaultValue}
+                    expectedJson={expectedJson}
+                    defaultTextInput=''
+                    //demoJSON={demoJSON}
+                    inputTextType='resume'
+                  />
+                )}
+                {defaultValue.name.length > 0 && (
+                  <NewProfileForm
+                    defaultValue={defaultValue}
+                    setUserProfile={setUserProfile}
+                    setHasProfile={setHasProfile}
+                    userId={session?.user?.id || ''}
+                  />
+                )}
+              </div>
             </div>
-            {defaultValue.name.length > 0 && (
-            <NewProfileForm
-              defaultValue={defaultValue}
-              setUserProfile={setUserProfile}
-              setHasProfile={setHasProfile}
-              userId={session?.user?.id || ''}
-            />
-            )}
           </>
         )}
 

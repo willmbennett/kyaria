@@ -1,25 +1,29 @@
 {
-  "jobTitle": "Senior Software Engineer",
-  "company": "Google",
-  "location": "New York City, NY",
-  "employmentType": "Full-Time",
-  "salaryRange": "$120K-$150K",
-  "remote": "Hybrid",
-  "aboutCompany": "Google is a multinational technology company specializing in Internet-related services and products. These include search engines, cloud computing, software, and hardware. Known for fostering an open and collaborative work environment, Google has consistently been named one of the 'Best Places to Work' worldwide.",
-  "jobDescription": "We are looking for a Senior Software Engineer with a strong background in backend development. The role involves designing, developing, and maintaining complex software solutions that contribute to our diverse range of products and services. The successful candidate will have excellent coding skills, a passion for problem-solving, and the ability to work in a fast-paced, innovative environment.",
-  "mandatoryRequirements": [
-      "Bachelor's Degree in Computer Science or equivalent experience",
-      "5+ years of experience in software development",
-      "Proficient in programming languages such as Java, Python, or C++",
-      "Strong knowledge of RESTful APIs and microservices architecture",
-      "Experience with relational databases like MySQL or PostgreSQL",
-      "Solid understanding of data structures, algorithms, and system design",
-      "Good communication skills and ability to collaborate with cross-functional teams"
+  "_id": "1",
+  "jobTitle": "Product Analyst",
+  "company": "23andMe",
+  "location": "Sunnyvale, CA",
+  "employmentType": "Full-time",
+  "salaryRange": "",
+  "remote": "",
+  "aboutCompany": "Since 2006, 23andMe’s mission has been to help people access, understand, and benefit from the human genome. We are a group of passionate individuals pushing the boundaries of what’s possible to help turn genetic insight into better health and personal understanding.",
+  "jobDescription": "23andMe is seeking a Product Analyst to join our Analytics team. We're looking for someone with excellent analytical and critical thinking skills who can apply them to help improve the consumer experience. In this role you will work closely with the Product team and Analytics Business Partners to measure product performance and inform strategy using analytics and data.",
+  "qualifications": [
+      "Good SQL and R skills are a must for this role",
+      "2+ years of industry work experience in an analyst or equivalent role",
+      "B.S. in statistics, mathematics, business or a related field",
+      "Excellent communication skills; this role requires regular interaction with partners from each part of the product",
+      "An analytical mindset; as a product analyst you will champion data-driven decision making and help the product team identify areas of opportunity",
+      "Strong data visualization skills",
+      "An online sample of your analytical and/or data visualization abilities is greatly appreciated"
   ],
-  "niceToHave": [
-      "Master's Degree in Computer Science",
-      "Experience in cloud technologies like Google Cloud Platform (GCP)",
-      "Familiarity with front-end technologies like React, Angular, or Vue",
-      "Knowledge of containerization and orchestration tools like Docker and Kubernetes"
-  ]
+  "responsibilities": [
+      "In this role you will work closely with the Product team and Analytics Business Partners to measure product performance and inform strategy using analytics and data",
+      "Our team culture is respectful and collaborative; we place a lot of emphasis on mentorship and growth both within the Analytics team and with our business partners",
+      "Your focus is 23andMe's consumer experience; you will support Product Managers and be a trusted partner for performance measurement and data visualization",
+      "Leverage Google Analytics and internal data to provide key insights by analyzing customer behavior",
+      "Implement and measure experiments around feature and product development",
+      "Collaborate with the larger Analytics organization to identify and develop long-term solutions to common data needs throughout the product organization"
+  ],
+  "userId": "2"
 }

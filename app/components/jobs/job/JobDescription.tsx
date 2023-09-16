@@ -1,13 +1,12 @@
-'use client'
+export default function JobDescription({
+    jobData,
+}: {
+    jobData: any,
+}) {
 
-import { useContext } from 'react';
-import { JobContext } from '../../components/jobs/JobContext';
-
-export default function Page() {
-    let { jobData } = useContext(JobContext);
 
     return (
-        <div className='w-full'>
+        <>
             <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
                 {jobData["jobTitle"]}
             </h1>
@@ -35,19 +34,19 @@ export default function Page() {
                 <p className="text-left mb-8">
                     {jobData["jobDescription"]}
                 </p>
-                <h2 className="text-left font-bold text-2xl mb-4">Mandatory Requirements</h2>
+                <h2 className="text-left font-bold text-2xl mb-4">Qualifications</h2>
                 <ul className="list-disc list-inside text-left mb-8">
-                    {jobData["mandatoryRequirements"].map((req: any, index: any) => (
-                        <li key={index}>{req}</li>
+                    {jobData["qualifications"].map((qualification: any, index: any) => (
+                        <li key={index}>{qualification}</li>
                     ))}
                 </ul>
-                <h2 className="text-left font-bold text-2xl mb-4">Nice to Have</h2>
+                <h2 className="text-left font-bold text-2xl mb-4">Responsibilities</h2>
                 <ul className="list-disc list-inside text-left">
-                    {jobData["niceToHave"].map((niceToHave: any, index: any) => (
-                        <li key={index}>{niceToHave}</li>
+                    {jobData["responsibilities"].map((responsibility: any, index: any) => (
+                        <li key={index}>{responsibility}</li>
                     ))}
                 </ul>
             </div>
-        </div>
+        </>
     );
 }
