@@ -20,7 +20,7 @@ export default function NewProfileForm({
 }) {
 
     const { register, handleSubmit, control } = useForm<FormFields>({
-        defaultValues: { ...defaultValue }
+        defaultValues: defaultValue
     });
 
     const { fields: experienceFields, append: appendExperience } = useFieldArray({
@@ -141,7 +141,7 @@ export default function NewProfileForm({
                     location: "Title",
                     start_date: "Start Date",
                     end_date: "End Date",
-                    responsibilities: ['']
+                    responsibilities: [{content: "", starStory: ""}]
                 })}>
                     Add Experience
                 </button>
@@ -181,7 +181,7 @@ export default function NewProfileForm({
                     degree: "Degree",
                     institution: "Institution",
                     location: "Location",
-                    details: [''],
+                    details: {content: "", starStory: ""}
                 })}>
                     Add Education
                 </button>

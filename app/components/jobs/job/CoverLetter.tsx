@@ -6,12 +6,13 @@ export default function CoverLetter({
     jobData,
     userProfile,
     coverLetter,
-    setCoverLetter }: {
-        jobData: any,
-        userProfile: any,
-        coverLetter: any,
-        setCoverLetter: any
-    }) {
+    setCoverLetter
+}: {
+    jobData: any,
+    userProfile: any,
+    coverLetter: any,
+    setCoverLetter: any
+}) {
 
     const message = [
         {
@@ -63,8 +64,9 @@ export default function CoverLetter({
                 Stand out with a cover letter
             </h1>
             <ChatWithGPT
+                collection='jobs'
                 documentID={jobData._id}
-                updateRef='userCoverLetter'
+                setKey='userCoverLetter'
                 message={message}
                 currentState={coverLetter}
                 updateState={setCoverLetter}

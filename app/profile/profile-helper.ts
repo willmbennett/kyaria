@@ -15,13 +15,19 @@ export type FormFields = {
         location: string;
         start_date: string;
         end_date: string;
-        responsibilities: string[];
+        responsibilities: {
+          content: string;
+          starStory: string;
+        }[];
     }[];
     education: {
         degree: string;
         institution: string;
         location: string;
-        details: string[];
+        details: {
+          content: string;
+          starStory: string;
+        };
     }[];
 };
 
@@ -98,8 +104,8 @@ export const expectedJson = {
   "social_links": { "": "" },
   "location": "",
   "summary": "",
-  "areas_of_expertise": ["", ""],
-  "skills": ["", ""],
+  "areas_of_expertise": [""],
+  "skills": [""],
   "professional_experience": [
       {
           "title": "",
@@ -107,7 +113,7 @@ export const expectedJson = {
           "location": "",
           "start_date": "",
           "end_date": "",
-          "responsibilities": ["", ""]
+          "responsibilities": [{"content": "", "starStory": ""}]
       }
   ],
   "education": [
@@ -115,7 +121,7 @@ export const expectedJson = {
           "degree": "",
           "institution": "",
           "location": "",
-          "details": ["", ""]
+          "details": [{"content": "", "starStory": ""}]
       }
   ]
 }
@@ -225,11 +231,22 @@ export const demoJSON = {
       "location": "San Francisco, CA",
       "start_date": "01/2022",
       "end_date": "03/2023",
-      "responsibilities": [
-        "Collaborated cross-functionally with engineering, data, design, sales, and marketing teams to revamp B2B SaaS ad targeting product for pharma clients",
-        "Launched a novel high-priority tool for sales team with data and engineering within 10 days, enabling over $5M in sales in first 3 months",
-        "Reduced Salesforce pricing errors by $200K by working with engineers to fix issues with auto-generated pricing",
-        "Improved client ROIs by designing and implementing framework with data scientist  to target users with ad inventory"
+      "responsibilities": [{
+        "content": "Collaborated cross-functionally with engineering, data, design, sales, and marketing teams to revamp B2B SaaS ad targeting product for pharma clients",
+        "starStory": ""
+      },
+      {
+        "content": "Launched a novel high-priority tool for sales team with data and engineering within 10 days, enabling over $5M in sales in first 3 months",
+        "starStory": ""
+      },
+      {
+        "content": "Reduced Salesforce pricing errors by $200K by working with engineers to fix issues with auto-generated pricing",
+        "starStory": ""
+      },
+      {
+        "content": "Improved client ROIs by designing and implementing framework with data scientist  to target users with ad inventory",
+        "starStory": ""
+      }
       ]
     },
     {
@@ -238,10 +255,16 @@ export const demoJSON = {
       "location": "San Francisco, CA",
       "start_date": "02/2020",
       "end_date": "01/2022",
-      "responsibilities": [
-        "Analyzed business impact with SQL and worked with pricing director to offer Telemedicine product ad-free during COVID-19",
-        "Optimized ad performance reviews, elevating goal attainment from 95% to 99% by leveraging Salesforce, Excel, and Looker analytics",
-        "Generated $60M+ in revenue working with pricing director and BizOps SVP on price changes by analyzing user activity in SQL"
+      "responsibilities": [{
+        "content": "Analyzed business impact with SQL and worked with pricing director to offer Telemedicine product ad-free during COVID-19",
+        "starStory": ""
+      },{
+        "content": "Optimized ad performance reviews, elevating goal attainment from 95% to 99% by leveraging Salesforce, Excel, and Looker analytics",
+        "starStory": ""
+      },{
+        "content": "Generated $60M+ in revenue working with pricing director and BizOps SVP on price changes by analyzing user activity in SQL",
+        "starStory": ""
+      }
       ]
     },
     {
@@ -250,10 +273,16 @@ export const demoJSON = {
       "location": "San Francisco, CA",
       "start_date": "01/2018",
       "end_date": "02/2020",
-      "responsibilities": [
-        "Provided robust support for the rollout of a major user flow change impacting 300k monthly active users (MAU)",
-        "Improved marketing email CTR by 3% with an AB test working with design team that is now  current email gold standard",
-        "Worked with data scientists to build dimensional models, built BI dashboard for goals and KPI monitoring, planned and executed switch to Looker"
+      "responsibilities": [{
+        "content": "Provided robust support for the rollout of a major user flow change impacting 300k monthly active users (MAU)",
+        "starStory": ""
+      },{
+        "content": "Improved marketing email CTR by 3% with an AB test working with design team that is now  current email gold standard",
+        "starStory": ""
+      },{
+        "content": "Worked with data scientists to build dimensional models, built BI dashboard for goals and KPI monitoring, planned and executed switch to Looker",
+        "starStory": ""
+      }
       ]
     }
   ],
@@ -262,26 +291,36 @@ export const demoJSON = {
       "degree": "Data Science Immersive",
       "institution": "Flatiron",
       "location": "Remote",
-      "details": [
-        "Applied machine learning methodologies to end stage liver disease to improve outcome prediction (0.86 C-statistic vs. 0.78 gold standard MELD score)",
-        "Built ALS Spark recommendation systems in python using the MovieLens dataset (0.87 RMSE vs Netflix competition winner 0.8567 RMSE)",
-        "Predicted h1n1 vaccination status of 26k survey respondents using machine learning"
+      "details": [{
+        "content": "Applied machine learning methodologies to end stage liver disease to improve outcome prediction (0.86 C-statistic vs. 0.78 gold standard MELD score)",
+        "starStory": ""
+      },{
+        "content": "Built ALS Spark recommendation systems in python using the MovieLens dataset (0.87 RMSE vs Netflix competition winner 0.8567 RMSE)",
+        "starStory": ""
+      },{
+        "content": "Predicted h1n1 vaccination status of 26k survey respondents using machine learning",
+        "starStory": ""
+      }
       ]
     },
     {
       "degree": "Online Learning with Certificates of Completion",
       "institution": "Udemy",
       "location": "Online",
-      "details": [
-        "Business Analysis, Advanced Web Development, Algorithms, Data Structures"
+      "details": [{
+        "content": "Predicted h1n1 vaccination status of 26k survey respondents using machine learning",
+        "starStory": "Business Analysis, Advanced Web Development, Algorithms, Data Structures"
+      }
       ]
     },
     {
       "degree": "AB in Engineering Science, BE in Electrical Engineering",
       "institution": "Dartmouth College",
       "location": "Hanover, NH",
-      "details": [
-        ""
+      "details": [{
+        "content": "N/A",
+        "starStory": ""
+      }
       ]
     }
   ]

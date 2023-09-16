@@ -61,9 +61,10 @@ export default function UserStory({
                 Let's write you a story
             </h1>
             <ChatWithGPT
+                collection='jobs'
                 documentID={jobData._id}
-                updateRef='userStory'
                 message={message}
+                setKey='userStory'
                 currentState={userStory}
                 updateState={setUserStory}
                 temp={0.7}

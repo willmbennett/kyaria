@@ -40,7 +40,8 @@ const iJobsContextState: JobsContextType = {
         userId: "",
         userCoverLetter: "",
         userStory: "",
-        userResume: emptyProfile
+        userResume: emptyProfile as profileFormat,
+        userQuestions: [{question: "", answer: ""}]
     }],  // Assuring TypeScript that this JSON matches our type
     setUserJobs: () => { },
 };
@@ -57,7 +58,8 @@ const JobsContextProvider = ({ children }: { children: React.ReactNode }) => {
         userId: "",
         userCoverLetter: "",
         userStory: "",
-        userResume: emptyProfile
+        userResume: emptyProfile,
+        userQuestions: [{question: "", answer: ""}]
     }]);
 
     const loadProfile = async (userId?: string) => {

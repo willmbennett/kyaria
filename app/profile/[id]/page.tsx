@@ -49,8 +49,8 @@ export default function ProfilePage({ params }: { params: { id: number } }) {
                   <TextToJSON
                     setDefaultValue={setDefaultValue}
                     expectedJson={expectedJson}
-                    defaultTextInput={defaultTextInput}
-                    demoJSON={demoJSON}
+                    defaultTextInput=''
+                    //demoJSON={demoJSON}
                     inputTextType='resume'
                   />
                 )}

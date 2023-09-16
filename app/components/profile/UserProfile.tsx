@@ -52,7 +52,7 @@ export default function UserProfile({
                   <p className="text-left text-lg mb-2">{exp.start_date} - {exp.end_date}</p>
                   <ul className="list-disc list-inside text-left mb-8">
                     {exp.responsibilities.map((resp, i) => (
-                      <li key={i}>{resp}</li>
+                      <li key={i}>{resp.content}</li>
                     ))}
                   </ul>
                 </div>
@@ -65,7 +65,7 @@ export default function UserProfile({
                   <p className="text-left text-lg mb-2">{edu.institution}, {edu.location}</p>
                   <ul className="list-disc list-inside text-left mb-8">
                     {edu.details.map((detail, i) => (
-                      <li key={i}>{detail}</li>
+                      <li key={i}>{detail.content}</li>
                     ))}
                   </ul>
                 </div>

@@ -7,28 +7,23 @@ interface updateType {
   }
 
 export async function POST(request: Request) {
-    const { collection, documentID, updateRef, updateVal} = await request.json()
+    const { collection, documentID, setKey, setVal} = await request.json()
 
-    console.log(collection, documentID, updateRef, updateVal)
+    console.log(collection, documentID, setKey, setVal)
     const documentIdObject = new ObjectId(documentID);
 
-    const updateDoc: updateType = {}
-
-    // Try to parse JSON
-    try {
-        updateDoc[updateRef] = JSON.parse(updateVal)
-    }
-    catch (e) { // If it fails just store the string
-        updateDoc[updateRef] = updateVal
-    }
+    // If we need to search, search else don't
+    console.log(`"${setKey}":"${setVal}"`)
+    const inputValues = JSON.parse(`{"${setKey}":""}`)
+    inputValues[setKey] = setVal
+    console.log(`inputValues: ${JSON.stringify(inputValues)}`)
 
     try {
         const client = await clientPromise;
         const updatedValue = await client.db("test")
             .collection(collection)
             .updateOne({_id: documentIdObject},
-                { $set: updateDoc })
-
+                { $set: inputValues})
         
             //console.log(userProfile)
         return NextResponse.json(updatedValue);

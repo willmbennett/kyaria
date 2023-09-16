@@ -28,7 +28,10 @@ export default (
             {childItem.map((field, index) => (
                 <div key={field.id} className="ext-left font-bold text-2xl mb-4">
                     <div className={BASIC_FIELD_STYLE}>
-                        <input {...register(`${parentName}.${parentIndex}.${childName}.${index}`)} placeholder={`${childName} ${index+1}`} />
+                        <input {...register(`${parentName}.${parentIndex}.${childName}.${index}.content`)} placeholder={`${childName} ${index+1}`} />
+                    </div>
+                    <div className={BASIC_FIELD_STYLE}>
+                        <textarea {...register(`${parentName}.${parentIndex}.${childName}.${index}.starStory`)} placeholder={`${childName} Star Story ${index+1}`} />
                     </div>
                 </div>
             ))}

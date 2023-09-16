@@ -11,6 +11,7 @@ export default function JobMenu({ section, setSection }: { section: string, setS
     { label: "Resume", section: `userResume` },
     { label: "Cover Letter", section: `userCoverLetter` },
     { label: "Story", section: `userStory` },
+    { label: "Experience", section: `userExperience` },
   ];
 
   /*

@@ -9,22 +9,22 @@ type FormFields = {
 };
 
 export default function TextToJSON(
-  { setDefaultValue,
-    expectedJson, 
-    defaultTextInput, 
-    demoJSON,
-    inputTextType
-  }: { 
-    setDefaultValue: any, 
-    expectedJson: any, 
-    defaultTextInput?: string, 
-    demoJSON?: any,
-    inputTextType: string
-  }) {
+    { setDefaultValue,
+        expectedJson,
+        defaultTextInput,
+        demoJSON,
+        inputTextType
+    }: {
+        setDefaultValue: any,
+        expectedJson: any,
+        defaultTextInput?: string,
+        demoJSON?: any,
+        inputTextType: string
+    }) {
     const [loading, setLoading] = useState(false)
     const [finishedLoading, setFinishedLoading] = useState(false)
     const { register, handleSubmit, control } = useForm<FormFields>({
-        defaultValues: { input: defaultTextInput? defaultTextInput : '' } // Leave blank
+        defaultValues: { input: defaultTextInput ? defaultTextInput : '' } // Leave blank
     });
 
     const { messages, reload, append } = useChat({
@@ -39,14 +39,14 @@ export default function TextToJSON(
     // Make a call to chatGPT
     const chatGPT = async (message: any) => {
         setLoading(true)
-        //append(message);
-        setFinishedLoading(true)
+        append(message);
+        //setFinishedLoading(true)
     };
 
     // Save the final message to context
     useEffect(() => {
         if (finishedLoading) {
-            const finalMessage = demoJSON? demoJSON : JSON.parse(messages[messages.length - 1].content);
+            const finalMessage = demoJSON ? demoJSON : JSON.parse(messages[messages.length - 1].content);
             console.log(finalMessage)
             setDefaultValue(finalMessage);
             setLoading(false)
@@ -70,21 +70,26 @@ export default function TextToJSON(
 
     return (
         <>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <div className={BASIC_FIELD_STYLE}>
-                    <p>Paste your text here</p>
-                    <textarea {...register('input')} placeholder="Text Input" rows={15} cols={50}></textarea>
-                </div>
-
-                <div className={BASIC_FIELD_STYLE}>
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4" type="submit">Submit</button>
-                </div>
-                {loading && (
-                    <div>
-                        <p>Insert Pretty Loading GIF Here</p>
+            <div className='flex-col items-center'>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <div className={BASIC_FIELD_STYLE}>
+                        <p>Paste your text here</p>
+                        <textarea {...register('input')} placeholder="Text Input" rows={15} cols={50}></textarea>
                     </div>
-                )}
-            </form>
+
+                    <div className={BASIC_FIELD_STYLE}>
+                        <button
+                            className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+                            disabled={loading}
+                            type="submit">Submit</button>
+                    </div>
+                    {loading && (
+                        <div>
+                            <p>Insert Pretty Loading GIF Here</p>
+                        </div>
+                    )}
+                </form>
+            </div>
         </>
     );
 }

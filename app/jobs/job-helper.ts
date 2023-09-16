@@ -30,11 +30,13 @@ export const fetchUserJobs = async (userId: string) => {
 export const createNewJob = async (
   {
       data,
-      userId
+      userId,
+      userResume
 
   }: {
       data: FormFields
       userId: string
+      userResume: profileFormat
   }) => {
   try {
       const response = await fetch('/api/db/job/new', {
@@ -42,7 +44,7 @@ export const createNewJob = async (
           headers: {
               'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ ...data, userId: userId }), // Sending form data
+          body: JSON.stringify({ ...data, "userResume": userResume, userId: userId }), // Sending form data
       });
 
       if (!response.ok) {
@@ -50,9 +52,6 @@ export const createNewJob = async (
       }
 
       const createdJob = await response.json();
-
-      //console.log("Created User Profile")
-      //console.log(createdUserProfile.insertedId)
 
       if (createdJob.insertedId) {
           return { ...data, _id: createdJob.insertedId, userId: userId }
@@ -90,8 +89,8 @@ export const expectedJson = {
   "remote": "",
   "aboutCompany": "",
   "jobDescription": "",
-  "qualifications": [{content: ''}],
-  "responsibilities": [{content: ''}]
+  "qualifications": [""],
+  "responsibilities": [""]
 }
 
 export const defaultTextInput =
@@ -182,4 +181,17 @@ export const demoJSON = {
     "Implement and measure experiments around feature and product development",
     "Collaborate with the larger Analytics organization to identify and develop long-term solutions to common data needs throughout the product organization"
   ]
+}
+
+export const defaultFormInput = {
+  "jobTitle": "",
+  "company": "",
+  "location": "",
+  "employmentType": "",
+  "salaryRange": "",
+  "remote": "",
+  "aboutCompany": "",
+  "jobDescription": "",
+  "qualifications": [],
+  "responsibilities": []
 }

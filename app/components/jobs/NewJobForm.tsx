@@ -10,11 +10,17 @@ const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-fu
 export default function NewJobForm({
     defaultValue,
     setCreatingJob,
-    userId
+    userId,
+    userResume,
+    jobList,
+    setJobList
 }: {
     defaultValue: any,
     setCreatingJob: any,
-    userId: string
+    userId: string,
+    userResume: profileFormat,
+    jobList: jobFormat[],
+    setJobList: any
 }) {
 
     const { register, handleSubmit, control } = useForm<FormFields>({
@@ -22,9 +28,10 @@ export default function NewJobForm({
     });
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
-        const newUser = await createNewJob({ data, userId });
-        console.log(newUser)
+        const newJob = await createNewJob({ data, userId, userResume });
+        console.log(newJob)
         setCreatingJob(false)
+        setJobList([...jobList, newJob])
         //redirect(`/`) // Navigate to new route
     };
 
