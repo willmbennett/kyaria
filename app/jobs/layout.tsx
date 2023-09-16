@@ -1,4 +1,4 @@
-import JobContextProvider from '../components/jobs/JobContext';
+import JobsContextProvider from '../components/jobs/JobsContext';
 
 
 export default function JobLayout({
@@ -9,9 +9,9 @@ export default function JobLayout({
 
   return (
     <>
-      <JobContextProvider>
+      <JobsContextProvider>
       {children}
-      </JobContextProvider>
+      </JobsContextProvider>
     </>
   )
 }

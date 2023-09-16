@@ -2,7 +2,7 @@
 import "./resume.css";
 import { useState } from 'react';
 import GPT from './GPT';
-import { jobFormat } from "../../jobs/[job]/types";
+import { jobFormat } from "../../jobs/[id]/types";
 
 export const Resume = (
     { jobData,

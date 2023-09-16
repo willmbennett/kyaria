@@ -15,7 +15,8 @@ export default async function middleware(req: NextRequest) {
     secret: process.env.NEXTAUTH_SECRET,
   });
 
-  const isProtected = path.includes('/jobs');
+  const protectedPaths = ['/profile', '/jobs']
+  const isProtected = containsOption(path, protectedPaths);
 
   if (!session && isProtected) {
     return NextResponse.redirect(new URL('/', req.url));
@@ -23,4 +24,13 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/jobs', req.url));
   }
   return NextResponse.next();
+}
+
+function containsOption(string: string, options: string[]) {
+  for (let i = 0; i < options.length; i++) {
+    if (string.includes(options[i])) {
+      return true;
+    }
+  }
+  return false;
 }

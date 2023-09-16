@@ -7,6 +7,6 @@
     "remote": "",
     "aboutCompany": "",
     "jobDescription": "",
-    "mandatoryRequirements": ["", ""],
-    "niceToHave": ["", ""]
+    "qualifications": [""],
+    "responsibilities": [""]
 }

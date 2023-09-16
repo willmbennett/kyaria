@@ -1,11 +1,17 @@
 'use client'
 
 import ChatWithGPT from '../../../components/ChatWithGPT';
-import { useContext } from 'react';
-import { JobContext } from '../../../components/jobs/JobContext';
 
-export default function Page() {
-    let { coverLetter, setCoverLetter, jobData, profileData } = useContext(JobContext);
+export default function CoverLetter({
+    jobData,
+    userProfile,
+    coverLetter,
+    setCoverLetter }: {
+        jobData: any,
+        userProfile: any,
+        coverLetter: any,
+        setCoverLetter: any
+    }) {
 
     const message = [
         {
@@ -43,25 +49,27 @@ export default function Page() {
             "role": "user",
             "content": `Please write me a tailored cover letter for the following job description:
             - Job description: ${JSON.stringify(jobData)}
-            Include information from my profile ${JSON.stringify(profileData)}
+            Include information from my profile ${JSON.stringify(userProfile)}
             
             Structure the cover letter into an introduction, body, and conclusion.`
         }
     ];
-    
-    
 
-  return (
-    <div>
-        <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
-            Stand out with a cover letter
-        </h1>
-        <ChatWithGPT
-            message={message}
-            currentState={coverLetter}
-            updateState={setCoverLetter}
-            temp={0.5}
-        />
-    </div>
-  );
+
+
+    return (
+        <>
+            <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
+                Stand out with a cover letter
+            </h1>
+            <ChatWithGPT
+                documentID={jobData._id}
+                updateRef='userCoverLetter'
+                message={message}
+                currentState={coverLetter}
+                updateState={setCoverLetter}
+                temp={0.5}
+            />
+        </>
+    );
 }
