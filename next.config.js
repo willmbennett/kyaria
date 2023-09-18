@@ -2,6 +2,7 @@
 module.exports = {
   experimental: {
     serverActions: true,
+    serverComponentsExternalPackages:['mongoose','@typegoose/typegoose']
   },
   async redirects() {
     return [
