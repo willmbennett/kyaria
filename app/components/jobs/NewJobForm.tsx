@@ -9,6 +9,7 @@ const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-fu
 
 export default function NewJobForm({
     defaultValue,
+    values,
     setCreatingJob,
     userId,
     userResume,
@@ -16,6 +17,7 @@ export default function NewJobForm({
     setJobList
 }: {
     defaultValue: any,
+    values: any,
     setCreatingJob: any,
     userId: string,
     userResume: profileFormat,
@@ -24,7 +26,8 @@ export default function NewJobForm({
 }) {
 
     const { register, handleSubmit, control } = useForm<FormFields>({
-        defaultValues: { ...defaultValue }
+        defaultValues: { ...defaultValue },
+        values
     });
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {

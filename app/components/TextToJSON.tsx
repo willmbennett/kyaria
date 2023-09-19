@@ -23,8 +23,8 @@ export default function TextToJSON(
         defaultTextInput?: string,
         demoJSON?: any,
         inputTextType: string,
-        setFormView: any,
-        setInputTextView: any,
+        setFormView?: any,
+        setInputTextView?: any,
     }) {
     const [loading, setLoading] = useState(false)
     const [finishedLoading, setFinishedLoading] = useState(false)

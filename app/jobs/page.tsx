@@ -14,7 +14,7 @@ export default function JobPage() {
   let { userProfile, userJobs, setUserJobs } = useContext(JobsContext)
   const [creatingJob, setCreatingJob] = useState(false);
   const [userResume, setUserResume] = useState<profileFormat>(userProfile);
-  const [defaultValue, setDefaultValue] = useState<FormFields>(defaultFormInput);
+  const [values, setValues] = useState<FormFields>(defaultFormInput);
 
   const handleCreateJobClick = () => {
     setCreatingJob(true)
@@ -65,18 +65,19 @@ export default function JobPage() {
                 </h1>
 
                 <div className="mb-4 flex flex-col items-center">
-                  {defaultValue.jobTitle.length == 0 && (
+                  {values.jobTitle.length == 0 && (
                     <TextToJSON
-                      setDefaultValue={setDefaultValue}
+                    setValues={setValues}
                       expectedJson={expectedJson}
                       defaultTextInput=''
                       //demoJSON={demoJSON}
                       inputTextType='resume'
                     />
                   )}
-                  {defaultValue.jobTitle.length > 0 && (
+                  {values.jobTitle.length > 0 && (
                     <NewJobForm
-                      defaultValue={defaultValue}
+                      defaultValue={defaultFormInput}
+                      values={values}
                       setCreatingJob={setCreatingJob}
                       userId={userProfile.userId}
                       userResume={userResume}
