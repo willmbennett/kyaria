@@ -5,10 +5,11 @@ import { useForm, useFieldArray, Controller, SubmitHandler } from 'react-hook-fo
 import NestedFieldArray from './NestedFieldArray';
 import emptyProfile from '../../../examples/profile_format.json';
 import { FormFields, createUserProfile } from '../../profile/profile-helper';
-import { createProfileAction } from '../../profile/_action';
+import { createProfileAction, updateProfileAction } from '../../profile/_action';
 import ProfileActions from './ProfileActions';
 import { ProfileClass } from '../../../models/Profile';
 import { demoJSON } from '../../profile/profile-helper';
+import UserProfile from './UserProfile';
 //import { redirect } from 'next/navigation'
 
 const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'
@@ -22,10 +23,22 @@ export default function ProfileForm({
     userProfile?: ProfileClass
 }) {
     const [formView, setFormView] = useState(false)
-    const [hasProfile, setHasProfile] = useState(userProfile? true: false)
+    const [formState, setFormState] = useState(userProfile ? 'Edit' : 'Create')
 
     const { register, handleSubmit, control } = useForm<FormFields>({
-        defaultValues: userProfile || demoJSON
+        defaultValues: {
+            name: userProfile?.name || '',
+            title: userProfile?.title || '',
+            email: userProfile?.email || '',
+            phone: userProfile?.phone || '',
+            social_links: userProfile?.social_links || { Github: "", LinkedIn: "" },
+            location: userProfile?.location || '',
+            summary: userProfile?.summary || '',
+            areas_of_expertise: userProfile?.areas_of_expertise || [],
+            skills: userProfile?.skills || [],
+            professional_experience: userProfile?.professional_experience || [],
+            education: userProfile?.education || []
+        }
     });
 
     const { fields: experienceFields, append: appendExperience } = useFieldArray({
@@ -40,20 +53,37 @@ export default function ProfileForm({
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
         // call server action
-        const addUserId = { ...data, userId: userId }
-        console.log(addUserId)
-        const path = "/"
-        const res = await createProfileAction(addUserId, path);
-        console.log(res)
+        if (userProfile) {
+            console.log("Editing Profile")
+            const path = "/"
+            const res = await updateProfileAction(userProfile.id, data, path);
+            console.log(res)
+        } else {
+            console.log("Creating Profile")
+            const addUserId = { ...data, userId: userId }
+            console.log(addUserId)
+            const path = "/"
+            const res = await createProfileAction(addUserId, path);
+            console.log(res)
+        }
+        setFormView(false)
     };
 
     return (
         <>
             <ProfileActions
                 id={userProfile?.id}
+                formView={formView}
                 setFormView={setFormView}
-                hasProfile={hasProfile}
+                formState={formState}
+                setFormState={setFormState}
             />
+            {userProfile && !formView && (
+                <>
+                    <UserProfile
+                        userProfile={userProfile} />
+                </>
+            )}
             {formView && (
                 <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-3xl">
                     <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">

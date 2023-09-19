@@ -16,12 +16,6 @@ export default async function ProfilePage({ params }: { params: { id: string } }
           userId={params.id}
           userProfile={profile}
         />
-        {profile && (
-          <>
-            <UserProfile
-              userProfile={profile} />
-          </>
-        )}
       </div>
     </div>
   );

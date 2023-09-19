@@ -10,10 +10,10 @@ export async function createProfileAction(data: any, path: string) {
 
 export async function updateProfileAction(
   id: string,
-  update: {},
+  data: any,
   path: string
 ) {
-  await updateProfile(id, update);
+  await updateProfile(id, data);
   revalidatePath(path);
 }
 

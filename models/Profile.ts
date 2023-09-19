@@ -16,7 +16,7 @@ import mongoose from "mongoose";
         allowMixed: Severity.ALLOW,
     },
 })
-@index({ email: 1 })
+@index({ email: 1, userId: 1 })
 class ProfileClass {
     @prop({ required: true })
     public name!: string;
@@ -69,7 +69,7 @@ class ProfileClass {
         }[];
     }[];
 
-    @prop({ required: true })
+    @prop({ required: true, unique: true })
     public userId!: string;
 
     _id: mongoose.Types.ObjectId | string;

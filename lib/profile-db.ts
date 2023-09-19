@@ -34,6 +34,8 @@ export async function createProfile(data: ProfileClass) {
     try {
         await connectDB();
 
+        console.log(`Profile to create: ${JSON.stringify(data)}`)
+
         const profile = await Profile.create(data);
 
         console.log(`Created Profile: ${JSON.stringify(profile)}`)
@@ -50,14 +52,12 @@ export async function getProfile(userId: string) {
     try {
         await connectDB();
 
-        const parsedId = stringToObjectId(userId);
-
-        if (!parsedId) {
+        if (!userId) {
             return { error: "Profile not found" };
         }
 
         //console.log(parsedId)
-        const profile = await Profile.findOne({userId: parsedId}).lean().exec();
+        const profile = await Profile.findOne({userId: userId}).lean().exec();
 
         if (profile) {
             const stringId = profile._id.toString()
@@ -75,12 +75,18 @@ export async function getProfile(userId: string) {
     }
 }
 
-export async function updateProfile(data: any) {
+export async function updateProfile(id: string, data: any) {
     try {
         await connectDB();
 
+        const parsedId = stringToObjectId(id);
+
+        console.log(id)
+
+        console.log(`data to update profile with: ${JSON.stringify(data)}`)
+
         const profile = await Profile.findByIdAndUpdate(
-            data._id,
+            parsedId,
             data
         )
             .lean()
