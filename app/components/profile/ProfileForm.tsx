@@ -4,12 +4,13 @@ import React, { useState } from 'react';
 import { useForm, useFieldArray, Controller, SubmitHandler } from 'react-hook-form';
 import NestedFieldArray from './NestedFieldArray';
 import emptyProfile from '../../../examples/profile_format.json';
-import { FormFields, createUserProfile } from '../../profile/profile-helper';
+import { FormFields, createUserProfile, defaultTextInput } from '../../profile/profile-helper';
 import { createProfileAction, updateProfileAction } from '../../profile/_action';
 import ProfileActions from './ProfileActions';
 import { ProfileClass } from '../../../models/Profile';
-import { demoJSON } from '../../profile/profile-helper';
+import { demoJSON, expectedJson } from '../../profile/profile-helper';
 import UserProfile from './UserProfile';
+import TextToJSON from '../TextToJSON';
 //import { redirect } from 'next/navigation'
 
 const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'
@@ -23,22 +24,26 @@ export default function ProfileForm({
     userProfile?: ProfileClass
 }) {
     const [formView, setFormView] = useState(false)
-    const [formState, setFormState] = useState(userProfile ? 'Edit' : 'Create')
+    const [inputTextView, setInputTextView] = useState(false)
+    const defaultValue = {
+        name: userProfile?.name || expectedJson.name,
+        title: userProfile?.title || expectedJson.title,
+        email: userProfile?.email || expectedJson.email,
+        phone: userProfile?.phone || expectedJson.phone,
+        social_links: userProfile?.social_links || expectedJson.social_links,
+        location: userProfile?.location || expectedJson.location,
+        summary: userProfile?.summary || expectedJson.summary,
+        areas_of_expertise: userProfile?.areas_of_expertise || expectedJson.areas_of_expertise,
+        skills: userProfile?.skills || expectedJson.skills,
+        professional_experience: userProfile?.professional_experience || expectedJson.professional_experience,
+        education: userProfile?.education || expectedJson.education
+    }
+
+    const [values, setValues] = useState(expectedJson)
 
     const { register, handleSubmit, control } = useForm<FormFields>({
-        defaultValues: {
-            name: userProfile?.name || '',
-            title: userProfile?.title || '',
-            email: userProfile?.email || '',
-            phone: userProfile?.phone || '',
-            social_links: userProfile?.social_links || { Github: "", LinkedIn: "" },
-            location: userProfile?.location || '',
-            summary: userProfile?.summary || '',
-            areas_of_expertise: userProfile?.areas_of_expertise || [],
-            skills: userProfile?.skills || [],
-            professional_experience: userProfile?.professional_experience || [],
-            education: userProfile?.education || []
-        }
+        defaultValues: defaultValue,
+        values
     });
 
     const { fields: experienceFields, append: appendExperience } = useFieldArray({
@@ -75,8 +80,8 @@ export default function ProfileForm({
                 id={userProfile?.id}
                 formView={formView}
                 setFormView={setFormView}
-                formState={formState}
-                setFormState={setFormState}
+                inputTextView={inputTextView}
+                setInputTextView={setInputTextView}
             />
             {userProfile && !formView && (
                 <>
@@ -84,6 +89,17 @@ export default function ProfileForm({
                         userProfile={userProfile} />
                 </>
             )}
+            {inputTextView && (
+                <TextToJSON
+                    setValues={setValues}
+                    expectedJson={expectedJson}
+                    defaultTextInput=''
+                    //defaultTextInput={defaultTextInput}
+                    //demoJSON={demoJSON}
+                    inputTextType='resume'
+                    setFormView={setFormView}
+                    setInputTextView={setInputTextView}
+                />)}
             {formView && (
                 <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-3xl">
                     <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
@@ -228,15 +244,15 @@ export default function ProfileForm({
                                 degree: "Degree",
                                 institution: "Institution",
                                 location: "Location",
-                                details: { content: "", starStory: "" }
+                                details: [{ content: "", starStory: "" }]
                             })}>
                                 Add Education
                             </button>
                         </div>
 
                         {/* Submit */}
-                        <div className={BASIC_FIELD_STYLE}>
-                            <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4" type="submit">Submit</button>
+                        <div className={`${BASIC_FIELD_STYLE} sticky bottom-0 p-3 bg-white shadow-md rounded-xl`}>
+                            <button className="bg-blue-500 text-white px-4 py-2 rounded" type="submit">Submit</button>
                         </div>
                     </form>
                 </div>

@@ -7,14 +7,14 @@ export default function ProfileActions(
         id,
         formView,
         setFormView,
-        formState,
-        setFormState
+        inputTextView,
+        setInputTextView
     }: {
         id?: string,
         formView: boolean,
         setFormView: any,
-        formState: string,
-        setFormState: any
+        inputTextView: boolean,
+        setInputTextView: any
     }) {
 
     async function deleteProfile() {
@@ -31,6 +31,12 @@ export default function ProfileActions(
         setFormView(true)
     }
 
+    function showTextInput() {
+        setInputTextView(true)
+    }
+
+    
+
     return (
         <div className='p-4'>
             {id && (<button
@@ -39,10 +45,16 @@ export default function ProfileActions(
                 Delete
             </button>
             )}
-            {!formView && (<button
+            {id && !formView && (<button
                 className="bg-blue-500 text-white px-4 py-2 rounded m-4 "
                 onClick={showForm}>
-                {formState == "Edit"? "Edit Profile": "Create Profile"}
+                Edit Profile
+            </button>
+            )}
+            {!id && !inputTextView && !formView && (<button
+                className="bg-blue-500 text-white px-4 py-2 rounded m-4 "
+                onClick={showTextInput}>
+                Create Profile
             </button>
             )}
         </div>
