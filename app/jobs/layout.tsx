@@ -1,5 +1,3 @@
-import JobsContextProvider from '../components/jobs/JobsContext';
-
 
 export default function JobLayout({
   children, // will be a page or nested layout
@@ -9,9 +7,7 @@ export default function JobLayout({
 
   return (
     <>
-      <JobsContextProvider>
       {children}
-      </JobsContextProvider>
     </>
   )
 }

@@ -1,3 +1,4 @@
+import { ProfileClass } from '../../../../models/Profile';
 import StarStory from './StarStory';
 
 export default function Experience({
@@ -5,7 +6,7 @@ export default function Experience({
     userResume,
 }: {
     jobData: any,
-    userResume: profileFormat,
+    userResume: ProfileClass,
 }) {
 
     return (
@@ -15,7 +16,7 @@ export default function Experience({
             </h1>
             <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-3xl">
                 <h2 className="text-left font-bold text-2xl py-4 mb-4">Professional Experience</h2>
-                {userResume.professional_experience.map((exp: any, index: number) => (
+                {userResume.professional_experience && userResume.professional_experience.map((exp: any, index: number) => (
                     <div key={index} className="mb-8">
                         <h3 className="text-left font-bold text-lg mb-2">{exp.title} at {exp.company}</h3>
                         <p className="text-left text-lg mb-2">{exp.location}</p>
@@ -56,17 +57,17 @@ export default function Experience({
                 ))}
 
                 <h2 className="text-left font-bold text-2xl py-4 mb-4">Education</h2>
-                {userResume.education.map((edu, index) => (
+                {userResume.education && userResume.education.map((edu, index) => (
                     <div key={index} className="mb-8">
                         <h3 className="text-left font-bold text-lg mb-2">{edu.degree}</h3>
                         <p className="text-left text-lg mb-2">{edu.institution}, {edu.location}</p>
                         <ul className="list-disc list-inside text-left mb-8">
-                            {edu.details.map((detail, i) => (<div key={i}>
+                            {edu.details && edu.details.map((detail, i) => (<div key={i}>
                                 <p>{detail.content}</p>
                                 <StarStory
                                     documentID={jobData._id}
                                     setKey={`userResume.professional_experience.${index}.responsibilities.${i}.starStory`}
-                                    content={detail.starStory}
+                                    content={detail.starStory || ''}
                                     message={[
                                         {
                                             "role": "system",

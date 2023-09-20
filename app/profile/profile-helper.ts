@@ -27,7 +27,7 @@ export type FormFields = {
         details: {
           content: string;
           starStory: string;
-        };
+        }[];
     }[];
 };
 
@@ -195,7 +195,7 @@ Dartmouth College - Hanover, NH
 export const demoJSON = {
   "name": "Will Bennett",
   "title": "Product Manager",
-  "email": "wbennett711@gmail.com",
+  "email": "wbennett71sdf1@gmail.com",
   "phone": "207-239-0234",
   "social_links": {
     "Github": "https://github.com/willmbennett",

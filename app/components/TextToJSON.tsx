@@ -9,17 +9,22 @@ type FormFields = {
 };
 
 export default function TextToJSON(
-    { setDefaultValue,
+    {
+        setValues,
         expectedJson,
         defaultTextInput,
         demoJSON,
-        inputTextType
+        inputTextType,
+        setFormView,
+        setInputTextView,
     }: {
-        setDefaultValue: any,
+        setValues: any,
         expectedJson: any,
         defaultTextInput?: string,
         demoJSON?: any,
-        inputTextType: string
+        inputTextType: string,
+        setFormView?: any,
+        setInputTextView?: any
     }) {
     const [loading, setLoading] = useState(false)
     const [finishedLoading, setFinishedLoading] = useState(false)
@@ -48,8 +53,11 @@ export default function TextToJSON(
         if (finishedLoading) {
             const finalMessage = demoJSON ? demoJSON : JSON.parse(messages[messages.length - 1].content);
             console.log(finalMessage)
-            setDefaultValue(finalMessage);
+            setValues(finalMessage)
+            setInputTextView(false) // hide the text input
+            setFormView(true) // Show the form
             setLoading(false)
+            
         }
     }, [finishedLoading]);
 
@@ -71,24 +79,35 @@ export default function TextToJSON(
     return (
         <>
             <div className='flex-col items-center'>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className={BASIC_FIELD_STYLE}>
-                        <p>Paste your text here</p>
-                        <textarea {...register('input')} placeholder="Text Input" rows={15} cols={50}></textarea>
-                    </div>
-
-                    <div className={BASIC_FIELD_STYLE}>
-                        <button
-                            className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
-                            disabled={loading}
-                            type="submit">Submit</button>
-                    </div>
-                    {loading && (
-                        <div>
-                            <p>Insert Pretty Loading GIF Here</p>
+                {!loading && (
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <div className={BASIC_FIELD_STYLE}>
+                            <p>Paste your text here</p>
+                            <textarea {...register('input')} placeholder="Text Input" rows={15} cols={50}></textarea>
                         </div>
-                    )}
-                </form>
+
+                        <div className={BASIC_FIELD_STYLE}>
+                            <button
+                                className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+                                disabled={loading}
+                                type="submit">Submit</button>
+                        </div>
+                        {loading && (
+                            <div>
+                                <p>Insert Pretty Loading GIF Here</p>
+                            </div>
+                        )}
+                    </form>
+                )}
+                {loading && (<div className='flex-col items-center'>
+                    <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
+                        AI is scanning your data
+                    </h1>
+                    <div className='p-2'>
+                    <p>This may take a minute</p>
+                    </div>
+                    <iframe src="https://giphy.com/embed/gJ3mEToTDJn3LT6kCT" className="giphy-embed w-full"></iframe>
+                </div>)}
             </div>
         </>
     );
