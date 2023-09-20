@@ -9,7 +9,6 @@ import mongoose from "mongoose";
 
 @ModelOptions({
     schemaOptions: {
-        timestamps: true,
         collection: "profiles",
     },
     options: {

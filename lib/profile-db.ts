@@ -65,7 +65,7 @@ export async function getProfile(userId: string) {
             profile["_id"] = stringId;
             //console.log(profile)
             return {
-                profile,
+                profile
             };
         } else {
             return { error: "Profile not found" };

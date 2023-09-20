@@ -1,89 +1,22 @@
-'use client'
+import Job from "../../components/jobs/job/Job";
+import { getJob } from "../../../lib/job-db";
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '../../../lib/auth';
+import { getProfile } from "../../../lib/profile-db";
 
-import { useContext, useState, useEffect } from 'react';
-import CoverLetter from '../../components/jobs/job/CoverLetter';
-import JobMenu from '../../components/jobs/job/JobMenu';
-import { JobsContext } from '../../components/jobs/JobsContext';
-import UserStory from '../../components/jobs/job/Story';
-import Resume from '../../components/jobs/job/Resume';
-import Experience from '../../components/jobs/job/Experience';
-import emptyProfile from '../../../examples/profile_format.json';
-import JobDescription from '../../components/jobs/job/JobDescription';
+export default async function ProfilePage({ params }: { params: { id: string } }) {
+  const { job } = await getJob(params.id);
+  const session = await getServerSession(authOptions)
+  const { profile } = await getProfile(session?.user?.id || '');
 
-export default function JobPage({ params }: { params: { id: number } }) {
-    let { userJobs, userProfile } = useContext(JobsContext);
-    const [jobData, setJobData] = useState<jobFormat>()
-    const [coverLetter, setCoverLetter] = useState('')
-    const [userStory, setUserStory] = useState('')
-    const [userResume, setUserResume] = useState<profileFormat>(emptyProfile)
-    const [section, setSection] = useState('jobDescription')
-
-    useEffect(() => {
-        const recievedJob = userJobs.find(job => job._id === params.id)
-        setJobData(recievedJob)
-        if(recievedJob) {
-            setUserResume(recievedJob.userResume)
-            setCoverLetter(recievedJob.userCoverLetter)
-            setUserStory(recievedJob.userStory)
-        }
-    }, [userJobs]);
-
-    return (<>
-    <div className="flex flex-1 w-full flex-col items-center justify-center text-center lg:px-4 lg:mt-6">
-          <div className="flex flex-1 w-full">
-        <div className="w-1/4 hidden lg:flex lg:flex-col">
-            <JobMenu
-                section={section}
-                setSection={setSection}
-            />
-        </div>
-        <div className="flex flex-1 w-full flex-col items-center text-center p-1 lg:p-8">
-            {jobData && (
-                <>
-                    {section == "jobDescription" && (
-                        <JobDescription
-                        jobData={jobData}
-                    />
-                    )}
-                    {section == "userCoverLetter" && jobData && (<>
-                        <CoverLetter
-                            jobData={jobData}
-                            userProfile={userProfile}
-                            coverLetter={coverLetter}
-                            setCoverLetter={setCoverLetter}
-                        />
-                    </>)}
-                    {section == "userResume" && jobData && (<>
-                        <Resume
-                            jobData={jobData}
-                            userProfile={userProfile}
-                            userResume={userResume}
-                            setUserResume={setUserResume}
-                        />
-                    </>)}
-                    {section == "userStory" && jobData && (<>
-                        <UserStory
-                            jobData={jobData}
-                            userProfile={userProfile}
-                            userStory={userStory}
-                            setUserStory={setUserStory}
-                        />
-                    </>)}
-                    {section == "userExperience" && jobData && (<>
-                        <Experience
-                            jobData={jobData}
-                            userResume={userResume}
-                        />
-                    </>)}
-                </>)}
-        </div>
-        </div>
-        </div>
-        <div className='lg:hidden sticky bottom-0'>
-            <JobMenu
-                section={section}
-                setSection={setSection}
-            />
-        </div>
-    </>);
+  return (
+    <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen bg-gray-100">
+      <div className="flex flex-1 w-full flex-col items-center justify-center text-center lg:px-4 lg:mt-6">
+      <Job
+            job={job}
+            profile={profile}
+          />
+      </div>
+    </div>
+  );
 }

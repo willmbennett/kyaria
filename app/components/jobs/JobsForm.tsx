@@ -7,82 +7,78 @@ import NewJobForm from "./NewJobForm";
 //import { ObjectId } from "mongodb";
 import { useSession } from 'next-auth/react';
 import { ProfileClass } from "../../../models/Profile";
+import { JobClass } from "../../../models/Job";
+import JobItem from "./JobItem";
 
 export default function JobsForm(
-    userProfile: ProfileClass
+  {
+    jobs,
+    profile
+  }: {
+    jobs: any,
+    profile: any
+  }
 ) {
-  const { data: session } = useSession();
   const [creatingJob, setCreatingJob] = useState(false);
-  const [userResume, setUserResume] = useState<ProfileClass>(userProfile);
   const [values, setValues] = useState<FormFields>(defaultFormInput);
+  const [formView, setFormView] = useState(false);
+  const [inputTextView, setInputTextView] = useState(false);
 
   const handleCreateJobClick = () => {
     setCreatingJob(true)
+    setInputTextView(true)
   };
 
-  useEffect(() => {
-    setUserResume(userProfile)
-  }, [userProfile]);
-  
   return (
-    <div className="flex max-w-5xl mx-auto flex-col items-center py-2 min-h-screen bg-gray-100">
-      <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4">
-        <div className="w-full max-w-2xl bg-white rounded-xl p-6 shadow-md">
-          {userProfile.name && (<>
-            {!creatingJob && (
-              <>
-                <h1 className="sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900 mb-10">
-                  Your Jobs
-                </h1>
-                {userJobs && (
-                  <ul className="space-y-4 mb-8">
-                    {userJobs.map((job) => (
-                      <li key={job._id} className="text-lg text-slate-700">
-                        <Link href={`/jobs/${job._id}`}>
-                          <span className="cursor-pointer hover:text-slate-900 hover:underline">
-                            {job.jobTitle}
-                          </span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4" onClick={handleCreateJobClick}> New Job</button>
-              </>
-            )}
-            {creatingJob && (
-              <>
-                <h1 className="sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900 mb-10">
-                  Create a New Job
-                </h1>
+    <div className="flex max-w-5xl mx-auto flex-col items-center min-h-screen">
+      {!creatingJob && (<>
+        {jobs?.map((job: any) => (
+          <div key={job.id} className="w-full">
+            <JobItem
+              id={job.id}
+              jobTitle={job.jobTitle}
+              company={job.company}
+            />
+          </div>
+        ))}
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded m-4 "
+          onClick={handleCreateJobClick}>
+          New Job
+        </button>
+      </>
+      )}
+      {creatingJob && (
+        <>
+          <h1 className="sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900 mb-10">
+            Create a New Job
+          </h1>
 
-                <div className="mb-4 flex flex-col items-center">
-                  {values.jobTitle.length == 0 && (
-                    <TextToJSON
-                    setValues={setValues}
-                      expectedJson={expectedJson}
-                      defaultTextInput=''
-                      //demoJSON={demoJSON}
-                      inputTextType='resume'
-                    />
-                  )}
-                  {values.jobTitle.length > 0 && (
-                    <NewJobForm
-                      defaultValue={defaultFormInput}
-                      values={values}
-                      setCreatingJob={setCreatingJob}
-                      userId={userProfile.userId}
-                      userResume={userResume}
-                      jobList={userJobs}
-                      setJobList={setUserJobs}
-                    />
-                  )}
-                </div>
-              </>
+          <div className="mb-4 flex flex-col items-center">
+            {inputTextView && (
+              <TextToJSON
+                setValues={setValues}
+                expectedJson={expectedJson}
+                defaultTextInput={defaultTextInput || ''}
+                demoJSON={demoJSON}
+                inputTextType='resume'
+                setFormView={setFormView}
+                setInputTextView={setInputTextView}
+              />
             )}
-          </>)}
-        </div>
-      </main>
+            {formView && (
+              <NewJobForm
+                defaultValue={defaultFormInput}
+                values={values}
+                setCreatingJob={setCreatingJob}
+                userId={profile.userId}
+                userResume={profile}
+                setFormView={setFormView}
+              />
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 }

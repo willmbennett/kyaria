@@ -4,6 +4,9 @@ import { FormFields } from '../../jobs/job-helper'
 //import { redirect } from 'next/navigation'
 import FieldArray from './FieldArray';
 import { createNewJob } from '../../jobs/job-helper';
+import { ProfileClass } from '../../../models/Profile';
+import { JobClass } from '../../../models/Job';
+import { createJobAction } from '../../jobs/[id]/_action';
 
 const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'
 
@@ -13,16 +16,14 @@ export default function NewJobForm({
     setCreatingJob,
     userId,
     userResume,
-    jobList,
-    setJobList
+    setFormView
 }: {
     defaultValue: any,
     values: any,
     setCreatingJob: any,
     userId: string,
-    userResume: profileFormat,
-    jobList: jobFormat[],
-    setJobList: any
+    userResume: any,
+    setFormView: any
 }) {
 
     const { register, handleSubmit, control } = useForm<FormFields>({
@@ -31,10 +32,21 @@ export default function NewJobForm({
     });
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
-        const newJob = await createNewJob({ data, userId, userResume });
-        console.log(newJob)
+        console.log("Creating Job")
+        const addDetails = {
+            ...data,
+            userId: userId,
+            userCoverLetter: "",
+            userResume: userResume,
+            userStory: ""
+        }
+        console.log(addDetails.userCoverLetter)
+        console.log(addDetails)
+        const path = "/"
+        const res = await createJobAction(addDetails, path);
+        console.log(res)
         setCreatingJob(false)
-        setJobList([...jobList, newJob])
+        setFormView(false)
         //redirect(`/`) // Navigate to new route
     };
 

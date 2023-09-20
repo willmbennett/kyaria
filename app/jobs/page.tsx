@@ -2,12 +2,13 @@ import { getServerSession } from "next-auth/next";
 import Link from "next/link";
 import { authOptions } from "../../lib/auth";
 import { getUserJobs } from "../../lib/job-db";
-import { JobClass } from "../../models/Job";
-import JobItem from "../components/jobs/JobItem";
+import { getProfile } from "../../lib/profile-db";
+import JobsForm from "../components/jobs/JobsForm";
 
 export default async function JobPage() {
   const session = await getServerSession(authOptions)
   const { jobs } = await getUserJobs({ userId: session?.user?.id || '' })
+  const { profile } = await getProfile(session?.user?.id || '');
 
 
   return (
@@ -22,15 +23,12 @@ export default async function JobPage() {
               <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4" type="submit">Go To Profile</button>
             </Link>
           </>)}
-          {jobs?.map((job: JobClass) => (
-          <div key={job.id}>
-            <JobItem 
-            id={job.id} 
-            jobTitle={job.jobTitle} 
-            company={job.company} 
+          {session?.user?.id && (
+            <JobsForm 
+            jobs={jobs}
+            profile={profile}
             />
-          </div>
-        ))}
+          )}
         </div>
       </main>
     </div>

@@ -11,13 +11,14 @@ import { ProfileClass } from "./Profile";
 @ModelOptions({
     schemaOptions: {
         timestamps: true,
+        versionKey: false,
         collection: "jobs",
     },
     options: {
         allowMixed: Severity.ALLOW,
     },
 })
-@index({ userId: 1 })
+//@index({ jobTitle: 1 })
 class JobClass {
     @prop({ required: true })
     public jobTitle!: string;
@@ -64,11 +65,16 @@ class JobClass {
         answer: string;
     }[]
 
-    @prop({ required: true, unique: true })
+    @prop({ required: true })
     public userId!: string;
 
     _id: mongoose.Types.ObjectId | string;
     id: string;
+
+    createdAt: Date | string;
+    _createdAt: string;
+    updatedAt: Date | string;
+    _updatedAt: string;
 }
 
 const Job = getModelForClass(JobClass);
