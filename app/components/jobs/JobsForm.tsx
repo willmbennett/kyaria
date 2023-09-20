@@ -20,7 +20,7 @@ export default function JobsForm(
   }
 ) {
   const [creatingJob, setCreatingJob] = useState(false);
-  const [values, setValues] = useState<FormFields>(defaultFormInput);
+  const [values, setValues] = useState<FormFields>();
   const [formView, setFormView] = useState(false);
   const [inputTextView, setInputTextView] = useState(false);
 
@@ -59,8 +59,8 @@ export default function JobsForm(
               <TextToJSON
                 setValues={setValues}
                 expectedJson={expectedJson}
-                defaultTextInput={defaultTextInput || ''}
-                demoJSON={demoJSON}
+                defaultTextInput=''
+                //demoJSON={demoJSON}
                 inputTextType='resume'
                 setFormView={setFormView}
                 setInputTextView={setInputTextView}
