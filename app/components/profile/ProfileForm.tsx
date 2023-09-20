@@ -18,10 +18,12 @@ const H2_STYLE = 'text-left font-bold text-2xl py-4 mb-4'
 
 export default function ProfileForm({
     userId,
-    userProfile
+    userProfile,
+    sessionUserId
 }: {
     userId: string
-    userProfile?: ProfileClass
+    userProfile?: ProfileClass,
+    sessionUserId?: string
 }) {
     const [formView, setFormView] = useState(false)
     const [inputTextView, setInputTextView] = useState(false)
@@ -75,7 +77,8 @@ export default function ProfileForm({
     };
 
     return (
-        <>
+        <> 
+            { sessionUserId == userId && (
             <ProfileActions
                 id={userProfile?.id}
                 formView={formView}
@@ -83,6 +86,7 @@ export default function ProfileForm({
                 inputTextView={inputTextView}
                 setInputTextView={setInputTextView}
             />
+            )}
             {userProfile && !formView && (
                 <>
                     <UserProfile

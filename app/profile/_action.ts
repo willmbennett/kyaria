@@ -1,6 +1,6 @@
 "use server";
 
-import { createProfile, deleteProfile, updateProfile } from "../../lib/profile-db";
+import { createProfile, deleteProfile, getProfile, updateProfile } from "../../lib/profile-db";
 import { revalidatePath } from "next/cache";
 
 export async function createProfileAction(data: any, path: string) {
@@ -26,4 +26,11 @@ export async function deleteProfileAction({
 }) {
   await deleteProfile(id);
   revalidatePath(path);
+}
+
+export async function getProfileAction(
+  userId: string
+) {
+  const profile = await getProfile(userId);
+  return profile
 }
