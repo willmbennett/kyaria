@@ -95,6 +95,9 @@ dependencies:
   transform-props:
     specifier: ^1.0.1
     version: 1.0.1
+  typegoose:
+    specifier: ^5.9.1
+    version: 5.9.1(mongoose@7.5.2)
 
 devDependencies:
   '@types/formidable':
@@ -3897,6 +3900,17 @@ packages:
     requiresBuild: true
     dev: false
     optional: true
+
+  /typegoose@5.9.1(mongoose@7.5.2):
+    resolution: {integrity: sha512-D+vMhNyZeKBZHrmJFZwOodl3T9W2NOXY+hbnW/f1n60oEL8+L15eryFc9C6fAKrlnkgpui+kdQnNXsLwx2MgCw==}
+    engines: {node: '>=8.10.0'}
+    deprecated: No longer maintained, use https://github.com/typegoose/typegoose
+    peerDependencies:
+      mongoose: ^5.6.7
+    dependencies:
+      mongoose: 7.5.2(mongodb-client-encryption@6.0.0)
+      reflect-metadata: 0.1.13
+    dev: false
 
   /typescript@4.9.4:
     resolution: {integrity: sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==}
