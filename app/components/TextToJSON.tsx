@@ -44,8 +44,8 @@ export default function TextToJSON(
     // Make a call to chatGPT
     const chatGPT = async (message: any) => {
         setLoading(true)
-        //append(message);
-        setFinishedLoading(true)
+        append(message);
+        //setFinishedLoading(true)
     };
 
     // Save the final message to context

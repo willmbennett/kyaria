@@ -1,16 +1,13 @@
 'use client'
 
+import { updateJobAppAction } from '../../../jobs/apps/[id]/_action';
 import ChatWithGPT from '../ChatWithGPT';
 
 export default function UserStory({
-    jobData,
-    userProfile,
-    userStory,
+    jobApp,
     setUserStory
 }: {
-    jobData: any,
-    userProfile: any,
-    userStory: any,
+    jobApp: any,
     setUserStory: any
 }) {
 
@@ -45,10 +42,10 @@ export default function UserStory({
             "role": "user",
             "content":
                 `Based on the following details, help me craft a compelling, narrative-style story:
-                    - Job Post: ${JSON.stringify(jobData)} 
-                    - My professional experience: ${JSON.stringify(userProfile.professional_experience)} 
-                    - My skills: ${JSON.stringify(userProfile.skills)} 
-                    - My education: ${JSON.stringify(userProfile.education)}
+                    - Job Post: ${JSON.stringify(jobApp.job)} 
+                    - My professional experience: ${JSON.stringify(jobApp.profile.professional_experience)} 
+                    - My skills: ${JSON.stringify(jobApp.profile.skills)} 
+                    - My education: ${JSON.stringify(jobApp.profile.education)}
                     `
         }
     ];
@@ -61,12 +58,13 @@ export default function UserStory({
                 Let's write you a story
             </h1>
             <ChatWithGPT
-                collection='jobs'
-                documentID={jobData._id}
+                collection='applications'
+                documentID={jobApp._id}
                 message={message}
                 setKey='userStory'
-                currentState={userStory}
+                currentState={jobApp.userStory}
                 updateState={setUserStory}
+                saveToDatabase={updateJobAppAction}
                 temp={0.7}
             />
         </>

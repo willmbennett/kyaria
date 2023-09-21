@@ -1,18 +1,17 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import CoverLetter from './CoverLetter';
 import JobMenu from './JobMenu';
 import UserStory from './Story';
 import Resume from './Resume';
 import Experience from './Experience';
 import JobDescription from './JobDescription';
-import { JobApplicationClass } from '../../../../models/JobApplication';
 
 export default function Job(
     { jobApp
     }: {
-        jobApp: JobApplicationClass
+        jobApp: any
     }) {
     const [section, setSection] = useState('jobDescription')
     const [application, setApplication] = useState(jobApp)
@@ -127,7 +126,7 @@ export default function Job(
                                     jobData={jobApp.job}
                                 />
                             )}
-                            {section == "userResume" && jobApp && (<>
+                            {section == "userResume" && (<>
                                 <Resume
                                     userProfile={jobApp.profile}
                                     job={jobApp.job}
@@ -137,29 +136,23 @@ export default function Job(
                                     updateResumeEductionDetails={updateResumeEductionDetails}
                                 />
                             </>)}
-                            {section == "userCoverLetter" && jobApp && (<>
+                            {section == "userCoverLetter" && (<>
                                 <CoverLetter
-                                    jobData={jobApp.job}
-                                    userProfile={jobApp.profile}
-                                    coverLetter={jobApp.userCoverLetter}
+                                    jobApp={jobApp}
                                     setCoverLetter={updateCoverLetter}
                                 />
                             </>)}
-                            {section == "userStory" && jobApp && (<>
+                            {section == "userStory" && (<>
                                 <UserStory
-                                    jobData={jobApp}
-                                    userProfile={jobApp.profile}
-                                    userStory={jobApp.userStory}
+                                    jobApp={jobApp}
                                     setUserStory={updateStory}
                                 />
                             </>)}
-                            {section == "userExperience" && jobApp && (<>
+                            {section == "userExperience" && (<>
                                 <Experience
-                                    job={jobApp}
-                                    userResume={jobApp.userResume}
+                                    jobApp={jobApp}
                                     updateExperienceStarStory={updateExperienceStarStory}
                                     updateEductionStarStory={updateEductionStarStory}
-                                    application={application}
                                 />
                             </>)}
                         </>)}

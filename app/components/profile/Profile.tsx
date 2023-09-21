@@ -97,9 +97,9 @@ export default function Profile({
                 <TextToJSON
                     setValues={setValues}
                     expectedJson={expectedJson}
-                    //defaultTextInput=''
-                    defaultTextInput={defaultTextInput}
-                    demoJSON={demoJSON}
+                    defaultTextInput=''
+                    //defaultTextInput={defaultTextInput}
+                    //demoJSON={demoJSON}
                     inputTextType='resume'
                     setFormView={setFormView}
                     setInputTextView={setInputTextView}

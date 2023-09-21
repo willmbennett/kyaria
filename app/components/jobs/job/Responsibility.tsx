@@ -1,7 +1,6 @@
 'use client'
 
 import ChatWithGPT from '../ChatWithGPT';
-import { useState } from 'react';
 
 export default function Responsibility({
     documentID,
@@ -9,6 +8,7 @@ export default function Responsibility({
     content,
     message,
     updateResumeExperienceResponsibilities,
+    saveToDatabase,
     parentIndex,
     childIndex
 }: {
@@ -17,6 +17,7 @@ export default function Responsibility({
     content: string,
     message: any,
     updateResumeExperienceResponsibilities: any,
+    saveToDatabase: any,
     parentIndex: number,
     childIndex: number
 }) {
@@ -25,7 +26,7 @@ export default function Responsibility({
         <>
             <div className="py-2">
                 <ChatWithGPT
-                    collection='jobs'
+                    collection='resumes'
                     documentID={documentID}
                     setKey={setKey}
                     message={message}
@@ -33,6 +34,7 @@ export default function Responsibility({
                     updateState={updateResumeExperienceResponsibilities}
                     parentIndex={parentIndex}
                     childIndex={childIndex}
+                    saveToDatabase={saveToDatabase}
                 />
             </div>
         </>

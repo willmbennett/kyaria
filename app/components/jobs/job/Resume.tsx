@@ -2,7 +2,7 @@
 
 import ChatWithGPT from '../ChatWithGPT';
 import Responsibility from './Responsibility';
-import { useState } from 'react';
+import { updateResumeAction } from '../../../jobs/apps/[id]/_action';
 
 export default function Resume({
     userProfile,
@@ -13,8 +13,8 @@ export default function Resume({
     updateResumeEductionDetails
 
 }: {
-    userProfile?: any,
-    job?: any,
+    userProfile: any,
+    job: any,
     application: any,
     updateResumeSummary: any,
     updateResumeExperienceResponsibilities: any,
@@ -33,34 +33,34 @@ export default function Resume({
         {
             "role": "user",
             "content":
-                `I'm applying for this job: ${JSON.stringify(job)}. Help me improve this resume summary ${userProfile?.summary} based on details from my profile:`
+                `I'm applying for this job: ${JSON.stringify(job)}. Help me improve this resume summary ${userProfile.summary} based on details from my profile: ${userProfile.summary}`
         }
     ];
 
     return (
         <>
             <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
-                {userResume?.name}
+                {userResume.name}
             </h1>
             <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-3xl">
                 <p className="text-left font-medium text-lg mb-4">
-                    <strong>Title:</strong> {userResume?.title}
+                    <strong>Title:</strong> {userResume.title}
                 </p>
                 <p className="text-left font-medium text-lg mb-4">
-                    <strong>Email:</strong> {userResume?.email}
+                    <strong>Email:</strong> {userResume.email}
                 </p>
                 <p className="text-left font-medium text-lg mb-4">
-                    <strong>Phone:</strong> {userResume?.phone}
+                    <strong>Phone:</strong> {userResume.phone}
                 </p>
                 <p className="text-left font-medium text-lg mb-4">
-                    <strong>Location:</strong> {userResume?.location}
+                    <strong>Location:</strong> {userResume.location}
                 </p>
-                {userResume?.social_links && (
+                {userResume.social_links && (
                     <p className="text-left font-medium text-lg mb-4">
                         <a href={userResume.social_links['LinkedIn']} target="_blank" rel="noopener noreferrer">LinkedIn</a>
                     </p>
                 )}
-                {userResume?.social_links && (
+                {userResume.social_links && (
                     <p className="text-left font-medium text-lg mb-4">
                         <a href={userResume.social_links['Github']} target="_blank" rel="noopener noreferrer">Github</a>
                     </p>
@@ -68,12 +68,13 @@ export default function Resume({
 
                 <h2 className="text-left font-bold text-2xl py-4 mb-4">Summary</h2>
                 <ChatWithGPT
-                    collection='jobs'
-                    documentID={job?.id || ""}
+                    collection='resumes'
+                    documentID={application.userResume._id}
                     message={message}
-                    setKey={"userResume.summary"}
+                    setKey={"summary"}
                     currentState={application.userResume.summary}
                     updateState={updateResumeSummary}
+                    saveToDatabase={updateResumeAction}
                 />
 
                 {userResume?.areas_of_expertise && (<>
@@ -88,7 +89,7 @@ export default function Resume({
                     <h2 className="text-left font-bold text-2xl py-4 mb-4">Skills</h2>
                     <p className='text-left'>{userResume.skills.join(', ')}</p>
                 </>)}
-                {userResume?.professional_experience && (<>
+                {userResume.professional_experience && (<>
                     <h2 className="text-left font-bold text-2xl py-4 mb-4">Professional Experience</h2>
                     {userResume.professional_experience.map((exp: any, index: number) => (
                         <div key={index} className="mb-8">
@@ -99,8 +100,8 @@ export default function Resume({
                                 {exp.responsibilities.map((resp: any, i: number) => (
                                     <div key={i}>
                                         <Responsibility
-                                            documentID={job?.id || ''}
-                                            setKey={`userResume.professional_experience.${index}.responsibilities.${i}.content`}
+                                            documentID={application.userResume._id}
+                                            setKey={`professional_experience.${index}.responsibilities.${i}.content`}
                                             content={resp.content}
                                             message={[
                                                 {
@@ -120,6 +121,7 @@ export default function Resume({
                                                 }
                                             ]}
                                             updateResumeExperienceResponsibilities={updateResumeExperienceResponsibilities}
+                                            saveToDatabase={updateResumeAction}
                                             parentIndex={index}
                                             childIndex={i}
                                         />
@@ -129,7 +131,7 @@ export default function Resume({
                     ))}
                 </>)}
 
-                {userResume?.education && (<>
+                {userResume.education && (<>
                     <h2 className="text-left font-bold text-2xl py-4 mb-4">Education</h2>
                     {userResume.education.map((edu: any, index: number) => (
                         <div key={index} className="mb-8">
@@ -140,9 +142,9 @@ export default function Resume({
                                     {edu.details.map((detail: any, i: number) => (
                                         <div key={i}>
                                             <Responsibility
-                                                documentID={job?.id || ''}
-                                                setKey={`userResume.education.${index}.details.${i}.content`}
-                                                content={detail.content || ''}
+                                                documentID={job.id}
+                                                setKey={`education.${index}.details.${i}.content`}
+                                                content={detail.content}
                                                 message={[
                                                     {
                                                         "role": "system",
@@ -161,6 +163,7 @@ export default function Resume({
                                                     }
                                                 ]}
                                                 updateResumeExperienceResponsibilities={updateResumeEductionDetails}
+                                                saveToDatabase={updateResumeAction}
                                                 parentIndex={index}
                                                 childIndex={i}
                                             />

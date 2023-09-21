@@ -60,9 +60,9 @@ export default function JobApps(
               <TextToJSON
                 setValues={setValues}
                 expectedJson={expectedJson}
-                //defaultTextInput=''
-                defaultTextInput={defaultTextInput}
-                demoJSON={demoJSON}
+                defaultTextInput=''
+                //defaultTextInput={defaultTextInput}
+                //demoJSON={demoJSON}
                 inputTextType='resume'
                 setFormView={setFormView}
                 setInputTextView={setInputTextView}

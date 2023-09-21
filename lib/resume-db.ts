@@ -1,6 +1,6 @@
 import { Resume, ResumeClass } from "../models/Resume";
 import connectDB from "./connect-db";
-import { castToString } from "./utils";
+import { castToString, stringToObjectId } from "./utils";
 
 export async function createResume(data: ResumeClass) {
     try {
@@ -21,6 +21,35 @@ export async function createResume(data: ResumeClass) {
             };
         } else {
             return { error: "Job not found" };
+        }
+    } catch (error) {
+        return { error };
+    }
+}
+
+export async function updateResume(id: string, data: any) {
+    try {
+        await connectDB();
+
+        const parsedId = stringToObjectId(id);
+
+        console.log(id)
+
+        console.log(`data to update profile with: ${JSON.stringify(data)}`)
+
+        const resume = await Resume.findByIdAndUpdate(
+            parsedId,
+            data
+        )
+            .lean()
+            .exec();
+
+        if (resume) {
+            return {
+                resume,
+            };
+        } else {
+            return { error: "Resume not found" };
         }
     } catch (error) {
         return { error };

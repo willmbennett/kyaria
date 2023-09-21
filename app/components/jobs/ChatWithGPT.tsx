@@ -13,6 +13,7 @@ interface Props {
   message: any;
   currentState: any;
   updateState: any;
+  saveToDatabase: any;
   refresh?: boolean;
   temp?: number;
   copy?: boolean;
@@ -29,6 +30,7 @@ export default function ChatWithGPT({
   message,
   currentState,
   updateState,
+  saveToDatabase,
   refresh = true,
   temp = 0.3,
   copy = true,
@@ -64,7 +66,7 @@ export default function ChatWithGPT({
     const data = JSON.parse(`{"${setKey}":""}`)
     data[setKey] = returnedMessage
     //console.log(id, data)
-    const jobupdate = await updateJobAction(id, data, "/")
+    const update = await saveToDatabase(id, data, "/")
     
     // Update the state
     console.log(finishedLoading)

@@ -1,16 +1,13 @@
 'use client'
 
 import ChatWithGPT from '../ChatWithGPT';
+import { updateJobAppAction } from '../../../jobs/apps/[id]/_action';
 
 export default function CoverLetter({
-    jobData,
-    userProfile,
-    coverLetter,
+    jobApp,
     setCoverLetter
 }: {
-    jobData: any,
-    userProfile: any,
-    coverLetter: any,
+    jobApp: any,
     setCoverLetter: any
 }) {
 
@@ -49,8 +46,8 @@ export default function CoverLetter({
         {
             "role": "user",
             "content": `Please write me a tailored cover letter for the following job description:
-            - Job description: ${JSON.stringify(jobData)}
-            Include information from my profile ${JSON.stringify(userProfile)}
+            - Job description: ${JSON.stringify(jobApp.job)}
+            Include information from my profile ${JSON.stringify(jobApp.profile)}
             
             Structure the cover letter into an introduction, body, and conclusion.`
         }
@@ -64,12 +61,13 @@ export default function CoverLetter({
                 Stand out with a cover letter
             </h1>
             <ChatWithGPT
-                collection='jobs'
-                documentID={jobData._id}
+                collection='applications'
+                documentID={jobApp._id}
                 setKey='userCoverLetter'
                 message={message}
-                currentState={coverLetter}
+                currentState={jobApp.userCoverLetter}
                 updateState={setCoverLetter}
+                saveToDatabase={updateJobAppAction}
                 temp={0.5}
             />
         </>
