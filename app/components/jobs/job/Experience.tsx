@@ -1,12 +1,18 @@
-import { ProfileClass } from '../../../../models/Profile';
+import { ResumeClass } from '../../../../models/Resume';
 import StarStory from './StarStory';
 
 export default function Experience({
-    jobData,
+    job,
     userResume,
+    updateExperienceStarStory,
+    updateEductionStarStory,
+    application
 }: {
-    jobData: any,
-    userResume: ProfileClass,
+    job: any,
+    userResume: ResumeClass,
+    updateExperienceStarStory: any,
+    updateEductionStarStory: any,
+    application: any
 }) {
 
     return (
@@ -25,9 +31,8 @@ export default function Experience({
                             {exp.responsibilities.map((resp: any, i: number) => (<div key={i}>
                                 <p>{resp.content}</p>
                                 <StarStory
-                                    documentID={jobData._id}
+                                    documentID={job._id}
                                     setKey={`userResume.professional_experience.${index}.responsibilities.${i}.starStory`}
-                                    content={resp.starStory}
                                     message={[
                                         {
                                             "role": "system",
@@ -47,9 +52,13 @@ export default function Experience({
                                         ,
                                         {
                                             role: "user",
-                                            content: `Create a STAR story for this text: "${resp.content}" based on this job post: ${JSON.stringify(jobData)}`
+                                            content: `Create a STAR story for this text: "${resp.content}" based on this job post: ${JSON.stringify(job)}`
                                         }
                                     ]}
+                                    currentState={application.userResume.professional_experience[index].responsibilities[i].starStory}
+                                    updateState={updateExperienceStarStory}
+                                    parentIndex={index}
+                                    childIndex={i}
                                 />
                             </div>))}
                         </ul>
@@ -65,9 +74,8 @@ export default function Experience({
                             {edu.details && edu.details.map((detail, i) => (<div key={i}>
                                 <p>{detail.content}</p>
                                 <StarStory
-                                    documentID={jobData._id}
+                                    documentID={job._id}
                                     setKey={`userResume.professional_experience.${index}.responsibilities.${i}.starStory`}
-                                    content={detail.starStory || ''}
                                     message={[
                                         {
                                             "role": "system",
@@ -87,9 +95,13 @@ export default function Experience({
                                         ,
                                         {
                                             role: "user",
-                                            content: `Create a STAR story for this text: "${detail.content}" based on this job post: ${JSON.stringify(jobData)}`
+                                            content: `Create a STAR story for this text: "${detail.content}" based on this job post: ${JSON.stringify(job)}`
                                         }
                                     ]}
+                                    currentState={application.userResume.education[index].details[i].starStory}
+                                    updateState={updateEductionStarStory}
+                                    parentIndex={index}
+                                    childIndex={i}
                                 />
                             </div>
                             ))}

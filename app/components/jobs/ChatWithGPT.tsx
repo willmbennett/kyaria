@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import { useChat } from 'ai/react';
+import { updateJobAction } from '../../jobs/[id]/_action';
 
 interface Props {
   collection: string,
@@ -15,6 +16,8 @@ interface Props {
   refresh?: boolean;
   temp?: number;
   copy?: boolean;
+  parentIndex?: number;
+  childIndex?: number;
 }
 
 export default function ChatWithGPT({
@@ -28,12 +31,13 @@ export default function ChatWithGPT({
   updateState,
   refresh = true,
   temp = 0.3,
-  copy = true
+  copy = true,
+  parentIndex,
+  childIndex,
 }: Props) {
   const [finishedLoading, setFinishedLoading] = useState(false)
-  const [usingSaved, setUsingSaved] = useState(false)
 
-  const { messages, reload, append } = useChat({
+  const { messages, setMessages, append } = useChat({
     body: {
       temp: temp
     },
@@ -42,74 +46,37 @@ export default function ChatWithGPT({
     }
   });
 
-  // Make a call to chatGPT
-  const chatGPT = async (message: any) => {
-    setFinishedLoading(false)
-    append(message);
-  };
-
   // Reload the last call
   const handleClick = () => {
     setFinishedLoading(false)
-    chatGPT(message)
-      //setFinishedLoading(true)
+    setMessages([])
+    append(message);
+    //setFinishedLoading(true)
   };
 
-  const updateJob = async (
-    {
-      collection,
-      documentID,
-      searchKey,
-      searchVal,
-      setKey,
-      setVal
+  const saveMessage = async () => {
+    const returnedMessage = messages[messages.length - 1].content.replace(/^"|"$/g, '')
+    //const returnedMessage = `${documentID}-${setKey}-test`
 
-    }: {
-      collection: string,
-      documentID: string,
-      searchKey?: string,
-      searchVal?: string,
-      setKey: string,
-      setVal: string
-    }) => {
-    try {
-      const response = await fetch('/api/db/update', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ collection, documentID, searchKey, searchVal, setKey, setVal }), // Sending form data
-      });
-
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-
-      const updatedJob = await response.json();
-      console.log(updatedJob)
-
-      if (updatedJob) {
-        return { updatedJob }
-      }
-    } catch (error) {
-      console.error('Failed to create user profile:', error);
-    }
+    // Save the message to the database
+    const id = documentID;
+    //console.log(`"${setKey}":"${returnedMessage}"`)
+    const data = JSON.parse(`{"${setKey}":""}`)
+    data[setKey] = returnedMessage
+    //console.log(id, data)
+    const jobupdate = await updateJobAction(id, data, "/")
+    
+    // Update the state
+    console.log(finishedLoading)
+    const newContent = returnedMessage;
+    console.log(newContent, parentIndex, childIndex)
+    updateState({newContent, parentIndex, childIndex})
   };
+
   // Save the final message to context
   useEffect(() => {
     if (finishedLoading) {
-      const returnedMessage = messages[messages.length - 1].content.replace(/^"|"$/g, '')
-      //const returnedMessage = `${documentID}-${setKey}-test`
-      console.log(returnedMessage)
-      updateState(returnedMessage);
-      updateJob({
-        collection: 'jobs',
-        documentID: documentID,
-        searchKey: searchKey,
-        searchVal: searchVal,
-        setKey: setKey,
-        setVal: returnedMessage
-      })
+      saveMessage()
     }
   }, [finishedLoading]);
 
@@ -142,11 +109,11 @@ export default function ChatWithGPT({
         </div>
       )}
       <button
-          className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
-          onClick={handleClick}
-        >
-          Generate
-        </button>
+        className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+        onClick={handleClick}
+      >
+        Generate
+      </button>
     </>
   );
 }

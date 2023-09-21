@@ -11,3 +11,7 @@ export function stringToObjectId(id: string): mongoose.Types.ObjectId | null {
 export function ObjectIdtoString(id: mongoose.Types.ObjectId): string {
   return id.toString()
 }
+
+export function castToString(arg: any) {
+  return String(arg);
+}

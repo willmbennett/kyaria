@@ -1,6 +1,7 @@
 import { Job, JobClass } from "../models/Job";
 import connectDB from "./connect-db";
-import { stringToObjectId } from "./utils";
+import { stringToObjectId, castToString } from "./utils";
+var transformProps = require('transform-props');
 
 interface JobFilter {
     userId: string
@@ -14,20 +15,15 @@ export async function getUserJobs(filter: JobFilter) {
         //const limit = filter.limit ?? 10;
         //const skip = (page - 1) * limit;
 
+        console.log(filter)
+
         //const jobs = await Job.find(filter).skip(skip).limit(limit).lean().exec();
         const jobs = await Job.find({ userId: filter.userId }).lean().exec();
 
         const results = jobs.length;
 
         if (jobs) {
-            jobs.map((job) => job["id"] = job["_id"].toString())
-            jobs.map((job) => job["_id"] = job["id"])
-            jobs.map((job) => job["_createdAt"] = job["createdAt"].toString())
-            jobs.map((job) => job["createdAt"] = job["_createdAt"])
-            jobs.map((job) => job["_updatedAt"] = job["updatedAt"].toString())
-            jobs.map((job) => job["updatedAt"] = job["_updatedAt"])
-            jobs.map((job) => job.userResume["userId"] = job.userResume["userId"].toString())
-            jobs.map((job) => job.userResume["_id"] = job.userResume["_id"].toString())
+            transformProps(jobs, castToString, ['_id', "_createdAt", "updatedAt"]);
             //console.log(jobs)
             return {
                 jobs,
@@ -51,11 +47,18 @@ export async function createJob(data: JobClass) {
 
         const job = await Job.create(data);
 
-        //console.log(`Created Job: ${JSON.stringify(job)}`)
+        //console.log(job)
 
-        return {
-            job,
-        };
+        if (job) {
+            //console.log('about to transform props')
+            const jobId = castToString(job._id)
+            //console.log(jobId)
+            return {
+                jobId
+            };
+        } else {
+            return { error: "Job not found" };
+        }
     } catch (error) {
         return { error };
     }
@@ -73,16 +76,8 @@ export async function getJob(id: string) {
         const job = await Job.findById(id).lean().exec();
 
         if (job) {
-            const stringId = job._id.toString()
-            job["id"] = stringId;
-            job["_id"] = stringId;
-            job["_createdAt"] = job["createdAt"].toString()
-            job["createdAt"] = job["_createdAt"]
-            job["_updatedAt"] = job["updatedAt"].toString()
-            job["updatedAt"] = job["_updatedAt"]
-            job.userResume["userId"] = job.userResume["userId"].toString()
-            job.userResume["_id"] = job.userResume["_id"].toString()
-            //console.log(job)
+            transformProps(job, castToString, ['_id', "_createdAt", "updatedAt"]);
+            console.log(job)
             return {
                 job,
             };
@@ -100,9 +95,9 @@ export async function updateJob(id: string, data: any) {
 
         const parsedId = stringToObjectId(id);
 
-        console.log(id)
+        //console.log(id)
 
-        console.log(`data to update job with: ${JSON.stringify(data)}`)
+        //console.log(`data to update job with: ${JSON.stringify(data)}`)
 
         const job = await Job.findByIdAndUpdate(
             parsedId,

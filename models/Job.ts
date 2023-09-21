@@ -1,12 +1,9 @@
 import {
     ModelOptions,
-    Severity,
     getModelForClass,
-    index,
     prop,
+    Severity,
 } from "@typegoose/typegoose";
-import mongoose from "mongoose";
-import { ProfileClass } from "./Profile";
 
 @ModelOptions({
     schemaOptions: {
@@ -15,13 +12,17 @@ import { ProfileClass } from "./Profile";
         collection: "jobs",
     },
     options: {
-        allowMixed: Severity.ALLOW,
-    },
+        allowMixed: Severity.ALLOW
+    }
 })
 //@index({ jobTitle: 1 })
+
 class JobClass {
     @prop({ required: true })
     public jobTitle!: string;
+
+    @prop()
+    public link: string;
 
     @prop()
     public company: string;
@@ -50,31 +51,9 @@ class JobClass {
     @prop()
     public responsibilities?: string[];
 
-    @prop()
-    userCoverLetter?: string;
-
-    @prop()
-    userStory?: string;
-
-    @prop({ required: true })
-    userResume: ProfileClass;
-
-    @prop({ type: () => [Object] })
-    public userQuestions?: {
-        question: string;
-        answer: string;
-    }[]
-
-    @prop({ required: true })
-    public userId!: string;
-
-    _id: mongoose.Types.ObjectId | string;
-    id: string;
-
-    createdAt: Date | string;
-    _createdAt: string;
-    updatedAt: Date | string;
-    _updatedAt: string;
+    _id: string;
+    createdAt: string;
+    updatedAt: string;
 }
 
 const Job = getModelForClass(JobClass);

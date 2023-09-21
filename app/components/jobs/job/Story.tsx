@@ -1,6 +1,6 @@
 'use client'
 
-import ChatWithGPT from '../../../components/ChatWithGPT';
+import ChatWithGPT from '../ChatWithGPT';
 
 export default function UserStory({
     jobData,

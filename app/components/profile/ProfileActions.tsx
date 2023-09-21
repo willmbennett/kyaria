@@ -35,11 +35,16 @@ export default function ProfileActions(
         setInputTextView(true)
     }
 
+    function cancel() {
+        setInputTextView(false)
+        setFormView(false)
+    }
+
     
 
     return (
         <div className='p-4'>
-            {id && (<button
+            {id && !inputTextView && !formView && (<button
                 className="bg-red-500 text-white px-4 py-2 rounded m-4"
                 onClick={deleteProfile}>
                 Delete
@@ -55,6 +60,12 @@ export default function ProfileActions(
                 className="bg-blue-500 text-white px-4 py-2 rounded m-4 "
                 onClick={showTextInput}>
                 Create Profile
+            </button>
+            )}
+            {(inputTextView || formView) && (<button
+                className="bg-red-500 text-white px-4 py-2 rounded m-4"
+                onClick={cancel}>
+                Cancel
             </button>
             )}
         </div>

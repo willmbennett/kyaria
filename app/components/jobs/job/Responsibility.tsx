@@ -1,27 +1,25 @@
 'use client'
 
-import ChatWithGPT from '../../ChatWithGPT';
+import ChatWithGPT from '../ChatWithGPT';
 import { useState } from 'react';
 
 export default function Responsibility({
     documentID,
-    searchKey,
     setKey,
     content,
-    message
+    message,
+    updateResumeExperienceResponsibilities,
+    parentIndex,
+    childIndex
 }: {
     documentID: string,
-    searchKey?: string
     setKey: string,
     content: string,
-    message: any
+    message: any,
+    updateResumeExperienceResponsibilities: any,
+    parentIndex: number,
+    childIndex: number
 }) {
-    const [itemState, setItemState] = useState(content)
-    const [active, setActive] = useState(false);
-
-    const handleClick = () => {
-        setActive(!active);
-    };
 
     return (
         <>
@@ -31,8 +29,10 @@ export default function Responsibility({
                     documentID={documentID}
                     setKey={setKey}
                     message={message}
-                    currentState={itemState}
-                    updateState={setItemState}
+                    currentState={content}
+                    updateState={updateResumeExperienceResponsibilities}
+                    parentIndex={parentIndex}
+                    childIndex={childIndex}
                 />
             </div>
         </>

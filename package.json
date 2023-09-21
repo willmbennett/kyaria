@@ -34,7 +34,8 @@
     "react-hot-toast": "^2.4.1",
     "react-router-dom": "^6.16.0",
     "react-switch": "^7.0.0",
-    "react-use-measure": "^2.1.1"
+    "react-use-measure": "^2.1.1",
+    "transform-props": "^1.0.1"
   },
   "devDependencies": {
     "@types/formidable": "^3.4.3",

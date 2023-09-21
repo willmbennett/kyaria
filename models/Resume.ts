@@ -1,9 +1,9 @@
 import {
     ModelOptions,
-    Severity,
     getModelForClass,
     index,
     prop,
+    Severity,
 } from "@typegoose/typegoose";
 
 class Responsibilities {
@@ -59,7 +59,7 @@ class Education {
 @ModelOptions({
     schemaOptions: {
         versionKey: false,
-        collection: "profiles",
+        collection: "resumes",
     },
     options: {
         disableLowerIndexes: true,
@@ -67,7 +67,7 @@ class Education {
     }
 })
 @index({ email: 1, userId: 1 })
-class ProfileClass {
+class ResumeClass {
     @prop({ required: true })
     public name!: string;
 
@@ -107,5 +107,5 @@ class ProfileClass {
     _id: string;
 }
 
-const Profile = getModelForClass(ProfileClass);
-export { Profile, ProfileClass };
+const Resume = getModelForClass(ResumeClass);
+export { Resume, ResumeClass };

@@ -1,22 +1,25 @@
 'use client'
 
-import ChatWithGPT from '../../ChatWithGPT';
+import ChatWithGPT from '../ChatWithGPT';
 import { useState } from 'react';
 
 export default function StarStory({
     documentID,
-    searchKey,
     setKey,
-    content,
-    message
+    message,
+    currentState,
+    updateState,
+    parentIndex,
+    childIndex
 }: {
     documentID: string,
-    searchKey?: string
     setKey: string,
-    content: string,
-    message: any
+    message: any,
+    currentState: string,
+    updateState: any,
+    parentIndex: number,
+    childIndex: number
 }) {
-    const [itemState, setItemState] = useState(content)
     const [active, setActive] = useState(false);
 
     const handleClick = () => {
@@ -37,8 +40,10 @@ export default function StarStory({
                     documentID={documentID}
                     setKey={setKey}
                     message={message}
-                    currentState={itemState}
-                    updateState={setItemState}
+                    currentState={currentState}
+                    updateState={updateState}
+                    parentIndex={parentIndex}
+                    childIndex={childIndex}
                 />
                 </div>
             </div>

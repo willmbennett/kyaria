@@ -1,6 +1,7 @@
 import { Profile, ProfileClass } from "../models/Profile";
 import connectDB from "./connect-db";
-import { stringToObjectId } from "./utils";
+import { stringToObjectId, castToString } from "./utils";
+var transformProps = require('transform-props');
 
 interface ProfileFilter {
     page?: number;
@@ -59,10 +60,10 @@ export async function getProfile(userId: string) {
         //console.log(parsedId)
         const profile = await Profile.findOne({userId: userId}).lean().exec();
 
+        //console.log(profile)
         if (profile) {
-            const stringId = profile._id.toString()
-            profile["id"] = stringId;
-            profile["_id"] = stringId;
+            //console.log('about to transform props')
+            transformProps(profile, castToString, '_id');
             //console.log(profile)
             return {
                 profile
