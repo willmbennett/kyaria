@@ -15,7 +15,6 @@ import {
         allowMixed: Severity.ALLOW
     }
 })
-//@index({ jobTitle: 1 })
 
 class JobClass {
     @prop({ required: true })
