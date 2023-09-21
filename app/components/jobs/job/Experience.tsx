@@ -53,6 +53,8 @@ export default function Experience({
                                     jobApp={jobApp}
                                     documentID={jobApp.userResume._id}
                                     setKey={`professional_experience.${index}.responsibilities.${i}.starStory`}
+                                    content={jobApp.userResume.education[index].details[i].content}
+                                    details={jobApp.profile.education[index].details[i].starStory}
                                     currentState={jobApp.userResume.education[index].details[i].starStory}
                                     updateState={updateEductionStarStory}
                                     parentIndex={index}
