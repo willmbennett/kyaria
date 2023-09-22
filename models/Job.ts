@@ -15,7 +15,6 @@ import {
         allowMixed: Severity.ALLOW
     }
 })
-
 class JobClass {
     @prop({ required: true })
     public jobTitle!: string;

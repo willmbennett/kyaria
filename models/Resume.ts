@@ -66,7 +66,6 @@ class Education {
         allowMixed: Severity.ALLOW
     }
 })
-@index({ email: 1, userId: 1 })
 class ResumeClass {
     @prop({ required: true })
     public name!: string;
@@ -74,7 +73,7 @@ class ResumeClass {
     @prop()
     public title?: string;
 
-    @prop({ required: true, unique: true })
+    @prop({ required: true })
     public email!: string;
 
     @prop()
@@ -101,7 +100,7 @@ class ResumeClass {
     @prop({ type: () => [Education] })
     public education?: Education[];
 
-    @prop({ required: true, unique: true })
+    @prop({ required: true})
     public userId!: string;
 
     _id: string;
