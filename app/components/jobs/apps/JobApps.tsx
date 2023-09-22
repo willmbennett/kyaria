@@ -56,7 +56,7 @@ export default function JobApps(
               <TextToJSON
                 setValues={setValues}
                 expectedJson={expectedJson}
-                defaultTextInput={process.env.VERCEL_ENV! in ['development', 'preview'] ? defaultTextInput : ''}
+                defaultTextInput={['development', 'preview'].includes(process.env.VERCEL_ENV!) ? defaultTextInput : ''}
                 demoJSON={demoJSON}
                 inputTextType='resume'
                 setFormView={setFormView}

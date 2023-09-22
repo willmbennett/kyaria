@@ -10,7 +10,7 @@ const options = {}
 let client
 let clientPromise: Promise<MongoClient>
 
-if (process.env.VERCEL_ENV! in ['development', 'preview']) {
+if (['development', 'preview'].includes(process.env.VERCEL_ENV!)) {
   // In development mode, use a global variable so that the value
   // is preserved across module reloads caused by HMR (Hot Module Replacement).
   let globalWithMongo = global as typeof globalThis & {
