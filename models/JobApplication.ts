@@ -2,9 +2,9 @@ import {
     ModelOptions,
     getModelForClass,
     prop,
-    Severity
+    Severity,
+    mongoose
 } from "@typegoose/typegoose";
-import type { Ref } from "@typegoose/typegoose";
 
 import { ProfileClass } from "./Profile";
 import { JobClass } from "./Job";
@@ -30,10 +30,10 @@ class UserQuestion {
 })
 class JobApplicationClass {
     @prop({ ref: () => JobClass, required: true })
-    job: Ref<JobClass>;
+    job: mongoose.Types.ObjectId | string
 
     @prop({ ref: () => ProfileClass, required: true })
-    profile: Ref<ProfileClass>;
+    profile: mongoose.Types.ObjectId | string
 
     @prop()
     userCoverLetter?: string;
@@ -45,7 +45,7 @@ class JobApplicationClass {
     public userQuestions?: UserQuestion[];
 
     @prop({ ref: () => ResumeClass, required: true })
-    userResume: Ref<ResumeClass>;
+    userResume: mongoose.Types.ObjectId | string
 
     @prop()
     userStory?: string;
