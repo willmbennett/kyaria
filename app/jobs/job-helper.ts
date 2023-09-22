@@ -1,66 +1,15 @@
-export const fetchUserJobs = async (userId: string) => {
-
-  //console.log(`User ID: ${userId}`)
-  try {
-    const response = await fetch(`/api/db/job/jobs/${userId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
-
-    //console.log(`Resp: ${response}`)
-
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-
-    const fetchedJobs = await response.json();
-
-    //console.log(`Resp: ${fetchedUserProfile[0]}`)
-
-    if (fetchedJobs.length > 0) {
-      return fetchedJobs;
-    }
-  } catch (error) {
-    console.error('Failed to fetch user jobs:', error);
-  }
-};
-
-export const createNewJob = async (
-  {
-      data,
-      userId,
-      userResume
-
-  }: {
-      data: FormFields
-      userId: string
-      userResume: profileFormat
-  }) => {
-  try {
-      const response = await fetch('/api/db/job/new', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ ...data, "userResume": userResume, userId: userId }), // Sending form data
-      });
-
-      if (!response.ok) {
-          throw new Error(response.statusText);
-      }
-
-      const createdJob = await response.json();
-
-      if (createdJob.insertedId) {
-          return { ...data, _id: createdJob.insertedId, userId: userId }
-      }
-  } catch (error) {
-      console.error('Failed to create user profile:', error);
-  }
-};
-
+export const questions = [
+  {"question": "Can you describe a situation where you had to deal with a difficult coworker or team member?", "answer": ""},
+  {"question": "Tell me about a time when you had to handle multiple tasks at once. How did you prioritize and manage your time?", "answer": ""},
+  {"question": "Describe a situation in which you had to use your communication skills in order to explain a difficult concept to someone.", "answer": ""},
+  {"question": "Tell me about a time when you took initiative to solve a problem at work. What was the outcome?", "answer": ""},
+  {"question": "Can you provide an example of a time when you received constructive feedback? How did you react, and what changes did you make?", "answer": ""},
+  {"question": "Describe a situation where you set a goal and were able to meet or exceed it.", "answer": ""},
+  {"question": "Tell me about a time when you had to make a difficult decision at work. How did you come to that decision and what was the result?", "answer": ""},
+  {"question": "How have you handled a situation in the past where you were under a lot of pressure?", "answer": ""},
+  {"question": "Describe a project or task where you had to collaborate with a cross-functional team. How did you ensure effective communication and cooperation?", "answer": ""},
+  {"question": "Tell me about a time when you had to adapt to significant changes at work. How did you handle it?", "answer": ""}
+]
 
 
 export type FormFields = {

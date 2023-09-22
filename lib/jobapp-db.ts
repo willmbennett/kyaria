@@ -52,6 +52,8 @@ export async function createJobApp(data: JobApplicationClass) {
     try {
         await connectDB();
 
+        transformProps(data, stringToObjectId, ['_id', 'profile', 'job', 'userResume']);
+
         console.log(`Job app to create: ${JSON.stringify(data)}`)
 
         const jobApp = await JobApplication.create(data);

@@ -1,11 +1,8 @@
-import React, { useState } from 'react';
-import { useForm, useFieldArray, Controller, SubmitHandler } from 'react-hook-form';
-import { FormFields } from '../../../jobs/job-helper'
+import React from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { FormFields, questions } from '../../../jobs/job-helper'
 //import { redirect } from 'next/navigation'
 import FieldArray from '../FieldArray';
-import { createNewJob } from '../../../jobs/job-helper';
-import { ProfileClass } from '../../../../models/Profile';
-import { JobClass } from '../../../../models/Job';
 import { createJobAction } from '../../../jobs/[id]/_action';
 import { createJobAppAction, createResumeAction } from '../../../jobs/apps/[id]/_action';
 
@@ -51,7 +48,8 @@ export default function NewJobAppForm({
                 userCoverLetter: "",
                 userResume: resumeId,
                 profile: profile._id,
-                userStory: ""
+                userStory: "",
+                userQuestions: questions
             }
             console.log(addDetails)
             await createJobAppAction(addDetails, path);
