@@ -49,12 +49,12 @@ export default function NewJobAppForm({
             console.log('Creating App')
             const userApp = {
                 job: jobId,
-                userId: userId,
-                userCoverLetter: "",
-                userResume: resumeId,
                 profile: profileId,
-                userStory: "",
-                userQuestions: questions
+                userCoverLetter: "",
+                userId: userId,
+                userQuestions: questions,
+                userResume: resumeId,
+                userStory: ""
             }
             console.log(userApp)
             const jobApp = await createJobAppAction(userApp, path);

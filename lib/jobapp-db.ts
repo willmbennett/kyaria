@@ -58,12 +58,18 @@ export async function createJobApp(data: JobApplicationClass) {
 
         const newJobApp = await JobApplication.create(data)
 
+        console.log('Created JobApp')
+        console.log(newJobApp)
+
         const jobApp = await JobApplication.findById(newJobApp._id)
             .populate("job")
             .populate("userResume")
             .populate("profile")
             .lean()
             .exec();
+
+        console.log("Found New JobApp")
+        console.log(jobApp)
 
         if (jobApp) {
             console.log('about to clean strings')
@@ -76,6 +82,7 @@ export async function createJobApp(data: JobApplicationClass) {
             return { error: "Job not found" };
         }
     } catch (error) {
+        console.error("Error in createJobApp:", error);
         return { error };
     }
 }

@@ -29,26 +29,26 @@ class UserQuestion {
     }
 })
 class JobApplicationClass {
-    @prop()
-    userCoverLetter?: string;
-
-    @prop()
-    userStory?: string;
-
     @prop({ ref: () => JobClass, required: true })
     job: Ref<JobClass>;
 
     @prop({ ref: () => ProfileClass, required: true })
     profile: Ref<ProfileClass>;
 
-    @prop({ ref: () => ResumeClass, required: true })
-    userResume: Ref<ResumeClass>;
+    @prop()
+    userCoverLetter?: string;
+
+    @prop({ required: true })
+    public userId!: string;
 
     @prop({ type: () => [UserQuestion] , options: { disableLowerIndexes: true }})
     public userQuestions?: UserQuestion[];
 
-    @prop({ required: true })
-    public userId!: string;
+    @prop({ ref: () => ResumeClass, required: true })
+    userResume: Ref<ResumeClass>;
+
+    @prop()
+    userStory?: string;
 
     _id: string;
     createdAt: string;
