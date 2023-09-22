@@ -52,12 +52,11 @@ export default function JobApps(
           </h1>
 
           <div className="mb-4 flex flex-col items-center">
-            {JSON.stringify(process.env.NODE_ENV)}
             {inputTextView && (
               <TextToJSON
                 setValues={setValues}
                 expectedJson={expectedJson}
-                defaultTextInput={process.env.NODE_ENV == "development"? defaultTextInput : ''}
+                defaultTextInput={['development', 'preview'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '')? defaultTextInput : ''}
                 demoJSON={demoJSON}
                 inputTextType='resume'
                 setFormView={setFormView}

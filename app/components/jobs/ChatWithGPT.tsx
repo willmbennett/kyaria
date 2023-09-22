@@ -52,7 +52,7 @@ export default function ChatWithGPT({
   const handleClick = () => {
     setFinishedLoading(false)
     setMessages([])
-    if (['development', 'preview'].includes(process.env.VERCEL_ENV!)) {
+    if (['development', 'preview'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '')) {
       setFinishedLoading(true)
     } else {
       append(message);
@@ -60,7 +60,7 @@ export default function ChatWithGPT({
   };
 
   const saveMessage = async () => {
-    const returnedMessage = ['development', 'preview'].includes(process.env.VERCEL_ENV!) ?
+    const returnedMessage = ['development', 'preview'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '')?
       `${documentID}-${setKey}-test`
       :
       messages[messages.length - 1].content.replace(/^"|"$/g, '')
