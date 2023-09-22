@@ -1,53 +1,47 @@
-import {
-    ModelOptions,
-    getModelForClass,
-    prop,
-    Severity,
-    Ref,
-} from "@typegoose/typegoose";
+import * as typegoose from "@typegoose/typegoose";
 
 import { ProfileClass } from "./Profile";
 import { JobClass } from "./Job";
 import { ResumeClass } from "./Resume";
 
 class UserQuestion {
-    @prop()
+    @typegoose.prop()
     public question?: string;
 
-    @prop()
+    @typegoose.prop()
     public answer?: string;
 }
 
-@ModelOptions({
+@typegoose.ModelOptions({
     schemaOptions: {
         timestamps: true,
         versionKey: false,
         collection: "applications",
     },
     options: {
-        allowMixed: Severity.ALLOW
+        allowMixed: typegoose.Severity.ALLOW
     }
 })
 class JobApplicationClass {
-    @prop()
+    @typegoose.prop()
     userCoverLetter?: string;
 
-    @prop()
+    @typegoose.prop()
     userStory?: string;
 
-    @prop({ ref: () => JobClass, required: true })
-    job: Ref<JobClass>;
+    @typegoose.prop({ ref: () => JobClass, required: true })
+    job: typegoose.Ref<JobClass>;
 
-    @prop({ ref: () => ProfileClass, required: true })
-    profile: Ref<ProfileClass>;
+    @typegoose.prop({ ref: () => ProfileClass, required: true })
+    profile: typegoose.Ref<ProfileClass>;
 
-    @prop({ ref: () => ResumeClass, required: true })
-    userResume: Ref<ResumeClass>;
+    @typegoose.prop({ ref: () => ResumeClass, required: true })
+    userResume: typegoose.Ref<ResumeClass>;
 
-    @prop({ type: () => [UserQuestion] , options: { disableLowerIndexes: true }})
+    @typegoose.prop({ type: () => [UserQuestion] , options: { disableLowerIndexes: true }})
     public userQuestions?: UserQuestion[];
 
-    @prop({ required: true })
+    @typegoose.prop({ required: true })
     public userId!: string;
 
     _id: string;
@@ -55,5 +49,5 @@ class JobApplicationClass {
     updatedAt: string;
 }
 
-const JobApplication = getModelForClass(JobApplicationClass);
+const JobApplication = typegoose.getModelForClass(JobApplicationClass);
 export { JobApplication, JobApplicationClass };
