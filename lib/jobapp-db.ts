@@ -62,9 +62,7 @@ export async function createJobApp(data: JobApplicationClass) {
         console.log(newJobApp)
 
         const jobApp = await JobApplication.findById(newJobApp._id)
-            .populate("job")
-            .populate("userResume")
-            .populate("profile")
+            .populate(["job", "userResume", "profile"])
             .lean()
             .exec();
 
@@ -97,9 +95,7 @@ export async function getJobApp(id: string) {
 
         //console.log(id)
         const jobApp = await JobApplication.findById(id)
-            .populate("job")
-            .populate("userResume")
-            .populate("profile")
+            .populate(["job", "userResume", "profile"])
             .lean()
             .exec();
 
