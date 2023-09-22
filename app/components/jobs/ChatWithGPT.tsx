@@ -52,13 +52,18 @@ export default function ChatWithGPT({
   const handleClick = () => {
     setFinishedLoading(false)
     setMessages([])
-    append(message);
-    //setFinishedLoading(true)
+    if (process.env.NODE_ENV === 'development') {
+      setFinishedLoading(true)
+    } else {
+      append(message);
+    }
   };
 
   const saveMessage = async () => {
-    const returnedMessage = messages[messages.length - 1].content.replace(/^"|"$/g, '')
-    //const returnedMessage = `${documentID}-${setKey}-test`
+    const returnedMessage = process.env.NODE_ENV === 'development' ?
+      `${documentID}-${setKey}-test`
+      :
+      messages[messages.length - 1].content.replace(/^"|"$/g, '')
 
     // Save the message to the database
     const id = documentID;
@@ -67,12 +72,12 @@ export default function ChatWithGPT({
     data[setKey] = returnedMessage
     //console.log(id, data)
     const update = await saveToDatabase(id, data, "/")
-    
+
     // Update the state
     console.log(finishedLoading)
     const newContent = returnedMessage;
     console.log(newContent, parentIndex, childIndex)
-    updateState({newContent, parentIndex, childIndex})
+    updateState({ newContent, parentIndex, childIndex })
   };
 
   // Save the final message to context

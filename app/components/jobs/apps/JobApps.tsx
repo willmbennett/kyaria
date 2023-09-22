@@ -1,13 +1,9 @@
 'use client'
-import Link from "next/link";
-import { useState, useContext, useEffect } from "react";
+import { useState } from "react";
 import TextToJSON from "../../TextToJSON";
 import { defaultFormInput, expectedJson, defaultTextInput, demoJSON, FormFields } from '../../../jobs/job-helper';
 import NewJobAppForm from "./JobAppForm";
 //import { ObjectId } from "mongodb";
-import { useSession } from 'next-auth/react';
-import { ProfileClass } from "../../../../models/Profile";
-import { JobClass } from "../../../../models/Job";
 import JobItem from "../JobItem";
 
 export default function JobApps(
@@ -60,9 +56,8 @@ export default function JobApps(
               <TextToJSON
                 setValues={setValues}
                 expectedJson={expectedJson}
-                defaultTextInput=''
-                //defaultTextInput={defaultTextInput}
-                //demoJSON={demoJSON}
+                defaultTextInput={process.env.NODE_ENV === 'development'? defaultTextInput : ''}
+                demoJSON={demoJSON}
                 inputTextType='resume'
                 setFormView={setFormView}
                 setInputTextView={setInputTextView}

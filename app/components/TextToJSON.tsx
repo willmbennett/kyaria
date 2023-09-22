@@ -44,20 +44,23 @@ export default function TextToJSON(
     // Make a call to chatGPT
     const chatGPT = async (message: any) => {
         setLoading(true)
-        append(message);
-        //setFinishedLoading(true)
+        if (process.env.NODE_ENV === 'development') {
+            setFinishedLoading(true)
+        } else {
+            append(message);
+        }
     };
 
     // Save the final message to context
     useEffect(() => {
         if (finishedLoading) {
-            const finalMessage = demoJSON ? demoJSON : JSON.parse(messages[messages.length - 1].content);
+            const finalMessage = process.env.NODE_ENV === 'development' ? demoJSON : JSON.parse(messages[messages.length - 1].content);
             console.log(finalMessage)
             setValues(finalMessage)
             setInputTextView(false) // hide the text input
             setFormView(true) // Show the form
             setLoading(false)
-            
+
         }
     }, [finishedLoading]);
 
@@ -104,7 +107,7 @@ export default function TextToJSON(
                         AI is scanning your data
                     </h1>
                     <div className='p-2'>
-                    <p>This may take a minute</p>
+                        <p>This may take a minute</p>
                     </div>
                     <iframe src="https://giphy.com/embed/gJ3mEToTDJn3LT6kCT" className="giphy-embed w-full"></iframe>
                 </div>)}

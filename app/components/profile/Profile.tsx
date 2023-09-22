@@ -77,15 +77,15 @@ export default function Profile({
     };
 
     return (
-        <> 
-            { sessionUserId == userId && (
-            <ProfileActions
-                id={profile?._id}
-                formView={formView}
-                setFormView={setFormView}
-                inputTextView={inputTextView}
-                setInputTextView={setInputTextView}
-            />
+        <>
+            {sessionUserId == userId && (
+                <ProfileActions
+                    id={profile?._id}
+                    formView={formView}
+                    setFormView={setFormView}
+                    inputTextView={inputTextView}
+                    setInputTextView={setInputTextView}
+                />
             )}
             {profile && !formView && (
                 <>
@@ -97,9 +97,8 @@ export default function Profile({
                 <TextToJSON
                     setValues={setValues}
                     expectedJson={expectedJson}
-                    defaultTextInput=''
-                    //defaultTextInput={defaultTextInput}
-                    //demoJSON={demoJSON}
+                    defaultTextInput={process.env.NODE_ENV === 'development' ? defaultTextInput : ''}
+                    demoJSON={demoJSON}
                     inputTextType='resume'
                     setFormView={setFormView}
                     setInputTextView={setInputTextView}
