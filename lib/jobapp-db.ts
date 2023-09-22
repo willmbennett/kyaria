@@ -56,7 +56,9 @@ export async function createJobApp(data: JobApplicationClass) {
 
         console.log(data)
 
+        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
         const newJobApp = await JobApplication.create(data)
+        console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
 
         console.log('Created JobApp')
         console.log(newJobApp)
