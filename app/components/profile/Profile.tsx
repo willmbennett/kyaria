@@ -97,7 +97,7 @@ export default function Profile({
                 <TextToJSON
                     setValues={setValues}
                     expectedJson={expectedJson}
-                    defaultTextInput={['development', 'preview'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '')? defaultTextInput : ''}
+                    defaultTextInput={['development', 'preview', 'production'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '')? defaultTextInput : ''}
                     demoJSON={demoJSON}
                     inputTextType='resume'
                     setFormView={setFormView}
