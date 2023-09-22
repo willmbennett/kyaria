@@ -1,47 +1,53 @@
-import * as typegoose from "@typegoose/typegoose";
+import {
+    ModelOptions,
+    getModelForClass,
+    prop,
+    Severity
+} from "@typegoose/typegoose";
+import type { Ref } from "@typegoose/typegoose";
 
 import { ProfileClass } from "./Profile";
 import { JobClass } from "./Job";
 import { ResumeClass } from "./Resume";
 
 class UserQuestion {
-    @typegoose.prop()
+    @prop()
     public question?: string;
 
-    @typegoose.prop()
+    @prop()
     public answer?: string;
 }
 
-@typegoose.ModelOptions({
+@ModelOptions({
     schemaOptions: {
         timestamps: true,
         versionKey: false,
         collection: "applications",
     },
     options: {
-        allowMixed: typegoose.Severity.ALLOW
+        allowMixed: Severity.ALLOW
     }
 })
 class JobApplicationClass {
-    @typegoose.prop()
+    @prop()
     userCoverLetter?: string;
 
-    @typegoose.prop()
+    @prop()
     userStory?: string;
 
-    @typegoose.prop({ ref: () => JobClass, required: true })
-    job: typegoose.Ref<JobClass>;
+    @prop({ ref: () => JobClass, required: true })
+    job: Ref<JobClass>;
 
-    @typegoose.prop({ ref: () => ProfileClass, required: true })
-    profile: typegoose.Ref<ProfileClass>;
+    @prop({ ref: () => ProfileClass, required: true })
+    profile: Ref<ProfileClass>;
 
-    @typegoose.prop({ ref: () => ResumeClass, required: true })
-    userResume: typegoose.Ref<ResumeClass>;
+    @prop({ ref: () => ResumeClass, required: true })
+    userResume: Ref<ResumeClass>;
 
-    @typegoose.prop({ type: () => [UserQuestion] , options: { disableLowerIndexes: true }})
+    @prop({ type: () => [UserQuestion] , options: { disableLowerIndexes: true }})
     public userQuestions?: UserQuestion[];
 
-    @typegoose.prop({ required: true })
+    @prop({ required: true })
     public userId!: string;
 
     _id: string;
@@ -49,5 +55,5 @@ class JobApplicationClass {
     updatedAt: string;
 }
 
-const JobApplication = typegoose.getModelForClass(JobApplicationClass);
+const JobApplication = getModelForClass(JobApplicationClass);
 export { JobApplication, JobApplicationClass };
