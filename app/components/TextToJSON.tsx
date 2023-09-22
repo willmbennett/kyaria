@@ -44,7 +44,7 @@ export default function TextToJSON(
     // Make a call to chatGPT
     const chatGPT = async (message: any) => {
         setLoading(true)
-        if (process.env.VERCEL_ENV in ['development', 'preview']) {
+        if (process.env.VERCEL_ENV! in ['development', 'preview']) {
             setFinishedLoading(true)
         } else {
             append(message);
@@ -54,7 +54,7 @@ export default function TextToJSON(
     // Save the final message to context
     useEffect(() => {
         if (finishedLoading) {
-            const finalMessage = process.env.VERCEL_ENV in ['development', 'preview'] ? demoJSON : JSON.parse(messages[messages.length - 1].content);
+            const finalMessage = process.env.VERCEL_ENV! in ['development', 'preview'] ? demoJSON : JSON.parse(messages[messages.length - 1].content);
             console.log(finalMessage)
             setValues(finalMessage)
             setInputTextView(false) // hide the text input
