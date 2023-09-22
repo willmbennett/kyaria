@@ -52,13 +52,29 @@ export async function createJobApp(data: JobApplicationClass) {
     try {
         await connectDB();
 
-        transformProps(data, stringToObjectId, ['_id', 'profile', 'job', 'userResume']);
+        transformProps(data, stringToObjectId, ['profile', 'job', 'userResume']);
 
-        console.log(`Job app to create: ${JSON.stringify(data)}`)
+        console.log(data)
 
-        const jobApp = await JobApplication.create(data);
+        const newJobApp = await JobApplication.create(data)
 
-        console.log(`Created app: ${JSON.stringify(jobApp)}`)
+        const jobApp = await JobApplication.findById(newJobApp._id)
+            .populate("job")
+            .populate("userResume")
+            .populate("profile")
+            .lean()
+            .exec();
+
+        if (jobApp) {
+            console.log('about to clean strings')
+            transformProps(jobApp, castToString, ['_id', "createdAt", "updatedAt", 'profile', 'job', 'userResume']);
+            console.log(jobApp)
+            return {
+                jobApp,
+            };
+        } else {
+            return { error: "Job not found" };
+        }
     } catch (error) {
         return { error };
     }
@@ -82,7 +98,7 @@ export async function getJobApp(id: string) {
 
         if (jobApp) {
             transformProps(jobApp, castToString, ['_id', "createdAt", "updatedAt"]);
-            //console.log(jobApp)
+            console.log(jobApp)
             return {
                 jobApp,
             };

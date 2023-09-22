@@ -9,8 +9,9 @@ import { revalidatePath } from "next/cache";
 import { createResume, updateResume } from "../../../../lib/resume-db";
 
 export async function createJobAppAction(data: any, path: string) {
-  await createJobApp(data);
+  const { jobApp } = await createJobApp(data);
   revalidatePath(path);
+  return jobApp
 }
 
 export async function updateJobAppAction(
@@ -36,9 +37,9 @@ export async function deleteJobAppAction({
 }
 
 export async function createResumeAction(data: any, path: string) {
-  const newResume = await createResume(data);
+  const { resumeId } = await createResume(data);
   revalidatePath(path);
-  return (newResume)
+  return resumeId
 }
 
 export async function updateResumeAction(

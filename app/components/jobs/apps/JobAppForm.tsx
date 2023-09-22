@@ -33,16 +33,17 @@ export default function NewJobAppForm({
         const path = "/"
         console.log("Create a Job")
         console.log(data)
-        const { jobId } = await createJobAction(data, path);
+        const jobId = await createJobAction(data, path);
         console.log("Creating Job")
         console.log(jobId)
         console.log("Create a Resume")
         console.log(profile)
-        const { resumeId } = await createResumeAction(profile, path);
+        const resumeId = await createResumeAction(profile, path);
         console.log("Creating Resume") 
         console.log(resumeId)
         if(jobId && resumeId) {
-            const addDetails = {
+            console.log('Creating App')
+            const userApp = {
                 job: jobId,
                 userId: userId,
                 userCoverLetter: "",
@@ -51,8 +52,10 @@ export default function NewJobAppForm({
                 userStory: "",
                 userQuestions: questions
             }
-            console.log(addDetails)
-            await createJobAppAction(addDetails, path);
+            console.log(userApp)
+            const jobApp = await createJobAppAction(userApp, path);
+            console.log('Created App')
+            console.log(jobApp)
             setCreatingJob(false)
             setFormView(false)
         }

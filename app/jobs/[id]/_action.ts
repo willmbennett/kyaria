@@ -4,9 +4,9 @@ import { createJob, deleteJob, updateJob } from "../../../lib/job-db";
 import { revalidatePath } from "next/cache";
 
 export async function createJobAction(data: any, path: string) {
-  const newJob = await createJob(data);
+  const { jobId } = await createJob(data);
   revalidatePath(path);
-  return(newJob)
+  return jobId
 }
 
 export async function updateJobAction(
