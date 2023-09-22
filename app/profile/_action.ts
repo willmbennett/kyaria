@@ -1,4 +1,4 @@
-"use server";
+"use server"
 
 import { createProfile, deleteProfile, getProfile, updateProfile } from "../../lib/profile-db";
 import { revalidatePath } from "next/cache";
