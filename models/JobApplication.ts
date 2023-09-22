@@ -23,6 +23,7 @@ class UserQuestion {
         timestamps: true,
         versionKey: false,
         collection: "apps",
+        validateBeforeSave: false
     },
     options: {
         allowMixed: Severity.ALLOW
