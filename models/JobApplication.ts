@@ -2,8 +2,13 @@ import {
     ModelOptions,
     getModelForClass,
     prop,
-    Severity
+    Severity,
+    Ref,
 } from "@typegoose/typegoose";
+
+import { ProfileClass } from "./Profile";
+import { JobClass } from "./Job";
+import { ResumeClass } from "./Resume";
 
 class UserQuestion {
     @prop()
@@ -13,7 +18,7 @@ class UserQuestion {
     public answer?: string;
 }
 
-ModelOptions({
+@ModelOptions({
     schemaOptions: {
         timestamps: true,
         versionKey: false,
@@ -30,14 +35,14 @@ class JobApplicationClass {
     @prop()
     userStory?: string;
 
-    @prop({ required: true })
-    job: string;
+    @prop({ ref: () => JobClass, required: true })
+    job: Ref<JobClass>;
 
-    @prop({ required: true })
-    profile: string;
+    @prop({ ref: () => ProfileClass, required: true })
+    profile: Ref<ProfileClass>;
 
-    @prop({ required: true })
-    userResume: string;
+    @prop({ ref: () => ResumeClass, required: true })
+    userResume: Ref<ResumeClass>;
 
     @prop({ type: () => [UserQuestion] , options: { disableLowerIndexes: true }})
     public userQuestions?: UserQuestion[];

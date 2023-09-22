@@ -37,18 +37,22 @@ export default function NewJobAppForm({
         console.log("Creating Job")
         console.log(jobId)
         console.log("Create a Resume")
-        console.log(profile)
-        const resumeId = await createResumeAction(profile, path);
+        const profileId = profile._id
+        console.log(`profile id: ${profileId}`)
+        const resume = profile
+        delete resume._id
+        console.log(resume)
+        const resumeId = await createResumeAction(resume, path);
         console.log("Creating Resume") 
         console.log(resumeId)
-        if(jobId && resumeId) {
+        if(jobId && resumeId && profileId) {
             console.log('Creating App')
             const userApp = {
                 job: jobId,
                 userId: userId,
                 userCoverLetter: "",
                 userResume: resumeId,
-                profile: profile._id,
+                profile: profileId,
                 userStory: "",
                 userQuestions: questions
             }
