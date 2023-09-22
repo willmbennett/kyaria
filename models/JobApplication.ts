@@ -12,11 +12,14 @@ class UserQuestion {
     public answer?: string;
 }
 
-@typegoose.ModelOptions({
+typegoose.ModelOptions({
     schemaOptions: {
         timestamps: true,
         versionKey: false,
         collection: "applications",
+    },
+    options: {
+        allowMixed: typegoose.Severity.ALLOW
     }
 })
 class JobApplicationClass {
