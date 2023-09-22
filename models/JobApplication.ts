@@ -22,7 +22,7 @@ class UserQuestion {
     schemaOptions: {
         timestamps: true,
         versionKey: false,
-        collection: "applications",
+        collection: "apps",
     },
     options: {
         allowMixed: Severity.ALLOW
