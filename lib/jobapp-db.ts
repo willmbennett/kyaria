@@ -52,7 +52,7 @@ export async function createJobApp(data: JobApplicationClass) {
     try {
         await connectDB();
 
-        transformProps(data, stringToObjectId, ['profile', 'job', 'userResume']);
+        //transformProps(data, stringToObjectId, ['profile', 'job', 'userResume']);
 
         console.log(data)
 
