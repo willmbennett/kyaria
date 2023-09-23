@@ -22,7 +22,7 @@ class UserQuestion {
     schemaOptions: {
         timestamps: true,
         versionKey: false,
-        collection: "apps",
+        collection: "jobapps",
         validateBeforeSave: false
     },
     options: {
