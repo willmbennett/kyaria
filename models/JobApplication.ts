@@ -51,9 +51,9 @@ class JobApplicationClass {
     @prop()
     userStory?: string;
 
-    _id: string;
-    createdAt: string;
-    updatedAt: string;
+    _id: mongoose.Types.ObjectId | string;
+    createdAt: Date | string;
+    updatedAt: Date | string;
 }
 
 const JobApplication = getModelForClass(JobApplicationClass);

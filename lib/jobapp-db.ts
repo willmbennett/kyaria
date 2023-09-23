@@ -57,13 +57,17 @@ export async function createJobApp(data: JobApplicationClass) {
         console.log(data)
 
         console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-        const newJobApp = await JobApplication.create(data)
+        const newApp = new JobApplication(data);
+        console.log(`newly created app`);
+        console.log(newApp);
+        const createdApp = await newApp.save();
+        //const newJobApp = await JobApplication.create(data)
         console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
 
-        console.log('Created JobApp')
-        console.log(newJobApp)
+        console.log('Created JobApp');
+        console.log(createdApp);
 
-        const jobApp = await JobApplication.findById(newJobApp._id)
+        const jobApp = await JobApplication.findById(createdApp._id)
             .populate(["job", "userResume", "profile"])
             .lean()
             .exec();
@@ -159,8 +163,11 @@ export async function deleteJobApp(id: string, resumeId: string) {
             return { error: "Job application not found" };
         }
 
+        console.log("Made it to Deletion")
         const jobApp = await JobApplication.findByIdAndDelete(parsedId).exec();
+        console.log("Post job app deletion")
         const resume = await Resume.findByIdAndDelete(parsedResumeId).exec();
+        console.log("Post resume deletion")
 
         if (jobApp) {
             return {};

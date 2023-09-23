@@ -4,6 +4,7 @@ import {
     getModelForClass,
     index,
     prop,
+    mongoose,
 } from "@typegoose/typegoose";
 
 class Responsibilities {
@@ -104,7 +105,7 @@ class ProfileClass {
     @prop({ required: true, unique: true })
     public userId!: string;
 
-    _id: string;
+    _id: mongoose.Types.ObjectId | string;
 }
 
 const Profile = getModelForClass(ProfileClass);

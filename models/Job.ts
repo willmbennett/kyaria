@@ -3,6 +3,7 @@ import {
     getModelForClass,
     prop,
     Severity,
+    mongoose,
 } from "@typegoose/typegoose";
 
 @ModelOptions({
@@ -49,9 +50,9 @@ class JobClass {
     @prop()
     public responsibilities?: string[];
 
-    _id: string;
-    createdAt: string;
-    updatedAt: string;
+    _id: mongoose.Types.ObjectId | string;
+    createdAt: Date | string;
+    updatedAt: Date | string;
 }
 
 const Job = getModelForClass(JobClass);

@@ -4,6 +4,7 @@ import {
     index,
     prop,
     Severity,
+    mongoose,
 } from "@typegoose/typegoose";
 
 class Responsibilities {
@@ -103,7 +104,7 @@ class ResumeClass {
     @prop({ required: true})
     public userId!: string;
 
-    _id: string;
+    _id: mongoose.Types.ObjectId | string;
 }
 
 const Resume = getModelForClass(ResumeClass);
