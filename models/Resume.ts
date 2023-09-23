@@ -1,9 +1,9 @@
 import {
     ModelOptions,
-    Severity,
     getModelForClass,
     index,
     prop,
+    Severity,
     mongoose,
 } from "@typegoose/typegoose";
 
@@ -60,22 +60,21 @@ class Education {
 @ModelOptions({
     schemaOptions: {
         versionKey: false,
-        collection: "profiles",
+        collection: "resumes",
     },
     options: {
         disableLowerIndexes: true,
         allowMixed: Severity.ALLOW
     }
 })
-@index({ email: 1, userId: 1 })
-class ProfileClass {
+class ResumeClass {
     @prop({ required: true })
     public name!: string;
 
     @prop()
     public title?: string;
 
-    @prop({ required: true, unique: true })
+    @prop({ required: true })
     public email!: string;
 
     @prop()
@@ -102,11 +101,11 @@ class ProfileClass {
     @prop({ type: () => [Education] })
     public education?: Education[];
 
-    @prop({ required: true, unique: true })
+    @prop({ required: true})
     public userId!: string;
 
     _id: mongoose.Types.ObjectId | string;
 }
 
-const Profile = getModelForClass(ProfileClass);
-export { Profile, ProfileClass };
+const Resume = getModelForClass(ResumeClass);
+export { Resume, ResumeClass };

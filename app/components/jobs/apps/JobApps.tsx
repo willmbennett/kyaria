@@ -1,43 +1,40 @@
 'use client'
-import Link from "next/link";
-import { useState, useContext, useEffect } from "react";
-import TextToJSON from "../TextToJSON";
-import { defaultFormInput, expectedJson, defaultTextInput, demoJSON, FormFields } from '../../jobs/job-helper';
-import NewJobForm from "./NewJobForm";
+import { useState } from "react";
+import TextToJSON from "../../TextToJSON";
+import { defaultFormInput, expectedJson, defaultTextInput, demoJSON, FormFields } from '../../../jobs/job-helper';
+import NewJobAppForm from "./JobAppForm";
 //import { ObjectId } from "mongodb";
-import { useSession } from 'next-auth/react';
-import { ProfileClass } from "../../../models/Profile";
-import { JobClass } from "../../../models/Job";
-import JobItem from "./JobItem";
+import JobItem from "../JobItem";
 
-export default function JobsForm(
+export default function JobApps(
   {
-    jobs,
+    jobApps,
     profile
   }: {
-    jobs: any,
+    jobApps: any,
     profile: any
   }
 ) {
-  const [creatingJob, setCreatingJob] = useState(false);
+  const [creatingJobApp, setCreatingJobApp] = useState(false);
   const [values, setValues] = useState<FormFields>();
   const [formView, setFormView] = useState(false);
   const [inputTextView, setInputTextView] = useState(false);
 
   const handleCreateJobClick = () => {
-    setCreatingJob(true)
+    setCreatingJobApp(true)
     setInputTextView(true)
   };
 
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center min-h-screen">
-      {!creatingJob && (<>
-        {jobs?.map((job: any) => (
-          <div key={job.id} className="w-full">
+      {!creatingJobApp && (<>
+        {jobApps && jobApps.map((jobApp: any) => (
+          <div key={jobApp._id} className="w-full">
             <JobItem
-              id={job.id}
-              jobTitle={job.jobTitle}
-              company={job.company}
+              id={jobApp._id}
+              resumeId={jobApp.userResume}
+              jobTitle={jobApp.job.jobTitle}
+              company={jobApp.job.company}
             />
           </div>
         ))}
@@ -48,7 +45,7 @@ export default function JobsForm(
         </button>
       </>
       )}
-      {creatingJob && (
+      {creatingJobApp && (
         <>
           <h1 className="sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900 mb-10">
             Create a New Job
@@ -59,20 +56,20 @@ export default function JobsForm(
               <TextToJSON
                 setValues={setValues}
                 expectedJson={expectedJson}
-                defaultTextInput=''
-                //demoJSON={demoJSON}
+                defaultTextInput={['development', 'preview', 'production'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '')? defaultTextInput : ''}
+                demoJSON={demoJSON}
                 inputTextType='resume'
                 setFormView={setFormView}
                 setInputTextView={setInputTextView}
               />
             )}
             {formView && (
-              <NewJobForm
+              <NewJobAppForm
                 defaultValue={defaultFormInput}
                 values={values}
-                setCreatingJob={setCreatingJob}
+                setCreatingJob={setCreatingJobApp}
                 userId={profile.userId}
-                userResume={profile}
+                profile={profile}
                 setFormView={setFormView}
               />
             )}

@@ -30,7 +30,7 @@ export default function JobMenu({ section, setSection }: { section: string, setS
   };
 
   return (
-    <div className="bg-white sticky bottom-0 lg:top-40 z-50 bg-white p-4 rounded-lg h-auto">
+    <div className="bg-white sticky bottom-0 w-full lg:top-40 z-50 bg-white p-4 rounded-lg h-auto">
       <div
         className={`${active ? ' ' : 'hidden'}  w-full lg:inline`}
       >

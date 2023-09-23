@@ -1,38 +1,40 @@
 'use client'
 
-import ChatWithGPT from '../../ChatWithGPT';
-import { useState } from 'react';
+import ChatWithGPT from '../ChatWithGPT';
 
 export default function Responsibility({
     documentID,
-    searchKey,
     setKey,
     content,
-    message
+    message,
+    updateResumeExperienceResponsibilities,
+    saveToDatabase,
+    parentIndex,
+    childIndex
 }: {
     documentID: string,
-    searchKey?: string
     setKey: string,
     content: string,
-    message: any
+    message: any,
+    updateResumeExperienceResponsibilities: any,
+    saveToDatabase: any,
+    parentIndex: number,
+    childIndex: number
 }) {
-    const [itemState, setItemState] = useState(content)
-    const [active, setActive] = useState(false);
-
-    const handleClick = () => {
-        setActive(!active);
-    };
 
     return (
         <>
             <div className="py-2">
                 <ChatWithGPT
-                    collection='jobs'
+                    collection='resumes'
                     documentID={documentID}
                     setKey={setKey}
                     message={message}
-                    currentState={itemState}
-                    updateState={setItemState}
+                    currentState={content}
+                    updateState={updateResumeExperienceResponsibilities}
+                    parentIndex={parentIndex}
+                    childIndex={childIndex}
+                    saveToDatabase={saveToDatabase}
                 />
             </div>
         </>

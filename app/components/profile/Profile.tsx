@@ -16,32 +16,32 @@ import TextToJSON from '../TextToJSON';
 const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'
 const H2_STYLE = 'text-left font-bold text-2xl py-4 mb-4'
 
-export default function ProfileForm({
+export default function Profile({
     userId,
-    userProfile,
+    profile,
     sessionUserId
 }: {
     userId: string
-    userProfile?: ProfileClass,
+    profile?: ProfileClass,
     sessionUserId?: string
 }) {
     const [formView, setFormView] = useState(false)
     const [inputTextView, setInputTextView] = useState(false)
     const defaultValue = {
-        name: userProfile?.name || expectedJson.name,
-        title: userProfile?.title || expectedJson.title,
-        email: userProfile?.email || expectedJson.email,
-        phone: userProfile?.phone || expectedJson.phone,
-        social_links: userProfile?.social_links || expectedJson.social_links,
-        location: userProfile?.location || expectedJson.location,
-        summary: userProfile?.summary || expectedJson.summary,
-        areas_of_expertise: userProfile?.areas_of_expertise || expectedJson.areas_of_expertise,
-        skills: userProfile?.skills || expectedJson.skills,
-        professional_experience: userProfile?.professional_experience || expectedJson.professional_experience,
-        education: userProfile?.education || expectedJson.education
+        name: profile?.name || expectedJson.name,
+        title: profile?.title || expectedJson.title,
+        email: profile?.email || expectedJson.email,
+        phone: profile?.phone || expectedJson.phone,
+        social_links: profile?.social_links || expectedJson.social_links,
+        location: profile?.location || expectedJson.location,
+        summary: profile?.summary || expectedJson.summary,
+        areas_of_expertise: profile?.areas_of_expertise || expectedJson.areas_of_expertise,
+        skills: profile?.skills || expectedJson.skills,
+        professional_experience: profile?.professional_experience || expectedJson.professional_experience,
+        education: profile?.education || expectedJson.education
     }
 
-    const [values, setValues] = useState(expectedJson)
+    const [values, setValues] = useState()
 
     const { register, handleSubmit, control } = useForm<FormFields>({
         defaultValues: defaultValue,
@@ -60,10 +60,10 @@ export default function ProfileForm({
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
         // call server action
-        if (userProfile) {
+        if (profile) {
             console.log("Editing Profile")
             const path = "/"
-            const res = await updateProfileAction(userProfile.id, data, path);
+            const res = await updateProfileAction(profile._id, data, path);
             console.log(res)
         } else {
             console.log("Creating Profile")
@@ -77,29 +77,28 @@ export default function ProfileForm({
     };
 
     return (
-        <> 
-            { sessionUserId == userId && (
-            <ProfileActions
-                id={userProfile?.id}
-                formView={formView}
-                setFormView={setFormView}
-                inputTextView={inputTextView}
-                setInputTextView={setInputTextView}
-            />
+        <>
+            {sessionUserId == userId && (
+                <ProfileActions
+                    id={profile?._id}
+                    formView={formView}
+                    setFormView={setFormView}
+                    inputTextView={inputTextView}
+                    setInputTextView={setInputTextView}
+                />
             )}
-            {userProfile && !formView && (
+            {profile && !formView && (
                 <>
                     <UserProfile
-                        userProfile={userProfile} />
+                        userProfile={profile} />
                 </>
             )}
             {inputTextView && (
                 <TextToJSON
                     setValues={setValues}
                     expectedJson={expectedJson}
-                    defaultTextInput=''
-                    //defaultTextInput={defaultTextInput}
-                    //demoJSON={demoJSON}
+                    defaultTextInput={['development', 'preview', 'production'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '')? defaultTextInput : ''}
+                    demoJSON={demoJSON}
                     inputTextType='resume'
                     setFormView={setFormView}
                     setInputTextView={setInputTextView}

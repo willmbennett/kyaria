@@ -1,23 +1,27 @@
 'use client'
 
-import ChatWithGPT from '../../ChatWithGPT';
+import ChatWithGPT from '../ChatWithGPT';
 import Responsibility from './Responsibility';
-import { useState } from 'react';
-import { ProfileClass } from '../../../../models/Profile';
-import { JobClass } from '../../../../models/Job';
+import { updateResumeAction } from '../../../jobs/apps/[id]/_action';
 
 export default function Resume({
-    jobData,
     userProfile,
-    userResume,
-    setUserResume
+    job,
+    application,
+    updateResumeSummary,
+    updateResumeExperienceResponsibilities,
+    updateResumeEductionDetails
+
 }: {
-    jobData: JobClass,
-    userProfile: ProfileClass,
-    userResume: ProfileClass,
-    setUserResume: any
+    userProfile: any,
+    job: any,
+    application: any,
+    updateResumeSummary: any,
+    updateResumeExperienceResponsibilities: any,
+    updateResumeEductionDetails: any
 }) {
-    const [currentSummary, updateCurrentSummary] = useState(userProfile.summary);
+
+    const userResume = application.userResume;
 
     const message = [
         {
@@ -29,7 +33,7 @@ export default function Resume({
         {
             "role": "user",
             "content":
-                `I'm applying for this job: ${JSON.stringify(jobData)}. Help me improve this resume summary ${userResume.summary}.`
+                `I'm applying for this job: ${JSON.stringify(job)}. Help me improve this resume summary ${userProfile.summary} based on details from my profile: ${userProfile.summary}`
         }
     ];
 
@@ -64,23 +68,24 @@ export default function Resume({
 
                 <h2 className="text-left font-bold text-2xl py-4 mb-4">Summary</h2>
                 <ChatWithGPT
-                    collection='jobs'
-                    documentID={jobData.id}
+                    collection='resumes'
+                    documentID={application.userResume._id}
                     message={message}
-                    setKey={"userResume.summary"}
-                    currentState={currentSummary}
-                    updateState={updateCurrentSummary}
+                    setKey={"summary"}
+                    currentState={application.userResume.summary}
+                    updateState={updateResumeSummary}
+                    saveToDatabase={updateResumeAction}
                 />
 
-                {userResume.areas_of_expertise && (<>
+                {userResume?.areas_of_expertise && (<>
                     <h2 className="text-left font-bold text-2xl py-4 mb-4">Areas of Expertise</h2>
                     <ul className="list-disc list-inside text-left mb-8">
-                        {userResume.areas_of_expertise.map((area, index) => (
+                        {userResume.areas_of_expertise.map((area: any, index: number) => (
                             <li key={index}>{area}</li>
                         ))}
                     </ul>
                 </>)}
-                {userResume.skills && (<>
+                {userResume?.skills && (<>
                     <h2 className="text-left font-bold text-2xl py-4 mb-4">Skills</h2>
                     <p className='text-left'>{userResume.skills.join(', ')}</p>
                 </>)}
@@ -95,8 +100,8 @@ export default function Resume({
                                 {exp.responsibilities.map((resp: any, i: number) => (
                                     <div key={i}>
                                         <Responsibility
-                                            documentID={jobData.id}
-                                            setKey={`userResume.professional_experience.${index}.responsibilities.${i}.content`}
+                                            documentID={application.userResume._id}
+                                            setKey={`professional_experience.${index}.responsibilities.${i}.content`}
                                             content={resp.content}
                                             message={[
                                                 {
@@ -112,9 +117,13 @@ export default function Resume({
                                                 {
                                                     "role": "user",
                                                     "content":
-                                                        `I'm applying for this job: ${JSON.stringify(jobData)}. Help me improve this resume bullet point ${resp.content}. Keep the output under 132 characters.`
+                                                        `I'm applying for this job: ${JSON.stringify(job)}. Help me improve this resume bullet point ${resp.content}. Keep the output under 132 characters.`
                                                 }
                                             ]}
+                                            updateResumeExperienceResponsibilities={updateResumeExperienceResponsibilities}
+                                            saveToDatabase={updateResumeAction}
+                                            parentIndex={index}
+                                            childIndex={i}
                                         />
                                     </div>))}
                             </ul>
@@ -124,18 +133,18 @@ export default function Resume({
 
                 {userResume.education && (<>
                     <h2 className="text-left font-bold text-2xl py-4 mb-4">Education</h2>
-                    {userResume.education.map((edu, index) => (
+                    {userResume.education.map((edu: any, index: number) => (
                         <div key={index} className="mb-8">
                             <h3 className="text-left font-bold text-lg mb-2">{edu.degree}</h3>
                             <p className="text-left text-lg mb-2">{edu.institution}, {edu.location}</p>
                             <ul className="list-disc list-inside text-left mb-8">
                                 {edu.details && (<>
-                                    {edu.details.map((detail, i) => (
+                                    {edu.details.map((detail: any, i: number) => (
                                         <div key={i}>
                                             <Responsibility
-                                                documentID={jobData.id}
-                                                setKey={`userResume.education.${index}.details.${i}.content`}
-                                                content={detail.content || ''}
+                                                documentID={job.id}
+                                                setKey={`education.${index}.details.${i}.content`}
+                                                content={detail.content}
                                                 message={[
                                                     {
                                                         "role": "system",
@@ -150,9 +159,13 @@ export default function Resume({
                                                     {
                                                         "role": "user",
                                                         "content":
-                                                            `I'm applying for this job: ${JSON.stringify(jobData)}. Help me improve this resume bullet point ${detail.content}. Keep the output under 132 characters.`
+                                                            `I'm applying for this job: ${JSON.stringify(job)}. Help me improve this resume bullet point ${detail.content}. Keep the output under 132 characters.`
                                                     }
                                                 ]}
+                                                updateResumeExperienceResponsibilities={updateResumeEductionDetails}
+                                                saveToDatabase={updateResumeAction}
+                                                parentIndex={index}
+                                                childIndex={i}
                                             />
                                         </div>
                                     ))}

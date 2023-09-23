@@ -1,13 +1,13 @@
 import { getServerSession } from "next-auth/next";
 import Link from "next/link";
 import { authOptions } from "../../lib/auth";
-import { getUserJobs } from "../../lib/job-db";
+import { getUserJobApps } from "../../lib/jobapp-db";
 import { getProfile } from "../../lib/profile-db";
-import JobsForm from "../components/jobs/JobsForm";
+import JobApps from "../components/jobs/apps/JobApps";
 
 export default async function JobPage() {
   const session = await getServerSession(authOptions)
-  const { jobs } = await getUserJobs({ userId: session?.user?.id || '' })
+  const { jobApps } = await getUserJobApps({ userId: session?.user?.id || '' })
   const { profile } = await getProfile(session?.user?.id || '');
 
 
@@ -23,9 +23,9 @@ export default async function JobPage() {
               <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4" type="submit">Go To Profile</button>
             </Link>
           </>)}
-          {session?.user?.id && (
-            <JobsForm 
-            jobs={jobs}
+          {profile && (
+            <JobApps 
+            jobApps={jobApps}
             profile={profile}
             />
           )}

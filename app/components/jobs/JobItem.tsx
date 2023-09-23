@@ -1,13 +1,27 @@
 "use client"
 import Link from "next/link";
-import { deleteJobAction } from "../../jobs/[id]/_action";
+import { deleteJobAppAction } from "../../jobs/apps/[id]/_action";
 
-export default function JobItem({ id, jobTitle, company }: { id: string, jobTitle: string, company: string }) {
+export default function JobItem(
+  { id, 
+    resumeId,
+    jobTitle, 
+    company 
+  }: { 
+    id: string, 
+    resumeId: string,
+    jobTitle: string, 
+    company: string 
+  }) {
 
   async function deleteJob() {
-    if (id) {
-      await deleteJobAction({
+    console.log("deleting Job")
+    console.log(id)
+    console.log(resumeId)
+    if (id && resumeId) {
+      await deleteJobAppAction({
         id: id,
+        resumeId: resumeId,
         path: "/",
       });
     }
@@ -15,7 +29,7 @@ export default function JobItem({ id, jobTitle, company }: { id: string, jobTitl
 
   return (
     <div className="flex items-center justify-center w-full max-w-2xl bg-white rounded-xl shadow-md space-x-2 mb-2">
-      <Link href={`jobs/${id}`}>
+      <Link href={`jobs/apps/${id}`}>
         <span className='flex items-center p-2 mr-4 '>
           <span className='text-xl text-gray-600 font-bold'>
             {jobTitle} - {company}

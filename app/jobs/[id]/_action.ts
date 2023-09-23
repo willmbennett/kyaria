@@ -1,11 +1,12 @@
 "use server";
 
-import { createJob, deleteJob, getUserJobs, updateJob } from "../../../lib/job-db";
+import { createJob, deleteJob, updateJob } from "../../../lib/job-db";
 import { revalidatePath } from "next/cache";
 
 export async function createJobAction(data: any, path: string) {
-  await createJob(data);
+  const { jobId } = await createJob(data);
   revalidatePath(path);
+  return jobId
 }
 
 export async function updateJobAction(
@@ -26,11 +27,4 @@ export async function deleteJobAction({
 }) {
   await deleteJob(id);
   revalidatePath(path);
-}
-
-export async function getJobsActions(
-  userId: string,
-) {
-  const res = await getUserJobs({userId: userId});
-  return(res)
 }

@@ -1,28 +1,26 @@
-import React, { useState } from 'react';
-import { useForm, useFieldArray, Controller, SubmitHandler } from 'react-hook-form';
-import { FormFields } from '../../jobs/job-helper'
+import React from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { FormFields, questions } from '../../../jobs/job-helper'
 //import { redirect } from 'next/navigation'
-import FieldArray from './FieldArray';
-import { createNewJob } from '../../jobs/job-helper';
-import { ProfileClass } from '../../../models/Profile';
-import { JobClass } from '../../../models/Job';
-import { createJobAction } from '../../jobs/[id]/_action';
+import FieldArray from '../FieldArray';
+import { createJobAction } from '../../../jobs/[id]/_action';
+import { createJobAppAction, createResumeAction } from '../../../jobs/apps/[id]/_action';
 
 const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'
 
-export default function NewJobForm({
+export default function NewJobAppForm({
     defaultValue,
     values,
     setCreatingJob,
     userId,
-    userResume,
+    profile,
     setFormView
 }: {
     defaultValue: any,
     values: any,
     setCreatingJob: any,
     userId: string,
-    userResume: any,
+    profile: any,
     setFormView: any
 }) {
 
@@ -32,22 +30,39 @@ export default function NewJobForm({
     });
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
-        console.log("Creating Job")
-        const addDetails = {
-            ...data,
-            userId: userId,
-            userCoverLetter: "",
-            userResume: userResume,
-            userStory: ""
-        }
-        console.log(addDetails.userCoverLetter)
-        console.log(addDetails)
         const path = "/"
-        const res = await createJobAction(addDetails, path);
-        console.log(res)
-        setCreatingJob(false)
-        setFormView(false)
-        //redirect(`/`) // Navigate to new route
+        console.log("Create a Job")
+        console.log(data)
+        const jobId = await createJobAction(data, path);
+        console.log("Creating Job")
+        console.log(jobId)
+        console.log("Create a Resume")
+        const profileId = profile._id
+        console.log(`profile id: ${profileId}`)
+        const resume = profile
+        delete resume._id
+        console.log(resume)
+        const resumeId = await createResumeAction(resume, path);
+        console.log("Creating Resume") 
+        console.log(resumeId)
+        if(jobId && resumeId && profileId) {
+            console.log('Creating App')
+            const userApp = {
+                job: jobId,
+                profile: profileId,
+                userCoverLetter: "",
+                userId: userId,
+                userQuestions: questions,
+                userResume: resumeId,
+                userStory: ""
+            }
+            console.log(userApp)
+            const jobApp = await createJobAppAction(userApp, path);
+            console.log('Created App')
+            console.log(jobApp)
+            setCreatingJob(false)
+            setFormView(false)
+        }
     };
 
     return (

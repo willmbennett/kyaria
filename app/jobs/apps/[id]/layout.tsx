@@ -1,4 +1,4 @@
-import JobMenu from '../../components/jobs/job/JobMenu';
+import JobMenu from '../../../components/jobs/job/JobMenu';
 
 
 export default function JobLayout({

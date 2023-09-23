@@ -17,7 +17,7 @@ export default function NavMenu() {
   };
 
   const handleLinkClick = () => {
-    active? setActive(!active) : null
+    active ? setActive(!active) : null
   };
 
   const pathname = usePathname();
@@ -56,21 +56,24 @@ export default function NavMenu() {
         <div
           className={`${active ? '' : 'hidden'}  w-full lg:inline-flex lg:flex-grow lg:w-auto`}
         >
+
           <div className='lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full items-center items-start  flex flex-col lg:h-auto'>
-            <button onClick={handleLinkClick}>
-              <Link href='/jobs'>
-              <span className= {pathname === '/jobs' ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
-                  JOBS
-                </span>
-              </Link>
-            </button>
-            <button onClick={handleLinkClick}>
-              <Link href={`/profile/${session?.user?.id}`}>
-              <span className= {pathname === `/profile/${session?.user?.id}` ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
-                  PROFILE
-                </span>
-              </Link>
-            </button>
+            {session?.user?.id && (<>
+              <button onClick={handleLinkClick}>
+                <Link href='/jobs'>
+                  <span className={pathname === '/jobs' ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
+                    JOBS
+                  </span>
+                </Link>
+              </button>
+              <button onClick={handleLinkClick}>
+                <Link href={`/profile/${session?.user?.id}`}>
+                  <span className={pathname === `/profile/${session?.user?.id}` ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
+                    PROFILE
+                  </span>
+                </Link>
+              </button>
+            </>)}
             <AuthButton />
           </div>
         </div>
