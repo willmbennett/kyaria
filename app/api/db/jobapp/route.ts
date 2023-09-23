@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     //const page = page_str ? parseInt(page_str, 10) : 1;
     //const limit = limit_str ? parseInt(limit_str, 10) : 10;
 
-    const userId = "65038e701a88bef271768446"
+    const userId = "650f7049e8c5117da89728e2"
 
     const { jobApps, results, error } = await getUserJobApps({ userId });
 
