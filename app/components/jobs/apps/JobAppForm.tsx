@@ -48,12 +48,12 @@ export default function NewJobAppForm({
         if(jobId && resumeId && profileId) {
             console.log('Creating App')
             const userApp = {
-                //job: jobId,
-                //profile: profileId,
+                job: jobId,
+                profile: profileId,
                 userCoverLetter: "",
                 userId: userId,
                 userQuestions: questions,
-                //userResume: resumeId,
+                userResume: resumeId,
                 userStory: ""
             }
             console.log(userApp)

@@ -6,9 +6,9 @@ import {
     mongoose
 } from "@typegoose/typegoose";
 
-//import { ProfileClass } from "./Profile";
-//import { JobClass } from "./Job";
-//import { ResumeClass } from "./Resume";
+import { ProfileClass } from "./Profile";
+import { JobClass } from "./Job";
+import { ResumeClass } from "./Resume";
 
 class UserQuestion {
     @prop()
@@ -28,12 +28,12 @@ class UserQuestion {
         allowMixed: Severity.ALLOW
     }
 })
-class JobApplicationClass {
-    //@prop({ ref: () => JobClass, required: true })
-    //job: mongoose.Types.ObjectId | string
+class JobAppClass {
+    @prop({ ref: () => JobClass, required: true })
+    job: mongoose.Types.ObjectId | string
 
-    //@prop({ ref: () => ProfileClass, required: true })
-    //profile: mongoose.Types.ObjectId | string
+    @prop({ ref: () => ProfileClass, required: true })
+    profile: mongoose.Types.ObjectId | string
 
     @prop()
     userCoverLetter?: string;
@@ -44,8 +44,8 @@ class JobApplicationClass {
     @prop({ type: () => [UserQuestion] , options: { disableLowerIndexes: true }})
     public userQuestions?: UserQuestion[];
 
-    //@prop({ ref: () => ResumeClass, required: true })
-    //userResume: mongoose.Types.ObjectId | string
+    @prop({ ref: () => ResumeClass, required: true })
+    userResume: mongoose.Types.ObjectId | string
 
     @prop()
     userStory?: string;
@@ -55,5 +55,5 @@ class JobApplicationClass {
     updatedAt: Date | string;
 }
 
-const JobApplication = getModelForClass(JobApplicationClass);
-export { JobApplication, JobApplicationClass };
+const JobApp = getModelForClass(JobAppClass);
+export { JobApp, JobAppClass };

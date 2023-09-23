@@ -1,5 +1,4 @@
-import { Job, JobClass } from "../models/Job";
-import { JobApplication, JobApplicationClass } from "../models/JobApplication";
+import { JobApp, JobAppClass } from "../models/JobApp";
 import { Resume } from "../models/Resume";
 import connectDB from "./connect-db";
 import { stringToObjectId, castToString } from "./utils";
@@ -22,7 +21,7 @@ export async function getUserJobApps(filter: JobAppFilter) {
         //console.log("getting job apps")
 
         //const jobs = await Job.find(filter).skip(skip).limit(limit).lean().exec();
-        const jobApps = await JobApplication.find({ userId: filter.userId })
+        const jobApps = await JobApp.find({ userId: filter.userId })
             .populate("job")
             .lean()
             .exec();
@@ -48,16 +47,16 @@ export async function getUserJobApps(filter: JobAppFilter) {
     }
 }
 
-export async function createJobApp(data: JobApplicationClass) {
+export async function createJobApp(data: JobAppClass) {
     try {
         await connectDB();
 
-        //transformProps(data, stringToObjectId, ['profile', 'job', 'userResume']);
+        transformProps(data, stringToObjectId, ['profile', 'job', 'userResume']);
 
         console.log(data)
 
         console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-        const newApp = new JobApplication(data);
+        const newApp = new JobApp(data);
         console.log(`newly created app`);
         console.log(newApp);
         const createdApp = await newApp.save();
@@ -67,7 +66,7 @@ export async function createJobApp(data: JobApplicationClass) {
         console.log('Created JobApp');
         console.log(createdApp);
 
-        const jobApp = await JobApplication.findById(createdApp._id)
+        const jobApp = await JobApp.findById(createdApp._id)
             .populate(["job", "userResume", "profile"])
             .lean()
             .exec();
@@ -100,7 +99,7 @@ export async function getJobApp(id: string) {
         }
 
         //console.log(id)
-        const jobApp = await JobApplication.findById(id)
+        const jobApp = await JobApp.findById(id)
             .populate(["job", "userResume", "profile"])
             .lean()
             .exec();
@@ -129,7 +128,7 @@ export async function updateJobApp(id: string, data: any) {
 
         //console.log(`data to update job with: ${JSON.stringify(data)}`)
 
-        const job = await JobApplication.findByIdAndUpdate(
+        const job = await JobApp.findByIdAndUpdate(
             parsedId,
             data
         )
@@ -164,7 +163,7 @@ export async function deleteJobApp(id: string, resumeId: string) {
         }
 
         console.log("Made it to Deletion")
-        const jobApp = await JobApplication.findByIdAndDelete(parsedId).exec();
+        const jobApp = await JobApp.findByIdAndDelete(parsedId).exec();
         console.log("Post job app deletion")
         const resume = await Resume.findByIdAndDelete(parsedResumeId).exec();
         console.log("Post resume deletion")
