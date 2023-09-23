@@ -58,7 +58,6 @@ export default function UserStory({
                 Let's write you a story
             </h1>
             <ChatWithGPT
-                collection='applications'
                 documentID={jobApp._id}
                 message={message}
                 setKey='userStory'

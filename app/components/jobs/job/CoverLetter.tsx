@@ -61,7 +61,6 @@ export default function CoverLetter({
                 Stand out with a cover letter
             </h1>
             <ChatWithGPT
-                collection='applications'
                 documentID={jobApp._id}
                 setKey='userCoverLetter'
                 message={message}

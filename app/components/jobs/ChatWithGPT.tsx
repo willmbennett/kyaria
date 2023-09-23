@@ -2,19 +2,14 @@
 import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import { useChat } from 'ai/react';
-import { updateJobAction } from '../../jobs/[id]/_action';
 
 interface Props {
-  collection: string,
   documentID: string,
-  searchKey?: string,
-  searchVal?: string,
   setKey: string,
   message: any;
   currentState: any;
   updateState: any;
   saveToDatabase: any;
-  refresh?: boolean;
   temp?: number;
   copy?: boolean;
   parentIndex?: number;
@@ -22,16 +17,12 @@ interface Props {
 }
 
 export default function ChatWithGPT({
-  collection,
   documentID,
-  searchKey,
-  searchVal,
   setKey,
   message,
   currentState,
   updateState,
   saveToDatabase,
-  refresh = true,
   temp = 0.3,
   copy = true,
   parentIndex,
