@@ -10,7 +10,7 @@ export default function ProfileActions(
         inputTextView,
         setInputTextView
     }: {
-        id?: string,
+        id?: any,
         formView: boolean,
         setFormView: any,
         inputTextView: boolean,

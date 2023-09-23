@@ -9,7 +9,7 @@ export async function createProfileAction(data: any, path: string) {
 }
 
 export async function updateProfileAction(
-  id: string,
+  id: any,
   data: any,
   path: string
 ) {
@@ -21,7 +21,7 @@ export async function deleteProfileAction({
   id,
   path,
 }: {
-  id: string;
+  id: any;
   path: string;
 }) {
   await deleteProfile(id);
