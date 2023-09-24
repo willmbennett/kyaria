@@ -52,13 +52,13 @@ export async function createJobApplication(data: any) {
     try {
         const { job, resume, profileId, userId, questions } = data
         await connectDB();
-        console.log("Create Resume")
+        //console.log("Create Resume")
         const newResume = await ResumeModel.create(resume);
         //console.log(newResume)
-        console.log("Create Job")
+        //console.log("Create Job")
         const newJob = await JobModel.create(job);
         //console.log(newJob)
-        console.log("Create App")
+        //console.log("Create App")
         const profileObjectId = stringToObjectId(profileId)
         const userApp = {
             job: newJob._id,
@@ -69,9 +69,9 @@ export async function createJobApplication(data: any) {
             userResume: newResume._id,
             userStory: ""
         }
-        console.log(userApp)
+        //console.log(userApp)
         const newApp = new AppModel(userApp);
-        console.log(newApp);
+        //console.log(newApp);
         const jobApp = await newApp.save();
 
         //console.log('Created JobApp');

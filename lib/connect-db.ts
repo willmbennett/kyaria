@@ -26,7 +26,7 @@ if (!cached) {
 
 async function connectDB() {
   if (cached.conn) {
-    console.log("🚀 Using cached connection");
+    //console.log("🚀 Using cached connection");
     return cached.conn;
   }
 
@@ -37,7 +37,7 @@ async function connectDB() {
 
     cached.promise = connect(MONGODB_URI!, opts)
       .then((mongoose) => {
-        console.log("✅ New connection established");
+        //console.log("✅ New connection established");
 
         // Clear Node's entire module cache
         Object.keys(require.cache).forEach((key) => {
@@ -47,7 +47,7 @@ async function connectDB() {
         return mongoose;
       })
       .catch((error) => {
-        console.error("❌ Connection to database failed");
+        //console.error("❌ Connection to database failed");
         throw error;
       });
   }
