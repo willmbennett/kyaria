@@ -18,7 +18,7 @@ export async function getUserJobApps(filter: JobAppFilter) {
 
         //console.log(filter)
 
-        console.log("getting job apps")
+        //console.log("getting job apps")
 
         //const jobs = await Job.find(filter).skip(skip).limit(limit).lean().exec();
         const jobApps = await JobApp.find({ userId: filter.userId })
@@ -28,11 +28,11 @@ export async function getUserJobApps(filter: JobAppFilter) {
 
         const results = jobApps.length;
 
-        console.log(jobApps, results)
+        //console.log(jobApps, results)
 
         if (jobApps) {
             transformProps(jobApps, castToString, ['_id', "createdAt", "updatedAt", "profile", "userResume"]);
-            console.log(jobApps)
+            //console.log(jobApps)
             return {
                 jobApps,
                 //page,
@@ -53,7 +53,7 @@ export async function createJobApp(data: any) {
 
         transformProps(data, stringToObjectId, ['profile', 'job', 'userResume']);
 
-        console.log(data)
+        //console.log(data)
 
         console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
         const newApp = new JobApp(data);
