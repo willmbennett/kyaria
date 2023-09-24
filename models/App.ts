@@ -23,14 +23,14 @@ class UserQuestion {
     schemaOptions: {
         timestamps: true,
         versionKey: false,
-        collection: "jobapplication",
+        collection: "apps",
     },
     options: {
         disableLowerIndexes: true,
         allowMixed: Severity.ALLOW
     }
 })
-class JobAppClass {
+class AppClass {
     @prop()
     public userCoverLetter?: string;
 
@@ -57,5 +57,5 @@ class JobAppClass {
     updatedAt: Date | string;
 }
 
-const JobApp = getModelForClass(JobAppClass);
-export { JobApp, JobAppClass };
+const AppModel = getModelForClass(AppClass);
+export { AppModel, AppClass };

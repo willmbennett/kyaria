@@ -1,14 +1,15 @@
-import { JobApp, JobAppClass } from "../models/JobApp";
-import { Resume } from "../models/Resume";
+import { AppModel, AppClass } from "../models/App";
+import { JobModel } from "../models/Job";
+import { ResumeModel } from "../models/Resume";
 import connectDB from "./connect-db";
 import { stringToObjectId, castToString, ObjectIdtoString } from "./utils";
 var transformProps = require('transform-props');
 
-interface JobAppFilter {
+interface AppFilter {
     userId: string
 }
 
-export async function getUserJobApps(filter: JobAppFilter) {
+export async function getUserJobApps(filter: AppFilter) {
     try {
         await connectDB();
 
@@ -21,7 +22,7 @@ export async function getUserJobApps(filter: JobAppFilter) {
         //console.log("getting job apps")
 
         //const jobs = await Job.find(filter).skip(skip).limit(limit).lean().exec();
-        const jobApps = await JobApp.find({ userId: filter.userId })
+        const jobApps = await AppModel.find({ userId: filter.userId })
             .populate("job")
             .lean()
             .exec();
@@ -47,21 +48,31 @@ export async function getUserJobApps(filter: JobAppFilter) {
     }
 }
 
-export async function createJobApp(data: any) {
+export async function createJobApplication(data: any) {
     try {
+        const { job, resume, profileId, userId, questions } = data
         await connectDB();
-
-        transformProps(data, stringToObjectId, ['profile', 'job', 'userResume']);
-
-        console.log(JobApp.schema.obj)
-
-        //console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-        const newApp = new JobApp(data);
-        //console.log(`newly created app`);
-        //console.log(newApp);
+        console.log("Create Resume")
+        const newResume = await ResumeModel.create(resume);
+        //console.log(newResume)
+        console.log("Create Job")
+        const newJob = await JobModel.create(job);
+        //console.log(newJob)
+        console.log("Create App")
+        const profileObjectId = stringToObjectId(profileId)
+        const userApp = {
+            job: newJob._id,
+            profile: profileObjectId,
+            userCoverLetter: "",
+            userId: userId,
+            userQuestions: questions,
+            userResume: newResume._id,
+            userStory: ""
+        }
+        console.log(userApp)
+        const newApp = new AppModel(userApp);
+        console.log(newApp);
         const jobApp = await newApp.save();
-        //const newJobApp = await JobApplication.create(data)
-        //console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
 
         //console.log('Created JobApp');
         //console.log(jobApp);
@@ -89,7 +100,7 @@ export async function getJobApp(id: string) {
         }
 
         //console.log(id)
-        const jobApp = await JobApp.findById(id)
+        const jobApp = await AppModel.findById(id)
             .populate(["job", "userResume", "profile"])
             .lean()
             .exec();
@@ -118,7 +129,7 @@ export async function updateJobApp(id: string, data: any) {
 
         //console.log(`data to update job with: ${JSON.stringify(data)}`)
 
-        const job = await JobApp.findByIdAndUpdate(
+        const job = await AppModel.findByIdAndUpdate(
             parsedId,
             data
         )
@@ -153,10 +164,8 @@ export async function deleteJobApp(id: string, resumeId: string) {
         }
 
         console.log("Made it to Deletion")
-        const jobApp = await JobApp.findByIdAndDelete(parsedId).exec();
+        const jobApp = await AppModel.findByIdAndDelete(parsedId).exec();
         console.log("Post job app deletion")
-        const resume = await Resume.findByIdAndDelete(parsedResumeId).exec();
-        console.log("Post resume deletion")
 
         if (jobApp) {
             return {};

@@ -1,4 +1,4 @@
-import { Resume, ResumeClass } from "../models/Resume";
+import { ResumeModel, ResumeClass } from "../models/Resume";
 import connectDB from "./connect-db";
 import { castToString, stringToObjectId } from "./utils";
 
@@ -8,7 +8,7 @@ export async function createResume(data: ResumeClass) {
 
         //console.log(`Resume to create: ${JSON.stringify(data)}`)
 
-        const resume = await Resume.create(data);
+        const resume = await ResumeModel.create(data);
 
         //console.log(`Created resume: ${JSON.stringify(resume)}`)
 
@@ -37,7 +37,7 @@ export async function updateResume(id: string, data: any) {
 
         console.log(`data to update profile with: ${JSON.stringify(data)}`)
 
-        const resume = await Resume.findByIdAndUpdate(
+        const resume = await ResumeModel.findByIdAndUpdate(
             parsedId,
             data
         )

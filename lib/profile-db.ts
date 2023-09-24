@@ -1,4 +1,4 @@
-import { Profile, ProfileClass } from "../models/Profile";
+import { ProfileModel, ProfileClass } from "../models/Profile";
 import connectDB from "./connect-db";
 import { stringToObjectId, castToString } from "./utils";
 var transformProps = require('transform-props');
@@ -16,7 +16,7 @@ export async function getProfiles(filter: ProfileFilter = {}) {
         const limit = filter.limit ?? 10;
         const skip = (page - 1) * limit;
 
-        const profiles = await Profile.find().skip(skip).limit(limit).lean().exec();
+        const profiles = await ProfileModel.find().skip(skip).limit(limit).lean().exec();
 
         const results = profiles.length;
 
@@ -37,7 +37,7 @@ export async function createProfile(data: ProfileClass) {
 
         console.log(`Profile to create: ${JSON.stringify(data)}`)
 
-        const profile = await Profile.create(data);
+        const profile = await ProfileModel.create(data);
 
         console.log(`Created Profile: ${JSON.stringify(profile)}`)
 
@@ -58,7 +58,7 @@ export async function getProfile(userId: string) {
         }
 
         //console.log(parsedId)
-        const profile = await Profile.findOne({userId: userId}).lean().exec();
+        const profile = await ProfileModel.findOne({userId: userId}).lean().exec();
 
         //console.log(profile)
         if (profile) {
@@ -86,7 +86,7 @@ export async function updateProfile(id: string, data: any) {
 
         console.log(`data to update profile with: ${JSON.stringify(data)}`)
 
-        const profile = await Profile.findByIdAndUpdate(
+        const profile = await ProfileModel.findByIdAndUpdate(
             parsedId,
             data
         )
@@ -119,7 +119,7 @@ export async function deleteProfile(id: string) {
             return { error: "Profile not found" };
         }
 
-        const profile = await Profile.findByIdAndDelete(parsedId).exec();
+        const profile = await ProfileModel.findByIdAndDelete(parsedId).exec();
 
         if (profile) {
             return {};

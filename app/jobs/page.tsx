@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import Link from "next/link";
 import { authOptions } from "../../lib/auth";
-import { getUserJobApps } from "../../lib/jobapp-db";
+import { getUserJobApps } from "../../lib/app-db";
 import { getProfile } from "../../lib/profile-db";
 import JobApps from "../components/jobs/apps/JobApps";
 

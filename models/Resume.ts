@@ -107,5 +107,5 @@ class ResumeClass {
     _id: mongoose.Types.ObjectId | string;
 }
 
-const Resume = getModelForClass(ResumeClass);
-export { Resume, ResumeClass };
+const ResumeModel = getModelForClass(ResumeClass);
+export { ResumeModel, ResumeClass };

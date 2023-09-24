@@ -110,5 +110,5 @@ class ProfileClass {
     updatedAt: Date | string;
 }
 
-const Profile = getModelForClass(ProfileClass);
-export { Profile, ProfileClass };
+const ProfileModel = getModelForClass(ProfileClass);
+export { ProfileModel, ProfileClass };
