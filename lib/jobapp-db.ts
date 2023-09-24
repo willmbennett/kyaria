@@ -53,21 +53,21 @@ export async function createJobApp(data: any) {
 
         transformProps(data, stringToObjectId, ['profile', 'job', 'userResume']);
 
-        //console.log(data)
+        console.log(JobApp.schema.obj)
 
-        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        //console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
         const newApp = new JobApp(data);
-        console.log(`newly created app`);
-        console.log(newApp);
+        //console.log(`newly created app`);
+        //console.log(newApp);
         const jobApp = await newApp.save();
         //const newJobApp = await JobApplication.create(data)
-        console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
+        //console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
 
-        console.log('Created JobApp');
-        console.log(jobApp);
+        //console.log('Created JobApp');
+        //console.log(jobApp);
         if (jobApp) {
             const jobAppId = jobApp._id.toString()
-            console.log(jobAppId);
+            //console.log(jobAppId);
             return {
                 jobApp: jobAppId
             };

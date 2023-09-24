@@ -4,8 +4,9 @@ import {
     index,
     prop,
     Severity,
-    mongoose,
+    mongoose
 } from "@typegoose/typegoose";
+import type { Ref } from "@typegoose/typegoose";
 import { JobClass } from "./Job";
 import { ProfileClass } from "./Profile";
 import { ResumeClass } from "./Resume";
@@ -43,13 +44,13 @@ class JobAppClass {
     public userId!: string;
 
     @prop({ ref: () => ProfileClass, required: true })
-    public profile!: mongoose.Types.ObjectId | string;
+    public profile!: Ref<ProfileClass>;
 
     @prop({ ref: () => JobClass, required: true })
-    public job!: mongoose.Types.ObjectId | string;
+    public job!: Ref<JobClass>;
 
     @prop({ ref: () => ResumeClass, required: true })
-    public userResume!: mongoose.Types.ObjectId | string;
+    public userResume!: Ref<ResumeClass>;
 
     _id: mongoose.Types.ObjectId | string;
     createdAt: Date | string;
