@@ -26,7 +26,6 @@ export default function Responsibility({
         <>
             <div className="py-2">
                 <ChatWithGPT
-                    collection='resumes'
                     documentID={documentID}
                     setKey={setKey}
                     message={message}

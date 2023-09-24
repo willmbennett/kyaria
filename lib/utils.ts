@@ -9,8 +9,8 @@ export function stringToObjectId(id: string): mongoose.Types.ObjectId | null {
   }
 }
 
-export function ObjectIdtoString(id: mongoose.Types.ObjectId): string {
-  return id.toString()
+export function ObjectIdtoString(data: any): string {
+  return data.toString()
 }
 
 export function castToString(arg: any) {

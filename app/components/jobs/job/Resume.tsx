@@ -68,7 +68,6 @@ export default function Resume({
 
                 <h2 className="text-left font-bold text-2xl py-4 mb-4">Summary</h2>
                 <ChatWithGPT
-                    collection='resumes'
                     documentID={application.userResume._id}
                     message={message}
                     setKey={"summary"}
@@ -77,7 +76,7 @@ export default function Resume({
                     saveToDatabase={updateResumeAction}
                 />
 
-                {userResume?.areas_of_expertise && (<>
+                {userResume.areas_of_expertise && (<>
                     <h2 className="text-left font-bold text-2xl py-4 mb-4">Areas of Expertise</h2>
                     <ul className="list-disc list-inside text-left mb-8">
                         {userResume.areas_of_expertise.map((area: any, index: number) => (

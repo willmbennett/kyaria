@@ -106,6 +106,8 @@ class ProfileClass {
     public userId!: string;
 
     _id: mongoose.Types.ObjectId | string;
+    createdAt: Date | string;
+    updatedAt: Date | string;
 }
 
 const Profile = getModelForClass(ProfileClass);

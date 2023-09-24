@@ -64,7 +64,6 @@ export default function StarStory({
                 </button>
                 <div className={`${active ? ' ' : 'hidden'}`}>
                 <ChatWithGPT
-                    collection='resumes'
                     documentID={documentID}
                     setKey={setKey}
                     message={message}
