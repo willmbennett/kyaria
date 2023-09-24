@@ -1,5 +1,4 @@
 import { JobAppModel, JobAppClass } from "../models/JobApp";
-import { ResumeModel } from "../models/Resume";
 import connectDB from "./connect-db";
 import { stringToObjectId, castToString, ObjectIdtoString } from "./utils";
 var transformProps = require('transform-props');
@@ -50,6 +49,9 @@ export async function getUserJobApps(filter: JobAppFilter) {
 export async function createJobApp(data: any) {
     try {
         await connectDB();
+        console.log(JobAppModel)
+
+        console.log(JobAppModel.schema)
 
         transformProps(data, stringToObjectId, ['profile', 'job', 'userResume']);
 
@@ -155,8 +157,6 @@ export async function deleteJobApp(id: string, resumeId: string) {
         console.log("Made it to Deletion")
         const jobApp = await JobAppModel.findByIdAndDelete(parsedId).exec();
         console.log("Post job app deletion")
-        const resume = await ResumeModel.findByIdAndDelete(parsedResumeId).exec();
-        console.log("Post resume deletion")
 
         if (jobApp) {
             return {};
