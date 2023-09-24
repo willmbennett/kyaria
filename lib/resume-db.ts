@@ -6,16 +6,16 @@ export async function createResume(data: ResumeClass) {
     try {
         await connectDB();
 
-        console.log(`Resume to create: ${JSON.stringify(data)}`)
+        //console.log(`Resume to create: ${JSON.stringify(data)}`)
 
         const resume = await Resume.create(data);
 
-        console.log(`Created resume: ${JSON.stringify(resume)}`)
+        //console.log(`Created resume: ${JSON.stringify(resume)}`)
 
         if (resume) {
-            console.log('about to transform props')
+            //console.log('about to transform props')
             const resumeId = castToString(resume._id)
-            console.log(resumeId)
+            //console.log(resumeId)
             return {
                 resumeId
             };
