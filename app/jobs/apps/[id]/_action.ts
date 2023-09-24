@@ -4,7 +4,7 @@ import {
   createJobApp,
   deleteJobApp,
   updateJobApp
-} from "../../../../lib/jobapp-db";
+} from "../../../../lib/app-db";
 import { revalidatePath } from "next/cache";
 import { createResume, updateResume } from "../../../../lib/resume-db";
 

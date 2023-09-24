@@ -1,13 +1,13 @@
-import { JobAppModel, JobAppClass } from "../models/JobApp";
+import { AppModel, AppClass } from "../models/App";
 import connectDB from "./connect-db";
 import { stringToObjectId, castToString, ObjectIdtoString } from "./utils";
 var transformProps = require('transform-props');
 
-interface JobAppFilter {
+interface AppFilter {
     userId: string
 }
 
-export async function getUserJobApps(filter: JobAppFilter) {
+export async function getUserJobApps(filter: AppFilter) {
     try {
         await connectDB();
 
@@ -20,7 +20,7 @@ export async function getUserJobApps(filter: JobAppFilter) {
         //console.log("getting job apps")
 
         //const jobs = await Job.find(filter).skip(skip).limit(limit).lean().exec();
-        const jobApps = await JobAppModel.find({ userId: filter.userId })
+        const jobApps = await AppModel.find({ userId: filter.userId })
             .populate("job")
             .lean()
             .exec();
@@ -50,12 +50,12 @@ export async function createJobApp(data: any) {
     try {
         await connectDB();
         console.log("JobAppModel")
-        console.log(JobAppModel)
-        console.log(JobAppModel.schema)
+        console.log(AppModel)
+        console.log(AppModel.schema)
         transformProps(data, stringToObjectId, ['profile', 'job', 'userResume']);
         console.log("After Transforming props")
         //console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-        const newApp = new JobAppModel(data);
+        const newApp = new AppModel(data);
         //console.log(`newly created app`);
         //console.log(newApp);
         const jobApp = await newApp.save();
@@ -88,7 +88,7 @@ export async function getJobApp(id: string) {
         }
 
         //console.log(id)
-        const jobApp = await JobAppModel.findById(id)
+        const jobApp = await AppModel.findById(id)
             .populate(["job", "userResume", "profile"])
             .lean()
             .exec();
@@ -117,7 +117,7 @@ export async function updateJobApp(id: string, data: any) {
 
         //console.log(`data to update job with: ${JSON.stringify(data)}`)
 
-        const job = await JobAppModel.findByIdAndUpdate(
+        const job = await AppModel.findByIdAndUpdate(
             parsedId,
             data
         )
@@ -152,7 +152,7 @@ export async function deleteJobApp(id: string, resumeId: string) {
         }
 
         console.log("Made it to Deletion")
-        const jobApp = await JobAppModel.findByIdAndDelete(parsedId).exec();
+        const jobApp = await AppModel.findByIdAndDelete(parsedId).exec();
         console.log("Post job app deletion")
 
         if (jobApp) {

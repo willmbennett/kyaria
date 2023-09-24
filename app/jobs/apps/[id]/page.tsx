@@ -1,7 +1,7 @@
 import Job from "../../../components/jobs/job/Job";
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../../../../lib/auth';
-import { getJobApp } from "../../../../lib/jobapp-db";
+import { getJobApp } from "../../../../lib/app-db";
 
 export default async function ProfilePage({ params }: { params: { id: string } }) {
   const { jobApp } = await getJobApp(params.id);

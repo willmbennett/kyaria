@@ -1,7 +1,7 @@
 import connectDB from "../../../../../lib/connect-db";
 import { createErrorResponse } from "../../../../../lib/utils";
 import { NextRequest, NextResponse } from "next/server";
-import { getJobApp, getUserJobApps } from "../../../../../lib/jobapp-db";
+import { getJobApp, getUserJobApps } from "../../../../../lib/app-db";
 
 export async function GET(request: NextRequest,
     { params }: { params: { id: string } }) {
