@@ -49,14 +49,11 @@ export async function getUserJobApps(filter: JobAppFilter) {
 export async function createJobApp(data: any) {
     try {
         await connectDB();
+        console.log("JobAppModel")
         console.log(JobAppModel)
-
         console.log(JobAppModel.schema)
-
         transformProps(data, stringToObjectId, ['profile', 'job', 'userResume']);
-
-        console.log(JobAppModel.schema.obj)
-
+        console.log("After Transforming props")
         //console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
         const newApp = new JobAppModel(data);
         //console.log(`newly created app`);
