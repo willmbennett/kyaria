@@ -40,11 +40,11 @@ export default function NewJobAppForm({
             userId: userId,
             questions: questions
         }
-        console.log('Creating App')
-        console.log(userApp)
+        //console.log('Creating App')
+        //console.log(userApp)
         const jobApp = await createJobApplicationAction(userApp, path);
-        console.log('Created App')
-        console.log(jobApp)
+        //console.log('Created App')
+        //console.log(jobApp)
         setCreatingJob(false)
         setFormView(false)
     };
