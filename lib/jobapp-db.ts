@@ -75,6 +75,7 @@ export async function createJobApp(data: any) {
             return { error: "Job not found" };
         }
     } catch (error) {
+        console.error("Error in createJobApp:", error);
         return { error };
     }
 }
