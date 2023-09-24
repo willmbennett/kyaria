@@ -57,5 +57,5 @@ class JobAppClass {
     updatedAt: Date | string;
 }
 
-const JobApp = getModelForClass(JobAppClass);
-export { JobApp, JobAppClass };
+const JobAppModel = getModelForClass(JobAppClass);
+export { JobAppModel, JobAppClass };

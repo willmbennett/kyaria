@@ -1,4 +1,4 @@
-import { Job, JobClass } from "../models/Job";
+import { JobModel, JobClass } from "../models/Job";
 import connectDB from "./connect-db";
 import { stringToObjectId, castToString } from "./utils";
 var transformProps = require('transform-props');
@@ -18,7 +18,7 @@ export async function getUserJobs(filter: JobFilter) {
         console.log(filter)
 
         //const jobs = await Job.find(filter).skip(skip).limit(limit).lean().exec();
-        const jobs = await Job.find({ userId: filter.userId }).lean().exec();
+        const jobs = await JobModel.find({ userId: filter.userId }).lean().exec();
 
         const results = jobs.length;
 
@@ -45,7 +45,7 @@ export async function createJob(data: JobClass) {
 
         //console.log(`Job To create: ${JSON.stringify(data)}`)
 
-        const job = await Job.create(data);
+        const job = await JobModel.create(data);
 
         //console.log(job)
 
@@ -73,7 +73,7 @@ export async function getJob(id: string) {
         }
 
         //console.log(parsedId)
-        const job = await Job.findById(id).lean().exec();
+        const job = await JobModel.findById(id).lean().exec();
 
         if (job) {
             transformProps(job, castToString, ['_id', "_createdAt", "updatedAt"]);
@@ -99,7 +99,7 @@ export async function updateJob(id: string, data: any) {
 
         //console.log(`data to update job with: ${JSON.stringify(data)}`)
 
-        const job = await Job.findByIdAndUpdate(
+        const job = await JobModel.findByIdAndUpdate(
             parsedId,
             data
         )
@@ -132,7 +132,7 @@ export async function deleteJob(id: string) {
             return { error: "Job not found" };
         }
 
-        const job = await Job.findByIdAndDelete(parsedId).exec();
+        const job = await JobModel.findByIdAndDelete(parsedId).exec();
 
         if (job) {
             return {};

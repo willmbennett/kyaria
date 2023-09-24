@@ -55,5 +55,5 @@ class JobClass {
     updatedAt: Date | string;
 }
 
-const Job = getModelForClass(JobClass);
-export { Job, JobClass };
+const JobModel = getModelForClass(JobClass);
+export { JobModel, JobClass };
