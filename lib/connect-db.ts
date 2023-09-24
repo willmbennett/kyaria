@@ -38,27 +38,6 @@ async function connectDB() {
     cached.promise = connect(MONGODB_URI!, opts)
       .then((mongoose) => {
         console.log("✅ New connection established");
-
-        // Print the names of all models registered on this connection.
-        const registeredModels = mongoose.modelNames();
-        console.log("Registered Mongoose Models:", registeredModels);
-
-        // Iterate through each model to print validations
-        registeredModels.forEach((modelName) => {
-          const model = mongoose.model(modelName);
-          console.log(`Validations for model ${modelName}:`);
-
-          Object.entries(model.schema.paths).forEach(([pathName, pathValue]) => {
-            if (pathValue.validators && pathValue.validators.length > 0) {
-              console.log(`  Field: ${pathName}`);
-              pathValue.validators.forEach((validator) => {
-                console.log(`    Validator: ${validator?.validator?.name}`);
-                console.log(`    Message: ${validator.message}`);
-              });
-            }
-          });
-        });
-
         return mongoose;
       })
       .catch((error) => {
