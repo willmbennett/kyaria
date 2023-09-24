@@ -4,6 +4,10 @@ module.exports = {
     serverActions: true,
     serverComponentsExternalPackages:['mongoose','@typegoose/typegoose']
   },
+  webpack(config) {
+    config.optimization.minimize = false;
+    return config;
+  },
   async redirects() {
     return [
       {
