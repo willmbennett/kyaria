@@ -1,3 +1,6 @@
+import { setLogLevel } from "@typegoose/typegoose";
+setLogLevel("DEBUG");
+
 import { Analytics } from '@vercel/analytics/react';
 import { Metadata } from 'next';
 import SessionProvider from './components/SessionProvider'
