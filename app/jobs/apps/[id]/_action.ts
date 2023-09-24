@@ -1,15 +1,15 @@
 "use server";
 
 import {
-  createJobApp,
+  createJobApplication,
   deleteJobApp,
   updateJobApp
 } from "../../../../lib/app-db";
 import { revalidatePath } from "next/cache";
 import { createResume, updateResume } from "../../../../lib/resume-db";
 
-export async function createJobAppAction(data: any, path: string) {
-  const { jobApp } = await createJobApp(data);
+export async function createJobApplicationAction(data: any, path: string) {
+  const { jobApp } = await createJobApplication(data);
   revalidatePath(path);
   return jobApp
 }

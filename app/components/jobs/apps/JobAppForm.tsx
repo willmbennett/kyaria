@@ -3,8 +3,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { FormFields, questions } from '../../../jobs/job-helper'
 //import { redirect } from 'next/navigation'
 import FieldArray from '../FieldArray';
-import { createJobAction } from '../../../jobs/[id]/_action';
-import { createJobAppAction, createResumeAction } from '../../../jobs/apps/[id]/_action';
+import { createJobApplicationAction } from '../../../jobs/apps/[id]/_action';
 
 const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'
 
@@ -43,7 +42,7 @@ export default function NewJobAppForm({
         }
         console.log('Creating App')
         console.log(userApp)
-        const jobApp = await createJobAppAction(userApp, path);
+        const jobApp = await createJobApplicationAction(userApp, path);
         console.log('Created App')
         console.log(jobApp)
         setCreatingJob(false)

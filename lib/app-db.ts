@@ -48,7 +48,7 @@ export async function getUserJobApps(filter: AppFilter) {
     }
 }
 
-export async function createJobApp(data: any) {
+export async function createJobApplication(data: any) {
     try {
         const { job, resume, profileId, userId, questions } = data
         await connectDB();
