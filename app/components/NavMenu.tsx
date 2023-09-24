@@ -28,7 +28,7 @@ export default function NavMenu() {
           <Link href='/'>
             <span className='inline-flex items-center p-2 mr-4 '>
               <span className='text-xl text-gray-600 font-bold uppercase tracking-wide'>
-                CAREER AI
+                KYARIA
               </span>
             </span>
           </Link>

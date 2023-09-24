@@ -45,7 +45,7 @@ export default function TextToJSON(
     const chatGPT = async (message: any) => {
         console.log("1")
         setLoading(true)
-        if (['development', 'preview', 'production'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '')){
+        if (['development', 'preview'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '')){
             console.log("2")
             setFinishedLoading(true)
         } else {
@@ -57,7 +57,7 @@ export default function TextToJSON(
     // Save the final message to context
     useEffect(() => {
         if (finishedLoading) {
-            const finalMessage = ['development', 'preview', 'production'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '')? demoJSON : JSON.parse(messages[messages.length - 1].content);
+            const finalMessage = ['development', 'preview'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '')? demoJSON : JSON.parse(messages[messages.length - 1].content);
             console.log(finalMessage)
             setValues(finalMessage)
             setInputTextView(false) // hide the text input
