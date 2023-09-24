@@ -1,7 +1,7 @@
 import { JobApp, JobAppClass } from "../models/JobApp";
 import { Resume } from "../models/Resume";
 import connectDB from "./connect-db";
-import { stringToObjectId, castToString } from "./utils";
+import { stringToObjectId, castToString, ObjectIdtoString } from "./utils";
 var transformProps = require('transform-props');
 
 interface JobAppFilter {
@@ -18,7 +18,7 @@ export async function getUserJobApps(filter: JobAppFilter) {
 
         //console.log(filter)
 
-        //console.log("getting job apps")
+        console.log("getting job apps")
 
         //const jobs = await Job.find(filter).skip(skip).limit(limit).lean().exec();
         const jobApps = await JobApp.find({ userId: filter.userId })
@@ -28,11 +28,11 @@ export async function getUserJobApps(filter: JobAppFilter) {
 
         const results = jobApps.length;
 
-        //console.log(jobApps, results)
+        console.log(jobApps, results)
 
         if (jobApps) {
             transformProps(jobApps, castToString, ['_id', "createdAt", "updatedAt", "profile", "userResume"]);
-            //console.log(jobApps)
+            console.log(jobApps)
             return {
                 jobApps,
                 //page,
@@ -47,7 +47,7 @@ export async function getUserJobApps(filter: JobAppFilter) {
     }
 }
 
-export async function createJobApp(data: JobAppClass) {
+export async function createJobApp(data: any) {
     try {
         await connectDB();
 
@@ -59,33 +59,22 @@ export async function createJobApp(data: JobAppClass) {
         const newApp = new JobApp(data);
         console.log(`newly created app`);
         console.log(newApp);
-        const createdApp = await newApp.save();
+        const jobApp = await newApp.save();
         //const newJobApp = await JobApplication.create(data)
         console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
 
         console.log('Created JobApp');
-        console.log(createdApp);
-
-        const jobApp = await JobApp.findById(createdApp._id)
-            .populate(["job", "userResume", "profile"])
-            .lean()
-            .exec();
-
-        console.log("Found New JobApp")
-        console.log(jobApp)
-
+        console.log(jobApp);
         if (jobApp) {
-            console.log('about to clean strings')
-            transformProps(jobApp, castToString, ['_id', "createdAt", "updatedAt", 'profile', 'job', 'userResume']);
-            console.log(jobApp)
+            const jobAppId = jobApp._id.toString()
+            console.log(jobAppId);
             return {
-                jobApp,
+                jobApp: jobAppId
             };
         } else {
             return { error: "Job not found" };
         }
     } catch (error) {
-        console.error("Error in createJobApp:", error);
         return { error };
     }
 }

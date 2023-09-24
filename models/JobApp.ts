@@ -1,13 +1,13 @@
 import {
     ModelOptions,
     getModelForClass,
+    index,
     prop,
     Severity,
-    mongoose
+    mongoose,
 } from "@typegoose/typegoose";
-
-import { ProfileClass } from "./Profile";
 import { JobClass } from "./Job";
+import { ProfileClass } from "./Profile";
 import { ResumeClass } from "./Resume";
 
 class UserQuestion {
@@ -22,33 +22,34 @@ class UserQuestion {
     schemaOptions: {
         timestamps: true,
         versionKey: false,
-        collection: "jobapps",
+        collection: "jobapplication",
     },
     options: {
+        disableLowerIndexes: true,
         allowMixed: Severity.ALLOW
     }
 })
 class JobAppClass {
-    @prop({ ref: () => JobClass, required: true })
-    job: mongoose.Types.ObjectId | string
-
-    @prop({ ref: () => ProfileClass, required: true })
-    profile: mongoose.Types.ObjectId | string
+    @prop()
+    public userCoverLetter?: string;
 
     @prop()
-    userCoverLetter?: string;
+    public userStory?: string;
 
-    @prop({ required: true })
-    public userId!: string;
-
-    @prop({ type: () => [UserQuestion] , options: { disableLowerIndexes: true }})
+    @prop({ type: () => [UserQuestion] })
     public userQuestions?: UserQuestion[];
 
-    @prop({ ref: () => ResumeClass, required: true })
-    userResume: mongoose.Types.ObjectId | string
+    @prop({ required: true})
+    public userId!: string;
 
-    @prop()
-    userStory?: string;
+    @prop({ ref: () => ProfileClass, required: true })
+    public profile!: mongoose.Types.ObjectId | string;
+
+    @prop({ ref: () => JobClass, required: true })
+    public job!: mongoose.Types.ObjectId | string;
+
+    @prop({ ref: () => ResumeClass, required: true })
+    public userResume!: mongoose.Types.ObjectId | string;
 
     _id: mongoose.Types.ObjectId | string;
     createdAt: Date | string;
