@@ -1,5 +1,6 @@
 import { AppModel, AppClass } from "../models/App";
-import { TestModel } from "../models/Test";
+import { JobModel } from "../models/Job";
+import { ResumeModel } from "../models/Resume";
 import connectDB from "./connect-db";
 import { stringToObjectId, castToString, ObjectIdtoString } from "./utils";
 var transformProps = require('transform-props');
@@ -49,19 +50,29 @@ export async function getUserJobApps(filter: AppFilter) {
 
 export async function createJobApp(data: any) {
     try {
+        const { job, resume, profileId, userId, questions } = data
         await connectDB();
-        console.log("TestModel")
-        console.log(TestModel)
-        console.log(TestModel.schema)
-        //transformProps(data, stringToObjectId, ['profile', 'job', 'userResume']);
-        //console.log("After Transforming props")
-        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-        const newApp = new TestModel({name: "prodtest"});
-        //console.log(`newly created app`);
+        console.log("Create Resume")
+        const newResume = await ResumeModel.create(resume);
+        //console.log(newResume)
+        console.log("Create Job")
+        const newJob = await JobModel.create(job);
+        //console.log(newJob)
+        console.log("Create App")
+        const profileObjectId = stringToObjectId(profileId)
+        const userApp = {
+            job: newJob._id,
+            profile: profileObjectId,
+            userCoverLetter: "",
+            userId: userId,
+            userQuestions: questions,
+            userResume: newResume._id,
+            userStory: ""
+        }
+        console.log(userApp)
+        const newApp = new AppModel(userApp);
         console.log(newApp);
         const jobApp = await newApp.save();
-        //const newJobApp = await JobApplication.create(data)
-        console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
 
         //console.log('Created JobApp');
         //console.log(jobApp);
