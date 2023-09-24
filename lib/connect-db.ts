@@ -39,11 +39,13 @@ async function connectDB() {
       .then((mongoose) => {
         console.log("✅ New connection established");
 
+        /*
         Object.keys(mongoose.models).forEach((modelName) => {
           console.log(`Deleting: ${modelName}`)
           delete mongoose.models[modelName];
           console.log(`Model ${modelName} deleted`)
         });
+        */
 
         return mongoose;
       })
