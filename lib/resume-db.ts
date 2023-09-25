@@ -33,9 +33,9 @@ export async function updateResume(id: string, data: any) {
 
         const parsedId = stringToObjectId(id);
 
-        console.log(id)
+        //console.log(id)
 
-        console.log(`data to update profile with: ${JSON.stringify(data)}`)
+        //console.log(`data to update profile with: ${JSON.stringify(data)}`)
 
         const resume = await ResumeModel.findByIdAndUpdate(
             parsedId,

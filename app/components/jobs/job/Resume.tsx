@@ -33,7 +33,7 @@ export default function Resume({
         {
             "role": "user",
             "content":
-                `I'm applying for this job: ${JSON.stringify(job)}. Help me improve this resume summary ${userProfile.summary} based on details from my profile: ${userProfile.summary}`
+                `I'm applying for this job: ${JSON.stringify(job)}. ${userResume.summary == ''? "Write me a resume summary": `Help me improve this resume summary ${userResume.summary}`} based on details from my profile: ${userProfile}`
         }
     ];
 

@@ -61,17 +61,17 @@ export default function Profile({
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
         // call server action
         if (profile) {
-            console.log("Editing Profile")
+            //console.log("Editing Profile")
             const path = "/"
             const res = await updateProfileAction(profile._id, data, path);
-            console.log(res)
+            //console.log(res)
         } else {
-            console.log("Creating Profile")
+            //console.log("Creating Profile")
             const addUserId = { ...data, userId: userId }
-            console.log(addUserId)
+            //console.log(addUserId)
             const path = "/"
             const res = await createProfileAction(addUserId, path);
-            console.log(res)
+            //console.log(res)
         }
         setFormView(false)
     };

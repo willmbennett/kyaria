@@ -60,9 +60,9 @@ export default function ChatWithGPT({
     const update = await saveToDatabase(id, data, "/")
 
     // Update the state
-    console.log(finishedLoading)
+    //console.log(finishedLoading)
     const newContent = returnedMessage;
-    console.log(newContent, parentIndex, childIndex)
+    //console.log(newContent, parentIndex, childIndex)
     updateState({ newContent, parentIndex, childIndex })
   };
 
