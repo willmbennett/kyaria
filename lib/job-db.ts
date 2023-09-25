@@ -15,7 +15,7 @@ export async function getUserJobs(filter: JobFilter) {
         //const limit = filter.limit ?? 10;
         //const skip = (page - 1) * limit;
 
-        console.log(filter)
+        //console.log(filter)
 
         //const jobs = await Job.find(filter).skip(skip).limit(limit).lean().exec();
         const jobs = await JobModel.find({ userId: filter.userId }).lean().exec();
@@ -77,7 +77,7 @@ export async function getJob(id: string) {
 
         if (job) {
             transformProps(job, castToString, ['_id', "_createdAt", "updatedAt"]);
-            console.log(job)
+            //console.log(job)
             return {
                 job,
             };
@@ -122,11 +122,11 @@ export async function deleteJob(id: string) {
     try {
         await connectDB();
 
-        console.log(id)
+        //console.log(id)
 
         const parsedId = stringToObjectId(id);
 
-        console.log(parsedId)
+        //console.log(parsedId)
 
         if (!parsedId) {
             return { error: "Job not found" };

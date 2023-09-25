@@ -15,9 +15,9 @@ export default function JobItem(
   }) {
 
   async function deleteJob() {
-    console.log("deleting Job")
-    console.log(id)
-    console.log(resumeId)
+    //console.log("deleting Job")
+    //console.log(id)
+    //console.log(resumeId)
     if (id && resumeId) {
       await deleteJobAppAction({
         id: id,

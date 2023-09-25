@@ -107,7 +107,7 @@ export async function getJobApp(id: string) {
 
         if (jobApp) {
             transformProps(jobApp, castToString, ['_id', "createdAt", "updatedAt"]);
-            console.log(jobApp)
+            //console.log(jobApp)
             return {
                 jobApp,
             };
@@ -152,20 +152,20 @@ export async function deleteJobApp(id: string, resumeId: string) {
     try {
         await connectDB();
 
-        console.log(id)
+        //console.log(id)
 
         const parsedId = stringToObjectId(id);
         const parsedResumeId = stringToObjectId(resumeId);
 
-        console.log(parsedId)
+        //console.log(parsedId)
 
         if (!parsedId) {
             return { error: "Job application not found" };
         }
 
-        console.log("Made it to Deletion")
+        //console.log("Made it to Deletion")
         const jobApp = await AppModel.findByIdAndDelete(parsedId).exec();
-        console.log("Post job app deletion")
+        //console.log("Post job app deletion")
 
         if (jobApp) {
             return {};

@@ -43,13 +43,13 @@ export default function TextToJSON(
 
     // Make a call to chatGPT
     const chatGPT = async (message: any) => {
-        console.log("1")
+        //console.log("1")
         setLoading(true)
         if (['development', 'preview'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '')){
-            console.log("2")
+            //console.log("2")
             setFinishedLoading(true)
         } else {
-            console.log("3")
+            //console.log("3")
             append(message);
         }
     };
@@ -58,7 +58,7 @@ export default function TextToJSON(
     useEffect(() => {
         if (finishedLoading) {
             const finalMessage = ['development', 'preview'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '')? demoJSON : JSON.parse(messages[messages.length - 1].content);
-            console.log(finalMessage)
+            //console.log(finalMessage)
             setValues(finalMessage)
             setInputTextView(false) // hide the text input
             setFormView(true) // Show the form
