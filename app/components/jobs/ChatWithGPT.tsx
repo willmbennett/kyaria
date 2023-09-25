@@ -1,7 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Toaster, toast } from 'react-hot-toast';
 import { useChat } from 'ai/react';
+import { Message } from 'ai'
+import { ChatMessage } from './ChatMessage';
 
 interface Props {
   documentID: string,
@@ -34,6 +35,7 @@ export default function ChatWithGPT({
     body: {
       temp: temp
     },
+    initialMessages: [{id: '1', role:'assistant', content:currentState}],
     onFinish() {
       setFinishedLoading(true)
     }
@@ -43,18 +45,11 @@ export default function ChatWithGPT({
   const handleClick = () => {
     setFinishedLoading(false)
     setMessages([])
-    if (['development', 'preview'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '')) {
-      setFinishedLoading(true)
-    } else {
-      append(message);
-    }
+    append(message);
   };
 
   const saveMessage = async () => {
-    const returnedMessage = ['development', 'preview'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '')?
-      `${documentID}-${setKey}-test`
-      :
-      messages[messages.length - 1].content.replace(/^"|"$/g, '')
+    const returnedMessage = messages[messages.length - 1].content
 
     // Save the message to the database
     const id = documentID;
@@ -78,33 +73,12 @@ export default function ChatWithGPT({
     }
   }, [finishedLoading]);
 
-
-  const lastmessage = (messages.length >= 1) && (messages[messages.length - 1].role == 'assistant') ? messages[messages.length - 1].content.replace(/^"|"$/g, '') : currentState;
+  const lastmessage = messages[messages.length - 1]
 
   return (
-    <>
-      {copy && (<Toaster position="top-center" reverseOrder={false} toastOptions={{ duration: 2000 }} />)}
-      {lastmessage && (
-        <div className="flex flex-1 w-full flex-col items-center justify-center text-left">
-          {copy ?
-            <div
-              className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
-              onClick={() => {
-                navigator.clipboard.writeText(lastmessage);
-                toast('Summary copied to jobSection', {
-                  icon: '✂️',
-                });
-              }}
-              key={lastmessage}
-            >
-              <div className="product-des" dangerouslySetInnerHTML={{ __html: lastmessage }}></div>
-            </div>
-            :
-            <div className="bg-white rounded-xl shadow-md p-4 transition border">
-              <div className="product-des" dangerouslySetInnerHTML={{ __html: lastmessage }}></div>
-            </div>
-          }
-        </div>
+    <div className="flex-col flex items-center justify-center">
+      {lastmessage && lastmessage.role=='assistant' && (
+        <ChatMessage message={lastmessage} />
       )}
       <button
         className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
@@ -112,6 +86,6 @@ export default function ChatWithGPT({
       >
         Generate
       </button>
-    </>
+    </div>
   );
 }

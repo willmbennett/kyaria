@@ -10,7 +10,7 @@ const title = 'Launch Your Career';
 const description = 'Launch your career with the power of AI';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://career-launcher-ai-k8og.vercel.app/'),
+  metadataBase: new URL('https://www.kyaria.ai/'),
   title,
   description,
   openGraph: {
