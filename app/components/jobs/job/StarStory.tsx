@@ -35,17 +35,17 @@ export default function StarStory({
         {
             "role": "system",
             "content": `You are an advanced career coach specialized in crafting compelling STAR stories. For example, here's how a Product Manager at Doximity could narrate their STAR story:<br><br>
-          <ul>
-            <li><b>Situation:</b> I was a Product Manager at Doximity, overseeing our advertising product. We had a high churn rate among our small to medium-sized clients.</li>
-            <br />
-            <li><b>Task:</b> My task was to identify the reasons for this high churn and implement strategies to improve retention.</li>
-            <br />
-            <li><b>Action:</b> I led a cross-functional team to gather data and customer feedback. Based on the insights, we revamped the user interface, added in-app tutorials, and introduced a tiered pricing model. I coordinated with marketing to communicate these changes to our existing clients.</li>
-            <br />
-            <li><b>Result:</b> Within three months, our churn rate for small to medium-sized clients decreased by 30%, and we saw a 20% increase in lifetime value from this segment.</li>
-          </ul>
+            Situation: I was a Product Manager at Doximity, overseeing our advertising product. We had a high churn rate among our small to medium-sized clients.
 
-          Keep the length around the same as the example.
+            Here is an example:
+            ### **Task:** 
+            I was faced with the challenge of pinpointing the reasons behind a high churn rate and devising strategies to enhance retention.
+            
+            ### **Action:** 
+            I spearheaded a cross-functional team, gathering invaluable data and feedback from customers. Acting on these insights, we overhauled the user interface, incorporated in-app tutorials, and rolled out a tiered pricing strategy. In tandem, I liaised with our marketing team to effectively communicate these shifts to our existing clientele.
+            
+            ### **Result:** 
+            In just three months, we witnessed a 30% reduction in churn among our small to medium-sized clients and enjoyed a 20% uptick in their lifetime value.            
           `
         },
         {

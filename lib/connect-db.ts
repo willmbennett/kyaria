@@ -38,12 +38,6 @@ async function connectDB() {
     cached.promise = connect(MONGODB_URI!, opts)
       .then((mongoose) => {
         //console.log("✅ New connection established");
-
-        // Clear Node's entire module cache
-        Object.keys(require.cache).forEach((key) => {
-          delete require.cache[key];
-        });
-
         return mongoose;
       })
       .catch((error) => {

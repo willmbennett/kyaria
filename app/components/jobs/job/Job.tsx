@@ -110,15 +110,14 @@ export default function Job(
     };
 
     return (<>
-        <div className="flex flex-1 w-full flex-col items-center justify-center text-center lg:px-4 lg:mt-6">
-            <div className="flex flex-1 w-full">
+        <div className="flex h-auto min-h-screen min-w-full lg:px-4 lg:mt-6">
                 <div className="w-1/4 hidden lg:flex lg:flex-col">
                     <JobMenu
                         section={section}
                         setSection={setSection}
                     />
                 </div>
-                <div className="flex flex-1 w-full flex-col items-center text-center p-1 lg:p-8">
+                <div className="bg-white p-6 rounded-lg shadow-md lg:w-3/4 mx-2 lg:mx-3">
                     {jobApp && (
                         <>
                             {section == "jobDescription" && (
@@ -157,7 +156,6 @@ export default function Job(
                             </>)}
                         </>)}
                 </div>
-            </div>
         </div>
         <div className='lg:hidden sticky bottom-0 w-full'>
             <JobMenu

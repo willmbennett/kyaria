@@ -19,23 +19,29 @@ export default function UserStory({
                     You are an advanced career coach specialized in helping professionals articulate why they are the perfect fit for a job opportunity, as well as why the company is the perfect fit for them. The goal is to create a compelling, narrative-style story that can be shared in less than 30 seconds. These stories can include the individual's skills, experience, education, and personal aspirations. 
     
                     Here is an example:
-                    <ul>
-                        <li><strong>Hook:</strong> I've always been drawn to the intersection of technology and business strategy. It was only natural for me to major in both Computer Science and Economics at Dartmouth.</li>
-                        <br />
-                        <li><strong>Transition 1:</strong> Right out of college, I joined McKinsey because I felt it perfectly married these two disciplines.</li>
-                        <br />
-                        <li><strong>First Relevant Job:</strong> At McKinsey, my main focus was on SaaS companies, where I honed my skills in creating effective product roadmaps and improving operational efficiency.</li>
-                        <br />
-                        <li><strong>Transition 2:</strong> Though I was promoted to Senior Consultant, I started yearning for a role that allowed me to be closer to both the product and the customer. I wanted to be in the trenches, so to speak.</li>
-                        <br />
-                        <li><strong>Previous Job:</strong> So, I moved to Doximity as a Product Manager for their advertising product. There, I fully immersed myself in the nuances of product management: creating vision, understanding customers, and leading a cross-functional team of engineers and stakeholders.</li>
-                        <br />
-                        <li><strong>Transition 3:</strong> While I loved my time at Doximity, I've realized I want to contribute at an even greater scale. I want to deliver significant impact while collaborating with top-tier talent.</li>
-                        <br />
-                        <li><strong>Target Job:</strong> This leads me to why I'm interested in the Google Ads PM position. After talking to Jessica Fan, I'm convinced this role offers what I'm looking for. Moreover, I bring a unique combination of scrappiness and structure, thanks to my startup experience and consulting background.</li>
-                        <br />
-                        <li><strong>Wrap-up:</strong> I'd be happy to go into further details about my experiences and also keen to learn more about what you're looking for in a Product Manager for Google Ads.</li>
-                    </ul>
+                    ### **Hook:** 
+                    I've always been drawn to the intersection of technology and business strategy. Naturally, I majored in both Computer Science and Economics at Dartmouth.
+
+                    ### **Transition 1:** 
+                    Fresh out of college, I was drawn to McKinsey, feeling it was the perfect marriage of my two disciplines.
+
+                    ### **First Relevant Job:** 
+                    At McKinsey, I dived deep into SaaS companies, honing skills in crafting effective product roadmaps and bolstering operational efficiency.
+
+                    ### **Transition 2:** 
+                    Though I rose to the role of Senior Consultant, I found myself yearning for a hands-on role; closer to the product and the consumer.
+
+                    ### **Previous Job:** 
+                    This led me to Doximity, taking on the role of Product Manager for their advertising platform. I delved into the intricacies of product management, from vision creation to leading a vibrant cross-functional team.
+
+                    ### **Transition 3:** 
+                    While my tenure at Doximity was fulfilling, I felt the urge to make a larger impact and collaborate with the best in the industry.
+
+                    ### **Target Job:** 
+                    This brings me to my interest in the Google Ads PM position. After insightful conversations with Jessica Fan, I'm confident this role aligns with my aspirations. My unique blend of agility, thanks to my startup ventures, and structured thinking from my consulting days, positions me uniquely for this role.
+
+                    ### **Wrap-up:** 
+                    I'm eager to delve deeper into my experiences and equally keen to understand what Google seeks in their ideal Product Manager for Google Ads.
                     `
         },
         {
@@ -54,7 +60,7 @@ export default function UserStory({
 
     return (
         <>
-            <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
+            <h1 className="sm:text-6xl text-4xl font-bold text-slate-900 mb-8">
                 Let's write you a story
             </h1>
             <ChatWithGPT
