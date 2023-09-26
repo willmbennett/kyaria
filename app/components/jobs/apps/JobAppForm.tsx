@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { FormFields, questions } from '../../../jobs/job-helper'
 //import { redirect } from 'next/navigation'
-import FieldArray from '../FieldArray';
+import FieldArray from './FieldArray';
 import { createJobApplicationAction } from '../../../jobs/apps/[id]/_action';
 
 const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'

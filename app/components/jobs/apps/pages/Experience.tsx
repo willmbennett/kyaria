@@ -1,4 +1,5 @@
-import StarStory from './StarStory';
+import Detail from '../components/Details';
+import StarStory from '../components/StarStory';
 
 export default function Experience({
     jobApp,
@@ -13,9 +14,10 @@ export default function Experience({
     return (
         <>
             <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
-                Star Stories
+                Let's talk experience
             </h1>
-            <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-3xl">
+            <p>Adding details to your profile will help us write your better star stories.</p>
+            <div className="bg-white p-6 w-full">
                 <h2 className="text-left font-bold text-2xl py-4 mb-4">Professional Experience</h2>
                 {jobApp.userResume.professional_experience.map((exp: any, index: number) => (
                     <div key={index} className="mb-8">
@@ -23,20 +25,40 @@ export default function Experience({
                         <p className="text-left text-lg mb-2">{exp.location}</p>
                         <p className="text-left text-lg mb-2">{exp.start_date} - {exp.end_date}</p>
                         <ul className="list-disc list-inside text-left mb-8">
-                            {exp.responsibilities.map((resp: any, i: number) => (<div key={i}>
-                                <p>{resp.content}</p>
-                                <StarStory
-                                    jobApp={jobApp}
-                                    documentID={jobApp.userResume._id}
-                                    setKey={`professional_experience.${index}.responsibilities.${i}.starStory`}
-                                    content={jobApp.userResume.professional_experience[index].responsibilities[i].content}
-                                    details={jobApp.profile.professional_experience[index].responsibilities[i].starStory}
-                                    currentState={jobApp.userResume.professional_experience[index].responsibilities[i].starStory}
-                                    updateState={updateExperienceStarStory}
-                                    parentIndex={index}
-                                    childIndex={i}
-                                />
-                            </div>))}
+                            {exp.responsibilities.map((resp: any, i: number) => {
+                                const { professional_experience } = jobApp.profile;
+                                const currentExperience = professional_experience[index].responsibilities[i];
+                                const { starStory, content } = currentExperience;
+
+                                return (
+                                    <div key={i} className="my-4">
+                                        <div className="py-2">
+                                            <h3 className="text-left font-bold text-lg mb-2">{resp.content}</h3>
+                                        </div>
+                                        <div className='rounded-lg shadow-md w-full p-4 bg-gray-50'>
+                                            {starStory && (
+                                                <Detail
+                                                    detail={starStory}
+                                                    parentIndex={index}
+                                                    childIndex={i}
+                                                />
+                                            )}
+                                            <StarStory
+                                                jobApp={jobApp}
+                                                documentID={jobApp.userResume._id}
+                                                setKey={`professional_experience.${index}.responsibilities.${i}.starStory`}
+                                                content={content}
+                                                details={starStory}
+                                                currentState={starStory}
+                                                updateState={updateExperienceStarStory}
+                                                parentIndex={index}
+                                                childIndex={i}
+                                            />
+                                        </div>
+                                    </div>
+                                );
+                            })}
+
                         </ul>
                     </div>
                 ))}

@@ -1,6 +1,6 @@
 'use client'
 
-import ChatWithGPT from '../ChatWithGPT';
+import ChatWithGPT from '../../ChatWithGPT';
 
 export default function Responsibility({
     documentID,

@@ -1,12 +1,12 @@
 'use client'
 
 import { useState } from 'react';
-import CoverLetter from './CoverLetter';
+import CoverLetter from './pages/CoverLetter';
 import JobMenu from './JobMenu';
-import UserStory from './Story';
-import Resume from './Resume';
-import Experience from './Experience';
-import JobDescription from './JobDescription';
+import UserStory from './pages/Story';
+import Resume from './pages/Resume';
+import Experience from './pages/Experience';
+import JobDescription from './pages/JobDescription';
 
 export default function Job(
     { jobApp
