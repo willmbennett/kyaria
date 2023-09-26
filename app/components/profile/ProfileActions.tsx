@@ -7,14 +7,10 @@ export default function ProfileActions(
         id,
         formView,
         setFormView,
-        inputTextView,
-        setInputTextView
     }: {
         id?: any,
         formView: boolean,
         setFormView: any,
-        inputTextView: boolean,
-        setInputTextView: any
     }) {
 
     async function deleteProfile() {
@@ -31,43 +27,36 @@ export default function ProfileActions(
         setFormView(true)
     }
 
-    function showTextInput() {
-        setInputTextView(true)
-    }
-
     function cancel() {
-        setInputTextView(false)
         setFormView(false)
     }
 
-    
+
 
     return (
-        <div className='p-4'>
-            {id && !inputTextView && !formView && (<button
-                className="bg-red-500 text-white px-4 py-2 rounded m-4"
-                onClick={deleteProfile}>
-                Delete
-            </button>
+        <div className='p-4 w-full flex justify-end'>
+            {id && !formView && (
+                <button
+                    className="bg-red-300 text-white px-4 py-2 rounded m-2 hover:bg-red-400"
+                    onClick={deleteProfile}>
+                    Delete
+                </button>
             )}
-            {id && !formView && (<button
-                className="bg-blue-500 text-white px-4 py-2 rounded m-4 "
-                onClick={showForm}>
-                Edit Profile
-            </button>
+            {id && !formView && (
+                <button
+                    className="bg-blue-300 text-white px-4 py-2 rounded m-2 hover:bg-blue-400"
+                    onClick={showForm}>
+                    Edit Profile
+                </button>
             )}
-            {!id && !inputTextView && !formView && (<button
-                className="bg-blue-500 text-white px-4 py-2 rounded m-4 "
-                onClick={showTextInput}>
-                Create Profile
-            </button>
-            )}
-            {(inputTextView || formView) && (<button
-                className="bg-red-500 text-white px-4 py-2 rounded m-4"
-                onClick={cancel}>
-                Cancel
-            </button>
+            {(formView) && (
+                <button
+                    className="bg-red-300 text-white px-4 py-2 rounded m-2 hover:bg-red-400"
+                    onClick={cancel}>
+                    Cancel
+                </button>
             )}
         </div>
+
     )
 }

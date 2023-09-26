@@ -74,7 +74,9 @@ export default function NavMenu() {
                 </Link>
               </button>
             </>)}
-            <AuthButton />
+            {pathname != "/auth/signin" && (
+              <AuthButton />
+            )}
           </div>
         </div>
       </nav>

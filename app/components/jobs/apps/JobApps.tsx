@@ -6,7 +6,7 @@ import NewJobAppForm from "./JobAppForm";
 //import { ObjectId } from "mongodb";
 import JobItem from "../JobItem";
 
-export default function JobApps(
+export default function JobAppsList(
   {
     jobApps,
     profile
@@ -53,15 +53,20 @@ export default function JobApps(
 
           <div className="mb-4 flex flex-col items-center">
             {inputTextView && (
-              <TextToJSON
-                setValues={setValues}
-                expectedJson={expectedJson}
-                defaultTextInput={['development', 'preview'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '')? defaultTextInput : ''}
-                demoJSON={demoJSON}
-                inputTextType='resume'
-                setFormView={setFormView}
-                setInputTextView={setInputTextView}
-              />
+              <>
+                <p>Paste text from the job posting here. No need to format it.</p>
+                <p>We use AI to scan your text.</p>
+                <br />
+                <TextToJSON
+                  setValues={setValues}
+                  expectedJson={expectedJson}
+                  defaultTextInput={['development', 'preview'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '') ? defaultTextInput : ''}
+                  demoJSON={demoJSON}
+                  inputTextType='resume'
+                  setFormView={setFormView}
+                  setInputTextView={setInputTextView}
+                />
+              </>
             )}
             {formView && (
               <NewJobAppForm

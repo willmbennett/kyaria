@@ -7,6 +7,9 @@ import { randomUUID, randomBytes } from "crypto";
 export const authOptions: NextAuthOptions = {
   adapter: MongoDBAdapter(clientPromise),
   secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: '/auth/signin'
+  },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_ID ?? "",

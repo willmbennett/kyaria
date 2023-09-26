@@ -3,15 +3,15 @@ import Link from "next/link";
 import { deleteJobAppAction } from "../../jobs/apps/[id]/_action";
 
 export default function JobItem(
-  { id, 
+  { id,
     resumeId,
-    jobTitle, 
-    company 
-  }: { 
-    id: string, 
+    jobTitle,
+    company
+  }: {
+    id: string,
     resumeId: string,
-    jobTitle: string, 
-    company: string 
+    jobTitle: string,
+    company: string
   }) {
 
   async function deleteJob() {
@@ -28,21 +28,25 @@ export default function JobItem(
   }
 
   return (
-    <div className="flex items-center justify-center w-full max-w-2xl bg-white rounded-xl shadow-md space-x-2 mb-2">
-      <Link href={`jobs/apps/${id}`}>
-        <span className='flex items-center p-2 mr-4 '>
-          <span className='text-xl text-gray-600 font-bold'>
+    <div className="flex items-center justify-between w-full max-w-2xl bg-white rounded-xl shadow-md hover:shadow-lg mb-2 transition-shadow duration-300">
+      {/* Job title and company name */}
+      <div className="flex items-center flex-grow p-4 hover:bg-gray-100 rounded-tl-xl rounded-bl-xl cursor-pointer">
+        <Link href={`jobs/apps/${id}`}>
+          <span className="text-xl text-gray-700 font-semibold hover:text-gray-800">
             {jobTitle} - {company}
           </span>
-        </span>
-      </Link>
-      <div className="flex items-center">
+        </Link>
+      </div>
+
+      <div className="border-l p-2 bg-gray-50 rounded-tr-xl rounded-br-xl">
         <button
-          className="bg-red-500 text-white px-4 py-2 rounded m-4"
+          className="bg-red-300 text-white px-4 py-2 rounded hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
           onClick={deleteJob}>
           Delete
         </button>
       </div>
     </div>
+
+
   );
 };

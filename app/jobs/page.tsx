@@ -3,7 +3,7 @@ import Link from "next/link";
 import { authOptions } from "../../lib/auth";
 import { getUserJobApps } from "../../lib/app-db";
 import { getProfile } from "../../lib/profile-db";
-import JobApps from "../components/jobs/apps/JobApps";
+import JobAppsList from "../components/jobs/apps/JobApps";
 
 export default async function JobPage() {
   const session = await getServerSession(authOptions)
@@ -24,7 +24,7 @@ export default async function JobPage() {
             </Link>
           </>)}
           {profile && (
-            <JobApps 
+            <JobAppsList 
             jobApps={jobApps}
             profile={profile}
             />
