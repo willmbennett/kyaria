@@ -1,8 +1,8 @@
 'use client'
 
-import ChatWithGPT from '../ChatWithGPT';
-import Responsibility from './Responsibility';
-import { updateResumeAction } from '../../../jobs/apps/[id]/_action';
+import ChatWithGPT from '../../ChatWithGPT';
+import Responsibility from '../components/Responsibility';
+import { updateResumeAction } from '../../../../jobs/apps/[id]/_action';
 
 export default function Resume({
     userProfile,

@@ -30,22 +30,30 @@ export default function ChatWithGPT({
   childIndex,
 }: Props) {
   const [finishedLoading, setFinishedLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  const { messages, setMessages, append } = useChat({
+  const { messages, setMessages, append, stop } = useChat({
     body: {
       temp: temp
     },
-    initialMessages: [{id: '1', role:'assistant', content:currentState}],
+    initialMessages: [{ id: '1', role: 'assistant', content: currentState }],
     onFinish() {
-      setFinishedLoading(true)
+      setFinishedLoading(true);
+      setLoading(false);
     }
   });
 
   // Reload the last call
   const handleClick = () => {
     setFinishedLoading(false)
+    setLoading(true)
     setMessages([])
     append(message);
+  };
+  // Reload the last call
+  const handleStop = () => {
+    stop()
+    setLoading(false);
   };
 
   const saveMessage = async () => {
@@ -76,16 +84,31 @@ export default function ChatWithGPT({
   const lastmessage = messages[messages.length - 1]
 
   return (
-    <div className="flex-col flex items-center justify-center">
-      {lastmessage && lastmessage.role=='assistant' && (
-        <ChatMessage message={lastmessage} />
-      )}
-      <button
-        className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
-        onClick={handleClick}
-      >
-        Generate
-      </button>
+    <div className="flex-col flex items-center justify-center w-full">
+      <div className='flex-col w-full'>
+      <div className='flex w-full justify-center'>
+        {!loading && (
+          <button
+            className="bg-blue-300 hover:bg-blue-400 text-white mx-2 px-4 py-2 rounded mt-4"
+            onClick={handleClick}
+          >
+            Generate
+          </button>
+        )}
+        {loading && (
+        <button
+          className="bg-red-300 hover:bg-red-400 text-white mx-2 px-4 py-2 rounded mt-4"
+          onClick={handleStop}
+        >
+          Stop
+        </button>
+        
+        )}
+        </div>
+        {lastmessage && lastmessage.role == 'assistant' && (
+          <ChatMessage message={lastmessage} />
+        )}
+      </div>
     </div>
   );
 }

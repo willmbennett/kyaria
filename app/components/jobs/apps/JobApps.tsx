@@ -4,7 +4,7 @@ import TextToJSON from "../../TextToJSON";
 import { defaultFormInput, expectedJson, defaultTextInput, demoJSON, FormFields } from '../../../jobs/job-helper';
 import NewJobAppForm from "./JobAppForm";
 //import { ObjectId } from "mongodb";
-import JobItem from "../JobItem";
+import JobItem from "./JobItem";
 
 export default function JobAppsList(
   {

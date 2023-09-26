@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link";
-import { deleteJobAppAction } from "../../jobs/apps/[id]/_action";
+import { deleteJobAppAction } from "../../../jobs/apps/[id]/_action";
 
 export default function JobItem(
   { id,
