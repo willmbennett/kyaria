@@ -26,7 +26,7 @@ export default function Profile({
     sessionUserId?: string
 }) {
     const [formView, setFormView] = useState(false)
-    const [inputTextView, setInputTextView] = useState(false)
+    const [inputTextView, setInputTextView] = useState(true)
     const defaultValue = {
         name: profile?.name || expectedJson.name,
         title: profile?.title || expectedJson.title,
@@ -78,36 +78,44 @@ export default function Profile({
 
     return (
         <>
-            {sessionUserId == userId && (
-                <ProfileActions
-                    id={profile?._id}
-                    formView={formView}
+            {sessionUserId == userId && !profile && inputTextView && (<>
+                <div className='py-4'>
+                    <h1 className="sm:text-6xl text-4xl font-bold text-slate-900 mb-8">
+                        Welcome!
+                    </h1>
+                    <h2 className="sm:text-4xl text-2xl font-bold text-slate-900 mb-8">
+                        Time to create your profile
+                    </h2>
+                    <p>Paste text from your resume or LinkedIn here. No need to format it.</p>
+                    <p>We use AI to scan your text.</p>
+                </div>
+                <TextToJSON
+                    setValues={setValues}
+                    expectedJson={expectedJson}
+                    defaultTextInput={['development', 'preview'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '') ? defaultTextInput : ''}
+                    demoJSON={demoJSON}
+                    inputTextType='resume'
                     setFormView={setFormView}
-                    inputTextView={inputTextView}
                     setInputTextView={setInputTextView}
                 />
-            )}
+            </>)}
+            {profile && (<ProfileActions
+                id={profile._id}
+                formView={formView}
+                setFormView={setFormView}
+            />)}
             {profile && !formView && (
                 <>
                     <UserProfile
                         userProfile={profile} />
                 </>
             )}
-            {inputTextView && (
-                <TextToJSON
-                    setValues={setValues}
-                    expectedJson={expectedJson}
-                    defaultTextInput={['development', 'preview'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '')? defaultTextInput : ''}
-                    demoJSON={demoJSON}
-                    inputTextType='resume'
-                    setFormView={setFormView}
-                    setInputTextView={setInputTextView}
-                />)}
             {formView && (
                 <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-3xl">
                     <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
                         Create your profile
                     </h1>
+                    <p>Don't worry too much, you can always edit this later.</p>
                     <form onSubmit={handleSubmit(onSubmit)} action="">
                         <h2 className={H2_STYLE}>Details</h2>
                         <div className={BASIC_FIELD_STYLE}>

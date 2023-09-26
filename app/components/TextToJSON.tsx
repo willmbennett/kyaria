@@ -88,7 +88,6 @@ export default function TextToJSON(
                 {!loading && (
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className={BASIC_FIELD_STYLE}>
-                            <p>Paste your text here</p>
                             <textarea {...register('input')} placeholder="Text Input" rows={15} cols={50}></textarea>
                         </div>
 
