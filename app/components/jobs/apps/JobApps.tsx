@@ -28,6 +28,9 @@ export default function JobAppsList(
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center min-h-screen">
       {!creatingJobApp && (<>
+        <h1 className="sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900 mb-10">
+          Your Job Applications
+        </h1>
         {jobApps && jobApps.map((jobApp: any) => (
           <div key={jobApp._id} className="w-full">
             <JobItem
