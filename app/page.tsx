@@ -1,20 +1,8 @@
 'use client'
 import { signIn, useSession } from "next-auth/react";
-import { useEffect } from "react";
 
 export default function Page() {
   const { data: session } = useSession();
-
-  useEffect(() => {
-    const user = session?.user
-    console.log(session)
-    if(user) {
-      window.Appcues.identify(user.id, {
-        email: user.email,
-        displayName: user.name
-      });
-    }
-  }, [session]);
 
   return (
     <div className='w-full'>
