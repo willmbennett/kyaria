@@ -50,7 +50,7 @@ export async function getUserJobApps(filter: AppFilter) {
 
 export async function createJobApplication(data: any) {
     try {
-        const { job, resume, profileId, userId, questions } = data
+        const { job, resume, profileId, userId, emails } = data
         await connectDB();
         //console.log("Create Resume")
         const newResume = await ResumeModel.create(resume);
@@ -65,7 +65,7 @@ export async function createJobApplication(data: any) {
             profile: profileObjectId,
             userCoverLetter: "",
             userId: userId,
-            userQuestions: questions,
+            emails: emails,
             userResume: newResume._id,
             userStory: ""
         }

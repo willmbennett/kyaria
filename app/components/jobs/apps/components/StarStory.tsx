@@ -69,7 +69,7 @@ export default function StarStory({
 
     return (
         <>
-            <div className="bg-white shadow-md rounded-xl p-2">
+            <div className="bg-white rounded-xl p-2">
                 <div className='flex w-full justify-between'>
                     <div className='felx flex-col '>
                         <p>Select a theme for your answer</p>
@@ -115,7 +115,7 @@ export default function StarStory({
 
 
                 <button
-                    className='inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50'
+                    className='inline-flex w-full my-2 justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50'
                     onClick={handleClick}
                 > Show your story
                 <svg className="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">

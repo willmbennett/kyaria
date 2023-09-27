@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { FormFields, questions } from '../../../jobs/job-helper'
+import { FormFields, emails } from '../../../jobs/job-helper'
 //import { redirect } from 'next/navigation'
 import FieldArray from './FieldArray';
 import { createJobApplicationAction } from '../../../jobs/apps/[id]/_action';
@@ -38,10 +38,10 @@ export default function NewJobAppForm({
             profileId: profileId,
             resume: resume,
             userId: userId,
-            questions: questions
+            emails: emails
         }
         //console.log('Creating App')
-        //console.log(userApp)
+        console.log(userApp)
         const jobApp = await createJobApplicationAction(userApp, path);
         //console.log('Created App')
         //console.log(jobApp)

@@ -60,7 +60,7 @@ export default function UserStory({
 
     return (
         <>
-            <h1 className="sm:text-6xl text-4xl font-bold text-slate-900 mb-8">
+            <h1 className="text-center sm:text-6xl text-4xl font-bold text-slate-900 mb-8">
                 Let's write you a story
             </h1>
             <ChatWithGPT

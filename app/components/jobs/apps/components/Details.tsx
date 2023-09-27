@@ -17,7 +17,7 @@ export default function Detail({
     };
 
     return (
-        <div className="p-2 mb-2 bg-white shadow-md rounded-xl" key={`${parentIndex} - ${childIndex}`}>
+        <div className="p-2 mb-2 bg-white rounded-xl" key={`${parentIndex} - ${childIndex}`}>
             <button
                 className='inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50'
                 onClick={toggleActive}

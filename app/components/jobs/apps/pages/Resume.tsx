@@ -5,16 +5,13 @@ import Responsibility from '../components/Responsibility';
 import { updateResumeAction } from '../../../../jobs/apps/[id]/_action';
 
 export default function Resume({
-    userProfile,
-    job,
+
     application,
     updateResumeSummary,
     updateResumeExperienceResponsibilities,
     updateResumeEductionDetails
 
 }: {
-    userProfile: any,
-    job: any,
     application: any,
     updateResumeSummary: any,
     updateResumeExperienceResponsibilities: any,
@@ -22,6 +19,8 @@ export default function Resume({
 }) {
 
     const userResume = application.userResume;
+    const profile = application.profile;
+    const job = application.job;
 
     const message = [
         {
@@ -33,13 +32,13 @@ export default function Resume({
         {
             "role": "user",
             "content":
-                `I'm applying for this job: ${JSON.stringify(job)}. ${userResume.summary == ''? "Write me a resume summary": `Help me improve this resume summary ${userResume.summary}`} based on details from my profile: ${userProfile}`
+                `I'm applying for this job: ${JSON.stringify(job)}. ${userResume.summary == ''? "Write me a resume summary": `Help me improve this resume summary ${userResume.summary}`} based on details from my profile: ${profile}`
         }
     ];
 
     return (
         <>
-            <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
+            <h1 className="text-center sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
                 {userResume.name}
             </h1>
             <div>
