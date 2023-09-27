@@ -5,7 +5,7 @@ export default function Page() {
   const { data: session } = useSession();
   return (
     <div className='w-full'>
-      <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
+      <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 h-screen">
         <h1 className="sm:text-6xl text-4xl font-bold text-slate-900 p-5 text-center">
           Launch your career with AI
         </h1>
@@ -18,7 +18,7 @@ export default function Page() {
           </button>
         )}
       </div>
-      <div className="flex flex-col md:flex-row p-5">
+      <div className="flex md:flex-row p-5">
         <div className="lg:w-1/3 lg:p-3 py-2">
           <a href={session?.user?.id ? `/profile/${session?.user?.id}` : "/"}>
             <div

@@ -1,3 +1,4 @@
+"use client"
 import { useState } from 'react';
 import { updateJobAppAction } from '../../../../jobs/apps/[id]/_action';
 import ChatWithGPT from '../../ChatWithGPT';
@@ -7,10 +8,8 @@ const INACTIVE_ROUTE = "hover:bg-gray-600 hover:text-white";
 
 export default function Experience({
     jobApp,
-    updateEmail
 }: {
     jobApp: any,
-    updateEmail: any
 }) {
     const emails = jobApp.emails;
     const [showOptions, setShowOptions] = useState(false);
@@ -94,7 +93,6 @@ export default function Experience({
                                     setKey={`emails.${i}.content`}
                                     message={message}
                                     currentState={email.content}
-                                    updateState={updateEmail}
                                     parentIndex={i}
                                     saveToDatabase={updateJobAppAction}
                                     temp={0.5}

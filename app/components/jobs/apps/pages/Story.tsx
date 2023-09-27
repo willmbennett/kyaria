@@ -3,12 +3,10 @@
 import { updateJobAppAction } from '../../../../jobs/apps/[id]/_action';
 import ChatWithGPT from '../../ChatWithGPT';
 
-export default function UserStory({
-    jobApp,
-    setUserStory
+export default function Story({
+    jobApp
 }: {
-    jobApp: any,
-    setUserStory: any
+    jobApp: any
 }) {
 
     const message = [
@@ -68,7 +66,6 @@ export default function UserStory({
                 message={message}
                 setKey='userStory'
                 currentState={jobApp.userStory}
-                updateState={setUserStory}
                 saveToDatabase={updateJobAppAction}
                 temp={0.7}
             />

@@ -1,23 +1,12 @@
-'use client'
-
 import ChatWithGPT from '../../ChatWithGPT';
 import Responsibility from '../components/Responsibility';
 import { updateResumeAction } from '../../../../jobs/apps/[id]/_action';
 
 export default function Resume({
-
-    application,
-    updateResumeSummary,
-    updateResumeExperienceResponsibilities,
-    updateResumeEductionDetails
-
+    application
 }: {
-    application: any,
-    updateResumeSummary: any,
-    updateResumeExperienceResponsibilities: any,
-    updateResumeEductionDetails: any
+    application: any
 }) {
-
     const userResume = application.userResume;
     const profile = application.profile;
     const job = application.job;
@@ -71,7 +60,6 @@ export default function Resume({
                     message={message}
                     setKey={"summary"}
                     currentState={application.userResume.summary}
-                    updateState={updateResumeSummary}
                     saveToDatabase={updateResumeAction}
                 />
 
@@ -118,7 +106,6 @@ export default function Resume({
                                                         `I'm applying for this job: ${JSON.stringify(job)}. Help me improve this resume bullet point ${resp.content}. Keep the output under 132 characters.`
                                                 }
                                             ]}
-                                            updateResumeExperienceResponsibilities={updateResumeExperienceResponsibilities}
                                             saveToDatabase={updateResumeAction}
                                             parentIndex={index}
                                             childIndex={i}
@@ -160,7 +147,6 @@ export default function Resume({
                                                             `I'm applying for this job: ${JSON.stringify(job)}. Help me improve this resume bullet point ${detail.content}. Keep the output under 132 characters.`
                                                     }
                                                 ]}
-                                                updateResumeExperienceResponsibilities={updateResumeEductionDetails}
                                                 saveToDatabase={updateResumeAction}
                                                 parentIndex={index}
                                                 childIndex={i}

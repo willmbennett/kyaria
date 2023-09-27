@@ -38,9 +38,7 @@ export default async function RootLayout({
       <body>
         <SessionProvider session={session}>
           <NavMenu />
-          <div className='flex h-auto min-h-screen'>
           {children}
-          </div>
           <Footer />
         </SessionProvider>
         <Analytics />

@@ -1,50 +1,47 @@
 'use client';
 
 import { useState } from "react";
-import JobMenuButton from "./components/MenuButton";
+import { usePathname } from 'next/navigation'
 
-export default function JobMenu({ section, setSection }: { section: string, setSection: any }) {
+import Link from "next/link";
+
+const ACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-2 rounded text-xl lg:text-lg text-gray-600 bg-gray-200 font-bold items-center justify-center hover:bg-gray-600 hover:text-white";
+const INACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-2 rounded text-xl lg:text-lg text-gray-600 font-bold items-center justify-center hover:bg-gray-600 hover:text-white";
+
+export default function JobMenu({ id }: { id: string }) {
   const [active, setActive] = useState(false);
+  const pathname = usePathname()
 
-  const links = [
-    { label: "Job Description", section: `jobDescription` },
-    { label: "Resume", section: `userResume` },
-    { label: "Cover Letter", section: `userCoverLetter` },
-    { label: "Emails", section: `emails` },
-    { label: "Story", section: `userStory` },
-    { label: "Experience", section: `userExperience` }
+  const pageList = [
+    { label: "Job Description", path: `/jobs/apps/${id}` },
+    { label: "Resume", path: `/jobs/apps/${id}/resume` },
+    { label: "Cover Letter", path: `/jobs/apps/${id}/coverletter` },
+    { label: "Emails", path: `/jobs/apps/${id}/emails` },
+    { label: "Story", path: `/jobs/apps/${id}/story` },
+    { label: "Experience", path: `/jobs/apps/${id}/experience` }
   ];
-
-  /*
-    { label: "Company", path: `/jobs/${id}/company` },
-    
-    { label: "Experience", path: `/jobs/${id}/experience` },
-    */
 
   const handleClick = () => {
     setActive(!active);
-  };
-
-  const handleLinkClick = (e: any) => {
-    active ? setActive(!active) : null
-    setSection(e)
   };
 
   return (
     <div className="bg-white shadow-inner lg:shadow-md sticky bottom-0 w-full lg:top-60 z-50 bg-gray-200 lg:bg-white p-4 rounded-lg h-auto">
       <div className={`${active ? ' ' : 'hidden'}  w-full lg:inline`}>
         <div className=" w-full items-center items-start  flex flex-col lg:h-auto py-2">
-          {links.map((l, i) => {
+          {pageList.map((l: any, i: number) => {
             return (
               <div key={i}>
-                <JobMenuButton
-                  label={l.label}
-                  section={l.section}
-                  currentSection={section}
-                  setSection={setSection}
-                  active={active}
-                  setActive={setActive}
-                />
+                <div className={l.path === pathname ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
+                  <Link href={l.path}>
+                    <button
+                      onClick={handleClick}
+                      className="inline"
+                    >
+                      {l.label}
+                    </button>
+                  </Link>
+                </div>
               </div>
             );
           })}
@@ -57,7 +54,7 @@ export default function JobMenu({ section, setSection }: { section: string, setS
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center">
             <span>
-              {links[links.findIndex(p => p.section == section)].label}
+              {pageList[pageList.findIndex(p => p.path == pathname)].label}
             </span>
           </div>
           <div className="flex items-center">

@@ -1,5 +1,5 @@
 "use client"
-import { getProviders, signIn, useSession, SessionProvider } from "next-auth/react";
+import { getProviders, signIn, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { redirect } from 'next/navigation'
 

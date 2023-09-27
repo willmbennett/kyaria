@@ -7,7 +7,6 @@ export default function Responsibility({
     setKey,
     content,
     message,
-    updateResumeExperienceResponsibilities,
     saveToDatabase,
     parentIndex,
     childIndex
@@ -16,7 +15,6 @@ export default function Responsibility({
     setKey: string,
     content: string,
     message: any,
-    updateResumeExperienceResponsibilities: any,
     saveToDatabase: any,
     parentIndex: number,
     childIndex: number
@@ -30,7 +28,6 @@ export default function Responsibility({
                     setKey={setKey}
                     message={message}
                     currentState={content}
-                    updateState={updateResumeExperienceResponsibilities}
                     parentIndex={parentIndex}
                     childIndex={childIndex}
                     saveToDatabase={saveToDatabase}

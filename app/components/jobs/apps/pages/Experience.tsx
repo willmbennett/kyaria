@@ -3,12 +3,8 @@ import StarStory from '../components/StarStory';
 
 export default function Experience({
     jobApp,
-    updateExperienceStarStory,
-    updateEductionStarStory,
 }: {
     jobApp: any,
-    updateExperienceStarStory: any,
-    updateEductionStarStory: any,
 }) {
 
     return (
@@ -48,7 +44,6 @@ export default function Experience({
                                                 content={resp.content}
                                                 details={starStory}
                                                 currentState={resp.starStory}
-                                                updateState={updateExperienceStarStory}
                                                 parentIndex={index}
                                                 childIndex={i}
                                             />
@@ -88,7 +83,6 @@ export default function Experience({
                                                     content={detail.content}
                                                     details={jobApp.profile.education[index].details[i].starStory}
                                                     currentState={detail.starStory}
-                                                    updateState={updateEductionStarStory}
                                                     parentIndex={index}
                                                     childIndex={i}
                                                 />
