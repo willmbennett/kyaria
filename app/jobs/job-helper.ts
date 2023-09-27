@@ -1,14 +1,15 @@
-export const questions = [
-  {"question": "Can you describe a situation where you had to deal with a difficult coworker or team member?", "answer": ""},
-  {"question": "Tell me about a time when you had to handle multiple tasks at once. How did you prioritize and manage your time?", "answer": ""},
-  {"question": "Describe a situation in which you had to use your communication skills in order to explain a difficult concept to someone.", "answer": ""},
-  {"question": "Tell me about a time when you took initiative to solve a problem at work. What was the outcome?", "answer": ""},
-  {"question": "Can you provide an example of a time when you received constructive feedback? How did you react, and what changes did you make?", "answer": ""},
-  {"question": "Describe a situation where you set a goal and were able to meet or exceed it.", "answer": ""},
-  {"question": "Tell me about a time when you had to make a difficult decision at work. How did you come to that decision and what was the result?", "answer": ""},
-  {"question": "How have you handled a situation in the past where you were under a lot of pressure?", "answer": ""},
-  {"question": "Describe a project or task where you had to collaborate with a cross-functional team. How did you ensure effective communication and cooperation?", "answer": ""},
-  {"question": "Tell me about a time when you had to adapt to significant changes at work. How did you handle it?", "answer": ""}
+export const emails = [
+  {"type": "Resume Submission", "content": ""},
+  {"type": "Cover Letter Submission", "content": ""},
+  {"type": "Job Inquiry", "content": ""},
+  {"type": "Networking Outreach", "content": ""},
+  {"type": "Thank You After Interview", "content": ""},
+  {"type": "Follow-Up After Interview", "content": ""},
+  {"type": "Job Offer Acceptance", "content": ""},
+  {"type": "Job Offer Clarification", "content": ""},
+  {"type": "Job Offer Decline", "content": ""},
+  {"type": "Salary Negotiation", "content": ""},
+  {"type": "Reference Request", "content": ""}
 ]
 
 

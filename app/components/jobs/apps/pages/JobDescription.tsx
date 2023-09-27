@@ -7,7 +7,7 @@ export default function JobDescription({
 
     return (
         <>
-            <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
+            <h1 className="text-center sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
                 {jobData["jobTitle"]}
             </h1>
             <div>

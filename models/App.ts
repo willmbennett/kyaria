@@ -11,12 +11,12 @@ import { JobClass } from "./Job";
 import { ProfileClass } from "./Profile";
 import { ResumeClass } from "./Resume";
 
-class UserQuestion {
+class Emails {
     @prop()
-    public question?: string;
+    public type?: string;
 
     @prop()
-    public answer?: string;
+    public content?: string;
 }
 
 @ModelOptions({
@@ -37,8 +37,8 @@ class AppClass {
     @prop()
     public userStory?: string;
 
-    @prop({ type: () => [UserQuestion] })
-    public userQuestions?: UserQuestion[];
+    @prop({ type: () => [Emails], required: true })
+    public emails: Emails[];
 
     @prop({ required: true})
     public userId!: string;

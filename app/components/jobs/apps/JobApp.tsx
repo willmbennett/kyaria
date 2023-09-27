@@ -7,6 +7,7 @@ import UserStory from './pages/Story';
 import Resume from './pages/Resume';
 import Experience from './pages/Experience';
 import JobDescription from './pages/JobDescription';
+import Emails from './pages/Emails';
 
 export default function Job(
     { jobApp
@@ -33,6 +34,21 @@ export default function Job(
         }
     };
 
+    const updateEmail = (
+        {
+            newContent,
+            parentIndex
+        }: {
+            newContent: string,
+            parentIndex: number
+        }) => {
+        console.log(newContent, parentIndex)
+
+        const newApplication = application;
+        newApplication.emails[parentIndex].content = newContent
+        setApplication(newApplication)
+    };
+
     const updateStory = ({ newContent }: { newContent: string }) => {
         if (application) {
             const newApplication = application;
@@ -51,7 +67,7 @@ export default function Job(
             parentIndex: number,
             childIndex: number
         }) => {
-        //console.log(newContent, experienceIndex, responsibilityIndex)
+        console.log(newContent, parentIndex, childIndex)
 
         const newApplication = application;
         newApplication.userResume.professional_experience[parentIndex].responsibilities[childIndex].starStory = newContent
@@ -68,7 +84,7 @@ export default function Job(
             parentIndex: number,
             childIndex: number
         }) => {
-        //console.log(newContent, experienceIndex, responsibilityIndex)
+        console.log(newContent, parentIndex, childIndex)
 
         const newApplication = application;
         newApplication.userResume.education[parentIndex].details[childIndex].starStory = newContent
@@ -110,25 +126,24 @@ export default function Job(
     };
 
     return (<>
-        <div className="flex h-auto min-h-screen min-w-full lg:px-4 lg:mt-6">
-                <div className="w-1/4 hidden lg:flex lg:flex-col">
-                    <JobMenu
-                        section={section}
-                        setSection={setSection}
-                    />
-                </div>
-                <div className="bg-white p-6 rounded-lg shadow-md lg:w-3/4 mx-2 lg:mx-3">
+        <div className="flex h-auto min-h-screen w-full lg:px-4 lg:mt-6">
+            <div className="w-1/4 hidden lg:flex lg:flex-col">
+                <JobMenu
+                    section={section}
+                    setSection={setSection}
+                />
+            </div>
+            <div className="lg:w-/4 lg:w-full lg:flex lg:flex-col">
+                <div className="bg-white p-6 rounded-lg shadow-md lg:w-full mx-2 lg:mx-3">
                     {jobApp && (
                         <>
                             {section == "jobDescription" && (
                                 <JobDescription
-                                    jobData={jobApp.job}
+                                    jobData={application.job}
                                 />
                             )}
                             {section == "userResume" && (<>
                                 <Resume
-                                    userProfile={jobApp.profile}
-                                    job={jobApp.job}
                                     application={application}
                                     updateResumeSummary={updateResumeSummary}
                                     updateResumeExperienceResponsibilities={updateResumeExperienceResponsibilities}
@@ -137,25 +152,32 @@ export default function Job(
                             </>)}
                             {section == "userCoverLetter" && (<>
                                 <CoverLetter
-                                    jobApp={jobApp}
+                                    jobApp={application}
                                     setCoverLetter={updateCoverLetter}
+                                />
+                            </>)}
+                            {section == "emails" && jobApp.emails && (<>
+                                <Emails
+                                    jobApp={application}
+                                    updateEmail={updateEmail}
                                 />
                             </>)}
                             {section == "userStory" && (<>
                                 <UserStory
-                                    jobApp={jobApp}
+                                    jobApp={application}
                                     setUserStory={updateStory}
                                 />
                             </>)}
                             {section == "userExperience" && (<>
                                 <Experience
-                                    jobApp={jobApp}
+                                    jobApp={application}
                                     updateExperienceStarStory={updateExperienceStarStory}
                                     updateEductionStarStory={updateEductionStarStory}
                                 />
                             </>)}
                         </>)}
                 </div>
+            </div>
         </div>
         <div className='lg:hidden sticky bottom-0 w-full'>
             <JobMenu
