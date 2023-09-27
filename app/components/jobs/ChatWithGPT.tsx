@@ -9,7 +9,6 @@ interface Props {
   setKey: string,
   message: any;
   currentState: any;
-  updateState: any;
   saveToDatabase: any;
   temp?: number;
   copy?: boolean;
@@ -22,7 +21,6 @@ export default function ChatWithGPT({
   setKey,
   message,
   currentState,
-  updateState,
   saveToDatabase,
   temp = 0.3,
   copy = true,
@@ -71,7 +69,7 @@ export default function ChatWithGPT({
     //console.log(finishedLoading)
     const newContent = returnedMessage;
     //console.log(newContent, parentIndex, childIndex)
-    updateState({ newContent, parentIndex, childIndex })
+    //updateState({ newContent, parentIndex, childIndex })
   };
 
   // Save the final message to context

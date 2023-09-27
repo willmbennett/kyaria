@@ -14,7 +14,6 @@ export default function StarStory({
     content,
     details,
     currentState,
-    updateState,
     parentIndex,
     childIndex
 }: {
@@ -24,7 +23,6 @@ export default function StarStory({
     content: string,
     details: string,
     currentState: string,
-    updateState: any,
     parentIndex: number,
     childIndex: number
 }) {
@@ -128,7 +126,6 @@ export default function StarStory({
                         setKey={setKey}
                         message={message}
                         currentState={currentState}
-                        updateState={updateState}
                         parentIndex={parentIndex}
                         childIndex={childIndex}
                         saveToDatabase={updateResumeAction}

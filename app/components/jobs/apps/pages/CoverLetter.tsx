@@ -5,10 +5,8 @@ import { updateJobAppAction } from '../../../../jobs/apps/[id]/_action';
 
 export default function CoverLetter({
     jobApp,
-    setCoverLetter
 }: {
-    jobApp: any,
-    setCoverLetter: any
+    jobApp: any
 }) {
 
     const message = [
@@ -67,7 +65,6 @@ export default function CoverLetter({
                 setKey='userCoverLetter'
                 message={message}
                 currentState={jobApp.userCoverLetter}
-                updateState={setCoverLetter}
                 saveToDatabase={updateJobAppAction}
                 temp={0.5}
             />

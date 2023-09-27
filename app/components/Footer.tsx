@@ -94,18 +94,18 @@ export default function Footer() {
                             </a>
                         </p>
                         <p className="mb-4">
-                            <a href="#!" className="text-neutral-600 dark:text-neutral-200">
-                                Virtual Career Coach (coming soon)
+                            <a href="/jobs" className="text-neutral-600 dark:text-neutral-200">
+                                Resume Writing
                             </a>
                         </p>
                         <p className="mb-4">
-                            <a href="#!" className="text-neutral-600 dark:text-neutral-200">
-                                Networking (coming soon)
+                            <a href="/jobs" className="text-neutral-600 dark:text-neutral-200">
+                                Cover Letter Writing
                             </a>
                         </p>
                         <p>
                             <a href="#!" className="text-neutral-600 dark:text-neutral-200">
-                                Jobs (coming soon)
+                                Virtual Career Coach (coming soon)
                             </a>
                         </p>
                     </div>

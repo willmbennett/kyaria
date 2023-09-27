@@ -1,3 +1,5 @@
+import { JobClass } from "../../../../../models/Job";
+
 export default function JobDescription({
     jobData,
 }: {
@@ -6,43 +8,44 @@ export default function JobDescription({
 
 
     return (
+
         <>
             <h1 className="text-center sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
-                {jobData["jobTitle"]}
+                {jobData.jobTitle}
             </h1>
             <div>
                 <p className="text-left font-medium text-lg mb-4">
-                    <strong>Company:</strong> {jobData["company"]}
+                    <strong>Company:</strong> {jobData.company}
                 </p>
                 <p className="text-left font-medium text-lg mb-4">
-                    <strong>Location:</strong> {jobData["location"]}
+                    <strong>Location:</strong> {jobData.location}
                 </p>
                 <p className="text-left font-medium text-lg mb-4">
-                    <strong>Employment Type:</strong> {jobData["employmentType"]}
+                    <strong>Employment Type:</strong> {jobData.employmentType}
                 </p>
                 <p className="text-left font-medium text-lg mb-4">
-                    <strong>Salary Range:</strong> {jobData["salaryRange"]}
+                    <strong>Salary Range:</strong> {jobData.salaryRange}
                 </p>
                 <p className="text-left font-medium text-lg mb-4">
-                    <strong>Remote:</strong> {jobData["remote"]}
+                    <strong>Remote:</strong> {jobData.remote}
                 </p>
                 <h2 className="text-left font-bold text-2xl mb-4">About the Company</h2>
                 <p className="text-left mb-8">
-                    {jobData["aboutCompany"]}
+                    {jobData.aboutCompany}
                 </p>
                 <h2 className="text-left font-bold text-2xl mb-4">Job Description</h2>
                 <p className="text-left mb-8">
-                    {jobData["jobDescription"]}
+                    {jobData.jobDescription}
                 </p>
                 <h2 className="text-left font-bold text-2xl mb-4">Qualifications</h2>
                 <ul className="list-disc list-inside text-left mb-8">
-                    {jobData["qualifications"].map((qualification: any, index: any) => (
+                    {jobData.qualifications && jobData.qualifications.map((qualification: any, index: any) => (
                         <li key={index}>{qualification}</li>
                     ))}
                 </ul>
                 <h2 className="text-left font-bold text-2xl mb-4">Responsibilities</h2>
                 <ul className="list-disc list-inside text-left">
-                    {jobData["responsibilities"].map((responsibility: any, index: any) => (
+                    {jobData.responsibilities && jobData.responsibilities.map((responsibility: any, index: any) => (
                         <li key={index}>{responsibility}</li>
                     ))}
                 </ul>
