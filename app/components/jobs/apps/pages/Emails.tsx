@@ -21,19 +21,6 @@ export default function Experience({
         setShowOptions(!showOptions);
     };
 
-    const message = [
-        {
-            "role": "system",
-            "content": `You are a professional email writer specialized in creating personalized, compelling emails for jobseekers.
-        `
-        },
-        {
-            "role": "user",
-            "content": `Please write me a ${selectedEmail.type} email for this job post: ${JSON.stringify(jobApp.job)}.
-        Include information from my profile ${JSON.stringify(jobApp.profile)}
-        `
-        }
-    ]
 
     return (
         <>
@@ -84,16 +71,38 @@ export default function Experience({
                 </div>
             </div>
             <div className="bg-white p-6 w-full">
-                <ChatWithGPT
-                    documentID={jobApp._id}
-                    setKey={`emails.${emailIndex}.content`}
-                    message={message}
-                    currentState={selectedEmail.content}
-                    updateState={updateEmail}
-                    parentIndex={emailIndex}
-                    saveToDatabase={updateJobAppAction}
-                    temp={0.7}
-                />
+                {
+                    emails.map((email: any, i: number) => {
+                        const message = [
+                            {
+                                "role": "system",
+                                "content": `You are a professional email writer specialized in creating personalized, compelling emails for jobseekers.
+                            `
+                            },
+                            {
+                                "role": "user",
+                                "content": `Please write me a ${selectedEmail.type} email for this job post: ${JSON.stringify(jobApp.job)}.
+                                Include information from my profile ${JSON.stringify(jobApp.profile)}
+                                Keep the emails concise, 3-4 paragraphs maximum.
+                            `
+                            }
+                        ]
+                        return (
+                            <div className={i != emailIndex ? 'hidden' : ''}>
+                                <ChatWithGPT
+                                    documentID={jobApp._id}
+                                    setKey={`emails.${i}.content`}
+                                    message={message}
+                                    currentState={email.content}
+                                    updateState={updateEmail}
+                                    parentIndex={i}
+                                    saveToDatabase={updateJobAppAction}
+                                    temp={0.5}
+                                />
+                            </div>
+                        )
+                    })
+                }
             </div>
         </>
     );

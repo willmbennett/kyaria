@@ -32,9 +32,7 @@ export default function JobMenu({ section, setSection }: { section: string, setS
 
   return (
     <div className="bg-white shadow-inner lg:shadow-md sticky bottom-0 w-full lg:top-60 z-50 bg-gray-200 lg:bg-white p-4 rounded-lg h-auto">
-      <div
-        className={`${active ? ' ' : 'hidden'}  w-full lg:inline`}
-      >
+      <div className={`${active ? ' ' : 'hidden'}  w-full lg:inline`}>
         <div className=" w-full items-center items-start  flex flex-col lg:h-auto py-2">
           {links.map((l, i) => {
             return (

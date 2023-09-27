@@ -5,6 +5,7 @@ import NavMenu from './components/NavMenu';
 import '../styles/globals.css';
 import { authOptions } from '../lib/auth';
 import { getServerSession } from "next-auth/next"
+import Footer from './components/Footer';
 
 const title = 'Launch Your Career';
 const description = 'Launch your career with the power of AI';
@@ -37,7 +38,10 @@ export default async function RootLayout({
       <body>
         <SessionProvider session={session}>
           <NavMenu />
+          <div className='flex h-auto min-h-screen'>
           {children}
+          </div>
+          <Footer />
         </SessionProvider>
         <Analytics />
       </body>
