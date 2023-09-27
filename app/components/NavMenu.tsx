@@ -28,7 +28,7 @@ export default function NavMenu() {
           <Link href='/'>
             <span className='inline-flex items-center p-2 mr-4 '>
               <span className='text-xl text-gray-600 font-bold uppercase tracking-wide'>
-                KYARIA
+              <img src='/icon-hor.svg' alt='Horizontal Login' width='100' />
               </span>
             </span>
           </Link>

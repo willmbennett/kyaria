@@ -127,13 +127,13 @@ export default function Job(
 
     return (<>
         <div className="flex h-auto min-h-screen w-full lg:px-4 lg:mt-6">
-            <div className="w-1/4 hidden lg:flex lg:flex-col">
+            <div className="lg:w-1/4 hidden lg:flex lg:flex-col">
                 <JobMenu
                     section={section}
                     setSection={setSection}
                 />
             </div>
-            <div className="lg:w-/4 lg:w-full lg:flex lg:flex-col">
+            <div className="lg:w-3/4 lg:w-full inline lg:flex lg:flex-col">
                 <div className="bg-white p-6 rounded-lg shadow-md lg:w-full mx-2 lg:mx-3">
                     {jobApp && (
                         <>

@@ -31,8 +31,8 @@ const SignIn: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="p-8 bg-white rounded shadow-md w-96">
+    <div className="min-h-screen w-full flex items-center justify-center bg-white">
+      <div className="p-8 bg-white w-full lg:w-1/4">
       <img src='/icon-hor.svg' alt='Horizontal Login' />
         <h1 className="text-2xl mb-4 text-center font-bold text-gray-700">Sign In</h1>
         {providers && Object.values(providers).map((provider) => (

@@ -12,7 +12,7 @@ export default function JobLayout({
 
   return (
     <section>
-      <div className="flex max-w-5xl mx-auto flex-col  py-2 min-h-screen bg-gray-100">
+      <div className="flex max-w-5xl mx-auto flex-col py-2 min-h-screen bg-gray-100">
                 {children}
       </div>
     </section>

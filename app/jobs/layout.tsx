@@ -6,8 +6,8 @@ export default function JobLayout({
 }) {
 
   return (
-    <>
+    <div className="w-full">
       {children}
-    </>
+    </ div>
   )
 }
