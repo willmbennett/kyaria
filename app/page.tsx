@@ -3,6 +3,7 @@ import { signIn, useSession } from "next-auth/react";
 
 export default function Page() {
   const { data: session } = useSession();
+
   return (
     <div className='w-full'>
       <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 h-screen">
@@ -18,7 +19,7 @@ export default function Page() {
           </button>
         )}
       </div>
-      <div className="flex md:flex-row p-5">
+      <div className="flex flex-col md:flex-row p-5">
         <div className="lg:w-1/3 lg:p-3 py-2">
           <a href={session?.user?.id ? `/profile/${session?.user?.id}` : "/"}>
             <div
