@@ -6,9 +6,15 @@ import '../styles/globals.css';
 import { authOptions } from '../lib/auth';
 import { getServerSession } from "next-auth/next"
 import Footer from './components/Footer';
+import Script from 'next/script';
 
 const title = 'Launch Your Career';
 const description = 'Launch your career with the power of AI';
+
+
+declare global {
+  interface Window { Appcues: any; }
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.kyaria.ai/'),
@@ -26,16 +32,24 @@ export const metadata: Metadata = {
     description,
   },
 };
-
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const session = await getServerSession(authOptions);
+
   return (
     <html lang="en">
       <body>
+        <Script
+          id="ze-snippet"
+          src="https://static.zdassets.com/ekr/snippet.js?key=135d1136-b2c1-4d54-8610-58a0b79632da"
+        />
+        <Script id="appcues-settings">
+          {`window.AppcuesSettings = {enableURLDetection: true}`}
+        </Script>
+        <Script src="//fast.appcues.com/201537.js" />
         <SessionProvider session={session}>
           <NavMenu />
           {children}
