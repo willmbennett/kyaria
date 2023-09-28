@@ -215,7 +215,7 @@ export default function Profile({
                                 location: "Title",
                                 start_date: "Start Date",
                                 end_date: "End Date",
-                                responsibilities: [{ content: "", starStory: "" }]
+                                responsibilities: [{ content: "", detail: "", starStory: "" }]
                             })}>
                                 Add Experience
                             </button>
@@ -255,7 +255,7 @@ export default function Profile({
                                 degree: "Degree",
                                 institution: "Institution",
                                 location: "Location",
-                                details: [{ content: "", starStory: "" }]
+                                details: [{ content: "", detail: "", starStory: "" }]
                             })}>
                                 Add Education
                             </button>

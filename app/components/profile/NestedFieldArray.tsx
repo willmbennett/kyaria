@@ -34,7 +34,7 @@ export default (
                     </div>
                     <p>{index+1}. Details</p>
                     <div className={BASIC_FIELD_STYLE}>
-                        <textarea {...register(`${parentName}.${parentIndex}.${childName}.${index}.starStory`)} rows={5} cols={50} placeholder="Details" />
+                        <textarea {...register(`${parentName}.${parentIndex}.${childName}.${index}.detail`)} rows={5} cols={50} placeholder="Details" />
                     </div>
                 </div>
             ))}

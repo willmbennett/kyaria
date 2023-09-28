@@ -23,6 +23,10 @@ export function castToString(arg: any) {
   return String(arg);
 }
 
+export function dateToString(arg: any) {
+  return arg.toISOString();
+}
+
 export function createErrorResponse(
   message: string,
   statusCode: number

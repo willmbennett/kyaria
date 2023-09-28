@@ -57,7 +57,7 @@ export default function Page() {
           </a>
         </div>
         <div className="lg:w-1/3 lg:p-3 py-2">
-          <a href={session?.user?.id ? `/jobs` : "/"}>
+          <a href={session?.user?.id ? "/board" : "/jobs"}>
             <div
               className="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
               <div
@@ -92,7 +92,7 @@ export default function Page() {
           </a>
         </div>
         <div className="lg:w-1/3 lg:p-3 py-2">
-          <a href={session?.user?.id ? `/jobs` : "/"}>
+          <a href={session?.user?.id ? "/board" : "/jobs"}>
             <div
               className="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
               <div

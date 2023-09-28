@@ -1,34 +1,35 @@
 import { JobModel, JobClass } from "../models/Job";
 import connectDB from "./connect-db";
-import { stringToObjectId, castToString } from "./utils";
+import { stringToObjectId, castToString, dateToString } from "./utils";
 var transformProps = require('transform-props');
 
 interface JobFilter {
-    userId: string
+    page: number,
+    limit: number
 }
 
-export async function getUserJobs(filter: JobFilter) {
+export async function getJobs(filter: JobFilter) {
     try {
         await connectDB();
 
-        //const page = filter.page ?? 1;
-        //const limit = filter.limit ?? 10;
-        //const skip = (page - 1) * limit;
+        const page = filter.page ?? 1;
+        const limit = filter.limit ?? 10;
+        const skip = (page - 1) * limit;
 
-        //console.log(filter)
+        //console.log(page, limit)
 
-        //const jobs = await Job.find(filter).skip(skip).limit(limit).lean().exec();
-        const jobs = await JobModel.find({ userId: filter.userId }).lean().exec();
+        const jobs = await JobModel.find({}).sort('-updatedAt').skip(skip).limit(limit).lean().exec();
 
         const results = jobs.length;
 
         if (jobs) {
-            transformProps(jobs, castToString, ['_id', "_createdAt", "updatedAt"]);
+            transformProps(jobs, castToString, '_id');
+            transformProps(jobs, dateToString, ["_createdAt", "updatedAt"]);
             //console.log(jobs)
             return {
                 jobs,
-                //page,
-                //limit,
+                page,
+                limit,
                 results,
             };
         } else {
@@ -38,7 +39,6 @@ export async function getUserJobs(filter: JobFilter) {
         return { error };
     }
 }
-
 export async function createJob(data: JobClass) {
     try {
         await connectDB();
