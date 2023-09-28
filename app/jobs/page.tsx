@@ -1,36 +1,41 @@
-import { getServerSession } from "next-auth/next";
-import Link from "next/link";
-import { authOptions } from "../../lib/auth";
-import { getUserJobApps } from "../../lib/app-db";
-import { getProfile } from "../../lib/profile-db";
-import JobAppsList from "../components/jobs/apps/JobApps";
+import { getJobs } from "../../lib/job-db";
+import JobList from "../components/jobs/JobList";
+import { Suspense } from 'react'
+import Skeleton from './skeleton'
+import Await from './await'
+import Trigger from "./trigger";
 
-export default async function JobPage() {
-  const session = await getServerSession(authOptions)
-  const { jobApps } = await getUserJobApps({ userId: session?.user?.id || '' })
-  const { profile } = await getProfile(session?.user?.id || '');
+export default async function JobsPage({
+    searchParams
+}: {
+    searchParams: { [key: string]: string | string[] | undefined }
+}) {
+    const page =
+        typeof searchParams.page === 'string' ? Number(searchParams.page) : 1
+    const limit =
+        typeof searchParams.limit === 'string' ? Number(searchParams.limit) : 10
 
+    const promise = getJobs({ page, limit })
 
-  return (
-    <div className="flex max-w-5xl mx-auto flex-col items-center py-2 min-h-screen bg-gray-100">
-      <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4">
-        <div className="w-full max-w-2xl bg-white rounded-xl p-6 shadow-md">
-          {!session?.user?.id && (<>
-            <h1 className="sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900 mb-10">
-              Create a Profile First
-            </h1>
-            <Link href={`profile/${session?.user?.id}`}>
-              <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4" type="submit">Go To Profile</button>
-            </Link>
-          </>)}
-          {profile && (
-            <JobAppsList 
-            jobApps={jobApps}
-            profile={profile}
-            />
-          )}
-        </div>
-      </main>
-    </div>
-  );
+    return (
+        <section>
+            <div className="flex max-w-5xl mx-auto flex-col items-center min-h-screen bg-gray-100">
+
+                <div className="w-full max-w-2xl bg-white rounded-xl p-2 md:p-6 shadow-md">
+                    <div className="w-full sticky bg-white top-10 g-white border-b-2 border-neutral-100 px-6 pb-6 pt-16 text-center">
+                        <h5 className="text-xl font-medium leading-tight dark:border-neutral-600 dark:text-neutral-50">
+                            Jobs
+                        </h5>
+                    </div>
+                    <Suspense fallback={<Skeleton />}>
+                        {/* @ts-expect-error Server Component */}
+                        <Await promise={promise}>
+                            {({ jobs }) => <JobList jobs={jobs} />}
+                        </Await>
+                    </Suspense>
+                    <Trigger limit={limit}></Trigger>
+                </div>
+            </div>
+        </section>
+    );
 }

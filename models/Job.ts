@@ -4,6 +4,7 @@ import {
     prop,
     Severity,
     mongoose,
+    index
 } from "@typegoose/typegoose";
 
 @ModelOptions({
@@ -16,12 +17,13 @@ import {
         allowMixed: Severity.ALLOW
     }
 })
+@index({ link: 1 }, { unique: true }) // compound index
 class JobClass {
     @prop({ required: true })
     public jobTitle!: string;
 
-    @prop()
-    public link: string;
+    @prop({ required: true })
+    public link!: string;
 
     @prop()
     public company: string;

@@ -12,6 +12,9 @@ class Responsibilities {
     public content?: string;
 
     @prop()
+    public detail?: string;
+
+    @prop()
     public starStory?: string;
 }
 
@@ -38,6 +41,9 @@ class ProfessionalExperience {
 class Details {
     @prop()
     public content?: string;
+
+    @prop()
+    public detail?: string;
 
     @prop()
     public starStory?: string;

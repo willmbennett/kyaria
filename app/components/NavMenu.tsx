@@ -28,7 +28,7 @@ export default function NavMenu() {
           <Link href='/'>
             <span className='inline-flex items-center p-2 mr-4 '>
               <span className='text-xl text-gray-600 font-bold uppercase tracking-wide'>
-              <img src='/icon-hor.svg' alt='Horizontal Login' width='100' />
+                <img src='/icon-hor.svg' alt='Horizontal Login' width='100' />
               </span>
             </span>
           </Link>
@@ -67,9 +67,21 @@ export default function NavMenu() {
                 </Link>
               </button>
               <button onClick={handleLinkClick}>
+                <Link href='/board'>
+                  <span className={pathname === '/board' ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
+                    BOARD
+                  </span>
+                </Link>
+              </button>
+              <button onClick={handleLinkClick}>
                 <Link href={`/profile/${session?.user?.id}`}>
-                  <span className={pathname === `/profile/${session?.user?.id}` ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
-                    PROFILE
+                  <span className={pathname === '/board' ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
+                    {session.user?.image && (
+                      <img className="rounded-full w-10" src={session.user?.image} alt="Profile Image" />
+                    )}
+                    {!session.user?.image && session.user?.name && (
+                      <span className="text-slate-500 items-center justify-center">{session?.user?.name}</span>
+                    )}
                   </span>
                 </Link>
               </button>
