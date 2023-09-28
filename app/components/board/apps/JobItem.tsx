@@ -31,7 +31,7 @@ export default function JobItem(
     <div className="flex items-center justify-between w-full max-w-2xl bg-white rounded-xl shadow-md hover:shadow-lg mb-2 transition-shadow duration-300">
       {/* Job title and company name */}
       <div className="flex items-center flex-grow p-4 hover:bg-gray-100 rounded-tl-xl rounded-bl-xl cursor-pointer">
-        <Link href={`jobs/apps/${id}`}>
+        <Link href={`board/apps/${id}`}>
           <span className="text-xl text-gray-700 font-semibold hover:text-gray-800">
             {jobTitle} - {company}
           </span>

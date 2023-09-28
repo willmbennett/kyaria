@@ -13,12 +13,12 @@ export default function JobMenu({ id }: { id: string }) {
   const pathname = usePathname()
 
   const pageList = [
-    { label: "Job Description", path: `/jobs/apps/${id}` },
-    { label: "Resume", path: `/jobs/apps/${id}/resume` },
-    { label: "Cover Letter", path: `/jobs/apps/${id}/coverletter` },
-    { label: "Emails", path: `/jobs/apps/${id}/emails` },
-    { label: "Story", path: `/jobs/apps/${id}/story` },
-    { label: "Experience", path: `/jobs/apps/${id}/experience` }
+    { label: "Job Description", path: `/board/apps/${id}` },
+    { label: "Resume", path: `/board/apps/${id}/resume` },
+    { label: "Cover Letter", path: `/board/apps/${id}/coverletter` },
+    { label: "Emails", path: `/board/apps/${id}/emails` },
+    { label: "Story", path: `/board/apps/${id}/story` },
+    { label: "Experience", path: `/board/apps/${id}/experience` }
   ];
 
   const handleClick = () => {
@@ -53,9 +53,11 @@ export default function JobMenu({ id }: { id: string }) {
       >
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center">
-            <span>
-              {pageList[pageList.findIndex(p => p.path == pathname)].label}
-            </span>
+            {pageList[pageList.findIndex(p => p.path == pathname)] && (
+              <span>
+                {pageList[pageList.findIndex(p => p.path == pathname)].label}
+              </span>
+            )}
           </div>
           <div className="flex items-center">
             <svg
