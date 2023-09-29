@@ -75,7 +75,7 @@ export default function NavMenu() {
               </button>
               <button onClick={handleLinkClick} className="mx-2">
                 <Link href={`/profile/${session?.user?.id}`}>
-                  <span className={pathname === '/board' ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
+                  <span className={pathname === `/profile/${session?.user?.id}` ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
                     {session.user?.image && (
                       <img className="rounded-full w-10" src={session.user?.image} alt="Profile Image" />
                     )}
