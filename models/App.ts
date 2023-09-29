@@ -1,7 +1,6 @@
 import {
     ModelOptions,
     getModelForClass,
-    index,
     prop,
     Severity,
     mongoose
@@ -31,6 +30,9 @@ class Emails {
     }
 })
 class AppClass {
+    @prop({ default: 'WISHLIST', required: true})
+    public state!: string;
+
     @prop()
     public userCoverLetter?: string;
 

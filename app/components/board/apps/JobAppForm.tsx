@@ -1,9 +1,9 @@
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { FormFields, emails } from '../../../board/job-helper'
-//import { redirect } from 'next/navigation'
 import FieldArray from './FieldArray';
 import { createJobApplicationAction } from '../../../board/apps/[id]/_action';
+import { useRouter } from 'next/navigation'
 
 const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'
 
@@ -22,6 +22,7 @@ export default function NewJobAppForm({
     profile: any,
     setFormView: any
 }) {
+    const router = useRouter()
 
     const { register, handleSubmit, control } = useForm<FormFields>({
         defaultValues: { ...defaultValue },
@@ -47,6 +48,7 @@ export default function NewJobAppForm({
         //console.log(jobApp)
         setCreatingJob(false)
         setFormView(false)
+        router.push(`/board/apps/${jobApp}`)
     };
 
     return (
@@ -102,7 +104,15 @@ export default function NewJobAppForm({
             />
             {/* Submit */}
             <div className={BASIC_FIELD_STYLE}>
-                <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4" type="submit">Submit</button>
+                <button
+                    className="inline-block rounded px-6 pb-2 pt-2.5 text-xs hover:opacity-80 font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                    style={{ backgroundColor: '#00703C' }}
+                    data-te-ripple-init
+                    data-te-ripple-color="light"
+                    type="submit"
+                >
+                    Submit
+                </button>
             </div>
         </form>
     );

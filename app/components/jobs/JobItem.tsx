@@ -10,7 +10,7 @@ export default function JobItem(
   let { _id, jobTitle, company, location, employmentType, salaryRange, updatedAt } = job;
   const date = parseISO(updatedAt);
   return (
-    <div className="text-left border-2 rounded-xl block bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
+    <div className="text-left border-2 dark:border-neutral-500 rounded-xl block bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
       <div className="flex p-2 justify-between w-full border-b-2 border-neutral-100 dark:border-neutral-600 dark:text-neutral-50">
         <div className="w-3/4 px-6 py-3 ">
         <h5 className="text-xl font-medium leading-tight ">

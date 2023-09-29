@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 import AuthButton from "./auth/AuthButton";
 import { useSession } from 'next-auth/react';
 
-const ACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-2 rounded text-xl lg:text-lg text-gray-600 bg-gray-200 font-bold items-center justify-center hover:bg-gray-600 hover:text-white";
-const INACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-2 rounded text-xl lg:text-lg text-gray-600 font-bold items-center justify-center hover:bg-gray-600 hover:text-white";
+const ACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-2 rounded text-xl lg:text-lg text-gray-600 bg-gray-200 font-bold items-center justify-center hover:bg-gray-600 hover:text-white dark:text-neutral-200 dark:text-neutral-600 dark:hover:bg-neutral-100 dark:hover:text-neutral-400";
+const INACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-2 rounded text-xl lg:text-lg text-gray-600 font-bold items-center justify-center hover:bg-gray-600 hover:text-white dark:text-neutral-200 dark:bg-neutral-600 dark:hover:bg-neutral-200 dark:hover:text-neutral-600";
 
 export default function NavMenu() {
   const [active, setActive] = useState(false);
@@ -23,7 +23,7 @@ export default function NavMenu() {
   const pathname = usePathname();
   return (
     <>
-      <nav className={`${active ? '' : 'shadow-md rounded-xl'}  p-3 flex items-center flex-wrap bg-white sticky top-0 z-50 overflow-visible`}>
+      <nav className={`${active ? '' : 'shadow-md'}  p-3 flex items-center flex-wrap bg-white sticky top-0 z-50 overflow-visible dark:bg-neutral-600`}>
         <button onClick={handleLinkClick}>
           <Link href='/'>
             <span className='inline-flex items-center p-2 mr-4 '>
@@ -59,23 +59,23 @@ export default function NavMenu() {
 
           <div className='lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full items-center items-start  flex flex-col lg:h-auto'>
             {session?.user?.id && (<>
-              <button onClick={handleLinkClick}>
+              <button onClick={handleLinkClick} className="mx-2">
                 <Link href='/jobs'>
                   <span className={pathname === '/jobs' ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
                     JOBS
                   </span>
                 </Link>
               </button>
-              <button onClick={handleLinkClick}>
+              <button onClick={handleLinkClick} className="mx-2">
                 <Link href='/board'>
                   <span className={pathname === '/board' ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
                     BOARD
                   </span>
                 </Link>
               </button>
-              <button onClick={handleLinkClick}>
+              <button onClick={handleLinkClick} className="mx-2">
                 <Link href={`/profile/${session?.user?.id}`}>
-                  <span className={pathname === '/board' ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
+                  <span className={pathname === `/profile/${session?.user?.id}` ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
                     {session.user?.image && (
                       <img className="rounded-full w-10" src={session.user?.image} alt="Profile Image" />
                     )}

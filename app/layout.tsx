@@ -43,7 +43,9 @@ export default async function RootLayout({
         />
         <SessionProvider session={session}>
           <NavMenu />
-          {children}
+          <div className='bg:white w-full dark:bg-black'>
+            {children}
+          </div>
           <Footer />
         </SessionProvider>
         <Analytics />
