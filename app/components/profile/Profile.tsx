@@ -104,7 +104,7 @@ export default function Profile({
                 formView={formView}
                 setFormView={setFormView}
             />)}
-            {profile && !formView && (<UserProfile userProfile={profile} /> )}
+            {profile && !formView && (<UserProfile userProfile={profile} />)}
             {formView && (
                 <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-3xl">
                     <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
@@ -204,14 +204,19 @@ export default function Profile({
                             </div>
                         ))}
                         <div className={BASIC_FIELD_STYLE}>
-                            <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4" type="button" onClick={() => appendExperience({
-                                title: "Title",
-                                company: "Company",
-                                location: "Title",
-                                start_date: "Start Date",
-                                end_date: "End Date",
-                                responsibilities: [{ content: "", detail: "", starStory: "" }]
-                            })}>
+                            <button
+                                className="inline-block bg-dartmouth-green rounded px-6 pb-2 pt-2.5 text-xs hover:opacity-80 font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                                data-te-ripple-init
+                                data-te-ripple-color="light"
+                                type="button"
+                                onClick={() => appendExperience({
+                                    title: "Title",
+                                    company: "Company",
+                                    location: "Title",
+                                    start_date: "Start Date",
+                                    end_date: "End Date",
+                                    responsibilities: [{ content: "", detail: "", starStory: "" }]
+                                })}>
                                 Add Experience
                             </button>
                         </div>
@@ -246,19 +251,31 @@ export default function Profile({
                             </div>
                         ))}
                         <div className={BASIC_FIELD_STYLE}>
-                            <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4" type="button" onClick={() => appendEducation({
-                                degree: "Degree",
-                                institution: "Institution",
-                                location: "Location",
-                                details: [{ content: "", detail: "", starStory: "" }]
-                            })}>
+                            <button
+                                className="inline-block bg-dartmouth-green rounded px-6 pb-2 pt-2.5 text-xs hover:opacity-80 font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                                data-te-ripple-init
+                                data-te-ripple-color="light"
+                                type="button"
+                                onClick={() => appendEducation({
+                                    degree: "Degree",
+                                    institution: "Institution",
+                                    location: "Location",
+                                    details: [{ content: "", detail: "", starStory: "" }]
+                                })}>
                                 Add Education
                             </button>
                         </div>
 
                         {/* Submit */}
                         <div className={`${BASIC_FIELD_STYLE} sticky bottom-0 p-3 bg-white shadow-md rounded-xl`}>
-                            <button className="bg-blue-500 text-white px-4 py-2 rounded" type="submit">Submit</button>
+                            <button
+                                className="inline-block bg-dartmouth-green rounded px-6 pb-2 pt-2.5 text-xs hover:opacity-80 font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                                data-te-ripple-init
+                                data-te-ripple-color="light"
+                                type="submit"
+                            >
+                                Submit
+                            </button>
                         </div>
                     </form>
                 </div>
