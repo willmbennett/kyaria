@@ -16,8 +16,8 @@ export default function AppItem(
     jobStates: string[]
   }) {
   const router = useRouter()
-  let { job, createdAt } = app
-  let { _id, jobTitle, company, location, employmentType, salaryRange } = job;
+  let { _id, job, createdAt } = app
+  let { jobTitle, company, location, employmentType, salaryRange } = job;
   const date = parseISO(createdAt);
   const [showOptions, setShowOptions] = useState(false);
 
@@ -28,7 +28,7 @@ export default function AppItem(
   return (
     <div className="text-left border-2 dark:border-neutral-500 rounded-xl block bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
       <div>
-        <Link href={`/jobs/${_id}`} target="_blank">
+        <Link href={`/board/apps/${_id}`} target="_blank">
           <div className="flex p-3 justify-between w-full border-b-2 border-neutral-100 dark:border-neutral-600 dark:text-neutral-50">
             <div className="w-4/5 py-1 ">
               <h5 className="text-lg font-medium leading-tight ">
@@ -80,7 +80,7 @@ export default function AppItem(
                 jobStates.map((l, i) => {
                   const selectOption = async () => {
                     setShowOptions(!showOptions);
-                    const { jobApp } = await updateJobAppAction(app._id, {state: jobStates[i]}, "/")
+                    const { jobApp } = await updateJobAppAction(_id, {state: jobStates[i]}, "/")
                     //console.log(jobApp)
                     router.push(`/board`, { scroll: false })
                   };
