@@ -33,6 +33,9 @@ class AppClass {
     @prop({ default: 'WISHLIST', required: true})
     public state!: string;
 
+    @prop({ default: true, required: true})
+    public active!: boolean;
+
     @prop()
     public userCoverLetter?: string;
 
