@@ -25,19 +25,35 @@ export default function AppItem(
     setShowOptions(!showOptions);
   };
 
+  const handleClose = async () => {
+    const { jobApp } = await updateJobAppAction(_id, { active: !app.active }, "/")
+    //console.log(jobApp)
+    router.push(`/board`, { scroll: false })
+  };
+
   return (
-    <div className="text-left border-2 dark:border-neutral-500 rounded-xl block bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
+    <div className={`text-left border-2 dark:border-neutral-500 rounded-xl block ${app.active? "bg-white dark:bg-neutral-700": "bg-red-100 dark:bg-red-700"} shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]`}>
       <div>
-        <Link href={`/board/apps/${_id}`} target="_blank">
-          <div className="flex p-3 justify-between w-full border-b-2 border-neutral-100 dark:border-neutral-600 dark:text-neutral-50">
-            <div className="w-4/5 py-1 ">
+        <div className="flex p-2 justify-between w-full dark:text-neutral-50">
+          <Link href={`/board/apps/${_id}`} target="_blank">
+            <div className="w-full py-1 ">
               <h5 className="text-lg font-medium leading-tight ">
                 {jobTitle}
               </h5>
             </div>
-            <div className="w-1/5 py-2 text-xs text-right">
-              {createdAt && (<time dateTime={createdAt}>{format(date, 'MM/dd')}</time>)}
-            </div>
+          </Link>
+          <div className="remove text-right">
+            <button onClick={handleClose} className="p-1">
+              <svg fill="#ffcccb" height="20px" width="20px"
+                viewBox="0 0 20 20" xmlSpace="preserve">
+                <path d="M6.414 5A1 1 0 1 0 5 6.414L10.586 12 5 17.586A1 1 0 1 0 6.414 19L12 13.414 17.586 19A1 1 0 1 0 19 17.586L13.414 12 19 6.414A1 1 0 1 0 17.586 5L12 10.586 6.414 5Z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <Link href={`/board/apps/${_id}`} target="_blank">
+          <div className="w-full px-2 pb-2 text-xs text-left border-b-2 border-neutral-100 dark:border-neutral-600 dark:text-neutral-50">
+            {createdAt && (<time dateTime={createdAt}>{format(date, 'MM/dd')}</time>)}
           </div>
           <div className="p-3">
             <h5
@@ -80,7 +96,7 @@ export default function AppItem(
                 jobStates.map((l, i) => {
                   const selectOption = async () => {
                     setShowOptions(!showOptions);
-                    const { jobApp } = await updateJobAppAction(_id, {state: jobStates[i]}, "/")
+                    const { jobApp } = await updateJobAppAction(_id, { state: jobStates[i] }, "/")
                     //console.log(jobApp)
                     router.push(`/board`, { scroll: false })
                   };
