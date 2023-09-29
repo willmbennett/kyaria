@@ -76,30 +76,46 @@ export default function Profile({
         setFormView(false)
     };
 
+    const skipButton = () => {
+        setFormView(true)
+        setInputTextView(false)
+      };
+
     return (
         <>
-            {sessionUserId == userId && !profile && inputTextView && (<>
-                <div className='py-4'>
-                    <h1 className="sm:text-6xl text-4xl font-bold text-slate-900 mb-8">
-                        Welcome!
-                    </h1>
-                    <h2 className="sm:text-4xl text-2xl font-bold text-slate-900 mb-8">
-                        Time to create your profile
-                    </h2>
-                    <p>Paste text from your resume or LinkedIn here. No need to format it.</p>
-                    <p>We use AI to scan your text.</p>
-                </div>
-                <TextToJSON
-                    setValues={setValues}
-                    expectedJson={expectedJson}
-                    defaultTextInput={['development', 'preview'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '') ? defaultTextInput : ''}
-                    demoJSON={demoJSON}
-                    inputTextType='resume'
-                    setFormView={setFormView}
-                    setInputTextView={setInputTextView}
-                />
-            </>)}
-            {profile && (<ProfileActions
+            {sessionUserId == userId && !profile && inputTextView && (
+                <div className='bg-white dar:bg-neutral-200 rounded-xl shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] p-3 min-h-screen w-full flex flex-col items-center'>
+                    <div className='py-4'>
+                        <h1 className="sm:text-6xl text-4xl font-bold text-slate-900 mb-8">
+                            Welcome!
+                        </h1>
+                        <h2 className="sm:text-4xl text-2xl font-bold text-slate-900 mb-8">
+                            Time to create your profile
+                        </h2>
+                    </div>
+                    <TextToJSON
+                        setValues={setValues}
+                        expectedJson={expectedJson}
+                        defaultTextInput={['development', 'preview'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '') ? defaultTextInput : ''}
+                        demoJSON={demoJSON}
+                        inputTextType='resume'
+                        setFormView={setFormView}
+                        setInputTextView={setInputTextView}
+                    />
+                    <p className="mb-4 text-sm text-base text-neutral-600 dark:text-neutral-200 w-full max-w-screen">
+                        Don't have a resume? That's totally fine! Fill out this form to get started.
+                    </p>
+                    <button
+                        className="inline-block bg-dartmouth-green rounded px-6 pb-2 pt-2.5 text-xs hover:opacity-80 font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                        data-te-ripple-init
+                        data-te-ripple-color="light"
+                        type="button"
+                        onClick={skipButton}
+                        >
+                        Go to Form
+                    </button>
+                </div>)}
+            {sessionUserId == userId && profile && (<ProfileActions
                 id={profile._id}
                 formView={formView}
                 setFormView={setFormView}
