@@ -2,7 +2,7 @@ import { AppModel, AppClass } from "../models/App";
 import { JobModel } from "../models/Job";
 import { ResumeModel } from "../models/Resume";
 import connectDB from "./connect-db";
-import { stringToObjectId, castToString, ObjectIdtoString } from "./utils";
+import { stringToObjectId, castToString, ObjectIdtoString, dateToString } from "./utils";
 var transformProps = require('transform-props');
 
 interface AppFilter {
@@ -23,6 +23,7 @@ export async function getUserJobApps(filter: AppFilter) {
 
         //const jobs = await Job.find(filter).skip(skip).limit(limit).lean().exec();
         const jobApps = await AppModel.find({ userId: filter.userId })
+            .sort('-createdAt')
             .populate("job")
             .lean()
             .exec();
@@ -32,7 +33,8 @@ export async function getUserJobApps(filter: AppFilter) {
         //console.log(jobApps, results)
 
         if (jobApps) {
-            transformProps(jobApps, castToString, ['_id', "createdAt", "updatedAt", "profile", "userResume"]);
+            transformProps(jobApps, castToString, ['_id', "profile", "userResume"]);
+            transformProps(jobApps, dateToString, ["createdAt", "updatedAt"]);
             //console.log(jobApps)
             return {
                 jobApps,
@@ -49,45 +51,88 @@ export async function getUserJobApps(filter: AppFilter) {
 }
 
 export async function createJobApplication(data: any) {
-    try {
-        const { job, resume, profileId, userId, emails } = data
-        await connectDB();
-        //console.log("Create Resume")
-        const newResume = await ResumeModel.create(resume);
-        //console.log(newResume)
-        //console.log("Create Job")
-        const newJob = await JobModel.create(job);
-        //console.log(newJob)
-        //console.log("Create App")
-        const profileObjectId = stringToObjectId(profileId)
-        const userApp = {
-            job: newJob._id,
-            profile: profileObjectId,
-            userCoverLetter: "",
-            userId: userId,
-            emails: emails,
-            userResume: newResume._id,
-            userStory: ""
-        }
-        //console.log(userApp)
-        const newApp = new AppModel(userApp);
-        //console.log(newApp);
-        const jobApp = await newApp.save();
+    const { job, resume, profileId, userId, emails } = data
+    // If the job is already created
+    if (job._id) {
+        try {
 
-        //console.log('Created JobApp');
-        //console.log(jobApp);
-        if (jobApp) {
-            const jobAppId = jobApp._id.toString()
-            //console.log(jobAppId);
-            return {
-                jobApp: jobAppId
-            };
-        } else {
-            return { error: "Job not found" };
+            await connectDB();
+            //console.log("Create Resume")
+            const newResume = await ResumeModel.create(resume);
+            //console.log(newResume)
+            //console.log("Create App")
+            const profileObjectId = stringToObjectId(profileId)
+            const userApp = {
+                job: job._id,
+                profile: profileObjectId,
+                userCoverLetter: "",
+                userId: userId,
+                emails: emails,
+                userResume: newResume._id,
+                userStory: ""
+            }
+            //console.log(userApp)
+            const newApp = new AppModel(userApp);
+            //console.log(newApp);
+            const jobApp = await newApp.save();
+
+            //console.log('Created JobApp');
+            //console.log(jobApp);
+            if (jobApp) {
+                const jobAppId = jobApp._id.toString()
+                //console.log(jobAppId);
+                return {
+                    jobApp: jobAppId
+                };
+            } else {
+                return { error: "Job not found" };
+            }
+        } catch (error) {
+            console.error("Error in createJobApp:", error);
+            return { error };
         }
-    } catch (error) {
-        console.error("Error in createJobApp:", error);
-        return { error };
+    } else {
+        // If the job is not created
+        try {
+
+            await connectDB();
+            //console.log("Create Resume")
+            const newResume = await ResumeModel.create(resume);
+            //console.log(newResume)
+            //console.log("Create Job")
+            const newJob = await JobModel.create(job);
+            //console.log(newJob)
+            //console.log("Create App")
+            const profileObjectId = stringToObjectId(profileId)
+            const userApp = {
+                job: newJob._id,
+                profile: profileObjectId,
+                userCoverLetter: "",
+                userId: userId,
+                emails: emails,
+                userResume: newResume._id,
+                userStory: ""
+            }
+            //onsole.log(userApp)
+            const newApp = new AppModel(userApp);
+            //console.log(newApp);
+            const jobApp = await newApp.save();
+
+            //console.log('Created JobApp');
+            //console.log(jobApp);
+            if (jobApp) {
+                const jobAppId = jobApp._id.toString()
+                //console.log(jobAppId);
+                return {
+                    jobApp: jobAppId
+                };
+            } else {
+                return { error: "Job not found" };
+            }
+        } catch (error) {
+            console.error("Error in createJobApp:", error);
+            return { error };
+        }
     }
 }
 
@@ -106,7 +151,8 @@ export async function getJobApp(id: string) {
             .exec();
 
         if (jobApp) {
-            transformProps(jobApp, castToString, ['_id', "createdAt", "updatedAt"]);
+            transformProps(jobApp, castToString, '_id');
+            transformProps(jobApp, dateToString, ["createdAt", "updatedAt"]);
             //console.log(jobApp)
             return {
                 jobApp,
@@ -129,16 +175,19 @@ export async function updateJobApp(id: string, data: any) {
 
         //console.log(`data to update job with: ${JSON.stringify(data)}`)
 
-        const job = await AppModel.findByIdAndUpdate(
+        const jobApp = await AppModel.findByIdAndUpdate(
             parsedId,
             data
         )
             .lean()
             .exec();
 
-        if (job) {
+        if (jobApp) {
+            transformProps(jobApp, ObjectIdtoString, ['_id', 'profile', 'job', 'userResume']);
+            transformProps(jobApp, dateToString, ["createdAt", "updatedAt"]);
+            //console.log(jobApp)
             return {
-                job,
+                jobApp,
             };
         } else {
             return { error: "Job application not found" };

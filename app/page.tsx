@@ -7,7 +7,7 @@ export default function Page() {
   return (
     <div className='w-full'>
       <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 h-screen">
-        <h1 className="sm:text-6xl text-4xl font-bold text-slate-900 p-5 text-center">
+        <h1 className="sm:text-6xl text-4xl font-bold text-slate-900 p-5 text-center dark:text-white">
           Launch your career with AI
         </h1>
         {!session && (

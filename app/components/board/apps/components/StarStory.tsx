@@ -28,7 +28,20 @@ export default function StarStory({
 }) {
     const [active, setActive] = useState(false);
     const [showOptions, setShowOptions] = useState(false);
-    const themes = ['None', 'Leadership', 'Conflict Resolution', 'Collaboration']
+    const themes = [
+        'None',
+        'Leadership',
+        'Conflict Resolution',
+        'Collaboration',
+        'Problem Solving',
+        'Time Management',
+        'Adaptability',
+        'Communication',
+        'Customer Service',
+        'Initiative',
+        'Teamwork'
+    ];
+    
     const [selectedTheme, setSelectedTheme] = useState(themes[0]);
 
     const handleClick = () => {

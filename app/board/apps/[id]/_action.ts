@@ -19,8 +19,9 @@ export async function updateJobAppAction(
   data: any,
   path: string
 ) {
-  await updateJobApp(id, data);
+  const res = await updateJobApp(id, data);
   revalidatePath(path);
+  return res;
 }
 
 export async function deleteJobAppAction({
