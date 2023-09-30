@@ -7,7 +7,7 @@ module.exports = {
   webpack(config) {
     config.optimization.minimize = false;
     config.module.rules.push({
-      test: /\.node/,
+      test: /canvas\/build\/Release\/canvas\.node$/,
       use: 'raw-loader',
       });
     return config;

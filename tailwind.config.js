@@ -14,8 +14,10 @@ module.exports = {
     },
   },
   theme: {
-    colors: {
-      'dartmouth-green': '#00703C',
+    extend: {
+      colors: {
+        'dartmouth-green': '#00703C',
+      },
     },
   },
   plugins: [require("@tailwindcss/forms"), require("@headlessui/tailwindcss")],
