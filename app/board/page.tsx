@@ -5,12 +5,16 @@ import { getUserJobApps } from "../../lib/app-db";
 import { getProfile } from "../../lib/profile-db";
 import JobAppsList from "../components/board/apps/JobApps";
 import Await from "../jobs/await";
+import { redirect } from "next/navigation";
 
 export default async function BoarPage() {
   const session = await getServerSession(authOptions)
   const promise = getUserJobApps({ userId: session?.user?.id || '' })
   const { profile } = await getProfile(session?.user?.id || '');
 
+  if (!session) {
+    redirect('/auth/signin')
+  }
 
   return (
     <>

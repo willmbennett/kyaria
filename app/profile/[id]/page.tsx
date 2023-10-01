@@ -2,10 +2,15 @@ import Profile from '../../components/profile/Profile';
 import { getProfile } from "../../../lib/profile-db";
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../../../lib/auth';
+import { redirect } from 'next/navigation';
 
 export default async function ProfilePage({ params }: { params: { id: string } }) {
   const { profile } = await getProfile(params.id);
   const session = await getServerSession(authOptions)
+
+  if (!session) {
+    redirect('/auth/signin')
+  }
 
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen bg-gray-100 dark:bg-black">
