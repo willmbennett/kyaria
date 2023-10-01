@@ -57,7 +57,7 @@ export default function CoverLetter({
 
     return (
         <>
-            <h1 className="text-center sm:text-6xl text-4xl font-bold text-slate-900 mb-8">
+            <h1 className="text-center sm:text-6xl text-4xl font-bold mb-8">
                 Stand out with a cover letter
             </h1>
             <ChatWithGPT

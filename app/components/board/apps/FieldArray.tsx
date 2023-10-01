@@ -22,9 +22,9 @@ export default (
     return (
         <>
             {childItem.map((field, index) => (
-                <div key={field.id} className="ext-left font-bold text-2xl mb-4">
+                <div key={field.id} className="ext-left font-bold text-2xl mb-4 className='dark:text-neutral-200'">
                     <div className={BASIC_FIELD_STYLE}>
-                        <input {...register(`${name}.${index}`)} placeholder={""} />
+                        <input {...register(`${name}.${index}`)} placeholder={""} className='dark:text-black'/>
                     </div>
                 </div>
             ))}

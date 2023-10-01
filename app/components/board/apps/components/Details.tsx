@@ -17,9 +17,9 @@ export default function Detail({
     };
 
     return (
-        <div className="p-2 mb-2 bg-white rounded-xl" key={`${parentIndex} - ${childIndex}`}>
+        <div className="p-2 mb-2 dark:bg-neutral-600 dark:text-neutral-200 rounded-xl" key={`${parentIndex} - ${childIndex}`}>
             <button
-                className='inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50'
+                className='inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-neutral-600 dark:hover:bg-neutral-200 dark:text-neutral-200 dark:hover:text-neutral-600'
                 onClick={toggleActive}
             > See details you added
             <svg className="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">

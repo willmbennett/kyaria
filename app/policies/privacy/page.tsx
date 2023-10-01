@@ -20,7 +20,7 @@ export default function PrivacyPolicy() {
                 <strong>Application</strong> refers to Kyaria.ai, the software program provided by the Company.
             </li>
             <li className="my-2">
-                <strong>Company</strong> (referred to as either &quot;the Company&quot;, &quot;We&quot;, &quot;Us&quot; or &quot;Our&quot; in this Agreement) refers to Kyaria.ai.
+                <strong>Company</strong> (referred to as either &quot;the Company&quot;, &quot;We&quot;, &quot;Us&quot; or &quot;Our&quot; in this Agreement) refers to Kyaria.ai, LLC.
             </li>
             <li className="my-2">
                 <strong>Country</strong> refers to: California,  United States

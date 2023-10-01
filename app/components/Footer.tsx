@@ -77,7 +77,8 @@ export default function Footer() {
                 <div className="grid-1 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
                     <div className="">
                         <div className="mb-4 flex items-center justify-center font-semibold uppercase md:justify-start">
-                            <img src='/icon-hor.svg' alt='Horizontal Login' width='200' />
+                            {/*<img src='/icon-hor.svg' alt='Horizontal Login' width='200' />*/}
+                            KYARIA.AI
                         </div>
                         <p>
                             Our mission is to make the job search effortless through the power of AI.
@@ -195,7 +196,7 @@ export default function Footer() {
                     className="font-semibold text-neutral-600 dark:text-neutral-400"
                     href="https://kyaria.ai"
                 >
-                    KYARIA.AI
+                    KYARIA.AI, LLC
                 </a  >
             </div>
         </footer>

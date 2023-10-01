@@ -8,7 +8,7 @@ export default async function ProfilePage({ params }: { params: { id: string } }
   const session = await getServerSession(authOptions)
 
   return (
-    <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen bg-gray-100">
+    <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen bg-gray-100 dark:bg-black">
       <div className="flex flex-1 w-full flex-col items-center text-center lg:px-4">
         <Profile
             userId={params.id}
