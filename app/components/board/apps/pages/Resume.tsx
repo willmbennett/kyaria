@@ -1,6 +1,7 @@
 import ChatWithGPT from '../../ChatWithGPT';
 import Responsibility from '../components/Responsibility';
 import { updateResumeAction } from '../../../../board/apps/[id]/_action';
+import { removeDetailSections } from '../../../../../lib/utils';
 
 export default function Resume({
     application
@@ -8,20 +9,18 @@ export default function Resume({
     application: any
 }) {
     const userResume = application.userResume;
-    const profile = application.profile;
     const job = application.job;
+    const profileNoDetails = removeDetailSections(application.profile)
 
     const message = [
         {
             "role": "system",
-            "content":
-                `You are an advanced career coach specialized in writing resume professional resume summaries. Limit the output to two sentances.
-                `
+            "content":"You are an advanced career coach specialized in writing resume professional resume summaries. Limit the output to two sentances."
         },
         {
             "role": "user",
             "content":
-                `I'm applying for this job: ${JSON.stringify(job)}. ${userResume.summary == ''? "Write me a resume summary": `Help me improve this resume summary ${userResume.summary}`} based on details from my profile: ${profile}`
+                `I'm applying for this job: ${JSON.stringify(job)}. ${userResume.summary == ''? "Write me a resume summary": `Help me improve this resume summary ${userResume.summary}`} based on details from my profile: ${profileNoDetails}`
         }
     ];
 

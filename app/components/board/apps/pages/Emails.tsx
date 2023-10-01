@@ -1,5 +1,6 @@
 "use client"
 import { useState } from 'react';
+import { removeDetailSections } from '../../../../../lib/utils';
 import { updateJobAppAction } from '../../../../board/apps/[id]/_action';
 import ChatWithGPT from '../../ChatWithGPT';
 
@@ -15,6 +16,7 @@ export default function Experience({
     const [showOptions, setShowOptions] = useState(false);
     const [selectedEmail, setSelectedEmail] = useState(emails[0]);
     const [emailIndex, setEmailIndex] = useState(0);
+    const profileNoDetails = removeDetailSections(jobApp.profile)
 
     const optionsClick = () => {
         setShowOptions(!showOptions);
@@ -86,7 +88,7 @@ export default function Experience({
                             {
                                 "role": "user",
                                 "content": `Please write me a ${selectedEmail.type} email for this job post: ${JSON.stringify(jobApp.job)}.
-                                Include information from my profile ${JSON.stringify(jobApp.profile)}
+                                Include information from my profile ${JSON.stringify(profileNoDetails)}
                                 Keep the emails concise, 3-4 paragraphs maximum.
                             `
                             }
