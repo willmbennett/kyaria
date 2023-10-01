@@ -84,7 +84,7 @@ export default function Profile({
     return (
         <>
             {sessionUserId == userId && !profile && inputTextView && (
-                <div className='bg-white dar:bg-neutral-200 rounded-xl shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] p-3 min-h-screen w-full flex flex-col items-center'>
+                <div className='bg-white dark:bg-neutral-600 rounded-xl shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] p-3 min-h-screen w-full flex flex-col items-center'>
                     <div className='py-4'>
                         <h1 className="sm:text-6xl text-4xl font-bold text-slate-900 mb-8">
                             Welcome!
@@ -122,7 +122,7 @@ export default function Profile({
             />)}
             {profile && !formView && (<UserProfile userProfile={profile} />)}
             {formView && (
-                <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-3xl">
+                <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-3xl dark:bg-neutral-600">
                     <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
                         Create your profile
                     </h1>

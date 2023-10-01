@@ -23,12 +23,13 @@ export default function NavMenu() {
   const pathname = usePathname();
   return (
     <>
-      <nav className={`${active ? '' : 'shadow-md'}  p-3 flex items-center flex-wrap bg-white sticky top-0 z-50 overflow-visible dark:bg-neutral-600`}>
+      <nav className={`${active ? '' : 'shadow-md'}  p-3 flex items-center flex-wrap bg-white sticky top-0 z-50 overflow-visible dark:bg-neutral-600 dark:text-neutral-200`}>
         <button onClick={handleLinkClick}>
           <Link href='/'>
             <span className='inline-flex items-center p-2 mr-4 '>
-              <span className='text-xl text-gray-600 font-bold uppercase tracking-wide'>
-                <img src='/icon-hor.svg' alt='Horizontal Login' width='100' />
+              <span className='text-xl font-bold uppercase tracking-wide'>
+                {/*<img src='/icon-hor.svg' alt='Horizontal Login' width='100' />*/}
+                KYARIA.AI
               </span>
             </span>
           </Link>
@@ -38,7 +39,7 @@ export default function NavMenu() {
           onClick={handleClick}
         >
           <svg
-            className='w-6 h-6'
+            className='w-6 h-6 dark:bg-neutral-600 dark:text-neutral-200'
             fill='none'
             stroke='currentColor'
             viewBox='0 0 24 24'
@@ -59,13 +60,14 @@ export default function NavMenu() {
 
           <div className='lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full items-center items-start  flex flex-col lg:h-auto'>
             {session?.user?.id && (<>
-              <button onClick={handleLinkClick} className="mx-2">
+              {session?.user?.email == 'wbennett711@gmail.com' && (<button onClick={handleLinkClick} className="mx-2">
                 <Link href='/jobs'>
                   <span className={pathname === '/jobs' ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
-                    JOBS
+                    JOB POSTS
                   </span>
                 </Link>
               </button>
+              )}
               <button onClick={handleLinkClick} className="mx-2">
                 <Link href='/board'>
                   <span className={pathname === '/board' ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
@@ -76,12 +78,13 @@ export default function NavMenu() {
               <button onClick={handleLinkClick} className="mx-2">
                 <Link href={`/profile/${session?.user?.id}`}>
                   <span className={pathname === `/profile/${session?.user?.id}` ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
-                    {session.user?.image && (
+                    {/*{session.user?.image && (
                       <img className="rounded-full w-10" src={session.user?.image} alt="Profile Image" />
                     )}
                     {!session.user?.image && session.user?.name && (
                       <span className="text-slate-500 items-center justify-center">{session?.user?.name}</span>
-                    )}
+                    )}*/}
+                    PROFILE
                   </span>
                 </Link>
               </button>

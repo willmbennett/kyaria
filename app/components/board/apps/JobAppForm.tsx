@@ -5,7 +5,7 @@ import FieldArray from './FieldArray';
 import { createJobApplicationAction } from '../../../board/apps/[id]/_action';
 import { useRouter } from 'next/navigation'
 
-const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'
+const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full dark:text-neutral-200'
 
 export default function NewJobAppForm({
     defaultValue,
@@ -56,39 +56,39 @@ export default function NewJobAppForm({
             <h2 className="text-left font-bold text-2xl py-4 mb-4">Details</h2>
             <div className={BASIC_FIELD_STYLE}>
                 <p>Job Title</p>
-                <input {...register('jobTitle')} placeholder="Job Title" />
+                <input {...register('jobTitle')} placeholder="Job Title" className='dark:text-black'/>
             </div>
             <div className={BASIC_FIELD_STYLE}>
                 <p>Link</p>
-                <input {...register('link')} placeholder="https://www.examplejob.com/awesomejob" />
+                <input {...register('link')} placeholder="https://www.examplejob.com/awesomejob" className='dark:text-black'/>
             </div>
             <div className={BASIC_FIELD_STYLE}>
                 <p>Company</p>
-                <input {...register('company')} placeholder="Company" />
+                <input {...register('company')} placeholder="Company" className='dark:text-black'/>
             </div>
             <div className={BASIC_FIELD_STYLE}>
                 <p>Location</p>
-                <input {...register('location')} placeholder="Location" />
+                <input {...register('location')} placeholder="Location" className='dark:text-black'/>
             </div>
             <div className={BASIC_FIELD_STYLE}>
                 <p>Employment Type</p>
-                <input {...register('employmentType')} placeholder="Employment Type" />
+                <input {...register('employmentType')} placeholder="Employment Type" className='dark:text-black'/>
             </div>
             <div className={BASIC_FIELD_STYLE}>
                 <p>Salary Range</p>
-                <input {...register('salaryRange')} placeholder="Salary Range" />
+                <input {...register('salaryRange')} placeholder="Salary Range" className='dark:text-black'/>
             </div>
             <div className={BASIC_FIELD_STYLE}>
                 <p>Remote</p>
-                <input {...register('remote')} placeholder="Remote" />
+                <input {...register('remote')} placeholder="Remote" className='dark:text-black'/>
             </div>
             <div className={BASIC_FIELD_STYLE}>
                 <p>About the Company</p>
-                <textarea {...register('aboutCompany')} placeholder="About the company" rows={5} cols={50} />
+                <textarea {...register('aboutCompany')} placeholder="About the company" rows={5} cols={50} className='dark:text-black'/>
             </div>
             <div className={BASIC_FIELD_STYLE}>
                 <p>Job Description</p>
-                <textarea {...register('jobDescription')} placeholder="Job Description" rows={5} cols={50} />
+                <textarea {...register('jobDescription')} placeholder="Job Description" rows={5} cols={50} className='dark:text-black'/>
             </div>
             <h2 className="text-left font-bold text-2xl py-4 mb-4">Qualifications</h2>
             <FieldArray

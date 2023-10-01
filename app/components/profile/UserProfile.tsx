@@ -9,38 +9,38 @@ const UserProfile: React.FC<ProfileProps> = ({ userProfile }) => {
 
   return (
     <>
-      <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-3xl border-l-4 border-dartmouth-green">
-          <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
+      <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-3xl border-l-4 border-dartmouth-green dark:bg-neutral-600 dark:text-neutral-200">
+          <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8 dark:text-neutral-200">
             {userProfile.name}
           </h1>
         {userProfile.title && (
           <p className="text-left font-medium text-lg mb-4">
-            <strong className="text-dartmouth-green">Title:</strong> {userProfile.title}
+            <strong className="text-dartmouth-green dark:text-neutral-200">Title:</strong> {userProfile.title}
           </p>
         )}
         {userProfile.email && (
           <p className="text-left font-medium text-lg mb-4">
-            <strong className="text-dartmouth-green">Email:</strong> {userProfile.email}
+            <strong className="text-dartmouth-green dark:text-neutral-200">Email:</strong> {userProfile.email}
           </p>
         )}
         {userProfile.phone && (
           <p className="text-left font-medium text-lg mb-4">
-            <strong className="text-dartmouth-green">Phone:</strong> {userProfile.phone}
+            <strong className="text-dartmouth-green dark:text-neutral-200">Phone:</strong> {userProfile.phone}
           </p>
         )}
         {userProfile.location && (
           <p className="text-left font-medium text-lg mb-4">
-            <strong className="text-dartmouth-green">Location:</strong> {userProfile.location}
+            <strong className="text-dartmouth-green dark:text-neutral-200">Location:</strong> {userProfile.location}
           </p>
         )}
         {userProfile.social_links?.LinkedIn && (
           <p className="text-left font-medium text-lg mb-4">
-            <a href={userProfile.social_links['LinkedIn']} target="_blank" rel="noopener noreferrer" className="text-dartmouth-green">LinkedIn</a>
+            <a href={userProfile.social_links['LinkedIn']} target="_blank" rel="noopener noreferrer" className="text-dartmouth-green dark:text-neutral-200">LinkedIn</a>
           </p>
         )}
         {userProfile.social_links?.Github && (
           <p className="text-left font-medium text-lg mb-4">
-            <a href={userProfile.social_links['Github']} target="_blank" rel="noopener noreferrer" className="text-dartmouth-green">Github</a>
+            <a href={userProfile.social_links['Github']} target="_blank" rel="noopener noreferrer" className="text-dartmouth-green dark:text-neutral-200">Github</a>
           </p>
         )}
         {userProfile.summary && (<>

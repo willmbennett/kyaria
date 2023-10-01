@@ -60,7 +60,7 @@ export default function JobDescription({
                                     data-te-ripple-init
                                     data-te-ripple-color="light"
                                 >
-                                    Apply to Job
+                                    View Original Post
                                 </button>
                             </a>
                         </p>

@@ -32,9 +32,9 @@ export default function AppItem(
   };
 
   return (
-    <div className={`text-left border-2 dark:border-neutral-500 rounded-xl block ${app.active? "bg-white dark:bg-neutral-700": "bg-red-100 dark:bg-red-700"} shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]`}>
+    <div className={`text-left border-2 dark:border-neutral-500 dark:text-neutral-200 rounded-xl block ${app.active? "bg-white dark:bg-neutral-700": "bg-red-100 dark:bg-neutral-700"} shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]`}>
       <div>
-        <div className="flex p-2 justify-between w-full dark:text-neutral-50">
+        <div className="flex p-2 justify-between w-full">
           <Link href={`/board/apps/${_id}`} target="_blank">
             <div className="w-full py-1 ">
               <h5 className="text-lg font-medium leading-tight ">
@@ -71,7 +71,7 @@ export default function AppItem(
                 style={{ backgroundColor: '#00703C' }}
                 data-te-ripple-init
                 data-te-ripple-color="light">
-                View Job
+                View packet
               </button>
             </div>
           </div>
@@ -82,7 +82,7 @@ export default function AppItem(
           <button
             onClick={optionsClick}
             type="button"
-            className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" id="menu-button" aria-expanded="true" aria-haspopup="true">
+            className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white dark:bg-neutral-700 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" id="menu-button" aria-expanded="true" aria-haspopup="true">
             {app.state}
             <svg className="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />

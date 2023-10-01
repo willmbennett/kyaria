@@ -12,7 +12,7 @@ export default function JobLayout({
 
   return (
     <section>
-      <div className="flex max-w-5xl mx-auto flex-col py-2 min-h-screen bg-gray-100">
+      <div className="flex max-w-5xl mx-auto flex-col py-2 min-h-screen bg-gray-100 dark:bg-neutral-600 dark:text-neutral-200">
         <div className="lg:px-4 lg:mt-6">
           <div className="flex h-auto min-h-screen w-full lg:px-4 lg:mt-6">
             <div className="lg:w-1/4 hidden lg:flex lg:flex-col">
@@ -20,7 +20,7 @@ export default function JobLayout({
                 id={id}
               />
             </div>
-            <div className="lg:w-3/4 flex flex-col bg-white m-3 p-3 rounded-lg shadow-md">
+            <div className="lg:w-3/4 flex flex-col bg-white m-3 p-3 rounded-lg shadow-md dark:bg-black dark:text-neutral-200">
               {children}
             </div>
           </div>

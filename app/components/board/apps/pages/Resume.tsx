@@ -27,7 +27,7 @@ export default function Resume({
 
     return (
         <>
-            <h1 className="text-center sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
+            <h1 className="text-center sm:text-6xl text-4xl max-w-[708px] font-bold mb-8">
                 {userResume.name}
             </h1>
             <div>

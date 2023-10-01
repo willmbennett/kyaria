@@ -6,7 +6,7 @@ export default function Page() {
 
   return (
     <div className='w-full'>
-      <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 h-screen">
+      <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2">
         <h1 className="sm:text-6xl text-4xl font-bold text-slate-900 p-5 text-center dark:text-white">
           Launch your career with AI
         </h1>
@@ -21,16 +21,16 @@ export default function Page() {
       </div>
       <div className="flex flex-col md:flex-row p-5">
         <div className="lg:w-1/3 lg:p-3 py-2">
-          <a href={session?.user?.id ? `/profile/${session?.user?.id}` : "/"}>
+          <a href={session?.user?.id ? `/profile/${session?.user?.id}` : "/board"}>
             <div
               className="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
               <div
-                className="relative overflow-hidden bg-cover bg-no-repeat"
+                className="relative overflow-hidden bg-cover bg-no-repeat md:h-80"
                 data-te-ripple-init
                 data-te-ripple-color="light">
                 <img
                   className="rounded-t-lg"
-                  src="/create-profile.jpg"
+                  src="/create-profile.png"
                   alt="" />
 
                 <div
@@ -43,11 +43,11 @@ export default function Page() {
                   1. Create a profile
                 </h5>
                 <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200">
-                  Go to the Profile tab and copy  paste all your resume content into the text box. Don’t worry about formatting. After uploading, make sure the content is accurate, and add any additional details. This info will be used across all Jobs to populate interview prep materials.
+                  Go to the Profile tab and upload your resume. After uploading, make sure the content is accurate, and add any additional details. The details will be used to populate interview prep materials and write STAR stories for behaviorals so add them if you can.
                 </p>
                 <button
                   type="button"
-                  className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal dark:text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                  className="inline-block rounded bg-dartmouth-green text-white px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal dark:text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
                   data-te-ripple-init
                   data-te-ripple-color="light">
                   Create Profile
@@ -57,16 +57,16 @@ export default function Page() {
           </a>
         </div>
         <div className="lg:w-1/3 lg:p-3 py-2">
-          <a href={session?.user?.id ? "/board" : "/jobs"}>
+          <a href="/board">
             <div
               className="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
               <div
-                className="relative overflow-hidden bg-cover bg-no-repeat"
+                className="relative overflow-hidden bg-cover bg-no-repeat  md:h-80"
                 data-te-ripple-init
                 data-te-ripple-color="light">
                 <img
                   className="rounded-t-lg"
-                  src="/add-job.jpg"
+                  src="/job-board.png"
                   alt="" />
                 <div
                   className="absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden bg-[hsla(0,0%,98%,0.15)] bg-fixed opacity-0 transition duration-300 ease-in-out hover:opacity-100"></div>
@@ -78,11 +78,11 @@ export default function Page() {
                   2. Add a job post
                 </h5>
                 <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200">
-                Next, we'll create tailored interview prep material for you. Find an online job posting page (for example one on Linkedin), ctrl a + ctrl c the job posting page, and paste the contents into the text box in the jobs tab in Kyaria. We'll scan your job post using AI and format it perfectly.
+                Go to your application board and click new job at the top. Find an online job posting page (for example one on Linkedin), copy the job post text, and paste the contents into the text box. We'll scan your job post using AI and format it perfectly.
                 </p>
                 <button
                   type="button"
-                  className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal dark:text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                  className="inline-block rounded bg-dartmouth-green text-white px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal dark:text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
                   data-te-ripple-init
                   data-te-ripple-color="light">
                   Add a job
@@ -92,16 +92,16 @@ export default function Page() {
           </a>
         </div>
         <div className="lg:w-1/3 lg:p-3 py-2">
-          <a href={session?.user?.id ? "/board" : "/jobs"}>
+          <a href="/board">
             <div
               className="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
               <div
-                className="relative overflow-hidden bg-cover bg-no-repeat"
+                className="relative overflow-hidden bg-cover bg-no-repeat  md:h-80"
                 data-te-ripple-init
                 data-te-ripple-color="light">
                 <img
                   className="rounded-t-lg"
-                  src="/interview-prep.jpg"
+                  src="/job-application.png"
                   alt="" />
                 <div
                   className="absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden bg-[hsla(0,0%,98%,0.15)] bg-fixed opacity-0 transition duration-300 ease-in-out hover:opacity-100"></div>
@@ -112,14 +112,14 @@ export default function Page() {
                   3. Get your results
                 </h5>
                 <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200">
-                  Navigate to the Jobs tab, and click on the job you want to see the interview prep materials for. On the left hand side of the screen, you'll find a menu with a tailored resume, cover letters, networking emails, “tell me about yourself” story, and STAR format behavioral interview answers.
+                  Once your application packet loads, on the left hand side of the screen, you'll find a menu with a tailored resume, cover letters, networking emails, “tell me about yourself” story, and STAR format behavioral interview answers.
                 </p>
                 <button
                   type="button"
-                  className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal dark:text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                  className="inline-block rounded text-white bg-dartmouth-green px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal dark:text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
                   data-te-ripple-init
                   data-te-ripple-color="light">
-                  Profit
+                  Prepare
                 </button>
               </div>
             </div>

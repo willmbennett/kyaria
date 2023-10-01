@@ -37,10 +37,10 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Script
+        {/*<Script
           id="ze-snippet"
           src="https://static.zdassets.com/ekr/snippet.js?key=135d1136-b2c1-4d54-8610-58a0b79632da"
-        />
+  />*/}
         <SessionProvider session={session}>
           <NavMenu />
           <div className='bg:white w-full dark:bg-black'>

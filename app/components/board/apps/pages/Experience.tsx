@@ -9,11 +9,11 @@ export default function Experience({
 
     return (
         <>
-            <h1 className="text-center sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
+            <h1 className="text-center sm:text-6xl text-4xl max-w-[708px] font-bold mb-8">
                 Let's talk experience
             </h1>
             <p>Adding details to your profile will help us write your better star stories.</p>
-            <div className="bg-white p-6 w-full">
+            <div className="p-6 w-full">
                 <h2 className="text-left font-bold text-2xl py-4 mb-4">Professional Experience</h2>
                 {jobApp.userResume.professional_experience.map((exp: any, index: number) => (
                     <div key={index} className="mb-8">
@@ -27,7 +27,7 @@ export default function Experience({
                                         <div className="py-2">
                                             <h3 className="text-left font-bold text-lg mb-2">{resp.content}</h3>
                                         </div>
-                                        <div className='rounded-lg w-full p-1 bg-gray-50'>
+                                        <div className='rounded-lg w-full p-1'>
                                             {resp.detail && (
                                                 <Detail
                                                     detail={resp.detail}
@@ -53,7 +53,7 @@ export default function Experience({
                         </ul>
                     </div>
                 ))}
-                <div className="bg-white p-6 w-full">
+                <div className="p-6 w-full">
                     <h2 className="text-left font-bold text-2xl py-4 mb-4">Education</h2>
                     {jobApp.userResume.education.map((edu: any, index: number) => (
                         <div key={index} className="mb-8">
