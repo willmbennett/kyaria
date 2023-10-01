@@ -1,5 +1,6 @@
 'use client'
 
+import { removeDetailSections } from '../../../../../lib/utils';
 import { updateJobAppAction } from '../../../../board/apps/[id]/_action';
 import ChatWithGPT from '../../ChatWithGPT';
 
@@ -8,6 +9,7 @@ export default function Story({
 }: {
     jobApp: any
 }) {
+    const profileNoDetails = removeDetailSections(jobApp.profile)
 
     const message = [
         {
@@ -47,9 +49,9 @@ export default function Story({
             "content":
                 `Based on the following details, help me craft a compelling, narrative-style story:
                     - Job Post: ${JSON.stringify(jobApp.job)} 
-                    - My professional experience: ${JSON.stringify(jobApp.profile.professional_experience)} 
-                    - My skills: ${JSON.stringify(jobApp.profile.skills)} 
-                    - My education: ${JSON.stringify(jobApp.profile.education)}
+                    - My professional experience: ${JSON.stringify(profileNoDetails.professional_experience)} 
+                    - My skills: ${JSON.stringify(profileNoDetails.skills)} 
+                    - My education: ${JSON.stringify(profileNoDetails.education)}
                     `
         }
     ];

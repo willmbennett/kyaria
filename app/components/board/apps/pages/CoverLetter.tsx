@@ -2,6 +2,7 @@
 
 import ChatWithGPT from '../../ChatWithGPT';
 import { updateJobAppAction } from '../../../../board/apps/[id]/_action';
+import { removeDetailSections } from '../../../../../lib/utils';
 
 export default function CoverLetter({
     jobApp,
@@ -9,11 +10,12 @@ export default function CoverLetter({
     jobApp: any
 }) {
 
+    const profileNoDetails = removeDetailSections(jobApp.profile)
     const message = [
         {
             "role": "system",
             "content": `You are a professional cover letter writer specialized in creating personalized, compelling cover letters tailored to specific job descriptions. The letter should showcase the individual's experience, skills, and education, and should be organized into an introductory paragraph, a body, and a closing.
-            # [Your Name]
+            [Your Name]
             [Your Address]  
             Email: [Your Email]  
             Phone: [Your Phone Number]  
@@ -45,10 +47,9 @@ export default function CoverLetter({
             "role": "user",
             "content": `Please write me a tailored cover letter for the following job description:
             - Job description: ${JSON.stringify(jobApp.job)}
-            Include information from my profile ${JSON.stringify(jobApp.profile)}
+            Include information from my profile ${JSON.stringify(profileNoDetails)}
             
             Structure the cover letter into an introduction, body, and conclusion.
-            Return the results using markdown
             `
         }
     ];

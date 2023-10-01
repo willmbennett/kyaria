@@ -90,22 +90,22 @@ export default function Footer() {
                             Products
                         </h6>
                         <p className="mb-4">
-                            <a href="/jobs" className="text-neutral-600 dark:text-neutral-200">
+                            <a href="/board" className="text-neutral-600 dark:text-neutral-200">
                                 Interview Prep
                             </a>
                         </p>
                         <p className="mb-4">
-                            <a href="/jobs" className="text-neutral-600 dark:text-neutral-200">
+                            <a href="/board" className="text-neutral-600 dark:text-neutral-200">
                                 Resume Writing
                             </a>
                         </p>
                         <p className="mb-4">
-                            <a href="/jobs" className="text-neutral-600 dark:text-neutral-200">
+                            <a href="/board" className="text-neutral-600 dark:text-neutral-200">
                                 Cover Letter Writing
                             </a>
                         </p>
                         <p>
-                            <a href="#!" className="text-neutral-600 dark:text-neutral-200">
+                            <a href="/" className="text-neutral-600 dark:text-neutral-200">
                                 Virtual Career Coach (coming soon)
                             </a>
                         </p>
