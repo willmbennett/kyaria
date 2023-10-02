@@ -1,6 +1,11 @@
 import clsx from 'clsx'
 
-export function Container({ className, ...props }) {
+interface ContainerProps {
+  className?: string; // Make this optional
+  [x: string]: any;   // For other props
+}
+
+export function Container({ className, ...props }: ContainerProps) {
   return (
     <div
       className={clsx(
