@@ -26,7 +26,7 @@ export default function JobMenu({ id }: { id: string }) {
   };
 
   return (
-    <div className="bg-white shadow-inner lg:shadow-md sticky bottom-0 w-full lg:top-60 z-50 bg-gray-200 p-4 lg:rounded-lg h-auto">
+    <div className="bg-white border sticky bottom-0 w-full lg:top-60 z-50 bg-gray-200 p-4 lg:rounded-lg h-auto">
       <div className={`${active ? ' ' : 'hidden'}  w-full lg:inline `}>
         <div className=" w-full items-center items-start  flex flex-col lg:h-auto py-2">
           {pageList.map((l: any, i: number) => {

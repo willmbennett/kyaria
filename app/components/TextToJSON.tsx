@@ -7,6 +7,7 @@ import "react-pdf/dist/esm/Page/TextLayer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css"
 
 import type { PDFDocumentProxy } from 'pdfjs-dist';
+import { Button } from './Button';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
     'pdfjs-dist/build/pdf.worker.min.js',
@@ -96,7 +97,7 @@ export default function TextToJSON(
                 "content": `Extract the ${inputTextType} details from this ${resumeUploadText} text and return it in json format following this format: ${JSON.stringify(expectedJson)}`
             }
         ]
-        console.log(message)
+        //console.log(message)
         chatGPT(message)
     };
 
@@ -108,13 +109,27 @@ export default function TextToJSON(
         const { files } = event.target;
 
         if (files && files[0]) {
-            setFile(files[0] || null);
+            const file = files[0];
+            const fileType = file.type;
+
+            if (fileType !== "application/pdf") {
+                alert("Please upload a valid PDF file.");
+                return;
+            }
+
+            setFile(file);
         }
     }
 
     function onDocumentLoadSuccess({ numPages: nextNumPages }: PDFDocumentProxy): void {
+        if (nextNumPages > 1) {
+            alert('Please upload a PDF with only one page.');
+            setFile(null);  // Reset the uploaded file
+            return;
+        }
         setNumPages(nextNumPages);
     }
+
     function handleTextContent(textContent: { items: any[]; }) {
         const strings = textContent.items.map(item => item.str);
         const fullText = strings.join(' ');
@@ -128,17 +143,18 @@ export default function TextToJSON(
                 {!loading && !finishedLoading && (<>
                     <div className='w-full flex flex-col text-center'>
                         <p className="mb-4 text-sm text-base text-neutral-600 w-full max-w-screen">
-                            Upload your resume here. We use AI to scan your text.
+                            Upload your resume here.
                         </p>
                     </div>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="w-full">
-                            <label className="bg-white text-dartmouth-green py-2 px-4 cursor-pointer hover:bg-green-100">
+                            <label className="bg-white py-2 px-4 cursor-pointer hover:bg-gray-secondary-100">
                                 Upload File
                                 <input
                                     className="opacity-0"
                                     onChange={onFileChange}
                                     type="file"
+                                    accept=".pdf"
                                 />
                             </label>
                         </div>
@@ -148,12 +164,14 @@ export default function TextToJSON(
                             ))}
                         </Document>
                         <div className={BASIC_FIELD_STYLE}>
-                            <button
-                                className="inline-block bg-dartmouth-green rounded px-6 pb-2 pt-2.5 text-xs hover:opacity-80 font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
-                                data-te-ripple-init
-                                data-te-ripple-color="light"
-                                disabled={loading}
-                                type="submit">Submit</button>
+                            <Button
+                                variant="solid"
+                                size="md"
+                                type="submit"
+                                className="mt-10 sm:mt-12"
+                            >
+                                Submit
+                            </Button>
                         </div>
                         {loading && (
                             <div>

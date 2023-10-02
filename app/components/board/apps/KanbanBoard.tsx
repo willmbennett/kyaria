@@ -12,7 +12,7 @@ export default function Kanban(
 
     return (
         <>
-            <div className="box-border w-full mt-4 overflow-scroll rounded-xl bg-slate-100">
+            <div className="box-border w-full mt-4 overflow-scroll rounded-xl">
                 <div className="box-border inline-flex min-h-screen overflow-scroll p-4">
                     {jobStates.map((state: string) => {
                         const activeApps = jobApps.filter((app: any) => app.state == state && app.active);
@@ -23,18 +23,18 @@ export default function Kanban(
                             setShowInactive(!showInactive);
                         };
                         return (
-                            <div className="w-80 rounded-xl bg-white mx-2 text-center items-center p-2" key={state}>
+                            <div className="w-80 rounded-xl bg-white mx-2 text-center items-center p-2 border" key={state}>
                                 <h5 className="text-xl font-medium leading-tight py-2">
                                     {state}
                                 </h5>
                                 <div className="flex flex-row w-full">
                                     <div className="text-center w-1/2">
-                                        <h5 className="text-xl font-medium leading-tight py-2 text-green-300">
+                                        <h5 className="text-xl font-medium leading-tight py-2">
                                             Active: {activeApps.length}
                                         </h5>
                                     </div>
                                     <div className="text-center w-1/2 ">
-                                        <h5 className="text-xl font-medium leading-tight py-2 text-red-300">
+                                        <h5 className="text-xl font-medium leading-tight py-2">
                                             Inactive: {inActiveApps.length}
                                         </h5>
                                     </div>

@@ -6,6 +6,7 @@ import NewJobAppForm from "./JobAppForm";
 //import { ObjectId } from "mongodb";
 import AppItem from "./AppItem";
 import Kanban from "./KanbanBoard";
+import { Button } from "../../Button";
 
 export default function JobAppsList(
   {
@@ -35,14 +36,15 @@ export default function JobAppsList(
           <h1 className="sm:text-lg text-xl font-bold text-slate-900">
             Your Job Board
           </h1>
-          <button
-            className="inline-block rounded px-6 pb-2 pt-2.5 text-xs hover:opacity-80 font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] "
-            style={{ backgroundColor: '#00703C' }}
-            data-te-ripple-init
-            data-te-ripple-color="light"
-            onClick={handleCreateJobClick}>
+          <Button
+            variant="solid"
+            size="md"
+            type="button"
+            onClick={handleCreateJobClick}
+            className="mt-3"
+          >
             New Job
-          </button>
+          </Button>
         </div>
         <Kanban
           jobApps={jobApps}
@@ -51,7 +53,7 @@ export default function JobAppsList(
       </>)}
       {creatingJobApp && (
         <div className="w-full items-center text-center justify-center flex flex-col">
-          <h1 className="sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900 mt-10">
+          <h1 className="sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900 my-10">
             Create a New Job
           </h1>
 
@@ -59,7 +61,7 @@ export default function JobAppsList(
             {inputTextView && (
               <>
                 <p>Paste text from the job posting here. No need to format it.</p>
-                <p>We use AI to scan your text.</p>
+                <p>We'll scan it and fill out a form for you.</p>
                 <br />
                 <NewAppTextInput
                   setValues={setValues}
