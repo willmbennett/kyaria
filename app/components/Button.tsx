@@ -39,6 +39,7 @@ interface ButtonProps {
   className?: string;
   href?: string;
   children?: React.ReactNode;
+  onClick?: () => void;  // Step 1: Add this line
 }
 
 export function  Button({
@@ -48,6 +49,7 @@ export function  Button({
   className,
   href,
   children,
+  onClick,  // Destructure the onClick prop
   ...props
 }: ButtonProps) {
   className = clsx(
@@ -63,7 +65,7 @@ export function  Button({
       {children}
     </Link>
   ) : (
-    <button className={className} {...props}>
+    <button className={className} onClick={onClick} {...props}>
       {children}
     </button>
   )
