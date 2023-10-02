@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import { EnvelopeIcon } from '@heroicons/react/24/outline'
 import { LockClosedIcon } from '@heroicons/react/24/outline'
 
-import { Button } from '@/components/Button'
+import { Button } from '../../components/Button'
 
 type Provider = {
   id: string;
