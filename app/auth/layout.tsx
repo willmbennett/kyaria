@@ -5,7 +5,11 @@ import Image from 'next/image'
 import logo from '/public/images/logo-icon.png'
 import { Container } from '../components/Container'
 
-export default function AuthLayout({ children }) {
+export default function AuthLayout({
+  children, // will be a page or nested layout
+}: {
+  children: React.ReactNode,
+}) {
   return (
     <section className="relative flex min-h-screen items-center justify-center bg-slate-100 py-16 sm:py-20">
       <Link
