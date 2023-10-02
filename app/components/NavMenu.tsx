@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import AuthButton from "./auth/AuthButton";
 import { useSession } from 'next-auth/react';
 
-const ACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-2 rounded text-xl lg:text-lg text-gray-600 bg-gray-200 font-bold items-center justify-center hover:bg-gray-600 hover:text-white dark:text-neutral-200 dark:text-neutral-600 dark:hover:bg-neutral-100 dark:hover:text-neutral-400";
+const ACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-2 rounded text-xl lg:text-lg text-gray-600 bg-gray-200 font-bold items-center justify-center hover:bg-gray-600 hover:text-white dark:text-neutral-200 dark:text-neutral-600 dark:hover:bg-slate-100 dark:hover:text-neutral-400";
 const INACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-2 rounded text-xl lg:text-lg text-gray-600 font-bold items-center justify-center hover:bg-gray-600 hover:text-white dark:text-neutral-200 dark:bg-neutral-600 dark:hover:bg-neutral-200 dark:hover:text-neutral-600";
 
 export default function NavMenu() {

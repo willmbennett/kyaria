@@ -12,7 +12,7 @@ export default function Kanban(
 
     return (
         <>
-            <div className="box-border w-full mt-4 overflow-scroll rounded-xl bg-neutral-100 dark:bg-neutral-700">
+            <div className="box-border w-full mt-4 overflow-scroll rounded-xl bg-slate-100 dark:bg-neutral-700">
                 <div className="box-border inline-flex min-h-screen overflow-scroll p-4">
                     {jobStates.map((state: string) => {
                         const activeApps = jobApps.filter((app: any) => app.state == state && app.active);
