@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-import Team01 from '/public/images/avatars/team-01.jpg'
+import Team01 from '/public/images/avatars/james-headshot.jpg'
 import Team02 from '/public/images/avatars/will-headshot.jpeg'
 import { Container } from './Container'
 
