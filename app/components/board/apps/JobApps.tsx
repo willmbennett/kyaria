@@ -31,7 +31,7 @@ export default function JobAppsList(
   return (
     <div className="flex w-full mx-auto flex-col items-center min-h-screen">
       {!creatingJobApp && (<>
-        <div className="w-full bg-white pt-10 g-white p-2 text-center z-40 items-center justify-center">
+        <div className="w-full bg-white pt-10 g-white p-2 text-center items-center justify-center">
           <h1 className="sm:text-lg text-xl font-bold text-slate-900">
             Your Job Board
           </h1>

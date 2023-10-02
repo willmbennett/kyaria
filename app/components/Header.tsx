@@ -43,7 +43,7 @@ export function Header() {
     /*{ label: 'Contact', href: '/contact' },*/
   ]
 
-  const navLinks = session? signedInLinks: links
+  const navLinks = session ? signedInLinks : links
 
   function MenuIcon({ open }: { open: any }) {
     return (
@@ -167,7 +167,6 @@ export function Header() {
                 <div className="mt-6">
                   <Button
                     size="md"
-                    href="/auth/signin"
                     variant="ghost"
                     className="w-full"
                     onClick={!session ? () => signIn() : () => signOut()}
@@ -265,13 +264,14 @@ export function Header() {
           <div>
             <div className="flex items-center space-x-4">
               <div className="hidden lg:block">
-                <Link
-                  href="/auth/signin"
-                  className="inline-block px-4 py-2 font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+                <Button
+                  size="md"
+                  variant="solid"
+                  className="w-full"
                   onClick={!session ? () => signIn() : () => signOut()}
                 >
                   {!session ? 'Sign In' : 'Sign Out'}
-                </Link>
+                </Button>
               </div>
               {/*<Button size="md" href="/signup">
                 Sign up free

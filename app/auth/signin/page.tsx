@@ -20,11 +20,7 @@ const SignIn: React.FC = () => {
   const [providers, setProviders] = useState<Record<string, Provider> | null>(null);
 
   if (session) {
-    if (session.user) {
-      redirect(`/profile/${session.user.id}`)
-    } else {
-      redirect(`/`)
-    }
+    redirect(`/`)
   }
 
   useEffect(() => {
@@ -37,7 +33,7 @@ const SignIn: React.FC = () => {
   return (
     <>
       <h1 className="mt-10 text-center text-4xl font-semibold text-slate-900">
-        Welcome back
+        Welcome
       </h1>
       <div className="mt-8 flex flex-col items-center gap-4 sm:mt-10 sm:flex-row sm:gap-6">
         {providers && Object.values(providers).map((provider) => (

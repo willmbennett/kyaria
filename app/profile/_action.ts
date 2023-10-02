@@ -4,8 +4,9 @@ import { createProfile, deleteProfile, getProfile, updateProfile } from "../../l
 import { revalidatePath } from "next/cache";
 
 export async function createProfileAction(data: any, path: string) {
-  await createProfile(data);
+  const res = await createProfile(data);
   revalidatePath(path);
+  return res
 }
 
 export async function updateProfileAction(

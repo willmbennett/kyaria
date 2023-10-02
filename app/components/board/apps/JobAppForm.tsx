@@ -24,7 +24,7 @@ export default function NewJobAppForm({
 }) {
     const router = useRouter()
 
-    const { register, handleSubmit, control } = useForm<FormFields>({
+    const { register, handleSubmit, control, formState: { errors } } = useForm<FormFields>({
         defaultValues: { ...defaultValue },
         values
     });
@@ -56,15 +56,18 @@ export default function NewJobAppForm({
             <h2 className="text-left font-bold text-2xl py-4 mb-4">Details</h2>
             <div className={BASIC_FIELD_STYLE}>
                 <p>Job Title</p>
-                <input {...register('jobTitle')} placeholder="Job Title"/>
+                <input {...register('jobTitle', { required: true })} placeholder="Job Title"/>
+                            {errors.jobTitle && <p>Please check your job title</p>}
             </div>
             <div className={BASIC_FIELD_STYLE}>
                 <p>Link</p>
-                <input {...register('link')} placeholder="https://www.examplejob.com/awesomejob"/>
+                <input type="url" {...register('link', { required: true, pattern: /^(http|https):\/\/[a-z0-9\.-]+\.[a-z]{2,}/i })} placeholder="https://www.examplejob.com/awesomejob"/>
+                            {errors.link && <p>Please check your link</p>}
             </div>
             <div className={BASIC_FIELD_STYLE}>
                 <p>Company</p>
-                <input {...register('company')} placeholder="Company"/>
+                <input {...register('company', { required: true })} placeholder="Company"/>
+                            {errors.company && <p>Please check your company name</p>}
             </div>
             <div className={BASIC_FIELD_STYLE}>
                 <p>Location</p>

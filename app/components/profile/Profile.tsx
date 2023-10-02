@@ -42,8 +42,9 @@ export default function Profile({
     }
 
     const [values, setValues] = useState()
+    const [error, setError] = useState('')
 
-    const { register, handleSubmit, control } = useForm<FormFields>({
+    const { register, handleSubmit, control, formState: { errors } } = useForm<FormFields>({
         defaultValues: defaultValue,
         values
     });
@@ -61,17 +62,20 @@ export default function Profile({
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
         // call server action
         if (profile) {
-            //console.log("Editing Profile")
+            console.log("Editing Profile")
             const path = "/"
             const res = await updateProfileAction(profile._id, data, path);
-            //console.log(res)
+            console.log(res)
         } else {
-            //console.log("Creating Profile")
+            console.log("Creating Profile")
             const addUserId = { ...data, userId: userId }
-            //console.log(addUserId)
+            console.log(addUserId)
             const path = "/"
-            const res = await createProfileAction(addUserId, path);
-            //console.log(res)
+            const { profile, error } = await createProfileAction(addUserId, path);
+            if (error) {
+                setError(error)
+            }
+            console.log(profile, error)
         }
         setFormView(false)
     };
@@ -79,11 +83,32 @@ export default function Profile({
     const skipButton = () => {
         setFormView(true)
         setInputTextView(false)
-      };
+    };
+
+    const redoClick = () => {
+        setInputTextView(true)
+        setError('')
+    };
 
     return (
         <>
-            {sessionUserId == userId && !profile && inputTextView && (
+            {error && (
+                <>
+                    <h2 className="sm:text-4xl text-2xl font-bold text-slate-900 mb-8 bg-red-100 text-red-600 p-10">
+                        Email already exists
+                    </h2>
+                    <button
+                        className="inline-block bg-dartmouth-green rounded px-6 pb-2 pt-2.5 text-xs hover:opacity-80 font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] "
+                        data-te-ripple-init
+                        data-te-ripple-color="light"
+                        type="button"
+                        onClick={redoClick}
+                    >
+                        Try again
+                    </button>
+                </>
+            )}
+            {!error && sessionUserId == userId && !profile && inputTextView && (
                 <div className='bg-white rounded-xl shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] p-3 min-h-screen w-full flex flex-col items-center'>
                     <div className='py-4'>
                         <h1 className="sm:text-6xl text-4xl font-bold text-slate-900 mb-8">
@@ -111,7 +136,7 @@ export default function Profile({
                         data-te-ripple-color="light"
                         type="button"
                         onClick={skipButton}
-                        >
+                    >
                         Go to Form
                     </button>
                 </div>)}
@@ -131,15 +156,24 @@ export default function Profile({
                         <h2 className={H2_STYLE}>Details</h2>
                         <div className={BASIC_FIELD_STYLE}>
                             <p>Name</p>
-                            <input {...register('name')} placeholder="Name" />
+                            <input {...register('name', { required: true })} placeholder="Name" />
+                            {errors.name && <p>Please check your name</p>}
                         </div>
                         <div className={BASIC_FIELD_STYLE}>
                             <p>Job Title</p>
-                            <input {...register('title')} placeholder="Title" />
+                            <input {...register('title', { required: true })} placeholder="Title" />
+                            {errors.title && <p>Please check your title</p>}
                         </div>
                         <div className={BASIC_FIELD_STYLE}>
                             <p>Email</p>
-                            <input {...register('email')} placeholder="Email" />
+                            <input
+                                type="email"
+                                {...register('email', {
+                                    required: true,
+                                    pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                                })}
+                                placeholder="Email" />
+                                {errors.email && <p>Please check your email</p>}
                         </div>
                         <div className={BASIC_FIELD_STYLE}>
                             <p>Phone Number</p>
