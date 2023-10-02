@@ -146,7 +146,7 @@ export function TestimonialsSlide() {
     } else if (navigator.userAgent.indexOf('Safari') != -1) {
       // There is an issue with safari not lazy loading off-screen images that come into view with CSS animations. Hence, we make sure to eager load these images.
       document.querySelectorAll('.podcast-image').forEach((img) => {
-        img.loading = 'eager'
+        (img as HTMLImageElement).loading = 'eager'
       })
     }
   }, [])

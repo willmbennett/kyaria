@@ -3,9 +3,20 @@ import { CheckCircleIcon } from '@heroicons/react/24/solid'
 
 import { Container } from './Container'
 
+type TierValue = string | boolean;
+type Tiers = {
+  [key in typeof tiers[number]]: TierValue;
+}
+
+interface Feature {
+  name: string;
+  tiers: Tiers;
+}
+
+
 const tiers = ['free', 'hobby', 'standard', 'pro']
 
-const features = [
+const features: Feature[] = [
   {
     name: 'Video quality',
     tiers: { free: '720p', hobby: '720p', standard: '1080p', pro: '4k' },
