@@ -32,6 +32,16 @@ const colors = {
   },
 }
 
+interface ButtonProps {
+  variant?: 'solid' | 'outline' | 'ghost' | 'link'; // Add other possible variants if needed
+  size?: 'sm' | 'md' | 'lg' | 'xl'; // Add other possible sizes if needed
+  color?: 'light' | 'dark' | 'primary' | 'secondary'; // Add other possible colors if needed
+  className?: string;
+  href?: string;
+  children?: React.ReactNode;
+  [x: string]: any;
+}
+
 export function Button({
   variant = 'solid',
   size = 'lg',
@@ -40,7 +50,7 @@ export function Button({
   href,
   children,
   ...props
-}) {
+}: ButtonProps) {
   className = clsx(
     baseStyles,
     styles[variant],

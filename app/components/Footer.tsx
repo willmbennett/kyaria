@@ -44,7 +44,7 @@ const navigation = {
     { name: 'Help center', href: '#' },
   ],
 }
-
+/*
 function SocialLink({ icon: Icon, ...props }) {
   return (
     <Link className="group" {...props}>
@@ -52,6 +52,7 @@ function SocialLink({ icon: Icon, ...props }) {
     </Link>
   )
 }
+*/
 
 export function Footer() {
   return (
