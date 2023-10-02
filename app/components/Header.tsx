@@ -26,7 +26,7 @@ const pages = [
   { label: 'About', href: '/about' },
   { label: 'Pricing', href: '/pricing' },
   { label: 'Contact', href: '/contact' },
-  { label: 'Sign in', href: '/signin' },
+  { label: 'Sign in', href: '/auth/signin' },
   { label: 'Sign up', href: '/signup' },
   { label: 'Password reset', href: '/password-reset' },
   { label: '404', href: '/404' },
@@ -115,7 +115,7 @@ export function Header() {
                 <div className="flex flex-col divide-y divide-gray-secondary-400/75">
                   {navLinks.map((link) => (
                     <Link
-                      key={`${link.name}-mobile`}
+                      key={`${link.label}-mobile`}
                       href={link.href}
                       className={
                         'block px-4 pb-2 pt-4 font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900'
@@ -167,7 +167,7 @@ export function Header() {
                 <div className="mt-6">
                   <Button
                     size="md"
-                    href="/signin"
+                    href="/auth/signin"
                     variant="ghost"
                     className="w-full"
                     onClick={!session ? () => signIn() : () => signOut()}
