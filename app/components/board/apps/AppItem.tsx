@@ -4,6 +4,7 @@ import { parseISO, format } from 'date-fns';
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { updateJobAppAction } from "../../../board/apps/[id]/_action";
+import { Button } from "../../Button";
 
 const ACTIVE_ROUTE = "bg-gray-200 hover:bg-gray-600 hover:text-white";
 const INACTIVE_ROUTE = "hover:bg-gray-600 hover:text-white";
@@ -32,7 +33,7 @@ export default function AppItem(
   };
 
   return (
-    <div className={`text-left border-2 rounded-xl block ${app.active? "bg-white ": "bg-red-100"} shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]`}>
+    <div className={`mt-2 text-left border rounded-xl block ${app.active ? "" : "bg-slate-200"} shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]`}>
       <div>
         <div className="flex p-2 justify-between w-full">
           <Link href={`/board/apps/${_id}`} target="_blank">
@@ -57,22 +58,19 @@ export default function AppItem(
           </div>
           <div className="p-3">
             <h5
-              className="mb-2 text-md font-medium leading-tight text-neutral-800">
+              className="mb-2 text-md font-medium leading-tight">
               {company} - {location}
             </h5>
             <p className="mb-2 text-sm text-base text-neutral-600">
               {employmentType ? employmentType : ""} {employmentType && salaryRange && ' | '} {salaryRange ? `${salaryRange}` : " "}
             </p>
             <div className="flex items-center justify-center">
-
-              <button
-                type="button"
-                className="inline-block rounded px-6 pb-2 pt-2.5 text-xs hover:opacity-80 font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] "
-                style={{ backgroundColor: '#00703C' }}
-                data-te-ripple-init
-                data-te-ripple-color="light">
+              <Button
+                variant="solid"
+                size="md"
+              >
                 View packet
-              </button>
+              </Button>
             </div>
           </div>
         </Link>

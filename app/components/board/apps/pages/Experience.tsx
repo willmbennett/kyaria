@@ -66,7 +66,7 @@ export default function Experience({
                                             <div className="py-2">
                                                 <h3 className="text-left font-bold text-lg mb-2">{detail.content}</h3>
                                             </div>
-                                            <div className='rounded-lg shadow-md w-full p-1 bg-gray-50'>
+                                            <div className='w-full p-1'>
                                                 {detail.detail && (
                                                     <Detail
                                                         detail={detail.detail}

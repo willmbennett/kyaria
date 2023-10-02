@@ -12,6 +12,7 @@ import { demoJSON, expectedJson } from '../../profile/profile-helper';
 import UserProfile from './UserProfile';
 import TextToJSON from '../TextToJSON';
 //import { redirect } from 'next/navigation'
+import { Button } from '../Button';
 
 const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'
 const H2_STYLE = 'text-left font-bold text-2xl py-4 mb-4'
@@ -62,20 +63,20 @@ export default function Profile({
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
         // call server action
         if (profile) {
-            console.log("Editing Profile")
+            //console.log("Editing Profile")
             const path = "/"
             const res = await updateProfileAction(profile._id, data, path);
-            console.log(res)
+            //console.log(res)
         } else {
-            console.log("Creating Profile")
+            //console.log("Creating Profile")
             const addUserId = { ...data, userId: userId }
-            console.log(addUserId)
+            //console.log(addUserId)
             const path = "/"
             const { profile, error } = await createProfileAction(addUserId, path);
             if (error) {
                 setError(error)
             }
-            console.log(profile, error)
+            //console.log(profile, error)
         }
         setFormView(false)
     };
@@ -97,19 +98,18 @@ export default function Profile({
                     <h2 className="sm:text-4xl text-2xl font-bold text-slate-900 mb-8 bg-red-100 text-red-600 p-10">
                         Email already exists
                     </h2>
-                    <button
-                        className="inline-block bg-dartmouth-green rounded px-6 pb-2 pt-2.5 text-xs hover:opacity-80 font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] "
-                        data-te-ripple-init
-                        data-te-ripple-color="light"
-                        type="button"
+                    <Button
+                        variant="solid"
+                        size="md"
                         onClick={redoClick}
+                        className="mt-10 sm:mt-12"
                     >
-                        Try again
-                    </button>
+                        Get started
+                    </Button>
                 </>
             )}
             {!error && sessionUserId == userId && !profile && inputTextView && (
-                <div className='bg-white rounded-xl shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] p-3 min-h-screen w-full flex flex-col items-center'>
+                <div>
                     <div className='py-4'>
                         <h1 className="sm:text-6xl text-4xl font-bold text-slate-900 mb-8">
                             Welcome!
@@ -127,18 +127,17 @@ export default function Profile({
                         setFormView={setFormView}
                         setInputTextView={setInputTextView}
                     />
-                    <p className="mb-4 text-sm text-base text-neutral-600 w-full max-w-screen">
+                    <p className="mt-10 text-sm text-base text-neutral-600 w-full max-w-screen">
                         Don't have a resume? That's totally fine! Fill out this form to get started.
                     </p>
-                    <button
-                        className="inline-block bg-dartmouth-green rounded px-6 pb-2 pt-2.5 text-xs hover:opacity-80 font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] "
-                        data-te-ripple-init
-                        data-te-ripple-color="light"
-                        type="button"
+                    <Button
+                        variant="ghost"
+                        size="md"
                         onClick={skipButton}
+                        className="mt-3"
                     >
                         Go to Form
-                    </button>
+                    </Button>
                 </div>)}
             {sessionUserId == userId && profile && (<ProfileActions
                 id={profile._id}
@@ -147,11 +146,11 @@ export default function Profile({
             />)}
             {profile && !formView && (<UserProfile userProfile={profile} />)}
             {formView && (
-                <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-3xl ">
+                <div className="p-6">
                     <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
-                        Create your profile
+                        {profile? "Edit your profile": "Create your profile"}
                     </h1>
-                    <p>Don't worry too much, you can always edit this later.</p>
+                    {!profile && (<p>Don't worry too much, you can always edit this later.</p>)}
                     <form onSubmit={handleSubmit(onSubmit)} action="">
                         <h2 className={H2_STYLE}>Details</h2>
                         <div className={BASIC_FIELD_STYLE}>
@@ -173,7 +172,7 @@ export default function Profile({
                                     pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
                                 })}
                                 placeholder="Email" />
-                                {errors.email && <p>Please check your email</p>}
+                            {errors.email && <p>Please check your email</p>}
                         </div>
                         <div className={BASIC_FIELD_STYLE}>
                             <p>Phone Number</p>
@@ -254,10 +253,9 @@ export default function Profile({
                             </div>
                         ))}
                         <div className={BASIC_FIELD_STYLE}>
-                            <button
-                                className="inline-block bg-dartmouth-green rounded px-6 pb-2 pt-2.5 text-xs hover:opacity-80 font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] "
-                                data-te-ripple-init
-                                data-te-ripple-color="light"
+                            <Button
+                                variant="solid"
+                                size="md"
                                 type="button"
                                 onClick={() => appendExperience({
                                     title: "Title",
@@ -266,9 +264,11 @@ export default function Profile({
                                     start_date: "Start Date",
                                     end_date: "End Date",
                                     responsibilities: [{ content: "", detail: "", starStory: "" }]
-                                })}>
+                                })}
+                                className="mt-10 sm:mt-12"
+                            >
                                 Add Experience
-                            </button>
+                            </Button>
                         </div>
 
                         <h2 className={H2_STYLE}>Eduation</h2>
@@ -301,31 +301,30 @@ export default function Profile({
                             </div>
                         ))}
                         <div className={BASIC_FIELD_STYLE}>
-                            <button
-                                className="inline-block bg-dartmouth-green rounded px-6 pb-2 pt-2.5 text-xs hover:opacity-80 font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] "
-                                data-te-ripple-init
-                                data-te-ripple-color="light"
+                            <Button
+                                variant="solid"
+                                size="md"
                                 type="button"
                                 onClick={() => appendEducation({
                                     degree: "Degree",
                                     institution: "Institution",
                                     location: "Location",
                                     details: [{ content: "", detail: "", starStory: "" }]
-                                })}>
+                                })}
+                                className="mt-10 sm:mt-12"
+                            >
                                 Add Education
-                            </button>
+                            </Button>
                         </div>
-
                         {/* Submit */}
                         <div className={`${BASIC_FIELD_STYLE} sticky bottom-0 p-3 bg-white shadow-md rounded-xl`}>
-                            <button
-                                className="inline-block bg-dartmouth-green rounded px-6 pb-2 pt-2.5 text-xs hover:opacity-80 font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] "
-                                data-te-ripple-init
-                                data-te-ripple-color="light"
+                            <Button
+                                variant="solid"
+                                size="md"
                                 type="submit"
                             >
-                                Submit
-                            </button>
+                                {profile? "Save changes": "Create My Profile"}
+                            </Button>
                         </div>
                     </form>
                 </div>
