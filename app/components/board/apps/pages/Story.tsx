@@ -60,7 +60,7 @@ export default function Story({
 
     return (
         <>
-            <h1 className="text-center sm:text-6xl text-4xl font-bold text-slate-900 mb-8 dark:text-neutral-200">
+            <h1 className="text-center sm:text-6xl text-4xl font-bold text-slate-900 mb-8">
                 Let's write you a story
             </h1>
             <p>It's how you answer the question "Tell me about yourself" or "Why do you want this job?"</p>

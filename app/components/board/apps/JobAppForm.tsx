@@ -5,7 +5,7 @@ import FieldArray from './FieldArray';
 import { createJobApplicationAction } from '../../../board/apps/[id]/_action';
 import { useRouter } from 'next/navigation'
 
-const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full dark:text-neutral-200'
+const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'
 
 export default function NewJobAppForm({
     defaultValue,
@@ -56,39 +56,39 @@ export default function NewJobAppForm({
             <h2 className="text-left font-bold text-2xl py-4 mb-4">Details</h2>
             <div className={BASIC_FIELD_STYLE}>
                 <p>Job Title</p>
-                <input {...register('jobTitle')} placeholder="Job Title" className='dark:text-black'/>
+                <input {...register('jobTitle')} placeholder="Job Title"/>
             </div>
             <div className={BASIC_FIELD_STYLE}>
                 <p>Link</p>
-                <input {...register('link')} placeholder="https://www.examplejob.com/awesomejob" className='dark:text-black'/>
+                <input {...register('link')} placeholder="https://www.examplejob.com/awesomejob"/>
             </div>
             <div className={BASIC_FIELD_STYLE}>
                 <p>Company</p>
-                <input {...register('company')} placeholder="Company" className='dark:text-black'/>
+                <input {...register('company')} placeholder="Company"/>
             </div>
             <div className={BASIC_FIELD_STYLE}>
                 <p>Location</p>
-                <input {...register('location')} placeholder="Location" className='dark:text-black'/>
+                <input {...register('location')} placeholder="Location" />
             </div>
             <div className={BASIC_FIELD_STYLE}>
                 <p>Employment Type</p>
-                <input {...register('employmentType')} placeholder="Employment Type" className='dark:text-black'/>
+                <input {...register('employmentType')} placeholder="Employment Type" />
             </div>
             <div className={BASIC_FIELD_STYLE}>
                 <p>Salary Range</p>
-                <input {...register('salaryRange')} placeholder="Salary Range" className='dark:text-black'/>
+                <input {...register('salaryRange')} placeholder="Salary Range" />
             </div>
             <div className={BASIC_FIELD_STYLE}>
                 <p>Remote</p>
-                <input {...register('remote')} placeholder="Remote" className='dark:text-black'/>
+                <input {...register('remote')} placeholder="Remote" />
             </div>
             <div className={BASIC_FIELD_STYLE}>
                 <p>About the Company</p>
-                <textarea {...register('aboutCompany')} placeholder="About the company" rows={5} cols={50} className='dark:text-black'/>
+                <textarea {...register('aboutCompany')} placeholder="About the company" rows={5} cols={50} />
             </div>
             <div className={BASIC_FIELD_STYLE}>
                 <p>Job Description</p>
-                <textarea {...register('jobDescription')} placeholder="Job Description" rows={5} cols={50} className='dark:text-black'/>
+                <textarea {...register('jobDescription')} placeholder="Job Description" rows={5} cols={50} />
             </div>
             <h2 className="text-left font-bold text-2xl py-4 mb-4">Qualifications</h2>
             <FieldArray
@@ -105,7 +105,7 @@ export default function NewJobAppForm({
             {/* Submit */}
             <div className={BASIC_FIELD_STYLE}>
                 <button
-                    className="inline-block rounded px-6 pb-2 pt-2.5 text-xs hover:opacity-80 font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                    className="inline-block rounded px-6 pb-2 pt-2.5 text-xs hover:opacity-80 font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] "
                     style={{ backgroundColor: '#00703C' }}
                     data-te-ripple-init
                     data-te-ripple-color="light"

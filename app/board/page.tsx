@@ -19,7 +19,7 @@ export default async function BoarPage() {
   return (
     <>
       {!profile && (<div className="h-screen justify-center items-center flex flex-col">
-        <h1 className="sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900 mb-10 dark:text-white">
+        <h1 className="sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900 mb-10">
           Create a Profile First
         </h1>
         <Link href={`profile/${session?.user?.id}`}>
