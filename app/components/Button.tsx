@@ -33,16 +33,15 @@ const colors = {
 }
 
 interface ButtonProps {
-  variant?: any;
-  size?: any;
-  color?: any;
+  variant?: 'solid' | 'ghost' | 'secondary';
+  size?: 'md' | 'lg';
+  color?: 'dark' | 'light';
   className?: string;
   href?: string;
   children?: React.ReactNode;
-  [x: string]: any;
 }
 
-export function Button({
+export function  Button({
   variant = 'solid',
   size = 'lg',
   color = 'dark',
