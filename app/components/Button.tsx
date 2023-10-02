@@ -33,9 +33,9 @@ const colors = {
 }
 
 interface ButtonProps {
-  variant?: string;
-  size?: string;
-  color?: string;
+  variant?: any;
+  size?: any;
+  color?: any;
   className?: string;
   href?: string;
   children?: React.ReactNode;
