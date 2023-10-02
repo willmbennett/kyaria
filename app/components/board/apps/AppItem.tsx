@@ -32,7 +32,7 @@ export default function AppItem(
   };
 
   return (
-    <div className={`text-left border-2 dark:border-neutral-500 dark:text-neutral-200 rounded-xl block ${app.active? "bg-white dark:bg-neutral-700": "bg-red-100 dark:bg-neutral-700"} shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]`}>
+    <div className={`text-left border-2 rounded-xl block ${app.active? "bg-white ": "bg-red-100"} shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]`}>
       <div>
         <div className="flex p-2 justify-between w-full">
           <Link href={`/board/apps/${_id}`} target="_blank">
@@ -52,22 +52,22 @@ export default function AppItem(
           </div>
         </div>
         <Link href={`/board/apps/${_id}`} target="_blank">
-          <div className="w-full px-2 pb-2 text-xs text-left border-b-2 border-neutral-100 dark:border-neutral-600 dark:text-neutral-50">
+          <div className="w-full px-2 pb-2 text-xs text-left border-b-2 border-neutral-100">
             {createdAt && (<time dateTime={createdAt}>{format(date, 'MM/dd')}</time>)}
           </div>
           <div className="p-3">
             <h5
-              className="mb-2 text-md font-medium leading-tight text-neutral-800 dark:text-neutral-50">
+              className="mb-2 text-md font-medium leading-tight text-neutral-800">
               {company} - {location}
             </h5>
-            <p className="mb-2 text-sm text-base text-neutral-600 dark:text-neutral-200">
+            <p className="mb-2 text-sm text-base text-neutral-600">
               {employmentType ? employmentType : ""} {employmentType && salaryRange && ' | '} {salaryRange ? `${salaryRange}` : " "}
             </p>
             <div className="flex items-center justify-center">
 
               <button
                 type="button"
-                className="inline-block rounded px-6 pb-2 pt-2.5 text-xs hover:opacity-80 font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                className="inline-block rounded px-6 pb-2 pt-2.5 text-xs hover:opacity-80 font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] "
                 style={{ backgroundColor: '#00703C' }}
                 data-te-ripple-init
                 data-te-ripple-color="light">
@@ -82,7 +82,7 @@ export default function AppItem(
           <button
             onClick={optionsClick}
             type="button"
-            className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white dark:bg-neutral-700 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" id="menu-button" aria-expanded="true" aria-haspopup="true">
+            className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" id="menu-button" aria-expanded="true" aria-haspopup="true">
             {app.state}
             <svg className="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />

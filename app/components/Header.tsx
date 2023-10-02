@@ -188,7 +188,6 @@ export function Header() {
       <Container className="flex h-full w-full items-center border-b border-gray-secondary-300/60">
         <nav className="relative z-50 flex w-full items-center justify-between ">
           <div className="flex items-center space-x-8 lg:space-x-12">
-          {!session && (
             <Link
               href="/"
               className="flex flex-shrink-0 items-center font-bold text-slate-700"
@@ -206,7 +205,6 @@ export function Header() {
               />*/}
               KYARIA.AI
             </Link>
-            )}
             <div className="hidden items-center space-x-3 md:flex lg:space-x-4">
               {navLinks.map((link) => (
                 <Link

@@ -19,10 +19,10 @@ export default async function JobsPage({
 
     return (
         <section>
-            <div className="flex max-w-5xl mx-auto flex-col items-center min-h-screen bg-gray-100 dark:bg-black">
-                <div className="w-full max-w-2xl bg-white md:rounded-xl py-2 md:p-6 shadow-md dark:md:bg-neutral-400 dark:bg-black">
-                    <div className="w-full sticky bg-white top-10 g-white px-6 pb-6 pt-16 text-center dark:bg-black dark:md:bg-neutral-600 dark:md:rounded-xl">
-                        <h5 className="text-xl font-medium leading-tight dark:border-neutral-600 dark:text-neutral-50">
+            <div className="flex max-w-5xl mx-auto flex-col items-center min-h-screen bg-gray-100 ">
+                <div className="w-full max-w-2xl bg-white md:rounded-xl py-2 md:p-6 shadow-md ">
+                    <div className="w-full sticky bg-white top-10 g-white px-6 pb-6 pt-16 text-center">
+                        <h5 className="text-xl font-medium leading-tight">
                             Jobs
                         </h5>
                     </div>
