@@ -6,6 +6,7 @@ import { getProfile } from "../../lib/profile-db";
 import JobAppsList from "../components/board/apps/JobApps";
 import Await from "../jobs/await";
 import { redirect } from "next/navigation";
+import { Button } from "../components/Button";
 
 export default async function BoarPage() {
   const session = await getServerSession(authOptions)
@@ -23,7 +24,13 @@ export default async function BoarPage() {
           Create a Profile First
         </h1>
         <Link href={`profile/${session?.user?.id}`}>
-          <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4" type="submit">Go To Profile</button>
+          <Button
+            variant="solid"
+            size="md"
+            className="mt-10 sm:mt-12"
+          >
+            Go to Profile
+          </Button>
         </Link>
       </div>)}
       {profile && (<>
