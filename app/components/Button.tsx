@@ -33,9 +33,9 @@ const colors = {
 }
 
 interface ButtonProps {
-  variant?: 'solid' | 'outline' | 'ghost' | 'link'; // Add other possible variants if needed
-  size?: 'sm' | 'md' | 'lg' | 'xl'; // Add other possible sizes if needed
-  color?: 'light' | 'dark' | 'primary' | 'secondary'; // Add other possible colors if needed
+  variant?: string;
+  size?: string;
+  color?: string;
   className?: string;
   href?: string;
   children?: React.ReactNode;
