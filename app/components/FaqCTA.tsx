@@ -13,7 +13,7 @@ export function FaqCTA() {
           mauris dictumst aliqua purus praesent.
         </p>
         <div className="mt-10 flex w-full justify-center sm:mt-12">
-          <Button href="/signup" variant="ghost">
+          <Button href="/signin" variant="ghost">
             Go to FAQs
           </Button>
         </div>

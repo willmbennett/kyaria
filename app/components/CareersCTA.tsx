@@ -14,7 +14,7 @@ export function CareersCTA() {
             est platea fermentum tempus egestas.
           </p>
           <div className="mt-10 flex w-full justify-center sm:mt-12">
-            <Button href="/signup">See open positions</Button>
+            <Button href="/signin">See open positions</Button>
           </div>
         </div>
       </Container>

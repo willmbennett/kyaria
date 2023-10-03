@@ -27,7 +27,7 @@ const pages = [
   { label: 'Pricing', href: '/pricing' },
   { label: 'Contact', href: '/contact' },
   { label: 'Sign in', href: '/auth/signin' },
-  { label: 'Sign up', href: '/signup' },
+  { label: 'Sign up', href: '/signin' },
   { label: 'Password reset', href: '/password-reset' },
   { label: '404', href: '/404' },
 ]
@@ -273,7 +273,7 @@ export function Header() {
                   {!session ? 'Sign In' : 'Sign Out'}
                 </Button>
               </div>
-              {/*<Button size="md" href="/signup">
+              {/*<Button size="md" href="/signin">
                 Sign up free
               </Button>
               */}

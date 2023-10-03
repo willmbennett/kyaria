@@ -20,7 +20,7 @@ const navigation = {
     /*{ name: 'Contact us', href: '/contact' },*/
   ],
   solutions: [
-    { name: 'Interview Preperation', href: '/board' },
+    { name: 'Interview Preparation', href: '/board' },
     { name: 'Resume Writing', href: '/board' },
     { name: 'Cover Letter Writing', href: '/board' },
     { name: 'Job Posts (coming soon)', href: '#' },
