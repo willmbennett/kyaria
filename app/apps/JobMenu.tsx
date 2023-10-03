@@ -7,7 +7,7 @@ import { useState } from "react";
 const ACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-1 my-1 rounded text-xl lg:text-lg text-gray-600 bg-gray-200 font-bold items-center justify-center hover:bg-gray-600 hover:text-white";
 const INACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-1 my-1 rounded text-xl lg:text-lg text-gray-600 font-bold items-center justify-center hover:bg-gray-600 hover:text-white";
 
-export default function DemoJobMenu(
+export default function JobMenu(
   { currentSection,
     setCurrentSection
   }: {
@@ -20,11 +20,11 @@ export default function DemoJobMenu(
 
   const pageList = [
     { label: "Job Description", section: 'jobDescription' },
-    { label: "Resume", section: 'resume' },
-    { label: "Cover Letter", section: 'coverLetter' },
-    { label: "Emails", section: 'emails' },
     { label: "Personal Story", section: 'story' },
-    { label: "Behavioral Interview", section: `experience` }
+    { label: "Behavioral Interview", section: `experience` },
+    { label: "Emails", section: 'emails' },
+    { label: "Cover Letter", section: 'coverLetter' },
+    { label: "Resume", section: 'resume' },
   ]
 
   const handleClick = () => {
@@ -32,8 +32,8 @@ export default function DemoJobMenu(
   };
 
   return (
-    <div className="bg-white border sticky bottom-0 w-full lg:top-60 z-50 bg-gray-200 p-4 lg:rounded-lg h-auto">
-      <div className={`${active ? ' ' : 'hidden'}  w-full lg:inline `}>
+    <div className="bg-white border w-full lg:top-60 z-50 bg-gray-200 p-4 lg:rounded-lg h-auto my-2">
+      <div className={`w-full inline `}>
         <div className=" w-full items-center items-start  flex flex-col lg:h-auto py-2">
           {pageList.map((l: any, i: number) => {
             const handleClick = () => {
@@ -56,6 +56,7 @@ export default function DemoJobMenu(
           })}
         </div>
       </div>
+      {/*
       <button
         className='inline-flex lg:hidden shadow-md rounded-xl w-full p-2 bg-gray-200 hover:bg-gray-300 text-gray-700 hover:text-gray-800 cursor-pointer outline-none transition-colors duration-300'
         onClick={handleClick}
@@ -86,7 +87,7 @@ export default function DemoJobMenu(
           </div>
         </div>
       </button>
-
+            */}
     </div>
   );
 }

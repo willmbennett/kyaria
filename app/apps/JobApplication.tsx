@@ -1,5 +1,5 @@
 'use client'
-import DemoJobMenu from '../components/DemoJobMenu'
+import JobMenu from './JobMenu'
 import JobDescription from '../components/board/apps/pages/JobDescription'
 import { Container } from '../components/Container'
 import { useState } from 'react';
@@ -17,9 +17,9 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
     <section className="relative overflow-hidden">
       <div className="flex max-w-5xl mx-auto flex-col py-2 min-h-screen">
         <div className="lg:px-4 lg:mt-6">
-          <div className="flex h-auto min-h-screen w-full lg:px-4 lg:mt-6">
-            <div className="lg:w-1/4 hidden lg:flex lg:flex-col">
-              <DemoJobMenu
+          <div className="flex flex-col lg:flex-row h-auto min-h-screen w-full p-2 lg:px-4 lg:mt-6">
+            <div className="lg:w-1/4 flex flex-col">
+              <JobMenu
                 currentSection={currentSection}
                 setCurrentSection={setCurrentSection}
               />
@@ -61,11 +61,11 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
         </div>
       </div>
     </section>
-    <div className='lg:hidden sticky bottom-0 w-full'>
-      <DemoJobMenu
+    {/*<div className='lg:hidden sticky bottom-0 w-full'>
+      <JobMenu
         currentSection={currentSection}
         setCurrentSection={setCurrentSection}
       />
-    </div>
+    </div>*/}
   </>)
 }

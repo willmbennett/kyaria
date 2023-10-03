@@ -43,7 +43,7 @@ export default function JobAppsList(
             onClick={handleCreateJobClick}
             className="mt-3"
           >
-            New Job
+            Add a New Job Post
           </Button>
         </div>
         <Kanban

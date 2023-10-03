@@ -1,5 +1,5 @@
 'use client'
-import DemoJobMenu from './DemoJobMenu'
+import DemoJobMenu from '../apps/JobMenu'
 import JobDescription from './board/apps/pages/JobDescription'
 import { Container } from './Container'
 import { useState } from 'react';

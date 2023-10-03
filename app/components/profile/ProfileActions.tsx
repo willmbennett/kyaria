@@ -28,11 +28,21 @@ export default function ProfileActions(
         <div className='p-4 w-full flex justify-end'>
             {id && !formView && (
                 <Button
+                    href='/board'
+                    variant="solid"
+                    size="md"
+                    className="mt-2 mx-2"
+                >
+                    See your Jobs
+                </Button>
+            )}
+            {id && !formView && (
+                <Button
                     type="button"
                     variant="ghost"
                     size="md"
                     onClick={showForm}
-                    className="mt-10 sm:mt-12"
+                    className="mt-2"
                 >
                     Edit Profile
                 </Button>
@@ -43,7 +53,7 @@ export default function ProfileActions(
                     variant="ghost"
                     size="md"
                     onClick={cancel}
-                    className="mt-10 sm:mt-12"
+                    className="mt-2"
                 >
                     Cancel
                 </Button>

@@ -29,7 +29,7 @@ export default function NewAppTextInput(
     }) {
     const [loading, setLoading] = useState(false)
     const [finishedLoading, setFinishedLoading] = useState(false)
-    const { register, handleSubmit, control } = useForm<FormFields>({
+    const { register, handleSubmit, control, formState: { errors } } = useForm<FormFields>({
         defaultValues: { input: defaultTextInput ? defaultTextInput : '' } // Leave blank
     });
 
@@ -89,7 +89,8 @@ export default function NewAppTextInput(
                 {!loading && (
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className={BASIC_FIELD_STYLE}>
-                            <textarea {...register('input')} placeholder="Text Input" rows={15} cols={50} className="rounded-sm"></textarea>
+                            <textarea {...register('input', { required: true })} placeholder="Text Input" rows={15} cols={50} className="rounded-sm" maxLength={5000}></textarea>
+                                {errors.input && <p>Please add a job post.</p>}
                         </div>
 
                         <div className={BASIC_FIELD_STYLE}>
@@ -102,19 +103,14 @@ export default function NewAppTextInput(
                                 Submit
                             </Button>
                         </div>
-                        {loading && (
-                            <div>
-                                <p>Insert Pretty Loading GIF Here</p>
-                            </div>
-                        )}
                     </form>
                 )}
                 {loading && (<div className='flex-col items-center'>
-                    <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
-                        AI is scanning your data
+                <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
+                        We're scanning your data
                     </h1>
                     <div className='p-2'>
-                        <p>This may take a minute</p>
+                        <p>This takes around 20 seconds, please don't close this tab while it is loading.</p>
                     </div>
                     <iframe src="https://giphy.com/embed/gJ3mEToTDJn3LT6kCT" className="giphy-embed w-full"></iframe>
                 </div>)}

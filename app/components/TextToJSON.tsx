@@ -47,7 +47,7 @@ export default function TextToJSON(
     }) {
     const [loading, setLoading] = useState(false)
     const [finishedLoading, setFinishedLoading] = useState(false)
-    const { register, handleSubmit, control } = useForm<FormFields>({
+    const { register, handleSubmit, control, formState: { errors } } = useForm<FormFields>({
         defaultValues: { input: defaultTextInput ? defaultTextInput : '' } // Leave blank
     });
 
@@ -148,31 +148,33 @@ export default function TextToJSON(
                     </div>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="w-full">
-                            <label className="bg-white py-2 px-4 cursor-pointer hover:bg-gray-secondary-100">
-                                Upload File
+                            <p className='py-2'>
                                 <input
-                                    className="opacity-0"
+                                    {...register('input', { required: true })}
                                     onChange={onFileChange}
                                     type="file"
                                     accept=".pdf"
                                 />
-                            </label>
+                                {errors.input && <p>Please fix your uploaded file</p>}
+                            </p>
                         </div>
-                        <Document file={file} onLoadSuccess={onDocumentLoadSuccess} options={options}>
-                            {Array.from(new Array(numPages), (el, index) => (
-                                <Page key={`page_${index + 1}`} pageNumber={index + 1} onGetTextSuccess={handleTextContent} />
-                            ))}
-                        </Document>
-                        <div className={BASIC_FIELD_STYLE}>
-                            <Button
-                                variant="solid"
-                                size="md"
-                                type="submit"
-                                className="mt-10 sm:mt-12"
-                            >
-                                Submit
-                            </Button>
-                        </div>
+                        {file && (<>
+                            <Document file={file} onLoadSuccess={onDocumentLoadSuccess} options={options}>
+                                {Array.from(new Array(numPages), (el, index) => (
+                                    <Page key={`page_${index + 1}`} pageNumber={index + 1} onGetTextSuccess={handleTextContent} />
+                                ))}
+                            </Document>
+                            <div className={BASIC_FIELD_STYLE}>
+                                <Button
+                                    variant="solid"
+                                    size="md"
+                                    type="submit"
+                                    className="mt-3"
+                                >
+                                    Submit
+                                </Button>
+                            </div>
+                        </>)}
                         {loading && (
                             <div>
                                 <p>Insert Pretty Loading GIF Here</p>
@@ -182,10 +184,10 @@ export default function TextToJSON(
                 </>)}
                 {loading && (<div className='flex-col items-center'>
                     <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
-                        AI is scanning your data
+                        We're scanning your data
                     </h1>
                     <div className='p-2'>
-                        <p>This may take a minute</p>
+                        <p>This takes around 30 seconds, please don't close this tab while it is loading.</p>
                     </div>
                     <iframe src="https://giphy.com/embed/gJ3mEToTDJn3LT6kCT" className="giphy-embed w-full"></iframe>
                 </div>)}

@@ -37,7 +37,7 @@ export default (
                     onClick={() => appendChildItem("")}
                     className="mt-3"
                 >
-                    Add New
+                    Add {name}
                 </Button>
             </div>
         </>
