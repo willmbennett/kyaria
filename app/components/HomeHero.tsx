@@ -12,13 +12,21 @@ export function HomeHero() {
       <Container>
         <div className="mx-auto max-w-lg pb-14 md:mx-0 md:max-w-none md:pb-48 lg:pb-52 xl:max-w-xl xl:pb-14">
           <h1 className="text-5xl font-semibold leading-tighter text-slate-900 md:mx-auto md:max-w-2xl md:text-center xl:mx-0 xl:text-left xl:text-6xl xl:leading-tighter">
-            Acing an interview has never been easier
+            Give yourself a competitive edge this recruiting season 
           </h1>
           <ul className="mt-6 flex flex-col space-y-4 md:mx-auto md:mt-8 md:max-w-3xl md:flex-row md:space-x-2 md:space-y-0 lg:space-x-4 xl:mx-0 xl:flex-col xl:space-x-0 xl:space-y-4">
+            
             <li className="flex items-center md:items-start xl:items-center">
               <CheckCircleIcon className="h-5 w-5 shrink-0 text-slate-800 md:h-6 md:w-6 xl:h-5 xl:w-5" />
               <p className="ml-3 text-slate-700 lg:ml-4 xl:ml-5 xl:text-lg">
-                Resume, cover letter,{' '}
+                Elevator pitch and behaviorals in {' '}
+                <span className="font-medium text-slate-900">one click.</span>
+              </p>
+            </li>
+            <li className="flex items-center md:items-start xl:items-center">
+              <CheckCircleIcon className="h-5 w-5 shrink-0 text-slate-800 md:h-6 md:w-6 xl:h-5 xl:w-5" />
+              <p className="ml-3 text-slate-700 lg:ml-4 xl:ml-5 xl:text-lg">
+                Polished resume and cover letter{' '}
                 <span className="font-medium text-slate-900">
                   written for you.
                 </span>
@@ -27,15 +35,8 @@ export function HomeHero() {
             <li className="flex items-center md:items-start xl:items-center">
               <CheckCircleIcon className="h-5 w-5 shrink-0 text-slate-800 md:h-6 md:w-6 xl:h-5 xl:w-5" />
               <p className="ml-3 text-slate-700 lg:ml-4 xl:ml-5 xl:text-lg">
-                Select your story theme, and click {' '}
-                <span className="font-medium text-slate-900">generate.</span>
-              </p>
-            </li>
-            <li className="flex items-center md:items-start xl:items-center">
-              <CheckCircleIcon className="h-5 w-5 shrink-0 text-slate-800 md:h-6 md:w-6 xl:h-5 xl:w-5" />
-              <p className="ml-3 text-slate-700 lg:ml-4 xl:ml-5 xl:text-lg">
-                Organize your jobsearch and optimize{' '}
-                <span className="font-medium text-slate-900">your funnel.</span>
+                <span className="font-medium text-slate-900">Stress free</span>
+                {' '} networking emails.
               </p>
             </li>
           </ul>
@@ -48,7 +49,7 @@ export function HomeHero() {
             </Button>
           </div>
           <p className="mt-4 flex text-md text-slate-600/90 md:justify-center xl:justify-start xl:text-base">
-            It's 100% free, no credit card EVER.
+            It's 100% free, no credit card or subscription.
           </p>
         </div>
       </Container>

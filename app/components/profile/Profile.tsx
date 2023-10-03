@@ -271,7 +271,7 @@ export default function Profile({
                             </Button>
                         </div>
 
-                        <h2 className={H2_STYLE}>Eduation</h2>
+                        <h2 className={H2_STYLE}>Education</h2>
                         {educationFields.map((field, index) => (
                             <div key={field.id} className={BASIC_FIELD_STYLE}>
                                 <div className={BASIC_FIELD_STYLE}>

@@ -133,7 +133,7 @@ export function PricingCards() {
                   eleifend malesuada dictumst vulputate rhoncus justo.
                 </p>
               </div>
-              <Button href="/signup" className="mt-8 lg:mt-0" variant="ghost">
+              <Button href="/signin" className="mt-8 lg:mt-0" variant="ghost">
                 Get started for free
               </Button>
             </div>

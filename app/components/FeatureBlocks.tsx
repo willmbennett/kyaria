@@ -74,7 +74,7 @@ export function FeatureBlocks() {
               and we'll provide you a customized comprehensive packet of everything you need to succeed.
             </p>
             <Button
-              href="/auth/signup"
+              href="/auth/signin"
               variant="ghost"
               size="md"
               className="mt-10 sm:mt-12"
