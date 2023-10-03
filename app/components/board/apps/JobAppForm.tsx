@@ -114,7 +114,7 @@ export default function NewJobAppForm({
                     type="submit"
                     className="mt-3"
                 >
-                    Add New
+                    Submit
                 </Button>
             </div>
         </form>
