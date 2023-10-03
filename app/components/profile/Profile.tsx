@@ -150,7 +150,7 @@ export default function Profile({
                     <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
                         {profile? "Edit your profile": "Create your profile"}
                     </h1>
-                    {!profile && (<p>Don't worry too much, you can always edit this later.</p>)}
+                    {!profile && (<p>You can edit this later, but the more detail added the better your results will be.</p>)}
                     <form onSubmit={handleSubmit(onSubmit)} action="">
                         <h2 className={H2_STYLE}>Details</h2>
                         <div className={BASIC_FIELD_STYLE}>
