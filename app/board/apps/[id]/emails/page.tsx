@@ -1,7 +1,7 @@
 import { getJobApp } from "../../../../../lib/app-db";
 import Emails from "../../../../components/board/apps/pages/Emails";
 
-export default async function ExperiencePage({ params }: { params: { id: string } }) {
+export default async function EmailsPage({ params }: { params: { id: string } }) {
     const { jobApp } = await getJobApp(params.id);
     const jobData = jobApp?.job
 
