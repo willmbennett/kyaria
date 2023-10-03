@@ -2,7 +2,7 @@
 
 import ChatWithGPT from '../../ChatWithGPT';
 import { useState } from 'react';
-import { updateResumeAction } from '../../../../board/apps/[id]/_action';
+import { updateResumeAction } from '../../../../board/_action';
 
 const ACTIVE_ROUTE = "bg-gray-200 hover:bg-gray-600 hover:text-white";
 const INACTIVE_ROUTE = "hover:bg-gray-600 hover:text-white";

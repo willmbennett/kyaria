@@ -4,9 +4,9 @@ import {
   createJobApplication,
   deleteJobApp,
   updateJobApp
-} from "../../../../lib/app-db";
+} from "../../lib/app-db";
 import { revalidatePath } from "next/cache";
-import { createResume, updateResume } from "../../../../lib/resume-db";
+import { createResume, updateResume } from "../../lib/resume-db";
 
 export async function createJobApplicationAction(data: any, path: string) {
   const { jobApp } = await createJobApplication(data);

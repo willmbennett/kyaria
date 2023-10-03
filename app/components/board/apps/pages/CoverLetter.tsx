@@ -1,7 +1,7 @@
 'use client'
 
 import ChatWithGPT from '../../ChatWithGPT';
-import { updateJobAppAction } from '../../../../board/apps/[id]/_action';
+import { updateJobAppAction } from '../../../../board/_action';
 import { removeDetailSections } from '../../../../../lib/utils';
 
 export default function CoverLetter({
