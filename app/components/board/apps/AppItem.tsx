@@ -3,7 +3,7 @@ import Link from "next/link";
 import { parseISO, format } from 'date-fns';
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { updateJobAppAction } from "../../../board/apps/[id]/_action";
+import { updateJobAppAction } from "../../../board/_action";
 import { Button } from "../../Button";
 
 const ACTIVE_ROUTE = "bg-gray-200 hover:bg-gray-600 hover:text-white";
@@ -36,7 +36,7 @@ export default function AppItem(
     <div className={`mt-2 text-left border rounded-xl block ${app.active ? "" : "bg-slate-200"} shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]`}>
       <div>
         <div className="flex p-2 justify-between w-full">
-          <Link href={`/board/apps/${_id}`} target="_blank">
+          <Link href={`/apps/${_id}`} target="_blank">
             <div className="w-full py-1 ">
               <h5 className="text-lg font-medium leading-tight ">
                 {jobTitle}
@@ -52,7 +52,7 @@ export default function AppItem(
             </button>
           </div>
         </div>
-        <Link href={`/board/apps/${_id}`} target="_blank">
+        <Link href={`/apps/${_id}`} target="_blank">
           <div className="w-full px-2 pb-2 text-xs text-left border-b-2 border-neutral-100">
             {createdAt && (<time dateTime={createdAt}>{format(date, 'MM/dd')}</time>)}
           </div>

@@ -12,8 +12,9 @@ export default function Experience({
             <h1 className="text-center sm:text-6xl text-4xl max-w-[708px] font-bold mb-8">
                 Let's talk experience
             </h1>
-            <p>Adding details to your profile will help us write your better star stories.</p>
-            <div className="p-6 w-full">
+
+            <div className="lg:p-6 w-full">
+                <p>Adding details to your profile will help us write your better star stories.</p>
                 <h2 className="text-left font-bold text-2xl py-4 mb-4">Professional Experience</h2>
                 {jobApp.userResume.professional_experience.map((exp: any, index: number) => (
                     <div key={index} className="mb-8">

@@ -1,7 +1,7 @@
 'use client'
 
 import { removeDetailSections } from '../../../../../lib/utils';
-import { updateJobAppAction } from '../../../../board/apps/[id]/_action';
+import { updateJobAppAction } from '../../../../board/_action';
 import ChatWithGPT from '../../ChatWithGPT';
 
 export default function Story({
@@ -63,15 +63,17 @@ export default function Story({
             <h1 className="text-center sm:text-6xl text-4xl font-bold text-slate-900 mb-8">
                 Let's write you a story
             </h1>
-            <p>It's how you answer the question "Tell me about yourself" or "Why do you want this job?"</p>
-            <ChatWithGPT
-                documentID={jobApp._id}
-                message={message}
-                setKey='userStory'
-                currentState={jobApp.userStory}
-                saveToDatabase={updateJobAppAction}
-                temp={0.7}
-            />
+            <div className="lg:p-6 w-full">
+                <p>It's how you answer the question "Tell me about yourself" or "Why do you want this job?"</p>
+                <ChatWithGPT
+                    documentID={jobApp._id}
+                    message={message}
+                    setKey='userStory'
+                    currentState={jobApp.userStory}
+                    saveToDatabase={updateJobAppAction}
+                    temp={0.7}
+                />
+            </div>
         </>
     );
 }

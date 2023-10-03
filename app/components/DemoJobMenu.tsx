@@ -1,17 +1,22 @@
 'use client';
 
+import { usePathname } from "next/navigation";
+
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 const ACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-1 my-1 rounded text-xl lg:text-lg text-gray-600 bg-gray-200 font-bold items-center justify-center hover:bg-gray-600 hover:text-white";
 const INACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-1 my-1 rounded text-xl lg:text-lg text-gray-600 font-bold items-center justify-center hover:bg-gray-600 hover:text-white";
 
 export default function DemoJobMenu(
-  { currentSection, 
+  { currentSection,
     setCurrentSection
-  }: { 
-    currentSection: string, 
+  }: {
+    currentSection: string,
     setCurrentSection: any
   }) {
+  const router = useRouter()
   const [active, setActive] = useState(false);
+  const path = usePathname()
 
   const pageList = [
     { label: "Job Description", section: 'jobDescription' },
@@ -34,16 +39,17 @@ export default function DemoJobMenu(
             const handleClick = () => {
               setActive(!active);
               setCurrentSection(l.section)
+              router.push(path, { scroll: false })
             };
             return (
               <div key={i}>
                 <div className={l.section === currentSection ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
-                    <button
-                      onClick={handleClick}
-                      className="inline"
-                    >
-                      {l.label}
-                    </button>
+                  <button
+                    onClick={handleClick}
+                    className="inline"
+                  >
+                    {l.label}
+                  </button>
                 </div>
               </div>
             );

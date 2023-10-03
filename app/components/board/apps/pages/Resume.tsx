@@ -1,6 +1,6 @@
 import ChatWithGPT from '../../ChatWithGPT';
 import Responsibility from '../components/Responsibility';
-import { updateResumeAction } from '../../../../board/apps/[id]/_action';
+import { updateResumeAction } from '../../../../board/_action';
 import { removeDetailSections } from '../../../../../lib/utils';
 
 export default function Resume({

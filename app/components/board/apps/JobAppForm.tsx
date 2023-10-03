@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { FormFields, emails } from '../../../board/job-helper'
 import FieldArray from './FieldArray';
-import { createJobApplicationAction } from '../../../board/apps/[id]/_action';
+import { createJobApplicationAction } from '../../../board/_action';
 import { useRouter } from 'next/navigation'
 import { Button } from '../../Button';
 
@@ -49,7 +49,7 @@ export default function NewJobAppForm({
         //console.log(jobApp)
         setCreatingJob(false)
         setFormView(false)
-        router.push(`/board/apps/${jobApp}`)
+        router.push("/board")
     };
 
     return (

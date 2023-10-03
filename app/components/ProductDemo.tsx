@@ -8,13 +8,14 @@ import Resume from './board/apps/pages/Resume';
 import Experience from './board/apps/pages/Experience';
 import Emails from './board/apps/pages/Emails';
 import Story from './board/apps/pages/Story';
+import { JobApplication } from '../apps/JobApplication';
 
 export function ProductDemo({ jobApp }: { jobApp: any }) {
   const [currentSection, setCurrentSection] = useState('jobDescription');
 
   const jobData = jobApp?.job
   return (<>
-    <section className="relative overflow-hidden pt-16 md:pt-20 xl:pt-32">
+    <section className="relative pt-16 md:pt-20 xl:pt-32">
       <Container>
         <div className="flex flex-col items-center">
           <p className="flex items-center space-x-3.5 text-xl font-medium text-amber-900/70">
@@ -42,81 +43,9 @@ export function ProductDemo({ jobApp }: { jobApp: any }) {
           </p>
         </div>
       </Container>
-      <div className="flex max-w-5xl mx-auto flex-col py-2 min-h-screen border">
-        <div className="lg:px-4 lg:mt-6">
-          <div className="flex h-auto min-h-screen w-full lg:px-4 lg:mt-6">
-            <div className="lg:w-1/4 hidden lg:flex lg:flex-col">
-              <DemoJobMenu
-                currentSection={currentSection}
-                setCurrentSection={setCurrentSection}
-              />
-            </div>
-            <div className="lg:w-3/4 flex flex-col bg-white lg:m-3 lg:p-3 rounded-lg">
-              {currentSection == 'jobDescription' && (
-                <Container>
-                  {jobData && (
-                    <JobDescription
-                      jobData={jobData}
-                    />
-                  )}
-                </Container>
-              )}
-              {currentSection == 'coverLetter' && (
-                <Container>
-                  {jobApp && (
-                    <CoverLetter
-                      jobApp={jobApp}
-                    />
-                  )}
-                </Container>
-              )}
-              {currentSection == 'resume' && (
-                <Container>
-                  {jobApp && (
-                    <Resume
-                      application={jobApp}
-                    />
-                  )}
-                </Container>
-              )}
-              {currentSection == 'story' && (
-                <Container>
-                  {jobApp && (
-                    <Story
-                      jobApp={jobApp}
-                    />
-                  )}
-                </Container>
-              )}
-              {currentSection == 'experience' && (
-                <Container>
-                  {jobApp && (
-                    <Experience
-                      jobApp={jobApp}
-                    />
-                  )}
-                </Container>
-              )}
-              {currentSection == 'emails' && (
-                <Container>
-                  {jobApp && (
-                    <Emails
-                      jobApp={jobApp}
-                    />
-                  )}
-                </Container>
-              )}
-            </div>
-          </div>
-
-        </div>
-      </div>
+      <JobApplication
+            jobApp={jobApp}
+          />
     </section>
-    <div className='lg:hidden sticky bottom-0 w-full'>
-      <DemoJobMenu
-        currentSection={currentSection}
-        setCurrentSection={setCurrentSection}
-      />
-    </div>
   </>)
 }
