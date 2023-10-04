@@ -3,7 +3,7 @@ import Link from "next/link";
 import { authOptions } from "../../lib/auth";
 import { getUserJobApps } from "../../lib/app-db";
 import { getProfile } from "../../lib/profile-db";
-import JobAppsList from "../components/board/apps/JobApps";
+import JobAppsList from "../components/apps/JobApps";
 import Await from "../jobs/await";
 import { redirect } from "next/navigation";
 import { Button } from "../components/Button";

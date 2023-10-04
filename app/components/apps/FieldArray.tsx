@@ -1,6 +1,6 @@
 import React from "react";
 import { useFieldArray } from "react-hook-form";
-import { Button } from "../../Button";
+import { Button } from "../Button";
 
 const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'
 

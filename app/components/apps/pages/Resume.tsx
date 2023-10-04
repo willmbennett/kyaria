@@ -1,12 +1,14 @@
-import ChatWithGPT from '../../ChatWithGPT';
+import ChatWithGPT from '../../board/ChatWithGPT';
 import Responsibility from '../components/Responsibility';
-import { updateResumeAction } from '../../../../board/_action';
-import { removeDetailSections } from '../../../../../lib/utils';
+import { updateResumeAction } from '../../../board/_action';
+import { removeDetailSections } from '../../../apps/[id]/app-helper';
 
 export default function Resume({
-    application
+    application,
+    jobKeyWords
 }: {
-    application: any
+    application: any,
+    jobKeyWords: string[]
 }) {
     const userResume = application.userResume;
     const job = application.job;
@@ -60,6 +62,7 @@ export default function Resume({
                     setKey={"summary"}
                     currentState={application.userResume.summary}
                     saveToDatabase={updateResumeAction}
+                    jobKeyWords={jobKeyWords}
                 />
 
                 {userResume.areas_of_expertise && (<>
@@ -108,6 +111,7 @@ export default function Resume({
                                             saveToDatabase={updateResumeAction}
                                             parentIndex={index}
                                             childIndex={i}
+                                            jobKeyWords={jobKeyWords}
                                         />
                                     </div>))}
                             </ul>
@@ -149,6 +153,7 @@ export default function Resume({
                                                 saveToDatabase={updateResumeAction}
                                                 parentIndex={index}
                                                 childIndex={i}
+                                                jobKeyWords={jobKeyWords}
                                             />
                                         </div>
                                     ))}

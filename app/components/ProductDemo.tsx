@@ -1,19 +1,9 @@
 'use client'
-import DemoJobMenu from '../apps/JobMenu'
-import JobDescription from './board/apps/pages/JobDescription'
 import { Container } from './Container'
 import { useState } from 'react';
-import CoverLetter from './board/apps/pages/CoverLetter';
-import Resume from './board/apps/pages/Resume';
-import Experience from './board/apps/pages/Experience';
-import Emails from './board/apps/pages/Emails';
-import Story from './board/apps/pages/Story';
-import { JobApplication } from '../apps/JobApplication';
+import { JobApplication } from './apps/JobApplication';
 
 export function ProductDemo({ jobApp }: { jobApp: any }) {
-  const [currentSection, setCurrentSection] = useState('jobDescription');
-
-  const jobData = jobApp?.job
   return (<>
     <section className="relative pt-16 md:pt-20 xl:pt-32">
       <Container>

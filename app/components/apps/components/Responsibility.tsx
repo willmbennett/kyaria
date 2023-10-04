@@ -1,6 +1,6 @@
 'use client'
 
-import ChatWithGPT from '../../ChatWithGPT';
+import ChatWithGPT from '../../board/ChatWithGPT';
 
 export default function Responsibility({
     documentID,
@@ -9,7 +9,8 @@ export default function Responsibility({
     message,
     saveToDatabase,
     parentIndex,
-    childIndex
+    childIndex,
+    jobKeyWords
 }: {
     documentID: string,
     setKey: string,
@@ -17,7 +18,8 @@ export default function Responsibility({
     message: any,
     saveToDatabase: any,
     parentIndex: number,
-    childIndex: number
+    childIndex: number,
+    jobKeyWords: string[]
 }) {
 
     return (
@@ -31,6 +33,7 @@ export default function Responsibility({
                     parentIndex={parentIndex}
                     childIndex={childIndex}
                     saveToDatabase={saveToDatabase}
+                    jobKeyWords={jobKeyWords}
                 />
             </div>
         </>

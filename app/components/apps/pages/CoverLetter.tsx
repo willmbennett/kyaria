@@ -1,13 +1,15 @@
 'use client'
 
-import ChatWithGPT from '../../ChatWithGPT';
-import { updateJobAppAction } from '../../../../board/_action';
-import { removeDetailSections } from '../../../../../lib/utils';
+import ChatWithGPT from '../../board/ChatWithGPT';
+import { updateJobAppAction } from '../../../board/_action';
+import { removeDetailSections } from '../../../apps/[id]/app-helper';
 
 export default function CoverLetter({
     jobApp,
+    jobKeyWords
 }: {
-    jobApp: any
+    jobApp: any,
+    jobKeyWords: string[]
 }) {
 
     const profileNoDetails = removeDetailSections(jobApp.profile)
@@ -68,6 +70,7 @@ export default function CoverLetter({
                 currentState={jobApp.userCoverLetter}
                 saveToDatabase={updateJobAppAction}
                 temp={0.5}
+                jobKeyWords={jobKeyWords}
             />
         </>
     );
