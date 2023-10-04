@@ -1,8 +1,8 @@
 'use client'
 
-import ChatWithGPT from '../../ChatWithGPT';
+import ChatWithGPT from '../../board/ChatWithGPT';
 import { useState } from 'react';
-import { updateResumeAction } from '../../../../board/_action';
+import { updateResumeAction } from '../../../board/_action';
 
 const ACTIVE_ROUTE = "bg-gray-200 hover:bg-gray-600 hover:text-white";
 const INACTIVE_ROUTE = "hover:bg-gray-600 hover:text-white";
@@ -15,7 +15,8 @@ export default function StarStory({
     details,
     currentState,
     parentIndex,
-    childIndex
+    childIndex,
+    jobKeyWords
 }: {
     jobApp: any,
     documentID: string,
@@ -25,6 +26,7 @@ export default function StarStory({
     currentState: string,
     parentIndex: number,
     childIndex: number
+    jobKeyWords: string[]
 }) {
     const [active, setActive] = useState(false);
     const [showOptions, setShowOptions] = useState(false);
@@ -143,6 +145,7 @@ export default function StarStory({
                         childIndex={childIndex}
                         saveToDatabase={updateResumeAction}
                         temp={0.7}
+                        jobKeyWords={jobKeyWords}
                     />
                 </div>
             </div>

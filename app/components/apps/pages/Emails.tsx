@@ -1,16 +1,18 @@
 "use client"
 import { useState } from 'react';
-import { removeDetailSections } from '../../../../../lib/utils';
-import { updateJobAppAction } from '../../../../board/_action';
-import ChatWithGPT from '../../ChatWithGPT';
+import { removeDetailSections } from '../../../apps/[id]/app-helper';
+import { updateJobAppAction } from '../../../board/_action';
+import ChatWithGPT from '../../board/ChatWithGPT';
 
 const ACTIVE_ROUTE = "bg-gray-200 hover:bg-gray-600 hover:text-white";
 const INACTIVE_ROUTE = "hover:bg-gray-600 hover:text-white";
 
 export default function Experience({
     jobApp,
+    jobKeyWords
 }: {
     jobApp: any,
+    jobKeyWords: string[]
 }) {
     const emails = jobApp.emails;
     const [showOptions, setShowOptions] = useState(false);
@@ -103,6 +105,7 @@ export default function Experience({
                                     parentIndex={i}
                                     saveToDatabase={updateJobAppAction}
                                     temp={0.5}
+                                    jobKeyWords={jobKeyWords}
                                 />
                             </div>
                         )

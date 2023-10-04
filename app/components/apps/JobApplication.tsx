@@ -1,16 +1,18 @@
 'use client'
 import JobMenu from './JobMenu'
-import JobDescription from '../components/board/apps/pages/JobDescription'
-import { Container } from '../components/Container'
+import JobDescription from './pages/JobDescription'
+import { Container } from '../Container'
 import { useState } from 'react';
-import CoverLetter from '../components/board/apps/pages/CoverLetter';
-import Resume from '../components/board/apps/pages/Resume';
-import Experience from '../components/board/apps/pages/Experience';
-import Emails from '../components/board/apps/pages/Emails';
-import Story from '../components/board/apps/pages/Story';
+import CoverLetter from './pages/CoverLetter';
+import Resume from './pages/Resume';
+import Experience from './pages/Experience';
+import Emails from './pages/Emails';
+import Story from './pages/Story';
+import { createJobKeywords } from '../../apps/[id]/app-helper';
 
 export function JobApplication({ jobApp }: { jobApp: any }) {
   const [currentSection, setCurrentSection] = useState('jobDescription');
+  const { jobKeyWords, topWords } = createJobKeywords(jobApp.job)
 
   const jobData = jobApp?.job
   return (<>
@@ -28,31 +30,37 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
               {currentSection == 'jobDescription' && jobData && (
                 <JobDescription
                   jobData={jobData}
+                  topWords={topWords}
                 />
               )}
               {currentSection == 'coverLetter' && jobApp && (
                 <CoverLetter
                   jobApp={jobApp}
+                  jobKeyWords={jobKeyWords}
                 />
               )}
               {currentSection == 'resume' && jobApp && (
                 <Resume
                   application={jobApp}
+                  jobKeyWords={jobKeyWords}
                 />
               )}
               {currentSection == 'story' && jobApp && (
                 <Story
                   jobApp={jobApp}
+                  jobKeyWords={jobKeyWords}
                 />
               )}
               {currentSection == 'experience' && jobApp && (
                 <Experience
                   jobApp={jobApp}
+                  jobKeyWords={jobKeyWords}
                 />
               )}
               {currentSection == 'emails' && jobApp && (
                 <Emails
                   jobApp={jobApp}
+                  jobKeyWords={jobKeyWords}
                 />
               )}
             </div>

@@ -10,10 +10,25 @@ import { CodeBlock } from './codeblock'
 import { MemoizedReactMarkdown } from './markdown'
 
 export interface ChatMessageProps {
-  message: Message
+  message: Message,
+  jobKeyWords: string[]
 }
 
-export function ChatMessage({ message, ...props }: ChatMessageProps) {
+export function ChatMessage({ message, jobKeyWords, ...props }: ChatMessageProps) {
+  function highlightKeywords(content: string, keywords: string[]): string {
+    if (content) {
+      keywords.forEach((keyword) => {
+        const regex = new RegExp(`\\b${keyword}\\b`, 'gi'); // Match the keyword as a whole word
+        content = content.replace(regex, (match) => `**${match}**`);
+      });
+      return content;
+    } else {
+      return content;
+    }
+  }
+
+  const highlightedContent = highlightKeywords(message.content, jobKeyWords);
+
   return (
     <div
       className={cn('w-full')}
@@ -59,7 +74,7 @@ export function ChatMessage({ message, ...props }: ChatMessageProps) {
             }
           }}
         >
-          {message.content}
+          {highlightedContent}
         </MemoizedReactMarkdown>
       </div>
     </div>

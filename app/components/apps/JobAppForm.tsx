@@ -1,10 +1,10 @@
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { FormFields, emails } from '../../../board/job-helper'
+import { FormFields, emails } from '../../board/job-helper'
 import FieldArray from './FieldArray';
-import { createJobApplicationAction } from '../../../board/_action';
+import { createJobApplicationAction } from '../../board/_action';
 import { useRouter } from 'next/navigation'
-import { Button } from '../../Button';
+import { Button } from '../Button';
 
 const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'
 

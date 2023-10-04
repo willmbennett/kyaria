@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../../lib/auth";
 import { getJob } from "../../../lib/job-db";
 import { getProfile } from "../../../lib/profile-db";
-import JobDescription from "../../components/board/apps/pages/JobDescription";
+import JobDescription from "../../components/apps/pages/JobDescription";
 
 export default async function JobPage({ params }: { params: { id: string } }) {
     const { job } = await getJob(params.id)

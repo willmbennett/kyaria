@@ -15,6 +15,7 @@ interface Props {
   copy?: boolean;
   parentIndex?: number;
   childIndex?: number;
+  jobKeyWords?: string[]
 }
 
 export default function ChatWithGPT({
@@ -27,6 +28,7 @@ export default function ChatWithGPT({
   copy = true,
   parentIndex,
   childIndex,
+  jobKeyWords
 }: Props) {
   const [finishedLoading, setFinishedLoading] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -110,7 +112,7 @@ export default function ChatWithGPT({
           )}
         </div>
         {lastmessage && lastmessage.role == 'assistant' && (
-          <ChatMessage message={lastmessage} />
+          <ChatMessage message={lastmessage} jobKeyWords={jobKeyWords || ['']}/>
         )}
       </div>
     </div>

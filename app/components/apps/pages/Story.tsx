@@ -1,13 +1,15 @@
 'use client'
 
-import { removeDetailSections } from '../../../../../lib/utils';
-import { updateJobAppAction } from '../../../../board/_action';
-import ChatWithGPT from '../../ChatWithGPT';
+import { removeDetailSections } from '../../../apps/[id]/app-helper';
+import { updateJobAppAction } from '../../../board/_action';
+import ChatWithGPT from '../../board/ChatWithGPT';
 
 export default function Story({
-    jobApp
+    jobApp,
+    jobKeyWords
 }: {
     jobApp: any
+    jobKeyWords: string[]
 }) {
     const profileNoDetails = removeDetailSections(jobApp.profile)
 
@@ -72,6 +74,7 @@ export default function Story({
                     currentState={jobApp.userStory}
                     saveToDatabase={updateJobAppAction}
                     temp={0.7}
+                    jobKeyWords={jobKeyWords}
                 />
             </div>
         </>

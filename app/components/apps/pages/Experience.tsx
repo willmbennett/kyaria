@@ -3,8 +3,10 @@ import StarStory from '../components/StarStory';
 
 export default function Experience({
     jobApp,
+    jobKeyWords
 }: {
     jobApp: any,
+    jobKeyWords: string[]
 }) {
 
     return (
@@ -45,6 +47,7 @@ export default function Experience({
                                                 currentState={resp.starStory}
                                                 parentIndex={index}
                                                 childIndex={i}
+                                                jobKeyWords={jobKeyWords}
                                             />
                                         </div>
                                     </div>
@@ -84,6 +87,7 @@ export default function Experience({
                                                     currentState={detail.starStory}
                                                     parentIndex={index}
                                                     childIndex={i}
+                                                    jobKeyWords={jobKeyWords}
                                                 />
                                             </div>
                                         </div>

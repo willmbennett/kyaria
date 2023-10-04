@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { getJobApp } from "../../../lib/app-db";
 import { authOptions } from "../../../lib/auth";
 import Await from "../../jobs/await";
-import { JobApplication } from "../JobApplication";
+import { JobApplication } from "../../components/apps/JobApplication";
 
 export default async function JobAppPage({ params }: { params: { id: string } }) {
   const promise = getJobApp(params.id);
