@@ -109,14 +109,17 @@ export default function Profile({
                 </>
             )}
             {!error && sessionUserId == userId && !profile && inputTextView && (
-                <div>
-                    <div className='py-4'>
+                <div className='py-4 flex flex-col items-center justify-center text-center'>
+                    <div className='py-4 items-center flex flex-col justify-center text-center'>
                         <h1 className="sm:text-6xl text-4xl font-bold text-slate-900 mb-8">
                             Welcome!
                         </h1>
                         <h2 className="sm:text-4xl text-2xl font-bold text-slate-900 mb-8">
                             Time to create your profile
                         </h2>
+                        <p className="mt-10 text-sm text-base text-neutral-600 lg:w-1/2">
+                            At the moment we only support single page resumes for scanning. If you have a longer than one page CV please reach out to contact@kyaria.ai and we'd be happy to assist you with setting up your profile.
+                        </p>
                     </div>
                     <TextToJSON
                         setValues={setValues}
@@ -148,7 +151,7 @@ export default function Profile({
             {formView && (
                 <div className="p-6">
                     <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
-                        {profile? "Edit your profile": "Create your profile"}
+                        {profile ? "Edit your profile" : "Create your profile"}
                     </h1>
                     {!profile && (<p>You can edit this later, but the more detail added the better your results will be.</p>)}
                     <form onSubmit={handleSubmit(onSubmit)} action="">
@@ -323,7 +326,7 @@ export default function Profile({
                                 size="md"
                                 type="submit"
                             >
-                                {profile? "Save changes": "Create My Profile"}
+                                {profile ? "Save changes" : "Create My Profile"}
                             </Button>
                         </div>
                     </form>
