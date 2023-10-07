@@ -11,7 +11,7 @@ import { MemoizedReactMarkdown } from './markdown'
 
 export interface ChatMessageProps {
   message: Message,
-  jobKeyWords: string[]
+  jobKeyWords?: string[]
 }
 
 export function ChatMessage({ message, jobKeyWords, ...props }: ChatMessageProps) {
@@ -27,14 +27,14 @@ export function ChatMessage({ message, jobKeyWords, ...props }: ChatMessageProps
     }
   }
 
-  const highlightedContent = highlightKeywords(message.content, jobKeyWords);
+  const highlightedContent = jobKeyWords? highlightKeywords(message.content, jobKeyWords): message.content;
 
   return (
     <div
       className={cn('w-full')}
       {...props}
     >
-      <div className="w-full text-left">
+      <div className={`w-full ${message.role == 'assistant'? "text-left": "text-right"}`}>
         <MemoizedReactMarkdown
           className="prose break-words dark:prose-invert prose-p:leading-relaxed prose-pre:p-0"
           remarkPlugins={[remarkGfm, remarkMath]}

@@ -40,6 +40,7 @@ interface ButtonProps {
   type?: "button" | "submit" | "reset";
   href?: string;
   children?: React.ReactNode;
+  disabled?: boolean;
   onClick?: () => void;  // Step 1: Add this line
 }
 
@@ -51,6 +52,7 @@ export function  Button({
   type,
   href,
   children,
+  disabled,
   onClick,  // Destructure the onClick prop
   ...props
 }: ButtonProps) {
@@ -67,7 +69,7 @@ export function  Button({
       {children}
     </Link>
   ) : (
-    <button className={className} onClick={onClick} type={type} {...props}>
+    <button className={className} onClick={onClick} disabled={disabled} type={type} {...props}>
       {children}
     </button>
   )
