@@ -9,10 +9,28 @@ import Experience from './pages/Experience';
 import Emails from './pages/Emails';
 import Story from './pages/Story';
 import { createJobKeywords } from '../../apps/[id]/app-helper';
+import { Chat } from '../chat/Chat';
+import { type Message } from 'ai/react'
 
 export function JobApplication({ jobApp }: { jobApp: any }) {
   const [currentSection, setCurrentSection] = useState('jobDescription');
   const { jobKeyWords, topWords } = createJobKeywords(jobApp.job)
+
+  const initialMessages: Message[] = [
+    {
+      "id": "1",
+      "role": "system",
+      "content": `You are a career coach that is helping ${jobApp.userResume.name} do a mock interview
+                  They are applying for this job ${JSON.stringify(jobApp.job)}
+                  Act only in your capacity as a career coach and do not discuss any other topic.
+                  `
+    },
+    {
+      "id": "2",
+      "role": "assistant",
+      "content": `Hi ${jobApp.userResume.name} are you ready to do a mock interview for the ${jobApp.job.jobTitle} position at ${jobApp.job.company}?`
+    }
+  ];
 
   const jobData = jobApp?.job
   return (<>
@@ -32,6 +50,9 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
                   jobData={jobData}
                   topWords={topWords}
                 />
+              )}
+              {currentSection == 'mockInterview' && jobData && (
+                <Chat initialMessages={initialMessages} />
               )}
               {currentSection == 'coverLetter' && jobApp && (
                 <CoverLetter

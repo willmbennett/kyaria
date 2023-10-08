@@ -20,6 +20,7 @@ export default function JobMenu(
 
   const pageList = [
     { label: "Job Description", section: 'jobDescription' },
+    { label: "Mock Interview", section: 'mockInterview' },
     { label: "Personal Story", section: 'story' },
     { label: "Behavioral Interview", section: `experience` },
     { label: "Emails", section: 'emails' },
