@@ -28,7 +28,7 @@ export const ResponsibilityItem = (
     return (
         <li className="flex bg-slate-100 my-2 p-2 rounded-xl w-full">
             <div className="flex flex-col space-y-2 w-full">
-                <h4 className="text-left font-bold text-lg mb-2">Responsibility</h4>
+                <h4 className="text-left font-bold text-lg mb-2">Accomplishment</h4>
                 {responsibility.content && (
                     <ProfileTextEdit
                         profileId={profileId}

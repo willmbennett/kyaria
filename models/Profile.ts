@@ -24,17 +24,6 @@ class Questionnaire {
     public salaryMax?: number;
 }
 
-class Responsibilities {
-    @prop()
-    public content?: string;
-
-    @prop()
-    public detail?: string;
-
-    @prop()
-    public starStory?: string;
-}
-
 class ProfessionalExperience {
     @prop()
     public title?: string;
@@ -51,8 +40,8 @@ class ProfessionalExperience {
     @prop()
     public end_date?: string;
 
-    @prop({ type: () => [Responsibilities] })
-    public responsibilities?: Responsibilities[];
+    @prop({ type: () => [Details] })
+    public responsibilities?: Details[];
 }
 
 class Details {
@@ -61,9 +50,6 @@ class Details {
 
     @prop()
     public detail?: string;
-
-    @prop()
-    public starStory?: string;
 }
 
 class Education {
@@ -75,6 +61,12 @@ class Education {
 
     @prop()
     public location?: string;
+
+    @prop()
+    public start_date?: string;
+
+    @prop()
+    public end_date?: string;
 
     @prop({ type: () => [Details] })
     public details?: Details[];

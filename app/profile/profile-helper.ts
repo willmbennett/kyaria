@@ -18,17 +18,17 @@ export type FormFields = {
         responsibilities: {
           content: string;
           detail: string;
-          starStory: string;
         }[];
     }[];
     education: {
         degree: string;
         institution: string;
         location: string;
+        start_date: string;
+        end_date: string;
         details: {
           content: string;
           detail: string;
-          starStory: string;
         }[];
     }[];
 };
@@ -87,7 +87,7 @@ export const expectedJson = {
           "location": "",
           "start_date": "",
           "end_date": "",
-          "responsibilities": [{"content": "", "detail": "", "starStory": ""}]
+          "responsibilities": [{"content": ""}]
       }
   ],
   "education": [
@@ -95,7 +95,9 @@ export const expectedJson = {
           "degree": "",
           "institution": "",
           "location": "",
-          "details": [{"content": "", "detail": "", "starStory": ""}]
+          "start_date": "",
+          "end_date": "",
+          "details": [{"content": ""}]
       }
   ]
 }

@@ -166,7 +166,7 @@ export default function NewProfileForm({
                             location: "Title",
                             start_date: "Start Date",
                             end_date: "End Date",
-                            responsibilities: [{ content: "", detail: "", starStory: "" }]
+                            responsibilities: [{ content: "", detail: "" }]
                         })}
                         className="mt-10 sm:mt-12"
                     >
@@ -188,6 +188,14 @@ export default function NewProfileForm({
                         <div className={BASIC_FIELD_STYLE}>
                             <p>Location</p>
                             <input {...register(`education.${index}.location`)} placeholder="Location" />
+                        </div>
+                        <div className={BASIC_FIELD_STYLE}>
+                            <p>Start Date</p>
+                            <input {...register(`education.${index}.start_date`)} placeholder="Start Date" />
+                        </div>
+                        <div className={BASIC_FIELD_STYLE}>
+                            <p>End Date</p>
+                            <input {...register(`education.${index}.end_date`)} placeholder="End Date" />
                         </div>
                         <div className={BASIC_FIELD_STYLE}>
                             <p>Details</p>
@@ -212,7 +220,9 @@ export default function NewProfileForm({
                             degree: "Degree",
                             institution: "Institution",
                             location: "Location",
-                            details: [{ content: "", detail: "", starStory: "" }]
+                            start_date: "",
+                            end_date: "",
+                            details: [{ content: "", detail: ""}]
                         })}
                         className="mt-10 sm:mt-12"
                     >

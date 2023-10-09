@@ -41,10 +41,6 @@ export const ProfessionalExperienceList = ({ experiences, profileId }: { experie
         setAdd(!add)
     };
 
-    const addExperience = () => {
-        setAdd(true)
-    };
-
     const { register, handleSubmit, control, formState: { errors } } = useForm<FormFields>({});
 
     // Save the final message to the database

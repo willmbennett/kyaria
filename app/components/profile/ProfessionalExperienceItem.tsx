@@ -46,7 +46,7 @@ export const ProfessionalExperienceItem = (
                         variant={add ? "ghost" : "solid"}
                         onClick={toggleAdd}
                     >
-                        {add ? "Remove New Responsibility" : "Add New Responsibilty"}
+                        {add ? "Remove New Accomplishment" : "Add New Accomplishment"}
                     </Button>
                 </ul>
             )}
