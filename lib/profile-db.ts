@@ -35,17 +35,12 @@ export async function createProfile(data: ProfileClass) {
     try {
         // You might not want to log sensitive user information in a production environment.
         // This is more suited for a development environment.
-        console.log(`Profile to create: ${JSON.stringify(data)}`);
+        //console.log(`Profile to create: ${JSON.stringify(data)}`);
 
-        const existingProfile = await ProfileModel.findOne({ email: data.email }).lean().exec();
+        const profile = await ProfileModel.create(data);
+        //console.log(`Created Profile: ${JSON.stringify(profile)}`);
 
-        if (existingProfile) {
-            return { error: "Email already exists" }
-        } else {
-            const profile = await ProfileModel.create(data);
-            console.log(`Created Profile: ${JSON.stringify(profile)}`);
-            return { profile };
-        }
+        //return { profile };
     } catch (error) {
         console.error("Error creating profile:", error); // Log the error for debugging purposes
         return { error: 'Failed to create profile' }; // Generic error message to user
