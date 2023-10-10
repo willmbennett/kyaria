@@ -44,7 +44,7 @@ export const EducationItem = (
                         variant={add ? "ghost" : "solid"}
                         onClick={toggleAdd}
                     >
-                        {add ? "Remove New Detail" : "Add Accomplishment"}
+                        {add ? "Remove New Accomplishment" : "Add New Accomplishment"}
                     </Button>
                 </ul>
             )}

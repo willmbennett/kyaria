@@ -81,7 +81,6 @@ export default function TextToJSON(
             const addUserId = { ...finalMessage, userId: userId }
             //console.log(profile)
             console.log('about to create profile')
-            setLoading(false)
             saveProfile(addUserId, path)
         }
     }, [finishedLoading]);
@@ -90,6 +89,7 @@ export default function TextToJSON(
     const saveProfile = async (addUserId: any, path: string) => {
         await createProfileAction(addUserId, path);
         setOnboardingStage('questionaire')
+        setLoading(false)
         router.push(currentPath, { scroll: true })
     };
 
