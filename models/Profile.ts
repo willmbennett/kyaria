@@ -7,15 +7,21 @@ import {
     mongoose,
 } from "@typegoose/typegoose";
 
-class Responsibilities {
+class Questionnaire {
     @prop()
-    public content?: string;
+    public desiredRole?: string;
+
+    @prop({ type: Number })
+    public industryExperience?: number;
 
     @prop()
-    public detail?: string;
+    public jobSearchStatus?: string;
 
-    @prop()
-    public starStory?: string;
+    @prop({ type: Number })
+    public salaryMin?: number;
+
+    @prop({ type: Number })
+    public salaryMax?: number;
 }
 
 class ProfessionalExperience {
@@ -34,8 +40,8 @@ class ProfessionalExperience {
     @prop()
     public end_date?: string;
 
-    @prop({ type: () => [Responsibilities] })
-    public responsibilities?: Responsibilities[];
+    @prop({ type: () => [Details] })
+    public responsibilities?: Details[];
 }
 
 class Details {
@@ -44,9 +50,6 @@ class Details {
 
     @prop()
     public detail?: string;
-
-    @prop()
-    public starStory?: string;
 }
 
 class Education {
@@ -58,6 +61,12 @@ class Education {
 
     @prop()
     public location?: string;
+
+    @prop()
+    public start_date?: string;
+
+    @prop()
+    public end_date?: string;
 
     @prop({ type: () => [Details] })
     public details?: Details[];
@@ -73,7 +82,7 @@ class Education {
         allowMixed: Severity.ALLOW
     }
 })
-@index({ email: 1, userId: 1 })
+@index({ userId: 1 })
 class ProfileClass {
     @prop({ required: true })
     public name!: string;
@@ -81,7 +90,7 @@ class ProfileClass {
     @prop()
     public title?: string;
 
-    @prop({ required: true, unique: true })
+    @prop({ required: true })
     public email!: string;
 
     @prop()
@@ -107,6 +116,9 @@ class ProfileClass {
 
     @prop({ type: () => [Education] })
     public education?: Education[];
+
+    @prop({ _id: false })
+    public questionnaire?: Questionnaire;
 
     @prop({ required: true, unique: true })
     public userId!: string;

@@ -18,84 +18,56 @@ export type FormFields = {
         responsibilities: {
           content: string;
           detail: string;
-          starStory: string;
         }[];
     }[];
     education: {
         degree: string;
         institution: string;
         location: string;
+        start_date: string;
+        end_date: string;
         details: {
           content: string;
           detail: string;
-          starStory: string;
         }[];
     }[];
 };
 
-export const fetchUserProfile = async (userId: string) => {
+export const roleOptions = [
+  'Software Developer',
+  'Senior Software Developer',
+  'Manager',
+  'Analyst',
+  'System Administrator',
+  'Data Scientist',
+  'Network Engineer',
+  'Front-End Developer',
+  'Back-End Developer',
+  'Full Stack Developer',
+  'DevOps Engineer',
+  'Product Manager',
+  'Graphic Designer',
+  'UX/UI Designer',
+  'Database Administrator',
+  'Cloud Engineer',
+  'Mobile App Developer',
+  'QA Engineer',
+  'Sales Representative',
+  'Marketing Specialist',
+  'Technical Writer',
+  'HR Specialist',
+  'Project Manager',
+  'Security Analyst',
+  'Business Analyst',
+  'Financial Advisor',
+  'Auditor',
+  'Consultant',
+  'Customer Support Specialist',
+  'Research Scientist',
+  'Other'
+];
 
-    //console.log(`User ID: ${userId}`)
-    try {
-      const response = await fetch(`/api/db/profile/${userId}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
 
-      //console.log(`Resp: ${response}`)
-
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-
-      const fetchedUserProfile = await response.json();
-
-      //console.log(`Resp: ${fetchedUserProfile[0]}`)
-
-      if (fetchedUserProfile.length > 0) {
-        return fetchedUserProfile[0];
-      }
-    } catch (error) {
-      console.error('Failed to fetch user profile:', error);
-    }
-  };
-
-export const createUserProfile = async (
-    {
-        data,
-        userId
-
-    }: {
-        data: FormFields
-        userId: string
-    }) => {
-    try {
-        const response = await fetch('/api/db/profile/new', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ ...data, userId: userId }), // Sending form data
-        });
-
-        if (!response.ok) {
-            throw new Error(response.statusText);
-        }
-
-        const createdUserProfile = await response.json();
-
-        //console.log("Created User Profile")
-        //console.log(createdUserProfile.insertedId)
-
-        if (createdUserProfile.insertedId) {
-            return { ...data, _id: createdUserProfile.insertedId, userId: userId }
-        }
-    } catch (error) {
-        console.error('Failed to create user profile:', error);
-    }
-};
 
 
 export const expectedJson = {
@@ -115,7 +87,7 @@ export const expectedJson = {
           "location": "",
           "start_date": "",
           "end_date": "",
-          "responsibilities": [{"content": "", "detail": "", "starStory": ""}]
+          "responsibilities": [{"content": ""}]
       }
   ],
   "education": [
@@ -123,7 +95,9 @@ export const expectedJson = {
           "degree": "",
           "institution": "",
           "location": "",
-          "details": [{"content": "", "detail": "", "starStory": ""}]
+          "start_date": "",
+          "end_date": "",
+          "details": [{"content": ""}]
       }
   ]
 }
