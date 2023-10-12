@@ -84,14 +84,12 @@ export default function Experience({
                         const message = [
                             {
                                 "role": "system",
-                                "content": `You are a professional email writer specialized in creating personalized, compelling emails for jobseekers.
-                            `
+                                "content": `You are a professional email writer specialized in creating personalized, compelling emails for jobseekers. Keep them 4 sentances max and casual, keep headlines short to under 60 characters.`
                             },
                             {
                                 "role": "user",
                                 "content": `Please write me a ${selectedEmail.type} email for this job post: ${JSON.stringify(jobApp.job)}.
-                                Include information from my profile ${JSON.stringify(profileNoDetails)}
-                                Keep the emails concise, 3-4 paragraphs maximum.
+                                Include information from my profile ${JSON.stringify(profileNoDetails)} and keep the writing style consistent. 
                             `
                             }
                         ]
@@ -104,7 +102,7 @@ export default function Experience({
                                     currentState={email.content}
                                     parentIndex={i}
                                     saveToDatabase={updateJobAppAction}
-                                    temp={0.5}
+                                    temp={0.9}
                                     jobKeyWords={jobKeyWords}
                                 />
                             </div>
