@@ -9,6 +9,7 @@ import clsx from 'clsx'
 import { Inter } from 'next/font/google'
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
+import { TooltipProvider } from './components/ui/tooltip';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
@@ -46,9 +47,11 @@ export default async function RootLayout({
           src="https://static.zdassets.com/ekr/snippet.js?key=135d1136-b2c1-4d54-8610-58a0b79632da"
   />*/}
         <SessionProvider session={session}>
+        <TooltipProvider >
           <Header />
             {children}
           <Footer />
+        </TooltipProvider >
         </SessionProvider>
         <Analytics />
       </body>

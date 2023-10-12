@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import { TooltipProvider } from "../../components/ui/tooltip";
 
 const title = 'Launch Your Career';
 const description = 'Launch your career with the power of AI';
@@ -27,9 +26,7 @@ export default async function AppLayout({
     children: React.ReactNode;
 }) {
 
-    return (
-        <TooltipProvider >
-            {children}
-        </TooltipProvider >
-    );
+    return (<>
+        {children}
+    </>);
 }
