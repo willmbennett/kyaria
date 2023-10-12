@@ -74,7 +74,7 @@ const UserProfile: React.FC<ProfileProps> = ({ userProfile }) => {
           <p className="text-left font-medium text-lg mb-4">
             <Link href={social_links.LinkedIn} target="_blank" rel="noopener noreferrer" >
               <ProfileTextEdit
-                label="Location"
+                label="LinkedIn"
                 profileId={profileId}
                 setKey="social_links.LinkedIn"
                 currentState={social_links.LinkedIn}
@@ -86,7 +86,7 @@ const UserProfile: React.FC<ProfileProps> = ({ userProfile }) => {
           <p className="text-left font-medium text-lg mb-4">
             <Link href={social_links.Github} target="_blank" rel="noopener noreferrer" >
               <ProfileTextEdit
-                label="Location"
+                label="Github"
                 profileId={profileId}
                 setKey="social_links.Github"
                 currentState={social_links.Github}
