@@ -32,22 +32,26 @@ export async function POST(request: Request) {
         }
     };
 
-    return new Promise((resolve, reject) => {
-        const req = https.request(options, function (response) {
+    return new Promise<NextResponse>((resolve, reject) => {
+        const req = https.request(options, (response) => {
             console.log(`STATUS: ${response.statusCode}`);
             response.setEncoding('utf8');
 
-            var responseAsString = '';
+            let responseAsString = '';
 
             response.on('data', (chunk) => {
                 responseAsString += chunk;
             });
 
             response.on('end', () => {
-                var responseAsJson = JSON.parse(responseAsString);
-                var resumeData = responseAsJson.Value.ResumeData;
-                //console.log(`resumeData: ${JSON.stringify(resumeData)}`);
-                resolve(new NextResponse(JSON.stringify({ parsedResume: resumeData }), { status: 200 }));
+                try {
+                    const responseAsJson = JSON.parse(responseAsString);
+                    const resumeData = responseAsJson.Value.ResumeData;
+                    resolve(new NextResponse(JSON.stringify({ parsedResume: resumeData }), { status: 200 }));
+                } catch (err) {
+                    console.error('Error while processing the response:', err);
+                    reject(new NextResponse(JSON.stringify({ error: 'An error occurred while processing the server response.' }), { status: 500 }));
+                }
             });
         });
 

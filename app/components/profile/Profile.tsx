@@ -39,12 +39,6 @@ export default function Profile({
                         <h2 className="sm:text-4xl text-2xl font-bold text-slate-900 mb-8">
                             Time to create your profile
                         </h2>
-                        <p className="mt-10 text-sm text-base text-neutral-600 lg:w-1/2">
-                            At the moment we only support single page resumes for scanning. If you have a longer than one page CV please reach out to contact@kyaria.ai and we'd be happy to assist you with setting up your profile.
-                        </p>
-                        <p className="mt-5 text-sm text-base text-neutral-600 lg:w-1/2">
-                            It will take a minute to set up your profile. Feel free to get up and stretch but please don't close this page.
-                        </p>
                     </div>
                     <TextToJSON
                         defaultTextInput={['development', 'preview'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '') ? defaultTextInput : ''}

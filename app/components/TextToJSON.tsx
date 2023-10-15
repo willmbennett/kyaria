@@ -109,11 +109,6 @@ export default function TextToJSON(
     }
 
     function onDocumentLoadSuccess({ numPages: nextNumPages }: PDFDocumentProxy): void {
-        if (nextNumPages > 1) {
-            alert('Please upload a PDF with only one page.');
-            setFile(null);  // Reset the uploaded file
-            return;
-        }
         setNumPages(nextNumPages);
     }
 
@@ -129,7 +124,7 @@ export default function TextToJSON(
             {!loading && (<>
                 <div className='w-full flex flex-col text-center'>
                     <p className="mb-4 text-sm text-base text-neutral-600 w-full max-w-screen">
-                        Upload your resume here.
+                        Upload your resume here (pdf only).
                     </p>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)}>
