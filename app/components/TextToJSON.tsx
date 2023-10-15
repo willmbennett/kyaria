@@ -1,7 +1,6 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { useChat, type Message } from 'ai/react'
 import { pdfjs, Document, Page } from 'react-pdf';
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css"
@@ -10,6 +9,7 @@ import type { PDFDocumentProxy } from 'pdfjs-dist';
 import { Button } from './Button';
 import { createProfileAction } from '../profile/_action';
 import { usePathname, useRouter } from "next/navigation";
+import { transformParsedResume } from '../profile/profile-helper';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
     'pdfjs-dist/build/pdf.worker.min.js',
@@ -31,15 +31,11 @@ type FormFields = {
 
 export default function TextToJSON(
     {
-        expectedJson,
         defaultTextInput,
-        demoJSON,
         setOnboardingStage,
         userId
     }: {
-        expectedJson: any,
         defaultTextInput?: string,
-        demoJSON?: any,
         setOnboardingStage: any,
         userId: string
     }) {
@@ -47,43 +43,10 @@ export default function TextToJSON(
     const router = useRouter()
     const currentPath = usePathname()
     const [loading, setLoading] = useState(false)
-    const [finishedLoading, setFinishedLoading] = useState(false)
     const { register, handleSubmit, formState: { errors } } = useForm<FormFields>({
         defaultValues: { input: defaultTextInput ? defaultTextInput : '' } // Leave blank
     });
 
-    const initialMessage: Message[] = [
-        {
-            "id": "1",
-            "role": "system",
-            "content": `You will be provided with unstructured data, and your task is to extract data from it. Return the data in the following format: ${JSON.stringify(expectedJson)}. If fields are empty simply return them as such.`
-        }
-    ]
-
-    const { messages, append } = useChat({
-        body: {
-            temp: 0.1
-        },
-        onFinish() {
-            setFinishedLoading(true)
-        },
-        initialMessages: initialMessage
-    });
-
-    // Save the final message to context
-    useEffect(() => {
-        if (finishedLoading) {
-            const finalMessage = ['', ''].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '') ? demoJSON : JSON.parse(messages[messages.length - 1].content);
-            //console.log(finalMessage)
-            console.log('Data to be created:')
-            console.log(finalMessage)
-            const path = "/"
-            const addUserId = { ...finalMessage, userId: userId }
-            //console.log(profile)
-            console.log('about to create profile')
-            saveProfile(addUserId, path)
-        }
-    }, [finishedLoading]);
 
     // Save the user's profile
     const saveProfile = async (addUserId: any, path: string) => {
@@ -93,15 +56,34 @@ export default function TextToJSON(
         router.push(currentPath, { scroll: true })
     };
 
-    const onSubmit: SubmitHandler<FormFields> = async (data) => {
-        console.log("Made it to parse text")
+    const onSubmit: SubmitHandler<FormFields> = async () => {
+        //console.log("Made it to parse text")
         // Ask chatGPT to parse resume text
         setLoading(true)
-        append({
+        /*append({
             "id": "2",
             "role": "user",
             "content": `${resumeUploadText}`
         });
+        */
+
+        const response = await fetch('/api/sovren', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ content: resumeUploadText })
+        });
+
+        const { parsedResume } = await response.json();
+        //console.log(parsedResume)
+        const transformedResume = transformParsedResume(parsedResume)
+        //console.log(transformedResume)
+        const addUserId = { ...transformedResume, userId: userId }
+        //console.log(profile)
+        const path = "/"
+        //console.log('about to create profile')
+        saveProfile(addUserId, path)
     };
 
     const [file, setFile] = useState<PDFFile>();
@@ -127,11 +109,6 @@ export default function TextToJSON(
     }
 
     function onDocumentLoadSuccess({ numPages: nextNumPages }: PDFDocumentProxy): void {
-        if (nextNumPages > 1) {
-            alert('Please upload a PDF with only one page.');
-            setFile(null);  // Reset the uploaded file
-            return;
-        }
         setNumPages(nextNumPages);
     }
 
@@ -147,7 +124,7 @@ export default function TextToJSON(
             {!loading && (<>
                 <div className='w-full flex flex-col text-center'>
                     <p className="mb-4 text-sm text-base text-neutral-600 w-full max-w-screen">
-                        Upload your resume here.
+                        Upload your resume here (pdf only).
                     </p>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)}>
