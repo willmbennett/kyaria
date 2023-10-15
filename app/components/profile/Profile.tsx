@@ -47,9 +47,7 @@ export default function Profile({
                         </p>
                     </div>
                     <TextToJSON
-                        expectedJson={expectedJson}
                         defaultTextInput={['development', 'preview'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '') ? defaultTextInput : ''}
-                        demoJSON={demoJSON}
                         setOnboardingStage={setOnboardingStage}
                         userId={userId}
                     />
