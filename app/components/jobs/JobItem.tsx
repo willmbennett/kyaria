@@ -1,6 +1,7 @@
 "use client"
 import Link from "next/link";
 import { parseISO, format } from 'date-fns';
+import { Button } from "../Button";
 
 export default function JobItem(
   { job
@@ -10,7 +11,7 @@ export default function JobItem(
   let { _id, jobTitle, company, location, employmentType, salaryRange, updatedAt } = job;
   const date = parseISO(updatedAt);
   return (
-    <div className="text-left border-2 rounded-xl block bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]">
+    <div className="text-left my-3 border-2 rounded-xl block bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]">
       <div className="flex p-2 justify-between w-full border-b-2 border-neutral-100 ">
         <div className="w-3/4 px-6 py-3 ">
         <h5 className="text-xl font-medium leading-tight ">
@@ -31,14 +32,12 @@ export default function JobItem(
         </p>
         <div className="flex items-center justify-center">
           <Link href={`/jobs/${_id}`} target="_blank">
-            <button
+            <Button
               type="button"
-              className="inline-block rounded px-6 pb-2 pt-2.5 text-xs hover:opacity-80 font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] "
-              style={{ backgroundColor: '#00703C' }}
-              data-te-ripple-init
-              data-te-ripple-color="light">
+              size="md"
+              >
               View Job
-            </button>
+            </Button>
           </Link>
         </div>
       </div>

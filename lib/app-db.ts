@@ -34,6 +34,8 @@ export async function getUserJobApps(filter: AppFilter) {
 
         if (jobApps) {
             transformProps(jobApps, castToString, ['_id', "profile", "userResume"]);
+            //console.log(jobApps)
+            
             transformProps(jobApps, dateToString, ["createdAt", "updatedAt"]);
             //console.log(jobApps)
             return {
