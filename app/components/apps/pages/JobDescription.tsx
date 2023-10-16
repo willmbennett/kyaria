@@ -39,7 +39,7 @@ export default function JobDescription({
             //console.log('Creating App')
             //console.log(userApp)
             const jobApp = await createJobApplicationAction(userApp, path);
-            router.push(`/board/apps/${jobApp}`)
+            router.push(`/board`)
         }
     };
 
@@ -71,15 +71,13 @@ export default function JobDescription({
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <p className="text-left font-medium text-lg mb-4 mx-2">
                                 <input {...register('board')} placeholder="board" className="hidden" />
-                                <button
-                                    className={BUTTON_GREEN}
+                                <Button
+                                    variant="solid"
                                     type="submit"
-                                    style={{ backgroundColor: '#00703C' }}
-                                    data-te-ripple-init
-                                    data-te-ripple-color="light"
+                                    size="md"
                                 >
                                     Add to Board
-                                </button>
+                                </Button>
                             </p>
                         </form>
                     )}

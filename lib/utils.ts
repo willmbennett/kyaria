@@ -24,7 +24,11 @@ export function castToString(arg: any) {
 }
 
 export function dateToString(arg: any) {
-  return arg.toISOString();
+  if (arg instanceof Date) {
+    return arg.toISOString();
+  } else {
+    return ''; // Handle null or invalid dates appropriately
+  }
 }
 
 export function createErrorResponse(

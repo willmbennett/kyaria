@@ -24,7 +24,7 @@ export async function getJobs(filter: JobFilter) {
 
         if (jobs) {
             transformProps(jobs, castToString, '_id');
-            transformProps(jobs, dateToString, ["_createdAt", "updatedAt"]);
+            transformProps(jobs, dateToString, ["createdAt", "updatedAt"]);
             //console.log(jobs)
             return {
                 jobs,
