@@ -40,6 +40,9 @@ class ProfessionalExperience {
     @prop()
     public end_date?: string;
 
+    @prop({ default: true })
+    public show?: boolean;
+
     @prop({ type: () => [Details] })
     public responsibilities?: Details[];
 }
@@ -50,6 +53,9 @@ class Details {
 
     @prop()
     public detail?: string;
+
+    @prop({ default: true })
+    public show?: boolean;
 }
 
 class Education {
@@ -67,6 +73,9 @@ class Education {
 
     @prop()
     public end_date?: string;
+
+    @prop({ default: true })
+    public show?: boolean;
 
     @prop({ type: () => [Details] })
     public details?: Details[];
