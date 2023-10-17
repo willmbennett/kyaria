@@ -63,22 +63,22 @@ const ListItem = ({
     return (
         <div className="mb-8">
             {!editMode ? (
-                <>
+                <div className='flex flex-row items-center text-left w-full'>
                     <p className="text-left pb-2">{skills.join(', ')}</p>
                     {userCanEdit && (
                         <Button
                             type="button"
                             className="py-1 px-3 border-none"
                             size="md"
-                            variant="secondary"
+                            variant="ghost"
                             onClick={toggleEditMode}
                         >
-                            Edit Skills
+                            Edit
                         </Button>
                     )}
-                </>
+                </div>
             ) : (
-                <>
+                <div className='flex flex-row items-center text-left w-full'>
                     <CreatableSelect
                         isMulti
                         isClearable
@@ -91,7 +91,7 @@ const ListItem = ({
                         placeholder="Type something and press enter..."
                         classNames={{
                             control: (state) =>
-                                `border rounded-md p-2 ${state.isFocused ? 'border-red-600' : 'border-gray-300'
+                                `border rounded-md p-2 m-2 ${state.isFocused ? 'border-red-600' : 'border-gray-300'
                                 }`,
                         }}
                     />
@@ -102,7 +102,7 @@ const ListItem = ({
                         variant="solid"
                         onClick={saveSkills}
                     >
-                        Save Skills
+                        Save
                     </Button>
                     <Button
                         type="button"
@@ -113,7 +113,7 @@ const ListItem = ({
                     >
                         Cancel
                     </Button>
-                </>
+                </div>
             )}
         </div>
     );
