@@ -4,6 +4,7 @@ import { ProfileClass } from '../../../models/Profile';
 import { EducationList } from './EducationList';
 import { ProfessionalExperienceList } from './ProfessionalExperienceList';
 import ProfileTextEdit from './ProfileTextEdit';
+import ListItem from './ListItem';
 
 interface ProfileProps {
   userProfile: ProfileClass;
@@ -99,18 +100,20 @@ const UserProfile: React.FC<ProfileProps> = ({ userProfile, edit }) => {
         />
 
         <h2 className="text-left font-bold text-2xl py-4 mb-4 border-b ">Areas of Expertise</h2>
-        {areas_of_expertise && areas_of_expertise.length > 1 && (<>
-          <ul className="list-disc list-inside text-left mb-8">
-            {areas_of_expertise.map((area, index) => (
-              <li key={index}>{area}</li>
-            ))}
-          </ul>
-        </>)}
+        <ListItem
+          skills={areas_of_expertise || []}
+          profileId={profileId}
+          setKey="areas_of_expertise"
+          userCanEdit={edit}
+        />
 
-        {skills && (<>
-          <h2 className="text-left font-bold text-2xl py-4 mb-4 border-b ">Skills</h2>
-          <p className='text-left'>{skills.join(', ')}</p>
-        </>)}
+        <h2 className="text-left font-bold text-2xl py-4 mb-4 border-b ">Skills</h2>
+        <ListItem
+          skills={skills || []}
+          profileId={profileId}
+          setKey="skills"
+          userCanEdit={edit}
+        />
 
         {professional_experience && (
           <ProfessionalExperienceList experiences={professional_experience} profileId={profileId} userCanEdit={edit} />
