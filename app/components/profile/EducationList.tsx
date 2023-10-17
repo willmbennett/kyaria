@@ -75,12 +75,11 @@ export const EducationList = (
 
         <>
             <h2 className="text-left font-bold text-2xl py-4 mb-4 border-b">Education</h2>
-            {
-                educationItems.map((edu: any, index: number) => (
+            {educationItems.length > 0 && educationItems.map((edu: any, index: number) => (
+                (edu.show === null || edu.show !== false) ? (
                     <EducationItem education={edu} profileId={profileId} index={index} key={index} userCanEdit={userCanEdit} />
-                ))
-            }
-
+                ) : null
+            ))}
             {add && userCanEdit && (<>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div key={newExperienceId} className="ext-left font-bold text-2xl mb-4">

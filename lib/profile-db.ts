@@ -61,7 +61,7 @@ function filterHiddenFields(profile: ProfileClass) {
 
     if (profile.education) {
         // Remove any education marked show=false
-        profile.education = profile.education.filter(exp => exp.show !== false)
+        profile.education = profile.education.filter(edu => edu.show !== false)
 
         // Remove all eduction details marked show=false
         profile.education.forEach(edu => {
