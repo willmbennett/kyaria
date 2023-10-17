@@ -11,7 +11,7 @@ import { Button } from "../components/Button";
 export default async function BoarPage() {
   const session = await getServerSession(authOptions)
   const promise = getUserJobApps({ userId: session?.user?.id || '' })
-  const { profile } = await getProfile(session?.user?.id || '');
+  const { profile } = await getProfile(session?.user?.id || '', true); // true means hide any deleted items from profile
 
   if (!session) {
     redirect('/auth/signin')

@@ -7,12 +7,14 @@ export const ResponsibilityItem = (
         responsibility,
         profileId,
         experienceIndex,
-        responsibilityIndex
+        responsibilityIndex,
+        userCanEdit
     }: {
-        responsibility: any;
-        profileId: string;
-        experienceIndex: number
-        responsibilityIndex: number
+        responsibility: any,
+        profileId: string,
+        experienceIndex: number,
+        responsibilityIndex: number,
+        userCanEdit: boolean
     }) => {
     const [add, setAdd] = useState(false)
     const [active, setActive] = useState(false);
@@ -29,11 +31,14 @@ export const ResponsibilityItem = (
         <li className="flex bg-slate-100 my-2 p-2 rounded-xl w-full">
             <div className="flex flex-col space-y-2 w-full">
                 <h4 className="text-left font-bold text-lg mb-2">Accomplishment</h4>
+                {JSON.stringify(responsibility.show)}
                 {responsibility.content && (
                     <ProfileTextEdit
                         profileId={profileId}
                         setKey={`professional_experience.${experienceIndex}.responsibilities.${responsibilityIndex}.content`}
                         currentState={responsibility.content || ''}
+                        userCanEdit={userCanEdit}
+                        deleatable={true}
                     />
                 )}
                 {(responsibility.detail || add) && (<>
@@ -43,7 +48,7 @@ export const ResponsibilityItem = (
                             <button
                                 className='inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50'
                                 onClick={toggleActive}
-                            > See details you added
+                            > See details
                                 <svg className="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                     <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
                                 </svg>
@@ -55,6 +60,7 @@ export const ResponsibilityItem = (
                                     profileId={profileId}
                                     setKey={`professional_experience.${experienceIndex}.responsibilities.${responsibilityIndex}.detail`}
                                     currentState={responsibility.detail || ''}
+                                    userCanEdit={userCanEdit}
                                     stateStart={add}
                                     toggleAdd={toggleAdd}
                                 />
@@ -62,7 +68,7 @@ export const ResponsibilityItem = (
                         )}
                     </div>
                 </>)}
-                {!responsibility.detail && (<div>
+                {!responsibility.detail && userCanEdit && (<div>
                     <Button
                         type="button"
                         className="py-1 my-2 px-3 border-none"

@@ -7,9 +7,10 @@ import ProfileTextEdit from './ProfileTextEdit';
 
 interface ProfileProps {
   userProfile: ProfileClass;
+  edit: boolean;
 }
 
-const UserProfile: React.FC<ProfileProps> = ({ userProfile }) => {
+const UserProfile: React.FC<ProfileProps> = ({ userProfile, edit }) => {
   const profileId = userProfile._id.toString()
   const { name,
     email,
@@ -32,79 +33,73 @@ const UserProfile: React.FC<ProfileProps> = ({ userProfile }) => {
             profileId={profileId}
             setKey={`name`}
             currentState={name}
+            userCanEdit={edit}
           />
         </h1>
-        {title && (
-          <ProfileTextEdit
-            label="Title"
-            profileId={profileId}
-            setKey={`title`}
-            currentState={title}
-          />
-        )}
+        <ProfileTextEdit
+          label="Title"
+          profileId={profileId}
+          setKey={`title`}
+          currentState={title || ''}
+          userCanEdit={edit}
+        />
 
-        {email && (
-          <ProfileTextEdit
-            label="Email"
-            profileId={profileId}
-            setKey={`email`}
-            currentState={email}
-          />
-        )}
+        <ProfileTextEdit
+          label="Email"
+          profileId={profileId}
+          setKey={`email`}
+          currentState={email || ''}
+          userCanEdit={edit}
+        />
 
-        {phone && (
-          <ProfileTextEdit
-            label="Phone"
-            profileId={profileId}
-            setKey="phone"
-            currentState={phone}
-          />
-        )}
+        <ProfileTextEdit
+          label="Phone"
+          profileId={profileId}
+          setKey="phone"
+          currentState={phone || ''}
+          userCanEdit={edit}
+        />
 
-        {location && (
-          <ProfileTextEdit
-            label="Location"
-            profileId={profileId}
-            setKey="location"
-            currentState={location}
-          />
-        )}
+        <ProfileTextEdit
+          label="Location"
+          profileId={profileId}
+          setKey="location"
+          currentState={location || ''}
+          userCanEdit={edit}
+        />
 
-        {social_links?.LinkedIn && (
-          <p className="text-left font-medium text-lg mb-4">
-            <Link href={social_links.LinkedIn} target="_blank" rel="noopener noreferrer" >
-              <ProfileTextEdit
-                label="LinkedIn"
-                profileId={profileId}
-                setKey="social_links.LinkedIn"
-                currentState={social_links.LinkedIn}
-              />
-            </Link>
-          </p>
-        )}
-        {social_links?.Github && (
-          <p className="text-left font-medium text-lg mb-4">
-            <Link href={social_links.Github} target="_blank" rel="noopener noreferrer" >
-              <ProfileTextEdit
-                label="Github"
-                profileId={profileId}
-                setKey="social_links.Github"
-                currentState={social_links.Github}
-              />
-            </Link>
-          </p>
-        )}
-        {summary && (<>
-          <h2 className="text-left font-bold text-2xl py-4 mb-4 border-b ">Summary</h2>
-          <ProfileTextEdit
-            profileId={profileId}
-            setKey="summary"
-            currentState={summary}
-          />
-        </>)}
+        <div className="text-left font-medium text-lg mb-4">
+          <Link href={social_links?.LinkedIn || 'https://www.linkedin.com/feed/'} target="_blank" rel="noopener noreferrer" >
+            <ProfileTextEdit
+              label="LinkedIn"
+              profileId={profileId}
+              setKey="social_links.LinkedIn"
+              currentState={social_links?.LinkedIn || ''}
+              userCanEdit={edit}
+            />
+          </Link>
+        </div>
+        <div className="text-left font-medium text-lg mb-4">
+          <Link href={social_links?.Github || 'https://github.com/'} target="_blank" rel="noopener noreferrer" >
+            <ProfileTextEdit
+              label="Github"
+              profileId={profileId}
+              setKey="social_links.Github"
+              currentState={social_links?.Github || ''}
+              userCanEdit={edit}
+            />
+          </Link>
+        </div>
+        <h2 className="text-left font-bold text-2xl py-4 mb-4 border-b ">Summary</h2>
+        <ProfileTextEdit
+          profileId={profileId}
+          setKey="summary"
+          currentState={summary || ''}
+          userCanEdit={edit}
+        />
 
-        {areas_of_expertise && (<>
-          <h2 className="text-left font-bold text-2xl py-4 mb-4 border-b ">Areas of Expertise</h2>
+        <h2 className="text-left font-bold text-2xl py-4 mb-4 border-b ">Areas of Expertise</h2>
+        {areas_of_expertise && areas_of_expertise.length > 1 && (<>
           <ul className="list-disc list-inside text-left mb-8">
             {areas_of_expertise.map((area, index) => (
               <li key={index}>{area}</li>
@@ -118,11 +113,11 @@ const UserProfile: React.FC<ProfileProps> = ({ userProfile }) => {
         </>)}
 
         {professional_experience && (
-          <ProfessionalExperienceList experiences={professional_experience} profileId={profileId} />
+          <ProfessionalExperienceList experiences={professional_experience} profileId={profileId} userCanEdit={edit} />
         )}
 
         {education && (
-          <EducationList educationItems={education} profileId={profileId} />
+          <EducationList educationItems={education} profileId={profileId} userCanEdit={edit} />
         )}
 
       </div>

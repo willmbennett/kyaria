@@ -25,6 +25,7 @@ export default async function ProfilePage({ params }: { params: { id: string } }
               userId={params.id}
               profile={profile}
               sessionUserId={session?.user?.id}
+              edit={params.id == session?.user?.id}
             />
           }
         </Await>

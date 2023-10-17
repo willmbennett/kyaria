@@ -32,7 +32,15 @@ export type FormFields = {
 
 const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'
 
-export const ProfessionalExperienceList = ({ experiences, profileId }: { experiences: any, profileId: string }) => {
+export const ProfessionalExperienceList = (
+    { experiences,
+        profileId,
+        userCanEdit
+    }: {
+        experiences: any,
+        profileId: string,
+        userCanEdit: boolean
+    }) => {
     const [add, setAdd] = useState(false)
     const router = useRouter()
     const path = usePathname()
@@ -45,15 +53,17 @@ export const ProfessionalExperienceList = ({ experiences, profileId }: { experie
 
     // Save the final message to the database
     const onSubmit: SubmitHandler<FormFields> = async (formData) => {
-        // Save the message to the database
-        const setKey = `professional_experience.${experiences.length}`
-        //console.log(`"${setKey}":"${formData}"`)
-        const data = JSON.parse(`{"${setKey}":""}`)
-        data[setKey] = formData.professional_experience
-        //console.log(profileId, data)
-        const update = await updateProfileAction(profileId, data, "/")
-        router.push(path, { scroll: false })
-        setAdd(false)
+        if (userCanEdit) {
+            // Save the message to the database
+            const setKey = `professional_experience.${experiences.length}`
+            //console.log(`"${setKey}":"${formData}"`)
+            const data = JSON.parse(`{"${setKey}":""}`)
+            data[setKey] = formData.professional_experience
+            //console.log(profileId, data)
+            const update = await updateProfileAction(profileId, data, "/")
+            router.push(path, { scroll: false })
+            setAdd(false)
+        }
     };
 
     const newExperienceId = experiences.length
@@ -61,15 +71,18 @@ export const ProfessionalExperienceList = ({ experiences, profileId }: { experie
     return (
         <>
             <h2 className="text-left font-bold text-2xl py-4 mb-4 border-b">Professional Experience</h2>
-            {experiences.map((exp: any, index: number) => (
-                <ProfessionalExperienceItem
-                    experience={exp}
-                    profileId={profileId}
-                    index={index}
-                    key={index}
-                />
+            {experiences.length > 0 && experiences.map((exp: any, index: number) => (
+                (exp.show === null || exp.show !== false) ? (
+                    <ProfessionalExperienceItem
+                        experience={exp}
+                        profileId={profileId}
+                        index={index}
+                        key={index}
+                        userCanEdit={userCanEdit}
+                    />
+                ) : null
             ))}
-            {add && (<>
+            {add && userCanEdit && (<>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div key={newExperienceId} className="ext-left font-bold text-2xl mb-4">
                         <div className={BASIC_FIELD_STYLE}>
@@ -116,17 +129,19 @@ export const ProfessionalExperienceList = ({ experiences, profileId }: { experie
                     </div>
                 </form>
             </>)}
-            <div className={BASIC_FIELD_STYLE}>
-                <Button
-                    variant={add ? "ghost" : "solid"}
-                    size="md"
-                    type="button"
-                    onClick={toggleAdd}
-                    className=""
-                >
-                    {add ? "Cancel" : "Add Experience"}
-                </Button>
-            </div>
+            {userCanEdit && (
+                <div className={BASIC_FIELD_STYLE}>
+                    <Button
+                        variant={add ? "ghost" : "solid"}
+                        size="md"
+                        type="button"
+                        onClick={toggleAdd}
+                        className=""
+                    >
+                        {add ? "Cancel" : "Add Experience"}
+                    </Button>
+                </div>
+            )}
         </>
     );
 }

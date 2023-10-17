@@ -7,7 +7,7 @@ import JobDescription from "../../components/apps/pages/JobDescription";
 export default async function JobPage({ params }: { params: { id: string } }) {
     const { job } = await getJob(params.id)
     const session = await getServerSession(authOptions);
-    const { profile } = await getProfile(session?.user?.id || '');
+    const { profile } = await getProfile(session?.user?.id || '', true); // true means hide any deleted items from profile
 
 
     return (

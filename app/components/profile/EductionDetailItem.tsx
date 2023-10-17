@@ -3,9 +3,19 @@ import { useState } from "react";
 import { Button } from "../Button";
 
 export const EducationDetailItem = (
-    { detail, profileId, educationIndex, detailIndex }:
-        { detail: any, profileId: string, educationIndex: number, detailIndex: number }
-) => {
+    { 
+        detail, 
+        profileId, 
+        educationIndex, 
+        detailIndex, 
+        userCanEdit 
+    }: { 
+        detail: any, 
+        profileId: string, 
+        educationIndex: number, 
+        detailIndex: number, 
+        userCanEdit: boolean 
+    }) => {
     const [add, setAdd] = useState(false);
     const [active, setActive] = useState(false);
 
@@ -27,6 +37,8 @@ export const EducationDetailItem = (
                         profileId={profileId}
                         setKey={`education.${educationIndex}.details.${detailIndex}.content`}
                         currentState={detail.content || ''}
+                        userCanEdit={userCanEdit}
+                        deleatable={true}
                     />
                 )}
                 {(detail.detail || add) && (<>
@@ -37,7 +49,7 @@ export const EducationDetailItem = (
                                 className='inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50'
                                 onClick={toggleActive}
                             >
-                                See details you added
+                                See details
                                 <svg className="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                     <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
                                 </svg>
@@ -49,6 +61,7 @@ export const EducationDetailItem = (
                                     profileId={profileId}
                                     setKey={`education.${educationIndex}.details.${detailIndex}.detail`}
                                     currentState={detail.detail || ''}
+                                    userCanEdit={userCanEdit}
                                     stateStart={add}
                                     toggleAdd={toggleAdd}
                                 />
@@ -56,7 +69,7 @@ export const EducationDetailItem = (
                         )}
                     </div>
                 </>)}
-                {!detail.detail && (
+                {!detail.detail && userCanEdit && (
                     <div>
                         <Button
                             type="button"

@@ -47,7 +47,32 @@ export async function createProfile(data: ProfileClass) {
     }
 }
 
-export async function getProfile(userId: string) {
+
+function filterHiddenFields(profile: ProfileClass) {
+    if (profile.professional_experience) {
+        // Remove any professional experience marked show=false
+        profile.professional_experience = profile.professional_experience.filter(exp => exp.show !== false)
+
+        // Remove all responsibilities marked show=false
+        profile.professional_experience.forEach(exp => {
+            exp.responsibilities = exp.responsibilities?.filter(resp => resp.show !== false);
+        });
+    }
+
+    if (profile.education) {
+        // Remove any education marked show=false
+        profile.education = profile.education.filter(exp => exp.show !== false)
+
+        // Remove all eduction details marked show=false
+        profile.education.forEach(edu => {
+            edu.details = edu.details?.filter(detail => detail.show !== false);
+        });
+    }
+
+    return(profile)
+}
+
+export async function getProfile(userId: string, filter = false,) {
     try {
         await connectDB();
 
@@ -63,9 +88,17 @@ export async function getProfile(userId: string) {
             //console.log('about to transform props')
             transformProps(profile, castToString, '_id');
             //console.log(profile)
-            return {
-                profile
-            };
+            if (filter) {
+                const cleanedProfile = filterHiddenFields(profile)
+                return {
+                    profile: cleanedProfile
+                };
+            } else {
+                return {
+                    profile
+                };
+            }
+
         } else {
             return { error: "Profile not found" };
         }
