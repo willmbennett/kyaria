@@ -43,7 +43,6 @@ export const ProfessionalExperienceItem = (
     return (
         <div className="mb-8">
             <div className='flex flex-row justify-between'>
-                {JSON.stringify(experience.show)}
                 <h3 className="text-left font-bold text-lg">
                     <ProfileTextEdit
                         profileId={profileId}
@@ -52,15 +51,17 @@ export const ProfessionalExperienceItem = (
                         userCanEdit={userCanEdit}
                     />
                 </h3>
-                <Button
-                    type="button"
-                    className="py-1 px-3 border-none"
-                    size="md"
-                    variant='secondary'
-                    onClick={deleteItem}
-                >
-                    Delete
-                </Button>
+                {userCanEdit && (
+                    <Button
+                        type="button"
+                        className="py-1 px-3 border-none"
+                        size="md"
+                        variant='secondary'
+                        onClick={deleteItem}
+                    >
+                        Delete
+                    </Button>
+                )}
             </div>
             <ProfileTextEdit
                 label="Company"

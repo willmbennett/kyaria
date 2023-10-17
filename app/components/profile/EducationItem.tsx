@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Button } from "../Button";
 import ProfileTextEdit from "./ProfileTextEdit";
 import { EducationDetailItem } from "./EductionDetailItem";
+import { updateProfileAction } from "../../profile/_action";
+import { usePathname, useRouter } from "next/navigation";
 
 export const EducationItem = (
     {
@@ -17,6 +19,8 @@ export const EducationItem = (
     }) => {
     const [add, setAdd] = useState(false);
     const [active, setActive] = useState(false);
+    const router = useRouter()
+    const path = usePathname()
     const toggleAdd = () => {
         setAdd(!add);
     };
@@ -24,16 +28,45 @@ export const EducationItem = (
         setActive(!active);
     };
 
+    const deleteItem = async () => {
+        if (userCanEdit) {
+            // Split the property path into segments
+            const setKey = `education.${index}.show`
+            console.log(setKey)
+
+            const data = JSON.parse(`{"${setKey}":false}`)
+            console.log(profileId, data)
+            await updateProfileAction(profileId, data, "/")
+            router.push(path, { scroll: false })
+        }
+    };
+
     return (
         <div className="mb-8">
             <h3 className="text-left font-bold text-lg mb-2">
+                
+            </h3>
+            <div className='flex flex-row justify-between'>
+                <h3 className="text-left font-bold text-lg">
                 <ProfileTextEdit
                     profileId={profileId}
                     setKey={`education.${index}.degree`}
                     currentState={education.degree || ''}
                     userCanEdit={userCanEdit}
                 />
-            </h3>
+                </h3>
+                {userCanEdit && (
+                    <Button
+                        type="button"
+                        className="py-1 px-3 border-none"
+                        size="md"
+                        variant='secondary'
+                        onClick={deleteItem}
+                    >
+                        Delete
+                    </Button>
+                )}
+            </div>
             <ProfileTextEdit
                 label="Institution"
                 profileId={profileId}
