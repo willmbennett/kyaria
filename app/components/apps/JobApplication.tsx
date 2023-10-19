@@ -8,13 +8,13 @@ import Resume from './pages/Resume';
 import Experience from './pages/Experience';
 import Emails from './pages/Emails';
 import Story from './pages/Story';
-import { createJobKeywords } from '../../apps/[id]/app-helper';
 import { Chat } from '../chat/Chat';
 import { type Message } from 'ai/react'
 
 export function JobApplication({ jobApp }: { jobApp: any }) {
   const [currentSection, setCurrentSection] = useState('jobDescription');
-  const { jobKeyWords, topWords } = createJobKeywords(jobApp.job)
+
+  const jobKeyWords = jobApp.job.skills?.map((skill: any) => skill.skill) || ['']
 
   const initialMessages: Message[] = [
     {
@@ -48,7 +48,7 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
               {currentSection == 'jobDescription' && jobData && (
                 <JobDescription
                   jobData={jobData}
-                  topWords={topWords}
+                  topWords={jobKeyWords}
                 />
               )}
               {currentSection == 'mockInterview' && jobData && (
