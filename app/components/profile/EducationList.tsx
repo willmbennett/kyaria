@@ -75,7 +75,19 @@ export const EducationList = (
 
         <>
             <h2 className="text-left font-bold text-2xl py-4 mb-4 border-b">Education</h2>
-            {educationItems.length > 0 && educationItems.map((edu: any, index: number) => (
+            {educationItems.length > 0 && educationItems.sort((a: any, b: any) => {
+                // Check if either a or b has 'present' as end_date
+                if (a.end_date === 'present' && b.end_date !== 'present') {
+                    return -1; // 'present' comes before other dates
+                } else if (a.end_date !== 'present' && b.end_date === 'present') {
+                    return 1; // 'present' comes before other dates
+                } else {
+                    // Compare the end_date values as timestamps (assuming they are in ISO date format)
+                    const dateA = new Date(a.end_date).getTime();
+                    const dateB = new Date(b.end_date).getTime();
+                    return dateB - dateA; // Sort other dates in descending order
+                }
+            }).map((edu: any, index: number) => (
                 (edu.show === null || edu.show !== false) ? (
                     <EducationItem education={edu} profileId={profileId} index={index} key={index} userCanEdit={userCanEdit} />
                 ) : null

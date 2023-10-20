@@ -87,7 +87,14 @@ export default function JobDescription({
                 </p>)}
                 {jobData.company && (
                     <p className="text-left font-medium text-lg mb-4">
-                        <strong>Company:</strong> {jobData.company}
+                        <strong>Company: </strong>
+                        <a href={`/companies/${jobData.company}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-500 hover:underline inline-block mr-2"
+                        >
+                            {jobData.company}
+                        </a>
                     </p>
                 )}
                 {jobData.location && (
