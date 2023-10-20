@@ -1,6 +1,6 @@
 'use client'
 import { useState } from "react";
-import NewAppTextInput from "../board/NewAppTextInput";
+import CreateJobApp from "../board/CreateJobApp";
 import { defaultFormInput, expectedJson, defaultTextInput, demoJSON, FormFields } from '../../board/job-helper';
 import NewJobAppForm from "./JobAppForm";
 //import { ObjectId } from "mongodb";
@@ -18,13 +18,9 @@ export default function JobAppsList(
   }
 ) {
   const [creatingJobApp, setCreatingJobApp] = useState(false);
-  const [values, setValues] = useState<FormFields>();
-  const [formView, setFormView] = useState(false);
-  const [inputTextView, setInputTextView] = useState(false);
 
   const handleCreateJobClick = () => {
     setCreatingJobApp(true)
-    setInputTextView(true)
   };
 
   const jobStates = ['WISHLIST', 'PHONE SCREEN', 'FIRST ROUND', 'SECOND ROUND', 'THIRD ROUND', 'FINAL ROUND', 'JOB OFFER', 'ACCEPTED']
@@ -56,34 +52,14 @@ export default function JobAppsList(
           <h1 className="sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900 my-10">
             Create a New Job
           </h1>
-
           <div className="mb-4 flex flex-col items-center">
-            {inputTextView && (
-              <>
-                <p>Paste text from the job posting here. No need to format it.</p>
-                <p>We'll scan it and fill out a form for you.</p>
-                <br />
-                <NewAppTextInput
-                  setValues={setValues}
-                  expectedJson={expectedJson}
-                  defaultTextInput={['development', 'preview'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '') ? defaultTextInput : ''}
-                  demoJSON={demoJSON}
-                  inputTextType='resume'
-                  setFormView={setFormView}
-                  setInputTextView={setInputTextView}
-                />
-              </>
-            )}
-            {formView && (
-              <NewJobAppForm
-                defaultValue={defaultFormInput}
-                values={values}
-                setCreatingJob={setCreatingJobApp}
-                userId={profile.userId}
-                profile={profile}
-                setFormView={setFormView}
-              />
-            )}
+            <p>Add in a job post link, it works best with the original job post (not linkedin, indeed, etc.)</p>
+            <br />
+            <CreateJobApp
+              userId={profile.userId}
+              profile={profile}
+              setCreatingJobApp={setCreatingJobApp}
+            />
           </div>
         </div>
       )}

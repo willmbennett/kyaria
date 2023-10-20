@@ -1,15 +1,15 @@
 export const emails = [
-  {"type": "Resume Submission", "content": ""},
-  {"type": "Cover Letter Submission", "content": ""},
-  {"type": "Job Inquiry", "content": ""},
-  {"type": "Networking Outreach", "content": ""},
-  {"type": "Thank You After Interview", "content": ""},
-  {"type": "Follow-Up After Interview", "content": ""},
-  {"type": "Job Offer Acceptance", "content": ""},
-  {"type": "Job Offer Clarification", "content": ""},
-  {"type": "Job Offer Decline", "content": ""},
-  {"type": "Salary Negotiation", "content": ""},
-  {"type": "Reference Request", "content": ""}
+  { "type": "Resume Submission", "content": "" },
+  { "type": "Cover Letter Submission", "content": "" },
+  { "type": "Job Inquiry", "content": "" },
+  { "type": "Networking Outreach", "content": "" },
+  { "type": "Thank You After Interview", "content": "" },
+  { "type": "Follow-Up After Interview", "content": "" },
+  { "type": "Job Offer Acceptance", "content": "" },
+  { "type": "Job Offer Clarification", "content": "" },
+  { "type": "Job Offer Decline", "content": "" },
+  { "type": "Salary Negotiation", "content": "" },
+  { "type": "Reference Request", "content": "" }
 ]
 
 
@@ -147,4 +147,56 @@ export const defaultFormInput = {
   "jobDescription": "",
   "qualifications": [],
   "responsibilities": []
+}
+
+// Define a simplified Job interface for the transformed object
+interface Job {
+  link: string; // Required field
+  jobTitle: string;
+  company?: string;
+  location?: string;
+  remote?: string;
+  aboutCompany?: string;
+  jobDescription?: string;
+  qualifications?: string[];
+  responsibilities?: string[];
+  skills?: Skill[];
+}
+
+// Define a simplified Skill interface for skills within the Job
+interface Skill {
+  skill: string;
+  salience?: number;
+  confidence?: number;
+  diffbotUri?: string;
+}
+
+// Function to transform the API response to a simplified Job object
+export function transformDiffBotApiResponse(apiResponse: any): Job {
+  const jobData = apiResponse.objects[0]; // Assuming there's only one job object in the response
+
+  const transformedJob: Job = {
+    jobTitle: jobData.title,
+    link: jobData.pageUrl,
+    company: jobData.employer?.name,
+    location: jobData.locations?.address,
+    remote: jobData.remote,
+    aboutCompany: jobData.aboutCompany,
+    jobDescription: jobData.text,
+    qualifications: jobData.requirements,
+    responsibilities: jobData.tasks,
+    skills: [],
+  };
+
+
+  if (jobData.skills && Array.isArray(jobData.skills)) {
+    transformedJob.skills = jobData.skills.map((skillData: any) => ({
+      skill: skillData.skill,
+      salience: skillData.salience,
+      confidence: skillData.confidence,
+      diffbotUri: skillData.diffbotUri,
+    }));
+  }
+
+  return transformedJob;
 }

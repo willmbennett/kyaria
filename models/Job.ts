@@ -7,6 +7,20 @@ import {
     index
 } from "@typegoose/typegoose";
 
+class Skill {
+    @prop()
+    public salience?: number;
+
+    @prop({ required: true })
+    public skill!: string;
+
+    @prop()
+    public confidence?: number;
+
+    @prop()
+    public diffbotUri?: string;
+}
+
 @ModelOptions({
     schemaOptions: {
         timestamps: true,
@@ -51,6 +65,9 @@ class JobClass {
 
     @prop()
     public responsibilities?: string[];
+
+    @prop({ type: () => [Skill] }) // Define skills as an array of Skill objects
+    public skills?: Skill[]; // Add the skills field to your schema
 
     _id: mongoose.Types.ObjectId | string;
     createdAt: Date | string;
