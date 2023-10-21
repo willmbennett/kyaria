@@ -115,7 +115,7 @@ const CompanyProfile = ({ companyData }: { companyData: any }) => {
                     Total Raised: {totalInvestment.currency}{' '} {(totalInvestment.value / 1000000).toFixed(0)}M
                 </p>
             )}
-            {investments && (
+            {Array.isArray(investments) && investments.length > 0 && (
                 <Investments investments={investments} />
             )}
 
