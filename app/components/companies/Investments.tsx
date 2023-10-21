@@ -82,7 +82,7 @@ const Investments: React.FC<InvestmentsProps> = ({ investments }) => {
               )}
               <h4 className="mt-2">Investors:</h4>
               <div className="flex flex-wrap">
-                {investment.investors.map((investor: any, investorIndex: number) => (
+                {Array.isArray(investment.investors) && investment.investors.length > 0 && investment.investors.map((investor: any, investorIndex: number) => (
                   <div key={investorIndex} className="w-1/2 md:w-1/3 lg:w-1/4 p-2">
                     <div className="bg-white p-2 rounded shadow-md h-full flex flex-col">
                       <img
