@@ -90,7 +90,7 @@ const options = {
             },
             ticks: {
                 callback: (value: any) => {
-                    return (value / 1000000).toLocaleString('en-US', {
+                    return (value).toLocaleString('en-US', {
                         style: 'currency',
                         currency: 'USD',
                         minimumFractionDigits: 0,
