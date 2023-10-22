@@ -39,6 +39,7 @@ export function Header() {
   const signedInLinks = [
     { label: 'Profile', href: `/profile/${session?.user?.id}` },
     { label: 'Board', href: '/board' },
+    { label: 'Resume Tester', href: '/resumetest' },
     /*{ label: 'Pricing', href: '/pricing' },*/
     /*{ label: 'Contact', href: '/contact' },*/
   ]

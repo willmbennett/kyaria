@@ -49,7 +49,7 @@ export function HomeHero() {
             </Button>
           </div>
           <p className="mt-4 flex text-md text-slate-600/90 md:justify-center xl:justify-start xl:text-base">
-            It's 100% free, no credit card or subscription.
+            It's 100% free, no credit card or subscription required.
           </p>
         </div>
       </Container>
@@ -75,7 +75,7 @@ export function HomeHero() {
                 </svg>
 
                 <p className="relative">
-                  Kyaria has taken the headache out of the jobsearch, and allowed me to focus on
+                  Kyaria has taken the headache out of the job search, and allowed me to focus on
                   what really matters – finding the job that's right for me.
                 </p>
               </div>
@@ -94,7 +94,7 @@ export function HomeHero() {
                   <p className="font-medium text-slate-900">Will Bennett</p>
 
                   <p className="font-medium text-slate-500">
-                    Founder, Kyaria.ai, LLC
+                    Founder, Kyaria, LLC
                   </p>
                 </div>
               </div>

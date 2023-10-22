@@ -29,7 +29,7 @@ export function ProductDemo({ jobApp }: { jobApp: any }) {
             <span>Product Demo</span>
           </p>
           <p className="ml-3 text-slate-700 lg:ml-4 xl:ml-5 xl:text-lg my-5 max-w-2xl text-center">
-            Below you'll find an example of the packet that will get created for you every time you add a job post. This is a fully interactable live demo of a real profile and a recent job post.
+            Below you'll find an example of a packet that will be created for you every time you add a job post. This is a fully interactable live demo of a real profile and a recent job post.
           </p>
         </div>
       </Container>
