@@ -20,11 +20,10 @@ const navigation = {
     /*{ name: 'Contact us', href: '/contact' },*/
   ],
   solutions: [
-    { name: 'Interview Preparation', href: '/board' },
-    { name: 'Resume Writing', href: '/board' },
-    { name: 'Cover Letter Writing', href: '/board' },
-    { name: 'Job Posts (coming soon)', href: '#' },
-    { name: 'Virtual Career Coach (coming soon)', href: '#' },
+    { name: 'Job Board', href: '/board' },
+    { name: 'Resume Tester', href: '/resumetest' },
+    { name: 'Job Posts (coming soon)', href: '/' },
+    { name: 'Virtual Career Coach (coming soon)', href: '/' },
   ],
   integrations: [
     { name: 'Youtube', href: '#' },
@@ -69,7 +68,7 @@ export function Footer() {
                 KYARIA.AI
             </Link>
             <p className="mt-10 text-md leading-relaxed text-slate-50">
-              Our mission is to make the job search streamless using the power of AI
+              Our mission is to make the job search effortless using the power of AI
             </p>
             {/*
             <div className="mt-8 flex items-center gap-4">

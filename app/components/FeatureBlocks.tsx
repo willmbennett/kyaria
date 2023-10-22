@@ -69,7 +69,7 @@ export function FeatureBlocks() {
               Quick and easy setup, endless value
             </h2>
             <p className="mt-6 leading-relaxed text-slate-700 sm:mt-8 sm:text-lg sm:leading-8">
-              After a simple automated profile setup, you'll be able to immediatly
+              After a simple automated profile setup, you'll be able to immediately
               jump to streamlining your job search. Simply add jobs that you're interested in
               and we'll provide you a customized comprehensive packet of everything you need to succeed.
             </p>
