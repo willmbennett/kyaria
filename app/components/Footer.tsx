@@ -1,5 +1,12 @@
+'use client'
+
 import Link from 'next/link'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation';
+import { Analytics } from '@segment/analytics-node'
+
+ // instantiation
+const analytics = new Analytics({ writeKey: 'wayhHKaPEXQc0mIChRaLHikN33jwEIKM' })
 
 import logo from '/public/images/logo-light.png'
 import { Container } from './Container'
@@ -10,6 +17,7 @@ import {
   InstagramIcon,
   TiktokIcon,
 } from './SocialIcons'
+import { useSession } from 'next-auth/react';
 
 const navigation = {
   company: [
@@ -54,6 +62,26 @@ function SocialLink({ icon: Icon, ...props }) {
 */
 
 export function Footer() {
+  const { data: session } = useSession();
+  const page = usePathname()
+
+  if(session?.user?.id){
+    analytics.identify({
+      userId: session.user.id,
+      traits: {
+        name: session.user.name,
+        email: session.user.email
+      }
+    });
+
+    analytics.page({
+      userId: session.user.id,
+      properties: {
+        path: page,
+      }
+    });
+  }
+
   return (
     <section className="overflow-hidden bg-slate-700 pb-12 pt-20 text-slate-50">
       <Container>

@@ -35,6 +35,9 @@ dependencies:
   '@react-pdf/renderer':
     specifier: ^3.1.12
     version: 3.1.12(react@18.2.0)
+  '@segment/analytics-node':
+    specifier: ^1.1.2
+    version: 1.1.2
   '@tailwindcss/forms':
     specifier: ^0.5.3
     version: 0.5.4(tailwindcss@3.3.3)
@@ -509,6 +512,18 @@ packages:
 
   /@kurkle/color@0.3.2:
     resolution: {integrity: sha512-fuscdXJ9G1qb7W8VdHi+IwRqij3lBkosAm4ydQtEmbY58OzHXqQhvlxqEkoz0yssNVn38bcpRWgA9PP+OGoisw==}
+    dev: false
+
+  /@lukeed/csprng@1.1.0:
+    resolution: {integrity: sha512-Z7C/xXCiGWsg0KuKsHTKJxbWhpI3Vs5GwLfOean7MGyVFGqdRgBbAjOCh6u4bbjPc/8MJ2pZmK/0DLdCbivLDA==}
+    engines: {node: '>=8'}
+    dev: false
+
+  /@lukeed/uuid@2.0.1:
+    resolution: {integrity: sha512-qC72D4+CDdjGqJvkFMMEAtancHUQ7/d/tAiHf64z8MopFDmcrtbcJuerDtFceuAfQJ2pDSfCKCtbqoGBNnwg0w==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@lukeed/csprng': 1.1.0
     dev: false
 
   /@mapbox/node-pre-gyp@1.0.11:
@@ -2070,6 +2085,27 @@ packages:
       mustache: 4.2.0
     dev: false
 
+  /@segment/analytics-core@1.3.2:
+    resolution: {integrity: sha512-NpeBCfOyMdO2/BDKfhCUNHcEwxg88N2iTnswBoEMh38rtsQ03TWLVYwgiTakPjNQFezdKkR6jq3JhQ3WWgq67g==}
+    dependencies:
+      '@lukeed/uuid': 2.0.1
+      dset: 3.1.2
+      tslib: 2.6.2
+    dev: false
+
+  /@segment/analytics-node@1.1.2:
+    resolution: {integrity: sha512-pYQwG4/1YDxwzu97v2glfxZpwMj3A7UOKId1IdnSyDharesYawdbXpiTxBqOS3JpgP7iU4TZSiRmk7InFel/MA==}
+    engines: {node: '>=14'}
+    dependencies:
+      '@lukeed/uuid': 2.0.1
+      '@segment/analytics-core': 1.3.2
+      buffer: 6.0.3
+      node-fetch: 2.7.0
+      tslib: 2.6.2
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
   /@swc/helpers@0.4.14:
     resolution: {integrity: sha512-4C7nX/dvpzB7za4Ql9K81xK3HPxCpHMgwTZVyf+9JQ6VUbn9jjZVN7/Nkdz/Ugzs2CSjqnL/UPXroiVBVHUWUw==}
     dependencies:
@@ -3286,6 +3322,11 @@ packages:
     dependencies:
       '@babel/runtime': 7.22.15
       csstype: 3.1.2
+    dev: false
+
+  /dset@3.1.2:
+    resolution: {integrity: sha512-g/M9sqy3oHe477Ar4voQxWtaPIFw1jTdKZuomOjhCcBx9nHUNn0pu6NopuFFrTh/TRZIKEj+76vLWFu9BNKk+Q==}
+    engines: {node: '>=4'}
     dev: false
 
   /eastasianwidth@0.2.0:
