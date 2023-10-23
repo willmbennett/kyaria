@@ -17,6 +17,7 @@ import logoIcon from '/public/images/logo-icon.png'
 const links = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
+  { label: 'Resume Tester', href: '/resumetest' },
   /*{ label: 'Pricing', href: '/pricing' },*/
   /*{ label: 'Contact', href: '/contact' },*/
 ]
