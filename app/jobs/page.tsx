@@ -1,21 +1,25 @@
-import { getJobs } from "../../lib/job-db";
+import { getJobRecs } from "../../lib/job-db";
 import JobList from "../components/jobs/JobList";
 import { Suspense } from 'react'
 import Skeleton from './skeleton'
 import Await from './await'
 import Trigger from "./trigger";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../../lib/auth";
 
 export default async function JobsPage({
     searchParams
 }: {
     searchParams: { [key: string]: string | string[] | undefined }
 }) {
+
+    const session = await getServerSession(authOptions);
     const page =
         typeof searchParams.page === 'string' ? Number(searchParams.page) : 1
     const limit =
         typeof searchParams.limit === 'string' ? Number(searchParams.limit) : 10
 
-    const promise = getJobs({ page, limit })
+    const promise = getJobRecs({ userId: session?.user?.id || '' })
 
     return (
         <section>

@@ -1,5 +1,7 @@
+import { AppClass, AppModel } from "../models/App";
 import { JobModel, JobClass } from "../models/Job";
 import connectDB from "./connect-db";
+import { getTopSimilarJobs } from "./recsystem-helper";
 import { stringToObjectId, castToString, dateToString } from "./utils";
 var transformProps = require('transform-props');
 
@@ -39,6 +41,68 @@ export async function getJobs(filter: JobFilter) {
         return { error };
     }
 }
+
+interface JobRecsFilter {
+    userId: string,
+    page?: number,
+    limit?: number
+}
+
+export async function getJobRecs(filter: JobRecsFilter) {
+    try {
+        await connectDB();
+
+        const page = filter.page ?? 1;
+        const limit = filter.limit ?? 100;
+        const skip = (page - 1) * limit;
+
+        // Fetch all job applications for the user
+        const jobApps = await AppModel.find({ userId: filter.userId })
+            .sort('-createdAt')
+            .populate("job")
+            .lean()
+            .exec();
+
+        // Extract the jobIds from the applications
+        const userJobs = jobApps.map((jobApp: AppClass) => (jobApp.job as JobClass)._id.toString())
+
+        // Fetch all jobs and sort them by their update time
+        const jobs = await JobModel.find({}).sort('-updatedAt').lean().exec();
+
+        // Get the top jobs based on cosine similarity
+        const topJobIds = getTopSimilarJobs(userJobs, jobs);
+
+        // Convert the jobs array to a map for faster lookups
+        const jobMap = new Map<string, JobClass>();
+        for (const job of jobs) {
+            jobMap.set(job._id.toString(), job);
+        }
+
+        // Sort the topJobIds by recency
+        topJobIds.sort((a, b) => {
+            const dateA = new Date(jobMap.get(a)?.updatedAt || 0);
+            const dateB = new Date(jobMap.get(b)?.updatedAt || 0);
+            return dateB.getTime() - dateA.getTime();
+        });
+
+        // Fetch the top jobs from the map using their IDs
+        const topJobs = topJobIds.map(jobId => jobMap.get(jobId)).filter(Boolean) as JobClass[];
+
+        transformProps(topJobs, castToString, '_id');
+        transformProps(topJobs, dateToString, ["createdAt", "updatedAt"]);
+
+        return {
+            jobs: topJobs.slice(skip, skip + limit),  // Pagination slice
+            page,
+            limit,
+            results: topJobs.length,
+        };
+    } catch (error) {
+        return { error };
+    }
+}
+
+
 export async function createJob(data: JobClass) {
     try {
         await connectDB();
