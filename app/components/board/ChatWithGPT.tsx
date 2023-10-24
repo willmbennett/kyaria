@@ -5,6 +5,7 @@ import { Message } from 'ai'
 import { ChatMessage } from './ChatMessage';
 import { Button } from '../Button';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface Props {
   documentID: string,
@@ -35,6 +36,8 @@ export default function ChatWithGPT({
   childIndex,
   jobKeyWords
 }: Props) {
+  const path = usePathname()
+  const router = useRouter()
   const [finishedLoading, setFinishedLoading] = useState(false)
   const [loading, setLoading] = useState(false)
 
@@ -99,7 +102,7 @@ export default function ChatWithGPT({
     lastmessage.content = messageSaved
     //console.log(id, data)
     const update = await saveToDatabase(id, data, "/")
-
+    router.push(path, { scroll: false })
   };
 
   const saveMessage = async () => {
