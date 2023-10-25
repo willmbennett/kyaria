@@ -27,7 +27,12 @@ export function ChatMessage({ message, jobKeyWords, ...props }: ChatMessageProps
     }
   }
 
-  const highlightedContent = jobKeyWords? highlightKeywords(message.content, jobKeyWords): message.content;
+  let highlightedContent = message.content
+  if(jobKeyWords){
+    if(jobKeyWords.length != 1 && jobKeyWords[0] != '') {
+      highlightedContent = highlightKeywords(message.content, jobKeyWords)
+    }
+  }
 
   return (
     <div
