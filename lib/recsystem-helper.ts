@@ -5,7 +5,12 @@ const stopwords = ['i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 
 // Function to convert job into string
 
 function extractStringValues(obj: any): string {
-    const excludedKeys = ["_id", "createdAt", "updatedAt", 'company', 'location', 'employmentType', 'salaryRange', 'remote'];
+    const includedKeys = ["jobTitle",
+        "aboutCompany",
+        "jobDescription",
+        'qualifications',
+        'responsibilities',
+        'skills'];
 
     if (obj === null || typeof obj === 'undefined') {
         return '';
@@ -19,7 +24,7 @@ function extractStringValues(obj: any): string {
     }
     if (typeof obj === 'object') {
         return Object.entries(obj)
-            .filter(([key]) => !excludedKeys.includes(key))
+            .filter(([key]) => includedKeys.includes(key))
             .map(([, value]) => extractStringValues(value))
             .join(' ');
     }
@@ -39,7 +44,7 @@ export function createTF(obj: any) {
 
     const sortedWordEntries = Object.entries(wordCounts)
         .sort((a, b) => b[1] - a[1])  // Sort by frequency, in descending order
-        .map(([term, tf]) => ({ term, tf }));  // Map to desired format
+        .map(([term, value]) => ({ term, value }));  // Map to desired format
 
     return sortedWordEntries;
 }
@@ -47,7 +52,7 @@ export function createTF(obj: any) {
 
 type TermFrequency = {
     term: string;
-    tf: number;
+    value: number;  // This was previously tf
 }
 
 type jobsTF = {
@@ -83,10 +88,10 @@ function calculateTFIDF(jobsTF: jobsTF[], termIDFs: Record<string, number>): job
         const tfIdf = job.tf.map(tf => {
             return {
                 term: tf.term,
-                tf: tf.tf * (termIDFs[tf.term] || 0)
+                value: tf.value * (termIDFs[tf.term] || 0)  // Changed tf.tf to tf.value
             };
         })
-            .sort((a, b) => b.tf - a.tf)  // Sort by frequency, in descending order;;
+            .sort((a, b) => b.value - a.value);  // Sort by tf-idf value, in descending order;;
         return {
             jobId: job.jobId,
             tf: tfIdf
@@ -101,7 +106,7 @@ function dotProduct(A: TermFrequency[], B: TermFrequency[]): number {
     A.forEach(a => {
         const b = B.find(b => b.term === a.term);
         if (b) {
-            sum += a.tf * b.tf;
+            sum += a.value * b.value;
         }
     });
 
@@ -109,7 +114,7 @@ function dotProduct(A: TermFrequency[], B: TermFrequency[]): number {
 }
 
 function magnitude(vector: TermFrequency[]): number {
-    return Math.sqrt(vector.reduce((sum, v) => sum + v.tf * v.tf, 0));
+    return Math.sqrt(vector.reduce((sum, v) => sum + v.value * v.value, 0));
 }
 
 function cosineSimilarity(A: TermFrequency[], B: TermFrequency[]): number {
@@ -117,71 +122,84 @@ function cosineSimilarity(A: TermFrequency[], B: TermFrequency[]): number {
 }
 
 export type JobSimilarity = {
-    jobId1: string;
-    jobId2: string;
+    jobId: string;
     similarity: number;
 };
 
-export function calculateSimilarities(jobsTFIDF: jobsTF[]): JobSimilarity[] {
-    const similarities: JobSimilarity[] = [];
+export function calculateSimilarities(jobsTFIDF: jobsTF[]): Record<string, JobSimilarity[]> {
+    const MAX_SIMILAR_JOBS = 10;
+    const MIN_SIMILARITY = 0.1;
+    const jobToSimilaritiesMap: Record<string, JobSimilarity[]> = {};
 
     for (let i = 0; i < jobsTFIDF.length; i++) {
-        for (let j = i + 1; j < jobsTFIDF.length; j++) {
-            const similarity = cosineSimilarity(jobsTFIDF[i].tf, jobsTFIDF[j].tf);
-            similarities.push({
-                jobId1: jobsTFIDF[i].jobId,
-                jobId2: jobsTFIDF[j].jobId,
-                similarity: similarity
-            });
+        const jobId1 = jobsTFIDF[i].jobId;
+        const currentSimilarities: JobSimilarity[] = [];
+
+        for (let j = 0; j < jobsTFIDF.length; j++) {
+            if (i !== j) {
+                const jobId2 = jobsTFIDF[j].jobId;
+                const similarity = cosineSimilarity(jobsTFIDF[i].tf, jobsTFIDF[j].tf);
+                //console.log(similarity)
+
+                // Check if similarity is greater than MIN_SIMILARITY before pushing
+                if (similarity > MIN_SIMILARITY) {
+                    currentSimilarities.push({
+                        jobId: jobId2,
+                        similarity: similarity
+                    });
+                }
+            }
         }
+
+        // Sort by similarity in descending order
+        currentSimilarities.sort((a, b) => b.similarity - a.similarity);
+
+        // Store only the top MAX_SIMILAR_JOBS
+        jobToSimilaritiesMap[jobId1] = currentSimilarities.slice(0, MAX_SIMILAR_JOBS);
     }
 
-    return similarities;
+    return jobToSimilaritiesMap;
 }
 
-export function createJobKeywords(jobs: JobClass[]) {
+
+
+
+export function createRecommendations(jobs: JobClass[]) {
     const jobsTermFrequencies = jobs.map(job => ({ jobId: job._id.toString(), tf: createTF(job) }));
     const termIDFs = calculateIDF(jobsTermFrequencies);
     const jobsTFIDF = calculateTFIDF(jobsTermFrequencies, termIDFs);
-    const jobsSimilarity = calculateSimilarities(jobsTFIDF)
-    return jobsSimilarity;
+    const jobsSimilarity = calculateSimilarities(jobsTFIDF);
+
+    const result = jobs.map(job => {
+        return {
+            jobId: job._id.toString(),
+            jobsSimilarity: jobsSimilarity[job._id.toString()],
+            jobTFIDF: jobsTFIDF.find(tfidf => tfidf.jobId === job._id.toString())?.tf
+        };
+    });
+
+    return result;
 }
 
-export function getTopSimilarJobs(jobIds: string[], jobs: JobClass[]): string[] {
-    // Calculate all the job similarities
-    const allSimilarities = createJobKeywords(jobs);
 
-    // Filter the similarities for only those that are related to the given jobIds
-    const relatedSimilarities = allSimilarities.filter(similarity =>
-        jobIds.includes(similarity.jobId1) || jobIds.includes(similarity.jobId2)
-    );
+export function getTopSimilarJobs(userJobs: string[], jobsWithSimilarities: JobClass[]): string[] {
+    const topSimilarJobs: string[] = [];
 
-    // Maps to store the sum of cosine similarities and the count for each jobId
-    const sumSimilarities: { [key: string]: number } = {};
-    const countOccurrences: { [key: string]: number } = {};
+    jobsWithSimilarities.forEach(job => {
+        if (userJobs.includes(job._id.toString()) && job.similarJobs) {
+            job.similarJobs.forEach(similarJob => {
+                // Check if the job is not already applied for by the user
+                if (!userJobs.includes(similarJob.jobId) && !topSimilarJobs.includes(similarJob.jobId)) {
+                    topSimilarJobs.push(similarJob.jobId);
+                }
+            });
+        }
+    });
 
-    for (const similarity of relatedSimilarities) {
-        sumSimilarities[similarity.jobId1] = (sumSimilarities[similarity.jobId1] || 0) + similarity.similarity;
-        countOccurrences[similarity.jobId1] = (countOccurrences[similarity.jobId1] || 0) + 1;
-
-        sumSimilarities[similarity.jobId2] = (sumSimilarities[similarity.jobId2] || 0) + similarity.similarity;
-        countOccurrences[similarity.jobId2] = (countOccurrences[similarity.jobId2] || 0) + 1;
-    }
-
-    // Calculate average cosine similarity for each jobId
-    const avgSimilarities: { [key: string]: number } = {};
-    for (const job of jobs) {
-        avgSimilarities[job._id.toString()] = sumSimilarities[job._id.toString()] / (countOccurrences[job._id.toString()] || 1);
-    }
-
-    // Sort jobs based on their average cosine similarity in descending order
-    const sortedJobs = jobs.sort((a, b) => (avgSimilarities[b._id.toString()] || 0) - (avgSimilarities[a._id.toString()] || 0));
-
-    // Filter out any jobs from the input list and then take the top 50
-    const filteredJobs = sortedJobs.filter(job => !jobIds.includes(job._id.toString()));
-
-    return filteredJobs.slice(0, 50).map(job => job._id.toString());  // Return top 50 jobIds
+    return topSimilarJobs;
 }
+
+
 
 
 

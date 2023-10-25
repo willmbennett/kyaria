@@ -1,7 +1,9 @@
+import { ObjectId } from "mongodb";
 import { AppClass, AppModel } from "../models/App";
 import { JobModel, JobClass } from "../models/Job";
+import { ProfileModel } from "../models/Profile";
 import connectDB from "./connect-db";
-import { getTopSimilarJobs } from "./recsystem-helper";
+import { createRecommendations, getTopSimilarJobs } from "./recsystem-helper";
 import { stringToObjectId, castToString, dateToString } from "./utils";
 var transformProps = require('transform-props');
 
@@ -48,6 +50,13 @@ interface JobRecsFilter {
     limit?: number
 }
 
+// Utility function to subtract days from a date
+function subtractDays(date: Date, days: number): Date {
+    const result = new Date(date);
+    result.setDate(result.getDate() - days);
+    return result;
+}
+
 export async function getJobRecs(filter: JobRecsFilter) {
     try {
         await connectDB();
@@ -56,37 +65,31 @@ export async function getJobRecs(filter: JobRecsFilter) {
         const limit = filter.limit ?? 100;
         const skip = (page - 1) * limit;
 
-        // Fetch all job applications for the user
-        const jobApps = await AppModel.find({ userId: filter.userId })
-            .sort('-createdAt')
-            .populate("job")
-            .lean()
-            .exec();
+        // Fetch user's profile and jobRecs
+        const userProfile = await ProfileModel.findOne({ userId: filter.userId }).lean().exec();
+        const jobRecs = userProfile?.jobRecs || [];
 
-        // Extract the jobIds from the applications
-        const userJobs = jobApps.map((jobApp: AppClass) => (jobApp.job as JobClass)._id.toString())
+        let topJobs: JobClass[] = [];
 
-        // Fetch all jobs and sort them by their update time
-        const jobs = await JobModel.find({}).sort('-updatedAt').lean().exec();
-
-        // Get the top jobs based on cosine similarity
-        const topJobIds = getTopSimilarJobs(userJobs, jobs);
-
-        // Convert the jobs array to a map for faster lookups
-        const jobMap = new Map<string, JobClass>();
-        for (const job of jobs) {
-            jobMap.set(job._id.toString(), job);
+        // If there are recommendations in jobRecs, fetch them
+        if (jobRecs.length > 0) {
+            const recommendedJobs = await JobModel.find({ _id: { $in: jobRecs } }).lean().exec();
+            topJobs = topJobs.concat(recommendedJobs);
         }
 
-        // Sort the topJobIds by recency
-        topJobIds.sort((a, b) => {
-            const dateA = new Date(jobMap.get(a)?.updatedAt || 0);
-            const dateB = new Date(jobMap.get(b)?.updatedAt || 0);
-            return dateB.getTime() - dateA.getTime();
-        });
+        // If the recommendations don't fulfill the limit, get the most recent jobs
+        if (topJobs.length < limit) {
+            const numJobsNeeded = limit - topJobs.length;
 
-        // Fetch the top jobs from the map using their IDs
-        const topJobs = topJobIds.map(jobId => jobMap.get(jobId)).filter(Boolean) as JobClass[];
+            // Exclude jobs already in recommendations
+            const recentJobs = await JobModel.find({ _id: { $nin: topJobs.map(job => job._id) } })
+                .sort('-createdAt')
+                .limit(numJobsNeeded)
+                .lean()
+                .exec();
+
+            topJobs = topJobs.concat(recentJobs);
+        }
 
         transformProps(topJobs, castToString, '_id');
         transformProps(topJobs, dateToString, ["createdAt", "updatedAt"]);
@@ -96,6 +99,99 @@ export async function getJobRecs(filter: JobRecsFilter) {
             page,
             limit,
             results: topJobs.length,
+        };
+    } catch (error) {
+        console.error("Error getting job recommendations:", error);
+        return { error };
+    }
+}
+
+
+export async function updateUserJobRecs() {
+    try {
+        await connectDB();
+
+        // I'm assuming you want this function to work for ALL user profiles. 
+        // If it's only for one specific user, then use the _id filter as you provided.
+        const userProfiles = await ProfileModel.find().lean().exec();
+
+        let count = 0;
+        for (let profile of userProfiles) {
+            // Fetch all job applications for the user
+            const jobApps = await AppModel.find({ userId: profile.userId })
+                .sort('-createdAt')
+                .populate("job")
+                .lean()
+                .exec();
+
+            // Extract the jobIds from the applications
+            const userJobs = jobApps.map((jobApp: any) => (jobApp.job as JobClass)._id.toString());
+
+            // Calculate the date from two weeks ago.
+            const twoWeeksAgo = subtractDays(new Date(), 14);
+
+            const aggregateJobs = await JobModel.aggregate([
+                { $match: { createdAt: { $gt: twoWeeksAgo } } },
+                { $sort: { createdAt: 1 } },
+                {
+                    $group: {
+                        _id: "$link",
+                        job: { $first: "$$ROOT" }
+                    }
+                }
+            ]);
+
+            // Extracting the job details from the aggregated results:
+            const jobsWithSimilarities = aggregateJobs.map(aggregated => aggregated.job);
+
+            // Get the top jobs based on pre-calculated cosine similarity
+            const topJobIds = getTopSimilarJobs(userJobs, jobsWithSimilarities);
+
+            // Update the user profile with the pre-calculated job recommendations
+            await ProfileModel.findByIdAndUpdate(profile._id, { $set: { jobRecs: topJobIds } });
+            
+            count++;  // Increment the count for each updated profile
+        }
+
+        return {
+            jobs: { updated_count: count }
+        };
+    } catch (error) {
+        console.error("Error updating user job recommendations:", error);
+        return { error };
+    }
+}
+
+export async function updateJobSimilarities() {
+    try {
+        await connectDB();
+
+        // Fetch all job applications for the user
+        const jobs = await JobModel.find({})
+            .lean()
+            .exec();
+
+        // Get the top jobs based on cosine similarity
+        const jobsTFIDF = createRecommendations(jobs);
+
+        // Update each job in the database with its recommendations
+        let count = 0
+        for (let jobData of jobsTFIDF) {
+            await JobModel.updateOne(
+                { _id: jobData.jobId },
+                {
+                    $set: {
+                        similarJobs: jobData.jobsSimilarity,
+                        tfidf: jobData.jobTFIDF
+                    }
+                }
+            );
+            // count the number of jobs updated
+            count = count + 1
+        }
+
+        return {
+            jobs: { updated_count: count },  // Pagination slice
         };
     } catch (error) {
         return { error };

@@ -1,17 +1,21 @@
 'use client'
 
-import { removeDetailSections } from '../../../apps/[id]/app-helper';
 import { updateJobAppAction } from '../../../board/_action';
 import ChatWithGPT from '../../board/ChatWithGPT';
 
 export default function Story({
-    jobApp,
+    jobAppId,
+    currentStory,
+    userResumeStripped,
+    job,
     jobKeyWords
 }: {
-    jobApp: any
+    jobAppId: string,
+    currentStory: string,
+    userResumeStripped: any,
+    job:any,
     jobKeyWords: string[]
 }) {
-    const profileNoDetails = removeDetailSections(jobApp.profile)
 
     const message = [
         {
@@ -50,10 +54,11 @@ export default function Story({
             "role": "user",
             "content":
                 `Based on the following details, help me craft a compelling, narrative-style story:
-                    - Job Post: ${JSON.stringify(jobApp.job)} 
-                    - My professional experience: ${JSON.stringify(profileNoDetails.professional_experience)} 
-                    - My skills: ${JSON.stringify(profileNoDetails.skills)} 
-                    - My education: ${JSON.stringify(profileNoDetails.education)}
+                    - Job Post: ${JSON.stringify(job)} 
+                    - My professional experience: ${JSON.stringify(userResumeStripped.professional_experience)} 
+                    - My skills: ${JSON.stringify(userResumeStripped.skills)} 
+                    - My education: ${JSON.stringify(userResumeStripped.education)}
+                    Make sure to pay attention to dates and make it follow chronological order
                     `
         }
     ];
@@ -68,10 +73,10 @@ export default function Story({
             <div className="lg:p-6 w-full">
                 <p>It's how you answer the question "Tell me about yourself" or "Why do you want this job?"</p>
                 <ChatWithGPT
-                    documentID={jobApp._id}
+                    documentID={jobAppId}
                     message={message}
                     setKey='userStory'
-                    currentState={jobApp.userStory}
+                    currentState={currentStory}
                     saveToDatabase={updateJobAppAction}
                     temp={0.7}
                     jobKeyWords={jobKeyWords}

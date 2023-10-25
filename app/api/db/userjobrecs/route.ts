@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from 'next/server';
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../../../lib/auth";
-import { updateJobSimilarities } from '../../../../lib/job-db';
+import { updateUserJobRecs } from '../../../../lib/job-db';
 
 export async function GET(req: NextRequest) {
     const session = await getServerSession(authOptions);
@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
 
     try {
 
-        const result = await updateJobSimilarities(); // Adjust the typecasting if you have types for the filter
+        const result = await updateUserJobRecs(); // Adjust the typecasting if you have types for the filter
 
         //console.log(result)
 

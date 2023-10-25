@@ -150,10 +150,12 @@ export const defaultFormInput = {
 }
 
 // Define a simplified Job interface for the transformed object
-interface Job {
+export interface Job {
   link: string; // Required field
   jobTitle: string;
+  diffbotUri: string,
   company?: string;
+  companyDiffbotUri?: string,
   location?: string;
   remote?: string;
   aboutCompany?: string;
@@ -161,6 +163,8 @@ interface Job {
   qualifications?: string[];
   responsibilities?: string[];
   skills?: Skill[];
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 // Define a simplified Skill interface for skills within the Job
@@ -178,13 +182,17 @@ export function transformDiffBotApiResponse(apiResponse: any): Job {
   const transformedJob: Job = {
     jobTitle: jobData.title,
     link: jobData.pageUrl,
+    diffbotUri: jobData.diffbotUri,
     company: jobData.employer?.name,
+    companyDiffbotUri: jobData.employer?.diffbotUri,
     location: jobData.locations?.address,
     remote: jobData.remote,
     aboutCompany: jobData.aboutCompany,
     jobDescription: jobData.text,
     qualifications: jobData.requirements,
     responsibilities: jobData.tasks,
+    createdAt: new Date(jobData.datePosted),
+    updatedAt: new Date(jobData.datePosted),
     skills: [],
   };
 

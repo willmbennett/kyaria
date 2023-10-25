@@ -21,6 +21,22 @@ class Skill {
     public diffbotUri?: string;
 }
 
+class TFIDFEntry {
+    @prop({ required: true })
+    term: string;
+
+    @prop({ required: true })
+    value: number;  // The tf-idf value
+}
+
+class SimilarJob {
+    @prop({ required: true })
+    jobId: string; // ID of a similar job
+    
+    @prop({ required: true })
+    similarity: number; // cosine similarity value
+}
+
 @ModelOptions({
     schemaOptions: {
         timestamps: true,
@@ -40,7 +56,13 @@ class JobClass {
     public link!: string;
 
     @prop()
+    public diffbotUri?: string;
+
+    @prop()
     public company: string;
+
+    @prop()
+    public companyDiffbotUri?: string;
 
     @prop()
     public location: string;
@@ -68,6 +90,12 @@ class JobClass {
 
     @prop({ type: () => [Skill] }) // Define skills as an array of Skill objects
     public skills?: Skill[]; // Add the skills field to your schema
+
+    @prop({ type: () => [TFIDFEntry] })
+    public tfidf?: TFIDFEntry[];
+
+    @prop({ type: () => [SimilarJob] })
+    public similarJobs?: SimilarJob[];
 
     _id: mongoose.Types.ObjectId | string;
     createdAt: Date | string;

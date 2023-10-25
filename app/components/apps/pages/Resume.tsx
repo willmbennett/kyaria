@@ -1,18 +1,18 @@
 import ChatWithGPT from '../../board/ChatWithGPT';
 import Responsibility from '../components/Responsibility';
 import { updateResumeAction } from '../../../board/_action';
-import { removeDetailSections } from '../../../apps/[id]/app-helper';
 
 export default function Resume({
-    application,
-    jobKeyWords
+    jobKeyWords,
+    job,
+    userResume,
+    userProfile
 }: {
-    application: any,
-    jobKeyWords: string[]
+    jobKeyWords: string[],
+    job: any,
+    userResume: any,
+    userProfile: any
 }) {
-    const userResume = application.userResume;
-    const job = application.job;
-    const profileNoDetails = removeDetailSections(application.profile)
 
     const message = [
         {
@@ -22,7 +22,7 @@ export default function Resume({
         {
             "role": "user",
             "content":
-                `I'm applying for this job: ${JSON.stringify(job)}. ${userResume.summary == ''? "Write me a resume summary": `Help me improve this resume summary ${userResume.summary}`} based on details from my profile: ${profileNoDetails}`
+                `I'm applying for this job: ${JSON.stringify(job)}. ${userResume.summary == ''? "Write me a resume summary": `Help me improve this resume summary ${userResume.summary}`} based on details from my profile: ${userProfile}`
         }
     ];
 
@@ -57,10 +57,10 @@ export default function Resume({
 
                 <h2 className="text-left font-bold text-2xl py-4 mb-4">Summary</h2>
                 <ChatWithGPT
-                    documentID={application.userResume._id}
+                    documentID={userResume._id}
                     message={message}
                     setKey={"summary"}
-                    currentState={application.userResume.summary}
+                    currentState={userResume.summary}
                     saveToDatabase={updateResumeAction}
                     jobKeyWords={jobKeyWords}
                 />
@@ -88,7 +88,7 @@ export default function Resume({
                                 {exp.responsibilities.map((resp: any, i: number) => (
                                     <div key={i}>
                                         <Responsibility
-                                            documentID={application.userResume._id}
+                                            documentID={userResume._id}
                                             setKey={`professional_experience.${index}.responsibilities.${i}.content`}
                                             content={resp.content}
                                             message={[
@@ -130,7 +130,7 @@ export default function Resume({
                                     {edu.details.map((detail: any, i: number) => (
                                         <div key={i}>
                                             <Responsibility
-                                                documentID={job.id}
+                                                documentID={userResume._id}
                                                 setKey={`education.${index}.details.${i}.content`}
                                                 content={detail.content}
                                                 message={[

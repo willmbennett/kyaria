@@ -17,6 +17,7 @@ import logoIcon from '/public/images/logo-icon.png'
 const links = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
+  { label: 'Jobs', href: '/jobs' },
   { label: 'Resume Tester', href: '/resumetest' },
   /*{ label: 'Pricing', href: '/pricing' },*/
   /*{ label: 'Contact', href: '/contact' },*/
@@ -40,6 +41,7 @@ export function Header() {
   const signedInLinks = [
     { label: 'Profile', href: `/profile/${session?.user?.id}` },
     { label: 'Board', href: '/board' },
+    { label: 'Jobs', href: '/jobs' },
     { label: 'Resume Tester', href: '/resumetest' },
     /*{ label: 'Pricing', href: '/pricing' },*/
     /*{ label: 'Contact', href: '/contact' },*/

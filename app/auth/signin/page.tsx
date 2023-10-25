@@ -16,12 +16,7 @@ type Provider = {
 };
 
 const SignIn: React.FC = () => {
-  const { data: session } = useSession();
   const [providers, setProviders] = useState<Record<string, Provider> | null>(null);
-
-  if (session) {
-    redirect(`/`)
-  }
 
   useEffect(() => {
     (async () => {

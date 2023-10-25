@@ -10,25 +10,53 @@ import Emails from './pages/Emails';
 import Story from './pages/Story';
 import { Chat } from '../chat/Chat';
 import { type Message } from 'ai/react'
+import { stripObject } from '../../apps/[id]/app-helper';
 
 export function JobApplication({ jobApp }: { jobApp: any }) {
   const [currentSection, setCurrentSection] = useState('jobDescription');
 
-  const jobKeyWords = jobApp.job.skills?.map((skill: any) => skill.skill) || ['']
+  // Limit the number of keywords
+  const jobKeyWords = jobApp.job.tfidf ? jobApp.job.tfidf.map((tf: any) => tf.term).slice(0, 20) : ['']
+
+  // Extract the high level objects
+  const userResume = jobApp.userResume
+  const job = jobApp.job
+  const profile = jobApp.profile
+
+  // Remove longer text from profile and limit to only relevant keys
+  const profileKeys = ["title",
+    "summary",
+    "areas_of_expertise",
+    "skills",
+    "education",
+    "professional_experience",
+    'details',
+    'responsibilities',
+    'content',
+    'start_date',
+    'end_date',
+    'degree',
+    'company',
+    'institution'
+  ];
+  const profileStripped = stripObject(profile, profileKeys)
+  const userResumeStripped = stripObject(userResume, profileKeys)
+  const jobdKeys = ["jobTitle", 'company', "aboutCompany", "jobDescription", "qualifications", "responsibilities"];
+  const jobStripped = stripObject(job, jobdKeys)
 
   const initialMessages: Message[] = [
     {
       "id": "1",
       "role": "system",
-      "content": `You are a career coach that is helping ${jobApp.userResume.name} do a mock interview
-                  They are applying for this job ${JSON.stringify(jobApp.job)}
+      "content": `You are a career coach that is helping ${userResume.name} do a mock interview
+                  They are applying for this job ${JSON.stringify(jobStripped)}
                   Act only in your capacity as a career coach and do not discuss any other topic.
                   `
     },
     {
       "id": "2",
       "role": "assistant",
-      "content": `Hi ${jobApp.userResume.name} are you ready to do a mock interview for the ${jobApp.job.jobTitle} position at ${jobApp.job.company}?`
+      "content": `Hi ${userResume.name} are you ready to do a mock interview for the ${jobApp.job.jobTitle} position at ${jobApp.job.company}?`
     }
   ];
 
@@ -56,32 +84,46 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
               )}
               {currentSection == 'coverLetter' && jobApp && (
                 <CoverLetter
-                  jobApp={jobApp}
+                  jobAppId={jobApp._id}
+                  currentCoverLetter={jobApp.userCoverLetter}
+                  userResumeStripped={userResumeStripped}
+                  jobStripped={jobStripped}
+                  job={job}
+                  userResume={userResume}
                   jobKeyWords={jobKeyWords}
                 />
               )}
               {currentSection == 'resume' && jobApp && (
                 <Resume
-                  application={jobApp}
                   jobKeyWords={jobKeyWords}
+                  job={jobStripped}
+                  userResume={userResume}
+                  userProfile={profileStripped}
                 />
               )}
               {currentSection == 'story' && jobApp && (
                 <Story
-                  jobApp={jobApp}
+                  jobAppId={jobApp._id}
+                  currentStory={jobApp.userStory}
+                  userResumeStripped={userResumeStripped}
+                  job={jobStripped}
                   jobKeyWords={jobKeyWords}
                 />
               )}
               {currentSection == 'experience' && jobApp && (
                 <Experience
                   jobApp={jobApp}
+                  jobStripped={jobStripped}
                   jobKeyWords={jobKeyWords}
                 />
               )}
               {currentSection == 'emails' && jobApp && (
                 <Emails
-                  jobApp={jobApp}
+                  jobAppId={jobApp._id}
+                  emails={jobApp.emails}
+                  jobStripped={jobStripped}
                   jobKeyWords={jobKeyWords}
+                  userResumeStripped={userResumeStripped}
                 />
               )}
             </div>

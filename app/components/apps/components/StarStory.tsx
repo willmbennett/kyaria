@@ -9,6 +9,7 @@ const INACTIVE_ROUTE = "hover:bg-gray-600 hover:text-white";
 
 export default function StarStory({
     jobApp,
+    jobStripped,
     documentID,
     setKey,
     content,
@@ -19,6 +20,7 @@ export default function StarStory({
     jobKeyWords
 }: {
     jobApp: any,
+    jobStripped: any,
     documentID: string,
     setKey: string,
     content: string,
@@ -106,7 +108,7 @@ export default function StarStory({
             role: "user",
             content: `Create a STAR story ${selectedTheme == '' ? '' : `with the theme of ${selectedTheme}`} for this resume achievement: "${content}". 
             ${details? `Here are some details about the achievement: ${details}` : ""}
-            Refine the story and tailor it to this job post: ${JSON.stringify(jobApp.job)}.
+            Refine the story and tailor it to this job post: ${JSON.stringify(jobStripped)}.
             `
         }
     ]

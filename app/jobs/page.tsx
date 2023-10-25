@@ -19,7 +19,12 @@ export default async function JobsPage({
     const limit =
         typeof searchParams.limit === 'string' ? Number(searchParams.limit) : 10
 
-    const promise = getJobRecs({ userId: session?.user?.id || '' })
+    const filter = {
+        userId: session?.user?.id || '',
+        page,
+        limit
+    }
+    const promise = getJobRecs(filter)
 
     return (
         <section>
