@@ -10,21 +10,31 @@ export async function GET(
     const session = await getServerSession(authOptions);
     const searchParams = request.nextUrl.searchParams
     const org = searchParams.get('org')
+    const entity = searchParams.get('entity')
 
-    //console.log(session)
+    console.log(entity)
 
     if (!session) {
         redirect('/auth/signin')
-      }
+    }
 
     //console.log(org)
 
     try {
-        if (!org || typeof org !== 'string') {
+        if ((!org || typeof org !== 'string') && (!entity || typeof entity !== 'string')) {
             return NextResponse.json({ error: 'Invalid URL provided.' }, { status: 400 });
         }
 
-        const apiUrl = `https://kg.diffbot.com/kg/v3/dql?type=query&token=${process.env.DIFFBOT_API_KEY}&query=type%3AOrganization+strict%3Aname%3A"${encodeURIComponent(org)}"&size=1`; // Replace 'YOUR_API_KEY' with your actual Diffbot API key
+
+        let apiUrl = '';
+
+        if (entity && typeof entity === 'string') {
+            apiUrl = `https://kg.diffbot.com/kg/v3/dql?type=query&token=${process.env.DIFFBOT_API_KEY}&query=diffbotUri%3A${encodeURIComponent(entity)}`;
+        } else if (org && typeof org === 'string') {
+            apiUrl = `https://kg.diffbot.com/kg/v3/dql?type=query&token=${process.env.DIFFBOT_API_KEY}&query=type%3AOrganization+strict%3Aname%3A"${encodeURIComponent(org)}"&size=1`;
+        }
+
+        console.log(apiUrl)
 
         const options = {
             method: 'GET',

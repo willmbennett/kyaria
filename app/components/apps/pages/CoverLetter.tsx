@@ -2,18 +2,25 @@
 
 import ChatWithGPT from '../../board/ChatWithGPT';
 import { updateJobAppAction } from '../../../board/_action';
-import { removeDetailSections } from '../../../apps/[id]/app-helper';
 import { CoverLetterPDF } from '../CoverLetterPDF';
 
 export default function CoverLetter({
-    jobApp,
+    jobAppId,
+    currentCoverLetter,
+    userResume,
+    userResumeStripped,
+    jobStripped,
+    job,
     jobKeyWords
 }: {
-    jobApp: any,
+    jobAppId: string,
+    currentCoverLetter: string,
+    userResume: any,
+    userResumeStripped: any,
+    jobStripped:any,
+    job: any
     jobKeyWords: string[]
 }) {
-
-    const profileNoDetails = removeDetailSections(jobApp.profile)
     const message = [
         {
             "role": "system",
@@ -33,8 +40,8 @@ export default function CoverLetter({
         {
             "role": "user",
             "content": `Please write me a tailored cover letter for the following job description:
-            - Job description: ${JSON.stringify(jobApp.job)}
-            Include information from my profile ${JSON.stringify(profileNoDetails)}
+            - Job description: ${JSON.stringify(jobStripped)}
+            Include information from my profile ${JSON.stringify(userResumeStripped)}
             
             Structure the cover letter into an introduction, body, and conclusion.
             `
@@ -48,12 +55,11 @@ export default function CoverLetter({
             <h1 className="text-center sm:text-6xl text-4xl font-bold mb-8">
                 Stand out with a cover letter
             </h1>
-
             <ChatWithGPT
-                documentID={jobApp._id}
+                documentID={jobAppId}
                 setKey='userCoverLetter'
                 message={message}
-                currentState={jobApp.userCoverLetter}
+                currentState={currentCoverLetter}
                 saveToDatabase={updateJobAppAction}
                 temp={0.5}
                 jobKeyWords={jobKeyWords}
@@ -62,13 +68,13 @@ export default function CoverLetter({
             <h3 className="text-xl font-semibold mt-5">Download your cover letter as a pdf</h3>
             <p className="text-gray-600 my-2">Once you create your cover letter you can see it here and download it.</p>
             <CoverLetterPDF
-                name={jobApp.profile.name}
-                phone={jobApp.profile.telephone}
-                email={jobApp.profile.email}
-                address={jobApp.profile.location}
-                company={jobApp.job.company}
-                companyLocation={jobApp.job.location}
-                bodyText={jobApp.userCoverLetter}
+                name={userResume.name}
+                phone={userResume.telephone}
+                email={userResume.email}
+                address={userResume.location}
+                company={job.company}
+                companyLocation={job.location}
+                bodyText={currentCoverLetter}
             />
         </>
     );

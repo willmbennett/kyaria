@@ -3,9 +3,11 @@ import StarStory from '../components/StarStory';
 
 export default function Experience({
     jobApp,
+    jobStripped,
     jobKeyWords
 }: {
     jobApp: any,
+    jobStripped: any,
     jobKeyWords: string[]
 }) {
 
@@ -40,6 +42,7 @@ export default function Experience({
                                             )}
                                             <StarStory
                                                 jobApp={jobApp}
+                                                jobStripped={jobStripped}
                                                 documentID={jobApp.userResume._id}
                                                 setKey={`professional_experience.${index}.responsibilities.${i}.starStory`}
                                                 content={resp.content}
@@ -80,6 +83,7 @@ export default function Experience({
                                                 )}
                                                 <StarStory
                                                     jobApp={jobApp}
+                                                    jobStripped={jobStripped}
                                                     documentID={jobApp.userResume._id}
                                                     setKey={`professional_experience.${index}.responsibilities.${i}.starStory`}
                                                     content={detail.content}

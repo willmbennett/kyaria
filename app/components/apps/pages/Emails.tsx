@@ -1,6 +1,5 @@
 "use client"
 import { useState } from 'react';
-import { removeDetailSections } from '../../../apps/[id]/app-helper';
 import { updateJobAppAction } from '../../../board/_action';
 import ChatWithGPT from '../../board/ChatWithGPT';
 
@@ -8,17 +7,21 @@ const ACTIVE_ROUTE = "bg-gray-200 hover:bg-gray-600 hover:text-white";
 const INACTIVE_ROUTE = "hover:bg-gray-600 hover:text-white";
 
 export default function Experience({
-    jobApp,
-    jobKeyWords
+    jobAppId,
+    emails,
+    jobKeyWords,
+    userResumeStripped,
+    jobStripped
 }: {
-    jobApp: any,
-    jobKeyWords: string[]
+    jobAppId: string,
+    emails: any,
+    jobKeyWords: string[],
+    userResumeStripped: any,
+    jobStripped: any
 }) {
-    const emails = jobApp.emails;
     const [showOptions, setShowOptions] = useState(false);
     const [selectedEmail, setSelectedEmail] = useState(emails[0]);
     const [emailIndex, setEmailIndex] = useState(0);
-    const profileNoDetails = removeDetailSections(jobApp.profile)
 
     const optionsClick = () => {
         setShowOptions(!showOptions);
@@ -88,15 +91,15 @@ export default function Experience({
                             },
                             {
                                 "role": "user",
-                                "content": `Please write me a ${selectedEmail.type} email for this job post: ${JSON.stringify(jobApp.job)}.
-                                Include information from my profile ${JSON.stringify(profileNoDetails)} and keep the writing style consistent. 
+                                "content": `Please write me a ${selectedEmail.type} email for this job post: ${JSON.stringify(jobStripped)}.
+                                Include information from my profile ${JSON.stringify(userResumeStripped)} and keep the writing style consistent. 
                             `
                             }
                         ]
                         return (
                             <div className={i != emailIndex ? 'hidden' : ''} key={i}>
                                 <ChatWithGPT
-                                    documentID={jobApp._id}
+                                    documentID={jobAppId}
                                     setKey={`emails.${i}.content`}
                                     message={message}
                                     currentState={email.content}

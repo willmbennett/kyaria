@@ -45,6 +45,23 @@ export const authOptions: NextAuthOptions = {
         session.user.id = user.id
       }
       return session
+    },
+    async redirect({ url, baseUrl }) {
+      // Extract callbackUrl from the URL
+      const urlObj = new URL(url);
+      const callbackUrl = urlObj.searchParams.get('callbackUrl');
+
+      // If callbackUrl exists and is valid
+      if (callbackUrl) {
+        if (callbackUrl.startsWith("/")) return `${baseUrl}${callbackUrl}`;
+        else if (new URL(callbackUrl).origin === baseUrl) return callbackUrl;
+      }
+
+      // Original logic
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      else if (urlObj.origin === baseUrl) return url;
+      return baseUrl;
     }
+
   }
 }

@@ -1,18 +1,21 @@
-export function removeDetailSections(obj: any) {
-    for (const key in obj) {
-      if (typeof obj[key] === 'object' && obj[key] !== null) {
-        // If the current property is an object or array, recurse into it
-        //console.log("Is an object")
-        //console.log(obj[key])
-        removeDetailSections(obj[key]);
+export function stripObject<T extends Record<string, any>>(obj: T, desiredKeys: string[]): Partial<T> {
+  return desiredKeys.reduce((acc, key) => {
+      if (key in obj) {
+          if (Array.isArray(obj[key])) {
+              // If the current property is an array, map over it and apply stripObject on each element
+              (acc as any)[key] = obj[key].map((item: any) => {
+                  if (typeof item === 'object' && item !== null) {
+                      return stripObject(item, desiredKeys);
+                  }
+                  return item;
+              });
+          } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+              // If the current property is an object (but not an array), recurse into it
+              (acc as any)[key] = stripObject(obj[key], desiredKeys);
+          } else {
+              (acc as any)[key] = obj[key];
+          }
       }
-  
-      // If the current property is named "detail", delete it
-      if (key === 'detail') {
-        //console.log("to be deleted")
-        //console.log(obj[key])
-        delete obj[key];
-      }
-    }
-    return obj;
-  }
+      return acc;
+  }, {} as Partial<T>);
+}

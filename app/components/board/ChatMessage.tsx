@@ -15,6 +15,19 @@ export interface ChatMessageProps {
 }
 
 export function ChatMessage({ message, jobKeyWords, ...props }: ChatMessageProps) {
+  function highlightKeywords(content: string, keywords: string[]): string {
+    if (content) {
+      keywords.forEach((keyword) => {
+        const regex = new RegExp(`\\b${keyword}\\b`, 'gi'); // Match the keyword as a whole word
+        content = content.replace(regex, (match) => `**${match}**`);
+      });
+      return content;
+    } else {
+      return content;
+    }
+  }
+
+  const highlightedContent = jobKeyWords? highlightKeywords(message.content, jobKeyWords): message.content;
 
   return (
     <div
@@ -61,7 +74,7 @@ export function ChatMessage({ message, jobKeyWords, ...props }: ChatMessageProps
             }
           }}
         >
-          {message.content}
+          {highlightedContent}
         </MemoizedReactMarkdown>
       </div>
     </div>

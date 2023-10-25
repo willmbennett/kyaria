@@ -45,7 +45,7 @@ export default function CreateJobApp(
 
             const transformedData = transformDiffBotApiResponse(apiData)
             // Handle the API response data here (e.g., setValues, etc.)
-            console.log(transformedData)
+            //console.log(transformedData)
 
             const path = "/"
             const profileId = profile._id
@@ -64,6 +64,7 @@ export default function CreateJobApp(
         } catch (error) {
             console.error(error);
             // Handle the error (e.g., display an error message to the user)
+            alert('Creating job failed')
         } finally {
             setLoading(false);
             setCreatingJobApp(false)

@@ -112,6 +112,9 @@ class ProfileClass {
     public location?: string;
 
     @prop()
+    public jobRecs?: string[];
+
+    @prop()
     public summary?: string;
 
     @prop({ type: () => [String] })

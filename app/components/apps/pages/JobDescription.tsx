@@ -4,6 +4,7 @@ import { createJobApplicationAction } from "../../../board/_action";
 import { emails } from "../../../board/job-helper";
 import { useRouter } from 'next/navigation'
 import { Button } from "../../Button";
+import { signIn, signOut } from "next-auth/react";
 
 const BUTTON_GREEN = "inline-block rounded px-6 pb-2 pt-2.5 text-xs hover:opacity-80 font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] ";
 
@@ -15,12 +16,12 @@ export default function JobDescription({
     jobData,
     addBoard,
     profile,
-    topWords
+    topWords,
 }: {
     jobData: any,
     addBoard?: boolean,
     profile?: any,
-    topWords?: string[]
+    topWords: string[]
 }) {
     const router = useRouter()
 
@@ -67,24 +68,40 @@ export default function JobDescription({
                             </a>
                         </p>
                     )}
-                    {addBoard && (
-                        <form onSubmit={handleSubmit(onSubmit)}>
-                            <p className="text-left font-medium text-lg mb-4 mx-2">
-                                <input {...register('board')} placeholder="board" className="hidden" />
-                                <Button
-                                    variant="solid"
-                                    type="submit"
-                                    size="md"
-                                >
-                                    Add to Board
-                                </Button>
-                            </p>
-                        </form>
-                    )}
+                    {addBoard && (<>
+                        {profile ? (
+                            <>
+                                <form onSubmit={handleSubmit(onSubmit)}>
+                                    <p className="text-left font-medium text-lg mb-4 mx-2">
+                                        <input {...register('board')} placeholder="board" className="hidden" />
+                                        <Button
+                                            variant="solid"
+                                            type="submit"
+                                            size="md"
+                                        >
+                                            Add to Board
+                                        </Button>
+                                    </p>
+                                </form>
+                            </>
+                        ) : (
+                            <>
+                                <p className="text-left font-medium text-lg mb-4 mx-2">
+                                    <Button
+                                        size="md"
+                                        variant="solid"
+                                        onClick={!profile ? () => signIn() : () => signOut()}
+                                    >
+                                        {!profile ? 'Sign In to Add to Board' : 'Sign Out'}
+                                    </Button>
+                                </p>
+                            </>
+                        )}
+                    </>)}
                 </div>
-                {topWords && (<p className="text-left font-medium text-lg mb-4">
+                <p className="text-left font-medium text-lg mb-4">
                     <strong>Keywords:</strong> {topWords.join(', ')}
-                </p>)}
+                </p>
                 {jobData.company && (
                     <p className="text-left font-medium text-lg mb-4">
                         <strong>Company: </strong>
