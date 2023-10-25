@@ -16,7 +16,22 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
   const [currentSection, setCurrentSection] = useState('jobDescription');
 
   // Limit the number of keywords
-  const jobKeyWords = jobApp.job.tfidf ? jobApp.job.tfidf.map((tf: any) => tf.term).slice(0, 20) : ['']
+  let jobKeyWords: string[] = [];
+
+  // Extracting keywords from the skills property
+  if (jobApp.job.skills) {
+    jobKeyWords.push(...jobApp.job.skills.map((skill: any) => skill.skill));
+  }
+
+  if (jobApp.job.tfidf) {
+    jobKeyWords.push(...jobApp.job.tfidf.map((tf: any) => tf.term).slice(0, 20));
+  }
+
+  // If neither tfidf nor skills are provided, default the keywords to an array with an empty string
+  if (!jobApp.job.tfidf && !jobApp.job.skills) {
+    jobKeyWords = [''];
+  }
+
 
   // Extract the high level objects
   const userResume = jobApp.userResume
