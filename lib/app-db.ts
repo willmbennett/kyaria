@@ -102,7 +102,7 @@ export async function createJobApplication(data: any) {
             const newResume = await ResumeModel.create(resume);
             //console.log(newResume)
             //console.log("Create Job")
-            const newJob = await JobModel.create(job);
+            const newJob = await JobModel.create({...job, userId: userId});
             //console.log(newJob)
             //console.log("Create App")
             const profileObjectId = stringToObjectId(profileId)

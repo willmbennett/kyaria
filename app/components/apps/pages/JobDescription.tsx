@@ -4,9 +4,10 @@ import { createJobApplicationAction } from "../../../board/_action";
 import { emails } from "../../../board/job-helper";
 import { useRouter } from 'next/navigation'
 import { Button } from "../../Button";
-import { signIn, signOut } from "next-auth/react";
-
-const BUTTON_GREEN = "inline-block rounded px-6 pb-2 pt-2.5 text-xs hover:opacity-80 font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] ";
+import { signIn, signOut, useSession } from "next-auth/react";
+import EditJobDescription from "../EditJobDescription";
+import Link from "next/link";
+import { EditList } from "../EditList";
 
 export type FormFields = {
     board: string;
@@ -24,6 +25,7 @@ export default function JobDescription({
     topWords: string[]
 }) {
     const router = useRouter()
+    const { data: session } = useSession()
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
         if (profile) {
@@ -46,14 +48,33 @@ export default function JobDescription({
 
     const { register, handleSubmit } = useForm<FormFields>();
 
+    const { _id,
+        jobTitle,
+        userId,
+        company,
+        location,
+        employmentType,
+        salaryRange,
+        remote,
+        aboutCompany,
+        jobDescription,
+        qualifications,
+        responsibilities
+    } = jobData;
+
+    const edit = session?.user?.id == '650f813286f63a9d8c0080ee' || session?.user?.id == userId
+
     return (
 
         <>
             <h1 className="text-center sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
-                {jobData.jobTitle}
+                <EditJobDescription
+                    jobId={_id}
+                    setKey={`jobTitle`}
+                    currentState={jobTitle}
+                    userCanEdit={edit}
+                />
             </h1>
-            <div className="text-center mb-8">
-            </div>
             <div>
                 <div className="flex items-center justify-center">
                     {jobData.link && (
@@ -102,68 +123,76 @@ export default function JobDescription({
                 <p className="text-left font-medium text-lg mb-4">
                     <strong>Keywords:</strong> {topWords.join(', ')}
                 </p>
-                {jobData.company && (
-                    <p className="text-left font-medium text-lg mb-4">
-                        <strong>Company: </strong>
-                        <a href={`/companies/${jobData.company}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-500 hover:underline inline-block mr-2"
-                        >
-                            {jobData.company}
-                        </a>
-                    </p>
-                )}
-                {jobData.location && (
-                    <p className="text-left font-medium text-lg mb-4">
-                        <strong>Location:</strong> {jobData.location}
-                    </p>
-                )}
-                {jobData.employmentType && (
-                    <p className="text-left font-medium text-lg mb-4">
-                        <strong>Employment Type:</strong> {jobData.employmentType}
-                    </p>
-                )}
-                {jobData.salaryRange && (
-                    <p className="text-left font-medium text-lg mb-4">
-                        <strong>Salary Range:</strong> {jobData.salaryRange}
-                    </p>
-                )}
-                {jobData.remote && (
-                    <p className="text-left font-medium text-lg mb-4">
-                        <strong>Remote:</strong> {jobData.remote}
-                    </p>
-                )}
-                {jobData.aboutCompany && (<>
-                    <h2 className="text-left font-bold text-2xl mb-4">About the Company</h2>
-                    <p className="text-left mb-8">
-                        {jobData.aboutCompany}
-                    </p>
-                </>)}
-                {jobData.jobDescription && (<>
-                    <h2 className="text-left font-bold text-2xl mb-4">Job Description</h2>
-                    <p className="text-left mb-8">
-                        {jobData.jobDescription}
-                    </p>
-                </>)}
-                {jobData.qualifications && (
-                    <>
-                        <h2 className="text-left font-bold text-2xl mb-4">Qualifications</h2>
-                        <ul className="list-disc list-inside text-left mb-8">
-                            {Array.isArray(jobData.qualifications) && jobData.qualifications.map((qualification: any, index: any) => (
-                                <li key={index}>{qualification}</li>
-                            ))}
-                        </ul>
-                    </>)}
-                {jobData.responsibilities && (
-                    <>
-                        <h2 className="text-left font-bold text-2xl mb-4">Responsibilities</h2>
-                        <ul className="list-disc list-inside text-left">
-                            {Array.isArray(jobData.responsibilities) && jobData.responsibilities.map((responsibility: any, index: any) => (
-                                <li key={index}>{responsibility}</li>
-                            ))}
-                        </ul>
-                    </>)}
+                <EditJobDescription
+                    label="Company"
+                    jobId={_id}
+                    setKey={`company`}
+                    currentState={company}
+                    userCanEdit={edit}
+                />
+                <Link href={`/companies/${company}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 hover:underline inline-block mr-2"
+                >
+                    See more information on {company}
+                </Link>
+                <EditJobDescription
+                    label="Location"
+                    jobId={_id}
+                    setKey={`location`}
+                    currentState={location}
+                    userCanEdit={edit}
+                />
+                <EditJobDescription
+                    label="Employment Type"
+                    jobId={_id}
+                    setKey={`employmentType`}
+                    currentState={employmentType}
+                    userCanEdit={edit}
+                />
+                <EditJobDescription
+                    label="Salary Range"
+                    jobId={_id}
+                    setKey={`salaryRange`}
+                    currentState={salaryRange}
+                    userCanEdit={edit}
+                />
+                <EditJobDescription
+                    label="Remote"
+                    jobId={_id}
+                    setKey={`remote`}
+                    currentState={remote}
+                    userCanEdit={edit}
+                />
+                <h2 className="text-left font-bold text-2xl mb-4">About the Company</h2>
+                <EditJobDescription
+                    jobId={_id}
+                    setKey={`aboutCompany`}
+                    currentState={aboutCompany}
+                    userCanEdit={edit}
+                />
+                <h2 className="text-left font-bold text-2xl mb-4">Job Description</h2>
+                <EditJobDescription
+                    jobId={_id}
+                    setKey={`jobDescription`}
+                    currentState={jobDescription}
+                    userCanEdit={edit}
+                />
+                <h2 className="text-left font-bold text-2xl mb-4">Qualifications</h2>
+                <EditList
+                    listItems={qualifications}
+                    id={_id}
+                    userCanEdit={edit}
+                    parentName='qualifications'
+                />
+                <h2 className="text-left font-bold text-2xl mb-4">Responsibilities</h2>
+                <EditList
+                    listItems={responsibilities}
+                    id={_id}
+                    userCanEdit={edit}
+                    parentName='responsibilities'
+                />
             </div>
         </>
     );

@@ -23,7 +23,7 @@ const rssFeedList = [
     }
 ]
 */
-async function fetchWithRetry(url: string, options: any, maxRetries: number = 5): Promise<any> {
+export async function fetchWithRetry(url: string, options: any, maxRetries: number = 5): Promise<any> {
     let attempts = 0;
 
     while (attempts < maxRetries) {
@@ -152,7 +152,7 @@ export async function POST() {
 
                 const data = await fetchWithRetry(apiUrl, options);
                 console.log('Data fetched successfully:', data);
-                const transformedResponse = transformDiffBotApiResponse(data);
+                const transformedResponse = transformDiffBotApiResponse(data, link);
                 console.log('------Transformed Response------')
                 console.log(JSON.stringify(transformedResponse))
                 const jobId = await createJobAction(transformedResponse, '/');
