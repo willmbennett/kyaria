@@ -50,13 +50,6 @@ interface JobRecsFilter {
     limit?: number
 }
 
-// Utility function to subtract days from a date
-function subtractDays(date: Date, days: number): Date {
-    const result = new Date(date);
-    result.setDate(result.getDate() - days);
-    return result;
-}
-
 export async function getJobRecs(filter: JobRecsFilter) {
     try {
         await connectDB();
@@ -65,16 +58,29 @@ export async function getJobRecs(filter: JobRecsFilter) {
         const limit = filter.limit ?? 100;
         const skip = (page - 1) * limit;
 
-        // Fetch user's profile and jobRecs
+        // Fetch user's profile
         const userProfile = await ProfileModel.findOne({ userId: filter.userId }).lean().exec();
         const jobRecs = userProfile?.jobRecs || [];
 
         let topJobs: JobClass[] = [];
 
-        // If there are recommendations in jobRecs, fetch them
+        // If there are recommendations in jobRecs, fetch them in the order they appear
         if (jobRecs.length > 0) {
-            const recommendedJobs = await JobModel.find({ _id: { $in: jobRecs } }).lean().exec();
-            topJobs = topJobs.concat(recommendedJobs);
+            // Fetching jobs without maintaining order
+            const recommendedJobsMap = await JobModel.find({ _id: { $in: jobRecs } })
+                .lean()
+                .exec()
+                .then(jobs => jobs.reduce((acc, job) => {
+                    acc[job._id.toString()] = job;
+                    return acc;
+                }, {} as Record<string, JobClass>));
+
+            // Maintaining the order based on jobRecs
+            for (const jobId of jobRecs) {
+                if (recommendedJobsMap[jobId]) {
+                    topJobs.push(recommendedJobsMap[jobId]);
+                }
+            }
         }
 
         // If the recommendations don't fulfill the limit, get the most recent jobs
@@ -106,6 +112,11 @@ export async function getJobRecs(filter: JobRecsFilter) {
     }
 }
 
+// Utility function to subtract days from a date
+function subtractDays(date: Date, days: number): Date {
+    date.setDate(date.getDate() - days);
+    return date;
+}
 
 export async function updateUserJobRecs() {
     try {
@@ -113,9 +124,11 @@ export async function updateUserJobRecs() {
 
         // I'm assuming you want this function to work for ALL user profiles. 
         // If it's only for one specific user, then use the _id filter as you provided.
+        //const userProfiles = await ProfileModel.find({ _id: "6514a6cf89f00c6960dc7490" }).lean().exec();
         const userProfiles = await ProfileModel.find().lean().exec();
 
         let count = 0;
+        let jobRecCount = 0;
         for (let profile of userProfiles) {
             // Fetch all job applications for the user
             const jobApps = await AppModel.find({ userId: profile.userId })
@@ -131,30 +144,39 @@ export async function updateUserJobRecs() {
             const twoWeeksAgo = subtractDays(new Date(), 14);
 
             const aggregateJobs = await JobModel.aggregate([
+                {
+                    $addFields: {
+                        "baseLink": {
+                            $substr: ["$link", 0, { $indexOfBytes: ["$link", "?"] }]
+                        }
+                    }
+                },
                 { $match: { createdAt: { $gt: twoWeeksAgo } } },
                 { $sort: { createdAt: 1 } },
                 {
                     $group: {
-                        _id: "$link",
+                        _id: "$baseLink",
                         job: { $first: "$$ROOT" }
                     }
                 }
             ]);
 
+
             // Extracting the job details from the aggregated results:
             const jobsWithSimilarities = aggregateJobs.map(aggregated => aggregated.job);
 
             // Get the top jobs based on pre-calculated cosine similarity
-            const topJobIds = getTopSimilarJobs(userJobs, jobsWithSimilarities);
+            const topJobIds = getTopSimilarJobs(userJobs, jobsWithSimilarities, profile);
 
             // Update the user profile with the pre-calculated job recommendations
             await ProfileModel.findByIdAndUpdate(profile._id, { $set: { jobRecs: topJobIds } });
-            
+
             count++;  // Increment the count for each updated profile
+            jobRecCount = jobRecCount + topJobIds.length
         }
 
         return {
-            jobs: { updated_count: count }
+            jobs: { updated_count: count, numRecsAdded: jobRecCount }
         };
     } catch (error) {
         console.error("Error updating user job recommendations:", error);

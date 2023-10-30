@@ -61,7 +61,7 @@ export async function GET(
 
     try {
         const diffbotDate = subtractDays(new Date(), 10);
-        const apiUrl = `https://kg.diffbot.com/kg/v3/dql?type=query&token=${process.env.DIFFBOT_API_KEY}&query=type%3AJobPost%20date%3D%222023-10-14%22&size=1`
+        const apiUrl = `https://kg.diffbot.com/kg/v3/dql?type=query&token=${process.env.DIFFBOT_API_KEY}&query=type%3AJobPost%20date%3D%222023-10-15%22&size=1`
 
         const options = {
             method: 'GET',

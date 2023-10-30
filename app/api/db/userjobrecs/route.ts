@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../../../lib/auth";
 import { updateUserJobRecs } from '../../../../lib/job-db';
 
-export async function GET(req: NextRequest) {
+export async function POST(req: NextRequest) {
     const session = await getServerSession(authOptions);
     //const searchParams = req.nextUrl.searchParams
     //const userId = searchParams.get('userId')

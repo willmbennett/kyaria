@@ -61,6 +61,7 @@ export const roleOptions = [
   'Project Manager',
   'Security Analyst',
   'Business Analyst',
+  'Financial Analyst',
   'Financial Advisor',
   'Auditor',
   'Consultant',

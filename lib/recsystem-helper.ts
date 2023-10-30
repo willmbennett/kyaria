@@ -1,16 +1,34 @@
 import { JobClass } from "../models/Job";
+import { ProfileClass } from "../models/Profile";
 
 const stopwords = ['i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', "you're", "you've", "you'll", "you'd", 'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself', 'she', "she's", 'her', 'hers', 'herself', 'it', "it's", 'its', 'itself', 'they', 'them', 'their', 'theirs', 'themselves', 'what', 'which', 'who', 'whom', 'this', 'that', "that'll", 'these', 'those', 'am', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'having', 'do', 'does', 'did', 'doing', 'a', 'an', 'the', 'and', 'but', 'if', 'or', 'because', 'as', 'until', 'while', 'of', 'at', 'by', 'for', 'with', 'about', 'against', 'between', 'into', 'through', 'during', 'before', 'after', 'above', 'below', 'to', 'from', 'up', 'down', 'in', 'out', 'on', 'off', 'over', 'under', 'again', 'further', 'then', 'once', 'here', 'there', 'when', 'where', 'why', 'how', 'all', 'any', 'both', 'each', 'few', 'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than', 'too', 'very', 's', 't', 'can', 'will', 'just', 'don', "don't", 'should', "should've", 'now', 'd', 'll', 'm', 'o', 're', 've', 'y', 'ain', 'aren', "aren't", 'couldn', "couldn't", 'didn', "didn't", 'doesn', "doesn't", 'hadn', "hadn't", 'hasn', "hasn't", 'haven', "haven't", 'isn', "isn't", 'ma', 'mightn', "mightn't", 'mustn', "mustn't", 'needn', "needn't", 'shan', "shan't", 'shouldn', "shouldn't", 'wasn', "wasn't", 'weren', "weren't", 'won', "won't", 'wouldn', "wouldn't"]
 
+const profileKeys = ["title",
+    "summary",
+    "areas_of_expertise",
+    "skills",
+    "education",
+    "professional_experience",
+    'details',
+    'responsibilities',
+    'content',
+    'start_date',
+    'end_date',
+    'degree',
+    'company',
+    'institution'
+];
+
+const jobKeys = ["jobTitle",
+    "aboutCompany",
+    "jobDescription",
+    'qualifications',
+    'responsibilities',
+    'skills'];
+
 // Function to convert job into string
 
-function extractStringValues(obj: any): string {
-    const includedKeys = ["jobTitle",
-        "aboutCompany",
-        "jobDescription",
-        'qualifications',
-        'responsibilities',
-        'skills'];
+function extractStringValues(obj: any, keys: string[]): string {
 
     if (obj === null || typeof obj === 'undefined') {
         return '';
@@ -20,19 +38,19 @@ function extractStringValues(obj: any): string {
         return cleanString;
     }
     if (Array.isArray(obj)) {
-        return obj.map(value => extractStringValues(value)).join(' ');
+        return obj.map(value => extractStringValues(value, keys)).join(' ');
     }
     if (typeof obj === 'object') {
         return Object.entries(obj)
-            .filter(([key]) => includedKeys.includes(key))
-            .map(([, value]) => extractStringValues(value))
+            .filter(([key]) => keys.includes(key))
+            .map(([, value]) => extractStringValues(value, keys))
             .join(' ');
     }
     return ''; // for other data types like numbers, booleans, etc.
 }
 
-export function createTF(obj: any) {
-    const singleWords = extractStringValues(obj)
+export function createTF(obj: any, keys: string[]) {
+    const singleWords = extractStringValues(obj, keys)
         .split(' ')
         .filter(s => s !== '')
         .filter(s => !stopwords.includes(s.toLowerCase()));
@@ -165,7 +183,7 @@ export function calculateSimilarities(jobsTFIDF: jobsTF[]): Record<string, JobSi
 
 
 export function createRecommendations(jobs: JobClass[]) {
-    const jobsTermFrequencies = jobs.map(job => ({ jobId: job._id.toString(), tf: createTF(job) }));
+    const jobsTermFrequencies = jobs.map(job => ({ jobId: job._id.toString(), tf: createTF(job, jobKeys) }));
     const termIDFs = calculateIDF(jobsTermFrequencies);
     const jobsTFIDF = calculateTFIDF(jobsTermFrequencies, termIDFs);
     const jobsSimilarity = calculateSimilarities(jobsTFIDF);
@@ -181,23 +199,96 @@ export function createRecommendations(jobs: JobClass[]) {
     return result;
 }
 
+export function profileTFIDF(profile: ProfileClass, termIDFs: Record<string, number>): TermFrequency[] {
+    const profileTF = createTF(profile, profileKeys);
+    return profileTF.map(tf => {
+        return {
+            term: tf.term,
+            value: tf.value * (termIDFs[tf.term] || 0)
+        };
+    })
+        .sort((a, b) => b.value - a.value);  // Sort by tf-idf value, in descending order
+}
 
-export function getTopSimilarJobs(userJobs: string[], jobsWithSimilarities: JobClass[]): string[] {
-    const topSimilarJobs: string[] = [];
+function rankJobsByProfile(profile: ProfileClass, jobs: JobClass[]): string[] {
+    const MINIMUM_QUALITY_SCORE = 0.2;
+    const profileTF = createTF(profile, profileKeys);
+    const jobScores: Record<string, number> = {};
 
+    jobs.forEach(job => {
+        const jobTF = createTF(job, jobKeys);
+        const similarity = cosineSimilarity(profileTF, jobTF);
+        if (similarity >= MINIMUM_QUALITY_SCORE) {
+            jobScores[job._id.toString()] = similarity;
+        }
+    });
+
+    const finalJobList = Object.entries(jobScores)
+    .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
+    .map(([jobId]) => jobId);
+
+    //console.log(finalJobList.length)
+
+    // Sort jobs by their similarity to the profile, filter out those below the threshold, and return the sorted jobIds
+    return finalJobList
+}
+
+
+
+export function getTopSimilarJobs(userJobs: string[], jobsWithSimilarities: JobClass[], profile: ProfileClass): string[] {
+    const SIMILAR_JOB_WEIGHT = 0.6;
+    const PROFILE_JOB_WEIGHT = 0.4;
+
+
+    const jobScores: Record<string, number> = {};
+
+    // Create a Set of job IDs from jobsWithSimilarities for easy lookup
+    const recentJobIdsSet = new Set(jobsWithSimilarities.map(job => job._id.toString()));
+
+    // Rank jobs based on similarity to the user's profile
+    const topUserJobs = rankJobsByProfile(profile, jobsWithSimilarities);
+    topUserJobs.forEach(jobId => {
+        if (!jobScores[jobId]) {
+            jobScores[jobId] = 0;
+        }
+        jobScores[jobId] += PROFILE_JOB_WEIGHT;  // Adding a score of 1 * weight for jobs ranked by profile
+    });
+
+    // Add scores for jobs similar to jobs the user has added
     jobsWithSimilarities.forEach(job => {
         if (userJobs.includes(job._id.toString()) && job.similarJobs) {
             job.similarJobs.forEach(similarJob => {
+                // Check if the similarJob exists in the recent jobs list (within the last two weeks)
+                if (!recentJobIdsSet.has(similarJob.jobId)) {
+                    return;  // Skip processing for this similarJob
+                }
+
+                if (!jobScores[similarJob.jobId]) {
+                    jobScores[similarJob.jobId] = 0;
+                }
+
                 // Check if the job is not already applied for by the user
-                if (!userJobs.includes(similarJob.jobId) && !topSimilarJobs.includes(similarJob.jobId)) {
-                    topSimilarJobs.push(similarJob.jobId);
+                if (!userJobs.includes(similarJob.jobId)) {
+                    jobScores[similarJob.jobId] += SIMILAR_JOB_WEIGHT;
                 }
             });
         }
     });
 
-    return topSimilarJobs;
+    // Sort jobIds by their scores in descending order
+    const sortedJobIds = Object.entries(jobScores)
+        .filter(([jobId,]) => recentJobIdsSet.has(jobId))
+        .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
+        .map(([jobId]) => jobId)
+        .slice(0, 100);
+
+    //console.log(sortedJobIds)
+
+    return sortedJobIds;
 }
+
+
+
 
 
 
