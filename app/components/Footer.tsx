@@ -73,15 +73,8 @@ export function Footer() {
         email: session.user.email
       }
     });
-
-    analytics.page({
-      userId: session.user.id,
-      properties: {
-        path: page,
-      }
-    });
   }
-
+  
   return (
     <section className="overflow-hidden bg-slate-700 pb-12 pt-20 text-slate-50">
       <Container>
