@@ -87,7 +87,8 @@ export default function Experience({
                         const message = [
                             {
                                 "role": "system",
-                                "content": `You are a professional email writer specialized in creating personalized, compelling emails for jobseekers. Keep them 4 sentances max and casual, keep headlines short to under 60 characters.`
+                                "content": `You are a professional email writer specialized in creating personalized, compelling emails for jobseekers.
+                                Tone: conversational, spartan, use less corporate jargon`
                             },
                             {
                                 "role": "user",
