@@ -7,8 +7,7 @@ interface SkillsProps {
 
 const SkillsComponent: React.FC<SkillsProps> = ({ data }) => {
     return (
-        <div className="p-6 border rounded-md shadow-lg">
-            <h3 className="text-xl font-semibold mb-4">Skills</h3>
+        <div className="p-6">
             <table className="min-w-full border-collapse table-auto">
                 <thead>
                     <tr>

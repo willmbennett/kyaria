@@ -20,7 +20,7 @@ const Overview: React.FC<OverviewProps> = ({
     SpeakingEngagements
 }) => {
     return (
-        <div className="overview p-8 border rounded shadow-lg">
+        <div className="overview p-8">
             {ProfessionalSummary && <p><strong>Professional Summary:</strong> {ProfessionalSummary}</p>}
             {Objective && <p><strong>Objective:</strong> {Objective}</p>}
             {CoverLetter && <p><strong>Cover Letter:</strong> {CoverLetter}</p>}
