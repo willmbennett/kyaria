@@ -176,14 +176,14 @@ interface Skill {
 }
 
 // Function to transform the API response to a simplified Job object
-export function transformDiffBotApiResponse(apiResponse: any): Job {
+export function transformDiffBotApiResponse(apiResponse: any, altUrl: string): Job {
   const jobData = apiResponse.objects[0]; // Assuming there's only one job object in the response
 
   const transformedJob: Job = {
-    jobTitle: jobData.title,
-    link: jobData.pageUrl,
+    jobTitle: jobData.title || 'Title Not Found',
+    link: jobData.pageUrl || altUrl,
     diffbotUri: jobData.diffbotUri,
-    company: jobData.employer?.name,
+    company: jobData.employer?.name || 'Company Not Found',
     companyDiffbotUri: jobData.employer?.diffbotUri,
     location: jobData.locations?.address,
     remote: jobData.remote,

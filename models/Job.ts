@@ -59,6 +59,9 @@ class JobClass {
     public diffbotUri?: string;
 
     @prop()
+    public userId?: string;
+
+    @prop()
     public company: string;
 
     @prop()

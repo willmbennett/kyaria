@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../../../lib/auth";
+import { fetchWithRetry } from '../../db/indeedscraper/route';
 
 export async function GET(
     request: NextRequest
@@ -15,7 +16,7 @@ export async function GET(
 
     if (!session) {
         redirect('/auth/signin')
-      }
+    }
 
     //console.log(url)
 
@@ -24,21 +25,17 @@ export async function GET(
             return NextResponse.json({ error: 'Invalid URL provided.' }, { status: 400 });
         }
 
-        const apiUrl = `https://api.diffbot.com/v3/job?url=${encodeURIComponent(url)}&token=${process.env.DIFFBOT_API_KEY}`; // Replace 'YOUR_API_KEY' with your actual Diffbot API key
+        const apiUrl = `https://api.diffbot.com/v3/analyze?url=${encodeURIComponent(url)}&token=${process.env.DIFFBOT_API_KEY}`; // Replace 'YOUR_API_KEY' with your actual Diffbot API key
 
         const options = {
             method: 'GET',
             headers: { accept: 'application/json' },
         };
 
-        const fetchResponse = await fetch(apiUrl, options);
+        const fetchResponse = await fetchWithRetry(apiUrl, options);
+        console.log('Data fetched successfully:', fetchResponse);
 
-        if (!fetchResponse.ok) {
-            return NextResponse.json({ error: 'Failed to fetch data from the Diffbot API.' }, { status: fetchResponse.status });
-        }
-
-        const data = await fetchResponse.json();
-        return NextResponse.json(data, { status: 200 });
+        return NextResponse.json(fetchResponse, { status: 200 });
     } catch (error) {
         console.error(error);
         return NextResponse.json({ error: 'An error occurred while processing your request.' }, { status: 500 });
