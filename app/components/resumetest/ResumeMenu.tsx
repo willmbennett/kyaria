@@ -7,7 +7,7 @@ const INACTIVE_ROUTE = "text-gray-600 font-bold hover:bg-gray-600 hover:text-whi
 interface ResumeListMenuProps {
     resumeScans: ResumeScanDataClass[];
     setResumeTest: (resume: ResumeScanDataClass) => void;
-    resumeTest?: ResumeScanDataClass;
+    resumeTest?: ResumeScanDataClass | null;
     setFormHidden: (arg: boolean) => void;
 }
 

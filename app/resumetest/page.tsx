@@ -8,7 +8,7 @@ import { ResumeScanDataClass } from "../../models/ResumeScan";
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions);
 
-  const promise = getResumeScans(session?.user?.id || '')
+  const promise = getResumeScans(session?.user?.id || '650f813286f63a9d8c0080ee')
 
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
