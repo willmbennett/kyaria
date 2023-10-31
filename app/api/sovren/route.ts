@@ -1,9 +1,16 @@
 import https from 'https';
 import { NextResponse } from 'next/server'
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../../../lib/auth";
 
 export async function POST(request: Request) {
     try {
         const { content } = await request.json();
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            redirect('/auth/signin')
+        }
 
         console.log(content);
 

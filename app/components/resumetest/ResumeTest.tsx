@@ -39,7 +39,7 @@ type FormFields = {
 };
 
 export default function ResumeTest({ session, resumeScans }: { session: any, resumeScans: ResumeScanDataClass[] }) {
-    const [resumeTest, setResumeTest] = useState<ResumeScanDataClass>()
+    const [resumeTest, setResumeTest] = useState<ResumeScanDataClass | null>(resumeScans[0])
     const [loading, setLoading] = useState(false)
     const [formHidden, setFormHidden] = useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm<FormFields>();
@@ -47,8 +47,8 @@ export default function ResumeTest({ session, resumeScans }: { session: any, res
     const onSubmit: SubmitHandler<FormFields> = async () => {
         setLoading(true)
         setFormHidden(true);
-        console.log('Resume Text')
-        console.log(resumeUploadText)
+        //console.log('Resume Text')
+        //console.log(resumeUploadText)
 
         const response = await fetch('/api/sovren', {
             method: 'POST',
@@ -60,12 +60,12 @@ export default function ResumeTest({ session, resumeScans }: { session: any, res
 
         if (!response.ok) {
             // If the response is not ok, print the status and throw an error
-            console.error('Server responded with status:', response.status);
+            //console.error('Server responded with status:', response.status);
             throw new Error(`HTTP error! status: ${response.status}`);
         } else {
             const { parsedResume } = await response.json();
-            console.log('Parsed Resume');
-            console.log(parsedResume);
+            //console.log('Parsed Resume');
+            //console.log(parsedResume);
 
             setResumeTest(parsedResume)
             setLoading(false)
@@ -74,7 +74,7 @@ export default function ResumeTest({ session, resumeScans }: { session: any, res
                 const path = '/'
                 const dataToSave = { ...parsedResume, userId: session.user.id }
                 const resumeScanId = await createResumeScanAction(dataToSave, path)
-                console.log(resumeScanId)
+                //console.log(resumeScanId)
             }
         }
     };
@@ -113,33 +113,28 @@ export default function ResumeTest({ session, resumeScans }: { session: any, res
     }
 
     return (
-        <div className='py-4 flex flex-row w-full justify-center'>
-            {session?.user?.id && (
-                <div className="lg:w-1/4 flex flex-col h-screen">
-                    <ResumeListMenu
-                        resumeScans={resumeScans}
-                        setResumeTest={setResumeTest}
-                        resumeTest={resumeTest}
-                        setFormHidden={setFormHidden} />
-                </div>
-            )}
-            <div className='py-4 items-center flex flex-col text-center w-3/4'>
+        <div className='py-4 flex flex-col lg:flex-row w-full justify-center'>
+            <div className="lg:w-1/4 flex flex-col lg:h-screen">
+                <ResumeListMenu
+                    resumeScans={resumeScans}
+                    setResumeTest={setResumeTest}
+                    resumeTest={resumeTest}
+                    setFormHidden={setFormHidden} />
+            </div>
+            <div className='py-4 items-center flex flex-col text-center lg:w-3/4'>
                 <div className='w-full flex flex-col text-center'>
                     <h1 className="sm:text-6xl text-4xl font-bold text-slate-900 mb-8">
                         Test your resume with ATS
                     </h1>
                     {!session?.user?.id && (
                         <>
-                            <p className="mb-4 text-sm text-base text-neutral-600 w-full max-w-screen">
-                                Upload your resume here (pdf only). We will not store your resume.
-                            </p>
                             <div className='py-2'>
                                 <Button
                                     size="md"
                                     variant="solid"
                                     onClick={() => signIn()}
                                 >
-                                    Sign In to Save Results
+                                    Sign in to test your resume
                                 </Button>
                             </div>
                         </>)}
@@ -150,7 +145,7 @@ export default function ResumeTest({ session, resumeScans }: { session: any, res
                             </p>
                         </>)}
                 </div>
-                {!formHidden && (<>
+                {!formHidden && session?.user?.id && (<>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="w-full">
                             <p className='py-2'>
@@ -190,18 +185,20 @@ export default function ResumeTest({ session, resumeScans }: { session: any, res
                 </div>)}
                 {resumeTest && (
                     <div className='w-full my-3'>
-                        <Button onClick={() => {
-                            setFormHidden(false);
-                            setResumeTest(undefined);
-                            setFile(null);
-                        }}
-                            size='md'
-                            className='my-3'
-                        >
-                            Upload Another Resume
-                        </Button>
+                        {session?.user?.id && (
+                            <Button onClick={() => {
+                                setFormHidden(false);
+                                setResumeTest(null);
+                                setFile(null);
+                            }}
+                                size='md'
+                                className='my-3'
+                            >
+                                Upload Another Resume
+                            </Button>
+                        )}
                         <h2 className="sm:text-4xl text-2xl font-bold text-slate-900 mb-8">
-                            Output
+                            {session?.user?.id ? 'Output' : 'Demo Output'}
                         </h2>
                         {/* Resume Quality Section */}
                         <h3 className="text-2xl font-semibold mb-4">Resume Quality</h3>
