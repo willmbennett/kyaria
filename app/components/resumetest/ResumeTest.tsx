@@ -15,6 +15,10 @@ import EducationComp from './Eduction';
 import EmploymentHistoryComponent from './EmploymentHistoryComponent';
 import SkillsComponent from './SkillsComponent';
 import NameList from './NameList';
+import { createResumeScanAction } from '../../resumetest/_action';
+import { ResumeScanDataClass } from '../../../models/ResumeScan';
+import ResumeListMenu from './ResumeMenu';
+import { signIn, signOut } from "next-auth/react";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
     'pdfjs-dist/build/pdf.worker.min.js',
@@ -34,9 +38,8 @@ type FormFields = {
     input: string;
 };
 
-export default function ResumeTest() {
-    //const [resumeTest, setResumeTest] = useState<ResumeData>(demoResume)
-    const [resumeTest, setResumeTest] = useState<ResumeData>()
+export default function ResumeTest({ session, resumeScans }: { session: any, resumeScans: ResumeScanDataClass[] }) {
+    const [resumeTest, setResumeTest] = useState<ResumeScanDataClass>()
     const [loading, setLoading] = useState(false)
     const [formHidden, setFormHidden] = useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm<FormFields>();
@@ -44,6 +47,8 @@ export default function ResumeTest() {
     const onSubmit: SubmitHandler<FormFields> = async () => {
         setLoading(true)
         setFormHidden(true);
+        console.log('Resume Text')
+        console.log(resumeUploadText)
 
         const response = await fetch('/api/sovren', {
             method: 'POST',
@@ -53,9 +58,25 @@ export default function ResumeTest() {
             body: JSON.stringify({ content: resumeUploadText })
         });
 
-        const { parsedResume } = await response.json();
-        setResumeTest(parsedResume)
-        setLoading(false)
+        if (!response.ok) {
+            // If the response is not ok, print the status and throw an error
+            console.error('Server responded with status:', response.status);
+            throw new Error(`HTTP error! status: ${response.status}`);
+        } else {
+            const { parsedResume } = await response.json();
+            console.log('Parsed Resume');
+            console.log(parsedResume);
+
+            setResumeTest(parsedResume)
+            setLoading(false)
+
+            if (session?.user?.id) {
+                const path = '/'
+                const dataToSave = { ...parsedResume, userId: session.user.id }
+                const resumeScanId = await createResumeScanAction(dataToSave, path)
+                console.log(resumeScanId)
+            }
+        }
     };
 
     const [file, setFile] = useState<PDFFile>();
@@ -92,15 +113,42 @@ export default function ResumeTest() {
     }
 
     return (
-        <div className='py-4 flex flex-col items-center justify-center text-center w-full'>
-            <div className='py-4 items-center flex flex-col justify-center text-center w-full'>
+        <div className='py-4 flex flex-row w-full justify-center'>
+            {session?.user?.id && (
+                <div className="lg:w-1/4 flex flex-col h-screen">
+                    <ResumeListMenu
+                        resumeScans={resumeScans}
+                        setResumeTest={setResumeTest}
+                        resumeTest={resumeTest}
+                        setFormHidden={setFormHidden} />
+                </div>
+            )}
+            <div className='py-4 items-center flex flex-col text-center w-3/4'>
                 <div className='w-full flex flex-col text-center'>
                     <h1 className="sm:text-6xl text-4xl font-bold text-slate-900 mb-8">
                         Test your resume with ATS
                     </h1>
-                    <p className="mb-4 text-sm text-base text-neutral-600 w-full max-w-screen">
-                        Upload your resume here (pdf only). We will not store your resume.
-                    </p>
+                    {!session?.user?.id && (
+                        <>
+                            <p className="mb-4 text-sm text-base text-neutral-600 w-full max-w-screen">
+                                Upload your resume here (pdf only). We will not store your resume.
+                            </p>
+                            <div className='py-2'>
+                                <Button
+                                    size="md"
+                                    variant="solid"
+                                    onClick={() => signIn()}
+                                >
+                                    Sign In to Save Results
+                                </Button>
+                            </div>
+                        </>)}
+                    {session?.user?.id && (
+                        <>
+                            <p className="mb-4 text-sm text-base text-neutral-600 w-full max-w-screen">
+                                We'll automatically save your scan for easy access later
+                            </p>
+                        </>)}
                 </div>
                 {!formHidden && (<>
                     <form onSubmit={handleSubmit(onSubmit)}>
@@ -236,7 +284,7 @@ export default function ResumeTest() {
                     </div>
                 )}
             </div>
-        </div>
+        </div >
     );
 }
 
