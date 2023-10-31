@@ -35,6 +35,7 @@ export default function CoverLetter({
             Google's reputation for fostering an open and collaborative work environment resonates with me, and I am particularly attracted to your hybrid remote work model. I am enthusiastic about the chance to bring my unique blend of skills and experience to Google. Thank you for considering my application. I am looking forward to the opportunity to further discuss my suitability for this position in an interview.
             
             Don't include the salutation
+            Tone: conversational, spartan, use less corporate jargon
             `
         },
         {

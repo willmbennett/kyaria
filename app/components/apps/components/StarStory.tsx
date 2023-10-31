@@ -60,6 +60,8 @@ export default function StarStory({
         {
             "role": "system",
             "content": `You are an advanced career coach specialized in crafting compelling STAR stories, follow-up questions, and answers. 
+            Tone: conversational, spartan, use less corporate jargon
+
             The user will give you a situation and some details and you will provide:
             - A concise STAR story (it should take less than 30 seconds to say) 
             - 3-4 follow up questions ${selectedTheme == '' ? '' : `with the theme of ${selectedTheme}`}. If the result has a quantifiable metric ask about it.

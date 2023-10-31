@@ -14,12 +14,12 @@ export type FormFields = {
 
 export const EditList = (
     {
-        listItems,
+        listItems = [],
         id,
         userCanEdit,
         parentName
     }: {
-        listItems: any,
+        listItems: string[],
         id: string,
         userCanEdit: boolean,
         parentName: string
