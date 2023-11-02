@@ -43,14 +43,14 @@ async function getData({ companyId, limit, roleFilter }: getDataProps) {
 
         const { data } = await companyFetchResponse.json();
 
-        const employeeCategories = data[0].entity.employeeCategories.sort((a: any,b: any) => b.nbEmployees - a.nbEmployees).map((e: any) => e.category);
+        const employeeCategories = ['All', ...data[0].entity.employeeCategories.sort((a: any, b: any) => b.nbEmployees - a.nbEmployees).map((e: any) => e.category)];
 
         //console.log(employeeCategories)
-        
+
 
         // Then pull all the employees
 
-        const roleFilterUrl = roleFilter != '' ? `+strict%3Acategories.name%3A+"${roleFilter}"` : ''
+        const roleFilterUrl = roleFilter != 'All' ? `+strict%3Acategories.name%3A+"${encodeURIComponent(roleFilter)}"` : ''
         const apiUrl = `https://kg.diffbot.com/kg/v3/dql?type=query&token=${process.env.DIFFBOT_API_KEY}&query=type%3APerson+employments.%7BisCurrent%3A+true${roleFilterUrl}+employer.diffbotUri%3A"http%3A%2F%2Fdiffbot.com%2Fentity%2F${companyId}"%7D+revSortBy%3Aimportance&size=${limit}`
 
         //console.log(apiUrl)
@@ -76,9 +76,10 @@ async function getData({ companyId, limit, roleFilter }: getDataProps) {
             description: item.entity.description,
             crunchbaseUri: item.entity.crunchbaseUri,
             linkedInUri: item.entity.linkedInUri,
+            emailAddresses: item.entity.emailAddresses
         }))
 
-        return { employeeData, employeeCategories }
+        return { employeeData, employeeCategories, limit, roleFilter }
     } catch (error) {
         //console.error(error);
         return error
@@ -99,7 +100,7 @@ export default async function Page({ params, searchParams }: employeeProps) {
     const limit =
         typeof searchParams.limit === 'string' ? Number(searchParams.limit) : 30
     const roleFilter =
-        typeof searchParams.roleFilter === 'string' ? decodeURIComponent(searchParams.roleFilter.replace(/\+/g, ' ')) : ''
+        typeof searchParams.roleFilter === 'string' ? decodeURIComponent(searchParams.roleFilter.replace(/\+/g, ' ')) : 'All'
 
     const company = params.name
     const companyId = params.id
@@ -113,10 +114,20 @@ export default async function Page({ params, searchParams }: employeeProps) {
                 <Suspense fallback={<EmployeesSkeleton />}>
                     {/* @ts-expect-error Server Component */}
                     <Await promise={orgPromise}>
-                        {({ employeeData, employeeCategories }: { employeeData: Employee[], employeeCategories: string[] }) => (<>
+                        {({
+                            employeeData,
+                            employeeCategories,
+                            limit,
+                            roleFilter
+                        }: {
+                            employeeData: Employee[],
+                            employeeCategories: string[],
+                            limit: number,
+                            roleFilter: string
+                        }) => (<>
                             {employeeData ? (
                                 <>
-                                    <EmployeeDropdown employeeCategories={employeeCategories} roleFilter={roleFilter} limit={limit}/>
+                                    <EmployeeDropdown employeeCategories={employeeCategories} roleFilter={roleFilter} limit={limit} />
                                     <EmployeeList employeeData={employeeData} company={company} />
                                     <Trigger limit={limit} length={employeeData.length} roleFilter={roleFilter}></Trigger>
                                 </>

@@ -5,4 +5,5 @@ export class Employee {
     description: string;
     crunchbaseUri: string;
     linkedInUri: string;
+    emailAddresses: {contactString: string, type: string}[]
 }

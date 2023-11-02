@@ -38,10 +38,14 @@ export default async function JobsPage({
                     <Suspense fallback={<Skeleton />}>
                         {/* @ts-expect-error Server Component */}
                         <Await promise={promise}>
-                            {({ jobs }) => <JobList jobs={jobs} />}
+                            {({ jobs }) => (
+                                <>
+                                    <JobList jobs={jobs} />
+                                    <Trigger limit={limit}></Trigger>
+                                </>
+                            )}
                         </Await>
                     </Suspense>
-                    <Trigger limit={limit}></Trigger>
                 </div>
             </div>
         </section>
