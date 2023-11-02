@@ -7,15 +7,7 @@ import Trigger from "../../../../components/companies/trigger";
 import EmployeeList from "../../../../components/companies/EmployeeList";
 import EmployeeDropdown from "../../../../components/companies/EmployeeDropdown";
 import EmployeesSkeleton from "../../../../components/companies/EmployeesSkeleton";
-
-export class Employee {
-    image: string;
-    name: string;
-    summary: string;
-    description: string;
-    crunchbaseUri: string;
-    linkedInUri: string;
-}
+import { Employee } from "./employee-helper";
 
 interface ApiResponse {
     data: {

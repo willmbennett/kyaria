@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Employee } from "../../companies/[name]/employees/[id]/page";
+import { Employee } from "../../companies/[name]/employees/[id]/employee-helper";
 
 // Define the props for the component
 interface EmployeeItemProps {
