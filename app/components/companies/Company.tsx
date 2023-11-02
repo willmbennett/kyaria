@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 import EmployeeChart from './EmployeeChart';
 import Investments from './Investments';
@@ -6,6 +7,7 @@ const CompanyProfile = ({ companyData }: { companyData: any }) => {
 
     // Extract data from the API response
     const {
+        id,
         name,
         description,
         logo,
@@ -115,12 +117,17 @@ const CompanyProfile = ({ companyData }: { companyData: any }) => {
                     Total Raised: {totalInvestment.currency}{' '} {(totalInvestment.value / 1000000).toFixed(0)}M
                 </p>
             )}
-            
+
             {Array.isArray(investments) && investments.length > 0 && (
                 <Investments investments={investments} />
             )}
 
-            <h2 className="text-2xl font-bold mt-4">Employee Breakdown</h2>
+            <h2 className="text-2xl font-bold mt-4">Employees</h2>
+            <Link href={`${name}/employees/${id}`} >
+                <span className="text-indigo-600 text-xl hover:text-indigo-900 dark:hover:text-indigo-400 transition duration-300" aria-label="Crunchbase profile">
+                    See all employees
+                </span>
+            </Link>
             <EmployeeChart employeeCategories={employeeCategories} />
 
         </div>
