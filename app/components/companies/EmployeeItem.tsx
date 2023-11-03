@@ -17,7 +17,8 @@ export default function EmployeeItem(
         summary,
         description,
         crunchbaseUri,
-        linkedInUri
+        linkedInUri,
+        emailAddresses
     } = employee
 
     return (
@@ -53,6 +54,15 @@ export default function EmployeeItem(
                         </span>
                     </Link>
                 </div>
+
+                {false && emailAddresses && (<>
+                    <p className="text-gray-700 dark:text-gray-400 mt-2 text-center">Contact Info</p>
+                    <ul>
+                        {emailAddresses.map((e, i) => (
+                            <li key={i}>{e.contactString}</li>
+                        ))}
+                    </ul>
+                </>)}
             </div>
         </div>
     );

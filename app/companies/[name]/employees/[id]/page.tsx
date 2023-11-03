@@ -43,14 +43,14 @@ async function getData({ companyId, limit, roleFilter }: getDataProps) {
 
         const { data } = await companyFetchResponse.json();
 
-        const employeeCategories = data[0].entity.employeeCategories.sort((a: any,b: any) => b.nbEmployees - a.nbEmployees).map((e: any) => e.category);
+        const employeeCategories = ['All', ...data[0].entity.employeeCategories.sort((a: any, b: any) => b.nbEmployees - a.nbEmployees).map((e: any) => e.category)];
 
         //console.log(employeeCategories)
-        
+
 
         // Then pull all the employees
 
-        const roleFilterUrl = roleFilter != '' ? `+strict%3Acategories.name%3A+"${roleFilter}"` : ''
+        const roleFilterUrl = roleFilter != 'All' ? `+strict%3Acategories.name%3A+"${encodeURIComponent(roleFilter)}"` : ''
         const apiUrl = `https://kg.diffbot.com/kg/v3/dql?type=query&token=${process.env.DIFFBOT_API_KEY}&query=type%3APerson+employments.%7BisCurrent%3A+true${roleFilterUrl}+employer.diffbotUri%3A"http%3A%2F%2Fdiffbot.com%2Fentity%2F${companyId}"%7D+revSortBy%3Aimportance&size=${limit}`
 
         //console.log(apiUrl)
@@ -76,9 +76,12 @@ async function getData({ companyId, limit, roleFilter }: getDataProps) {
             description: item.entity.description,
             crunchbaseUri: item.entity.crunchbaseUri,
             linkedInUri: item.entity.linkedInUri,
+            emailAddresses: item.entity.emailAddresses
         }))
 
-        return { employeeData, employeeCategories }
+        //console.log(employeeData.length)
+
+        return { employeeData, employeeCategories, newLimit: limit, newFilter: roleFilter  }
     } catch (error) {
         //console.error(error);
         return error
@@ -91,20 +94,30 @@ interface employeeProps {
 }
 
 export default async function Page({ params, searchParams }: employeeProps) {
+    //console.log('Server-side Page rendering with searchParams:', searchParams);
+
+    // Ensure the session handling is correct and redirect is working as intended
     const session = await getServerSession(authOptions);
     if (!session) {
-        redirect('/auth/signin')
+        // Make sure to log if the session is not found
+        console.error('Session not found, redirecting to signin');
+        redirect('/auth/signin');
+        return; // Don't forget to return after a redirect
     }
 
-    const limit =
-        typeof searchParams.limit === 'string' ? Number(searchParams.limit) : 30
-    const roleFilter =
-        typeof searchParams.roleFilter === 'string' ? decodeURIComponent(searchParams.roleFilter.replace(/\+/g, ' ')) : ''
+    const limit = typeof searchParams.limit === 'string' ? parseInt(searchParams.limit, 10) : 30;
+    const roleFilter = typeof searchParams.roleFilter === 'string' ? decodeURIComponent(searchParams.roleFilter.replace(/\+/g, ' ')) : 'All';
 
-    const company = params.name
-    const companyId = params.id
+    // Logging the computed limit and roleFilter for debugging
+    //console.log(`Computed Limit: ${limit}, RoleFilter: ${roleFilter}`);
 
-    const orgPromise = getData({ companyId, limit, roleFilter })
+    const company = params.name;
+    const companyId = params.id;
+
+    // You can add more logging inside getData if needed
+    const orgPromise = getData({ companyId, limit, roleFilter });
+
+    // The return should be JSX or a component, not raw JSON
 
     return (
         <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
@@ -113,12 +126,24 @@ export default async function Page({ params, searchParams }: employeeProps) {
                 <Suspense fallback={<EmployeesSkeleton />}>
                     {/* @ts-expect-error Server Component */}
                     <Await promise={orgPromise}>
-                        {({ employeeData, employeeCategories }: { employeeData: Employee[], employeeCategories: string[] }) => (<>
+                        {({
+                            employeeData,
+                            employeeCategories,
+                            newLimit,
+                            newFilter
+                        }: {
+                            employeeData: Employee[],
+                            employeeCategories: string[],
+                            newLimit: number,
+                            newFilter: string
+                        }) => (<>
                             {employeeData ? (
                                 <>
-                                    <EmployeeDropdown employeeCategories={employeeCategories} roleFilter={roleFilter} limit={limit}/>
+                                    <EmployeeDropdown employeeCategories={employeeCategories} roleFilter={roleFilter} limit={limit} />
                                     <EmployeeList employeeData={employeeData} company={company} />
-                                    <Trigger limit={limit} length={employeeData.length} roleFilter={roleFilter}></Trigger>
+                                    {employeeData.length >= newLimit && (
+                                        <Trigger length={employeeData.length} newLimit={newLimit} newFilter={newFilter}></Trigger>
+                                    )}
                                 </>
                             ) : (
                                 // Render a fallback or loading message when companyData is undefined
