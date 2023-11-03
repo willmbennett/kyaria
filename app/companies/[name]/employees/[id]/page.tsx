@@ -79,8 +79,9 @@ async function getData({ companyId, limit, roleFilter }: getDataProps) {
             emailAddresses: item.entity.emailAddresses
         }))
 
-        //console.log(limit, roleFilter)
-        return { employeeData, employeeCategories, newLimit: limit, newRoleFilter: roleFilter }
+        //console.log(employeeData.length)
+
+        return { employeeData, employeeCategories, newLimit: limit, newFilter: roleFilter  }
     } catch (error) {
         //console.error(error);
         return error
@@ -93,20 +94,30 @@ interface employeeProps {
 }
 
 export default async function Page({ params, searchParams }: employeeProps) {
+    //console.log('Server-side Page rendering with searchParams:', searchParams);
+
+    // Ensure the session handling is correct and redirect is working as intended
     const session = await getServerSession(authOptions);
     if (!session) {
-        redirect('/auth/signin')
+        // Make sure to log if the session is not found
+        console.error('Session not found, redirecting to signin');
+        redirect('/auth/signin');
+        return; // Don't forget to return after a redirect
     }
 
-    const limit =
-        typeof searchParams.limit === 'string' ? Number(searchParams.limit) : 30
-    const roleFilter =
-        typeof searchParams.roleFilter === 'string' ? decodeURIComponent(searchParams.roleFilter.replace(/\+/g, ' ')) : 'All'
+    const limit = typeof searchParams.limit === 'string' ? parseInt(searchParams.limit, 10) : 30;
+    const roleFilter = typeof searchParams.roleFilter === 'string' ? decodeURIComponent(searchParams.roleFilter.replace(/\+/g, ' ')) : 'All';
 
-    const company = params.name
-    const companyId = params.id
+    // Logging the computed limit and roleFilter for debugging
+    //console.log(`Computed Limit: ${limit}, RoleFilter: ${roleFilter}`);
 
-    const orgPromise = getData({ companyId, limit, roleFilter })
+    const company = params.name;
+    const companyId = params.id;
+
+    // You can add more logging inside getData if needed
+    const orgPromise = getData({ companyId, limit, roleFilter });
+
+    // The return should be JSX or a component, not raw JSON
 
     return (
         <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
@@ -119,18 +130,20 @@ export default async function Page({ params, searchParams }: employeeProps) {
                             employeeData,
                             employeeCategories,
                             newLimit,
-                            newRoleFilter
+                            newFilter
                         }: {
                             employeeData: Employee[],
                             employeeCategories: string[],
                             newLimit: number,
-                            newRoleFilter: string
+                            newFilter: string
                         }) => (<>
                             {employeeData ? (
                                 <>
                                     <EmployeeDropdown employeeCategories={employeeCategories} roleFilter={roleFilter} limit={limit} />
                                     <EmployeeList employeeData={employeeData} company={company} />
-                                    <Trigger newLimit={newLimit} length={employeeData.length} newRoleFilter={newRoleFilter}></Trigger>
+                                    {employeeData.length >= newLimit && (
+                                        <Trigger length={employeeData.length} newLimit={newLimit} newFilter={newFilter}></Trigger>
+                                    )}
                                 </>
                             ) : (
                                 // Render a fallback or loading message when companyData is undefined
