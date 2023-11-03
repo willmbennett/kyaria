@@ -79,7 +79,8 @@ async function getData({ companyId, limit, roleFilter }: getDataProps) {
             emailAddresses: item.entity.emailAddresses
         }))
 
-        return { employeeData, employeeCategories, limit, roleFilter }
+        //console.log(limit, roleFilter)
+        return { employeeData, employeeCategories, newLimit: limit, newRoleFilter: roleFilter }
     } catch (error) {
         //console.error(error);
         return error
@@ -117,19 +118,19 @@ export default async function Page({ params, searchParams }: employeeProps) {
                         {({
                             employeeData,
                             employeeCategories,
-                            limit,
-                            roleFilter
+                            newLimit,
+                            newRoleFilter
                         }: {
                             employeeData: Employee[],
                             employeeCategories: string[],
-                            limit: number,
-                            roleFilter: string
+                            newLimit: number,
+                            newRoleFilter: string
                         }) => (<>
                             {employeeData ? (
                                 <>
                                     <EmployeeDropdown employeeCategories={employeeCategories} roleFilter={roleFilter} limit={limit} />
                                     <EmployeeList employeeData={employeeData} company={company} />
-                                    <Trigger limit={limit} length={employeeData.length} roleFilter={roleFilter}></Trigger>
+                                    <Trigger newLimit={newLimit} length={employeeData.length} newRoleFilter={newRoleFilter}></Trigger>
                                 </>
                             ) : (
                                 // Render a fallback or loading message when companyData is undefined
