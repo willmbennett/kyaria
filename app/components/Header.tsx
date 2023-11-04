@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation'
 import { Disclosure, Transition, Popover, Menu } from '@headlessui/react'
 import clsx from 'clsx'
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
+import { DiscordButton } from "./ui/DiscordButton";
 
 import { Container } from './Container'
 import { Button } from './Button'
@@ -267,6 +268,9 @@ export function Header() {
 
           <div>
             <div className="flex items-center space-x-4">
+              <div className="hidden lg:block">
+               < DiscordButton />
+              </div>
               <div className="hidden lg:block">
                 <Button
                   size="md"

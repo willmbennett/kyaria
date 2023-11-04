@@ -19,7 +19,7 @@ const ResumeListMenu: React.FC<ResumeListMenuProps> = ({ resumeScans, setResumeT
     };
 
     return (
-        <div className="sticky bg-white border w-full lg:top-60 z-50 bg-gray-200 p-4 lg:rounded-lg h-auto my-2">
+        <div className="sticky bg-white border w-full lg:top-60 bg-gray-200 p-4 lg:rounded-lg h-auto my-2">
             <div className=" w-full items-center items-start  flex flex-col lg:h-auto py-2 overflow-scroll">
                 <p>Resumes Scans</p>
                 <ul>
