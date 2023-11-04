@@ -62,7 +62,7 @@ interface SocialLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> 
 const SocialLink: React.FC<SocialLinkProps> = ({ icon: Icon, href = '', ...props }) => {
   // Ensure Icon is a component by capitalizing it
   return (
-    <Link href={href} {...props}>
+    <Link href={href} target="_blank" {...props}>
         <Icon className="h-5 w-5 text-slate-100/90 duration-150 group-hover:text-slate-50" />
     </Link>
   );
@@ -124,7 +124,7 @@ export function Footer() {
               />
               */}
               <SocialLink
-                href="linkedin.com/company/kyariaai"
+                href="https://www.linkedin.com/company/kyariaai"
                 aria-label="Follow on Instagram"
                 icon={LinkedInIcon}
               />
