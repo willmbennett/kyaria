@@ -15,6 +15,7 @@ import {
   YoutubeIcon,
   TwitterIcon,
   InstagramIcon,
+  LinkedInIcon,
   TiktokIcon,
 } from './SocialIcons'
 import { useSession } from 'next-auth/react';
@@ -51,15 +52,22 @@ const navigation = {
     { name: 'Help center', href: '#' },
   ],
 }
-/*
-function SocialLink({ icon: Icon, ...props }) {
-  return (
-    <Link className="group" {...props}>
-      <Icon className="h-5 w-5 text-slate-100/90 duration-150 group-hover:text-slate-50" />
-    </Link>
-  )
+
+type IconComponentType = React.ComponentType<React.SVGAttributes<SVGElement>>;
+
+interface SocialLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+  icon: IconComponentType;
 }
-*/
+
+const SocialLink: React.FC<SocialLinkProps> = ({ icon: Icon, href = '', ...props }) => {
+  // Ensure Icon is a component by capitalizing it
+  return (
+    <Link href={href} {...props}>
+        <Icon className="h-5 w-5 text-slate-100/90 duration-150 group-hover:text-slate-50" />
+    </Link>
+  );
+};
+
 
 export function Footer() {
   const { data: session } = useSession();
@@ -91,8 +99,9 @@ export function Footer() {
             <p className="mt-10 text-md leading-relaxed text-slate-50">
               Our mission is to make the job search effortless using the power of AI
             </p>
-            {/*
+            
             <div className="mt-8 flex items-center gap-4">
+              {/*
               <SocialLink
                 href="https://facebook.com"
                 aria-label="Follow on Facebook"
@@ -113,13 +122,18 @@ export function Footer() {
                 aria-label="Follow on Instagram"
                 icon={InstagramIcon}
               />
+              */}
               <SocialLink
-                href="https://tiktok.com"
+                href="linkedin.com/company/kyariaai"
+                aria-label="Follow on Instagram"
+                icon={LinkedInIcon}
+              />
+              <SocialLink
+                href="https://www.tiktok.com/@kyaria.ai"
                 aria-label="Follow on Tiktok"
                 icon={TiktokIcon}
               />
             </div>
-              */}
           </div>
           <div className="mt-12 grid grid-cols-12 gap-8 lg:col-span-8 lg:mt-0">
             <div className="col-span-6 md:col-span-3">
