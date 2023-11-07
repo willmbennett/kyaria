@@ -54,6 +54,9 @@ class Details {
     @prop()
     public detail?: string;
 
+    @prop()
+    public starStory?: string;
+
     @prop({ default: true })
     public show?: boolean;
 }
@@ -110,6 +113,12 @@ class ProfileClass {
 
     @prop()
     public location?: string;
+
+    @prop()
+    public story?: string;
+
+    @prop()
+    public bio?: string;
 
     @prop()
     public jobRecs?: string[];

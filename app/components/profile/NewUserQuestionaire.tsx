@@ -31,7 +31,7 @@ export default function NewUserQuestionnaire(
         console.log("Submitted data:", data);
         const path = "/"
         const res = await updateProfileAction(profile._id, { questionnaire: data }, path);
-        setOnboardingStage('profile')
+        setOnboardingStage('story')
     };
 
     const statusOptions = [
@@ -44,7 +44,7 @@ export default function NewUserQuestionnaire(
     const formattedStatusOptions = statusOptions.map(status => ({ value: status, label: status }));
 
     return (
-        <div className="p-6">
+        <div>
             <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
                 Questionnaire
             </h1>

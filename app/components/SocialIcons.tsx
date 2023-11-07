@@ -111,8 +111,8 @@ export function LinkedInIcon(props: any) {
       version="1.1"
       id="Capa_1"
       xmlns="http://www.w3.org/1999/xlink">
-      <g fill="currentColor" id="SVGRepo_bgCarrier" stroke-width="0"></g>
-      <g fill="currentColor" id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+      <g fill="currentColor" id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+      <g fill="currentColor" id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
       <g fill="currentColor" id="SVGRepo_iconCarrier">
         <g fill="currentColor">
           <g fill="currentColor">
