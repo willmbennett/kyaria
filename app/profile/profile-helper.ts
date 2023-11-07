@@ -174,7 +174,7 @@ Dartmouth College - Hanover, NH
 export const demoJSON = {
   "name": "Will Bennett",
   "title": "Product Manager",
-  "email": "wbennett71sdf1@gmail.com",
+  "email": "wbennett711@gmail.com",
   "phone": "207-239-0234",
   "social_links": {
     "Github": "https://github.com/willmbennett",

@@ -40,7 +40,8 @@ export default function NewJobAppForm({
             profileId: profileId,
             resume: resume,
             userId: userId,
-            emails: emails
+            emails: emails,
+            userStory: profile.story
         }
         //console.log('Creating App')
         //console.log(userApp)

@@ -54,6 +54,9 @@ class Details {
     @prop()
     public detail?: string;
 
+    @prop()
+    public starStory?: string;
+
     @prop({ default: true })
     public show?: boolean;
 }
@@ -112,6 +115,12 @@ class ProfileClass {
     public location?: string;
 
     @prop()
+    public story?: string;
+
+    @prop()
+    public bio?: string;
+
+    @prop()
     public jobRecs?: string[];
 
     @prop()
@@ -141,4 +150,4 @@ class ProfileClass {
 }
 
 const ProfileModel = getModelForClass(ProfileClass);
-export { ProfileModel, ProfileClass };
+export { ProfileModel, ProfileClass, Questionnaire };

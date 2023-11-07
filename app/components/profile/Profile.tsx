@@ -1,95 +1,119 @@
-"use client"
-
+'use client'
 import React, { useState } from 'react';
-import { defaultTextInput } from '../../profile/profile-helper';
-//import ProfileActions from './ProfileActions';
 import { ProfileClass } from '../../../models/Profile';
-import { demoJSON, expectedJson } from '../../profile/profile-helper';
 import UserProfile from './UserProfile';
-import TextToJSON from '../TextToJSON';
-//import { redirect } from 'next/navigation'
+import NewUserQuestionnaire from './NewUserQuestionaire';
+import ResumeParser from '../ResumeParser';
 import { Button } from '../Button';
-import NewProfileForm from './NewProfileForm';
-import NewUserQuestionaire from './NewUserQuestionaire';
+import Story from './onboarding/Story';
+import { stripObject } from '../../apps/[id]/app-helper';
+import Behaivoral from './onboarding/Behaivoral';
+import Bio from './onboarding/Bio';
+import CreateJobApp from '../board/CreateJobApp';
+import Menu from './onboarding/Menu';
 
-export default function Profile({
-    userId,
-    profile,
-    sessionUserId,
-    edit
-}: {
-    userId: string
-    profile?: ProfileClass,
-    sessionUserId?: string,
-    edit:boolean
-}) {
-    const [onboardingStage, setOnboardingStage] = useState(profile ? 'profile' : 'resumeUpload')
-    //const [onboardingStage, setOnboardingStage] = useState('questionaire')
+// Enum for the onboarding stages to enhance readability and maintainability
+enum OnboardingStage {
+    ResumeUpload = 'resumeUpload',
+    Form = 'form',
+    Questionnaire = 'questionnaire',
+    Story = 'story',
+    Bio = 'bio',
+    Behaivoral = 'behaivoral',
+    Finished = 'finished',
+}
 
-    const skipButton = () => {
-        setOnboardingStage('form')
+interface ProfileProps {
+    userId: string;
+    profile?: ProfileClass;
+    sessionUserId?: string;
+    edit: boolean;
+}
+
+export default function Profile({ userId, profile, sessionUserId, edit }: ProfileProps) {
+
+    const [onboardingStage, setOnboardingStage] = useState<OnboardingStage>(profile ? OnboardingStage.Finished : OnboardingStage.ResumeUpload);
+
+    const [onboarding, setOnboarding] = useState((onboardingStage != OnboardingStage.Finished) && edit ? true : false); // If the user doesn't have a profile but it's theirs true else false
+    const [profileNotFound] = useState((!profile && !edit) ? true : false); // If there isn't a profile and it's not the user's account
+
+    // Remove longer text from profile and limit to only relevant keys
+    const profileKeys = ["title",
+        "summary",
+        "areas_of_expertise",
+        "skills",
+        "education",
+        "professional_experience",
+        'details',
+        'responsibilities',
+        'content',
+        'start_date',
+        'end_date',
+        'degree',
+        'company',
+        'institution'
+    ];
+    const profileStripped = stripObject(profile || {}, profileKeys)
+
+    const renderNonExistentProfile = () => (
+        <div className='py-4 flex flex-col items-center justify-center text-center'>
+            <h1 className="sm:text-6xl text-4xl font-bold text-slate-900 mb-8">We're sorry</h1>
+            <h2 className="sm:text-4xl text-2xl font-bold text-slate-900 mb-8">This profile doesn't exist</h2>
+            <Button href={`/profile/${sessionUserId}`} size='lg'>
+                Go to my profile
+            </Button>
+        </div>
+    );
+
+    const renderOnboardingContent = () => {
+        switch (onboardingStage) {
+            case OnboardingStage.ResumeUpload:
+                return <ResumeParser setOnboardingStage={setOnboardingStage} userId={userId} />
+            case OnboardingStage.Questionnaire:
+                return profile && <NewUserQuestionnaire profile={profile} setOnboardingStage={setOnboardingStage} currentState={profile.questionnaire}/>;
+            case OnboardingStage.Story:
+                return profile &&
+                    <Story
+                        profileId={profile._id.toString()}
+                        desiredRole={profile.questionnaire?.desiredRole || ''}
+                        profileStripped={profileStripped}
+                        setOnboardingStage={setOnboardingStage}
+                        currentState={profile.story}
+                    />;
+            case OnboardingStage.Bio:
+                return profile &&
+                    <Bio
+                        profileId={profile._id.toString()}
+                        desiredRole={profile.questionnaire?.desiredRole || ''}
+                        profileStripped={profileStripped}
+                        setOnboardingStage={setOnboardingStage}
+                        currentState={profile.bio}
+                    />;
+            case OnboardingStage.Behaivoral:
+                return profile &&
+                    <Behaivoral
+                        profile={profile}
+                        setOnboardingStage={setOnboardingStage}
+                        setOnboarding={setOnboarding}
+                    />;
+            default:
+                return renderNonExistentProfile();
+        }
     };
 
     return (
-        <>
-            {!profile && !edit && (
-                <div className='py-4 flex flex-col items-center justify-center text-center'>
-                    <div className='py-4 items-center flex flex-col justify-center text-center'>
-                        <h1 className="sm:text-6xl text-4xl font-bold text-slate-900 mb-8">
-                            We're sorry
-                        </h1>
-                        <h2 className="sm:text-4xl text-2xl font-bold text-slate-900 mb-8">
-                            This profile doesn't exist
-                        </h2>
-                        <Button
-                        href={`/profile/${sessionUserId}`}
-                        size='lg'
-                        >
-                            Go to my profile
-                        </Button>
-                    </div>
+        <>{onboarding &&
+            <div className='md:flex md:flex-row w-full min-h-screen'>
+                <div className='md:w-1/4 items-top'>
+                    <Menu setOnboardingStage={setOnboardingStage} onboardingStage={onboardingStage} profile={profile}/>
                 </div>
-            )}
-            {onboardingStage == 'resumeUpload' && edit && (
-                <div className='py-4 flex flex-col items-center justify-center text-center'>
-                    <div className='py-4 items-center flex flex-col justify-center text-center'>
-                        <h1 className="sm:text-6xl text-4xl font-bold text-slate-900 mb-8">
-                            Welcome!
-                        </h1>
-                        <h2 className="sm:text-4xl text-2xl font-bold text-slate-900 mb-8">
-                            Time to create your profile
-                        </h2>
-                    </div>
-                    <TextToJSON
-                        defaultTextInput={['development', 'preview'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '') ? defaultTextInput : ''}
-                        setOnboardingStage={setOnboardingStage}
-                        userId={userId}
-                    />
-                    <p className="mt-10 text-sm text-base text-neutral-600 w-full max-w-screen">
-                        Don't have a resume? That's totally fine! Fill out this form to get started.
-                    </p>
-                    <Button
-                        variant="ghost"
-                        size="md"
-                        onClick={skipButton}
-                        className="mt-3"
-                    >
-                        Go to Form
-                    </Button>
-                </div>)}
-            {onboardingStage == 'form' && (
-                <NewProfileForm
-                    userId={userId}
-                    profile={profile}
-                    setOnboardingStage={setOnboardingStage}
-                />
-            )}
-            {onboardingStage == 'questionaire' && profile && edit && (
-                <NewUserQuestionaire
-                    profile={profile}
-                    setOnboardingStage={setOnboardingStage}
-                />)}
-            {profile && onboardingStage == 'profile' && (<UserProfile userProfile={profile} edit={edit} />)}
-
-        </>);
+                <div className=' md:w-3/4 p-2 md:p-4'>
+                    {renderOnboardingContent()}
+                </div>
+            </div>
+        }
+            {!onboarding && profile && <UserProfile userProfile={profile} edit={edit} />}
+            {profileNotFound && renderNonExistentProfile()}
+        </>
+    );
 }

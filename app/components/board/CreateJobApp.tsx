@@ -19,7 +19,7 @@ export default function CreateJobApp(
     }: {
         userId: string,
         profile: any,
-        setCreatingJobApp: any
+        setCreatingJobApp?: any
     }) {
         const router = useRouter()
     const [loading, setLoading] = useState(false)
@@ -58,7 +58,8 @@ export default function CreateJobApp(
                 profileId: profileId,
                 resume: resume,
                 userId: userId,
-                emails: emails
+                emails: emails,
+                userStory: profile.story
             }
             await createJobApplicationAction(userApp, path);
             router.push("/board")
@@ -69,7 +70,9 @@ export default function CreateJobApp(
             alert('Creating job failed')
         } finally {
             setLoading(false);
-            setCreatingJobApp(false)
+            if(setCreatingJobApp){
+                setCreatingJobApp(false)
+            }
         }
 
     };

@@ -37,7 +37,8 @@ export default function JobDescription({
                 profileId: profile._id,
                 resume: resume,
                 userId: profile.userId,
-                emails: emails
+                emails: emails,
+                userStory: profile.story
             }
             //console.log('Creating App')
             //console.log(userApp)
