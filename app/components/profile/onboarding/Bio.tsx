@@ -8,12 +8,14 @@ export default function Bio({
     profileId,
     profileStripped,
     desiredRole,
-    setOnboardingStage
+    setOnboardingStage,
+    currentState
 }: {
     profileId: string,
     profileStripped: any,
     desiredRole: string,
-    setOnboardingStage: any
+    setOnboardingStage: any,
+    currentState?: string
 }) {
 
     const message = [
@@ -120,7 +122,7 @@ export default function Bio({
                     documentID={profileId}
                     message={message}
                     setKey='bio'
-                    currentState=''
+                    currentState={currentState || ''}
                     saveToDatabase={updateProfileAction}
                     temp={0.7}
                 />

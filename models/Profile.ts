@@ -150,4 +150,4 @@ class ProfileClass {
 }
 
 const ProfileModel = getModelForClass(ProfileClass);
-export { ProfileModel, ProfileClass };
+export { ProfileModel, ProfileClass, Questionnaire };

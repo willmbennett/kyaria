@@ -1,6 +1,8 @@
 import ProfileTextEdit from "./ProfileTextEdit";
 import { useState } from "react";
 import { Button } from "../Button";
+import ChatWithGPT from "../board/ChatWithGPT";
+import { updateProfileAction } from "../../profile/_action";
 
 export const ResponsibilityItem = (
     {
@@ -27,11 +29,43 @@ export const ResponsibilityItem = (
         setActive(!active);
     };
 
+    const message = [
+        {
+            "role": "system",
+            "content": `You are an advanced career coach specialized in crafting compelling STAR stories. 
+            Tone: conversational, spartan, use less corporate jargon
+
+            The user will give you a situation and some details and you will provide a concise STAR story (it should take less than 30 seconds to say)
+            
+            Here is an example"
+            ### **Situation:** 
+            I was overseeing the delivery/pickup forecasting system at Whole Foods, which was plagued with a high
+            error rate leading to significant financial losses and missed customer demand.
+            ### **Task:** 
+            My responsibility was to reduce this error rate, minimize cost and prevent lost customer demand.
+            ### **Action:** 
+            I led a team to analyze and refine our forecasting model, implementing advanced machine learning
+            algorithms to better predict customer behavior. We also incorporated real-time demand data to make
+            our model more dynamic.
+            ### **Result:** 
+            Our efforts reduced the forecast error by 35%, leading to cost savings of 10 million per year and
+            reducing lost customer demand worth 20 million per year. This experience equipped me with valuable
+            insights into how data-driven product management can directly improve a company&'ss bottom line.
+            `
+        },
+        {
+            role: "user",
+            content: `Create a STAR story for this resume accomplishment: "${responsibility.content}". 
+            ${responsibility.detail ? `Here are some details about the achievement: ${responsibility.detail}` : ""}
+            Refine the story. 
+            `
+        }
+    ]
+
     return (
         <li className="flex bg-slate-100 my-2 p-2 rounded-xl w-full">
             <div className="flex flex-col space-y-2 w-full">
                 <h4 className="text-left font-bold text-lg mb-2">Accomplishment</h4>
-                {JSON.stringify(responsibility.show)}
                 {responsibility.content && (
                     <ProfileTextEdit
                         profileId={profileId}
@@ -80,6 +114,27 @@ export const ResponsibilityItem = (
                     </Button>
                 </div>
                 )}
+                {!userCanEdit && responsibility.starStory &&
+                    <ProfileTextEdit
+                        profileId={profileId}
+                        setKey={`professional_experience.${experienceIndex}.responsibilities.${responsibilityIndex}.starStory`}
+                        currentState={responsibility.starStory || ''}
+                        userCanEdit={userCanEdit}
+                    />
+                }
+                {userCanEdit &&
+                    <div className="p-3 w-full">
+                        <h4 className="text-left font-bold text-lg mb-2">Interview Story</h4>
+                        <ChatWithGPT
+                            documentID={profileId}
+                            setKey={`professional_experience.${experienceIndex}.responsibilities.${responsibilityIndex}.starStory`}
+                            message={message}
+                            currentState={responsibility.starStory}
+                            saveToDatabase={updateProfileAction}
+                            temp={0.7}
+                        />
+                    </div>
+                }
 
             </div>
         </li>

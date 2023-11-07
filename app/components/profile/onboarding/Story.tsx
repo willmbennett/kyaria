@@ -8,12 +8,14 @@ export default function Story({
     profileId,
     profileStripped,
     desiredRole,
-    setOnboardingStage
+    setOnboardingStage,
+    currentState
 }: {
     profileId: string,
     profileStripped: any,
     desiredRole: string,
     setOnboardingStage: any
+    currentState?: string
 }) {
 
     const message = [
@@ -86,7 +88,7 @@ export default function Story({
                     documentID={profileId}
                     message={message}
                     setKey='story'
-                    currentState=''
+                    currentState={currentState || ''}
                     saveToDatabase={updateProfileAction}
                     temp={0.7}
                 />

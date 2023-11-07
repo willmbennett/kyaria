@@ -5,6 +5,7 @@ import { EducationList } from './EducationList';
 import { ProfessionalExperienceList } from './ProfessionalExperienceList';
 import ProfileTextEdit from './ProfileTextEdit';
 import ListItem from './ListItem';
+import Section from '../resumetest/Section';
 
 interface ProfileProps {
   userProfile: ProfileClass;
@@ -23,7 +24,9 @@ const UserProfile: React.FC<ProfileProps> = ({ userProfile, edit }) => {
     areas_of_expertise,
     skills,
     professional_experience,
-    education
+    education,
+    story,
+    bio
   } = userProfile;
 
   return (
@@ -91,14 +94,35 @@ const UserProfile: React.FC<ProfileProps> = ({ userProfile, edit }) => {
             />
           </Link>
         </div>
-        <h2 className="text-left font-bold text-2xl py-4 mb-4 border-b ">Summary</h2>
+        <h2 className="text-left font-bold text-2xl py-4 mb-4 border-b ">Bio</h2>
         <ProfileTextEdit
           profileId={profileId}
-          setKey="summary"
-          currentState={summary || ''}
+          setKey="bio"
+          currentState={bio || ''}
           userCanEdit={edit}
         />
 
+        <h2 className="text-left font-bold text-2xl py-4 mb-4 border-b ">Story</h2>
+        <Section>
+          <ProfileTextEdit
+            profileId={profileId}
+            setKey="story"
+            currentState={story || ''}
+            userCanEdit={edit}
+          />
+        </Section>
+
+        <h2 className="text-left font-bold text-2xl py-4 mb-4 border-b ">Resume Summary</h2>
+        <Section>
+          <ProfileTextEdit
+            profileId={profileId}
+            setKey="summary"
+            currentState={summary || ''}
+            userCanEdit={edit}
+          />
+        </Section>
+
+        {/*
         <h2 className="text-left font-bold text-2xl py-4 mb-4 border-b ">Areas of Expertise</h2>
         <ListItem
           skills={areas_of_expertise || []}
@@ -106,6 +130,7 @@ const UserProfile: React.FC<ProfileProps> = ({ userProfile, edit }) => {
           setKey="areas_of_expertise"
           userCanEdit={edit}
         />
+  */}
 
         <h2 className="text-left font-bold text-2xl py-4 mb-4 border-b ">Skills</h2>
         <ListItem

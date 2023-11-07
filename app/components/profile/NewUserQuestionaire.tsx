@@ -4,14 +4,7 @@ import Select from 'react-select';
 import { Button } from '../Button';
 import { roleOptions } from '../../profile/profile-helper';
 import { updateProfileAction } from '../../profile/_action';
-
-type QuestionFormFields = {
-    desiredRole: string;
-    industryExperience: number;
-    jobSearchStatus: string;
-    salaryMin: number;
-    salaryMax: number;
-};
+import { Questionnaire } from '../../../models/Profile';
 
 const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'
 const H2_STYLE = 'text-left font-bold text-2xl py-4 mb-4'
@@ -19,15 +12,19 @@ const H2_STYLE = 'text-left font-bold text-2xl py-4 mb-4'
 export default function NewUserQuestionnaire(
     {
         profile,
-        setOnboardingStage
+        setOnboardingStage,
+        currentState
     }: {
         profile: any,
         setOnboardingStage: any
+        currentState?: Questionnaire
     }
 ) {
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm<QuestionFormFields>();
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm<Questionnaire>({
+        defaultValues: currentState
+    });
 
-    const onSubmit: SubmitHandler<QuestionFormFields> = async (data: any) => {
+    const onSubmit: SubmitHandler<Questionnaire> = async (data: any) => {
         console.log("Submitted data:", data);
         const path = "/"
         const res = await updateProfileAction(profile._id, { questionnaire: data }, path);
@@ -55,6 +52,7 @@ export default function NewUserQuestionnaire(
                     <Select
                         id="desiredRole"
                         options={formattedRoleOptions}
+                        defaultInputValue={currentState?.desiredRole}
                         onChange={(option: any) => setValue("desiredRole", option.value)}
                     />
                     {errors.desiredRole && <p>Please select a role</p>}
@@ -71,6 +69,7 @@ export default function NewUserQuestionnaire(
                     <Select
                         id="jobSearchStatus"
                         options={formattedStatusOptions}
+                        defaultInputValue={currentState?.jobSearchStatus}
                         onChange={(option: any) => setValue("jobSearchStatus", option.value)}
                     />
                     {errors.jobSearchStatus && <p>Please select a status</p>}

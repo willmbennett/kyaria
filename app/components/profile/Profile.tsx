@@ -70,7 +70,7 @@ export default function Profile({ userId, profile, sessionUserId, edit }: Profil
             case OnboardingStage.ResumeUpload:
                 return <ResumeParser setOnboardingStage={setOnboardingStage} userId={userId} />
             case OnboardingStage.Questionnaire:
-                return profile && <NewUserQuestionnaire profile={profile} setOnboardingStage={setOnboardingStage} />;
+                return profile && <NewUserQuestionnaire profile={profile} setOnboardingStage={setOnboardingStage} currentState={profile.questionnaire}/>;
             case OnboardingStage.Story:
                 return profile &&
                     <Story
@@ -78,6 +78,7 @@ export default function Profile({ userId, profile, sessionUserId, edit }: Profil
                         desiredRole={profile.questionnaire?.desiredRole || ''}
                         profileStripped={profileStripped}
                         setOnboardingStage={setOnboardingStage}
+                        currentState={profile.story}
                     />;
             case OnboardingStage.Bio:
                 return profile &&
@@ -86,6 +87,7 @@ export default function Profile({ userId, profile, sessionUserId, edit }: Profil
                         desiredRole={profile.questionnaire?.desiredRole || ''}
                         profileStripped={profileStripped}
                         setOnboardingStage={setOnboardingStage}
+                        currentState={profile.bio}
                     />;
             case OnboardingStage.Behaivoral:
                 return profile &&
