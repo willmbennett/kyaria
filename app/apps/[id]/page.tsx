@@ -15,12 +15,16 @@ export default async function JobAppPage({ params }: { params: { id: string } })
 
   return (
     <div className="lg:px-4 lg:mt-6">
-        {promise && (<>
+      {promise && (<>
         {/* @ts-expect-error Server Component */}
         < Await promise={promise}>
-          {({ jobApp }) => <JobApplication
-            jobApp={jobApp}
-          />}
+          {({ jobApp }) => <>{jobApp ?
+            <JobApplication jobApp={jobApp} />
+            :
+            <p>Job app not found</p>
+          }
+          </>
+          }
         </Await>
       </>)
       }

@@ -64,6 +64,7 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
   const userResumeStripped = stripObject(userResume, profileKeys)
   const jobdKeys = ["jobTitle", 'company', "aboutCompany", "jobDescription", "qualifications", "responsibilities"];
   const jobStripped = stripObject(job, jobdKeys)
+  const resumeId = userResume._id.toString()
 
   const initialMessages: Message[] = [
     {
@@ -136,9 +137,12 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
               )}
               {currentSection == 'experience' && jobApp && (
                 <Experience
-                  jobApp={jobApp}
+                  professionalExperience={userResume.professional_experience || []}
+                  profileId={profileId}
+                  resumeId={resumeId}
                   jobStripped={jobStripped}
                   jobKeyWords={jobKeyWords}
+                  userId={userId}
                 />
               )}
               {currentSection == 'emails' && jobApp && (

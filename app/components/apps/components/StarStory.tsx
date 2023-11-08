@@ -3,35 +3,47 @@
 import ChatWithGPT from '../../board/ChatWithGPT';
 import { useState } from 'react';
 import { updateResumeAction } from '../../../board/_action';
+import { JobClass } from '../../../../models/Job';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { Button } from '../../Button';
+import { updateProfileAction } from '../../../profile/_action';
+import { useSession } from "next-auth/react";
+import DropdownMenu from './DropdownMenu';
 
 const ACTIVE_ROUTE = "bg-gray-200 hover:bg-gray-600 hover:text-white";
 const INACTIVE_ROUTE = "hover:bg-gray-600 hover:text-white";
 
+type QuestionFormFields = {
+    details: string
+};
+
 export default function StarStory({
-    jobApp,
+    resumeId,
+    profileId,
+    userId,
+    item,
     jobStripped,
-    documentID,
-    setKey,
-    content,
-    details,
-    currentState,
     parentIndex,
-    childIndex,
-    jobKeyWords
+    childIndex
 }: {
-    jobApp: any,
-    jobStripped: any,
-    documentID: string,
-    setKey: string,
-    content: string,
-    details: string,
-    currentState: string,
+    resumeId: string,
+    profileId: string,
+    userId: string,
+    item: {
+        _id?: string;
+        content?: string;
+        detail?: string;
+        starStory?: string;
+    },
+    jobStripped: Partial<JobClass>,
     parentIndex: number,
     childIndex: number
-    jobKeyWords: string[]
 }) {
-    const [active, setActive] = useState(false);
+    const { data: session } = useSession()
+    const userCanEdit = session?.user?.id == '650f813286f63a9d8c0080ee' || session?.user?.id == userId
+    const [savedToProfile, setSavedToProfile] = useState(false)
     const [showOptions, setShowOptions] = useState(false);
+    const { _id, content, detail, starStory } = item
     const themes = [
         'None',
         'Leadership',
@@ -45,16 +57,19 @@ export default function StarStory({
         'Initiative',
         'Teamwork'
     ];
-    
-    const [selectedTheme, setSelectedTheme] = useState(themes[0]);
 
-    const handleClick = () => {
-        setActive(!active);
-    };
+    const [selectedTheme, setSelectedTheme] = useState(themes[0]);
+    const [showDetails, setShowDetails] = useState(detail == '' ? true : false);
+    const setKey = `professional_experience.${parentIndex}.responsibilities.${childIndex}`
 
     const optionsClick = () => {
         setShowOptions(!showOptions);
     };
+
+    const toggleDetails = () => {
+        setShowDetails(!showDetails);
+    };
+
 
     const message = [
         {
@@ -109,81 +124,122 @@ export default function StarStory({
         {
             role: "user",
             content: `Create a STAR story ${selectedTheme == '' ? '' : `with the theme of ${selectedTheme}`} for this resume achievement: "${content}". 
-            ${details? `Here are some details about the achievement: ${details}` : ""}
+            ${detail ? `Here are some details about the achievement: ${detail}` : ""}
             Refine the story and tailor it to this job post: ${JSON.stringify(jobStripped)}.
             `
         }
     ]
 
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm<QuestionFormFields>({
+        defaultValues: { details: detail }
+    });
+
+    const onSubmit: SubmitHandler<QuestionFormFields> = async (data: any) => {
+        const { details } = data
+
+        const savedData: { [key: string]: any } = {};
+        savedData[`${setKey}.detail`] = details; // Set the detail property to the details provided.
+
+        console.log(profileId, savedData)
+        const updateResume = await updateResumeAction(resumeId, savedData, "/")
+        console.log("Updated Resume:", updateResume);
+
+        // Also update the user's profile
+        console.log(profileId, savedData)
+        const updateProfile = await updateProfileAction(profileId, savedData, "/")
+        console.log("Updated Profile:", updateProfile);
+        setShowDetails(false)
+    };
+
+    const defaultMessage = `To make the best story possible add details such as: 
+- What the business impact of the project was.
+- Who you worked with to deliver this project.
+- What challenges you overcame.
+- What tools/tech did you use.
+- How you went above and beyond your role.
+`
+
+    const saveToProfile = async () => {
+        if (userCanEdit) {
+            // Split the property path into segments
+            const savedData: { [key: string]: any } = {};
+            savedData[`${setKey}.starStory`] = starStory; // Set the detail property to the details provided.
+
+            console.log(profileId, savedData)
+            await updateProfileAction(profileId, savedData, "/")
+            setSavedToProfile(true)
+        }
+    };
+
     return (
-        <>
-            <div className="rounded-xl p-2">
-                <div className='flex w-full justify-between'>
-                    <div className='felx flex-col '>
-                        <p>Select a theme for your answer</p>
-                    </div>
-                    <div className="relative inline-block text-left">
-                        <div>
-                            <button
-                                onClick={optionsClick}
-                                type="button"
-                                className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" id="menu-button" aria-expanded="true" aria-haspopup="true">
-                                {selectedTheme}
-                                <svg className="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                    <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
-                                </svg>
-                            </button>
-                        </div>
-                        {showOptions && (
-                            <div className="absolute right-0 z-10 mt-2 w-auto origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabIndex={-1}>
-                                <div className="py-1" role="none">
-                                    {
-                                        themes.map((l, i) => {
-                                            const selectOption = () => {
-                                                setSelectedTheme(themes[i]);
-                                                setShowOptions(!showOptions);
-                                            };
-
-                                            return (
-                                                <button
-                                                    key={i}
-                                                    onClick={selectOption}
-                                                    className={`text-gray-700 w-full block px-4 py-2 text-sm ${selectedTheme === themes[i] ? ACTIVE_ROUTE : INACTIVE_ROUTE}`}
-                                                >
-                                                    {themes[i]}
-                                                </button>
-                                            );
-                                        })
-                                    }
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </div>
-
-
-                <button
-                    className='inline-flex w-full my-2 justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50'
-                    onClick={handleClick}
-                > Show your story
-                <svg className="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                    <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
-                                </svg>
-                </button>
-                <div className={`${active ? 'p-3' : 'hidden'}`}>
-                    <ChatWithGPT
-                        documentID={documentID}
-                        setKey={setKey}
-                        message={message}
-                        currentState={currentState}
-                        parentIndex={parentIndex}
-                        childIndex={childIndex}
-                        saveToDatabase={updateResumeAction}
-                        temp={0.7}
-                        jobKeyWords={jobKeyWords}
-                    />
-                </div>
+        <div className="rounded-xl">
+    <h3 className="text-left mb-2 font-bold">Accomplishment</h3>
+    <p className="text-left mb-4">{content}</p>
+    
+    {showDetails ? (
+        <form onSubmit={handleSubmit(onSubmit)} className="mb-4">
+            <div className="mb-3">
+                <label htmlFor="details" className="block mb-2 text-sm font-medium text-gray-700">
+                    Add some details on your accomplishment to improve your story
+                </label>
+                <textarea
+                    {...register("details", { required: true })}
+                    id="details" rows={10}
+                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    placeholder={defaultMessage}
+                />
+                {errors.details && <p className="mt-1 text-xs text-red-600">Please specify your experience.</p>}
             </div>
+            <Button type="submit" size='md'>Add Details</Button>
+        </form>
+    ) : (
+        <>
+            <div className='flex justify-between items-center'>
+                <h3 className="text-left mb-2 font-bold">Details</h3>
+                <button
+                    type='button'
+                    onClick={toggleDetails}
+                    className="mb-4 inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
+                    Edit Details
+                </button>
+            </div>
+            <div className='flex w-full justify-between'>
+                <div className='flex flex-col'>
+                    <p>Select a theme for your answer</p>
+                </div>
+                <DropdownMenu
+                    selectedTheme={selectedTheme}
+                    setSelectedTheme={setSelectedTheme}
+                    showOptions={showOptions}
+                    setShowOptions={setShowOptions}
+                    themes={themes}
+                />
+            </div>
+            {userCanEdit && !savedToProfile && starStory && (
+                <div className='flex flex-col w-full text-center'>
+                    <p>Like what you see? Make this your default by saving to your profile. Note: it will overwrite the story saved to your profile.</p>
+                    <div className='flex w-full justify-center my-2'>
+                        <Button size='md' onClick={saveToProfile}>Make default</Button>
+                    </div>
+                </div>
+            )}
+            <div className='flex w-full justify-center bg-slate-100'>
+                <p>{savedToProfile && 'Updated your profile with the new story'}</p>
+            </div>
+            <ChatWithGPT
+                documentID={resumeId}
+                setKey={`${setKey}.starStory`}
+                message={message}
+                currentState={starStory || ''}
+                parentIndex={parentIndex}
+                childIndex={childIndex}
+                saveToDatabase={updateResumeAction}
+                temp={0.7}
+            />
         </>
+    )}
+</div>
+
     );
 }
