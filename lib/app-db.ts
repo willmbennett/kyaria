@@ -53,7 +53,7 @@ export async function getUserJobApps(filter: AppFilter) {
 }
 
 export async function createJobApplication(data: any) {
-    const { job, resume, profileId, userId, emails } = data
+    const { job, resume, profileId, userId, emails, userStory } = data
     // If the job is already created
     if (job._id) {
         try {
@@ -71,7 +71,7 @@ export async function createJobApplication(data: any) {
                 userId: userId,
                 emails: emails,
                 userResume: newResume._id,
-                userStory: ""
+                userStory: userStory || ''
             }
             //console.log(userApp)
             const newApp = new AppModel(userApp);
@@ -113,9 +113,9 @@ export async function createJobApplication(data: any) {
                 userId: userId,
                 emails: emails,
                 userResume: newResume._id,
-                userStory: ""
+                userStory: userStory || ''
             }
-            //onsole.log(userApp)
+            //console.log(userApp)
             const newApp = new AppModel(userApp);
             //console.log(newApp);
             const jobApp = await newApp.save();
