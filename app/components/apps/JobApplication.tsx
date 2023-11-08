@@ -11,9 +11,21 @@ import Story from './pages/Story';
 import { Chat } from '../chat/Chat';
 import { type Message } from 'ai/react'
 import { stripObject } from '../../apps/[id]/app-helper';
+import { AppClass } from '../../../models/App';
+import { ResumeClass } from '../../../models/Resume';
+import { JobClass } from '../../../models/Job';
+import { ProfileClass } from '../../../models/Profile';
 
 export function JobApplication({ jobApp }: { jobApp: any }) {
   const [currentSection, setCurrentSection] = useState('jobDescription');
+
+  // Extract the high level objects
+  const userResume: ResumeClass = jobApp.userResume
+  const job: JobClass = jobApp.job
+  const profile: ProfileClass = jobApp.profile
+  const userId = jobApp.userId
+  const profileId = profile._id.toString()
+
 
   // Limit the number of keywords
   let jobKeyWords: string[] = [];
@@ -31,12 +43,6 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
   if (!jobApp.job.tfidf && !jobApp.job.skills) {
     jobKeyWords = [''];
   }
-
-
-  // Extract the high level objects
-  const userResume = jobApp.userResume
-  const job = jobApp.job
-  const profile = jobApp.profile
 
   // Remove longer text from profile and limit to only relevant keys
   const profileKeys = ["title",
@@ -123,6 +129,9 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
                   userResumeStripped={userResumeStripped}
                   job={jobStripped}
                   jobKeyWords={jobKeyWords}
+                  profileStory={profile.story || ''}
+                  userId={userId}
+                  profileId={profileId}
                 />
               )}
               {currentSection == 'experience' && jobApp && (

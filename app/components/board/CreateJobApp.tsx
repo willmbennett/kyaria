@@ -59,8 +59,9 @@ export default function CreateJobApp(
                 resume: resume,
                 userId: userId,
                 emails: emails,
-                userStory: profile.story
+                userStory: profile.story || ''
             }
+            //console.log(userApp)
             await createJobApplicationAction(userApp, path);
             router.push("/board")
 

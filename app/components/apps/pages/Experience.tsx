@@ -20,7 +20,19 @@ export default function Experience({
             <div className="lg:p-6 w-full">
                 <p>Adding details to your profile will help us write your better star stories.</p>
                 <h2 className="text-left font-bold text-2xl py-4 mb-4">Professional Experience</h2>
-                {jobApp.userResume.professional_experience.map((exp: any, index: number) => (
+                {jobApp.userResume.professional_experience.sort((a: any, b: any) => {
+                    // Check if either a or b has 'present' as end_date
+                    if (a.end_date === 'present' && b.end_date !== 'present') {
+                        return -1; // 'present' comes before other dates
+                    } else if (a.end_date !== 'present' && b.end_date === 'present') {
+                        return 1; // 'present' comes before other dates
+                    } else {
+                        // Compare the end_date values as timestamps (assuming they are in ISO date format)
+                        const dateA = new Date(a.end_date).getTime();
+                        const dateB = new Date(b.end_date).getTime();
+                        return dateB - dateA; // Sort other dates in descending order
+                    }
+                }).map((exp: any, index: number) => (
                     <div key={index} className="mb-8">
                         <h3 className="text-left font-bold text-lg mb-2">{exp.title} at {exp.company}</h3>
                         <p className="text-left text-lg mb-2">{exp.location}</p>
@@ -62,7 +74,19 @@ export default function Experience({
                 ))}
                 <div className="p-6 w-full">
                     <h2 className="text-left font-bold text-2xl py-4 mb-4">Education</h2>
-                    {jobApp.userResume.education.map((edu: any, index: number) => (
+                    {jobApp.userResume.education.sort((a: any, b: any) => {
+                        // Check if either a or b has 'present' as end_date
+                        if (a.end_date === 'present' && b.end_date !== 'present') {
+                            return -1; // 'present' comes before other dates
+                        } else if (a.end_date !== 'present' && b.end_date === 'present') {
+                            return 1; // 'present' comes before other dates
+                        } else {
+                            // Compare the end_date values as timestamps (assuming they are in ISO date format)
+                            const dateA = new Date(a.end_date).getTime();
+                            const dateB = new Date(b.end_date).getTime();
+                            return dateB - dateA; // Sort other dates in descending order
+                        }
+                    }).map((edu: any, index: number) => (
                         <div key={index} className="mb-8">
                             <h3 className="text-left font-bold text-lg mb-2">{edu.degree}</h3>
                             <p className="text-left text-lg mb-2">{edu.institution}, {edu.location}</p>

@@ -162,7 +162,7 @@ export default function ChatWithGPT({
               type="button"
               className="m-3"
             >
-              Refine
+              Edit
             </Button>
           )}
           {!loading && edit && (<>
@@ -202,7 +202,7 @@ export default function ChatWithGPT({
               type="button"
               className="m-3"
             >
-              Generate
+              {currentState == ''? 'Generate': 'Tailor'}
             </Button>
           </>)}
           {loading && (
