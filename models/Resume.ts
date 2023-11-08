@@ -8,6 +8,9 @@ import {
 
 class Responsibilities {
     @prop()
+    public _id?: string;
+
+    @prop()
     public content?: string;
 
     @prop()
@@ -113,4 +116,4 @@ class ResumeClass {
 }
 
 const ResumeModel = getModelForClass(ResumeClass);
-export { ResumeModel, ResumeClass };
+export { ResumeModel, ResumeClass, ProfessionalExperience, Responsibilities };

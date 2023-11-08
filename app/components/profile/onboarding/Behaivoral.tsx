@@ -42,7 +42,7 @@ export default function Behavioral({ profile, setOnboardingStage, setOnboarding 
     return (
         <div className="p-6">
             <h1 className="sm:text-6xl text-4xl w-full font-bold text-slate-900 mb-8">
-            Interview stories
+                Interview stories
             </h1>
             <div className="flex justify-between items-center my-4">
                 <p className='text-left'> These are the stories you will use to answer “tell me about a time questions” in the behavioral interview.</p>
@@ -59,14 +59,16 @@ export default function Behavioral({ profile, setOnboardingStage, setOnboarding 
                 </Button>
             </div>
             {items.length > 0 && (
-                <StarStory
-                    key={`responsibility-${items[currentIndex].expIndex}-${items[currentIndex].respIndex}`}
-                    profileId={profile._id.toString()}
-                    setKey={`professional_experience.${items[currentIndex].expIndex}.responsibilities.${items[currentIndex].respIndex}`}
-                    currentState={items[currentIndex].responsibility.starStory || ''}
-                    accomplishment={items[currentIndex].responsibility.content || ''}
-                    detail={items[currentIndex].responsibility.detail || ''}
-                />
+                <div key={`${items[currentIndex].expIndex}-${items[currentIndex].respIndex}`}>
+                    <StarStory
+                        key={`responsibility-${items[currentIndex].expIndex}-${items[currentIndex].respIndex}`}
+                        profileId={profile._id.toString()}
+                        setKey={`professional_experience.${items[currentIndex].expIndex}.responsibilities.${items[currentIndex].respIndex}`}
+                        currentState={items[currentIndex].responsibility.starStory || ''}
+                        accomplishment={items[currentIndex].responsibility.content || ''}
+                        detail={items[currentIndex].responsibility.detail || ''}
+                    />
+                </div>
             )}
         </div>
     );
