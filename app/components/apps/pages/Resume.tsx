@@ -1,6 +1,7 @@
 import ChatWithGPT from '../../board/ChatWithGPT';
 import Responsibility from '../components/Responsibility';
 import { updateResumeAction } from '../../../board/_action';
+import { Education, ProfessionalExperience, Responsibilities } from '../../../../models/Resume';
 
 export default function Resume({
     jobKeyWords,
@@ -17,12 +18,12 @@ export default function Resume({
     const message = [
         {
             "role": "system",
-            "content":"You are an advanced career coach specialized in writing resume professional resume summaries. Limit the output to two sentances."
+            "content": "You are an advanced career coach specialized in writing resume professional resume summaries. Limit the output to two sentances."
         },
         {
             "role": "user",
             "content":
-                `I'm applying for this job: ${JSON.stringify(job)}. ${userResume.summary == ''? "Write me a resume summary": `Help me improve this resume summary ${userResume.summary}`} based on details from my profile: ${userProfile}`
+                `I'm applying for this job: ${JSON.stringify(job)}. ${userResume.summary == '' ? "Write me a resume summary" : `Help me improve this resume summary ${userResume.summary}`} based on details from my profile: ${userProfile}`
         }
     ];
 
@@ -77,91 +78,134 @@ export default function Resume({
                     <h2 className="text-left font-bold text-2xl py-4 mb-4">Skills</h2>
                     <p className='text-left'>{userResume.skills.join(', ')}</p>
                 </>)}
-                {userResume.professional_experience && (<>
-                    <h2 className="text-left font-bold text-2xl py-4 mb-4">Professional Experience</h2>
-                    {userResume.professional_experience.map((exp: any, index: number) => (
-                        <div key={index} className="mb-8">
-                            <h3 className="text-left font-bold text-lg mb-2">{exp.title} at {exp.company}</h3>
-                            <p className="text-left text-lg mb-2">{exp.location}</p>
-                            <p className="text-left text-lg mb-2">{exp.start_date} - {exp.end_date}</p>
-                            <ul className="list-disc list-inside text-left mb-8">
-                                {exp.responsibilities.map((resp: any, i: number) => (
-                                    <div key={i}>
-                                        <Responsibility
-                                            documentID={userResume._id}
-                                            setKey={`professional_experience.${index}.responsibilities.${i}.content`}
-                                            content={resp.content}
-                                            message={[
-                                                {
-                                                    "role": "system",
-                                                    "content":
-                                                        `You are an advanced career coach specialized in writing resume professional experience bullet points. 
-                                                        Examples:
-                                                        1. Maintained a 97% customer satisfaction rating as a customer care representative.
-                                                        2. Exceeded department sales goals by an average of 15% quarter-on-quarter in 2016.
-                                                        3. Cut page loading time by 50% by building a new cloud infrastructure, leading to a better customer experience.
-                                                        `
-                                                },
-                                                {
-                                                    "role": "user",
-                                                    "content":
-                                                        `I'm applying for this job: ${JSON.stringify(job)}. Help me improve this resume bullet point ${resp.content}. Keep the output under 132 characters.`
-                                                }
-                                            ]}
-                                            saveToDatabase={updateResumeAction}
-                                            parentIndex={index}
-                                            childIndex={i}
-                                            jobKeyWords={jobKeyWords}
-                                        />
-                                    </div>))}
-                            </ul>
-                        </div>
-                    ))}
-                </>)}
-
-                {userResume.education && (<>
-                    <h2 className="text-left font-bold text-2xl py-4 mb-4">Education</h2>
-                    {userResume.education.map((edu: any, index: number) => (
-                        <div key={index} className="mb-8">
-                            <h3 className="text-left font-bold text-lg mb-2">{edu.degree}</h3>
-                            <p className="text-left text-lg mb-2">{edu.institution}, {edu.location}</p>
-                            <ul className="list-disc list-inside text-left mb-8">
-                                {edu.details && (<>
-                                    {edu.details.map((detail: any, i: number) => (
-                                        <div key={i}>
+                {userResume.professional_experience && (
+                    <>
+                        <h2 className="text-left font-bold text-2xl py-4 mb-4">Professional Experience</h2>
+                        {userResume.professional_experience
+                            // Map the experiences to include the original index
+                            .map((exp: ProfessionalExperience, index: number) => ({
+                                exp,
+                                originalIndex: index,
+                            }))
+                            // Then, sort the array of mapped objects
+                            .sort((a: any, b: any) => {
+                                // Check if either a or b has 'present' as end_date
+                                if (a.exp.end_date === 'present' && b.exp.end_date !== 'present') {
+                                    return -1; // 'present' comes before other dates
+                                } else if (a.exp.end_date !== 'present' && b.exp.end_date === 'present') {
+                                    return 1; // 'present' comes before other dates
+                                } else {
+                                    // Compare the end_date values as timestamps (assuming they are in ISO date format)
+                                    const dateA = new Date(a.exp.end_date).getTime();
+                                    const dateB = new Date(b.exp.end_date).getTime();
+                                    return dateB - dateA; // Sort other dates in descending order
+                                }
+                            })
+                            // Filter the experiences to only include those where `show` is true
+                            .filter(({ exp }: { exp: ProfessionalExperience }) => exp.show !== false && exp.show !== null)
+                            // Map the sorted objects to components
+                            .map(({ exp, originalIndex }: { exp: ProfessionalExperience, originalIndex: number }) => (
+                                <div key={exp._id || originalIndex} className="mb-8">
+                                    <h3 className="text-left font-bold text-lg mb-2">{exp.title} at {exp.company}</h3>
+                                    <p className="text-left text-lg mb-2">{exp.location}</p>
+                                    <p className="text-left text-lg mb-2">{exp.start_date} - {exp.end_date}</p>
+                                    <ul className="list-disc list-inside text-left mb-8">
+                                        {exp.responsibilities && exp.responsibilities.map((resp: Responsibilities, i: number) => (
                                             <Responsibility
                                                 documentID={userResume._id}
-                                                setKey={`education.${index}.details.${i}.content`}
-                                                content={detail.content}
+                                                setKey={`professional_experience.${originalIndex}.responsibilities.${i}.content`}
+                                                content={resp.content || ''}
                                                 message={[
                                                     {
                                                         "role": "system",
-                                                        "content":
-                                                            `You are an advanced career coach specialized in writing resume professional experience bullet points. 
-                                                        Examples:
-                                                        1. Maintained a 97% customer satisfaction rating as a customer care representative.
-                                                        2. Exceeded department sales goals by an average of 15% quarter-on-quarter in 2016.
-                                                        3. Cut page loading time by 50% by building a new cloud infrastructure, leading to a better customer experience.
-                                                        `
+                                                        "content": `You are an advanced career coach specialized in writing resume professional experience bullet points. 
+                                  Examples:
+                                  1. Maintained a 97% customer satisfaction rating as a customer care representative.
+                                  2. Exceeded department sales goals by an average of 15% quarter-on-quarter in 2016.
+                                  3. Cut page loading time by 50% by building a new cloud infrastructure, leading to a better customer experience.`
                                                     },
                                                     {
                                                         "role": "user",
-                                                        "content":
-                                                            `I'm applying for this job: ${JSON.stringify(job)}. Help me improve this resume bullet point ${detail.content}. Keep the output under 132 characters.`
+                                                        "content": `I'm applying for this job: ${JSON.stringify(job)}. Help me improve this resume bullet point: ${resp.content}. Keep the output under 132 characters.`
                                                     }
                                                 ]}
                                                 saveToDatabase={updateResumeAction}
-                                                parentIndex={index}
+                                                parentIndex={originalIndex}
                                                 childIndex={i}
                                                 jobKeyWords={jobKeyWords}
                                             />
-                                        </div>
-                                    ))}
-                                </>)}
-                            </ul>
-                        </div>
-                    ))}
-                </>)}
+                                        ))}
+                                    </ul>
+                                </div>
+                            ))}
+                    </>
+                )}
+
+
+                {
+                    userResume.education && (
+                        <>
+                            <h2 className="text-left font-bold text-2xl py-4 mb-4">Education</h2>
+                            {userResume.education
+                                // Map the education items to include the original index
+                                .map((edu: Education, index: number) => ({
+                                    edu,
+                                    originalIndex: index,
+                                }))
+                                // Filter out the education items where `show` is not true
+                                .filter(({ edu }: { edu: Education }) => edu.show !== false && edu.show !== null)
+                                // Then, sort the filtered array of mapped objects
+                                .sort((a: any, b: any) => {
+                                    // Check if either a or b has 'present' as end_date
+                                    if (a.edu.end_date === 'present' && b.edu.end_date !== 'present') {
+                                        return -1; // 'present' comes before other dates
+                                    } else if (a.edu.end_date !== 'present' && b.edu.end_date === 'present') {
+                                        return 1; // 'present' comes before other dates
+                                    } else {
+                                        // Compare the end_date values as timestamps (assuming they are in ISO date format)
+                                        const dateA = new Date(a.edu.end_date).getTime();
+                                        const dateB = new Date(b.edu.end_date).getTime();
+                                        return dateB - dateA; // Sort other dates in descending order
+                                    }
+                                })
+                                // Map the sorted objects to components
+                                .map(({ edu, originalIndex }: { edu: Education, originalIndex: number }) => (
+                                    <div key={edu._id || originalIndex} className="mb-8">
+                                        <h3 className="text-left font-bold text-lg mb-2">{edu.degree} at {edu.institution}</h3>
+                                        <p className="text-left text-lg mb-2">{edu.location}</p>
+                                        <p className="text-left text-lg mb-2">{edu.start_date} - {edu.end_date}</p>
+                                        {edu.details && edu.details.map((detail, i) => (
+                                            <Responsibility
+                                                documentID={userResume._id}
+                                                setKey={`education.${originalIndex}.details.${i}.content`}
+                                                content={detail.content || ''}
+                                                message={[
+                                                    {
+                                                        "role": "system",
+                                                        "content": `You are an advanced career coach specialized in writing resume education accomplishments bullet points. 
+                                  Examples:
+                                  1. Maintained a 97% customer satisfaction rating as a customer care representative.
+                                  2. Exceeded department sales goals by an average of 15% quarter-on-quarter in 2016.
+                                  3. Cut page loading time by 50% by building a new cloud infrastructure, leading to a better customer experience.`
+                                                    },
+                                                    {
+                                                        "role": "user",
+                                                        "content": `I'm applying for this job: ${JSON.stringify(job)}. Help me improve this resume bullet point: ${detail.content}. Keep the output under 132 characters.`
+                                                    }
+                                                ]}
+                                                saveToDatabase={updateResumeAction}
+                                                parentIndex={originalIndex}
+                                                childIndex={i}
+                                                jobKeyWords={jobKeyWords}
+                                            />
+                                        ))}
+                                    </div>
+                                ))
+                            }
+                        </>
+                    )
+                }
+
             </div>
         </>
     );

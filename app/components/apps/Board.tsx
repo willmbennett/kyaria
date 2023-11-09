@@ -1,14 +1,11 @@
 'use client'
 import { useState } from "react";
 import CreateJobApp from "../board/CreateJobApp";
-import { defaultFormInput, expectedJson, defaultTextInput, demoJSON, FormFields } from '../../board/job-helper';
-import NewJobAppForm from "./JobAppForm";
 //import { ObjectId } from "mongodb";
-import AppItem from "./AppItem";
 import Kanban from "./KanbanBoard";
 import { Button } from "../Button";
 
-export default function JobAppsList(
+export default function Board(
   {
     jobApps,
     profile

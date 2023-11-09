@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Button } from "../Button";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import NestedFieldArray from "./NestedFieldArray";
+import { Education } from "../../../models/Profile";
 
 const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'
 
@@ -40,7 +41,7 @@ export const EducationList = (
         profileId,
         userCanEdit
     }: {
-        educationItems: any,
+        educationItems: Education[],
         profileId: string,
         userCanEdit: boolean
     }) => {
@@ -75,23 +76,41 @@ export const EducationList = (
 
         <>
             <h2 className="text-left font-bold text-2xl py-4 mb-4 border-b">Education</h2>
-            {educationItems.length > 0 && educationItems.sort((a: any, b: any) => {
-                // Check if either a or b has 'present' as end_date
-                if (a.end_date === 'present' && b.end_date !== 'present') {
-                    return -1; // 'present' comes before other dates
-                } else if (a.end_date !== 'present' && b.end_date === 'present') {
-                    return 1; // 'present' comes before other dates
-                } else {
-                    // Compare the end_date values as timestamps (assuming they are in ISO date format)
-                    const dateA = new Date(a.end_date).getTime();
-                    const dateB = new Date(b.end_date).getTime();
-                    return dateB - dateA; // Sort other dates in descending order
-                }
-            }).map((edu: any, index: number) => (
-                (edu.show === null || edu.show !== false) ? (
-                    <EducationItem education={edu} profileId={profileId} index={index} key={index} userCanEdit={userCanEdit} />
-                ) : null
-            ))}
+            {
+                educationItems &&
+                educationItems
+                    // Map the education items to include the original index
+                    .map((edu: Education, index: number) => ({
+                        edu,
+                        originalIndex: index,
+                    }))
+                    // Then, sort the array of mapped objects
+                    .sort((a: { edu: Education, originalIndex: number }, b: { edu: Education, originalIndex: number }) => {
+                        // Check if either a or b has 'present' as end_date
+                        if (a.edu.end_date === 'present' && b.edu.end_date !== 'present') {
+                            return -1; // 'present' comes before other dates
+                        } else if (a.edu.end_date !== 'present' && b.edu.end_date === 'present') {
+                            return 1; // 'present' comes before other dates
+                        } else {
+                            // Compare the end_date values as timestamps (assuming they are in ISO date format)
+                            const dateA = new Date(a.edu.end_date || '').getTime();
+                            const dateB = new Date(b.edu.end_date || '').getTime();
+                            return dateB - dateA; // Sort other dates in descending order
+                        }
+                    })
+                    // Filter the experiences to only include those where `show` is true
+                    .filter(({ edu }: { edu: Education }) => edu.show != false)
+                    // Map the sorted objects to components
+                    .map(({ edu, originalIndex }: { edu: Education, originalIndex: number }) => (
+                            <EducationItem
+                                education={edu}
+                                profileId={profileId}
+                                index={originalIndex} // Use the original index
+                                key={edu._id || originalIndex} // It's better to use a unique id if available
+                                userCanEdit={userCanEdit}
+                            />
+                        ))
+            }
             {add && userCanEdit && (<>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div key={newExperienceId} className="ext-left font-bold text-2xl mb-4">

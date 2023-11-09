@@ -4,6 +4,7 @@ import ProfileTextEdit from "./ProfileTextEdit";
 import { EducationDetailItem } from "./EductionDetailItem";
 import { updateProfileAction } from "../../profile/_action";
 import { usePathname, useRouter } from "next/navigation";
+import { Education } from "../../../models/Profile";
 
 export const EducationItem = (
     {
@@ -12,7 +13,7 @@ export const EducationItem = (
         index,
         userCanEdit
     }: {
-        education: any,
+        education: Education,
         profileId: string,
         index: number,
         userCanEdit: boolean
@@ -124,7 +125,7 @@ export const EducationItem = (
                     {add && userCanEdit && (
                         <ProfileTextEdit
                             profileId={profileId}
-                            setKey={`education.${index}.details.${education.details.length}.content`}
+                            setKey={`education.${index}.details.${education.details?.length || 0}.content`}
                             currentState=''
                             userCanEdit={userCanEdit}
                             stateStart={true}

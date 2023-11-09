@@ -16,11 +16,17 @@ class Responsibilities {
     @prop()
     public detail?: string;
 
+    @prop({ default: true })
+    public show?: boolean;
+
     @prop()
     public starStory?: string;
 }
 
 class ProfessionalExperience {
+    @prop()
+    public _id?: string;
+
     @prop()
     public title?: string;
 
@@ -36,11 +42,17 @@ class ProfessionalExperience {
     @prop()
     public end_date?: string;
 
+    @prop({ default: true })
+    public show?: boolean;
+
     @prop({ type: () => [Responsibilities] })
     public responsibilities?: Responsibilities[];
 }
 
 class Details {
+    @prop()
+    public _id?: string;
+
     @prop()
     public content?: string;
 
@@ -49,9 +61,15 @@ class Details {
 
     @prop()
     public starStory?: string;
+
+    @prop({ default: true })
+    public show?: boolean;
 }
 
 class Education {
+    @prop()
+    public _id?: string;
+    
     @prop()
     public degree?: string;
 
@@ -60,6 +78,15 @@ class Education {
 
     @prop()
     public location?: string;
+
+    @prop()
+    public start_date?: string;
+
+    @prop()
+    public end_date?: string;
+
+    @prop({ default: true })
+    public show?: boolean;
 
     @prop({ type: () => [Details] })
     public details?: Details[];
@@ -71,7 +98,6 @@ class Education {
         collection: "resumes",
     },
     options: {
-        disableLowerIndexes: true,
         allowMixed: Severity.ALLOW
     }
 })
@@ -116,4 +142,4 @@ class ResumeClass {
 }
 
 const ResumeModel = getModelForClass(ResumeClass);
-export { ResumeModel, ResumeClass, ProfessionalExperience, Responsibilities };
+export { ResumeModel, ResumeClass, ProfessionalExperience, Responsibilities, Education };
