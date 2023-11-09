@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Button } from "../Button";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import NestedFieldArray from "./NestedFieldArray";
+import { ProfessionalExperience } from "../../../models/Profile";
 
 const newExperience = {
     title: "",
@@ -71,30 +72,42 @@ export const ProfessionalExperienceList = (
     return (
         <>
             <h2 className="text-left font-bold text-2xl py-4 mb-4 border-b">Professional Experience</h2>
-            {experiences.length > 0 && experiences.sort((a: any, b: any) => {
-                // Check if either a or b has 'present' as end_date
-                if (a.end_date === 'present' && b.end_date !== 'present') {
-                    return -1; // 'present' comes before other dates
-                } else if (a.end_date !== 'present' && b.end_date === 'present') {
-                    return 1; // 'present' comes before other dates
-                } else {
-                    // Compare the end_date values as timestamps (assuming they are in ISO date format)
-                    const dateA = new Date(a.end_date).getTime();
-                    const dateB = new Date(b.end_date).getTime();
-                    return dateB - dateA; // Sort other dates in descending order
-                }
-            })
-                .map((exp: any, index: number) => (
-                    (exp.show === null || exp.show !== false) ? (
+            {
+                experiences.length > 0 &&
+                experiences
+                    // Map the experiences to include the original index
+                    .map((exp: ProfessionalExperience, index: number) => ({
+                        exp,
+                        originalIndex: index,
+                    }))
+                    // Then, sort the array of mapped objects
+                    .sort((a: any, b: any) => {
+                        // Check if either a or b has 'present' as end_date
+                        if (a.exp.end_date === 'present' && b.exp.end_date !== 'present') {
+                            return -1; // 'present' comes before other dates
+                        } else if (a.exp.end_date !== 'present' && b.exp.end_date === 'present') {
+                            return 1; // 'present' comes before other dates
+                        } else {
+                            // Compare the end_date values as timestamps (assuming they are in ISO date format)
+                            const dateA = new Date(a.exp.end_date).getTime();
+                            const dateB = new Date(b.exp.end_date).getTime();
+                            return dateB - dateA; // Sort other dates in descending order
+                        }
+                    })
+                    // Filter the experiences to only include those where `show` is true
+                    .filter(({ exp }: { exp: ProfessionalExperience }) => exp.show !== false)
+                    // Map the sorted objects to components
+                    .map(({ exp, originalIndex }: { exp: ProfessionalExperience, originalIndex: number }) => (
                         <ProfessionalExperienceItem
                             experience={exp}
                             profileId={profileId}
-                            index={index}
-                            key={index}
+                            index={originalIndex} // Use the original index
+                            key={exp._id || originalIndex} // It's better to use a unique id if available
                             userCanEdit={userCanEdit}
                         />
-                    ) : null
-                ))}
+                    )
+                    )
+            }
             {add && userCanEdit && (<>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div key={newExperienceId} className="ext-left font-bold text-2xl mb-4">

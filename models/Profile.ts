@@ -26,6 +26,9 @@ class Questionnaire {
 
 class ProfessionalExperience {
     @prop()
+    public _id?: string;
+
+    @prop()
     public title?: string;
 
     @prop()
@@ -49,6 +52,9 @@ class ProfessionalExperience {
 
 class Details {
     @prop()
+    public _id?: string;
+
+    @prop()
     public content?: string;
 
     @prop()
@@ -62,6 +68,9 @@ class Details {
 }
 
 class Education {
+    @prop()
+    public _id?: string;
+
     @prop()
     public degree?: string;
 
@@ -150,4 +159,4 @@ class ProfileClass {
 }
 
 const ProfileModel = getModelForClass(ProfileClass);
-export { ProfileModel, ProfileClass, Questionnaire };
+export { ProfileModel, ProfileClass, Questionnaire, ProfessionalExperience, Education };
