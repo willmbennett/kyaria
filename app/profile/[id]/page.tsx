@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../../../lib/auth';
 import { redirect } from 'next/navigation';
 import Await from '../../jobs/await';
+import FeedbackAside from '../../components/FeedbackAside';
 
 export default async function ProfilePage({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions)
@@ -16,11 +17,11 @@ export default async function ProfilePage({ params }: { params: { id: string } }
   const profilePromise = getProfile(params.id);
 
   return (
-    <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
+    <div className="flex max-w-5xl mx-auto flex-col md:flex-row justify-center py-2 min-h-screen">
       <div className="flex flex-1 w-full flex-col items-center text-center lg:px-4">
         {/* @ts-expect-error Server Component */}
         <Await promise={profilePromise}>
-          {({ profile }) => 
+          {({ profile }) =>
             <Profile
               userId={params.id}
               profile={profile}
@@ -29,6 +30,9 @@ export default async function ProfilePage({ params }: { params: { id: string } }
             />
           }
         </Await>
+      </div>
+      <div>
+        <FeedbackAside />
       </div>
     </div>
   );
