@@ -33,30 +33,26 @@ export default function JobMenu(
   };
 
   return (
-    <div className="bg-white border w-full lg:top-60 z-50 bg-gray-200 p-4 lg:rounded-lg h-auto my-2">
-      <div className={`w-full inline `}>
-        <div className=" w-full items-center items-start  flex flex-col lg:h-auto py-2">
-          {pageList.map((l: any, i: number) => {
-            const handleClick = () => {
-              setActive(!active);
-              setCurrentSection(l.section)
-              router.push(path, { scroll: false })
-            };
-            return (
-              <div key={i}>
-                <div className={l.section === currentSection ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
-                  <button
-                    onClick={handleClick}
-                    className="inline"
-                  >
-                    {l.label}
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+    <div className="bg-white border w-full md:sticky md:top-60 p-4 lg:rounded-lg h-auto my-2 flex flex-col">
+      {pageList.map((l: any, i: number) => {
+        const handleClick = () => {
+          setActive(!active);
+          setCurrentSection(l.section)
+          router.push(path, { scroll: false })
+        };
+        return (
+          <div key={i}>
+            <div className={l.section === currentSection ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
+              <button
+                onClick={handleClick}
+                className="inline"
+              >
+                {l.label}
+              </button>
+            </div>
+          </div>
+        );
+      })}
       {/*
       <button
         className='inline-flex lg:hidden shadow-md rounded-xl w-full p-2 bg-gray-200 hover:bg-gray-300 text-gray-700 hover:text-gray-800 cursor-pointer outline-none transition-colors duration-300'

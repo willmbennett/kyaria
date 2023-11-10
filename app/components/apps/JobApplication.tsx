@@ -83,88 +83,77 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
   ];
 
   const jobData = jobApp?.job
-  return (<>
-    <section className="relative overflow-hidden">
-      <div className="flex max-w-5xl mx-auto flex-col py-2 min-h-screen">
-        <div className="lg:px-4 lg:mt-6">
-          <div className="flex flex-col lg:flex-row h-auto min-h-screen w-full p-2 lg:px-4 lg:mt-6">
-            <div className="lg:w-1/4 flex flex-col">
-              <JobMenu
-                currentSection={currentSection}
-                setCurrentSection={setCurrentSection}
-              />
-            </div>
-            <div className="lg:w-3/4 flex flex-col lg:m-3 lg:p-3 rounded-lg">
-              {currentSection == 'jobDescription' && jobData && (
-                <JobDescription
-                  jobData={jobData}
-                  topWords={jobKeyWords}
-                />
-              )}
-              {currentSection == 'mockInterview' && jobData && (
-                <Chat initialMessages={initialMessages} />
-              )}
-              {currentSection == 'coverLetter' && jobApp && (
-                <CoverLetter
-                  jobAppId={jobApp._id}
-                  currentCoverLetter={jobApp.userCoverLetter}
-                  userResumeStripped={userResumeStripped}
-                  jobStripped={jobStripped}
-                  job={job}
-                  userResume={userResume}
-                  jobKeyWords={jobKeyWords}
-                />
-              )}
-              {currentSection == 'resume' && jobApp && (
-                <Resume
-                  jobKeyWords={jobKeyWords}
-                  job={jobStripped}
-                  userResume={userResume}
-                  userProfile={profileStripped}
-                />
-              )}
-              {currentSection == 'story' && jobApp && (
-                <Story
-                  jobAppId={jobApp._id}
-                  currentStory={jobApp.userStory}
-                  userResumeStripped={userResumeStripped}
-                  job={jobStripped}
-                  jobKeyWords={jobKeyWords}
-                  profileStory={profile.story || ''}
-                  userId={userId}
-                  profileId={profileId}
-                />
-              )}
-              {currentSection == 'experience' && jobApp && (
-                <Experience
-                  professionalExperience={userResume.professional_experience || []}
-                  profileId={profileId}
-                  resumeId={resumeId}
-                  jobStripped={jobStripped}
-                  jobKeyWords={jobKeyWords}
-                  userId={userId}
-                />
-              )}
-              {currentSection == 'emails' && jobApp && (
-                <Emails
-                  jobAppId={jobApp._id}
-                  emails={jobApp.emails}
-                  jobStripped={jobStripped}
-                  jobKeyWords={jobKeyWords}
-                  userResumeStripped={userResumeStripped}
-                />
-              )}
-            </div>
-          </div>
-
+  return (
+    <section>
+      <div className="flex flex-col max-w-5xl md:flex-row py-2 min-h-screen lg:px-4 lg:mt-6">
+        <div className='md:w-1/4'>
+          <JobMenu
+            currentSection={currentSection}
+            setCurrentSection={setCurrentSection}
+          />
+        </div>
+        <div className="lg:m-3 p-2 lg:p-3 md:w-3/4">
+          {currentSection == 'jobDescription' && jobData && (
+            <JobDescription
+              jobData={jobData}
+              topWords={jobKeyWords}
+            />
+          )}
+          {currentSection == 'mockInterview' && jobData && (
+            <Chat initialMessages={initialMessages} />
+          )}
+          {currentSection == 'coverLetter' && jobApp && (
+            <CoverLetter
+              jobAppId={jobApp._id}
+              currentCoverLetter={jobApp.userCoverLetter}
+              userResumeStripped={userResumeStripped}
+              jobStripped={jobStripped}
+              job={job}
+              userResume={userResume}
+              jobKeyWords={jobKeyWords}
+            />
+          )}
+          {currentSection == 'resume' && jobApp && (
+            <Resume
+              jobKeyWords={jobKeyWords}
+              job={jobStripped}
+              userResume={userResume}
+              userProfile={profileStripped}
+            />
+          )}
+          {currentSection == 'story' && jobApp && (
+            <Story
+              jobAppId={jobApp._id}
+              currentStory={jobApp.userStory}
+              userResumeStripped={userResumeStripped}
+              job={jobStripped}
+              jobKeyWords={jobKeyWords}
+              profileStory={profile.story || ''}
+              userId={userId}
+              profileId={profileId}
+            />
+          )}
+          {currentSection == 'experience' && jobApp && (
+            <Experience
+              professionalExperience={userResume.professional_experience || []}
+              profileId={profileId}
+              resumeId={resumeId}
+              jobStripped={jobStripped}
+              jobKeyWords={jobKeyWords}
+              userId={userId}
+            />
+          )}
+          {currentSection == 'emails' && jobApp && (
+            <Emails
+              jobAppId={jobApp._id}
+              emails={jobApp.emails}
+              jobStripped={jobStripped}
+              jobKeyWords={jobKeyWords}
+              userResumeStripped={userResumeStripped}
+            />
+          )}
         </div>
       </div>
     </section>
-    {/*<div className='lg:hidden sticky bottom-0 w-full'>
-      <JobMenu
-        currentSection={currentSection}
-        setCurrentSection={setCurrentSection}
-      />
-    </div>*/}
-  </>)
+  )
 }

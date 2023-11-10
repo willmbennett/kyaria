@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import FeedbackAside from '../../components/FeedbackAside';
 
 const title = 'Launch Your Career';
 const description = 'Launch your career with the power of AI';
@@ -26,7 +27,10 @@ export default async function AppLayout({
     children: React.ReactNode;
 }) {
 
-    return (<>
+    return (<div className='flex flex-col w-full md:flex-row justify-center'>
         {children}
-    </>);
+        <div>
+            <FeedbackAside />
+        </div>
+    </div>);
 }

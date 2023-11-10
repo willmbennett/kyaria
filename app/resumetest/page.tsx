@@ -4,6 +4,7 @@ import { authOptions } from "../../lib/auth";
 import { getResumeScans } from "../../lib/resumescan-db";
 import Await from "../jobs/await";
 import { ResumeScanDataClass } from "../../models/ResumeScan";
+import FeedbackAside from "../components/FeedbackAside";
 
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions);
@@ -11,12 +12,15 @@ export default async function ProfilePage() {
   const promise = getResumeScans(session?.user?.id || '650f813286f63a9d8c0080ee')
 
   return (
-    <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
-      <div className="flex flex-1 w-full flex-col items-center text-center lg:px-4">
+    <div className="flex flex-col w-full md:flex-row justify-center">
+      <div className="flex flex-col max-w-5xl md:flex-row py-2 min-h-screen lg:px-4 lg:mt-6">
         {/* @ts-expect-error Server Component */}
         <Await promise={promise}>
-          {({ resumeScans }: { resumeScans: ResumeScanDataClass[]}) => <ResumeTest session={session} resumeScans={resumeScans} />}
+          {({ resumeScans }: { resumeScans: ResumeScanDataClass[] }) => <ResumeTest session={session} resumeScans={resumeScans} />}
         </Await>
+      </div>
+      <div>
+        <FeedbackAside />
       </div>
     </div>
   );
