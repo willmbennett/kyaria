@@ -1,23 +1,23 @@
 'use client'
 import JobMenu from './JobMenu'
-import JobDescription from './pages/JobDescription'
-import { Container } from '../Container'
-import { useState } from 'react';
-import CoverLetter from './pages/CoverLetter';
-import Resume from './pages/Resume';
-import Experience from './pages/Experience';
-import Emails from './pages/Emails';
-import Story from './pages/Story';
-import { Chat } from '../chat/Chat';
-import { type Message } from 'ai/react'
+import JobDescription from './components/pages/JobDescription'
+import { useEffect, useState } from 'react';
+import CoverLetter from './components/pages/CoverLetter';
+import Resume from './components/pages/Resume';
+import Experience from './components/pages/Experience';
+import Emails from './components/pages/Emails';
+import Story from './components/pages/Story';
 import { stripObject } from '../../apps/[id]/app-helper';
 import { AppClass } from '../../../models/App';
 import { ResumeClass } from '../../../models/Resume';
 import { JobClass } from '../../../models/Job';
 import { ProfileClass } from '../../../models/Profile';
+import MockInterview from './components/pages/MockInterview';
+import ProgressBar from './components/ProgressBar';
+
+type ApplicationState = 'Research' | 'Phone Screen' | 'Interviewing' | 'Post-Offer';
 
 export function JobApplication({ jobApp }: { jobApp: any }) {
-  const [currentSection, setCurrentSection] = useState('jobDescription');
 
   // Extract the high level objects
   const userResume: ResumeClass = jobApp.userResume
@@ -66,33 +66,81 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
   const jobStripped = stripObject(job, jobdKeys)
   const resumeId = userResume._id.toString()
 
-  const initialMessages: Message[] = [
-    {
-      "id": "1",
-      "role": "system",
-      "content": `You are a career coach that is helping ${userResume.name} do a mock interview
-                  They are applying for this job ${JSON.stringify(jobStripped)}
-                  Act only in your capacity as a career coach and do not discuss any other topic.
-                  `
-    },
-    {
-      "id": "2",
-      "role": "assistant",
-      "content": `Hi ${userResume.name} are you ready to do a mock interview for the ${jobApp.job.jobTitle} position at ${jobApp.job.company}?`
+  const progressStates = ['Research', 'Phone Screen', 'Interviewing', 'Post-Offer'];
+
+  const getCurrentProgress = (state: string) => {
+    switch (state) {
+      case 'WISHLIST':
+        return 'Research';
+      case 'PHONE SCREEN':
+        return 'Phone Screen';
+      case 'FIRST ROUND':
+      case 'SECOND ROUND':
+      case 'THIRD ROUND':
+      case 'FINAL ROUND':
+        return 'Interviewing';
+      case 'JOB OFFER':
+      case 'ACCEPTED':
+        return 'Post-Offer';
+      default:
+        return 'Research';
     }
-  ];
+  };
+  const [currentProgress, setCurrentCurrentProgress] = useState<ApplicationState>(getCurrentProgress(jobApp.state));
+
+  const pageList = [
+    { label: "Job Description", section: 'jobDescription' },
+    { label: "Elevator Pitch", section: 'story' },
+    { label: "Interview Stories", section: `experience` },
+    { label: "Mock Interview", section: 'mockInterview' },
+    { label: "Emails", section: 'emails' },
+    { label: "Cover Letter", section: 'coverLetter' },
+    { label: "Resume", section: 'resume' },
+  ]
+
+  // Map the states to the corresponding pages
+  const statePagesMap: { [key in ApplicationState]: string[] } = {
+    'Research': ['jobDescription', 'elevatorPitch', 'coverLetter', 'resume'],
+    'Phone Screen': ['story', 'emails', 'experience'],
+    'Interviewing': ['story', 'experience', 'mockInterview', 'emails'],
+    'Post-Offer': ['emails']
+  };
+
+  // Filter the pages based on the current state
+  const filteredPages = pageList.filter(page =>
+    statePagesMap[currentProgress].includes(page.section)
+  );
+
+  const [currentSection, setCurrentSection] = useState(filteredPages[0].section);
+
+  useEffect(() => {
+    const updatedFilteredPages = pageList.filter(page =>
+      statePagesMap[currentProgress].includes(page.section)
+    );
+
+    if (updatedFilteredPages.length > 0) {
+      setCurrentSection(updatedFilteredPages[0].section);
+    }
+  }, [currentProgress]);
 
   const jobData = jobApp?.job
   return (
-    <section>
-      <div className="flex flex-col max-w-5xl md:flex-row py-2 min-h-screen lg:px-4 lg:mt-6">
+    <div className='w-full'>
+      <ProgressBar
+        progressStates={progressStates}
+        currentProgress={currentProgress}
+        setCurrentCurrentProgress={setCurrentCurrentProgress}
+      />
+      <div className="flex flex-col w-full md:flex-row py-2 min-h-screen lg:px-4 lg:mt-6">
+
         <div className='md:w-1/4'>
           <JobMenu
             currentSection={currentSection}
             setCurrentSection={setCurrentSection}
+            filteredPages={filteredPages}
           />
         </div>
-        <div className="lg:m-3 p-2 lg:p-3 md:w-3/4">
+        <div className="lg:m-3 p-2 lg:p-3 md:w-3/4" key="1">
           {currentSection == 'jobDescription' && jobData && (
             <JobDescription
               jobData={jobData}
@@ -100,7 +148,12 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
             />
           )}
           {currentSection == 'mockInterview' && jobData && (
-            <Chat initialMessages={initialMessages} />
+            <MockInterview
+              userName={userResume.name}
+              jobStripped={jobStripped}
+              jobTitle={job.jobTitle}
+              company={job.company}
+            />
           )}
           {currentSection == 'coverLetter' && jobApp && (
             <CoverLetter
@@ -154,6 +207,6 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
           )}
         </div>
       </div>
-    </section>
+    </div>
   )
 }

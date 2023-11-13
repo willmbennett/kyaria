@@ -7,26 +7,21 @@ import { useState } from "react";
 const ACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-1 my-1 rounded text-xl lg:text-lg text-gray-600 bg-gray-200 font-bold items-center justify-center hover:bg-gray-600 hover:text-white";
 const INACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-1 my-1 rounded text-xl lg:text-lg text-gray-600 font-bold items-center justify-center hover:bg-gray-600 hover:text-white";
 
+type ApplicationState = 'Research' | 'Phone Screen' | 'Interviewing' | 'Post-Offer';
+
+
 export default function JobMenu(
   { currentSection,
-    setCurrentSection
+    setCurrentSection,
+    filteredPages
   }: {
     currentSection: string,
-    setCurrentSection: any
+    setCurrentSection: any,
+    filteredPages: any
   }) {
   const router = useRouter()
   const [active, setActive] = useState(false);
   const path = usePathname()
-
-  const pageList = [
-    { label: "Job Description", section: 'jobDescription' },
-    { label: "Elevator Pitch", section: 'story' },
-    { label: "Interview Stories", section: `experience` },
-    { label: "Mock Interview", section: 'mockInterview' },
-    { label: "Emails", section: 'emails' },
-    { label: "Cover Letter", section: 'coverLetter' },
-    { label: "Resume", section: 'resume' },
-  ]
 
   const handleClick = () => {
     setActive(!active);
@@ -34,7 +29,7 @@ export default function JobMenu(
 
   return (
     <div className="bg-white border w-full md:sticky md:top-60 p-4 lg:rounded-lg h-auto my-2 flex flex-col">
-      {pageList.map((l: any, i: number) => {
+      {filteredPages.map((l: any, i: number) => {
         const handleClick = () => {
           setActive(!active);
           setCurrentSection(l.section)
