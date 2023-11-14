@@ -1,13 +1,13 @@
 'use client'
 import { SubmitHandler, useForm } from "react-hook-form";
-import { createJobApplicationAction } from "../../../board/_action";
-import { emails } from "../../../board/job-helper";
+import { createJobApplicationAction } from "../../../../board/_action";
+import { emails } from "../../../../board/job-helper";
 import { useRouter } from 'next/navigation'
-import { Button } from "../../Button";
+import { Button } from "../../../Button";
 import { signIn, signOut, useSession } from "next-auth/react";
-import EditJobDescription from "../EditJobDescription";
+import EditJobDescription from "../../EditJobDescription";
 import Link from "next/link";
-import { EditList } from "../EditList";
+import { EditList } from "../../EditList";
 
 export type FormFields = {
     board: string;

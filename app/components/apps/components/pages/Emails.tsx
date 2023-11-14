@@ -1,7 +1,7 @@
 "use client"
 import { useState } from 'react';
-import { updateJobAppAction } from '../../../board/_action';
-import ChatWithGPT from '../../board/ChatWithGPT';
+import { updateJobAppAction } from '../../../../board/_action';
+import ChatWithGPT from '../../../board/ChatWithGPT';
 
 const ACTIVE_ROUTE = "bg-gray-200 hover:bg-gray-600 hover:text-white";
 const INACTIVE_ROUTE = "hover:bg-gray-600 hover:text-white";
