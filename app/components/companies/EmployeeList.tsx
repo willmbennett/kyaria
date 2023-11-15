@@ -1,4 +1,4 @@
-import { Employee } from "../../companies/[name]/employees/[id]/employee-helper";
+import { Employee } from "../../companies/[id]/employees/employee-helper";
 import EmployeeItem from "./EmployeeItem";
 
 export default function EmployeeList({

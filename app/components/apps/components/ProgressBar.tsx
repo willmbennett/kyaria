@@ -29,9 +29,10 @@ const ProgressBar: React.FC<ProgressBarProps> = (
 
                     return (
                         <button
+                            key={p}
                             onClick={updateProgress}
                         >
-                            <li key={p} className={`relative ${currentProgress === p ? 'text-blue-600 font-bold' : 'text-gray-400'}`}>
+                            <li className={`relative ${currentProgress === p ? 'text-blue-600 font-bold' : 'text-gray-400'}`}>
                                 {p}
                             </li>
                         </button>
