@@ -4,14 +4,14 @@ import { authOptions } from "../../../lib/auth";
 import CompanyProfile from "../../components/companies/Company";
 import Await from "../../jobs/await";
 
-async function getData(org: string) {
+async function getData(orgId: string) {
     try {
-        if (!org || typeof org !== 'string') {
+        if (!orgId || typeof orgId !== 'string') {
             return { error: 'Invalid URL provided.' }
         }
 
-        const apiUrl = `https://kg.diffbot.com/kg/v3/dql?type=query&token=${process.env.DIFFBOT_API_KEY}&query=type%3AOrganization+strict%3Aname%3A"${encodeURIComponent(org)}"&size=1`; // Replace 'YOUR_API_KEY' with your actual Diffbot API key
-        //console.log(apiUrl)
+        const apiUrl = `https://kg.diffbot.com/kg/v3/dql?type=query&token=${process.env.DIFFBOT_API_KEY}&query=diffbotUri%3Ahttp%3A%2F%2Fdiffbot.com%2Fentity%2F${orgId}`; // Replace 'YOUR_API_KEY' with your actual Diffbot API key
+        console.log(apiUrl)
         const options = {
             method: 'GET',
             headers: { accept: 'application/json' },
@@ -33,7 +33,7 @@ async function getData(org: string) {
     }
 }
 
-export default async function Page({ params }: { params: { name: string } }) {
+export default async function Page({ params }: { params: { id: string } }) {
     const session = await getServerSession(authOptions);
 
     //console.log(session)
@@ -45,7 +45,7 @@ export default async function Page({ params }: { params: { name: string } }) {
     //console.log(org)
 
 
-    const orgPromise = getData(params.name)
+    const orgPromise = getData(params.id)
 
     return (
         <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
@@ -57,7 +57,7 @@ export default async function Page({ params }: { params: { name: string } }) {
                             <CompanyProfile companyData={companyData} />
                         ) : (
                             // Render a fallback or loading message when companyData is undefined
-                            <div>We're sorry, {decodeURIComponent(params.name)} could not be found</div>
+                            <div>We're sorry, The company could not be found</div>
                         )}
                     </>)}
                 </Await>

@@ -8,6 +8,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import EditJobDescription from "../../EditJobDescription";
 import Link from "next/link";
 import { EditList } from "../../EditList";
+import { JobClass } from "../../../../../models/Job";
 
 export type FormFields = {
     board: string;
@@ -18,11 +19,13 @@ export default function JobDescription({
     addBoard,
     profile,
     topWords,
+    companyDiffbotId
 }: {
     jobData: any,
     addBoard?: boolean,
     profile?: any,
-    topWords: string[]
+    topWords: string[],
+    companyDiffbotId?: string | null
 }) {
     const router = useRouter()
     const { data: session } = useSession()
@@ -60,8 +63,11 @@ export default function JobDescription({
         aboutCompany,
         jobDescription,
         qualifications,
-        responsibilities
-    } = jobData;
+        responsibilities,
+        companyDiffbotUri
+    }: JobClass = jobData;
+
+    const jobId = _id.toString()
 
     const edit = session?.user?.id == '650f813286f63a9d8c0080ee' || session?.user?.id == userId
 
@@ -70,7 +76,7 @@ export default function JobDescription({
         <>
             <h1 className="text-center sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
                 <EditJobDescription
-                    jobId={_id}
+                    jobId={jobId}
                     setKey={`jobTitle`}
                     currentState={jobTitle}
                     userCanEdit={edit}
@@ -126,71 +132,73 @@ export default function JobDescription({
                 </p>
                 <EditJobDescription
                     label="Company"
-                    jobId={_id}
+                    jobId={jobId}
                     setKey={`company`}
                     currentState={company}
                     userCanEdit={edit}
                 />
-                <Link href={`/companies/${company}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 hover:underline inline-block mr-2"
-                >
-                    See more information on {company}
-                </Link>
+                {companyDiffbotId &&
+                    <Link href={`/companies/${companyDiffbotId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 hover:underline inline-block mr-2"
+                    >
+                        See more information on {company}
+                    </Link>
+                }
                 <EditJobDescription
                     label="Location"
-                    jobId={_id}
+                    jobId={jobId}
                     setKey={`location`}
                     currentState={location}
                     userCanEdit={edit}
                 />
                 <EditJobDescription
                     label="Employment Type"
-                    jobId={_id}
+                    jobId={jobId}
                     setKey={`employmentType`}
-                    currentState={employmentType}
+                    currentState={employmentType || ''}
                     userCanEdit={edit}
                 />
                 <EditJobDescription
                     label="Salary Range"
-                    jobId={_id}
+                    jobId={jobId}
                     setKey={`salaryRange`}
-                    currentState={salaryRange}
+                    currentState={salaryRange || ''}
                     userCanEdit={edit}
                 />
                 <EditJobDescription
                     label="Remote"
-                    jobId={_id}
+                    jobId={jobId}
                     setKey={`remote`}
-                    currentState={remote}
+                    currentState={remote || ''}
                     userCanEdit={edit}
                 />
                 <h2 className="text-left font-bold text-2xl mb-4">About the Company</h2>
                 <EditJobDescription
-                    jobId={_id}
+                    jobId={jobId}
                     setKey={`aboutCompany`}
-                    currentState={aboutCompany}
+                    currentState={aboutCompany || ''}
                     userCanEdit={edit}
                 />
                 <h2 className="text-left font-bold text-2xl mb-4">Job Description</h2>
                 <EditJobDescription
-                    jobId={_id}
+                    jobId={jobId}
                     setKey={`jobDescription`}
-                    currentState={jobDescription}
+                    currentState={jobDescription || ''}
                     userCanEdit={edit}
                 />
                 <h2 className="text-left font-bold text-2xl mb-4">Qualifications</h2>
                 <EditList
-                    listItems={qualifications}
-                    id={_id}
+                    listItems={qualifications || []}
+                    id={jobId}
                     userCanEdit={edit}
                     parentName='qualifications'
                 />
                 <h2 className="text-left font-bold text-2xl mb-4">Responsibilities</h2>
                 <EditList
-                    listItems={responsibilities}
-                    id={_id}
+                    listItems={responsibilities || []}
+                    id={jobId}
                     userCanEdit={edit}
                     parentName='responsibilities'
                 />

@@ -14,6 +14,7 @@ import { JobClass } from '../../../models/Job';
 import { ProfileClass } from '../../../models/Profile';
 import MockInterview from './components/pages/MockInterview';
 import ProgressBar from './components/ProgressBar';
+import Networking from './components/pages/Networking';
 
 type ApplicationState = 'Research' | 'Phone Screen' | 'Interviewing' | 'Post-Offer';
 
@@ -25,6 +26,7 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
   const profile: ProfileClass = jobApp.profile
   const userId = jobApp.userId
   const profileId = profile._id.toString()
+  const jobAppId = jobApp._id.toString()
 
 
   // Limit the number of keywords
@@ -45,7 +47,9 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
   }
 
   // Remove longer text from profile and limit to only relevant keys
-  const profileKeys = ["title",
+  const profileKeys = [
+    "name",
+    "title",
     "summary",
     "areas_of_expertise",
     "skills",
@@ -62,9 +66,11 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
   ];
   const profileStripped = stripObject(profile, profileKeys)
   const userResumeStripped = stripObject(userResume, profileKeys)
-  const jobdKeys = ["jobTitle", 'company', "aboutCompany", "jobDescription", "qualifications", "responsibilities"];
-  const jobStripped = stripObject(job, jobdKeys)
+  const jobKeys = ["jobTitle", 'company', "aboutCompany", "jobDescription", "qualifications", "responsibilities"];
+  const jobStripped = stripObject(job, jobKeys)
   const resumeId = userResume._id.toString()
+  const companyDiffbotId = job.companyDiffbotUri ? job.companyDiffbotUri.split('/').pop() : null;
+
 
   const progressStates = ['Research', 'Phone Screen', 'Interviewing', 'Post-Offer'];
 
@@ -91,6 +97,7 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
   const pageList = [
     { label: "Job Description", section: 'jobDescription' },
     { label: "Elevator Pitch", section: 'story' },
+    { label: "Networking", section: 'networking' },
     { label: "Interview Stories", section: `experience` },
     { label: "Mock Interview", section: 'mockInterview' },
     { label: "Emails", section: 'emails' },
@@ -98,9 +105,15 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
     { label: "Resume", section: 'resume' },
   ]
 
+  // Dynamically create the 'Research' state pages based on the existence of companyDiffbotUri
+  const researchPages = ['jobDescription', 'elevatorPitch', 'coverLetter', 'resume'];
+  if (job.companyDiffbotUri) {
+    researchPages.push('networking');
+  }
+
   // Map the states to the corresponding pages
   const statePagesMap: { [key in ApplicationState]: string[] } = {
-    'Research': ['jobDescription', 'elevatorPitch', 'coverLetter', 'resume'],
+    'Research': researchPages,
     'Phone Screen': ['story', 'emails', 'experience'],
     'Interviewing': ['story', 'experience', 'mockInterview', 'emails'],
     'Post-Offer': ['emails']
@@ -114,16 +127,10 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
   const [currentSection, setCurrentSection] = useState(filteredPages[0].section);
 
   useEffect(() => {
-    const updatedFilteredPages = pageList.filter(page =>
-      statePagesMap[currentProgress].includes(page.section)
-    );
-
-    if (updatedFilteredPages.length > 0) {
-      setCurrentSection(updatedFilteredPages[0].section);
-    }
+    const pages = statePagesMap[currentProgress];
+    setCurrentSection(pages.length > 0 ? pages[0] : '');
   }, [currentProgress]);
 
-  const jobData = jobApp?.job
   return (
     <div className='w-full'>
       <ProgressBar
@@ -132,7 +139,6 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
         setCurrentCurrentProgress={setCurrentCurrentProgress}
       />
       <div className="flex flex-col w-full md:flex-row py-2 min-h-screen lg:px-4 lg:mt-6">
-
         <div className='md:w-1/4'>
           <JobMenu
             currentSection={currentSection}
@@ -141,72 +147,121 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
           />
         </div>
         <div className="lg:m-3 p-2 lg:p-3 md:w-3/4" key="1">
-          {currentSection == 'jobDescription' && jobData && (
-            <JobDescription
-              jobData={jobData}
-              topWords={jobKeyWords}
-            />
-          )}
-          {currentSection == 'mockInterview' && jobData && (
-            <MockInterview
-              userName={userResume.name}
-              jobStripped={jobStripped}
-              jobTitle={job.jobTitle}
-              company={job.company}
-            />
-          )}
-          {currentSection == 'coverLetter' && jobApp && (
-            <CoverLetter
-              jobAppId={jobApp._id}
-              currentCoverLetter={jobApp.userCoverLetter}
-              userResumeStripped={userResumeStripped}
-              jobStripped={jobStripped}
-              job={job}
-              userResume={userResume}
-              jobKeyWords={jobKeyWords}
-            />
-          )}
-          {currentSection == 'resume' && jobApp && (
-            <Resume
-              jobKeyWords={jobKeyWords}
-              job={jobStripped}
-              userResume={userResume}
-              userProfile={profileStripped}
-            />
-          )}
-          {currentSection == 'story' && jobApp && (
-            <Story
-              jobAppId={jobApp._id}
-              currentStory={jobApp.userStory}
-              userResumeStripped={userResumeStripped}
-              job={jobStripped}
-              jobKeyWords={jobKeyWords}
-              profileStory={profile.story || ''}
-              userId={userId}
-              profileId={profileId}
-            />
-          )}
-          {currentSection == 'experience' && jobApp && (
-            <Experience
-              professionalExperience={userResume.professional_experience || []}
-              profileId={profileId}
-              resumeId={resumeId}
-              jobStripped={jobStripped}
-              jobKeyWords={jobKeyWords}
-              userId={userId}
-            />
-          )}
-          {currentSection == 'emails' && jobApp && (
-            <Emails
-              jobAppId={jobApp._id}
-              emails={jobApp.emails}
-              jobStripped={jobStripped}
-              jobKeyWords={jobKeyWords}
-              userResumeStripped={userResumeStripped}
-            />
+          {renderCurrentSection(
+            currentSection,
+            job,
+            jobStripped,
+            jobKeyWords,
+            userResume,
+            userResumeStripped,
+            profile,
+            profileStripped,
+            userId,
+            profileId,
+            resumeId,
+            jobAppId,
+            jobApp,
+            companyDiffbotId
           )}
         </div>
       </div>
     </div>
-  )
+  );
+}
+
+function renderCurrentSection(
+  currentSection: string,
+  jobData: JobClass,
+  jobStripped: any,
+  jobKeyWords: string[],
+  userResume: ResumeClass,
+  userResumeStripped: any,
+  profile: ProfileClass,
+  profileStripped: any,
+  userId: string,
+  profileId: string,
+  resumeId: string,
+  jobAppId: string,
+  jobApp: AppClass,
+  companyDiffbotId?: string | null
+) {
+  switch (currentSection) {
+    case 'jobDescription':
+      return <JobDescription jobData={jobData} topWords={jobKeyWords} companyDiffbotId={companyDiffbotId} />;
+    case 'mockInterview':
+      return (
+        <MockInterview
+          userName={userResume.name}
+          jobStripped={jobStripped}
+          jobTitle={jobData.jobTitle}
+          company={jobData.company}
+        />
+      );
+    case 'coverLetter':
+      return (
+        <CoverLetter
+          jobAppId={jobAppId}
+          currentCoverLetter={jobApp.userCoverLetter || ''}
+          userResumeStripped={userResumeStripped}
+          jobStripped={jobStripped}
+          job={jobData}
+          userResume={userResume}
+          jobKeyWords={jobKeyWords}
+        />
+      );
+    case 'resume':
+      return (
+        <Resume
+          jobKeyWords={jobKeyWords}
+          job={jobData}
+          userResume={userResume}
+          userProfile={profile}
+        />
+      );
+    case 'story':
+      return (
+        <Story
+          jobAppId={jobAppId}
+          currentStory={jobApp.userStory || ''}
+          userResumeStripped={userResumeStripped}
+          job={jobData}
+          jobKeyWords={jobKeyWords}
+          profileStory={profile.story || ''}
+          userId={userId}
+          profileId={profileId}
+        />
+      );
+    case 'networking':
+      return (
+        <Networking
+          companyDiffbotUri={companyDiffbotId || ''}
+          userResumeStripped={userResumeStripped}
+          jobStripped={jobStripped}
+          company={jobData.company}
+        />
+      );
+    case 'experience':
+      return (
+        <Experience
+          professionalExperience={userResume.professional_experience || []}
+          profileId={profileId}
+          resumeId={resumeId}
+          jobStripped={jobStripped}
+          jobKeyWords={jobKeyWords}
+          userId={userId}
+        />
+      );
+    case 'emails':
+      return (
+        <Emails
+          jobAppId={jobAppId}
+          emails={jobApp.emails}
+          jobStripped={jobStripped}
+          jobKeyWords={jobKeyWords}
+          userResumeStripped={userResumeStripped}
+        />
+      );
+    default:
+      return null;
+  }
 }

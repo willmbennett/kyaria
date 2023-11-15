@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Employee } from "../../companies/[name]/employees/[id]/employee-helper";
+import { Employee } from "../../companies/[id]/employees/employee-helper";
 
 // Define the props for the component
 interface EmployeeItemProps {
@@ -22,7 +22,7 @@ export default function EmployeeItem(
     } = employee
 
     return (
-        <div className="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md overflow-hidden dark:bg-gray-800 dark:border-gray-700">
+        <div className="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md overflow-hidden">
             {/* Image container with responsive image and circular style */}
             <div className="flex justify-center mt-5">
                 {image ? (
@@ -37,19 +37,19 @@ export default function EmployeeItem(
             </div>
 
             <div className="p-5">
-                <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white text-center">{name}</h5>
+                <h5 className="text-xl font-semibold tracking-tight text-gray-900 text-center">{name}</h5>
                 <p className="text-gray-700 dark:text-gray-400 mt-2 text-center">{summary}</p>
                 {/*<p className="line-clamp-3 text-xs">
                     {description}
                 </p> */}
-                <div className="flex justify-around mt-4">
+                <div className="flex justify-around space-x-2 mt-4">
                     <Link href={`https://www.${crunchbaseUri}`} target="_blank">
-                        <span className="text-indigo-600 hover:text-indigo-900 dark:hover:text-indigo-400 transition duration-300" aria-label="Crunchbase profile">
+                        <span className="text-indigo-600 hover:text-indigo-900 transition duration-300" aria-label="Crunchbase profile">
                             Crunchbase Profile
                         </span>
                     </Link>
                     <Link href={`https://www.${linkedInUri}`} target="_blank">
-                        <span className="text-indigo-600 hover:text-indigo-900 dark:hover:text-indigo-400 transition duration-300" aria-label="LinkedIn profile">
+                        <span className="text-indigo-600 hover:text-indigo-900 400 transition duration-300" aria-label="LinkedIn profile">
                             LinkedIn Profile
                         </span>
                     </Link>

@@ -123,7 +123,7 @@ const CompanyProfile = ({ companyData }: { companyData: any }) => {
             )}
 
             <h2 className="text-2xl font-bold mt-4">Employees</h2>
-            <Link href={`${name}/employees/${id}`} >
+            <Link href={`${id}/employees`} >
                 <span className="text-indigo-600 text-xl hover:text-indigo-900 dark:hover:text-indigo-400 transition duration-300" aria-label="Crunchbase profile">
                     See all employees
                 </span>
