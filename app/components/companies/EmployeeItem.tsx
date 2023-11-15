@@ -42,7 +42,7 @@ export default function EmployeeItem(
                 {/*<p className="line-clamp-3 text-xs">
                     {description}
                 </p> */}
-                <div className="flex justify-around mt-4">
+                <div className="flex justify-around space-x-2 mt-4">
                     <Link href={`https://www.${crunchbaseUri}`} target="_blank">
                         <span className="text-indigo-600 hover:text-indigo-900 transition duration-300" aria-label="Crunchbase profile">
                             Crunchbase Profile
