@@ -1,5 +1,5 @@
 import React from 'react';
-import { EmploymentHistory } from '../../../models/ResumeScan';
+import { EmploymentHistory } from '../../../../models/ResumeScan';
 
 interface EmploymentProps {
     data: EmploymentHistory;
