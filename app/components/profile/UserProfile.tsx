@@ -5,7 +5,7 @@ import { EducationList } from './EducationList';
 import { ProfessionalExperienceList } from './ProfessionalExperienceList';
 import ProfileTextEdit from './ProfileTextEdit';
 import ListItem from './ListItem';
-import Section from '../resumetest/Section';
+import Section from '../resumetest/ui/Section';
 
 interface ProfileProps {
   userProfile: ProfileClass;

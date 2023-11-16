@@ -13,7 +13,7 @@ export default async function ProfilePage() {
 
   return (
     <div className="flex flex-col w-full md:flex-row justify-center">
-      <div className="flex flex-col max-w-5xl md:flex-row py-2 min-h-screen lg:px-4 lg:mt-6">
+      <div className="flex flex-col md:w-3/4 md:flex-row py-2 min-h-screen lg:px-4 lg:mt-6">
         {/* @ts-expect-error Server Component */}
         <Await promise={promise}>
           {({ resumeScans }: { resumeScans: ResumeScanDataClass[] }) => <ResumeTest session={session} resumeScans={resumeScans} />}

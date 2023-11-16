@@ -1,4 +1,4 @@
-import { ResumeScanDataClass } from '../../../models/ResumeScan';
+import { ResumeScanDataClass } from '../../../../models/ResumeScan';
 
 const ACTIVE_ROUTE = "text-gray-600 bg-gray-200 font-bold hover:bg-gray-600 hover:text-white";
 const INACTIVE_ROUTE = "text-gray-600 font-bold hover:bg-gray-600 hover:text-white";
@@ -19,21 +19,21 @@ const ResumeListMenu: React.FC<ResumeListMenuProps> = ({ resumeScans, setResumeT
     };
 
     return (
-        <div className="sticky bg-white border w-full lg:top-60 bg-gray-200 p-4 lg:rounded-lg h-auto my-2">
-            <div className=" w-full items-center items-start  flex flex-col lg:h-auto py-2 overflow-scroll">
-                <p>Resumes Scans</p>
-                <ul>
+        <div className="sticky top-60 lg:rounded-lg bg-gray-200 border p-4 my-2 w-full h-auto">
+            <div className="flex flex-col items-start py-2 overflow-auto w-full">
+                <p className="text-lg font-semibold mb-2">Resumes Scans</p>
+                <ul className="w-full">
                     {resumeScans.map((resume, index) => (
-
-                        <li key={index} onClick={() => handleResumeClick(resume)}>
-                            <div className={`inline-flex w-auto w-full px-3 py-1 my-1 rounded text-xl lg:text-lg items-center justify-center ${resume._id === resumeTest?._id ? ACTIVE_ROUTE : INACTIVE_ROUTE}`}>
+                        <li key={index} onClick={() => handleResumeClick(resume)} className="my-1">
+                            <div className={`inline-flex items-center justify-center w-full px-3 py-1 rounded text-lg cursor-pointer hover:bg-gray-300 ${resume._id === resumeTest?._id ? 'bg-blue-500 text-white' : 'bg-white'}`}>
                                 <p>{resumeScans.length - index} - {new Date(resume.createdAt).toLocaleDateString()}</p>
                             </div>
                         </li>
                     ))}
                 </ul>
             </div>
-        </div >
+        </div>
+
     );
 };
 
