@@ -107,6 +107,7 @@ export default function ResumeTest({ session, resumeScans }: { session: any, res
 
     return (
         <div className='py-4 flex flex-col lg:flex-row w-full justify-center'>
+
             <div>
                 <ResumeListMenu
                     resumeScans={resumeScans}
@@ -115,6 +116,9 @@ export default function ResumeTest({ session, resumeScans }: { session: any, res
                     setFormHidden={setFormHidden} />
             </div>
             <div className='py-4 items-center flex flex-col text-center lg:w-3/4'>
+                <h1 className="sm:text-6xl text-4xl font-bold text-slate-900 mb-8">
+                    Test your resume with ATS
+                </h1>
                 {!session?.user?.id && (
                     <Button onClick={() => signIn()}>Sign in to test your resume</Button>
                 )}
