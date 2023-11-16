@@ -102,8 +102,7 @@ const UserProfile: React.FC<ProfileProps> = ({ userProfile, edit }) => {
           userCanEdit={edit}
         />
 
-        <h2 className="text-left font-bold text-2xl py-4 mb-4 border-b ">Story</h2>
-        <Section>
+        <Section title="Story">
           <ProfileTextEdit
             profileId={profileId}
             setKey="story"
@@ -112,8 +111,7 @@ const UserProfile: React.FC<ProfileProps> = ({ userProfile, edit }) => {
           />
         </Section>
 
-        <h2 className="text-left font-bold text-2xl py-4 mb-4 border-b ">Resume Summary</h2>
-        <Section>
+        <Section title="Resume Summary">
           <ProfileTextEdit
             profileId={profileId}
             setKey="summary"
