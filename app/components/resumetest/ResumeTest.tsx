@@ -4,9 +4,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { pdfjs } from 'react-pdf';
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css"
-import type { PDFDocumentProxy } from 'pdfjs-dist';
 import { Button } from '../Button';
-import { createResumeScanAction } from '../../resumetest/_action';
 import { ResumeScanDataClass } from '../../../models/ResumeScan';
 import ResumeListMenu from './ui/ResumeMenu';
 import { signIn } from "next-auth/react";
@@ -14,6 +12,8 @@ import { ResumeUploadForm } from './ui/ResumeUploadForm';
 import ResumeDisplay from './ui/ResumeDisplay';
 import { LoadingComponent } from './ui/LoadingComponent';
 import { PDFViewer } from './ui/PDFViewer';
+import { handleFormSubmit, useDocumentLoadSuccess, useFileHandler } from '../../../lib/hooks/resume-test';
+import ResumeBuilder from '../resume/ResumeBuilder';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
     'pdfjs-dist/build/pdf.worker.min.js',
@@ -33,64 +33,17 @@ export default function ResumeTest({ session, resumeScans }: { session: any, res
     const { handleSubmit, formState: { errors } } = useForm<FormFields>();
 
     const onSubmit: SubmitHandler<FormFields> = async () => {
-        setLoading(true)
-        setFormHidden(true);
-        //console.log('Resume Text')
-        //console.log(resumeUploadText)
-
-        const response = await fetch('/api/sovren', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ content: resumeUploadText })
+        await handleFormSubmit({
+            setLoading, setFormHidden, setResumeTest, setFile, resumeUploadText, session
         });
-
-        if (!response.ok) {
-            // If the response is not ok, print the status and throw an error
-            //console.error('Server responded with status:', response.status);
-            throw new Error(`HTTP error! status: ${response.status}`);
-        } else {
-            const { parsedResume } = await response.json();
-            //console.log('Parsed Resume');
-            //console.log(parsedResume);
-
-            setResumeTest(parsedResume)
-            setFile(null);
-            setLoading(false)
-
-            if (session?.user?.id) {
-                const path = '/'
-                const dataToSave = { ...parsedResume, userId: session.user.id }
-                const resumeScanId = await createResumeScanAction(dataToSave, path)
-                //console.log(resumeScanId)
-            }
-        }
     };
 
     const [file, setFile] = useState<PDFFile>(null);
     const [numPages, setNumPages] = useState<number | null>(null);
     const [resumeUploadText, setResumeUploadText] = useState('');
 
-    function onFileChange(event: React.ChangeEvent<HTMLInputElement>): void {
-        const { files } = event.target;
-
-        if (files && files[0]) {
-            const file = files[0];
-            const fileType = file.type;
-
-            if (fileType !== "application/pdf") {
-                alert("Please upload a valid PDF file.");
-                event.target.value = "";  // Clear the file input
-                return;
-            }
-            setFile(file);
-        }
-    }
-
-    function onDocumentLoadSuccess({ numPages: nextNumPages }: PDFDocumentProxy): void {
-        setNumPages(nextNumPages);
-    }
+    const onFileChange = useFileHandler(setFile);
+    const onDocumentLoadSuccess = useDocumentLoadSuccess(setNumPages);
 
     function handleTextContent(textContent: { items: any[]; }) {
         const strings = textContent.items.map(item => item.str);
@@ -141,12 +94,18 @@ export default function ResumeTest({ session, resumeScans }: { session: any, res
                     />
                 )}
                 {loading && <LoadingComponent />}
-                {resumeTest && (
+                {resumeTest && (<>
                     <ResumeDisplay
                         resumeTest={resumeTest}
                         session={session}
                         resetForm={resetForm}
                     />
+                    <ResumeBuilder
+                        education={resumeTest.Education?.EducationDetails}
+                        experience={resumeTest.EmploymentHistory?.Positions}
+                        skills={resumeTest.Skills}
+                    />
+                </>
                 )}
             </div>
         </div>

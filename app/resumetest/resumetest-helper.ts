@@ -217,7 +217,7 @@ export type EmploymentHistory = {
 };
 
 // Skills section
-interface Skill {
+export interface Skill {
     Name: string;
     FoundIn: {
         SectionType: string;
