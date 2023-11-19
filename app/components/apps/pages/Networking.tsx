@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { updateJobAppAction } from "../../../../board/_action";
-import { Employee } from "../../../../companies/[id]/employees/employee-helper";
-import ChatWithGPT from "../../../board/ChatWithGPT";
-import EmployeeItem from "../../../companies/EmployeeItem";
-import Carousel from "../Carousel";
+import { updateJobAppAction } from "../../../board/_action";
+import { Employee } from "../../../companies/[id]/employees/employee-helper";
+import ChatWithGPT from "../../board/ChatWithGPT";
+import EmployeeItem from "../../companies/EmployeeItem";
+import Carousel from "../ui/Carousel";
 
 interface NetworkingProps {
     companyDiffbotUri: string

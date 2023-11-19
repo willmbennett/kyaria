@@ -1,6 +1,6 @@
 
 
-import { Chat } from '../../../chat/Chat';
+import { Chat } from '../../chat/Chat';
 import { type Message } from 'ai/react'
 
 interface MockInterviewProps {

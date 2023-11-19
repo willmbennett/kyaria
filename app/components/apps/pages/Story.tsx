@@ -1,11 +1,11 @@
 'use client'
 
-import { updateJobAppAction } from '../../../../board/_action';
-import ChatWithGPT from '../../../board/ChatWithGPT';
-import { updateProfileAction } from '../../../../profile/_action';
+import { updateJobAppAction } from '../../../board/_action';
+import ChatWithGPT from '../../board/ChatWithGPT';
+import { updateProfileAction } from '../../../profile/_action';
 import { useSession } from "next-auth/react";
 import { useState } from 'react';
-import { Button } from '../../../Button';
+import { Button } from '../../Button';
 
 
 export default function Story({

@@ -1,9 +1,9 @@
 'use client'
 import { useState } from 'react';
-import { JobClass } from '../../../../../models/Job';
-import { ProfessionalExperience } from '../../../../../models/Resume';
-import { Button } from '../../../Button';
-import StarStory from '../StarStory';
+import { JobClass } from '../../../../models/Job';
+import { ProfessionalExperience } from '../../../../models/Resume';
+import { Button } from '../../Button';
+import StarStory from '../ui/StarStory';
 import { useRouter, usePathname } from "next/navigation";
 
 export default function Experience({

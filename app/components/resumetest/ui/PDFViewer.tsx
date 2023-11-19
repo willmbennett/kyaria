@@ -9,7 +9,6 @@ const options = {
     standardFontDataUrl: '/standard_fonts/',
 };
 
-
 type PDFViewerProps = {
     file: File | null;
     onLoadSuccess: (pdf: PDFDocumentProxy) => void;

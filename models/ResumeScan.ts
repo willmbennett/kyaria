@@ -514,4 +514,4 @@ class ResumeScanDataClass {
 // Model for ResumeData
 const ResumeScanDataModel = getModelForClass(ResumeScanDataClass);
 
-export { ResumeScanDataModel, ResumeScanDataClass, Education, EducationDetail, Position };
+export { ResumeScanDataModel, ResumeScanDataClass, Education, EducationDetail, Position, DateDetails };

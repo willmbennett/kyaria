@@ -1,7 +1,7 @@
-import ChatWithGPT from '../../../board/ChatWithGPT';
-import Responsibility from '../Responsibility';
-import { updateResumeAction } from '../../../../board/_action';
-import { Education, ProfessionalExperience, Responsibilities } from '../../../../../models/Resume';
+import ChatWithGPT from '../../board/ChatWithGPT';
+import Responsibility from '../ui/Responsibility';
+import { updateResumeAction } from '../../../board/_action';
+import { Education, ProfessionalExperience, Responsibilities } from '../../../../models/Resume';
 
 export default function Resume({
     jobKeyWords,
