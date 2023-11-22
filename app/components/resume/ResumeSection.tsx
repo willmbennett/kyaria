@@ -38,21 +38,21 @@ const ResumeSection: React.FC<SectionProps> = ({ title, register, control, secti
         switch (fieldConfig.type) {
             case 'text':
                 return (
-                    <div key={fieldConfig.name} className="mb-4">
+                    <div key={fieldConfig.name} className="mb-4 flex flex-col">
                         <label className="text-gray-600 text-sm mb-1">{fieldConfig.placeholder.toUpperCase()}</label>
                         <InputField name={fieldName} register={register} placeholder={fieldConfig.placeholder} />
                     </div>
                 );
             case 'textarea':
                 return (
-                    <div key={fieldConfig.name} className="mb-4 w-full">
+                    <div key={fieldConfig.name} className="mb-4 w-full flex flex-col">
                         <label className="text-gray-600 text-sm mb-1">{fieldConfig.placeholder.toUpperCase()}</label>
                         <TextareaAutosize {...register(fieldName)} placeholder={fieldConfig.placeholder} className="border rounded w-full p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
                     </div>
                 );
             case 'date':
                 return (
-                    <div key={fieldConfig.name} className="mb-4">
+                    <div key={fieldConfig.name} className="mb-4 flex flex-col">
                         <label className="text-gray-600 text-sm mb-1">{fieldConfig.placeholder.toUpperCase()}</label>
                         <input type="date" {...register(fieldName)} className="border rounded w-full p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
                     </div>
@@ -76,7 +76,7 @@ const ResumeSection: React.FC<SectionProps> = ({ title, register, control, secti
         return (
             <div key={item.id} className="mb-6 bg-white p-4 shadow rounded">
                 {Object.entries(groupedFields).map(([group, groupFields]) => (
-                    <div key={group} className="flex space-x-4">
+                    <div key={group} className="flex space-x-4 bg-slate-100 p-2 rounded-md">
                         {groupFields.map(fieldConfig => renderField(fieldConfig, item, index))}
                     </div>
                 ))}
@@ -86,11 +86,10 @@ const ResumeSection: React.FC<SectionProps> = ({ title, register, control, secti
     };
 
     return (
-        <div className="my-4 p-4 border border-gray-300 rounded shadow-lg">
-            <h2 className="text-lg font-semibold mb-4">{title.toUpperCase()}</h2>
+        <>
             {fields.map(renderFields)}
             <button type="button" onClick={() => append({})} className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-150 ease-in-out">Add {title}</button>
-        </div>
+        </>
     );
 };
 

@@ -114,8 +114,8 @@ class ResumeClass {
     @prop()
     public phone?: string;
 
-    @prop()
-    public social_links?: { [key: string]: string };
+    @prop({ default: {} })
+    public social_links: { [key: string]: string } = {};
 
     @prop()
     public location?: string;

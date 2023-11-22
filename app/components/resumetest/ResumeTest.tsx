@@ -14,6 +14,7 @@ import { LoadingComponent } from './ui/LoadingComponent';
 import { PDFViewer } from './ui/PDFViewer';
 import { handleFormSubmit, useDocumentLoadSuccess, useFileHandler } from '../../../lib/hooks/resume-test';
 import ResumeBuilder from '../resume/ResumeBuilder';
+import { transformParsedResume } from '../../resumetest/resumetest-helper';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
     'pdfjs-dist/build/pdf.worker.min.js',
@@ -113,23 +114,7 @@ export default function ResumeTest({ session, resumeScans }: { session: any, res
                     }
                     {editResume &&
                         <ResumeBuilder
-                            education={resumeTest.Education?.EducationDetails}
-                            experience={resumeTest.EmploymentHistory?.Positions}
-                            skills={resumeTest.Skills}
-                            professionalSummary={resumeTest.ProfessionalSummary}
-                            objective={resumeTest.Objective}
-                            hobbies={resumeTest.Hobbies}
-                            patents={resumeTest.Patents}
-                            publications={resumeTest.Publications}
-                            speakingEngagements={resumeTest.SpeakingEngagements}
-                            name={resumeTest.ContactInformation?.CandidateName?.FormattedName}
-                            telephone={resumeTest.ContactInformation?.Telephones?.[0]?.Raw}
-                            emailAddress={resumeTest.ContactInformation?.EmailAddresses?.[0]}
-                            location={
-                                `${resumeTest.ContactInformation?.Location?.Municipality}, ` +
-                                `${resumeTest.ContactInformation?.Location?.Regions?.join(', ')}`
-                            }
-                        // Pass other resume sections as needed
+                            data={transformParsedResume(resumeTest)}
                         />
 
                     }

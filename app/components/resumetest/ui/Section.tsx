@@ -11,6 +11,7 @@ const Section: React.FC<SectionProps> = ({ title, children }) => {
   return (
     <div className='px-2 py-3 w-full'>
       <button
+        type='button'
         className='inline-flex items-center justify-between w-full rounded-md px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 my-2'
         onClick={() => setShowComponent(!showComponent)}
         aria-expanded={showComponent}
@@ -21,7 +22,7 @@ const Section: React.FC<SectionProps> = ({ title, children }) => {
         </svg>
       </button>
 
-      <div className={`transition-all ease-in-out duration-300 ${showComponent ? 'max-h-screen' : 'max-h-0 overflow-hidden'}`}>
+      <div className={`transition-all ease-in-out duration-300 ${showComponent ? '' : 'max-h-0 overflow-hidden'}`}>
         {showComponent && children}
       </div>
     </div>

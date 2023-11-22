@@ -1,5 +1,5 @@
 import React, { MouseEventHandler, useState } from "react";
-import { useFieldArray, Control } from 'react-hook-form';
+import { useFieldArray, Control, UseFormSetValue, UseFormWatch } from 'react-hook-form';
 import {
     components,
     MultiValueGenericProps,
@@ -17,23 +17,19 @@ import {
     useSortable
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-
-import { EducationDetail, Position } from '../../../models/ResumeScan';
 import CreatableSelect from "react-select/creatable";
-
-type FormData = {
-    // Define the structure of your form data here
-    education: Array<EducationDetail>;
-    experience: Array<Position>;
-    skills: Array<{ label: string; value: string }>;
-    // Add other resume sections as needed
-};
+import { Education, ProfessionalExperience } from "../../../models/Resume";
+import { ResumeBuilderFormData } from "../../resumetest/resumetest-helper";
 
 type SkillField = { id: string, label: string; value: string }
 
+type ArrayFieldNames = 'education' | 'professional_experience' | 'skills';
+
 type ListInputProps = {
-    name: keyof FormData;
-    control: Control<FormData>;
+    name: ArrayFieldNames;
+    control: Control<ResumeBuilderFormData>;
+    setValue: UseFormSetValue<ResumeBuilderFormData>;
+    watch: UseFormWatch<ResumeBuilderFormData>;
 };
 
 const MultiValue = (props: MultiValueProps<SkillField>) => {
@@ -109,7 +105,7 @@ const MultiValueRemove = (props: MultiValueRemoveProps<SkillField>) => {
     );
 };
 
-const ListInput: React.FC<ListInputProps> = ({ name, control }) => {
+const ListInput: React.FC<ListInputProps> = ({ name, control, setValue, watch }) => {
     const { fields, append, remove, move } = useFieldArray({ control, name });
     const [inputValue, setInputValue] = useState('');
 
@@ -141,6 +137,48 @@ const ListInput: React.FC<ListInputProps> = ({ name, control }) => {
             return move(oldIndex, newIndex);
         }
     };
+
+    async function optimizeSkills() {
+        const data = watch('skills')
+    
+        if (!data) return;
+        const skillsArray = data.map(skill => skill.value)
+    
+        const messages = [
+            {
+                role: "system", content: "You are a professional resume writer experienced in curating and refining skill sets for job seekers."
+            },
+            {
+                role: "user", content: `Please review this list of skills and refine it for a professional resume. Focus on including only the most important and relevant skills, enhancing their wording for clarity and impact. Shorten the list as necessary, but ensure that key competencies are retained. Return the revised list in a JSON array format: ${JSON.stringify(skillsArray)}.`
+            }
+        ]
+    
+        try {
+            console.log('about to optimize resume section', data)
+            const response = await fetch('/api/openai/optimizeResume', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    messages
+                }),
+            });
+    
+            if (!response.ok) {
+                throw new Error(`Network response was not ok`);
+            }
+    
+            const skillsRaw = await response.json();
+    
+            const fixedSkills = skillsRaw.skills.map((skill: string) => ({ label: skill, value: skill }))
+    
+            console.log('optimizedData', fixedSkills)
+            setValue('skills', fixedSkills);
+        } catch (error) {
+            console.error(`Failed to optimize resume section: skills`, error);
+        }
+    }
 
     return (
         <DndContext modifiers={[restrictToParentElement]} onDragEnd={onSortEnd} onDragOver={handleDragOver}>

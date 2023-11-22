@@ -1,188 +1,161 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import ResumeSection from './ResumeSection';
-import { Position, EducationDetail } from '../../../models/ResumeScan';
-import ListInput from './ListInput';
-import { Skill, SkillsData } from '../../resumetest/resumetest-helper';
+import React, { useState } from 'react';
+import { Controller, FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import SingleInput from '../resumetest/ui/SingleInput';
 import dynamic from 'next/dynamic';
+import { Button } from '../Button';
+import { ResumeClass } from '../../../models/Resume';
+import { ResumeBuilderFormData } from '../../resumetest/resumetest-helper';
+import Section from '../resumetest/ui/Section';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent, } from '@dnd-kit/core';
+import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import SortableResumeSection from '../resumetest/ui/SortableResumeSection';
 
 const DynamicResumePDF = dynamic(() => import("./ResumePDF"), {
     loading: () => <p>Loading...</p>,
     ssr: false,
-    });
+});
 
+type SocialField = { id: string, name: string, url: string }
 
-type FormData = {
-    education: Array<EducationDetail>;
-    experience: Array<Position>;
-    skills: Array<{ label: string; value: string }>;
-    professionalSummary?: string;
-    objective?: string;
-    coverLetter?: string;
-    hobbies?: string;
-    patents?: string;
-    publications?: string;
-    speakingEngagements?: string;
-    name?: string;
-    telephone?: string;
-    emailAddress?: string;
-    location?: string;
-    // Add other resume sections as needed
-};
+const socialPlatforms = ['LinkedIn', 'GitHub', 'Twitter', 'Facebook', 'Instagram', 'Website', 'Blog']; // Add more platforms as needed
 
+const ResumeBuilder = ({ data }: { data: ResumeClass }) => {
+    const {
+        name,
+        title,
+        email,
+        phone,
+        social_links,
+        location,
+        summary,
+        skills,
+        professional_experience,
+        education
+    } = data
+    const [sections, setSections] = useState(['skills', 'experience', 'education']);
 
-interface ResumeBuilderProps {
-    education?: Array<EducationDetail>;
-    experience?: Array<Position>;
-    skills?: SkillsData;
-    professionalSummary?: string;
-    objective?: string;
-    hobbies?: string;
-    patents?: string;
-    publications?: string;
-    speakingEngagements?: string;
-    name?: string
-    telephone?: string;
-    emailAddress?: string;
-    location?: string;
-    // Add other resume sections as needed
-};
+    const defaultSkills = skills ? skills
+        .map(skill => ({ label: skill, value: skill })) : null
 
+    const socialLinksArray = Object.entries(social_links).map(([name, url]) => ({
+        name,
+        url
+    }));
 
-const ResumeBuilder = ({
-    education,
-    experience,
-    skills,
-    professionalSummary,
-    objective,
-    hobbies,
-    patents,
-    publications,
-    speakingEngagements,
-    name,
-    telephone,
-    emailAddress,
-    location
-}: ResumeBuilderProps) => {
-    const defaultSkills = skills?.Raw
-        .sort((a, b) => (b.MonthsExperience?.Value || 1) - (a.MonthsExperience?.Value || 1))
-        .map(skill => ({ label: skill.Name, value: skill.Name }))
-
-    const { register, handleSubmit, control, reset, watch } = useForm<FormData>({
+    const methods = useForm<ResumeBuilderFormData>({
         values: {
             education: education || [],
-            experience: experience || [],
-            skills: defaultSkills || []
+            professional_experience: professional_experience || [],
+            skills: defaultSkills || [],
+            email,
+            phone,
+            location,
+            summary,
+            title,
+            name,
+            social_links: socialLinksArray
         }
     });
 
-    return (<div className='flex flex-row'>
+    const { register, control, watch, setValue } = methods
+
+
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: "social_links"
+    });
+
+    const inputFields = [
+        { sectionName: 'name', initialValue: name },
+        { sectionName: 'title', initialValue: title },
+        { sectionName: 'phone', initialValue: phone },
+        { sectionName: 'email', initialValue: email },
+        { sectionName: 'location', initialValue: location },
+        { sectionName: 'summary', initialValue: summary, optimize: true }
+    ];
+
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor)
+    );
+
+    const handleDragEnd = (event: DragEndEvent) => {
+        const { active, over } = event;
+
+        if (!active || !over) return;
+
+        if (over && active.id !== over.id) {
+            setSections((sections) => {
+                const oldIndex = sections.indexOf(active.id.toString());
+                const newIndex = sections.indexOf(over.id.toString());
+                return arrayMove(sections, oldIndex, newIndex);
+            });
+        }
+    };
+
+
+    return (<div className='flex flex-row w-full'>
         <div className='w-1/2'>
-            <form>
-                <SingleInput
-                    sectionName="name"
-                    register={register}
-                    initialValue={name} // Replace with actual state/prop
-                />
+            <FormProvider {...methods}>
+                <form>
+                    <Section title={"Contact Information".toUpperCase()}>
+                        {inputFields.map((field, index) => (
+                            <SingleInput
+                                key={index}
+                                sectionName={field.sectionName}
+                                register={register}
+                                optimize={field.optimize}
+                            />
+                        ))}
 
-                <SingleInput
-                    sectionName="telephone"
-                    register={register}
-                    initialValue={telephone} // Replace with actual state/prop
-                />
+                        <h2 className="text-lg font-semibold mb-4">{'Social Links'.toUpperCase()}</h2>
+                        {fields.map((field: SocialField, index) => (
+                            <div key={field.id} className="flex items-center mb-2">
+                                <Controller
+                                    name={`social_links.${index}.name`}
+                                    control={control}
+                                    render={({ field }) => (
+                                        <select {...field} className="border p-1 rounded w-full" defaultValue={field.name || socialPlatforms[0]}>
+                                            {socialPlatforms.map((platform, idx) => (
+                                                <option key={idx} value={platform}>
+                                                    {platform}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    )}
+                                    defaultValue={field.name || socialPlatforms[0]} // Set default value
+                                />
+                                <Controller
+                                    name={`social_links.${index}.url`}
+                                    control={control}
+                                    render={({ field }) => <input {...field} placeholder="Social Link URL" className="border p-1 rounded w-full" />}
+                                />
+                                <button onClick={() => remove(index)} className="ml-2 text-red-500">Remove</button>
+                            </div>
+                        ))}
+                        <Button size='md' type="button" onClick={() => append({ name: socialPlatforms[0], url: '' })} className="text-blue-500">Add Social Link</Button>s
+                    </Section>
 
-                <SingleInput
-                    sectionName="emailAddress"
-                    register={register}
-                    initialValue={emailAddress} // Replace with actual state/prop
-                />
-
-                <SingleInput
-                    sectionName="location"
-                    register={register}
-                    initialValue={location} // Replace with actual state/prop
-                />
-
-                <SingleInput
-                    sectionName="professionalSummary"
-                    register={register}
-                    initialValue={professionalSummary} // Replace with actual state/prop
-                />
-
-                <SingleInput
-                    sectionName="objective"
-                    register={register}
-                    initialValue={objective} // Replace with actual state/prop
-                />
-
-                <SingleInput
-                    sectionName="hobbies"
-                    register={register}
-                    initialValue={hobbies} // Replace with actual state/prop
-                />
-
-                <SingleInput
-                    sectionName="patents"
-                    register={register}
-                    initialValue={patents} // Replace with actual state/prop
-                />
-
-                <SingleInput
-                    sectionName="publications"
-                    register={register}
-                    initialValue={publications} // Replace with actual state/prop
-                />
-
-                <SingleInput
-                    sectionName="speakingEngagements"
-                    register={register}
-                    initialValue={speakingEngagements} // Replace with actual state/prop
-                />
-
-
-                <h2>SKILLS</h2>
-                <ListInput
-                    name="skills"
-                    control={control}
-                />
-
-                <ResumeSection
-                    title="Experience"
-                    register={register}
-                    control={control}
-                    sectionName="experience"
-                    fieldsConfig={[
-                        { name: "Employer.Name.Raw", placeholder: "Employer Name", type: "text", group: "emp" },
-                        { name: "JobTitle.Raw", placeholder: "Job Title", type: "text", group: "emp" },
-                        { name: "StartDate.Date", placeholder: "Start Date", type: "date", group: "emp-date" },
-                        { name: "EndDate.Date", placeholder: "End Date", type: "date", group: "emp-date" },
-                        { name: "Description", placeholder: "Job Description", type: "textarea" },
-                        { name: "Bullets", placeholder: "Bullets", type: "bulletPoints" },
-                        // ... other fields as needed
-                    ]}
-                />
-
-                <ResumeSection
-                    title="Education"
-                    register={register}
-                    control={control}
-                    sectionName="education"
-                    fieldsConfig={[
-                        { name: "SchoolName.Raw", placeholder: "School Name", type: "text", group: "edu" },
-                        { name: "Degree.Name.Raw", placeholder: "Degree", type: "text", group: "edu" },
-                        { name: "GPA", placeholder: "GPA", type: "gpa", group: "edu" },
-                        { name: "StartDate.Date", placeholder: "Start Date", type: "date", group: "edu-date" },
-                        { name: "EndDate.Date", placeholder: "End Date", type: "date", group: "edu-date" },
-                        { name: "Text", placeholder: "Education Details", type: "textarea" }
-                        // ... other fields as needed
-                    ]}
-                />
-            </form>
+                    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                        <SortableContext items={sections} strategy={verticalListSortingStrategy}>
+                            {sections.map(section => 
+                            <SortableResumeSection
+                                key={section}
+                                id={section}
+                                name={section}
+                                control={control}
+                                register={register}
+                                setValue={setValue}
+                                watch={watch}
+                            />)}
+                        </SortableContext>
+                    </DndContext>
+                </form>
+            </FormProvider>
         </div>
         <div className='w-1/2'>
             <div className='sticky top-0 p-3'>
-                <DynamicResumePDF data={watch()} />
+                <DynamicResumePDF data={watch() } sections={sections}/>
             </div>
         </div>
     </div>);
