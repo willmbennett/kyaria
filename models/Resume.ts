@@ -45,6 +45,9 @@ class ProfessionalExperience {
     @prop({ default: true })
     public show?: boolean;
 
+    @prop()
+    public summary?: string;
+
     @prop({ type: () => [Responsibilities] })
     public responsibilities?: Responsibilities[];
 }
@@ -75,6 +78,95 @@ class Education {
 
     @prop()
     public institution?: string;
+
+    @prop()
+    public location?: string;
+
+    @prop()
+    public start_date?: string;
+
+    @prop()
+    public end_date?: string;
+
+    @prop({ default: true })
+    public show?: boolean;
+
+    @prop()
+    public summary?: string;
+
+    @prop({ type: () => [Details] })
+    public details?: Details[];
+}
+
+class Certification {
+    @prop()
+    public _id?: string;
+    
+    @prop()
+    public certification?: string;
+
+    @prop()
+    public provider?: string;
+
+    @prop()
+    public start_date?: string;
+
+    @prop()
+    public end_date?: string;
+
+    @prop({ default: true })
+    public show?: boolean;
+}
+
+class Award {
+    @prop()
+    public _id?: string;
+    
+    @prop()
+    public award?: string;
+
+    @prop()
+    public organization?: string;
+
+    @prop()
+    public date?: string;
+
+    @prop({ default: true })
+    public show?: boolean;
+}
+
+class Publication {
+    @prop()
+    public _id?: string;
+    
+    @prop()
+    public publication?: string;
+
+    @prop()
+    public publisher?: string;
+
+    @prop()
+    public date?: string;
+
+    @prop({ default: true })
+    public show?: boolean;
+}
+
+class Project {
+    @prop()
+    public _id?: string;
+    
+    @prop()
+    public name: string;
+
+    @prop()
+    public organization: string;
+
+    @prop()
+    public Link?: string;
+
+    @prop()
+    public LinkTitle?: string;
 
     @prop()
     public location?: string;
@@ -129,11 +221,26 @@ class ResumeClass {
     @prop({ type: () => [String] })
     public skills?: string[];
 
+    @prop({ type: () => [String] })
+    public interests?: string[];
+
     @prop({ type: () => [ProfessionalExperience] })
     public professional_experience?: ProfessionalExperience[];
 
     @prop({ type: () => [Education] })
     public education?: Education[];
+
+    @prop({ type: () => [Project] })
+    public projects?: Project[];
+
+    @prop({ type: () => [Publication] })
+    public publications?: Publication[];
+
+    @prop({ type: () => [Certification] })
+    public certifications?: Certification[];
+
+    @prop({ type: () => [Award] })
+    public awards?: Award[];
 
     @prop({ required: true})
     public userId!: string;
@@ -142,4 +249,4 @@ class ResumeClass {
 }
 
 const ResumeModel = getModelForClass(ResumeClass);
-export { ResumeModel, ResumeClass, ProfessionalExperience, Responsibilities, Education };
+export { ResumeModel, ResumeClass, ProfessionalExperience, Responsibilities, Education, Project, Publication, Award, Certification };

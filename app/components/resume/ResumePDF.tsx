@@ -1,7 +1,8 @@
 import React from 'react';
 import { Page, Text, View, Document, StyleSheet, PDFViewer, Link, Svg, Line } from '@react-pdf/renderer';
 import { ResumeBuilderFormData } from '../../resumetest/resumetest-helper';
-import { Education, ProfessionalExperience } from '../../../models/Resume';
+import { Award, Certification, Education, ProfessionalExperience, Project, Publication } from '../../../models/Resume';
+import { format, parse } from 'date-fns';
 // Create styles
 const styles = StyleSheet.create({
   page: {
@@ -37,6 +38,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 22,
     fontWeight: 'bold',
+    color: '#4A6274'
   },
   separator: {
     marginHorizontal: 5, // Adjust as needed for spacing
@@ -92,7 +94,18 @@ type ContactElement = {
 };
 
 const formatDate = (dateDetail: string | undefined) => {
-  return dateDetail;
+  if (dateDetail === 'present') {
+    return 'present';
+  }
+  if (dateDetail) {
+    try {
+      return format(parse(dateDetail, 'yyyy-MM-dd', new Date()), 'MM/dd/yyyy');
+    } catch (error) {
+      console.error('Invalid date format:', error);
+      return dateDetail; // or return a default/fallback value
+    }
+  }
+  return ''; // Handle undefined dateDetail
 };
 
 interface ResumePDFProps {
@@ -119,9 +132,14 @@ interface ListInputProps {
   skills: {
     label: string;
     value: string;
-}[];
-  professional_experience: ProfessionalExperience[]
-  education: Education[]
+  }[];
+  professional_experience: ProfessionalExperience[];
+  education: Education[];
+  projects: Project[];
+    publications?: Publication[];
+    awards?: Award[];
+    certifications?: Certification[];
+    interests: { label: string; value: string }[];
 }
 
 const renderField = ({ id, skills, professional_experience, education }: ListInputProps) => {
@@ -135,7 +153,7 @@ const renderField = ({ id, skills, professional_experience, education }: ListInp
           <Text style={styles.text}>{skills.map(skill => skill.value).join(', ')}</Text>
         </View>
       );
-    case 'experience':
+    case 'professional_experience':
       return (
         <View>
           <Text style={styles.sectionHeader}>{'Professional Experience'.toUpperCase()}</Text>
@@ -206,7 +224,12 @@ const ResumePDF: React.FC<ResumePDFProps> = ({ data, sections }) => {
     summary,
     skills,
     professional_experience,
-    education
+    education,
+    interests,
+    projects,
+    certifications,
+    awards,
+    publications
   } = data
 
   const contactElements: ContactElement[] = [];
@@ -260,8 +283,19 @@ const ResumePDF: React.FC<ResumePDFProps> = ({ data, sections }) => {
             )
             : <View></View>
           }
-          
-          {sections.map(section => renderField({ id: section, skills, professional_experience, education }))}
+
+          {sections.map(section => renderField(
+            {
+              id: section,
+              skills,
+              professional_experience,
+              education,
+              interests,
+              projects,
+              certifications,
+              awards,
+              publications
+            }))}
         </Page>
       </Document>
     </PDFViewer>

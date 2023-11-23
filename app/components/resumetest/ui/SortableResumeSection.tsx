@@ -2,58 +2,34 @@ import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Control, UseFormRegister, UseFormSetValue, UseFormWatch } from 'react-hook-form';
-import { ResumeBuilderFormData } from '../../../resumetest/resumetest-helper';
+import { ResumeBuilderFormData, sectionConfigs } from '../../../resumetest/resumetest-helper';
 import ResumeSection from '../../resume/ResumeSection';
 import Section from './Section';
 import ListInput from '../../resume/ListInput';
+import { Button } from '../../Button';
+
 
 const renderField = ({ id, name, control, register, setValue, watch }: ListInputProps) => {
 
-    switch (id) {
-        case 'skills':
+    const sectionConfig = sectionConfigs.find(config => config.id === id);
+    switch (sectionConfig?.sectionType) {
+        case 'list':
             return (
                 <ListInput
-                    name="skills"
+                    name={name}
                     control={control}
                     setValue={setValue}
                     watch={watch}
                 />
             );
-        case 'experience':
+        case 'section':
             return (
                 <ResumeSection
-                    title="Experience"
+                    title={sectionConfig.title || ''}
                     register={register}
                     control={control}
-                    sectionName="professional_experience"
-                    fieldsConfig={[
-                        { name: "company", placeholder: "Employer Name", type: "text", group: "emp" },
-                        { name: "title", placeholder: "Job Title", type: "text", group: "emp" },
-                        { name: "location", placeholder: "Location", type: "text" },
-                        { name: "start_date", placeholder: "Start Date", type: "date", group: "emp-date" },
-                        { name: "end_date", placeholder: "End Date", type: "date", group: "emp-date" },
-                        { name: "responsibilities", placeholder: "Bullets", type: "bulletPoints" },
-                        // ... other fields as needed
-                    ]}
-                />
-            );
-        case 'education':
-            return (
-                <ResumeSection
-                    title="Education"
-                    register={register}
-                    control={control}
-                    sectionName="education"
-                    fieldsConfig={[
-                        { name: "institution", placeholder: "School Name", type: "text", group: "edu" },
-                        { name: "degree", placeholder: "Degree", type: "text", group: "edu" },
-                        { name: "location", placeholder: "Location", type: "text" },
-                        { name: "GPA", placeholder: "GPA", type: "gpa" },
-                        { name: "start_date", placeholder: "Start Date", type: "date", group: "edu-date" },
-                        { name: "end_date", placeholder: "End Date", type: "date", group: "edu-date" },
-                        { name: "details", placeholder: "Bullets", type: "bulletPoints" },
-                        // ... other fields as needed
-                    ]}
+                    sectionName={sectionConfig.sectionName || ''}
+                    fieldsConfig={sectionConfig.fieldsConfig || [{ name: "misc", placeholder: "Add additional information", type: "textarea" }]}
                 />
             );
         default:
@@ -63,7 +39,7 @@ const renderField = ({ id, name, control, register, setValue, watch }: ListInput
 
 type ListInputProps = {
     id: string;
-    name: string;
+    name: "social_links" | "skills" | "professional_experience" | "education" | "projects" | 'awards' | 'publications' | 'certifications' | 'interests';
     control: Control<ResumeBuilderFormData>;
     register: UseFormRegister<ResumeBuilderFormData>;
     setValue: UseFormSetValue<ResumeBuilderFormData>;
@@ -95,7 +71,6 @@ function SortableResumeSection({ id, name, control, register, setValue, watch }:
                     {renderField({ id, name, control, register, setValue, watch })}
                 </Section>
             </div>
-
         </div>
     );
 }

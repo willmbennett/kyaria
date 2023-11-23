@@ -16,6 +16,7 @@ const DynamicResumePDF = dynamic(() => import("./ResumePDF"), {
 });
 
 type SocialField = { id: string, name: string, url: string }
+type sectionOptions = "social_links" | "skills" | "professional_experience" | "education" | "projects" | 'awards' | 'publications' | 'certifications' | 'interests'
 
 const socialPlatforms = ['LinkedIn', 'GitHub', 'Twitter', 'Facebook', 'Instagram', 'Website', 'Blog']; // Add more platforms as needed
 
@@ -30,12 +31,30 @@ const ResumeBuilder = ({ data }: { data: ResumeClass }) => {
         summary,
         skills,
         professional_experience,
-        education
+        education,
+        projects,
+        interests
     } = data
-    const [sections, setSections] = useState(['skills', 'experience', 'education']);
+
+    const resumeSections: sectionOptions[] = [
+        'skills', 
+        'professional_experience', 
+        'education',
+        'projects',
+        'awards',
+        'publications',
+        'certifications',
+        'interests'
+    ]
+
+    const [sections, setSections] = useState<sectionOptions[]>(resumeSections);
 
     const defaultSkills = skills ? skills
         .map(skill => ({ label: skill, value: skill })) : null
+
+        const defaultInterests = interests ? interests
+        .map(interest => ({ label: interest, value: interest })) : null
+
 
     const socialLinksArray = Object.entries(social_links).map(([name, url]) => ({
         name,
@@ -47,12 +66,14 @@ const ResumeBuilder = ({ data }: { data: ResumeClass }) => {
             education: education || [],
             professional_experience: professional_experience || [],
             skills: defaultSkills || [],
+            projects: projects || [],
             email,
             phone,
             location,
             summary,
             title,
             name,
+            interests: defaultInterests || [],
             social_links: socialLinksArray
         }
     });
@@ -86,8 +107,8 @@ const ResumeBuilder = ({ data }: { data: ResumeClass }) => {
 
         if (over && active.id !== over.id) {
             setSections((sections) => {
-                const oldIndex = sections.indexOf(active.id.toString());
-                const newIndex = sections.indexOf(over.id.toString());
+                const oldIndex = sections.indexOf(active.id.toString() as sectionOptions);
+                const newIndex = sections.indexOf(over.id.toString() as sectionOptions);
                 return arrayMove(sections, oldIndex, newIndex);
             });
         }
@@ -138,9 +159,9 @@ const ResumeBuilder = ({ data }: { data: ResumeClass }) => {
 
                     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
                         <SortableContext items={sections} strategy={verticalListSortingStrategy}>
-                            {sections.map(section => 
+                            {sections.map((section: sectionOptions, idx: number)  => 
                             <SortableResumeSection
-                                key={section}
+                                key={idx}
                                 id={section}
                                 name={section}
                                 control={control}

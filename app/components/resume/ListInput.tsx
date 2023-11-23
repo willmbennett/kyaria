@@ -18,12 +18,12 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import CreatableSelect from "react-select/creatable";
-import { Education, ProfessionalExperience } from "../../../models/Resume";
 import { ResumeBuilderFormData } from "../../resumetest/resumetest-helper";
+import { Button } from "../Button";
 
 type SkillField = { id: string, label: string; value: string }
 
-type ArrayFieldNames = 'education' | 'professional_experience' | 'skills';
+type ArrayFieldNames = "social_links" | "skills" | "professional_experience" | "education" | "projects" | 'awards' | 'publications' | 'certifications' | 'interests';
 
 type ListInputProps = {
     name: ArrayFieldNames;
@@ -200,6 +200,7 @@ const ListInput: React.FC<ListInputProps> = ({ name, control, setValue, watch })
                     closeMenuOnSelect={false}
                     menuIsOpen={false}
                 />
+                <Button type="button" onClick={optimizeSkills} size="md">Optimize</Button>
             </SortableContext>
         </DndContext>
     );
