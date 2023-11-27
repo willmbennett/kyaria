@@ -14,7 +14,8 @@ import { LoadingComponent } from './ui/LoadingComponent';
 import { PDFViewer } from './ui/PDFViewer';
 import { handleFormSubmit, useDocumentLoadSuccess, useFileHandler } from '../../../lib/hooks/resume-test';
 import ResumeBuilder from '../resume/ResumeBuilder';
-import { transformParsedResume } from '../../resumetest/resumetest-helper';
+import { sampleResume, testResumeData, transformParsedResume } from '../../resumebuilder/resumetest-helper';
+import FeedbackAside from '../FeedbackAside';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
     'pdfjs-dist/build/pdf.worker.min.js',
@@ -67,7 +68,7 @@ export default function ResumeTest({ session, resumeScans }: { session: any, res
     return (
         <div className='py-4 flex flex-col lg:flex-row w-full justify-center'>
             {!editResume &&
-                <div>
+                <div className='md:w-1/4'>
                     <ResumeListMenu
                         resumeScans={resumeScans}
                         setResumeTest={setResumeTest}
@@ -104,23 +105,50 @@ export default function ResumeTest({ session, resumeScans }: { session: any, res
                     {loading && <LoadingComponent />}
                 </>}
                 {resumeTest && (<>
-                    <Button onClick={toggleEdit}>{editResume ? 'Switch Resume' : 'Edit Resume'}</Button>
                     {!editResume &&
-                        <ResumeDisplay
-                            resumeTest={resumeTest}
-                            session={session}
-                            resetForm={resetForm}
-                        />
+                        <>
+                            {session?.user?.id && (
+                                <div className='flex flex-row space-x-2 mb-5'>
+                                    {['651146ab26d83e7a6daac978', '650f813286f63a9d8c0080ee', '651a5e4d0010dd7e56b12a89', '6517481adbbff5b2580b0783', '6538286f7d90de2a9a045b95'].includes(session?.user?.id) &&
+                                        <Button size='md' onClick={toggleEdit}>Resume Builder</Button>
+                                    }
+                                    <Button onClick={resetForm} size='md'>
+                                        Upload Another Resume
+                                    </Button>
+                                </div>
+                            )}
+                            <h2 className="sm:text-4xl text-2xl font-bold text-slate-900 mb-8">
+                                {session?.user?.id ? 'Output' : 'Demo Output'}
+                            </h2>
+                            <ResumeDisplay
+                                resumeTest={resumeTest}
+                            />
+                        </>
                     }
-                    {editResume &&
-                        <ResumeBuilder
-                            data={transformParsedResume(resumeTest)}
-                        />
+                    {editResume && (
+                        <>
 
-                    }
+                            <Button size='md' onClick={toggleEdit}>Switch Resume</Button>
+                            {/*['development', 'preview'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '') ?
+                                <ResumeBuilder
+                                    data={sampleResume}
+                                /> :
+                                <ResumeBuilder
+                                    data={transformParsedResume(resumeTest)}
+                    />*/}
+                            <ResumeBuilder
+                                data={transformParsedResume(resumeTest)}
+                            />
+                        </>
+                    )}
                 </>
                 )}
             </div>
+            {!editResume &&
+                <div>
+                    <FeedbackAside />
+                </div>
+            }
         </div>
     );
 }

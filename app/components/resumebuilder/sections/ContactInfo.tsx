@@ -1,5 +1,5 @@
 import React from 'react';
-import { ContactInformation } from '../../../resumetest/resumetest-helper';
+import { ContactInformation } from '../../../resumebuilder/resumetest-helper';
 
 interface ContactInformationProps {
     data: ContactInformation

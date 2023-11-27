@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { ResumeScanDataClass } from '../../models/ResumeScan';
-import { createResumeScanAction } from '../../app/resumetest/_action';
+import { createResumeScanAction } from '../../app/resumebuilder/_action';
 
 type PDFFile = File | null;
 

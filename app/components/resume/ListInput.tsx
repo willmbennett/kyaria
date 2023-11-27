@@ -18,12 +18,12 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import CreatableSelect from "react-select/creatable";
-import { ResumeBuilderFormData } from "../../resumetest/resumetest-helper";
+import { ResumeBuilderFormData } from "../../resumebuilder/resumetest-helper";
 import { Button } from "../Button";
 
 type SkillField = { id: string, label: string; value: string }
 
-type ArrayFieldNames = "social_links" | "skills" | "professional_experience" | "education" | "projects" | 'awards' | 'publications' | 'certifications' | 'interests';
+type ArrayFieldNames = "social_links" | "skills" | "professional_experience" | "education" | "projects" | 'awards' | 'publications' | 'certifications' | 'interests' | 'volunteering';
 
 type ListInputProps = {
     name: ArrayFieldNames;

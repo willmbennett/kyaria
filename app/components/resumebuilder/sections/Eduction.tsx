@@ -1,5 +1,5 @@
 import React from 'react';
-import { Education } from '../../../resumetest/resumetest-helper';
+import { Education } from '../../../resumebuilder/resumetest-helper';
 
 interface EducationProps {
     data: Education;

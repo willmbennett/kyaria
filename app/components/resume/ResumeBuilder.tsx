@@ -1,22 +1,27 @@
+'use'
 import React, { useState } from 'react';
 import { Controller, FormProvider, useFieldArray, useForm } from 'react-hook-form';
-import SingleInput from '../resumetest/ui/SingleInput';
+import SingleInput from '../resumebuilder/ui/SingleInput';
 import dynamic from 'next/dynamic';
 import { Button } from '../Button';
 import { ResumeClass } from '../../../models/Resume';
-import { ResumeBuilderFormData } from '../../resumetest/resumetest-helper';
-import Section from '../resumetest/ui/Section';
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent, } from '@dnd-kit/core';
+import { ResumeBuilderFormData } from '../../resumebuilder/resumetest-helper';
+import Section from '../resumebuilder/ui/Section';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent, DragOverEvent, } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import SortableResumeSection from '../resumetest/ui/SortableResumeSection';
 
 const DynamicResumePDF = dynamic(() => import("./ResumePDF"), {
-    loading: () => <p>Loading...</p>,
+    loading: () => <p>Loading Resume...</p>,
     ssr: false,
 });
 
+const SortableResumeSection = dynamic(
+    () => import('../resumebuilder/ui/SortableResumeSection'),
+    { ssr: false }
+);
+
 type SocialField = { id: string, name: string, url: string }
-type sectionOptions = "social_links" | "skills" | "professional_experience" | "education" | "projects" | 'awards' | 'publications' | 'certifications' | 'interests'
+type sectionOptions = "social_links" | "skills" | "professional_experience" | "education" | "projects" | 'awards' | 'publications' | 'certifications' | 'interests' | 'volunteering'
 
 const socialPlatforms = ['LinkedIn', 'GitHub', 'Twitter', 'Facebook', 'Instagram', 'Website', 'Blog']; // Add more platforms as needed
 
@@ -33,17 +38,22 @@ const ResumeBuilder = ({ data }: { data: ResumeClass }) => {
         professional_experience,
         education,
         projects,
-        interests
+        interests,
+        certifications,
+        publications,
+        awards,
+        volunteering
     } = data
 
     const resumeSections: sectionOptions[] = [
-        'skills', 
-        'professional_experience', 
+        'skills',
+        'professional_experience',
         'education',
         'projects',
         'awards',
         'publications',
         'certifications',
+        'volunteering',
         'interests'
     ]
 
@@ -52,7 +62,7 @@ const ResumeBuilder = ({ data }: { data: ResumeClass }) => {
     const defaultSkills = skills ? skills
         .map(skill => ({ label: skill, value: skill })) : null
 
-        const defaultInterests = interests ? interests
+    const defaultInterests = interests ? interests
         .map(interest => ({ label: interest, value: interest })) : null
 
 
@@ -74,7 +84,11 @@ const ResumeBuilder = ({ data }: { data: ResumeClass }) => {
             title,
             name,
             interests: defaultInterests || [],
-            social_links: socialLinksArray
+            social_links: socialLinksArray,
+            certifications,
+            publications,
+            awards,
+            volunteering: volunteering || []
         }
     });
 
@@ -159,16 +173,16 @@ const ResumeBuilder = ({ data }: { data: ResumeClass }) => {
 
                     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
                         <SortableContext items={sections} strategy={verticalListSortingStrategy}>
-                            {sections.map((section: sectionOptions, idx: number)  => 
-                            <SortableResumeSection
-                                key={idx}
-                                id={section}
-                                name={section}
-                                control={control}
-                                register={register}
-                                setValue={setValue}
-                                watch={watch}
-                            />)}
+                            {sections.map((section: sectionOptions, idx: number) =>
+                                <SortableResumeSection
+                                    key={idx}
+                                    id={section}
+                                    name={section}
+                                    control={control}
+                                    register={register}
+                                    setValue={setValue}
+                                    watch={watch}
+                                />)}
                         </SortableContext>
                     </DndContext>
                 </form>
@@ -176,7 +190,7 @@ const ResumeBuilder = ({ data }: { data: ResumeClass }) => {
         </div>
         <div className='w-1/2'>
             <div className='sticky top-0 p-3'>
-                <DynamicResumePDF data={watch() } sections={sections}/>
+                <DynamicResumePDF key={sections.join('-')} data={watch()} sections={sections} />
             </div>
         </div>
     </div>);

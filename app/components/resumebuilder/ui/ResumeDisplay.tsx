@@ -14,26 +14,15 @@ import Section from './Section';
 
 type ResumeDisplayProps = {
     resumeTest: ResumeScanDataClass | null;
-    session: any; // Replace with your session type
-    resetForm: () => void;
 };
 
-const ResumeDisplay: React.FC<ResumeDisplayProps> = ({ resumeTest, session, resetForm }) => {
+const ResumeDisplay: React.FC<ResumeDisplayProps> = ({ resumeTest }) => {
     if (!resumeTest) {
         return null;
     }
 
     return (
         <div className='w-full my-3'>
-            {session?.user?.id && (
-                <Button onClick={resetForm} size='md' className='my-3'>
-                    Upload Another Resume
-                </Button>
-            )}
-
-            <h2 className="sm:text-4xl text-2xl font-bold text-slate-900 mb-8">
-                {session?.user?.id ? 'Output' : 'Demo Output'}
-            </h2>
 
             {/* Resume Quality Section */}
             {resumeTest.ResumeMetadata && resumeTest.ResumeMetadata.ResumeQuality && (

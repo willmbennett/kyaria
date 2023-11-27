@@ -184,6 +184,35 @@ class Project {
     public details?: Details[];
 }
 
+class Volunteering {
+    @prop()
+    public _id?: string;
+    
+    @prop()
+    public involvement: string;
+
+    @prop()
+    public organization: string;
+
+    @prop()
+    public location?: string;
+
+    @prop()
+    public start_date?: string;
+
+    @prop()
+    public end_date?: string;
+
+    @prop({ default: true })
+    public show?: boolean;
+
+    @prop()
+    public summary?: string;
+
+    @prop({ type: () => [Details] })
+    public details?: Details[];
+}
+
 @ModelOptions({
     schemaOptions: {
         versionKey: false,
@@ -239,6 +268,9 @@ class ResumeClass {
     @prop({ type: () => [Certification] })
     public certifications?: Certification[];
 
+    @prop({ type: () => [Volunteering] })
+    public volunteering?: Volunteering[];
+
     @prop({ type: () => [Award] })
     public awards?: Award[];
 
@@ -249,4 +281,4 @@ class ResumeClass {
 }
 
 const ResumeModel = getModelForClass(ResumeClass);
-export { ResumeModel, ResumeClass, ProfessionalExperience, Responsibilities, Education, Project, Publication, Award, Certification };
+export { ResumeModel, ResumeClass, ProfessionalExperience, Responsibilities, Education, Project, Publication, Award, Certification, Volunteering };

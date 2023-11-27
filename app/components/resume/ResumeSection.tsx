@@ -1,7 +1,7 @@
 import React from 'react';
 import { UseFormRegister, Control, useFieldArray } from 'react-hook-form';
-import BulletPointsField from '../resumetest/ui/BulletPointsField';
-import GPAField from '../resumetest/ui/GPAField';
+import BulletPointsField from '../resumebuilder/ui/BulletPointsField';
+import GPAField from '../resumebuilder/ui/GPAField';
 import InputField from './InputField';
 import TextareaAutosize from 'react-textarea-autosize';
 

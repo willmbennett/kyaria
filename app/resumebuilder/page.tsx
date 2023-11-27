@@ -1,10 +1,9 @@
-import ResumeTest from "../components/resumetest/ResumeTest";
+import ResumeTest from "../components/resumebuilder/ResumeTest";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../lib/auth";
 import { getResumeScans } from "../../lib/resumescan-db";
 import Await from "../jobs/await";
 import { ResumeScanDataClass } from "../../models/ResumeScan";
-import FeedbackAside from "../components/FeedbackAside";
 
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions);
@@ -18,9 +17,6 @@ export default async function ProfilePage() {
         <Await promise={promise}>
           {({ resumeScans }: { resumeScans: ResumeScanDataClass[] }) => <ResumeTest session={session} resumeScans={resumeScans} />}
         </Await>
-      </div>
-      <div>
-        <FeedbackAside />
       </div>
     </div>
   );
