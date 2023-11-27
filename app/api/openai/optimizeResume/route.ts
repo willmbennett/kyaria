@@ -30,12 +30,11 @@ export async function POST(
         // Process the response from OpenAI and format it as needed
         const optimizedData = completion.choices[0].message.content;
         console.log("optimizedData", optimizedData)
-        if (!optimizedData) {
-            return NextResponse.json({ error: 'Failed to fetch data from the Diffbot API.' }, { status: 400 });
-        }
         if (optimizedData) {
             const parsedData = JSON.parse(optimizedData);
             return NextResponse.json(parsedData, { status: 200 });
+        } else {
+            return NextResponse.json({ error: 'Failed to optimize the data.' }, { status: 400 });
         }
 
     } catch (error) {
