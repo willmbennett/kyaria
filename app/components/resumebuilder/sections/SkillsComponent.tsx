@@ -1,5 +1,5 @@
 import React from 'react';
-import { SkillsData } from '../../../resumebuilder/resumetest-helper';
+import { SkillsData } from '../../../../models/ResumeScan';
 
 interface SkillsProps {
     data: SkillsData;

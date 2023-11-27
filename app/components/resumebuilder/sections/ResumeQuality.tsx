@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { ResumeQuality } from '../../../resumebuilder/resumetest-helper';
+import { ResumeQuality } from '../../../../models/ResumeScan';
 
 interface Props {
     data: ResumeQuality[];
