@@ -30,7 +30,7 @@ const navigation = {
   ],
   solutions: [
     { name: 'Job Board', href: '/board' },
-    { name: 'Resume Tester', href: '/resumetest' },
+    { name: 'Resume Tester', href: '/resumebuilder' },
     { name: 'Jobs', href: '/jobs' },
     { name: 'Virtual Career Coach (coming soon)', href: '/' },
   ],

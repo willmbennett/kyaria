@@ -19,7 +19,7 @@ const links = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
   { label: 'Jobs', href: '/jobs' },
-  { label: 'Resume Tester', href: '/resumetest' },
+  { label: 'Resume Builder', href: '/resumebuilder' },
   /*{ label: 'Pricing', href: '/pricing' },*/
   /*{ label: 'Contact', href: '/contact' },*/
 ]
@@ -43,7 +43,7 @@ export function Header() {
     { label: 'Profile', href: `/profile/${session?.user?.id}` },
     { label: 'Board', href: '/board' },
     { label: 'Jobs', href: '/jobs' },
-    { label: 'Resume Tester', href: '/resumetest' },
+    { label: 'Resume Builder', href: '/resumebuilder' },
     /*{ label: 'Pricing', href: '/pricing' },*/
     /*{ label: 'Contact', href: '/contact' },*/
   ]

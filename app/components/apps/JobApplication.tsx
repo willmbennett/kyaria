@@ -1,20 +1,20 @@
 'use client'
 import JobMenu from './JobMenu'
-import JobDescription from './components/pages/JobDescription'
+import JobDescription from './pages/JobDescription'
 import { useEffect, useState } from 'react';
-import CoverLetter from './components/pages/CoverLetter';
-import Resume from './components/pages/Resume';
-import Experience from './components/pages/Experience';
-import Emails from './components/pages/Emails';
-import Story from './components/pages/Story';
+import CoverLetter from './pages/CoverLetter';
+import Resume from './pages/Resume';
+import Experience from './pages/Experience';
+import Emails from './pages/Emails';
+import Story from './pages/Story';
 import { stripObject } from '../../apps/[id]/app-helper';
 import { AppClass } from '../../../models/App';
 import { ResumeClass } from '../../../models/Resume';
 import { JobClass } from '../../../models/Job';
 import { ProfileClass } from '../../../models/Profile';
-import MockInterview from './components/pages/MockInterview';
-import ProgressBar from './components/ProgressBar';
-import Networking from './components/pages/Networking';
+import MockInterview from './pages/MockInterview';
+import ProgressBar from './ui/ProgressBar';
+import Networking from './pages/Networking';
 
 type ApplicationState = 'Research' | 'Phone Screen' | 'Interviewing' | 'Post-Offer';
 
