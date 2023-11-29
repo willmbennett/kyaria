@@ -127,7 +127,7 @@ export default function ResumeTest({ session, resumeScans }: { session: any, res
                     }
                     {editResume && (
                         <>
-                            {['development', 'preview'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '') ?
+                            {['development'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '') ?
                                 <ResumeBuilder
                                     data={sampleResume}
                                     toggleEdit={toggleEdit}
