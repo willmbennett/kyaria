@@ -1,5 +1,4 @@
 "use server";
-
 import { createResumeScan } from "../../lib/resumescan-db";
 import { revalidatePath } from "next/cache";
 

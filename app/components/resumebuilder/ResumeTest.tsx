@@ -127,18 +127,19 @@ export default function ResumeTest({ session, resumeScans }: { session: any, res
                     }
                     {editResume && (
                         <>
-
-                            <Button size='md' onClick={toggleEdit}>Switch Resume</Button>
-                            {/*['development', 'preview'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '') ?
+                            {['development', 'preview'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '') ?
                                 <ResumeBuilder
                                     data={sampleResume}
+                                    toggleEdit={toggleEdit}
                                 /> :
                                 <ResumeBuilder
                                     data={transformParsedResume(resumeTest)}
-                    />*/}
-                            <ResumeBuilder
+                                    toggleEdit={toggleEdit}
+                                />}
+                            {/*<ResumeBuilder
                                 data={transformParsedResume(resumeTest)}
-                            />
+                                    toggleEdit={toggleEdit}
+                    />*/}
                         </>
                     )}
                 </>

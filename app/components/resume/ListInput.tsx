@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useState } from "react";
+import React, { KeyboardEventHandler, MouseEventHandler, useState } from "react";
 import { useFieldArray, Control, UseFormSetValue, UseFormWatch } from 'react-hook-form';
 import {
     components,
@@ -47,24 +47,23 @@ const MultiValue = (props: MultiValueProps<SkillField>) => {
     } = useSortable({
         id: props.data.id
     });
-    const style = {
+    const dynamicStyles = {
         transform: CSS.Transform.toString(transform),
         transition: transition || 'transform 0.2s ease',
-        cursor: 'grab',
-        backgroundColor: '#f2f2f2', // Light background color
-        border: '1px solid #d9d9d9', // Subtle border
-        borderRadius: '4px', // Rounded corners
-        padding: '5px 8px', // Padding inside the draggable item
-        margin: '2px', // Space around the item
-        boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.1)', // Slight shadow for depth
-        fontSize: '0.9em', // Font size, adjust as needed
     };
 
     return (
-        <div style={style} ref={setNodeRef} {...attributes} {...listeners}>
+        <div
+            ref={setNodeRef}
+            {...attributes}
+            {...listeners}
+            style={dynamicStyles}
+            className="cursor-grab bg-gray-200 border border-slate-300 rounded px-2 py-1 m-0.5 shadow text-sm"
+        >
             <components.MultiValue {...props} innerProps={innerProps} />
         </div>
     );
+
 };
 
 
@@ -72,17 +71,9 @@ const Control = (props: ControlProps<SkillField>) => {
     const { setNodeRef, active } = useDroppable({
         id: "droppable"
     });
-    const style = {
-        padding: "5px 10px", // Adequate padding
-        margin: "5px 0", // Space around the control
-        backgroundColor: active ? "#F0F8FF" : "white", // Slight background change on active
-        transition: "border-color 0.2s, background-color 0.2s", // Smooth transitions
-        boxShadow: active ? "0px 0px 5px #B0E0E6" : "none", // Optional: shadow effect on focus
-        cursor: "pointer", // Cursor pointer on hover
-    };
 
     return (
-        <div ref={setNodeRef} style={style}>
+        <div ref={setNodeRef}>
             <components.Control {...props} />
         </div>
     );
@@ -108,11 +99,28 @@ const MultiValueRemove = (props: MultiValueRemoveProps<SkillField>) => {
 const ListInput: React.FC<ListInputProps> = ({ name, control, setValue, watch }) => {
     const { fields, append, remove, move } = useFieldArray({ control, name });
     const [inputValue, setInputValue] = useState('');
+    const data = watch('skills')
+    const skillsArray = data?.map(skill => skill.value)
 
     const onChange = (fields: OnChangeValue<SkillField, true>) => {
         remove();
         fields.forEach(item => append({ label: item.label, value: item.value }));
     }
+
+    const handleKeyDown: KeyboardEventHandler = (event) => {
+        if (!inputValue) return;
+        switch (event.key) {
+            case 'Enter':
+            case 'Tab':
+                // Check if the skill is unique before adding it
+                if (!fields.some((field) => (field as SkillField).value === inputValue)) {
+                    const newSkill = { label: inputValue, value: inputValue };
+                    append(newSkill)
+                }
+                setInputValue(''); // Clear the input value here
+                event.preventDefault();
+        }
+    };
 
     const handleDragOver = (event: DragOverEvent) => {
         const { over, active } = event;
@@ -120,7 +128,7 @@ const ListInput: React.FC<ListInputProps> = ({ name, control, setValue, watch })
             // Find the indices and reorder the list temporarily
             const oldIndex = fields.findIndex(item => item.id === active.id);
             const newIndex = fields.findIndex(item => item.id === over.id);
-            
+
             // Update the state with the new order
             return move(oldIndex, newIndex);
         }
@@ -139,11 +147,9 @@ const ListInput: React.FC<ListInputProps> = ({ name, control, setValue, watch })
     };
 
     async function optimizeSkills() {
-        const data = watch('skills')
-    
+
         if (!data) return;
-        const skillsArray = data.map(skill => skill.value)
-    
+
         const messages = [
             {
                 role: "system", content: "You are a professional resume writer experienced in curating and refining skill sets for job seekers."
@@ -152,7 +158,7 @@ const ListInput: React.FC<ListInputProps> = ({ name, control, setValue, watch })
                 role: "user", content: `Please review this list of skills and refine it for a professional resume. Focus on including only the most important and relevant skills, enhancing their wording for clarity and impact. Shorten the list as necessary, but ensure that key competencies are retained. Return the revised list in a JSON array format: ${JSON.stringify(skillsArray)}.`
             }
         ]
-    
+
         try {
             console.log('about to optimize resume section', data)
             const response = await fetch('/api/openai/optimizeResume', {
@@ -164,15 +170,15 @@ const ListInput: React.FC<ListInputProps> = ({ name, control, setValue, watch })
                     messages
                 }),
             });
-    
+
             if (!response.ok) {
                 throw new Error(`Network response was not ok`);
             }
-    
+
             const skillsRaw = await response.json();
-    
+
             const fixedSkills = skillsRaw.skills.map((skill: string) => ({ label: skill, value: skill }))
-    
+
             console.log('optimizedData', fixedSkills)
             setValue('skills', fixedSkills);
         } catch (error) {
@@ -181,28 +187,32 @@ const ListInput: React.FC<ListInputProps> = ({ name, control, setValue, watch })
     }
 
     return (
-        <DndContext modifiers={[restrictToParentElement]} onDragEnd={onSortEnd} onDragOver={handleDragOver}>
-            <SortableContext items={fields} strategy={rectSortingStrategy}>
-                <CreatableSelect
-                    isMulti
-                    value={fields.map(field => ({ id: field.id, label: (field as SkillField).value, value: (field as SkillField).value }))}
-                    onChange={onChange}
-                    inputValue={inputValue}
-                    components={{
-                        // @ts-ignore We're failing to provide a required index prop to SortableElement
-                        MultiValue,
-                        MultiValueContainer,
-                        MultiValueRemove,
-                        Control,
-                        DropdownIndicator: null,
-                    }}
-                    onInputChange={setInputValue}
-                    closeMenuOnSelect={false}
-                    menuIsOpen={false}
-                />
-                <Button type="button" onClick={optimizeSkills} size="md">Optimize</Button>
-            </SortableContext>
-        </DndContext>
+        <div className="p-4 bg-slate-100 border-slate-400 shadow rounded-md">
+            <DndContext modifiers={[restrictToParentElement]} onDragEnd={onSortEnd} onDragOver={handleDragOver}>
+                <SortableContext items={fields} strategy={rectSortingStrategy}>
+                    {name == 'skills' && <Button className="mb-3" type="button" onClick={optimizeSkills} size="md">Optimize</Button>}
+                    <CreatableSelect
+                        isMulti
+                        value={fields.map(field => ({ id: field.id, label: (field as SkillField).value, value: (field as SkillField).value }))}
+                        onChange={onChange}
+                        inputValue={inputValue}
+                        onInputChange={(newValue) => setInputValue(newValue)}
+                        onKeyDown={handleKeyDown}
+                        components={{
+                            // @ts-ignore We're failing to provide a required index prop to SortableElement
+                            MultiValue,
+                            MultiValueContainer,
+                            MultiValueRemove,
+                            Control,
+                            DropdownIndicator: null,
+                        }}
+                        closeMenuOnSelect={false}
+                        menuIsOpen={false}
+                    />
+
+                </SortableContext>
+            </DndContext>
+        </div>
     );
 };
 

@@ -1,4 +1,4 @@
-'use'
+'use client'
 import React, { useState } from 'react';
 import { Controller, FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import SingleInput from '../resumebuilder/ui/SingleInput';
@@ -7,10 +7,12 @@ import { Button } from '../Button';
 import { ResumeClass } from '../../../models/Resume';
 import { ResumeBuilderFormData } from '../../resumebuilder/resumetest-helper';
 import Section from '../resumebuilder/ui/Section';
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent, DragOverEvent, } from '@dnd-kit/core';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent, } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import ReactPDF from '@react-pdf/renderer';
+import ResumePDF from './ResumePDF';
 
-const DynamicResumePDF = dynamic(() => import("./ResumePDF"), {
+const DynamicResumePDF = dynamic(() => import('../resumebuilder/ui/CustomPDFViewer'), {
     loading: () => <p>Loading Resume...</p>,
     ssr: false,
 });
@@ -25,7 +27,7 @@ type sectionOptions = "social_links" | "skills" | "professional_experience" | "e
 
 const socialPlatforms = ['LinkedIn', 'GitHub', 'Twitter', 'Facebook', 'Instagram', 'Website', 'Blog']; // Add more platforms as needed
 
-const ResumeBuilder = ({ data }: { data: ResumeClass }) => {
+const ResumeBuilder = ({ data, toggleEdit }: { data: ResumeClass, toggleEdit: any }) => {
     const {
         name,
         title,
@@ -128,9 +130,30 @@ const ResumeBuilder = ({ data }: { data: ResumeClass }) => {
         }
     };
 
+    const generatePDF = async () => {
+        const name = watch('name')?.replace(' ', '_')
+        const blob = await ReactPDF.pdf((
+            <ResumePDF key={sections.join('-')} data={watch()} sections={sections} />
+        )).toBlob();
 
-    return (<div className='flex flex-row w-full'>
-        <div className='w-1/2'>
+        // Example: Save the blob as a file (or you can handle it as needed)
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${name}_Resume.pdf`;
+        link.click();
+    };
+
+
+    return (<div className='flex flex-row w-screen min-h-screen px-3'>
+        <div className='min-h-screen p-3'>
+            <div className='flex flex-col sticky top-0 space-y-2 border border-slate-200 shadow rounded-md p-3'>
+                <h1>Menu</h1>
+                <Button variant='ghost' size='md' onClick={toggleEdit}>Switch Resume</Button>
+                <Button size='md' onClick={generatePDF} className="mb-2">Download Resume</Button>
+            </div>
+        </div>
+        <div className='w-full'>
             <FormProvider {...methods}>
                 <form>
                     <Section title={"Contact Information".toUpperCase()}>
@@ -171,11 +194,11 @@ const ResumeBuilder = ({ data }: { data: ResumeClass }) => {
                         <Button size='md' type="button" onClick={() => append({ name: socialPlatforms[0], url: '' })} className="text-blue-500">Add Social Link</Button>s
                     </Section>
 
-                    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} >
                         <SortableContext items={sections} strategy={verticalListSortingStrategy}>
                             {sections.map((section: sectionOptions, idx: number) =>
                                 <SortableResumeSection
-                                    key={idx}
+                                    key={section}
                                     id={section}
                                     name={section}
                                     control={control}
@@ -188,10 +211,11 @@ const ResumeBuilder = ({ data }: { data: ResumeClass }) => {
                 </form>
             </FormProvider>
         </div>
-        <div className='w-1/2'>
-            <div className='sticky top-0 p-3'>
+        <div className='w-full h-full'>
+            <div className='sticky top-0 p-3 h-screen'>
                 <DynamicResumePDF key={sections.join('-')} data={watch()} sections={sections} />
             </div>
+
         </div>
     </div>);
 };
