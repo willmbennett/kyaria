@@ -73,7 +73,7 @@ const BulletPointItem = ({ name, index, control, onRemove }: BulletPointItemProp
                 )}
             />
             <div className='flex flex-row items-center'>
-                <Button variant='ghost' size='md' type="button" onClick={() => onRemove(index)} className="ml-2 text-red-500">Remove</Button>
+                <Button variant='secondary' size='md' type="button" onClick={() => onRemove(index)} className="ml-2 text-red-500">Remove</Button>
                 <Button size='md' type="button" onClick={optimizeClick} className="ml-2" disabled={loading}>Optimize</Button>
             </div>
         </div>
@@ -96,7 +96,7 @@ const BulletPointsField = ({ name, control }: Props) => {
                     onRemove={remove}
                 />
             ))}
-            <Button size='md' type="button" onClick={() => append({ content: '' })} className="mt-2 text-blue-500">Add Bullet Point</Button>
+            <Button size='md' type="button" onClick={() => append({ content: '' })}>Add Bullet Point</Button>
         </div>
     );
 };

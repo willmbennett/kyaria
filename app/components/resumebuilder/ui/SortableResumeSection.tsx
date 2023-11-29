@@ -29,6 +29,7 @@ const renderField = ({ id, name, control, register, setValue, watch }: ListInput
                     control={control}
                     sectionName={sectionConfig.sectionName || ''}
                     fieldsConfig={sectionConfig.fieldsConfig || [{ name: "misc", placeholder: "Add additional information", type: "textarea" }]}
+                    watch={watch}
                 />
             );
         default:
@@ -54,24 +55,13 @@ function SortableResumeSection({ id, name, control, register, setValue, watch }:
         setNodeRef,
         transform,
         transition,
+        isDragging
     } = useSortable({ id });
 
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
     };
-
-    const handleDragStart = () => {
-        setShowComponent(false);
-    };
-
-    const combinedListeners = {
-        ...listeners,
-        onDragStart: handleDragStart,
-        // Include other custom event handlers if needed
-    };
-    
-    
 
     return (
         <div className='flex flex-row items-top justify-center w-full h-full'>
@@ -92,10 +82,11 @@ function SortableResumeSection({ id, name, control, register, setValue, watch }:
                             <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
                         </svg>
                     </button>
-
-                    <div className={`transition-all ease-in-out duration-300 ${showComponent ? '' : 'max-h-0 overflow-hidden'}`}>
-                        {showComponent && renderField({ id, name, control, register, setValue, watch })}
-                    </div>
+                    {!isDragging &&
+                        <div className={`transition-all ease-in-out duration-300 ${showComponent ? '' : 'max-h-0 overflow-hidden'}`}>
+                            {showComponent && renderField({ id, name, control, register, setValue, watch })}
+                        </div>
+                    }
                 </div>
             </div>
         </div>

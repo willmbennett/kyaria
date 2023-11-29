@@ -1,5 +1,5 @@
 import React from 'react';
-import { Page, Text, View, Document, PDFViewer, Link, Svg, Line } from '@react-pdf/renderer';
+import { Page, Text, View, Document, Link } from '@react-pdf/renderer';
 import { ResumeBuilderFormData } from '../../resumebuilder/resumetest-helper';
 import { Award, Certification, Education, ProfessionalExperience, Project, Publication, Volunteering } from '../../../models/Resume';
 import { pdfstyles } from './styles';
@@ -23,20 +23,6 @@ interface ResumePDFProps {
   data: ResumeBuilderFormData;
   sections: string[]
 }
-
-const LineBreak = () => (
-  <View style={pdfstyles.lineBreak}>
-    <Svg height="5" width="100%">
-      <Line
-        x1="0"
-        y1="3"
-        x2="1000"
-        y2="3"
-        strokeWidth={2}
-        stroke="#4A6274"
-      />
-    </Svg>
-  </View>)
 
 interface ListInputProps {
   id: string
@@ -74,18 +60,18 @@ const renderField = (
       return (<>{interests && interests.length > 0 && <ListSection name={id} list={interests} />}</>);
     case 'professional_experience':
       return (<>{professional_experience && professional_experience.length > 0 && <ProfessionalExperienceSection professional_experience={professional_experience} />} </>);
+    case 'volunteering':
+      return (<>{volunteering && volunteering.length > 0 && <VolunteeringSection volunteering={volunteering} />}</>);
+    case 'education':
+      return (<>{education && education.length > 0 && <EducationSection education={education} />}</>);
+    case 'certifications':
+      return (<>{certifications && certifications.length > 0 && <CertificationSection certifications={certifications} />}</>);
     case 'projects':
       return (<>{projects && projects.length > 0 && <ProjectSection projects={projects} />}</>);
     case 'publications':
       return (<>{publications && publications.length > 0 && <PublicationSection publications={publications} />}</>);
-    case 'certifications':
-      return (<>{certifications && certifications.length > 0 && <CertificationSection certifications={certifications} />}</>);
     case 'awards':
       return (<>{awards && awards.length > 0 && <AwardSection awards={awards} />}</>);
-    case 'education':
-      return (<>{education && education.length > 0 && <EducationSection education={education} />}</>);
-    case 'volunteering':
-      return (<>{volunteering && volunteering.length > 0 && <VolunteeringSection volunteering={volunteering} />}</>);
     default:
       return null;
   }
@@ -129,57 +115,54 @@ const ResumePDF: React.FC<ResumePDFProps> = ({ data, sections }) => {
   });
 
   return (
-    <PDFViewer className="viewer border border-gray-300 rounded shadow-lg" style={{ width: '100%', height: '97vh' }}>
-      <Document>
-        <Page size="A4" style={pdfstyles.page}>
-          <View style={pdfstyles.header}>
-            <Text style={pdfstyles.name}>{name}</Text>
-            <View style={pdfstyles.contactView}>
-              {contactElements.map((element, index) => (
-                <React.Fragment key={index}>
-                  {index > 0 && <Text style={pdfstyles.separator}>|</Text>} {/* Separator */}
-                  {element.type === 'text' && (
-                    <Text style={pdfstyles.contactInfo}>{element.value}</Text>
-                  )}
-                  {element.type === 'link' && (
-                    <Link src={element.url || ''} style={pdfstyles.contactInfoLink}>
-                      {element.value}
-                    </Link>
-                  )}
-                </React.Fragment>
-              ))}
+    <Document>
+      <Page size="A4" style={pdfstyles.page}>
+        <View style={pdfstyles.header}>
+          <Text style={pdfstyles.name}>{name}</Text>
+          <View style={pdfstyles.contactView}>
+            {contactElements.map((element, index) => (
+              <React.Fragment key={index}>
+                {index > 0 && <Text style={pdfstyles.separator}>|</Text>} {/* Separator */}
+                {element.type === 'text' && (
+                  <Text style={pdfstyles.contactInfo}>{element.value}</Text>
+                )}
+                {element.type === 'link' && (
+                  <Link src={element.url || ''} style={pdfstyles.contactInfoLink}>
+                    {element.value}
+                  </Link>
+                )}
+              </React.Fragment>
+            ))}
+          </View>
+        </View>
+        {summary ?
+          (<View>
+            <Text style={pdfstyles.title}>{title?.toUpperCase()}</Text>
+            <View style={pdfstyles.entryContainer}>
+              <Text style={pdfstyles.text}>{summary}</Text>
             </View>
           </View>
-          {summary ?
-            (<View>
-              <Text style={pdfstyles.title}>{title?.toUpperCase()}</Text>
-              <View style={pdfstyles.entryContainer}>
-                <Text style={pdfstyles.text}>{summary}</Text>
-              </View>
-            </View>
-            )
-            : <View></View>
-          }
-          {sections.map((section, idx) =>
-            <View key={idx}>
-              {renderField(
-                {
-                  id: section,
-                  skills,
-                  professional_experience,
-                  education,
-                  interests,
-                  projects,
-                  certifications,
-                  awards,
-                  publications,
-                  volunteering
-                })}
-            </View>
-          )}
-        </Page>
-      </Document>
-    </PDFViewer>
+          )
+          : <View></View>
+        }
+        {sections.map((section, idx) =>
+          <View key={idx}>
+            {renderField({
+              id: section,
+              skills: section === 'skills' ? skills : undefined,
+              professional_experience: section === 'professional_experience' ? professional_experience : undefined,
+              education: section === 'education' ? education : undefined,
+              interests: section === 'interests' ? interests : undefined,
+              projects: section === 'projects' ? projects : undefined,
+              certifications: section === 'certifications' ? certifications : undefined,
+              awards: section === 'awards' ? awards : undefined,
+              publications: section === 'publications' ? publications : undefined,
+              volunteering: section === 'volunteering' ? volunteering : undefined,
+            })}
+          </View>
+        )}
+      </Page>
+    </Document>
   );
 };
 

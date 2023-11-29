@@ -42,6 +42,9 @@ class ProfessionalExperience {
     @prop()
     public end_date?: string;
 
+    @prop()
+    public current?: boolean;
+
     @prop({ default: true })
     public show?: boolean;
 
@@ -177,6 +180,9 @@ class Project {
     @prop()
     public end_date?: string;
 
+    @prop()
+    public current?: boolean;
+
     @prop({ default: true })
     public show?: boolean;
 
@@ -202,6 +208,9 @@ class Volunteering {
 
     @prop()
     public end_date?: string;
+
+    @prop()
+    public current?: boolean;
 
     @prop({ default: true })
     public show?: boolean;
