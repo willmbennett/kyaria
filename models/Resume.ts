@@ -186,6 +186,9 @@ class Project {
     @prop({ default: true })
     public show?: boolean;
 
+    @prop()
+    public summary?: string;
+
     @prop({ type: () => [Details] })
     public details?: Details[];
 }
@@ -290,4 +293,4 @@ class ResumeClass {
 }
 
 const ResumeModel = getModelForClass(ResumeClass);
-export { ResumeModel, ResumeClass, ProfessionalExperience, Responsibilities, Education, Project, Publication, Award, Certification, Volunteering };
+export { ResumeModel, ResumeClass, ProfessionalExperience, Responsibilities, Education, Project, Publication, Award, Certification, Volunteering, Details };

@@ -13,7 +13,7 @@ export const formatDate = (dateDetail: string | undefined) => {
         if (isToday(parsedDate)) {
             return 'PRESENT';
         }
-        else if(parsedDate > startOfToday()) {
+        else if (parsedDate > startOfToday()) {
             return 'EXPECTED ' + format(parsedDate, 'MM/yyyy');
         }
         return format(parsedDate, 'MM/yyyy');
@@ -43,7 +43,7 @@ export function transformParsedResume(sourceData: ResumeScanDataClass): ResumeCl
     }
 
     // Transform professional summary
-    transformedData.summary = sourceData.ProfessionalSummary || '';
+    transformedData.summary = sourceData.ProfessionalSummary?.replace(/\n/g, ' ') || '';
 
     // Transform education data
     if (sourceData.Education && sourceData.Education.EducationDetails) {
@@ -53,10 +53,17 @@ export function transformParsedResume(sourceData: ResumeScanDataClass): ResumeCl
             location: detail.Location ? (detail.Location.Municipality || detail.Location.CountryCode) : '',
             start_date: detail.StartDate ? detail.StartDate.Date : '',
             end_date: detail.EndDate ? detail.EndDate.Date : '',
-            details: detail.Text ? detail.Text.split('\n').map(text => ({
-                content: text.trim(),
-                detail: '' // Leaving empty as no equivalent field in source structure.
-            })) : [],
+            details: detail.Text ? detail.Text// Replace newlines not following a period with a space
+                .replace(/(?<!\.)\n/g, ' ')
+                // Then split by periods followed by newlines to get individual statements
+                .split(/\.\n/)
+                .map(text => text.trim() + '.') // Add the period back to each sentence
+                .filter(text => text !== '.')   // Filter out any empty entries
+                .map(text => ({
+                    content: text,
+                    detail: '' // Keeping this field as per your original structure
+                }))
+                : [],
         }));
     }
 
@@ -68,10 +75,19 @@ export function transformParsedResume(sourceData: ResumeScanDataClass): ResumeCl
             location: position.Employer && position.Employer.Location ? (position.Employer.Location.Municipality || position.Employer.Location.CountryCode) : '',
             start_date: position.StartDate ? position.StartDate.Date : '',
             end_date: position.EndDate ? position.EndDate.Date : '',
-            responsibilities: position.Description ? position.Description.split('\n').map(text => ({
-                content: text.trim(),
-                detail: '' // Leaving empty as no equivalent field in source structure.
-            })) : [],
+            responsibilities: position.Description
+                ? position.Description
+                    // Replace newlines not following a period with a space
+                    .replace(/(?<!\.)\n/g, ' ')
+                    // Then split by periods followed by newlines to get individual statements
+                    .split(/\.\n/)
+                    .map(text => text.trim() + '.') // Add the period back to each sentence
+                    .filter(text => text !== '.')   // Filter out any empty entries
+                    .map(text => ({
+                        content: text,
+                        detail: '' // Keeping this field as per your original structure
+                    }))
+                : [],
         }));
     }
 
@@ -132,6 +148,8 @@ export type FieldConfig = {
     placeholder: string;
     type: 'text' | 'textarea' | 'date' | 'gpa' | 'bulletPoints' | 'check';
     group?: string;
+    pdftype?: 'text' | 'textBold' | 'date' | 'startDate' | 'endDate' | 'gpa' | 'bulletPoints' | 'link';
+    pdfgroup?: string;
 };
 
 type ListSectionConfig = {
@@ -139,7 +157,7 @@ type ListSectionConfig = {
     sectionType: 'list';
 };
 
-type GeneralSectionConfig = {
+export type GeneralSectionConfig = {
     id: string;
     sectionType: 'section';
     title: string;
@@ -147,7 +165,7 @@ type GeneralSectionConfig = {
     fieldsConfig: FieldConfig[];
 };
 
-type SectionConfig = ListSectionConfig | GeneralSectionConfig;
+export type SectionConfig = ListSectionConfig | GeneralSectionConfig;
 
 
 export const sectionConfigs: SectionConfig[] = [
@@ -165,14 +183,14 @@ export const sectionConfigs: SectionConfig[] = [
         title: 'Experience',
         sectionName: 'professional_experience',
         fieldsConfig: [
-            { name: "company", placeholder: "Employer Name", type: "text", group: "emp" },
-            { name: "title", placeholder: "Job Title", type: "text", group: "emp" },
-            { name: "location", placeholder: "Location", type: "text" },
-            { name: "start_date", placeholder: "Start Date", type: "date", group: "date" },
-            { name: "end_date", placeholder: "End Date", type: "date", group: "date" },
+            { name: "company", placeholder: "Employer Name", type: "text", group: "emp", pdftype: "textBold", pdfgroup: "title" },
+            { name: "title", placeholder: "Job Title", type: "text", group: "emp", pdftype: "textBold", pdfgroup: "title" },
+            { name: "location", placeholder: "Location", type: "text", pdftype: "text", pdfgroup: "title" },
+            { name: "start_date", placeholder: "Start Date", type: "date", group: "date", pdftype: "startDate", pdfgroup: "title" },
+            { name: "end_date", placeholder: "End Date", type: "date", group: "date", pdftype: "endDate", pdfgroup: "title" },
             { name: "current", placeholder: "Is Current", type: "check", group: "date" },
-            { name: "summary", placeholder: "Summary", type: "textarea" },
-            { name: "responsibilities", placeholder: "Bullets", type: "bulletPoints" }
+            { name: "summary", placeholder: "Summary", type: "textarea", pdftype: "text", pdfgroup: "body" },
+            { name: "responsibilities", placeholder: "Bullets", type: "bulletPoints", pdftype: "bulletPoints", pdfgroup: "body" }
         ]
     },
     {
@@ -181,15 +199,16 @@ export const sectionConfigs: SectionConfig[] = [
         title: 'Projects',
         sectionName: 'projects',
         fieldsConfig: [
-            { name: "name", placeholder: "Project Name", type: "text", group: "org" },
-            { name: "organization", placeholder: "Organization", type: "text", group: "org" },
-            { name: "Link", placeholder: "Link URL", type: "text", group: "link" },
-            { name: "LinkTitle", placeholder: "Link Title", type: "text", group: "link" },
-            { name: "location", placeholder: "Location", type: "text" },
-            { name: "start_date", placeholder: "Start Date", type: "date", group: "date" },
-            { name: "end_date", placeholder: "End Date", type: "date", group: "date" },
+            { name: "name", placeholder: "Project Name", type: "text", group: "org", pdftype: "textBold", pdfgroup: "title" },
+            { name: "organization", placeholder: "Organization", type: "text", group: "org", pdftype: "textBold", pdfgroup: "title" },
+            { name: "Link", placeholder: "Link URL", type: "text", group: "link", pdftype: "link", pdfgroup: "title" },
+            { name: "LinkTitle", placeholder: "Link Title", type: "text", group: "link", pdfgroup: "title" },
+            { name: "location", placeholder: "Location", type: "text", pdftype: "text", pdfgroup: "title" },
+            { name: "start_date", placeholder: "Start Date", type: "date", group: "date", pdftype: "startDate", pdfgroup: "title" },
+            { name: "end_date", placeholder: "End Date", type: "date", group: "date", pdftype: "endDate", pdfgroup: "title" },
             { name: "current", placeholder: "Is Current", type: "check", group: "date" },
-            { name: "details", placeholder: "Bullets", type: "bulletPoints" }
+            { name: "summary", placeholder: "Summary", type: "textarea", pdftype: "text", pdfgroup: "body" },
+            { name: "details", placeholder: "Bullets", type: "bulletPoints", pdftype: "bulletPoints", pdfgroup: "body" }
         ]
     },
     {
@@ -198,14 +217,14 @@ export const sectionConfigs: SectionConfig[] = [
         title: 'Education',
         sectionName: 'education',
         fieldsConfig: [
-            { name: "institution", placeholder: "School Name", type: "text", group: "edu" },
-            { name: "degree", placeholder: "Degree", type: "text", group: "edu" },
-            { name: "location", placeholder: "Location", type: "text" },
-            { name: "GPA", placeholder: "GPA", type: "gpa" },
-            { name: "start_date", placeholder: "Start Date", type: "date", group: "date" },
-            { name: "end_date", placeholder: "End Date", type: "date", group: "date" },
-            { name: "summary", placeholder: "Summary", type: "textarea" },
-            { name: "details", placeholder: "Bullets", type: "bulletPoints" }
+            { name: "degree", placeholder: "Degree", type: "text", group: "edu", pdftype: "textBold", pdfgroup: "title" },
+            { name: "institution", placeholder: "School Name", type: "text", group: "edu", pdftype: "textBold", pdfgroup: "title" },
+            { name: "location", placeholder: "Location", type: "text", pdftype: "text", pdfgroup: "title"  },
+            { name: "GPA", placeholder: "GPA", type: "gpa", pdftype: "gpa", pdfgroup: "title"  },
+            { name: "start_date", placeholder: "Start Date", type: "date", group: "date", pdftype: "startDate", pdfgroup: "title"  },
+            { name: "end_date", placeholder: "End Date", type: "date", group: "date", pdftype: "endDate", pdfgroup: "title" },
+            { name: "summary", placeholder: "Summary", type: "textarea", pdftype: "text", pdfgroup: "body" },
+            { name: "details", placeholder: "Bullets", type: "bulletPoints", pdftype: "bulletPoints", pdfgroup: "body" }
         ]
     },
     {
@@ -214,9 +233,9 @@ export const sectionConfigs: SectionConfig[] = [
         title: 'Publications',
         sectionName: 'publications',
         fieldsConfig: [
-            { name: "publication", placeholder: "Publication", type: "text", group: "pub" },
-            { name: "publisher", placeholder: "Publisher", type: "text", group: "pub" },
-            { name: "date", placeholder: "Date", type: "date" },
+            { name: "publication", placeholder: "Publication", type: "text", group: "pub", pdftype: "textBold", pdfgroup: "title" },
+            { name: "publisher", placeholder: "Publisher", type: "text", group: "pub", pdftype: "textBold", pdfgroup: "title" },
+            { name: "date", placeholder: "Date", type: "date", pdftype: "date", pdfgroup: "title"   },
         ]
     },
     {
@@ -225,9 +244,9 @@ export const sectionConfigs: SectionConfig[] = [
         title: 'Awards',
         sectionName: 'awards',
         fieldsConfig: [
-            { name: "award", placeholder: "Award Name", type: "text", group: "award" },
-            { name: "organization", placeholder: "Organization", type: "text", group: "award" },
-            { name: "date", placeholder: "Date", type: "date" },
+            { name: "award", placeholder: "Award Name", type: "text", group: "award", pdftype: "textBold", pdfgroup: "title"  },
+            { name: "organization", placeholder: "Organization", type: "text", group: "award", pdftype: "textBold", pdfgroup: "title"  },
+            { name: "date", placeholder: "Date", type: "date", pdftype: "date", pdfgroup: "title"  },
         ]
     },
     {
@@ -236,12 +255,11 @@ export const sectionConfigs: SectionConfig[] = [
         title: 'Certifications',
         sectionName: 'certifications',
         fieldsConfig: [
-            { name: "certification", placeholder: "Certification", type: "text", group: "cert" },
-            { name: "organization", placeholder: "Organization", type: "text", group: "cert" },
-            { name: "provider", placeholder: "Provider", type: "text" },
-            { name: "start_date", placeholder: "Start Date", type: "date", group: "date" },
-            { name: "end_date", placeholder: "End Date", type: "date", group: "date" },
-            { name: "summary", placeholder: "Summary", type: "textarea" },
+            { name: "certification", placeholder: "Certification", type: "text", group: "cert", pdftype: "textBold", pdfgroup: "title" },
+            { name: "provider", placeholder: "Provider", type: "text", group: "cert", pdftype: "textBold", pdfgroup: "title" },
+            { name: "start_date", placeholder: "Start Date", type: "date", group: "date", pdftype: "startDate", pdfgroup: "title" },
+            { name: "end_date", placeholder: "End Date", type: "date", group: "date", pdftype: "endDate", pdfgroup: "title" },
+            { name: "summary", placeholder: "Summary", type: "textarea", pdftype: "text", pdfgroup: "body" },
         ]
     },
     {
@@ -250,17 +268,18 @@ export const sectionConfigs: SectionConfig[] = [
         title: 'Volunteering',
         sectionName: 'volunteering',
         fieldsConfig: [
-            { name: "involvement", placeholder: "Involvement", type: "text", group: "name" },
-            { name: "organization", placeholder: "Organization", type: "text", group: "name" },
-            { name: "location", placeholder: "Location", type: "text" },
-            { name: "start_date", placeholder: "Start Date", type: "date", group: "date" },
-            { name: "end_date", placeholder: "End Date", type: "date", group: "date" },
-            { name: "summary", placeholder: "Summary", type: "textarea" },
+            { name: "involvement", placeholder: "Involvement", type: "text", group: "name", pdftype: "textBold", pdfgroup: "title" },
+            { name: "organization", placeholder: "Organization", type: "text", group: "name", pdftype: "textBold", pdfgroup: "title" },
+            { name: "location", placeholder: "Location", type: "text", pdftype: "text", pdfgroup: "title" },
+            { name: "start_date", placeholder: "Start Date", type: "date", group: "date", pdftype: "startDate", pdfgroup: "title" },
+            { name: "end_date", placeholder: "End Date", type: "date", group: "date", pdftype: "endDate", pdfgroup: "title" },
+            { name: "summary", placeholder: "Summary", type: "textarea", pdftype: "text", pdfgroup: "body" },
             { name: "current", placeholder: "Is Current", type: "check", group: "date" },
-            { name: "details", placeholder: "Bullets", type: "bulletPoints" }
+            { name: "details", placeholder: "Bullets", type: "bulletPoints", pdftype: "bulletPoints", pdfgroup: "body" }
         ]
     },
 ];
+
 
 // Test data for resume scan
 
@@ -2602,7 +2621,7 @@ export const sampleResume = {
             ]
         }
         // ... additional education
-    ],    
+    ],
     projects: [
         {
             "_id": "proj123",
@@ -2613,6 +2632,7 @@ export const sampleResume = {
             "location": "San Francisco, CA",
             "start_date": "2019-01-01",
             "end_date": "2020-01-01",
+            "summary": "Involved in full-stack web application development with a focus on creating responsive and user-friendly interfaces.",
             "show": true,
             "details": [
                 {
@@ -2641,6 +2661,7 @@ export const sampleResume = {
             "location": "Remote",
             "start_date": "2020-06-01",
             "end_date": "2021-03-01",
+            "summary": "Involved in full-stack web application development with a focus on creating responsive and user-friendly interfaces.",
             "show": true,
             "details": [
                 {
@@ -2660,7 +2681,7 @@ export const sampleResume = {
                 }
             ]
         }
-    ],    
+    ],
     publications: [
         {
             _id: "pub123",
@@ -2690,6 +2711,7 @@ export const sampleResume = {
             _id: "cert123",
             certification: "Certified JavaScript Developer",
             provider: "Programming Institute",
+            summary: "Involved in full-stack web application development with a focus on creating responsive and user-friendly interfaces.",
             start_date: "2019-05-01",
             end_date: "2024-05-01",
             show: true
@@ -2697,6 +2719,7 @@ export const sampleResume = {
         {
             _id: "cert124",
             certification: "Cert 2",
+            summary: "Involved in full-stack web application development with a focus on creating responsive and user-friendly interfaces.",
             provider: "Programming Institute",
             start_date: "2022-05-01",
             end_date: "2023-05-01",

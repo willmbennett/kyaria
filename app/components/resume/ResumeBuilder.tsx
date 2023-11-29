@@ -27,7 +27,7 @@ type sectionOptions = "social_links" | "skills" | "professional_experience" | "e
 
 const socialPlatforms = ['LinkedIn', 'GitHub', 'Twitter', 'Facebook', 'Instagram', 'Website', 'Blog']; // Add more platforms as needed
 
-const ResumeBuilder = ({ data, toggleEdit }: { data: ResumeClass, toggleEdit: any }) => {
+const ResumeBuilder = ({ data, toggleEdit }: { data: ResumeClass, toggleEdit?: any }) => {
     const {
         name,
         title,
@@ -149,7 +149,7 @@ const ResumeBuilder = ({ data, toggleEdit }: { data: ResumeClass, toggleEdit: an
         <div className='min-h-screen p-3'>
             <div className='flex flex-col sticky top-0 space-y-2 border border-slate-200 shadow rounded-md p-3'>
                 <h1>Menu</h1>
-                <Button variant='ghost' size='md' onClick={toggleEdit}>Switch Resume</Button>
+                {toggleEdit && <Button variant='ghost' size='md' onClick={toggleEdit}>Switch Resume</Button>}
                 <Button size='md' onClick={generatePDF} className="mb-2">Download Resume</Button>
             </div>
         </div>

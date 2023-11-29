@@ -1,16 +1,10 @@
 import React from 'react';
 import { Page, Text, View, Document, Link } from '@react-pdf/renderer';
-import { ResumeBuilderFormData } from '../../resumebuilder/resumetest-helper';
+import { GeneralSectionConfig, ResumeBuilderFormData, sectionConfigs } from '../../resumebuilder/resumetest-helper';
 import { Award, Certification, Education, ProfessionalExperience, Project, Publication, Volunteering } from '../../../models/Resume';
 import { pdfstyles } from './styles';
-import { EducationSection } from './sections/EducationSection';
-import { ProfessionalExperienceSection } from './sections/ProfessionalExperienceSection';
 import { ListSection } from './sections/ListSection';
-import { ProjectSection } from './sections/ProjectsSection';
-import { PublicationSection } from './sections/PublicationsSection';
-import { AwardSection } from './sections/AwardSection';
-import { CertificationSection } from './sections/CertificationSection';
-import { VolunteeringSection } from './sections/VolunteeringSection';
+import PDFResumeSection from './sections/PDFResumeSection';
 
 
 type ContactElement = {
@@ -53,25 +47,27 @@ const renderField = (
     volunteering
   }: ListInputProps) => {
 
+  const sectionConfig = sectionConfigs.find(config => config.id === id) as GeneralSectionConfig;
+
   switch (id) {
     case 'skills':
       return (<>{skills && skills.length > 0 && <ListSection name={id} list={skills} />}</>);
     case 'interests':
       return (<>{interests && interests.length > 0 && <ListSection name={id} list={interests} />}</>);
     case 'professional_experience':
-      return (<>{professional_experience && professional_experience.length > 0 && <ProfessionalExperienceSection professional_experience={professional_experience} />} </>);
+      return (<>{professional_experience && professional_experience.length > 0 && <PDFResumeSection key={id} sectionConfig={sectionConfig} data={professional_experience} />} </>);
     case 'volunteering':
-      return (<>{volunteering && volunteering.length > 0 && <VolunteeringSection volunteering={volunteering} />}</>);
+      return (<>{volunteering && volunteering.length > 0 && <PDFResumeSection key={id} sectionConfig={sectionConfig} data={volunteering} />}</>);
     case 'education':
-      return (<>{education && education.length > 0 && <EducationSection education={education} />}</>);
+      return (<>{education && education.length > 0 && <PDFResumeSection key={id} sectionConfig={sectionConfig} data={education} />}</>);
     case 'certifications':
-      return (<>{certifications && certifications.length > 0 && <CertificationSection certifications={certifications} />}</>);
+      return (<>{certifications && certifications.length > 0 && <PDFResumeSection key={id} sectionConfig={sectionConfig} data={certifications} />}</>);
     case 'projects':
-      return (<>{projects && projects.length > 0 && <ProjectSection projects={projects} />}</>);
+      return (<>{projects && projects.length > 0 && <PDFResumeSection key={id} sectionConfig={sectionConfig} data={projects} />}</>);
     case 'publications':
-      return (<>{publications && publications.length > 0 && <PublicationSection publications={publications} />}</>);
+      return (<>{publications && publications.length > 0 && <PDFResumeSection key={id} sectionConfig={sectionConfig} data={publications} />}</>);
     case 'awards':
-      return (<>{awards && awards.length > 0 && <AwardSection awards={awards} />}</>);
+      return (<>{awards && awards.length > 0 && <PDFResumeSection key={id} sectionConfig={sectionConfig} data={awards} />}</>);
     default:
       return null;
   }
@@ -117,36 +113,39 @@ const ResumePDF: React.FC<ResumePDFProps> = ({ data, sections }) => {
   return (
     <Document>
       <Page size="A4" style={pdfstyles.page}>
-        <View style={pdfstyles.header}>
-          <Text style={pdfstyles.name}>{name}</Text>
-          <View style={pdfstyles.contactView}>
-            {contactElements.map((element, index) => (
-              <React.Fragment key={index}>
-                {index > 0 && <Text style={pdfstyles.separator}>|</Text>} {/* Separator */}
-                {element.type === 'text' && (
-                  <Text style={pdfstyles.contactInfo}>{element.value}</Text>
-                )}
-                {element.type === 'link' && (
-                  <Link src={element.url || ''} style={pdfstyles.contactInfoLink}>
-                    {element.value}
-                  </Link>
-                )}
-              </React.Fragment>
-            ))}
-          </View>
-        </View>
-        {summary ?
-          (<View>
-            <Text style={pdfstyles.title}>{title?.toUpperCase()}</Text>
-            <View style={pdfstyles.entryContainer}>
-              <Text style={pdfstyles.text}>{summary}</Text>
+        <View style={pdfstyles.resumeSection}>
+          <View style={pdfstyles.header}>
+            <Text style={pdfstyles.name}>{name}</Text>
+            <View style={pdfstyles.contactView}>
+              {contactElements.map((element, index) => (
+                <React.Fragment key={index}>
+                  {index > 0 && <Text style={pdfstyles.separator}>|</Text>} {/* Separator */}
+                  {element.type === 'text' && (
+                    <Text style={pdfstyles.contactInfo}>{element.value}</Text>
+                  )}
+                  {element.type === 'link' && (
+                    <Link src={element.url || ''} style={pdfstyles.contactInfoLink}>
+                      {element.value}
+                    </Link>
+                  )}
+                </React.Fragment>
+              ))}
             </View>
           </View>
-          )
-          : <View></View>
-        }
+          {summary ?
+            (<View>
+              <Text style={pdfstyles.title}>{title?.toUpperCase()}</Text>
+              <View style={pdfstyles.entryContainer}>
+                <Text style={pdfstyles.text}>{summary}</Text>
+              </View>
+            </View>
+            )
+            : <View></View>
+          }
+        </View>
+
         {sections.map((section, idx) =>
-          <View key={idx}>
+          <View key={idx} style={pdfstyles.resumeSection}>
             {renderField({
               id: section,
               skills: section === 'skills' ? skills : undefined,

@@ -50,3 +50,26 @@ export async function getResumeScans(userId: string) {
         return { error };
     }
 }
+
+export async function getResumeScan(id: string) {
+    try {
+        await connectDB();
+
+        if (!id) {
+            return { error: "Profile not found" };
+        }
+        const resumeScan = await ResumeScanDataModel.findById(id).lean().exec();
+        if (resumeScan) {
+            transformProps(resumeScan, castToString, '_id');
+            transformProps(resumeScan, dateToString, ["createdAt", "updatedAt"]);
+            return {
+                resumeScan
+            };
+
+        } else {
+            return { error: "Error pulling resume scan" };
+        }
+    } catch (error) {
+        return { error };
+    }
+}
