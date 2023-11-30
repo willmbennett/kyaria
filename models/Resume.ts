@@ -72,6 +72,17 @@ class Details {
     public show?: boolean;
 }
 
+class GPA {
+    @prop()
+    public _id?: string;
+
+    @prop()
+    public score?: string;
+
+    @prop({ default: 4.0 })
+    public scoringSystem?: string;
+}
+
 class Education {
     @prop()
     public _id?: string;
@@ -87,6 +98,9 @@ class Education {
 
     @prop()
     public start_date?: string;
+
+    @prop({ type: () => [GPA] })
+    public gpa?: GPA;
 
     @prop()
     public end_date?: string;
@@ -293,4 +307,4 @@ class ResumeClass {
 }
 
 const ResumeModel = getModelForClass(ResumeClass);
-export { ResumeModel, ResumeClass, ProfessionalExperience, Responsibilities, Education, Project, Publication, Award, Certification, Volunteering, Details };
+export { ResumeModel, ResumeClass, ProfessionalExperience, Responsibilities, Education, Project, Publication, Award, Certification, Volunteering, Details, GPA };

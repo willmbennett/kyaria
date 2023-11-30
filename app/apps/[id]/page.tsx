@@ -15,7 +15,7 @@ export default async function JobAppPage({ params }: { params: { id: string } })
   }
 
   return (
-    <div className="lg:px-4 lg:mt-6 lg:w-1/2">
+    <>
       {promise && (<>
         {/* @ts-expect-error Server Component */}
         < Await promise={promise}>
@@ -29,6 +29,6 @@ export default async function JobAppPage({ params }: { params: { id: string } })
         </Await>
       </>)
       }
-    </div>
+    </>
   );
 }

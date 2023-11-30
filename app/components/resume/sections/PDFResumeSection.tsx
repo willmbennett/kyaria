@@ -1,61 +1,8 @@
 import { pdfstyles } from "../styles";
 import { Link, Text, View } from '@react-pdf/renderer';
 import { LineBreak } from "./LineBreak";
-import { FieldConfig, formatDate, GeneralSectionConfig } from "../../../resumebuilder/resumetest-helper";
-import { Award, Certification, Details, Education, ProfessionalExperience, Project, Publication, Responsibilities, Volunteering } from "../../../../models/Resume";
-import { isArray } from "chart.js/dist/helpers/helpers.core";
-import { isRefType } from "@typegoose/typegoose";
-
-// Determine the key to sort by. This could be more dynamic based on sectionConfig if needed.
-const getSortDateField = (sectionConfig: GeneralSectionConfig) => {
-    // Check if 'end_date' field is configured
-    const hasEndDate = sectionConfig.fieldsConfig.some(field => field.name === 'end_date');
-    if (hasEndDate) return 'end_date';
-
-    // Check if 'date' field is configured
-    const hasDate = sectionConfig.fieldsConfig.some(field => field.name === 'date');
-    if (hasDate) return 'date';
-
-    // Return null if neither 'end_date' nor 'date' is configured
-    return null;
-};
-
-type sectionType = ProfessionalExperience | Education | Publication | Project | Award | Certification | Volunteering
-
-// Custom sort function
-const sortDataBasedOnConfig = (data: sectionType[]
-    , sectionConfig: GeneralSectionConfig
-) => {
-    // Get the appropriate date field for sorting
-    const sortDateField = getSortDateField(sectionConfig);
-
-    // Custom sort function
-    const customSort = (a: sectionType, b: sectionType) => {
-        if (!sortDateField) return 0; // No sorting if no date field is present
-
-        const dateA = a[sortDateField as keyof sectionType]?.toString();
-        const dateB = b[sortDateField as keyof sectionType]?.toString();
-
-        const isCurrentDefined = (obj: any): obj is { current: boolean } => {
-            return 'current' in obj;
-        };
-
-        // Handle 'current' or 'present' cases
-        if (isCurrentDefined(a) && (a.current || dateA === 'present')) return -1;
-        if (isCurrentDefined(b) && (b.current || dateB === 'present')) return 1;
-
-
-        // Convert dates to timestamps for comparison
-        const timestampA = new Date(dateA || '').getTime();
-        const timestampB = new Date(dateB || '').getTime();
-
-        // Sort in descending order
-        return timestampB - timestampA;
-    };
-
-    // Return the sorted data
-    return data.sort(customSort);
-};
+import { FieldConfig, formatDate, GeneralSectionConfig, sectionType, sortDataBasedOnConfig } from "../../../resumebuilder/resumetest-helper";
+import { Award, Certification, Details, Education, GPA, ProfessionalExperience, Project, Publication, Volunteering } from "../../../../models/Resume";
 
 const SectionHeader = ({ title }: { title: string }) => (
     <View>
@@ -95,38 +42,59 @@ const EntryView = ({ item, fieldsConfig }: { item: sectionType, fieldsConfig: Fi
         return acc;
     }, {});
 
+    // Define the order in which the groups should be rendered
+    const renderOrder = ['title', 'subtitle', 'body'];
+
     return (
         <View style={pdfstyles.resumeEntry}>
-            {Object.entries(groupedFields).map(([group, groupFields]) => (
-                <RenderFieldGroups key={group} group={group} item={item} groupFields={groupFields} />
-            ))}
+            {renderOrder.map(group => {
+                // Render each group only if it exists in groupedFields
+                return groupedFields[group] ? (
+                    <RenderFieldGroups key={group} group={group} item={item} groupFields={groupedFields[group]} />
+                ) : null;
+            })}
         </View>
     );
 };
 
+const hasProperty = <T extends object>(obj: T, key: keyof any): key is keyof T => {
+    return key in obj;
+};
+
 const RenderFieldGroups = ({ group, item, groupFields }: { group: string, item: sectionType, groupFields: FieldConfig[] }) => {
-    const titleTextGroups = groupFields.filter(g => (g.pdfgroup == group) && ['text', 'textBold', 'link'].includes(g.pdftype || ''))
-    const numTitleText = titleTextGroups.length
+    const titleTextGroups = groupFields.filter(g => (g.pdfgroup == group) && ['text', 'textBold', 'link', 'gpa'].includes(g.pdftype || ''))
     const titleDateGroups = groupFields.filter(g => (g.pdfgroup == group) && ['date', 'startDate', 'endDate'].includes(g.pdftype || ''))
-    const numTitleDate = titleDateGroups.length
 
     switch (group) {
         case 'title':
             return (
                 <View style={pdfstyles.entryHeader}>
                     <View style={pdfstyles.entryTitle}>
-                        {titleTextGroups.map((field, idx) => (
+                        {titleTextGroups.filter(field => hasProperty(item, field.name) && item[field.name]).map((field, idx) => (
                             <View style={pdfstyles.entryTitle} key={idx}>
+                                {idx > 0 && <Text>, </Text>}
                                 <RenderField key={idx} field={field} item={item} />
-                                <Text style={pdfstyles.text}>{idx < numTitleText - 1 ? ', ' : ''}</Text>
                             </View>
                         ))}
                     </View>
                     <View style={pdfstyles.entryTitle}>
-                        {titleDateGroups.map((field, idx) => (
+                        {titleDateGroups.filter(field => hasProperty(item, field.name) && item[field.name]).map((field, idx) => (
                             <View style={pdfstyles.entryTitle} key={idx}>
+                                {idx > 0 && <Text style={pdfstyles.entryDateSeparator}>-</Text>}
                                 <RenderField key={idx} field={field} item={item} />
-                                <Text style={pdfstyles.entryDateSeparator}>{(idx < numTitleDate - 1) && (numTitleDate != 1) ? '-' : ''}</Text>
+                            </View>
+                        ))}
+                    </View>
+                </View>
+            )
+        case 'subtitle':
+            return (
+                <View style={pdfstyles.entryHeader}>
+                    <View style={pdfstyles.entryTitle}>
+                        {titleTextGroups.filter(field => hasProperty(item, field.name) && item[field.name]).map((field, idx) => (
+                            <View style={pdfstyles.entryTitle} key={idx}>
+                                {idx > 0 && <Text>, </Text>}
+                                <RenderField key={idx} field={field} item={item} />
                             </View>
                         ))}
                     </View>
@@ -151,10 +119,6 @@ const RenderFieldGroups = ({ group, item, groupFields }: { group: string, item: 
 
 const RenderField = ({ field, item }: { field: FieldConfig, item: sectionType }) => {
 
-    const hasProperty = <T extends object>(obj: T, key: keyof any): key is keyof T => {
-        return key in obj;
-    };
-
     const fieldName = field.name
 
     if (!hasProperty(item, fieldName)) {
@@ -162,16 +126,16 @@ const RenderField = ({ field, item }: { field: FieldConfig, item: sectionType })
     } else {
         switch (field.pdftype) {
             case 'text':
-                return <Text style={pdfstyles.text}>{item[fieldName] || field.placeholder}</Text>;
+                return item[fieldName] ? <Text style={pdfstyles.text}>{item[fieldName]}</Text> : null;
 
             case 'textBold':
-                return <Text style={pdfstyles.textbold}>{item[fieldName] || field.placeholder}</Text>;
+                return item[fieldName] ? <Text style={pdfstyles.textbold}>{item[fieldName]}</Text> : null;
 
             case 'date':
-                return <Text style={pdfstyles.entryDate}>{item[fieldName] ? formatDate(item[fieldName]?.toString()) : field.placeholder}</Text>;
+                return item[fieldName] ? <Text style={pdfstyles.entryDate}>{formatDate(item[fieldName]?.toString())}</Text> : null;
 
             case 'startDate':
-                return <Text style={pdfstyles.entryDate}>{item[fieldName] ? formatDate(item[fieldName]?.toString()) : field.placeholder}</Text>;
+                return item[fieldName] ? <Text style={pdfstyles.entryDate}>{formatDate(item[fieldName]?.toString())}</Text> : null;
 
             case 'endDate':
                 return <Text style={pdfstyles.entryDate}>{item['current' as keyof sectionType] ? 'PRESENT' : formatDate(item[fieldName]?.toString())}</Text>;
@@ -193,7 +157,7 @@ const RenderField = ({ field, item }: { field: FieldConfig, item: sectionType })
                 return null;
 
             case 'gpa':
-                return <Text style={pdfstyles.text}>{`GPA: ${item[fieldName] || ''}`}</Text>;
+                return (item[fieldName] as GPA).score ? <Text style={pdfstyles.text}>{`GPA: ${(item[fieldName] as GPA).score}${(item[fieldName] as GPA).scoringSystem ? `/${(item[fieldName] as GPA).scoringSystem}` : ''}`}</Text> : null;
 
             case 'link':
                 return item[fieldName] ? <Link src={item['Link' as keyof sectionType]?.toString() || ''} style={pdfstyles.contactInfoLink}>{item['LinkTitle' as keyof sectionType] || field.placeholder}</Link> : null;

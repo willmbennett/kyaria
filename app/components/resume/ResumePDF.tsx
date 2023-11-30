@@ -51,23 +51,23 @@ const renderField = (
 
   switch (id) {
     case 'skills':
-      return (<>{skills && skills.length > 0 && <ListSection name={id} list={skills} />}</>);
+      return skills && skills.length > 0 && <ListSection name={id} list={skills} />;
     case 'interests':
-      return (<>{interests && interests.length > 0 && <ListSection name={id} list={interests} />}</>);
+      return interests && interests.length > 0 && <ListSection name={id} list={interests} />
     case 'professional_experience':
-      return (<>{professional_experience && professional_experience.length > 0 && <PDFResumeSection key={id} sectionConfig={sectionConfig} data={professional_experience} />} </>);
+      return professional_experience && professional_experience.length > 0 && <PDFResumeSection key={id} sectionConfig={sectionConfig} data={professional_experience} />
     case 'volunteering':
-      return (<>{volunteering && volunteering.length > 0 && <PDFResumeSection key={id} sectionConfig={sectionConfig} data={volunteering} />}</>);
+      return volunteering && volunteering.length > 0 && <PDFResumeSection key={id} sectionConfig={sectionConfig} data={volunteering} />
     case 'education':
-      return (<>{education && education.length > 0 && <PDFResumeSection key={id} sectionConfig={sectionConfig} data={education} />}</>);
+      return education && education.length > 0 && <PDFResumeSection key={id} sectionConfig={sectionConfig} data={education} />
     case 'certifications':
-      return (<>{certifications && certifications.length > 0 && <PDFResumeSection key={id} sectionConfig={sectionConfig} data={certifications} />}</>);
+      return certifications && certifications.length > 0 && <PDFResumeSection key={id} sectionConfig={sectionConfig} data={certifications} />
     case 'projects':
-      return (<>{projects && projects.length > 0 && <PDFResumeSection key={id} sectionConfig={sectionConfig} data={projects} />}</>);
+      return projects && projects.length > 0 && <PDFResumeSection key={id} sectionConfig={sectionConfig} data={projects} />
     case 'publications':
-      return (<>{publications && publications.length > 0 && <PDFResumeSection key={id} sectionConfig={sectionConfig} data={publications} />}</>);
+      return publications && publications.length > 0 && <PDFResumeSection key={id} sectionConfig={sectionConfig} data={publications} />
     case 'awards':
-      return (<>{awards && awards.length > 0 && <PDFResumeSection key={id} sectionConfig={sectionConfig} data={awards} />}</>);
+      return awards && awards.length > 0 && <PDFResumeSection key={id} sectionConfig={sectionConfig} data={awards} />
     default:
       return null;
   }
@@ -119,7 +119,7 @@ const ResumePDF: React.FC<ResumePDFProps> = ({ data, sections }) => {
             <View style={pdfstyles.contactView}>
               {contactElements.map((element, index) => (
                 <React.Fragment key={index}>
-                  {index > 0 && <Text style={pdfstyles.separator}>|</Text>} {/* Separator */}
+                  {index > 0 && <Text style={pdfstyles.separator}>|</Text>}
                   {element.type === 'text' && (
                     <Text style={pdfstyles.contactInfo}>{element.value}</Text>
                   )}
@@ -143,7 +143,6 @@ const ResumePDF: React.FC<ResumePDFProps> = ({ data, sections }) => {
             : <View></View>
           }
         </View>
-
         {sections.map((section, idx) =>
           <View key={idx} style={pdfstyles.resumeSection}>
             {renderField({

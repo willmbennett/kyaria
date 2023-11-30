@@ -21,7 +21,7 @@ export default async function ResumeScanPage({ params }: { params: { id: string 
             <div className="flex flex-col md:w-3/4 md:flex-row py-2 min-h-screen lg:px-4 lg:mt-6">
                 {/* @ts-expect-error Server Component */}
                 <Await promise={promise}>
-                    {({ resumeScan }: { resumeScan: ResumeScanDataClass }) => <ResumeBuilder data={transformParsedResume(resumeScan)} />}
+                    {({ resumeScan }: { resumeScan: ResumeScanDataClass }) => <ResumeBuilder data={transformParsedResume(resumeScan)} toggleEdit={false} editResume={true} />}
                 </Await>
             </div>
         </div>
