@@ -15,10 +15,18 @@ import { ProfileClass } from '../../../models/Profile';
 import MockInterview from './pages/MockInterview';
 import ProgressBar from './ui/ProgressBar';
 import Networking from './pages/Networking';
+import ResumeBuilder from '../resume/ResumeBuilder';
+import FeedbackAside from '../FeedbackAside';
+import { Button } from '../Button';
 
 type ApplicationState = 'Research' | 'Phone Screen' | 'Interviewing' | 'Post-Offer';
 
 export function JobApplication({ jobApp }: { jobApp: any }) {
+  const [hideMenu, setHideMenu] = useState(false);
+
+  function toggleEdit() {
+    setHideMenu(!hideMenu)
+  }
 
   // Extract the high level objects
   const userResume: ResumeClass = jobApp.userResume
@@ -133,20 +141,24 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
 
   return (
     <div className='w-full'>
-      <ProgressBar
-        progressStates={progressStates}
-        currentProgress={currentProgress}
-        setCurrentCurrentProgress={setCurrentCurrentProgress}
-      />
+      {!hideMenu &&
+        <ProgressBar
+          progressStates={progressStates}
+          currentProgress={currentProgress}
+          setCurrentCurrentProgress={setCurrentCurrentProgress}
+        />
+      }
       <div className="flex flex-col w-full md:flex-row py-2 min-h-screen lg:px-4 lg:mt-6">
-        <div className='md:w-1/4'>
-          <JobMenu
-            currentSection={currentSection}
-            setCurrentSection={setCurrentSection}
-            filteredPages={filteredPages}
-          />
-        </div>
-        <div className="lg:m-3 p-2 lg:p-3 md:w-3/4" key="1">
+        {!hideMenu &&
+          <div className='md:w-1/4'>
+            <JobMenu
+              currentSection={currentSection}
+              setCurrentSection={setCurrentSection}
+              filteredPages={filteredPages}
+            />
+          </div>
+        }
+        <div className={`lg:m-3 p-2 ${hideMenu ? 'w-full' : 'lg:p-3 md:w-3/4'}`} key="1">
           {renderCurrentSection(
             currentSection,
             job,
@@ -161,9 +173,16 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
             resumeId,
             jobAppId,
             jobApp,
-            companyDiffbotId
+            toggleEdit,
+            hideMenu,
+            companyDiffbotId,
           )}
         </div>
+        {!hideMenu &&
+          <div>
+            <FeedbackAside />
+          </div>
+        }
       </div>
     </div>
   );
@@ -183,6 +202,8 @@ function renderCurrentSection(
   resumeId: string,
   jobAppId: string,
   jobApp: AppClass,
+  toggleEdit: any,
+  hideMenu: boolean,
   companyDiffbotId?: string | null
 ) {
   switch (currentSection) {
@@ -211,12 +232,14 @@ function renderCurrentSection(
       );
     case 'resume':
       return (
-        <Resume
-          jobKeyWords={jobKeyWords}
-          job={jobData}
-          userResume={userResume}
-          userProfile={profile}
-        />
+        <div className='w-full flex flex-col items-center justify-center'>
+          {!hideMenu && <Button size='md' onClick={toggleEdit}>Edit Resume</Button>}
+          <ResumeBuilder
+            data={userResume}
+            toggleEdit={toggleEdit}
+            editResume={hideMenu}
+          />
+        </div>
       );
     case 'story':
       return (

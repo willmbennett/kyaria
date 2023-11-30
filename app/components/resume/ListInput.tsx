@@ -187,7 +187,7 @@ const ListInput: React.FC<ListInputProps> = ({ name, control, setValue, watch })
     }
 
     return (
-        <div className="p-4 bg-slate-100 border-slate-400 shadow rounded-md">
+        <div className="mb-6 p-4 border bg-slate-100 border-slate-400 shadow rounded-md">
             <DndContext modifiers={[restrictToParentElement]} onDragEnd={onSortEnd} onDragOver={handleDragOver}>
                 <SortableContext items={fields} strategy={rectSortingStrategy}>
                     {name == 'skills' && <Button className="mb-3" type="button" onClick={optimizeSkills} size="md">Optimize</Button>}

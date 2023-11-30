@@ -29,8 +29,5 @@ export default async function AppLayout({
 
     return (<div className='flex flex-col w-full md:flex-row justify-center'>
         {children}
-        <div>
-            <FeedbackAside />
-        </div>
     </div>);
 }
