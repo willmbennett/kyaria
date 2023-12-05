@@ -10,7 +10,7 @@ const EmploymentHistoryComponent: React.FC<EmploymentProps> = ({ data }) => {
         <div className="p-6">
             <section className="mb-6">
                 <h3 className="text-xl font-semibold mb-2">Experience Summary</h3>
-                {[
+                {data.ExperienceSummary && [
                     ['Description', data.ExperienceSummary.Description],
                     ['Months of Work Experience', data.ExperienceSummary.MonthsOfWorkExperience],
                     ['Management Experience', `${data.ExperienceSummary.MonthsOfManagementExperience} months`],

@@ -22,7 +22,7 @@ const EducationComp: React.FC<EducationProps> = ({ data }) => {
                     {detail.Location && (
                         <div className="mt-2 text-sm text-gray-600">
                             <p>{detail.Location.StreetAddressLines?.join(', ')}</p>
-                            <p>{detail.Location.Municipality}, {detail.Location.Regions.join(', ')} {detail.Location.CountryCode}</p>
+                            <p>{detail.Location.Municipality}, {detail.Location.Regions && detail.Location.Regions.join(', ')} {detail.Location.CountryCode}</p>
                         </div>
                     )}
 
