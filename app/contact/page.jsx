@@ -1,4 +1,4 @@
-import { ContactHeader } from '../components/landingpage/ontactHeader'
+import { ContactHeader } from '../components/landingpage/ContactHeader'
 import { ContactInfo } from '../components/landingpage/ContactInfo'
 import { Map } from '../components/landingpage/Map'
 import { FaqCTA } from '../components/landingpage/FaqCTA'

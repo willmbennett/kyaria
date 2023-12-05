@@ -60,6 +60,8 @@ export function Header() {
     /*{ label: 'Contact', href: '/contact' },*/
   ]
 
+  const desktopMenuLinks = session? signedInLinks : links
+
   const signedInMenuLinks = [
     { label: 'Profile', href: `/profile/${session?.user?.id}` },
   ]
@@ -285,7 +287,7 @@ export function Header() {
               KYARIA.AI
             </Link>
             <div className="hidden items-center space-x-3 md:flex lg:space-x-4">
-              {session && signedInLinks.map((link) => (
+              {desktopMenuLinks.map((link) => (
                 <Link
                   key={`${link.label}-desktop`}
                   href={link.href}
