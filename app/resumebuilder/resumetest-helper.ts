@@ -33,6 +33,7 @@ export function convertFormDataToResumeModel(formData: ResumeBuilderFormData): P
         awards: formData.awards,
         skills: formData.skills?.map(skill => skill.label),
         interests: formData.interests?.map(interest => interest.label),
+        sectionOrder: formData.sectionOrder
         // Add other fields as necessary
     };
 
@@ -266,6 +267,7 @@ export const sortDataBasedOnConfig = (data: sectionType[]
 
     return data.sort(customSort)
 };
+export type sectionOptions = "social_links" | "skills" | "professional_experience" | "education" | "projects" | 'awards' | 'publications' | 'certifications' | 'interests' | 'volunteering'
 
 export type ResumeBuilderFormData = {
     education: Education[];
@@ -284,6 +286,7 @@ export type ResumeBuilderFormData = {
     email?: string;
     location?: string;
     title?: string;
+    sectionOrder: sectionOptions[]
 };
 
 export type FieldConfig = {

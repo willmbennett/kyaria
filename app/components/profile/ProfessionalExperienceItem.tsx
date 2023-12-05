@@ -32,10 +32,10 @@ export const ProfessionalExperienceItem = (
         if (userCanEdit) {
             // Split the property path into segments
             const setKey = `professional_experience.${index}.show`
-            console.log(setKey)
+            //console.log(setKey)
 
             const data = JSON.parse(`{"${setKey}":false}`)
-            console.log(profileId, data)
+            //console.log(profileId, data)
             await updateProfileAction(profileId, data, "/")
             router.push(path, { scroll: false })
         }

@@ -140,14 +140,14 @@ export default function StarStory({
         const savedData: { [key: string]: any } = {};
         savedData[`${setKey}.detail`] = details; // Set the detail property to the details provided.
 
-        console.log(profileId, savedData)
+        //console.log(profileId, savedData)
         const updateResume = await updateResumeAction(resumeId, savedData, "/")
-        console.log("Updated Resume:", updateResume);
+        //console.log("Updated Resume:", updateResume);
 
         // Also update the user's profile
-        console.log(profileId, savedData)
+        //console.log(profileId, savedData)
         const updateProfile = await updateProfileAction(profileId, savedData, "/")
-        console.log("Updated Profile:", updateProfile);
+        //console.log("Updated Profile:", updateProfile);
         setShowDetails(false)
     };
 
@@ -165,7 +165,7 @@ export default function StarStory({
             const savedData: { [key: string]: any } = {};
             savedData[`${setKey}.starStory`] = starStory; // Set the detail property to the details provided.
 
-            console.log(profileId, savedData)
+            //console.log(profileId, savedData)
             await updateProfileAction(profileId, savedData, "/")
             setSavedToProfile(true)
         }

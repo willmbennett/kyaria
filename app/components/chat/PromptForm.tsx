@@ -88,8 +88,8 @@ export function PromptForm({
       onSubmit={async e => {
         e.preventDefault();
 
-        console.log('Made it to submit');
-        console.log(transcript);
+        //console.log('Made it to submit');
+        //console.log(transcript);
 
         // Stop listening.
         SpeechRecognition.stopListening();

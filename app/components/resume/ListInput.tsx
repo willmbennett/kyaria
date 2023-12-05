@@ -313,7 +313,7 @@ Zoho Projects
 
         try {
             setLoading(true)
-            console.log('about to optimize resume section', data)
+            //console.log('about to optimize resume section', data)
             const response = await fetch('/api/openai/optimizeResume', {
                 method: 'POST',
                 headers: {
@@ -332,7 +332,7 @@ Zoho Projects
 
             const fixedSkills = skillsRaw.skills.map((skill: string) => ({ label: skill, value: skill }))
 
-            console.log('optimizedData', fixedSkills)
+            //console.log('optimizedData', fixedSkills)
             setValue('skills', fixedSkills);
             setLoading(false)
         } catch (error) {

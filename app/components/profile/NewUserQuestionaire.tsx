@@ -25,7 +25,7 @@ export default function NewUserQuestionnaire(
     });
 
     const onSubmit: SubmitHandler<Questionnaire> = async (data: any) => {
-        console.log("Submitted data:", data);
+        //console.log("Submitted data:", data);
         const path = "/"
         const res = await updateProfileAction(profile._id, { questionnaire: data }, path);
         setOnboardingStage('story')

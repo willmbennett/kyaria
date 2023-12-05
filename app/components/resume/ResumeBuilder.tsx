@@ -15,6 +15,7 @@ import { format } from 'date-fns';
 import SortableResumeSection from '../resumebuilder/ui/SortableResumeSection';
 import { createResumeAction, updateResumeAction } from '../../board/_action';
 import { debounce, isEqual } from 'lodash';
+import { useRouter } from 'next/navigation';
 
 const DynamicResumePDF = dynamic(() => import('../resumebuilder/ui/CustomPDFViewer'), {
     loading: () => <p>Loading Resume...</p>,
@@ -58,11 +59,13 @@ const ResumeBuilder = (
         certifications,
         publications,
         awards,
-        volunteering
+        volunteering,
+        sectionOrder
     } = data
     const [saveStatus, setSaveStatus] = useState('up to date');
+    const router = useRouter()
 
-    const resumeSections: sectionOptions[] = [
+    const resumeSections: sectionOptions[] = sectionOrder ? sectionOrder as sectionOptions[] : [
         'skills',
         'professional_experience',
         'education',
@@ -73,8 +76,6 @@ const ResumeBuilder = (
         'volunteering',
         'interests'
     ]
-
-    const [sections, setSections] = useState<sectionOptions[]>(resumeSections);
 
     const defaultSkills = skills ? skills
         .map(skill => ({ label: skill, value: skill })) : null
@@ -150,6 +151,7 @@ const ResumeBuilder = (
             publications: handleResumeInport('publications', publications),
             awards: handleResumeInport('awards', awards),
             volunteering: handleResumeInport('volunteering', volunteering),
+            sectionOrder: resumeSections
         }
     });
 
@@ -161,6 +163,7 @@ const ResumeBuilder = (
     const savetoDatabase = async () => {
         setSaveStatus('saving');
         const resumeToSave = convertFormDataToResumeModel(watch())
+        //console.log(resumeToSave)
         try {
             const userResumeWithIds = { userId, resumeScan: resumeScanId, ...resumeToSave }
             //console.log('resumeId: ', resumeId)
@@ -169,11 +172,12 @@ const ResumeBuilder = (
             //console.log('userId: ', userId)
             //console.log('userResumeWithIds: ', userResumeWithIds)
             if (resumeId) {
-                await updateResumeAction(resumeId, resumeToSave, '/')
+                await updateResumeAction(resumeId, { ...resumeToSave }, '/')
             } else if (resumeScanId) {
                 const resumeId = await createResumeAction(userResumeWithIds, '/')
                 //console.log(resumeId)
             }
+            router.refresh()
             setTimeout(() => {
                 setSaveStatus('up to date');
             }, 1000); // Adjust the delay as needed
@@ -202,17 +206,16 @@ const ResumeBuilder = (
         [] // Dependencies array is empty to ensure this is only created once
     );
 
-
     useEffect(() => {
         //console.log('newResume: ', newResume);
         //console.log('currentResume: ', currentResume);
-        if (!isEqual(currentResume, newResume) && editResume) {
-            console.log('Made it to save');
+        const resumeChanged = !isEqual(currentResume, newResume)
+        if ((resumeChanged) && editResume) {
+            //console.log('Made it to save');
             debouncedSaveToDatabase();
             setCurrentResume(newResume); // Update the current state
         }
     }, [newResume, currentResume, editResume, debouncedSaveToDatabase, savetoDatabase]);
-
 
     const { fields, append, remove } = useFieldArray({
         control,
@@ -239,18 +242,25 @@ const ResumeBuilder = (
         if (!active || !over) return;
 
         if (over && active.id !== over.id) {
-            setSections((sections) => {
+            const currentSectionOrder = watch('sectionOrder')
+            const updateSections = (sections: sectionOptions[]): sectionOptions[] => {
                 const oldIndex = sections.indexOf(active.id.toString() as sectionOptions);
                 const newIndex = sections.indexOf(over.id.toString() as sectionOptions);
                 return arrayMove(sections, oldIndex, newIndex);
-            });
+            }
+
+            const newSectionOrder = updateSections(currentSectionOrder)
+            //console.log(newSectionOrder)
+
+            setValue('sectionOrder', newSectionOrder)
         }
     };
 
     const generatePDF = async () => {
         const name = watch('name')?.replace(' ', '_')
+        const sectionOrder = watch('sectionOrder')
         const blob = await ReactPDF.pdf((
-            <ResumePDF key={sections.join('-')} data={watch()} sections={sections} />
+            <ResumePDF key={sectionOrder.join('-')} data={watch()} sections={sectionOrder} />
         )).toBlob();
 
         // Example: Save the blob as a file (or you can handle it as needed)
@@ -263,6 +273,8 @@ const ResumeBuilder = (
 
     const id = useId()
 
+    const sections = watch('sectionOrder')
+
 
     return (
         <div className='w-full flex flex-col px-4'>
@@ -270,6 +282,7 @@ const ResumeBuilder = (
                 {editResume && <>
                     <div className='w-full'>
                         <div className='flex flex-row w-full justify-center items-center space-x-2 py-3 sticky top-0 bg-white'>
+                            <Button variant='ghost' size='sm' onClick={savetoDatabase}>Save</Button>
                             <Button variant='ghost' size='sm' onClick={toggleEdit}>Exit</Button>
                             <Button size='sm' onClick={generatePDF}>Download</Button>
                             <div className='flex flex-row space-x-2'>
@@ -338,7 +351,7 @@ const ResumeBuilder = (
                                     <SortableContext items={sections} strategy={verticalListSortingStrategy}>
                                         {sections.map((section: sectionOptions, idx: number) =>
                                             <SortableResumeSection
-                                                key={idx}
+                                                key={section}
                                                 id={section}
                                                 name={section}
                                                 control={control}

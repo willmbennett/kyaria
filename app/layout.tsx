@@ -12,11 +12,11 @@ import { TooltipProvider } from './components/ui/tooltip';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
-const title = 'Launch Your Career';
-const description = 'Launch your career with the power of AI';
+const title = 'Kyaria.ai | Launch Your Career with Our Advanced AI Resume Builder';
+const description = "Kickstart your professional journey with Kyaria.ai's innovative AI-powered resume builder. Tailor your resume for success, stand out to employers, and find your dream job. Start now!";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://www.kyaria.ai/'),
+  metadataBase: new URL('https://www.kyaria.ai'),
   title,
   description,
   openGraph: {
@@ -24,6 +24,7 @@ export const metadata: Metadata = {
     description,
     locale: 'en_US',
     type: 'website',
+    url: 'https://www.kyaria.ai'
   },
   twitter: {
     card: 'summary_large_image',

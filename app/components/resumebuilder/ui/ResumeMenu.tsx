@@ -8,15 +8,10 @@ import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 
 interface ResumeListMenuProps {
     resumeScans: ResumeScanDataClass[];
-    setResumeTest: (resume: ResumeScanDataClass) => void;
-    resumeTest?: ResumeScanDataClass | null;
-    setFormHidden: (arg: boolean) => void;
+    resumeIndex: string
+    setResumeIndex: (resume: string) => void;
     resumes: ResumeClass[];
-    currentResume?: ResumeClass | null;
     setUseResume: (arg: boolean) => void;
-    useResume: boolean;
-    setResume: (resume: ResumeClass) => void;
-    editResume: boolean;
     toggleEdit: () => void;
     resetForm: () => void;
     userId?: string;
@@ -81,8 +76,14 @@ const ListItem = ({ isSelected, onClick, onEdit, children }: ListItemProps) => {
 
 
 const ResumeListMenu: React.FC<ResumeListMenuProps> = ({
-    resumeScans, setResumeTest, resumeTest, setFormHidden, resumes,
-    currentResume, setUseResume, useResume, setResume, editResume, toggleEdit, resetForm, userId
+    resumeScans,
+    resumeIndex,
+    setResumeIndex,
+    resumes,
+    setUseResume,
+    toggleEdit,
+    resetForm,
+    userId
 }) => {
 
     // Combined function to handle click events for both resume scans and resumes
@@ -90,11 +91,11 @@ const ResumeListMenu: React.FC<ResumeListMenuProps> = ({
         //console.log('Made it to click')
         if (itemIsResume) {
             //console.log('Resume Item: ', item)
-            setResume(item as ResumeClass);
+            setResumeIndex(item._id.toString());
             setUseResume(true);
         } else {
             //console.log('Resume Scan Item: ', item)
-            setResumeTest(item as ResumeScanDataClass);
+            setResumeIndex(item._id.toString());
             setUseResume(false);
         }
         if (edit) {
@@ -104,9 +105,7 @@ const ResumeListMenu: React.FC<ResumeListMenuProps> = ({
 
     // Combined render function
     const renderItem = (item: Item, index: number, itemIsResume: boolean) => {
-        const isSelected = useResume
-            ? item._id === currentResume?._id
-            : item._id === resumeTest?._id;
+        const isSelected = item._id === resumeIndex
 
         const formattedLabel = isResume(item) && itemIsResume
             ? `Resume ${item.createdAt ? new Date(item.createdAt).toLocaleDateString() : resumes.length - index} - ${item.title ? item.title : item.name}`

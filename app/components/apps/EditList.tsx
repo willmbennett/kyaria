@@ -53,7 +53,7 @@ export const EditList = (
 
             // Create a payload for the update
             const data = { [parentName]: newArray };
-            console.log(id, data)
+            //console.log(id, data)
             const update = await updateJobAction(id, data, "/")
             router.push(path, { scroll: false })
             setAdd(false)

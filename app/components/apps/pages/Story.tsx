@@ -88,10 +88,10 @@ Job Posting Details: ${JSON.stringify(job)}`
         if (userCanEdit) {
             // Split the property path into segments
             const setKey = `story`
-            console.log(setKey)
+            //console.log(setKey)
 
             const data = { story: currentStory }
-            console.log(profileId, data)
+            //console.log(profileId, data)
             await updateProfileAction(profileId, data, "/")
             setSavedToProfile(true)
         }

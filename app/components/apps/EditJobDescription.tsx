@@ -50,10 +50,10 @@ export default function ProfileTextEdit({
   const onSubmit: SubmitHandler<FormFields> = async (textinput) => {
     if (userCanEdit) {
       // Save the message to the database
-      console.log(`"${setKey}":"${textinput}"`)
+      //console.log(`"${setKey}":"${textinput}"`)
       const data = JSON.parse(`{"${setKey}":""}`)
       data[setKey] = textinput.input
-      console.log(jobId, data)
+      //console.log(jobId, data)
       const update = await updateJobAction(jobId, data, "/")
       router.push(path, { scroll: false })
       setEdit(false)
@@ -78,7 +78,7 @@ export default function ProfileTextEdit({
       // Create a payload for the update
       const data = { [parentName]: newArray };
 
-      console.log(jobId, data);
+      //console.log(jobId, data);
 
       // Update the job with the new array
       await updateJobAction(jobId, data, "/");

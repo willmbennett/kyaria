@@ -44,10 +44,10 @@ export default function ProfileTextEdit({
   const onSubmit: SubmitHandler<FormFields> = async (textinput) => {
     if (userCanEdit) {
       // Save the message to the database
-      console.log(`"${setKey}":"${textinput}"`)
+      //console.log(`"${setKey}":"${textinput}"`)
       const data = JSON.parse(`{"${setKey}":""}`)
       data[setKey] = textinput.input
-      console.log(profileId, data)
+      //console.log(profileId, data)
       const update = await updateProfileAction(profileId, data, "/")
       router.push(path, { scroll: false })
       setEdit(false)
@@ -71,10 +71,10 @@ export default function ProfileTextEdit({
 
       // Reconstruct the updated property path
       const deleteSetKey = segments.join(".");
-      console.log(deleteSetKey)
+      //console.log(deleteSetKey)
 
       const data = JSON.parse(`{"${deleteSetKey}":false}`)
-      console.log(profileId, data)
+      //console.log(profileId, data)
       await updateProfileAction(profileId, data, "/")
       router.push(path, { scroll: false })
     }

@@ -11,7 +11,7 @@ async function getData(orgId: string) {
         }
 
         const apiUrl = `https://kg.diffbot.com/kg/v3/dql?type=query&token=${process.env.DIFFBOT_API_KEY}&query=diffbotUri%3Ahttp%3A%2F%2Fdiffbot.com%2Fentity%2F${orgId}`; // Replace 'YOUR_API_KEY' with your actual Diffbot API key
-        console.log(apiUrl)
+        //console.log(apiUrl)
         const options = {
             method: 'GET',
             headers: { accept: 'application/json' },
