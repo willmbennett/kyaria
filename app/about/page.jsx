@@ -1,9 +1,9 @@
-import { AboutHero } from '../components/AboutHero'
-import { StoryWithStats } from '../components/StoryWithStats'
-import { FeaturesGridDark } from '../components/FeaturesGridDark'
-import { Team } from '../components/Team'
-import { LogosGrid } from '../components/LogosGrid'
-import { CareersCTA } from '../components/CareersCTA'
+import { AboutHero } from '../components/landingpage/AboutHero'
+import { StoryWithStats } from '../components/landingpage/StoryWithStats'
+import { FeaturesGridDark } from '../components/landingpage/FeaturesGridDark'
+import { Team } from '../components/landingpage/Team'
+import { LogosGrid } from '../components/landingpage/LogosGrid'
+import { CareersCTA } from '../components/landingpage/CareersCTA'
 
 export const metadata = {
   title: 'Kyaria - streamlining the job search with AI.',
