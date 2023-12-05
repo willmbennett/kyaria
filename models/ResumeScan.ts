@@ -21,19 +21,19 @@ class GeoCoordinates {
     @prop({ required: true })
     public Longitude!: number;
 
-    @prop({ required: true })
-    public Source!: string;
+    @prop()
+    public Source?: string;
 }
 
 class Location {
-    @prop({ required: true })
-    public CountryCode!: string;
+    @prop()
+    public CountryCode?: string;
 
     @prop()
     public PostalCode?: string;
 
     @prop({ type: () => [String] })
-    public Regions!: string[];
+    public Regions?: string[];
 
     @prop()
     public Municipality?: string;
@@ -49,17 +49,17 @@ class Telephone {
     @prop({ required: true })
     public Raw!: string;
 
-    @prop({ required: true })
-    public Normalized!: string;
+    @prop()
+    public Normalized?: string;
 
-    @prop({ required: true })
-    public InternationalCountryCode!: string;
+    @prop()
+    public InternationalCountryCode?: string;
 
-    @prop({ required: true })
-    public AreaCityCode!: string;
+    @prop()
+    public AreaCityCode?: string;
 
-    @prop({ required: true })
-    public SubscriberNumber!: string;
+    @prop()
+    public SubscriberNumber?: string;
 }
 
 class WebAddress {
@@ -77,8 +77,8 @@ class CandidateName {
     @prop()
     public Prefix?: string;
 
-    @prop({ required: true })
-    public GivenName!: string;
+    @prop()
+    public GivenName?: string;
 
     @prop()
     public Moniker?: string;
@@ -86,8 +86,8 @@ class CandidateName {
     @prop()
     public MiddleName?: string;
 
-    @prop({ required: true })
-    public FamilyName!: string;
+    @prop()
+    public FamilyName?: string;
 
     @prop()
     public Suffix?: string;
@@ -303,7 +303,7 @@ class Position {
     public Id!: string;
 
     @prop({ _id: false, required: true })
-    public Employer!: Employer;
+    public Employer?: Employer;
 
     @prop({ type: () => [String] })
     public RelatedToByDates?: string[];
@@ -354,40 +354,40 @@ class Position {
 }
 
 class ExperienceSummary {
-    @prop({ required: true })
-    public Description!: string;
+    @prop()
+    public Description?: string;
 
-    @prop({ required: true })
-    public MonthsOfWorkExperience!: number;
+    @prop()
+    public MonthsOfWorkExperience?: number;
 
-    @prop({ required: true })
-    public MonthsOfManagementExperience!: number;
+    @prop()
+    public MonthsOfManagementExperience?: number;
 
-    @prop({ required: true })
-    public ExecutiveType!: string;
+    @prop()
+    public ExecutiveType?: string;
 
-    @prop({ required: true })
-    public AverageMonthsPerEmployer!: number;
+    @prop()
+    public AverageMonthsPerEmployer?: number;
 
-    @prop({ required: true })
-    public FulltimeDirectHirePredictiveIndex!: number;
+    @prop()
+    public FulltimeDirectHirePredictiveIndex?: number;
 
-    @prop({ required: true })
-    public ManagementStory!: string;
+    @prop()
+    public ManagementStory?: string;
 
-    @prop({ required: true })
-    public CurrentManagementLevel!: string;
+    @prop()
+    public CurrentManagementLevel?: string;
 
-    @prop({ required: true })
-    public ManagementScore!: number;
+    @prop()
+    public ManagementScore?: number;
 
     @prop()
     public AttentionNeeded?: string;
 }
 
 class EmploymentHistory {
-    @prop({ _id: false, required: true })
-    public ExperienceSummary!: ExperienceSummary;
+    @prop()
+    public ExperienceSummary?: ExperienceSummary;
 
     @prop()
     public Positions!: Position[];
@@ -465,7 +465,7 @@ class ResumeScanDataClass {
     createdAt: Date | string;
     updatedAt: Date | string;
 
-    @prop({required: true})
+    @prop({ required: true })
     public userId!: string;
 
     @prop()
@@ -490,10 +490,10 @@ class ResumeScanDataClass {
     public SpeakingEngagements?: string;
 
     @prop({ type: () => [ContactInformation] })
-    public ContactInformation!: ContactInformation;
+    public ContactInformation?: ContactInformation;
 
     @prop({ type: () => [ResumeMetadata] })
-    public ResumeMetadata!: ResumeMetadata;
+    public ResumeMetadata?: ResumeMetadata;
 
     @prop({ type: () => [Education] })
     public Education?: Education;

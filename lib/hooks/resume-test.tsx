@@ -91,7 +91,7 @@ export async function handleFormSubmit(
         //console.log(userId)
 
         if (session?.user?.id) {
-            //console.log('1)  Made it to Resume Scan creation')
+            console.log('1)  Made it to Resume Scan creation')
             const path = '/'
             const userId = session.user.id
             const dataToSave = { ...parsedResume, userId }
@@ -105,19 +105,17 @@ export async function handleFormSubmit(
                 const resumeId = await createResumeAction(userResumeWithIds, '/')
                 if (resumeId) {
                     //console.log('2)  Made it to Resume fetching')
-                    const { resume, resumeScan } = await getResumeAction(resumeId, '/')
-                    if (resume && resumeScan) {
+                    const { resume } = await getResumeAction(resumeId, '/')
+                    if (resume) {
                         setResume(resume)
                         setUseResume(true)
                         //console.log(resumeId)
-                        setResumeTest(resumeScan)
                         setFile(null);
                         setLoading(false)
-                        router.push("/resumebuilder")
+                        router.refresh()
                     }
                 }
             }
-
         }
     }
 }

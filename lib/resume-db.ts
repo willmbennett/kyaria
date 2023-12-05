@@ -26,7 +26,9 @@ export async function getResumes(userId: string) {
         const resumeScans = await ResumeScanDataModel.find({
             userId: userId,
             _id: { $nin: resumeScanIdsToExclude }
-        }).lean().exec();
+        })
+            .sort({ createdAt: -1, _id: -1 }) // Sorting by createdAt in descending order, then by _id in descending order
+            .lean().exec();
         if (resumes) {
             transformProps(resumes, castToString, '_id');
             transformProps(resumes, dateToString, ["createdAt", "updatedAt"]);

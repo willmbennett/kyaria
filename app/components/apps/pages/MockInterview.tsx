@@ -4,7 +4,7 @@ import { Chat } from '../../chat/Chat';
 import { type Message } from 'ai/react'
 
 interface MockInterviewProps {
-    userName: string;
+    userName?: string;
     jobStripped: any;
     jobTitle: string;
     company: string;

@@ -14,13 +14,21 @@ type PDFViewerProps = {
     onLoadSuccess: (pdf: PDFDocumentProxy) => void;
     numPages: number | null;
     handleTextContent: (textContent: { items: any[]; }) => void;
+    handleAnnotations: (annotations: any[]) => void;
 };
 
-export const PDFViewer: React.FC<PDFViewerProps> = ({ file, onLoadSuccess, numPages, handleTextContent }) => (
+export const PDFViewer: React.FC<PDFViewerProps> = (
+    { file, 
+        onLoadSuccess, 
+        numPages, 
+        handleTextContent,
+        handleAnnotations
+    }
+    ) => (
 
     <Document file={file} onLoadSuccess={onLoadSuccess} options={options}>
         {Array.from(new Array(numPages), (el, index) => (
-            <Page key={`page_${index + 1}`} pageNumber={index + 1} onGetTextSuccess={handleTextContent} />
+            <Page key={`page_${index + 1}`} pageNumber={index + 1} onGetTextSuccess={handleTextContent} onGetAnnotationsSuccess={handleAnnotations} />
         ))}
     </Document>
 );
