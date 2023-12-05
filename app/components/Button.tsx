@@ -10,6 +10,7 @@ const styles = {
 }
 
 const sizeStyles = {
+  sm: 'px-2 py-1.5 text-sm',
   md: 'px-5 py-2.5 text-base',
   lg: 'px-6 py-3 xl:px-7 xl:py-4 text-base xl:text-lg',
 }
@@ -34,7 +35,7 @@ const colors = {
 
 interface ButtonProps {
   variant?: 'solid' | 'ghost' | 'secondary';
-  size?: 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg';
   color?: 'dark' | 'light';
   className?: string;
   type?: "button" | "submit" | "reset";

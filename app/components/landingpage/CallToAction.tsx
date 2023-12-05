@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { Container } from './Container'
 import ctaImage1 from '/public/images/stock/cta-image-01.jpg'
 import ctaImage2 from '/public/images/stock/cta-image-02.jpg'
-import { Button } from './Button'
+import { Button } from '../Button'
 
 export function CallToAction() {
   return (

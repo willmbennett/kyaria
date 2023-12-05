@@ -9,7 +9,7 @@ import { Analytics } from '@segment/analytics-node'
 const analytics = new Analytics({ writeKey: 'wayhHKaPEXQc0mIChRaLHikN33jwEIKM' })
 
 import logo from '/public/images/logo-light.png'
-import { Container } from './Container'
+import { Container } from './landingpage/Container'
 import {
   FacebookIcon,
   YoutubeIcon,

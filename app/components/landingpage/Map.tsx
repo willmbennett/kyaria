@@ -1,7 +1,7 @@
 import Image from 'next/image'
 
 import MapImage from '/public/images/map.png'
-import { Button } from './Button'
+import { Button } from '../Button'
 import { Container } from './Container'
 
 export function Map() {

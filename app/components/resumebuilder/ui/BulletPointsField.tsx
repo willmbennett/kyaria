@@ -39,10 +39,10 @@ const BulletPointItem = ({ name, index, control, onRemove }: BulletPointItemProp
 
         const messages: Message[] = [
             {
-                id: "1", role: "system", content: "You are a professional resume writer experienced in enhancing bullet points. Use the format Action Verb + What You Did +	Additional Descriptive Information/Results including quantities"
+                id: "1", role: "system", content: "You are a professional resume writer experienced in enhancing bullet points. Use the format Action Verb + What You Did +	Additional Descriptive Information/Results including quantities. If the bullet doesn't have a quantity make one up but leave it blank like [number] or [percent]%."
             },
             {
-                id: "2", role: "user", content: `Please refine this bullet point for clarity and impact: "${bulletPoint}"`
+                id: "2", role: "user", content: `Please improve this resume bullet point: "${bulletPoint}"`
             },
             { id: '1', role: 'assistant', content: bulletPoint }
         ];

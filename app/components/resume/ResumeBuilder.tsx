@@ -1,34 +1,47 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useId, useState } from 'react';
 import { Controller, FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import SingleInput from '../resumebuilder/ui/SingleInput';
 import dynamic from 'next/dynamic';
 import { Button } from '../Button';
 import { Award, Certification, Education, ProfessionalExperience, Project, Publication, ResumeClass, Volunteering } from '../../../models/Resume';
-import { GeneralSectionConfig, parseDate, ResumeBuilderFormData, sectionConfigs, sectionType, sortDataBasedOnConfig } from '../../resumebuilder/resumetest-helper';
+import { convertFormDataToResumeModel, GeneralSectionConfig, parseDate, ResumeBuilderFormData, sectionConfigs, sectionType, sortDataBasedOnConfig } from '../../resumebuilder/resumetest-helper';
 import Section from '../resumebuilder/ui/Section';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent, } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import ReactPDF from '@react-pdf/renderer';
 import ResumePDF from './ResumePDF';
 import { format } from 'date-fns';
+import SortableResumeSection from '../resumebuilder/ui/SortableResumeSection';
+import { createResumeAction, updateResumeAction } from '../../board/_action';
+import { debounce, isEqual } from 'lodash';
 
 const DynamicResumePDF = dynamic(() => import('../resumebuilder/ui/CustomPDFViewer'), {
     loading: () => <p>Loading Resume...</p>,
     ssr: false,
 });
 
-const SortableResumeSection = dynamic(
-    () => import('../resumebuilder/ui/SortableResumeSection'),
-    { ssr: false }
-);
-
 type SocialField = { id: string, name: string, url: string }
 type sectionOptions = "social_links" | "skills" | "professional_experience" | "education" | "projects" | 'awards' | 'publications' | 'certifications' | 'interests' | 'volunteering'
 
 const socialPlatforms = ['LinkedIn', 'GitHub', 'Twitter', 'Facebook', 'Instagram', 'Website', 'Blog']; // Add more platforms as needed
 
-const ResumeBuilder = ({ data, toggleEdit, editResume }: { data: ResumeClass, toggleEdit: any, editResume: boolean }) => {
+const ResumeBuilder = (
+    {
+        data,
+        toggleEdit,
+        editResume,
+        resumeId,
+        resumeScanId,
+        userId
+    }: {
+        data: Partial<ResumeClass>,
+        toggleEdit: any,
+        editResume: boolean,
+        resumeId?: string,
+        resumeScanId?: string
+        userId?: string
+    }) => {
     const {
         name,
         title,
@@ -47,6 +60,7 @@ const ResumeBuilder = ({ data, toggleEdit, editResume }: { data: ResumeClass, to
         awards,
         volunteering
     } = data
+    const [saveStatus, setSaveStatus] = useState('up to date');
 
     const resumeSections: sectionOptions[] = [
         'skills',
@@ -69,7 +83,7 @@ const ResumeBuilder = ({ data, toggleEdit, editResume }: { data: ResumeClass, to
         .map(interest => ({ label: interest, value: interest })) : null
 
 
-    const socialLinksArray = Object.entries(social_links).map(([name, url]) => ({
+    const socialLinksArray = social_links && Object.entries(social_links).map(([name, url]) => ({
         name,
         url
     }));
@@ -118,11 +132,6 @@ const ResumeBuilder = ({ data, toggleEdit, editResume }: { data: ResumeClass, to
         return sortedResumeSection as T[];;
     };
 
-
-
-
-
-
     const methods = useForm<ResumeBuilderFormData>({
         values: {
             email,
@@ -145,6 +154,64 @@ const ResumeBuilder = ({ data, toggleEdit, editResume }: { data: ResumeClass, to
     });
 
     const { register, control, watch, setValue } = methods
+
+    const [currentResume, setCurrentResume] = useState(convertFormDataToResumeModel(watch()));
+    const newResume = convertFormDataToResumeModel(watch())
+
+    const savetoDatabase = async () => {
+        setSaveStatus('saving');
+        const resumeToSave = convertFormDataToResumeModel(watch())
+        try {
+            const userResumeWithIds = { userId, resumeScan: resumeScanId, ...resumeToSave }
+            //console.log('resumeId: ', resumeId)
+            //console.log('resumeScanId: ', resumeScanId)
+            //console.log('resumeToSave: ', resumeToSave)
+            //console.log('userId: ', userId)
+            //console.log('userResumeWithIds: ', userResumeWithIds)
+            if (resumeId) {
+                await updateResumeAction(resumeId, resumeToSave, '/')
+            } else if (resumeScanId) {
+                const resumeId = await createResumeAction(userResumeWithIds, '/')
+                //console.log(resumeId)
+            }
+            setTimeout(() => {
+                setSaveStatus('up to date');
+            }, 1000); // Adjust the delay as needed
+        } catch (error) {
+            //console.error('Error saving to database:', error);
+            setSaveStatus(`error: ${error}`);
+            // Handle the error appropriately
+        }
+    }
+    
+    function debounce<T extends (...args: any[]) => void>(callback: T, delay: number): (...args: Parameters<T>) => void {
+        let timeoutId: NodeJS.Timeout | null = null;
+
+        return function (...args: Parameters<T>) {
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
+            timeoutId = setTimeout(() => callback(...args), delay);
+        };
+    }
+
+    const debouncedSaveToDatabase = useCallback(
+        debounce(() => {
+            savetoDatabase();
+        }, 5000),
+        [] // Dependencies array is empty to ensure this is only created once
+    );
+
+
+    useEffect(() => {
+        //console.log('newResume: ', newResume);
+        //console.log('currentResume: ', currentResume);
+        if (!isEqual(currentResume, newResume) && editResume) {
+            console.log('Made it to save');
+            debouncedSaveToDatabase();
+            setCurrentResume(newResume); // Update the current state
+        }
+    }, [newResume, currentResume, editResume, debouncedSaveToDatabase, savetoDatabase]);
 
 
     const { fields, append, remove } = useFieldArray({
@@ -194,84 +261,106 @@ const ResumeBuilder = ({ data, toggleEdit, editResume }: { data: ResumeClass, to
         link.click();
     };
 
+    const id = useId()
 
-    return (<div className='flex flex-row w-full px-3'>
-        {editResume && <>
-            <div className='min-h-screen p-3'>
-                <div className='flex flex-col sticky top-0 space-y-2 border border-slate-200 shadow rounded-md p-3'>
-                    <h1>Menu</h1>
-                    <Button variant='ghost' size='md' onClick={toggleEdit}>Exit Builder</Button>
-                    <Button size='md' onClick={generatePDF} className="mb-2">Download Resume</Button>
+
+    return (
+        <div className='w-full flex flex-col px-4'>
+            <div className='flex flex-row w-full space-x-2'>
+                {editResume && <>
+                    <div className='w-full'>
+                        <div className='flex flex-row w-full justify-center items-center space-x-2 py-3 sticky top-0 bg-white'>
+                            <Button variant='ghost' size='sm' onClick={toggleEdit}>Exit</Button>
+                            <Button size='sm' onClick={generatePDF}>Download</Button>
+                            <div className='flex flex-row space-x-2'>
+                                <p>Status: </p>
+                                {saveStatus === 'saving' && (
+                                    <span className='text-orange-500'>
+                                        Saving... <span role="img" aria-label="saving">⏳</span>
+                                    </span>
+                                )}
+                                {saveStatus === 'up to date' && (
+                                    <span className='text-green-500'>
+                                        Up to date <span role="img" aria-label="ok">✅</span>
+                                    </span>
+                                )}
+                                {saveStatus === 'error' && (
+                                    <span className='text-red-500'>
+                                        Error during save <span role="img" aria-label="error">❌</span>
+                                    </span>
+                                )}
+                            </div>
+
+                        </div>
+                        <FormProvider {...methods}>
+                            <form>
+                                <Section title={"Contact Information".toUpperCase()}>
+                                    <div className='mb-6 p-4 border bg-slate-100 border-slate-400 shadow rounded-md'>
+                                        {inputFields.map((field, index) => (
+                                            <SingleInput
+                                                key={index}
+                                                sectionName={field.sectionName}
+                                                register={register}
+                                                optimize={field.optimize}
+                                            />
+                                        ))}
+
+                                        <h2 className="text-lg font-semibold mb-4">{'Social Links'.toUpperCase()}</h2>
+                                        {fields.map((field: SocialField, index) => (
+                                            <div key={field.id} className="flex items-center mb-2">
+                                                <Controller
+                                                    name={`social_links.${index}.name`}
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <select {...field} className="border p-1 rounded w-full">
+                                                            {socialPlatforms.map((platform, idx) => (
+                                                                <option key={idx} value={platform}>
+                                                                    {platform}
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                    )}
+                                                    defaultValue={field.name || socialPlatforms[0]} // Set default value
+                                                />
+                                                <Controller
+                                                    name={`social_links.${index}.url`}
+                                                    control={control}
+                                                    render={({ field }) => <input type="url" {...field} placeholder="Social Link URL" className="border p-1 rounded w-full" />}
+                                                />
+                                                <button onClick={() => remove(index)} className="ml-2 text-red-500">Remove</button>
+                                            </div>
+                                        ))}
+                                        <Button size='md' type="button" onClick={() => append({ name: socialPlatforms[0], url: '' })} className="text-blue-500">Add Social Link</Button>
+                                    </div>
+                                </Section>
+
+                                <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} id={id}>
+                                    <SortableContext items={sections} strategy={verticalListSortingStrategy}>
+                                        {sections.map((section: sectionOptions, idx: number) =>
+                                            <SortableResumeSection
+                                                key={idx}
+                                                id={section}
+                                                name={section}
+                                                control={control}
+                                                register={register}
+                                                setValue={setValue}
+                                                watch={watch}
+                                            />)}
+                                    </SortableContext>
+                                </DndContext>
+                            </form>
+                        </FormProvider>
+                    </div>
+                </>}
+                <div className='w-full h-auto'>
+                    <div className='sticky top-0 h-screen'>
+                        <DynamicResumePDF key={sections.join('-')} data={watch()} sections={sections} />
+                    </div>
+
                 </div>
             </div>
-            <div className='w-full'>
-                <FormProvider {...methods}>
-                    <form>
-                        <Section title={"Contact Information".toUpperCase()}>
-                            <div className='mb-6 p-4 border bg-slate-100 border-slate-400 shadow rounded-md'>
-                                {inputFields.map((field, index) => (
-                                    <SingleInput
-                                        key={index}
-                                        sectionName={field.sectionName}
-                                        register={register}
-                                        optimize={field.optimize}
-                                    />
-                                ))}
-
-                                <h2 className="text-lg font-semibold mb-4">{'Social Links'.toUpperCase()}</h2>
-                                {fields.map((field: SocialField, index) => (
-                                    <div key={field.id} className="flex items-center mb-2">
-                                        <Controller
-                                            name={`social_links.${index}.name`}
-                                            control={control}
-                                            render={({ field }) => (
-                                                <select {...field} className="border p-1 rounded w-full">
-                                                    {socialPlatforms.map((platform, idx) => (
-                                                        <option key={idx} value={platform}>
-                                                            {platform}
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                            )}
-                                            defaultValue={field.name || socialPlatforms[0]} // Set default value
-                                        />
-                                        <Controller
-                                            name={`social_links.${index}.url`}
-                                            control={control}
-                                            render={({ field }) => <input {...field} placeholder="Social Link URL" className="border p-1 rounded w-full" />}
-                                        />
-                                        <button onClick={() => remove(index)} className="ml-2 text-red-500">Remove</button>
-                                    </div>
-                                ))}
-                                <Button size='md' type="button" onClick={() => append({ name: socialPlatforms[0], url: '' })} className="text-blue-500">Add Social Link</Button>
-                            </div>
-                        </Section>
-
-                        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} >
-                            <SortableContext items={sections} strategy={verticalListSortingStrategy}>
-                                {sections.map((section: sectionOptions, idx: number) =>
-                                    <SortableResumeSection
-                                        key={section}
-                                        id={section}
-                                        name={section}
-                                        control={control}
-                                        register={register}
-                                        setValue={setValue}
-                                        watch={watch}
-                                    />)}
-                            </SortableContext>
-                        </DndContext>
-                    </form>
-                </FormProvider>
-            </div>
-        </>}
-        <div className='w-full h-auto'>
-            <div className='sticky top-0 p-3 h-screen'>
-                <DynamicResumePDF key={sections.join('-')} data={watch()} sections={sections} />
-            </div>
-
         </div>
-    </div>);
+    );
 };
 
 export default ResumeBuilder;

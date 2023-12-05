@@ -21,7 +21,7 @@ const PDFResumeSection = ({ sectionConfig, data }: ResumeSectionProps) => {
     const sortedData = sortDataBasedOnConfig(data, sectionConfig);
 
     return (
-        <View wrap={false}>
+        <View wrap={false} style={pdfstyles.resumeSection}>
             <SectionHeader title={sectionConfig.title} />
             {sortedData.map((item, index) => (
                 <EntryView key={index} item={item} fieldsConfig={sectionConfig.fieldsConfig} />

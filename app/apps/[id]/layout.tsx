@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import FeedbackAside from '../../components/FeedbackAside';
+import FeedbackAside from '../../components/landingpage/FeedbackAside';
 
 const title = 'Launch Your Career';
 const description = 'Launch your career with the power of AI';

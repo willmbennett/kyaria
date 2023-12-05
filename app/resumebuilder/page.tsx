@@ -1,23 +1,25 @@
 import ResumeTest from "../components/resumebuilder/ResumeTest";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../lib/auth";
-import { getResumeScans } from "../../lib/resumescan-db";
 import Await from "../jobs/await";
 import { ResumeScanDataClass } from "../../models/ResumeScan";
+import { getResumes } from "../../lib/resume-db";
+import { ResumeClass } from "../../models/Resume";
+import { ResumeBuilderHero } from "../components/resumebuilder/ResumeBuilderHero";
 
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions);
-
-  const promise = getResumeScans(session?.user?.id || '650f813286f63a9d8c0080ee')
+  const resumesPromise = getResumes(session?.user?.id || '650f813286f63a9d8c0080ee')
 
   return (
-    <div className="flex flex-col w-full md:flex-row justify-center">
-      <div className="flex flex-col md:w-3/4 md:flex-row py-2 min-h-screen lg:px-4 lg:mt-6">
+    <div className="flex w-full min-h-screen justify-center">
+      {!session?.user?.id && ResumeBuilderHero()}
+      {session?.user?.id && <>
         {/* @ts-expect-error Server Component */}
-        <Await promise={promise}>
-          {({ resumeScans }: { resumeScans: ResumeScanDataClass[] }) => <ResumeTest session={session} resumeScans={resumeScans} />}
+        < Await promise={resumesPromise}>
+          {({ resumes, resumeScans }: { resumes: ResumeClass[], resumeScans: ResumeScanDataClass[] }) => <ResumeTest session={session} resumeScans={resumeScans} resumes={resumes} />}
         </Await>
-      </div>
-    </div>
+      </>}
+    </div >
   );
 }

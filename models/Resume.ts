@@ -3,8 +3,10 @@ import {
     getModelForClass,
     prop,
     Severity,
-    mongoose,
+    mongoose
 } from "@typegoose/typegoose";
+import type { Ref } from "@typegoose/typegoose";
+import { ResumeScanDataClass } from "./ResumeScan";
 
 class Responsibilities {
     @prop()
@@ -241,6 +243,7 @@ class Volunteering {
 
 @ModelOptions({
     schemaOptions: {
+        timestamps: true,
         versionKey: false,
         collection: "resumes",
     },
@@ -251,6 +254,11 @@ class Volunteering {
 class ResumeClass {
     @prop({ required: true })
     public name!: string;
+    createdAt: Date | string;
+    updatedAt: Date | string;
+
+    @prop({ ref: () => ResumeScanDataClass, required: true })
+    public resumeScan?: Ref<ResumeScanDataClass>;
 
     @prop()
     public title?: string;

@@ -3,7 +3,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 
 import logo from '/public/images/logo-icon.png'
-import { Container } from '../components/Container'
+import { Container } from '../components/landingpage/Container'
 
 export default function AuthLayout({
   children, // will be a page or nested layout

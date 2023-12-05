@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 
 import { Container } from './Container'
-import { Button } from './Button'
+import { Button } from '../Button'
 
 const features = [
   {

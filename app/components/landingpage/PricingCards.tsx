@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 
 import { Container } from './Container'
-import { Button } from './Button'
+import { Button } from '../Button'
 
 const tiers = [
   {

@@ -132,19 +132,17 @@ const ResumePDF: React.FC<ResumePDFProps> = ({ data, sections }) => {
               ))}
             </View>
           </View>
-          {summary ?
-            (<View>
-              <Text style={pdfstyles.title}>{title?.toUpperCase()}</Text>
+          <View>
+            {title && <Text style={pdfstyles.title}>{title.toLocaleUpperCase()}</Text>}
+            {summary &&
               <View style={pdfstyles.entryContainer}>
                 <Text style={pdfstyles.text}>{summary}</Text>
               </View>
-            </View>
-            )
-            : <View></View>
-          }
+            }
+          </View>
         </View>
         {sections.map((section, idx) =>
-          <View key={idx} style={pdfstyles.resumeSection}>
+          <View key={idx}>
             {renderField({
               id: section,
               skills: section === 'skills' ? skills : undefined,

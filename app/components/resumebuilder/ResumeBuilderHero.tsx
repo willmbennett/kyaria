@@ -2,54 +2,48 @@ import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import Image from 'next/image'
 
 import Avatar from '/public/images/avatars/avatar-will.jpg'
-import homeHeroImg from '/public/images/stock/job-interview2.jpg'
-import { Container } from './Container'
-import { Button } from './Button'
+import homeHeroImg from '/public/images/products/resume-example.png'
+import { Container } from '../landingpage/Container'
+import AuthButton from './AuthButton'
 
-export function HomeHero() {
+export function ResumeBuilderHero() {
   return (
     <section className="relative overflow-hidden pt-16 md:pt-20 xl:pt-32">
       <Container>
         <div className="mx-auto max-w-lg pb-14 md:mx-0 md:max-w-none md:pb-48 lg:pb-52 xl:max-w-xl xl:pb-14">
           <h1 className="text-5xl font-semibold leading-tighter text-slate-900 md:mx-auto md:max-w-2xl md:text-center xl:mx-0 xl:text-left xl:text-6xl xl:leading-tighter">
-            Give yourself a competitive edge this recruiting season 
+            AI-powered resume builder
           </h1>
           <ul className="mt-6 flex flex-col space-y-4 md:mx-auto md:mt-8 md:max-w-3xl md:flex-row md:space-x-2 md:space-y-0 lg:space-x-4 xl:mx-0 xl:flex-col xl:space-x-0 xl:space-y-4">
-            
             <li className="flex items-center md:items-start xl:items-center">
               <CheckCircleIcon className="h-5 w-5 shrink-0 text-slate-800 md:h-6 md:w-6 xl:h-5 xl:w-5" />
               <p className="ml-3 text-slate-700 lg:ml-4 xl:ml-5 xl:text-lg">
-                Elevator pitch and behaviorals in {' '}
-                <span className="font-medium text-slate-900">one click.</span>
+                Resume summaries and bullets written for you by {' '}
+                <span className="font-medium text-slate-900">AI.</span>
               </p>
             </li>
             <li className="flex items-center md:items-start xl:items-center">
               <CheckCircleIcon className="h-5 w-5 shrink-0 text-slate-800 md:h-6 md:w-6 xl:h-5 xl:w-5" />
               <p className="ml-3 text-slate-700 lg:ml-4 xl:ml-5 xl:text-lg">
-                Polished resume and cover letter{' '}
+                Straightforward and simple {' '}
                 <span className="font-medium text-slate-900">
-                  written for you.
+                  resume builder.
                 </span>
               </p>
             </li>
             <li className="flex items-center md:items-start xl:items-center">
               <CheckCircleIcon className="h-5 w-5 shrink-0 text-slate-800 md:h-6 md:w-6 xl:h-5 xl:w-5" />
               <p className="ml-3 text-slate-700 lg:ml-4 xl:ml-5 xl:text-lg">
-                <span className="font-medium text-slate-900">Stress free</span>
-                {' '} networking emails.
+                <span className="font-medium text-slate-900">ATS approved</span>
+                {' '} formatting.
               </p>
             </li>
           </ul>
           <div className="mt-10 flex flex-col sm:flex-row sm:space-x-5 md:mt-12 md:justify-center xl:justify-start">
-            <Button
-              href="/auth/signin"
-              className="mt-3.5 w-full sm:mt-0 sm:w-auto"
-            >
-              Sign in
-            </Button>
+            <AuthButton />
           </div>
           <p className="mt-4 flex text-md text-slate-600/90 md:justify-center xl:justify-start xl:text-base">
-            It's 100% free, no credit card or subscription required.
+            Included with Kyaria PRO subscription.
           </p>
         </div>
       </Container>
@@ -73,10 +67,8 @@ export function HomeHero() {
                     />
                   </g>
                 </svg>
-
                 <p className="relative">
-                  Kyaria has taken the headache out of the job search, and allowed me to focus on
-                  what really matters – finding the job that's right for me.
+                  I used to use word documents, never again. This resume builder has drastically improved my resume.
                 </p>
               </div>
               <div className="mt-7 flex items-center">
@@ -100,7 +92,7 @@ export function HomeHero() {
               </div>
             </blockquote>
           </div>
-          <div className="absolute bottom-0 right-6 hidden w-1/3 bg-gray-secondary-100 md:block lg:right-12 xl:-right-0 xl:w-full xl:max-w-xl 2xl:-right-32 2xl:max-w-[640px]">
+          <div className="absolute bottom-0 right-6 hidden w-1/3 bg-gray-secondary-100 md:block lg:right-12 xl:-right-0 xl:w-full xl:max-w-xl 2xl:-right-32 2xl:max-w-[600px]">
             <Image
               src={homeHeroImg}
               className="h-auto w-full object-cover"
