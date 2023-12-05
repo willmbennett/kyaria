@@ -1,8 +1,8 @@
-import { ContactHeader } from '../components/ContactHeader'
-import { ContactInfo } from '../components/ContactInfo'
-import { Map } from '../components/Map'
-import { FaqCTA } from '../components/FaqCTA'
-import { CallToAction } from '../components/CallToAction'
+import { ContactHeader } from '../components/landingpage/ontactHeader'
+import { ContactInfo } from '../components/landingpage/ContactInfo'
+import { Map } from '../components/landingpage/Map'
+import { FaqCTA } from '../components/landingpage/FaqCTA'
+import { CallToAction } from '../components/landingpage/CallToAction'
 
 export const metadata = {
   title: 'Wavvy - Contact',
