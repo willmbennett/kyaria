@@ -12,7 +12,7 @@ export default async function ProfilePage() {
   const resumesPromise = getResumes(session?.user?.id || '650f813286f63a9d8c0080ee')
 
   return (
-    <div className="flex w-full min-h-screen justify-center">
+    <div className="w-screen min-h-screen">
       {!session?.user?.id && ResumeBuilderHero()}
       {session?.user?.id && <>
         {/* @ts-expect-error Server Component */}

@@ -90,94 +90,96 @@ export default function ResumeTest(
     }
 
     return (
-        <div className={`py-4 flex flex-col md:flex-row justify-center space-x-2 ${editResume ? 'w-full' : 'w-full lg:w-4/5'}`}>
-            {!editResume &&
-                <div className='w-full md:w-1/3 h-screen'>
-                    <ResumeListMenu
-                        resumeScans={resumeScans}
-                        resumes={resumes}
-                        currentResume={resume}
-                        setResumeTest={setResumeTest}
-                        resumeTest={resumeTest}
-                        setFormHidden={setFormHidden}
-                        useResume={useResume}
-                        setUseResume={setUseResume}
-                        setResume={setResume}
-                        editResume={editResume}
-                        toggleEdit={toggleEdit}
-                        resetForm={resetForm}
-                        userId={session?.user?.id}
-                    />
-                </div>
-            }
-            <div className={`items-center flex flex-col text-center ${editResume ? 'w-full' : 'lg:w-2/3'}`}>
+        <div className={`flex justify-center w-full`}>
+            <div className={`py-4 flex flex-col md:flex-row space-x-2 ${editResume ? 'w-full' : 'w-full lg:w-4/5'}`}>
                 {!editResume &&
-                    <>
-                        {!formHidden && session?.user?.id && (
-                            <ResumeUploadForm
-                                onSubmit={handleSubmit(onSubmit)}
-                                onFileChange={onFileChange}
-                                handleCancel={resetForm}
-                                file={file}
-                                errors={errors}
-                            />
-                        )}
-                        {loading && <LoadingComponent />}
-                        {file && (
-                            <PDFViewer
-                                file={file}
-                                onLoadSuccess={onDocumentLoadSuccess}
-                                numPages={numPages}
-                                handleTextContent={handleTextContent}
-                            />
-                        )}
-                    </>
-                }
-                {!editResume && !useResume && resumeTest &&
-                    <>
-                        <h2 className="sm:text-4xl text-2xl font-bold text-slate-900 mb-8">
-                            {session?.user?.id ? 'Output' : 'Demo Output'}
-                        </h2>
-                        <ResumeDisplay
+                    <div className='w-full md:w-1/3 h-screen'>
+                        <ResumeListMenu
+                            resumeScans={resumeScans}
+                            resumes={resumes}
+                            currentResume={resume}
+                            setResumeTest={setResumeTest}
                             resumeTest={resumeTest}
+                            setFormHidden={setFormHidden}
+                            useResume={useResume}
+                            setUseResume={setUseResume}
+                            setResume={setResume}
+                            editResume={editResume}
+                            toggleEdit={toggleEdit}
+                            resetForm={resetForm}
+                            userId={session?.user?.id}
                         />
-                    </>
+                    </div>
                 }
-                {session?.user?.id &&
-                    <div className='w-full flex flex-col items-center justify-center'>
-                        {useResume ?
-                            <>
-                                {resume && useResume && 
-                                    <ResumeBuilder
-                                        data={resume} // sampleResume
-                                        toggleEdit={toggleEdit}
-                                        editResume={editResume}
-                                        resumeId={resume._id.toString()}
-                                        userId={session.user.id}
-                                    />
-                                }
-                            </>
-                            :
-                            <>
-                                {resumeTest && !useResume &&
-                                    <ResumeBuilder
-                                        data={transformParsedResume(resumeTest)}
-                                        toggleEdit={toggleEdit}
-                                        editResume={editResume}
-                                        resumeScanId={resumeTest._id.toString()}
-                                        userId={session.user.id}
-                                    />
-                                }
-                            </>
-                        }
+                <div className={`items-center flex flex-col text-center ${editResume ? 'w-full' : 'lg:w-2/3'}`}>
+                    {!editResume &&
+                        <>
+                            {!formHidden && session?.user?.id && (
+                                <ResumeUploadForm
+                                    onSubmit={handleSubmit(onSubmit)}
+                                    onFileChange={onFileChange}
+                                    handleCancel={resetForm}
+                                    file={file}
+                                    errors={errors}
+                                />
+                            )}
+                            {loading && <LoadingComponent />}
+                            {file && (
+                                <PDFViewer
+                                    file={file}
+                                    onLoadSuccess={onDocumentLoadSuccess}
+                                    numPages={numPages}
+                                    handleTextContent={handleTextContent}
+                                />
+                            )}
+                        </>
+                    }
+                    {!editResume && !useResume && resumeTest &&
+                        <>
+                            <h2 className="sm:text-4xl text-2xl font-bold text-slate-900 mb-8">
+                                {session?.user?.id ? 'Output' : 'Demo Output'}
+                            </h2>
+                            <ResumeDisplay
+                                resumeTest={resumeTest}
+                            />
+                        </>
+                    }
+                    {session?.user?.id &&
+                        <div className='w-full flex flex-col items-center justify-center'>
+                            {useResume ?
+                                <>
+                                    {resume && useResume &&
+                                        <ResumeBuilder
+                                            data={resume} // sampleResume
+                                            toggleEdit={toggleEdit}
+                                            editResume={editResume}
+                                            resumeId={resume._id.toString()}
+                                            userId={session.user.id}
+                                        />
+                                    }
+                                </>
+                                :
+                                <>
+                                    {resumeTest && !useResume &&
+                                        <ResumeBuilder
+                                            data={transformParsedResume(resumeTest)}
+                                            toggleEdit={toggleEdit}
+                                            editResume={editResume}
+                                            resumeScanId={resumeTest._id.toString()}
+                                            userId={session.user.id}
+                                        />
+                                    }
+                                </>
+                            }
+                        </div>
+                    }
+                </div>
+                {!editResume &&
+                    <div>
+                        <FeedbackAside />
                     </div>
                 }
             </div>
-            {!editResume &&
-                <div>
-                    <FeedbackAside />
-                </div>
-            }
         </div >
     );
 }
