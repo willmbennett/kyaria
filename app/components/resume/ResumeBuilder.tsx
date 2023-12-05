@@ -351,7 +351,7 @@ const ResumeBuilder = (
                                     <SortableContext items={sections} strategy={verticalListSortingStrategy}>
                                         {sections.map((section: sectionOptions, idx: number) =>
                                             <SortableResumeSection
-                                                key={idx}
+                                                key={section}
                                                 id={section}
                                                 name={section}
                                                 control={control}

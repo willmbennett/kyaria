@@ -127,7 +127,7 @@ export async function updateResume(id: string, data: any) {
 
         //console.log(id)
 
-        console.log(`data to update resume with: ${JSON.stringify(data)}`)
+        //console.log(`data to update resume with: ${JSON.stringify(data)}`)
 
         const resume = await ResumeModel.findByIdAndUpdate(
             parsedId,
