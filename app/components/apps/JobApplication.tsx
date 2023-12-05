@@ -16,7 +16,7 @@ import MockInterview from './pages/MockInterview';
 import ProgressBar from './ui/ProgressBar';
 import Networking from './pages/Networking';
 import ResumeBuilder from '../resume/ResumeBuilder';
-import FeedbackAside from '../FeedbackAside';
+import FeedbackAside from '../landingpage/FeedbackAside';
 import { Button } from '../Button';
 
 type ApplicationState = 'Research' | 'Phone Screen' | 'Interviewing' | 'Post-Offer';

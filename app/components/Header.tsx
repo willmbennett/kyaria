@@ -10,20 +10,22 @@ import clsx from 'clsx'
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 import { DiscordButton } from "./ui/DiscordButton";
 
-import { Container } from './Container'
+import { Container } from './landingpage/Container'
 import { Button } from './Button'
 import logo from '/public/images/logo-dark.png'
 import logoIcon from '/public/images/logo-icon.png'
 
+type pageListType = {
+  label: string,
+  href: string
+}
+
 const links = [
-  { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
-  { label: 'Jobs', href: '/jobs' },
-  { label: 'Resume Builder', href: '/resumebuilder' },
   /*{ label: 'Pricing', href: '/pricing' },*/
   /*{ label: 'Contact', href: '/contact' },*/
 ]
-
+/*
 const pages = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
@@ -33,22 +35,36 @@ const pages = [
   { label: 'Sign up', href: '/signin' },
   { label: 'Password reset', href: '/password-reset' },
   { label: '404', href: '/404' },
+]*/
+
+const userPages = [
+  { label: 'Resume Builder', href: '/resumebuilder' },
+  { label: 'Jobs (beta)', href: '/jobs' },
+  { label: 'AI Career Concierge (beta)', href: '/board' },
+  /*{ label: 'Pricing', href: '/pricing' },*/
+  /*{ label: 'Contact', href: '/contact' },*/
 ]
+
+
+//{ label: 'Profile', href: `/profile/${session?.user?.id}` },
 
 export function Header() {
   const pathname = usePathname()
   const { data: session } = useSession();
 
   const signedInLinks = [
-    { label: 'Profile', href: `/profile/${session?.user?.id}` },
-    { label: 'Board', href: '/board' },
-    { label: 'Jobs', href: '/jobs' },
     { label: 'Resume Builder', href: '/resumebuilder' },
+    { label: 'Job Board (beta)', href: '/board' },
+    { label: 'Jobs (beta)', href: '/jobs' },
     /*{ label: 'Pricing', href: '/pricing' },*/
     /*{ label: 'Contact', href: '/contact' },*/
   ]
 
-  const navLinks = session ? signedInLinks : links
+  const desktopMenuLinks = session? signedInLinks : links
+
+  const signedInMenuLinks = [
+    { label: 'Profile', href: `/profile/${session?.user?.id}` },
+  ]
 
   function MenuIcon({ open }: { open: any }) {
     return (
@@ -118,7 +134,7 @@ export function Header() {
             >
               <div>
                 <div className="flex flex-col divide-y divide-gray-secondary-400/75">
-                  {navLinks.map((link) => (
+                  {session && [...signedInMenuLinks, ...signedInLinks].map((link) => (
                     <Link
                       key={`${link.label}-mobile`}
                       href={link.href}
@@ -129,45 +145,8 @@ export function Header() {
                       {link.label}
                     </Link>
                   ))}
-                  {/*
-                  <Disclosure as="div" className="relative">
-                    {({ open }) => (
-                      <>
-                        <Disclosure.Button
-                          className={`group flex w-full items-center justify-between px-4 pb-2 pt-4 font-medium duration-150 ease-in-out ${open
-                              ? 'bg-amber-50 text-slate-900'
-                              : 'text-slate-700 hover:bg-slate-100  hover:text-slate-900'
-                            }`}
-                        >
-                          <span>Pages</span>
-                          <ChevronRightIcon
-                            className={`ml-2 h-5 w-5 duration-300 ${open
-                                ? 'rotate-90 text-slate-900'
-                                : 'text-slate-600/90 group-hover:text-slate-900'
-                              }`}
-                            aria-hidden="true"
-                          />
-                        </Disclosure.Button>
+                  {!session && mobileDropDownMenu('For Job Seekers', session ? signedInLinks : userPages)}
 
-                        <Disclosure.Panel className="z-20 space-y-0 px-4">
-                          {pages.map((subLink) => (
-                            <div
-                              className="mt-2"
-                              key={`${subLink.label}-dropdown-desktop`}
-                            >
-                              <Link
-                                href={subLink.href}
-                                className="block px-3 py-3 font-medium text-slate-700 transition duration-300 ease-in-out hover:bg-slate-100 hover:text-slate-900"
-                              >
-                                {subLink.label}
-                              </Link>
-                            </div>
-                          ))}
-                        </Disclosure.Panel>
-                      </>
-                    )}
-                  </Disclosure>
-                          */}
                 </div>
                 <div className="mt-6">
                   <Button
@@ -186,6 +165,104 @@ export function Header() {
       </Popover>
     )
   }
+
+  const mobileDropDownMenu = (title: string, pageList: pageListType[]) => (
+    <Disclosure as="div" className="relative">
+      {({ open }) => (
+        <>
+          <Disclosure.Button
+            className={`group flex w-full items-center justify-between px-4 pb-2 pt-4 font-medium duration-150 ease-in-out ${open
+              ? 'bg-amber-50 text-slate-900'
+              : 'text-slate-700 hover:bg-slate-100  hover:text-slate-900'
+              }`}
+          >
+            <span>{title}</span>
+            <ChevronRightIcon
+              className={`ml-2 h-5 w-5 duration-300 ${open
+                ? 'rotate-90 text-slate-900'
+                : 'text-slate-600/90 group-hover:text-slate-900'
+                }`}
+              aria-hidden="true"
+            />
+          </Disclosure.Button>
+
+          <Disclosure.Panel className="z-20 space-y-0 px-4">
+            {pageList.map((subLink) => (
+              <div
+                className="mt-2"
+                key={`${subLink.label}-dropdown-desktop`}
+              >
+                <Link
+                  href={subLink.href}
+                  className="block px-3 py-3 font-medium text-slate-700 transition duration-300 ease-in-out hover:bg-slate-100 hover:text-slate-900"
+                >
+                  {subLink.label}
+                </Link>
+              </div>
+            ))}
+          </Disclosure.Panel>
+        </>
+      )}
+    </Disclosure>
+  )
+
+  const desktopDropDownMenu = (title: string, pageList: pageListType[]) => (
+    <Menu as="div" className="relative">
+      {({ open }) => (
+        <>
+          {title == 'Menu' ?
+            <Menu.Button
+              className="group relative z-50 flex cursor-pointer items-center justify-center border border-gray-secondary-400/75 bg-gray-secondary-50 p-3 transition duration-300 ease-in-out focus:outline-none"
+              aria-label="Toggle Navigation"
+            >
+              <MenuIcon open={open} />
+            </Menu.Button>
+            :
+            <Menu.Button
+              className={`group flex items-center px-4  py-2  font-medium outline-none duration-150 ease-in-out focus:outline-none ${open
+                ? 'bg-slate-100 text-slate-900'
+                : 'text-slate-700 hover:bg-slate-100  hover:text-slate-900'
+                }`}
+            >
+              <span>{title}</span>
+              <ChevronDownIcon
+                className={`ml-2 h-5 w-5 duration-300 ${open
+                  ? 'rotate-180 text-slate-900'
+                  : 'text-slate-600/90 group-hover:text-slate-900'
+                  }`}
+                aria-hidden="true"
+              />
+            </Menu.Button>
+          }
+
+
+          <Menu.Items className="absolute right-0 z-20 mt-3 w-52 space-y-1 bg-gray-secondary-50 p-2.5 outline-none drop-shadow filter focus:outline-none">
+            {pageList.map((subLink: pageListType, i) => (
+              <Menu.Item key={`${subLink.label}-dropdown-desktop`}>
+                <Link
+                  href={subLink.href}
+                  className={`block px-5 py-3.5 font-medium ${pathname == subLink.href
+                    ? 'bg-gray-secondary-100/60 text-slate-900'
+                    : 'text-slate-700 transition duration-300 ease-in-out hover:bg-gray-secondary-100/60 hover:text-slate-900'
+                    }`}
+                >
+                  {subLink.label}
+                </Link>
+              </Menu.Item>
+            ))}
+            <Button
+              size="md"
+              variant="solid"
+              className="w-full"
+              onClick={() => signOut()}
+            >
+              Sign Out
+            </Button>
+          </Menu.Items>
+        </>
+      )}
+    </Menu>
+  )
 
   return (
     <header className="h-24">
@@ -210,7 +287,7 @@ export function Header() {
               KYARIA.AI
             </Link>
             <div className="hidden items-center space-x-3 md:flex lg:space-x-4">
-              {navLinks.map((link) => (
+              {desktopMenuLinks.map((link) => (
                 <Link
                   key={`${link.label}-desktop`}
                   href={link.href}
@@ -224,63 +301,28 @@ export function Header() {
                   {link.label}
                 </Link>
               ))}
-              {/*
-              <Menu as="div" className="relative">
-                {({ open }) => (
-                  <>
-                    <Menu.Button
-                      className={`group flex items-center px-4  py-2  font-medium outline-none duration-150 ease-in-out focus:outline-none ${open
-                          ? 'bg-slate-100 text-slate-900'
-                          : 'text-slate-700 hover:bg-slate-100  hover:text-slate-900'
-                        }`}
-                    >
-                      <span>Pages</span>
-                      <ChevronDownIcon
-                        className={`ml-2 h-5 w-5 duration-300 ${open
-                            ? 'rotate-180 text-slate-900'
-                            : 'text-slate-600/90 group-hover:text-slate-900'
-                          }`}
-                        aria-hidden="true"
-                      />
-                    </Menu.Button>
-
-                    <Menu.Items className="absolute right-0 z-20 mt-3 w-52 space-y-1 bg-gray-secondary-50 p-2.5 outline-none drop-shadow filter focus:outline-none">
-                      {pages.map((subLink, i) => (
-                        <Menu.Item key={`${subLink.label}-dropdown-desktop`}>
-                          <Link
-                            href={subLink.href}
-                            className={`block px-5 py-3.5 font-medium ${pathname == subLink.href
-                                ? 'bg-gray-secondary-100/60 text-slate-900'
-                                : 'text-slate-700 transition duration-300 ease-in-out hover:bg-gray-secondary-100/60 hover:text-slate-900'
-                              }`}
-                          >
-                            {subLink.label}
-                          </Link>
-                        </Menu.Item>
-                      ))}
-                    </Menu.Items>
-                  </>
-                )}
-              </Menu>
-              */}
+              {!session && desktopDropDownMenu('For Job Seekers', userPages)}
             </div>
           </div>
 
           <div>
-            <div className="flex items-center space-x-4">
+            <div className="hidden items-center space-x-4 md:flex">
               <div className="hidden lg:block">
-               < DiscordButton />
+                < DiscordButton />
               </div>
               <div className="hidden lg:block">
-                <Button
-                  size="md"
-                  variant="solid"
-                  className="w-full"
-                  onClick={!session ? () => signIn() : () => signOut()}
-                >
-                  {!session ? 'Sign In' : 'Sign Out'}
-                </Button>
+                {!session &&
+                  <Button
+                    size="md"
+                    variant="solid"
+                    className="w-full"
+                    onClick={() => signIn()}
+                  >
+                    Sign In
+                  </Button>
+                }
               </div>
+              {session && desktopDropDownMenu('Menu', signedInMenuLinks)}
               {/*<Button size="md" href="/signin">
                 Sign up free
               </Button>

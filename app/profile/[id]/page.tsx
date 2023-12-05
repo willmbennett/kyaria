@@ -4,7 +4,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../../../lib/auth';
 import { redirect } from 'next/navigation';
 import Await from '../../jobs/await';
-import FeedbackAside from '../../components/FeedbackAside';
+import FeedbackAside from '../../components/landingpage/FeedbackAside';
 
 export default async function ProfilePage({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions)

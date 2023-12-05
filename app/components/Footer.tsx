@@ -5,11 +5,11 @@ import Image from 'next/image'
 import { usePathname } from 'next/navigation';
 import { Analytics } from '@segment/analytics-node'
 
- // instantiation
+// instantiation
 const analytics = new Analytics({ writeKey: 'wayhHKaPEXQc0mIChRaLHikN33jwEIKM' })
 
 import logo from '/public/images/logo-light.png'
-import { Container } from './Container'
+import { Container } from './landingpage/Container'
 import {
   FacebookIcon,
   YoutubeIcon,
@@ -29,10 +29,9 @@ const navigation = {
     /*{ name: 'Contact us', href: '/contact' },*/
   ],
   solutions: [
-    { name: 'Job Board', href: '/board' },
-    { name: 'Resume Tester', href: '/resumebuilder' },
-    { name: 'Jobs', href: '/jobs' },
-    { name: 'Virtual Career Coach (coming soon)', href: '/' },
+    { name: 'Resume Builder', href: '/resumebuilder' },
+    { name: 'AI Career Concierge (beta)', href: '/board' },
+    { name: 'Jobs (beta)', href: '/jobs' },
   ],
   integrations: [
     { name: 'Youtube', href: '#' },
@@ -63,7 +62,7 @@ const SocialLink: React.FC<SocialLinkProps> = ({ icon: Icon, href = '', ...props
   // Ensure Icon is a component by capitalizing it
   return (
     <Link href={href} target="_blank" {...props}>
-        <Icon className="h-5 w-5 text-slate-100/90 duration-150 group-hover:text-slate-50" />
+      <Icon className="h-5 w-5 text-slate-100/90 duration-150 group-hover:text-slate-50" />
     </Link>
   );
 };
@@ -73,7 +72,7 @@ export function Footer() {
   const { data: session } = useSession();
   const page = usePathname()
 
-  if(session?.user?.id){
+  if (session?.user?.id) {
     analytics.identify({
       userId: session.user.id,
       traits: {
@@ -82,7 +81,7 @@ export function Footer() {
       }
     });
   }
-  
+
   return (
     <section className="overflow-hidden bg-slate-700 pb-12 pt-20 text-slate-50">
       <Container>
@@ -94,12 +93,12 @@ export function Footer() {
                 className="h-7 w-auto sm:h-8 lg:h-9"
                 alt="Logo"
                 />*/}
-                KYARIA.AI
+              KYARIA.AI
             </Link>
             <p className="mt-10 text-md leading-relaxed text-slate-50">
               Our mission is to make the job search effortless using the power of AI
             </p>
-            
+
             <div className="mt-8 flex items-center gap-4">
               {/*
               <SocialLink
@@ -150,7 +149,7 @@ export function Footer() {
                 ))}
               </div>
             </div>
-            
+
             <div className="col-span-6 md:col-span-3">
               <p className="text-md font-semibold text-white">Solutions</p>
               <div className="mt-4 flex flex-col space-y-3">
@@ -197,7 +196,7 @@ export function Footer() {
             */}
           </div>
         </div>
-        
+
         <hr className="mt-16 border-gray-secondary-400/60" />
         <div className="flex w-full flex-col justify-between pt-8 sm:flex-row">
           <p className="text-md text-slate-200">

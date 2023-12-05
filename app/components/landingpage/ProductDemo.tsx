@@ -1,7 +1,7 @@
 'use client'
 import { Container } from './Container'
 import { useState } from 'react';
-import { JobApplication } from './apps/JobApplication';
+import { JobApplication } from '../apps/JobApplication';
 
 export function ProductDemo({ jobApp }: { jobApp: any }) {
   return (

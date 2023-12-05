@@ -21,9 +21,12 @@ export async function createResumeScan(data: ResumeScanDataClass) {
                 resumeScanId
             };
         } else {
-            return { error: "Issue creating Resume Scan" };
+            const error = { error: "Issue creating Resume Scan" }
+            console.log(error)
+            return error;
         }
     } catch (error) {
+        console.log(error)
         return { error };
     }
 }

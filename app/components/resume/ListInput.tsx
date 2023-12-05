@@ -96,10 +96,34 @@ const MultiValueRemove = (props: MultiValueRemoveProps<SkillField>) => {
     );
 };
 
+function Loading() {
+    return <>
+      <style jsx>{`
+          .loader {
+            border: 6px solid #f3f3f3; 
+            border-top: 6px solid rgb(51 65 85);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: auto;
+          }
+  
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+      `}</style>
+      <div className="loader"></div> 
+    </>
+  }
+
 const ListInput: React.FC<ListInputProps> = ({ name, control, setValue, watch }) => {
     const { fields, append, remove, move } = useFieldArray({ control, name });
     const [inputValue, setInputValue] = useState('');
+    const [loading, setLoading] = useState(false);
     const data = watch('skills')
+    const userResume = watch()
     const skillsArray = data?.map(skill => skill.value)
 
     const onChange = (fields: OnChangeValue<SkillField, true>) => {
@@ -152,14 +176,143 @@ const ListInput: React.FC<ListInputProps> = ({ name, control, setValue, watch })
 
         const messages = [
             {
-                role: "system", content: "You are a professional resume writer experienced in curating and refining skill sets for job seekers."
+                role: "system", content: `You are a professional resume writer experienced in curating and refining skill sets for job seekers. Skills should be 1-2 words long. If the resume is technical only include technical skills.
+Soft skills examples:
+Listening
+Writing
+Empathy
+Giving constructive feedback
+Self-confidence
+Respect
+Nonverbal communication
+Self-organization
+Self-motivation
+Self-management
+Curiosity
+Positivity
+Calmness in stressful situations
+Quick decision-making
+Open-mindedness
+Delegation
+Negotiation
+Mediation
+Listening
+Coordination
+Conflict management
+Cooperation
+Collaboration
+Introspection
+Critical thinking and observation
+Memory
+Self-organization
+Perception
+Perception
+Persistence
+Decision-making
+Lateral thinking
+Initiative
+Negotiation
+Brainstorming
+Discipline
+Integrity
+Dependability
+Commitment
+Critical thinking
+Professionalism
+Initiative
+Time-management
+Self-motivation
+Inspiration
+Innovative ideas
+Reframing ideas
+Divergent thinking
+Questioning
+Insightfulness
+Mind mapping
+Prioritization
+Organization
+Setting goals
+Stress management
+Delegation
+Decision making
+Self-starting
+Coping
+Empathy
+Diplomacy
+Sensitivity
+Public speaking
+Tolerance
+Mentoring
+Sense of humor
+Networking
+Patience
+Humility
+Empathy
+Versatility
+Trust
+Discipline
+Active listening
+Authenticity
+
+Technical skills examples:
+Word processing software
+Spreadsheet software
+Presentation software
+Email management
+Data entry
+Digital calendars
+Video conferencing
+Social media management
+Instant messaging
+HTML
+Java
+Operating systems
+UI/UX
+Python
+JavaScript
+CSS
+Illustration software
+Photoshop
+Design software
+Desktop publishing
+Video creation software
+Instant messaging
+Video conferencing
+Email management applications
+Spreadsheets
+SQL
+MySQL
+Oracle RDBMS
+Toad
+Data analytics
+Accounts payable
+Billings
+Accounts receivable
+Fixed assets
+Inventory
+Payroll
+Microsoft Excel
+OnlyOffice
+LibreOffice
+Microsoft Word
+Google Drive
+Microsoft Powerpoint
+Adobe Persuasion
+Adobe Creative Suite
+iMovie
+Hootsuite
+WordPress
+GanttPRO
+Zoho Projects
+` 
             },
             {
-                role: "user", content: `Please review this list of skills and refine it for a professional resume. Focus on including only the most important and relevant skills, enhancing their wording for clarity and impact. Shorten the list as necessary, but ensure that key competencies are retained. Return the revised list in a JSON array format: ${JSON.stringify(skillsArray)}.`
+                role: "user", content: `Please tailor the skills section of my resume: ${JSON.stringify(userResume)}${userResume.title? `to this role ${JSON.stringify(userResume.title)}` : ''}. Return the list of the top 10-15 skills in this json format: {"skills": string[]}`
             }
         ]
 
         try {
+            setLoading(true)
             console.log('about to optimize resume section', data)
             const response = await fetch('/api/openai/optimizeResume', {
                 method: 'POST',
@@ -181,6 +334,7 @@ const ListInput: React.FC<ListInputProps> = ({ name, control, setValue, watch })
 
             console.log('optimizedData', fixedSkills)
             setValue('skills', fixedSkills);
+            setLoading(false)
         } catch (error) {
             console.error(`Failed to optimize resume section: skills`, error);
         }
@@ -191,25 +345,27 @@ const ListInput: React.FC<ListInputProps> = ({ name, control, setValue, watch })
             <DndContext modifiers={[restrictToParentElement]} onDragEnd={onSortEnd} onDragOver={handleDragOver}>
                 <SortableContext items={fields} strategy={rectSortingStrategy}>
                     {name == 'skills' && <Button className="mb-3" type="button" onClick={optimizeSkills} size="md">Optimize</Button>}
-                    <CreatableSelect
-                        isMulti
-                        value={fields.map(field => ({ id: field.id, label: (field as SkillField).value, value: (field as SkillField).value }))}
-                        onChange={onChange}
-                        inputValue={inputValue}
-                        onInputChange={(newValue) => setInputValue(newValue)}
-                        onKeyDown={handleKeyDown}
-                        components={{
-                            // @ts-ignore We're failing to provide a required index prop to SortableElement
-                            MultiValue,
-                            MultiValueContainer,
-                            MultiValueRemove,
-                            Control,
-                            DropdownIndicator: null,
-                        }}
-                        closeMenuOnSelect={false}
-                        menuIsOpen={false}
-                    />
-
+                    {!loading &&
+                        <CreatableSelect
+                            isMulti
+                            value={fields.map(field => ({ id: field.id, label: (field as SkillField).value, value: (field as SkillField).value }))}
+                            onChange={onChange}
+                            inputValue={inputValue}
+                            onInputChange={(newValue) => setInputValue(newValue)}
+                            onKeyDown={handleKeyDown}
+                            components={{
+                                // @ts-ignore We're failing to provide a required index prop to SortableElement
+                                MultiValue,
+                                MultiValueContainer,
+                                MultiValueRemove,
+                                Control,
+                                DropdownIndicator: null,
+                            }}
+                            closeMenuOnSelect={false}
+                            menuIsOpen={false}
+                        />
+                    }
+                    {loading && Loading()}
                 </SortableContext>
             </DndContext>
         </div>

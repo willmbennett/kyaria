@@ -1,5 +1,5 @@
 import { Container } from './Container'
-import { Button } from './Button'
+import { Button } from '../Button'
 
 export function FaqCTA() {
   return (

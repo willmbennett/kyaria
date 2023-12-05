@@ -1,7 +1,7 @@
 import Image from 'next/image'
 
 import { Container } from './Container'
-import { Button } from './Button'
+import { Button } from '../Button'
 import processImage from '/public/images/stock/interview.jpg'
 
 export function Process() {
