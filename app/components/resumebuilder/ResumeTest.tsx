@@ -50,7 +50,32 @@ export default function ResumeTest(
     const router = useRouter()
     const { handleSubmit, formState: { errors } } = useForm<FormFields>();
 
+    const [file, setFile] = useState<PDFFile>(null);
+    const [numPages, setNumPages] = useState<number | null>(null);
+    const [resumeUploadText, setResumeUploadText] = useState('');
+
+    const onFileChange = useFileHandler(setFile);
+    const onDocumentLoadSuccess = useDocumentLoadSuccess(setNumPages);
+
+    function handleTextContent(textContent: { items: any[]; }) {
+        const strings = textContent.items.map(item => item.str);
+        const fullText = strings.join(' ');
+        //console.log('fullText: ', fullText);  // This logs the entire text content of the PDF page
+        //console.log('resumeUploadText: ', resumeUploadText);  // This logs the entire text content of the PDF page
+        setResumeUploadText(resumeUploadText + ' ' + fullText)
+    }
+
+    function handleAnnotations(annotations: any[]) {
+        const links = annotations.map(item => item.url);
+        const LinkText = links.join(' ');
+        //console.log(LinkText)
+        //console.log('LinkText: ', LinkText);  // This logs the entire text content of the PDF page
+        //console.log('resumeUploadText: ', resumeUploadText);  // This logs the entire text content of the PDF page
+        setResumeUploadText(LinkText + ' ' + resumeUploadText)
+    }
+
     const onSubmit: SubmitHandler<FormFields> = async () => {
+        //console.log('resumeUploadText: ', resumeUploadText)
         await handleFormSubmit({
             setLoading,
             setFormHidden,
@@ -63,20 +88,6 @@ export default function ResumeTest(
             router
         });
     };
-
-    const [file, setFile] = useState<PDFFile>(null);
-    const [numPages, setNumPages] = useState<number | null>(null);
-    const [resumeUploadText, setResumeUploadText] = useState('');
-
-    const onFileChange = useFileHandler(setFile);
-    const onDocumentLoadSuccess = useDocumentLoadSuccess(setNumPages);
-
-    function handleTextContent(textContent: { items: any[]; }) {
-        const strings = textContent.items.map(item => item.str);
-        const fullText = strings.join(' ');
-        //console.log(fullText);  // This logs the entire text content of the PDF page
-        setResumeUploadText(fullText)
-    }
 
     function resetForm() {
         setFormHidden(false);
@@ -124,12 +135,13 @@ export default function ResumeTest(
                                 />
                             )}
                             {loading && <LoadingComponent />}
-                            {file && (
+                            {file && !loading && (
                                 <PDFViewer
                                     file={file}
                                     onLoadSuccess={onDocumentLoadSuccess}
                                     numPages={numPages}
                                     handleTextContent={handleTextContent}
+                                    handleAnnotations={handleAnnotations}
                                 />
                             )}
                         </>
@@ -154,6 +166,7 @@ export default function ResumeTest(
                                             toggleEdit={toggleEdit}
                                             editResume={editResume}
                                             resumeId={resume._id.toString()}
+                                            resumeScanId={resume.resumeScan?.toString()}
                                             userId={session.user.id}
                                         />
                                     }

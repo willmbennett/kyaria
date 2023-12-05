@@ -183,7 +183,7 @@ const ResumeBuilder = (
             // Handle the error appropriately
         }
     }
-    
+
     function debounce<T extends (...args: any[]) => void>(callback: T, delay: number): (...args: Parameters<T>) => void {
         let timeoutId: NodeJS.Timeout | null = null;
 

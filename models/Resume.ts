@@ -252,25 +252,25 @@ class Volunteering {
     }
 })
 class ResumeClass {
-    @prop({ required: true })
-    public name!: string;
+    @prop()
+    public name?: string;
     createdAt: Date | string;
     updatedAt: Date | string;
 
-    @prop({ ref: () => ResumeScanDataClass, required: true })
+    @prop({ ref: () => ResumeScanDataClass})
     public resumeScan?: Ref<ResumeScanDataClass>;
 
     @prop()
     public title?: string;
 
-    @prop({ required: true })
-    public email!: string;
+    @prop()
+    public email?: string;
 
     @prop()
     public phone?: string;
 
     @prop({ default: {} })
-    public social_links: { [key: string]: string } = {};
+    public social_links?: { [key: string]: string } = {};
 
     @prop()
     public location?: string;
