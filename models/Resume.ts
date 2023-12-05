@@ -269,6 +269,9 @@ class ResumeClass {
     @prop()
     public phone?: string;
 
+    @prop()
+    public sectionOrder?: string[];
+
     @prop({ default: {} })
     public social_links?: { [key: string]: string } = {};
 

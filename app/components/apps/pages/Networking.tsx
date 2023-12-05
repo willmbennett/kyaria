@@ -34,7 +34,7 @@ export default function Networking(
             });
 
             const data = await response.json()
-            console.log(data)
+            //console.log(data)
             const employees = data.map((d: any) => d.entity).filter((a: Employee) => a.summary.includes(company))
             setEmployeeData(employees);
         };

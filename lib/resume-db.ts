@@ -127,7 +127,7 @@ export async function updateResume(id: string, data: any) {
 
         //console.log(id)
 
-        //console.log(`data to update profile with: ${JSON.stringify(data)}`)
+        console.log(`data to update resume with: ${JSON.stringify(data)}`)
 
         const resume = await ResumeModel.findByIdAndUpdate(
             parsedId,
@@ -141,9 +141,12 @@ export async function updateResume(id: string, data: any) {
                 resume,
             };
         } else {
-            return { error: "Resume not found" };
+            const error = { error: "Resume not found" }
+            console.log(error)
+            return error;
         }
     } catch (error) {
+        console.log(error)
         return { error };
     }
 }

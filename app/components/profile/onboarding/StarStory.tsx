@@ -102,9 +102,9 @@ export default function StarStory({
         const savedData: { [key: string]: any } = {};
         savedData[`${setKey}.detail`] = details; // Set the detail property to the details provided.
 
-        console.log(profileId, savedData)
+        //console.log(profileId, savedData)
         const update = await updateProfileAction(profileId, savedData, "/")
-        console.log("Submitted data:", update);
+        //console.log("Submitted data:", update);
         setShowDetails(false)
     };
 

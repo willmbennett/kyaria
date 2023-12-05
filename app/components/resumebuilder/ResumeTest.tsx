@@ -43,6 +43,8 @@ export default function ResumeTest(
     }) {
     const [resumeTest, setResumeTest] = useState<ResumeScanDataClass | null>(resumeScans[0])
     const [resume, setResume] = useState<ResumeClass | null>(resumes[0])
+    const [resumeIndex, setResumeIndex] = useState<string>(resumes ? resumes[0]._id.toString() : resumeScans[0]._id.toString()) // current active resume
+    const activeResume = resumes ? resumes.filter(resume => resume._id == resumeIndex)[0] : resumeScans.filter(resume => resume._id == resumeIndex)[0]
     const [useResume, setUseResume] = useState(resumes.length > 0 ? true : false)
     const [loading, setLoading] = useState(false)
     const [formHidden, setFormHidden] = useState(resumes.length > 0 || resumeScans.length > 0 ? true : false);
@@ -108,14 +110,9 @@ export default function ResumeTest(
                         <ResumeListMenu
                             resumeScans={resumeScans}
                             resumes={resumes}
-                            currentResume={resume}
-                            setResumeTest={setResumeTest}
-                            resumeTest={resumeTest}
-                            setFormHidden={setFormHidden}
-                            useResume={useResume}
+                            resumeIndex={resumeIndex}
+                            setResumeIndex={setResumeIndex}
                             setUseResume={setUseResume}
-                            setResume={setResume}
-                            editResume={editResume}
                             toggleEdit={toggleEdit}
                             resetForm={resetForm}
                             userId={session?.user?.id}
@@ -156,29 +153,28 @@ export default function ResumeTest(
                             />
                         </>
                     }
-                    {session?.user?.id &&
+                    {session?.user?.id && activeResume && 
                         <div className='w-full flex flex-col items-center justify-center'>
                             {useResume ?
                                 <>
-                                    {resume && useResume &&
+                                    {useResume &&
                                         <ResumeBuilder
-                                            data={resume} // sampleResume
+                                            data={activeResume} // sampleResume
                                             toggleEdit={toggleEdit}
                                             editResume={editResume}
-                                            resumeId={resume._id.toString()}
-                                            resumeScanId={resume.resumeScan?.toString()}
+                                            resumeId={activeResume._id.toString()}
                                             userId={session.user.id}
                                         />
                                     }
                                 </>
                                 :
                                 <>
-                                    {resumeTest && !useResume &&
+                                    {!useResume &&
                                         <ResumeBuilder
-                                            data={transformParsedResume(resumeTest)}
+                                            data={transformParsedResume(activeResume)}
                                             toggleEdit={toggleEdit}
                                             editResume={editResume}
-                                            resumeScanId={resumeTest._id.toString()}
+                                            resumeScanId={activeResume._id.toString()}
                                             userId={session.user.id}
                                         />
                                     }

@@ -57,9 +57,9 @@ export default function ResumeParser(
         if (['development'].includes(process.env.NEXT_PUBLIC_VERCEL_ENV || '')) {
 
             const addUserId = { ...demoJSON, userId: userId }
-            console.log(addUserId)
+            //console.log(addUserId)
             const path = "/"
-            console.log('about to create profile')
+            //console.log('about to create profile')
             saveProfile(addUserId, path)
         } else {
 
