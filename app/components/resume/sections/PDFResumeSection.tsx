@@ -24,7 +24,7 @@ const PDFResumeSection = ({ sectionConfig, data }: ResumeSectionProps) => {
         <View wrap={false} style={pdfstyles.resumeSection}>
             <SectionHeader title={sectionConfig.title} />
             {sortedData.map((item, index) => (
-                <EntryView key={index} item={item} fieldsConfig={sectionConfig.fieldsConfig} />
+                <EntryView key={index} item={item} index={index} fieldsConfig={sectionConfig.fieldsConfig} />
             ))}
         </View>
     );
@@ -35,7 +35,7 @@ interface FieldGroups {
 }
 
 
-const EntryView = ({ item, fieldsConfig }: { item: sectionType, fieldsConfig: FieldConfig[] }) => {
+const EntryView = ({ item, fieldsConfig, index }: { item: sectionType, fieldsConfig: FieldConfig[], index: number }) => {
     const groupedFields = fieldsConfig.reduce<FieldGroups>((acc, fieldConfig) => {
         const group = fieldConfig.pdfgroup || fieldConfig.name; // Fallback to name if no group specified
         acc[group] = acc[group] ? [...acc[group], fieldConfig] : [fieldConfig];
@@ -46,7 +46,7 @@ const EntryView = ({ item, fieldsConfig }: { item: sectionType, fieldsConfig: Fi
     const renderOrder = ['title', 'subtitle', 'body'];
 
     return (
-        <View style={pdfstyles.resumeEntry}>
+        <View style={index != 0? pdfstyles.resumeEntry : {}}>
             {renderOrder.map(group => {
                 // Render each group only if it exists in groupedFields
                 return groupedFields[group] ? (

@@ -13,7 +13,10 @@ export async function getResumes(userId: string) {
         }
         const resumes = await ResumeModel.find({
             userId: userId,
-            resumeScan: { $ne: null }
+            $or: [
+                { resumeScan: { $ne: null } },
+                { fromTemplate: true }
+            ]
         })
             .sort({ createdAt: -1, _id: -1 }) // Sorting by createdAt in descending order, then by _id in descending order
             .lean()

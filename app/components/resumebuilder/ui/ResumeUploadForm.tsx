@@ -1,23 +1,23 @@
 import { Button } from "../../Button";
 import { FileUploader } from "./FileUploader";
-import { FieldErrors } from 'react-hook-form';
+import { FieldErrors, SubmitHandler, UseFormHandleSubmit } from 'react-hook-form';
 
 type FormFields = {
     input: string;
 };
 
 type ResumeUploadFormProps = {
-    onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+    handleSubmit: UseFormHandleSubmit<FormFields, undefined>;
+    onSubmit: SubmitHandler<FormFields>;
     onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     file: File | null;
     errors: FieldErrors<FormFields>;
     handleCancel: () => void;
 };
 
-export const ResumeUploadForm: React.FC<ResumeUploadFormProps> = ({ onSubmit, onFileChange, file, errors, handleCancel }) => (
+export const ResumeUploadForm: React.FC<ResumeUploadFormProps> = ({ handleSubmit, onSubmit, onFileChange, file, errors, handleCancel }) => (
     <>
-        <p className='py-2'>Upload your resume</p>
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <p className='py-2'>
                 <FileUploader onFileChange={onFileChange} />
                 {errors.input && <p>{errors.input.message}</p>}

@@ -15,6 +15,7 @@ interface ResumeListMenuProps {
     toggleEdit: () => void;
     resetForm: () => void;
     userId?: string;
+    setFormHidden: (arg: boolean) => void;
 }
 
 
@@ -83,12 +84,14 @@ const ResumeListMenu: React.FC<ResumeListMenuProps> = ({
     setUseResume,
     toggleEdit,
     resetForm,
-    userId
+    userId,
+    setFormHidden
 }) => {
 
     // Combined function to handle click events for both resume scans and resumes
     const handleItemClick = (item: Item, itemIsResume: boolean, edit?: boolean | false) => {
         //console.log('Made it to click')
+        setFormHidden(true)
         if (itemIsResume) {
             //console.log('Resume Item: ', item)
             setResumeIndex(item._id.toString());
@@ -108,8 +111,8 @@ const ResumeListMenu: React.FC<ResumeListMenuProps> = ({
         const isSelected = item._id === resumeIndex
 
         const formattedLabel = isResume(item) && itemIsResume
-            ? `Resume ${item.createdAt ? new Date(item.createdAt).toLocaleDateString() : resumes.length - index} - ${item.title ? item.title : item.name}`
-            : `Resume ${resumeScans.length - index} - ${new Date((item as ResumeScanDataClass).createdAt).toLocaleDateString()}`;
+            ? `${item.createdAt ? new Date(item.createdAt).toLocaleDateString() : resumes.length - index} - ${item.title ? item.title : item.name}`
+            : `${resumeScans.length - index} - ${new Date((item as ResumeScanDataClass).createdAt).toLocaleDateString()}`;
 
         return (
             <ListItem

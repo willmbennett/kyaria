@@ -1,5 +1,6 @@
 import { StyleSheet } from '@react-pdf/renderer';
 
+const sectionMargin = 5
 
 export const pdfstyles = StyleSheet.create({
   viewer: {
@@ -14,15 +15,14 @@ export const pdfstyles = StyleSheet.create({
     fontSize: 11
   },
   resumeSection: {
-    marginBottom: 5
+    marginTop: sectionMargin
   },
   resumeEntry: {
-    marginTop: 5
+    marginTop: sectionMargin
   },
   entryHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 2
   },
   entryContainer: {
     flexDirection: 'row',
@@ -54,7 +54,7 @@ export const pdfstyles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 11,
     fontFamily: 'Times-Bold',
-    marginBottom: 2
+    marginTop: 2 * sectionMargin
   },
   name: {
     fontSize: 22,
@@ -71,7 +71,6 @@ export const pdfstyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 5,
   },
   contactInfo: {
     marginHorizontal: 3, // Adjust as needed for spacing
