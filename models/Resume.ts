@@ -179,7 +179,7 @@ class Project {
     public name: string;
 
     @prop()
-    public organization: string;
+    public organization?: string;
 
     @prop()
     public Link?: string;
@@ -256,6 +256,9 @@ class ResumeClass {
     public name?: string;
     createdAt: Date | string;
     updatedAt: Date | string;
+
+    @prop()
+    public fromTemplate?: boolean;
 
     @prop({ ref: () => ResumeScanDataClass})
     public resumeScan?: Ref<ResumeScanDataClass>;

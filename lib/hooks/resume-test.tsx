@@ -13,9 +13,8 @@ type PDFFile = File | null;
 interface FormSubmitParams {
     setLoading: Dispatch<SetStateAction<boolean>>;
     setFormHidden: Dispatch<SetStateAction<boolean>>;
-    setResumeTest: Dispatch<SetStateAction<ResumeScanDataClass | null>>;
-    setResume: Dispatch<SetStateAction<ResumeClass | null>>;
     setUseResume: Dispatch<SetStateAction<boolean>>;
+    setResumeIndex: Dispatch<SetStateAction<string>>;
     setFile: Dispatch<SetStateAction<PDFFile>>;
     resumeUploadText: string;
     router: AppRouterInstance;
@@ -53,17 +52,15 @@ export async function handleFormSubmit(
     {
         setLoading,
         setFormHidden,
-        setResumeTest,
         setFile,
-        setResume,
         setUseResume,
+        setResumeIndex,
         resumeUploadText,
         session,
         router
     }: FormSubmitParams
 ): Promise<void> {
     setLoading(true);
-    setFormHidden(true);
     //console.log('Resume Text')
     //console.log(resumeUploadText)
 
@@ -104,16 +101,12 @@ export async function handleFormSubmit(
                 const userResumeWithIds = { resumeScan: resumeScanId, ...resumeToCreate, userId: userId }
                 const resumeId = await createResumeAction(userResumeWithIds, '/')
                 if (resumeId) {
-                    //console.log('2)  Made it to Resume fetching')
-                    const { resume } = await getResumeAction(resumeId, '/')
-                    if (resume) {
-                        setResume(resume)
-                        setUseResume(true)
-                        //console.log(resumeId)
-                        setFile(null);
-                        setLoading(false)
-                        router.refresh()
-                    }
+                    router.refresh()
+                    setUseResume(true)
+                    setResumeIndex(resumeId)
+                    setFile(null);
+                    setLoading(false)
+                    setFormHidden(true);
                 }
             }
         }

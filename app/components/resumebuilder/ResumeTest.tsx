@@ -19,6 +19,9 @@ import FeedbackAside from '../landingpage/FeedbackAside';
 import { ResumeClass } from '../../../models/Resume';
 import { useRouter } from 'next/navigation'
 import { Session } from 'next-auth';
+import ResumeTemplates from './Template';
+import NewResumeSection from './NewResume';
+import { createResumeAction, getResumeAction } from '../../board/_action';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
     'pdfjs-dist/build/pdf.worker.min.js',
@@ -41,8 +44,6 @@ export default function ResumeTest(
         resumeScans: ResumeScanDataClass[],
         resumes: ResumeClass[]
     }) {
-    const [resumeTest, setResumeTest] = useState<ResumeScanDataClass | null>(resumeScans[0])
-    const [resume, setResume] = useState<ResumeClass | null>(resumes[0])
     const [resumeIndex, setResumeIndex] = useState<string>(resumes ? resumes[0]._id.toString() : resumeScans[0]._id.toString()) // current active resume
     const activeResume = resumes ? resumes.filter(resume => resume._id == resumeIndex)[0] : resumeScans.filter(resume => resume._id == resumeIndex)[0]
     const [useResume, setUseResume] = useState(resumes.length > 0 ? true : false)
@@ -81,20 +82,29 @@ export default function ResumeTest(
         await handleFormSubmit({
             setLoading,
             setFormHidden,
-            setResumeTest,
             setFile,
-            setResume,
             setUseResume,
+            setResumeIndex,
             resumeUploadText,
             session,
             router
         });
     };
 
+    const handleTemplateSelection = async (resumeTemplate: Partial<ResumeClass>) => {
+        const userResumeWithIds = { fromTemplate: true, ...resumeTemplate, userId: session?.user?.id }
+        console.log('userResumeWithIds', userResumeWithIds)
+        const resumeId = await createResumeAction(userResumeWithIds, '/')
+        if (resumeId) {
+            router.refresh()
+            setResumeIndex(resumeId)
+            setUseResume(true)
+            setFormHidden(true);
+        }
+    }
+
     function resetForm() {
         setFormHidden(false);
-        setResumeTest(null);
-        setResume(null);
         setFile(null);
     }
 
@@ -115,69 +125,53 @@ export default function ResumeTest(
                             setUseResume={setUseResume}
                             toggleEdit={toggleEdit}
                             resetForm={resetForm}
+                            setFormHidden={setFormHidden}
                             userId={session?.user?.id}
                         />
                     </div>
                 }
                 <div className={`items-center flex flex-col text-center ${editResume ? 'w-full' : 'lg:w-2/3'}`}>
-                    {!editResume &&
-                        <>
-                            {!formHidden && session?.user?.id && (
-                                <ResumeUploadForm
-                                    onSubmit={handleSubmit(onSubmit)}
-                                    onFileChange={onFileChange}
-                                    handleCancel={resetForm}
-                                    file={file}
-                                    errors={errors}
-                                />
-                            )}
-                            {loading && <LoadingComponent />}
-                            {file && !loading && (
-                                <PDFViewer
-                                    file={file}
-                                    onLoadSuccess={onDocumentLoadSuccess}
-                                    numPages={numPages}
-                                    handleTextContent={handleTextContent}
-                                    handleAnnotations={handleAnnotations}
-                                />
-                            )}
-                        </>
+                    {!editResume && !formHidden &&
+                        <NewResumeSection
+                            session={session}
+                            handleSubmit={handleSubmit}
+                            onSubmit={onSubmit}
+                            onFileChange={onFileChange}
+                            resetForm={resetForm}
+                            file={file}
+                            errors={errors}
+                            loading={loading}
+                            numPages={numPages}
+                            onDocumentLoadSuccess={onDocumentLoadSuccess}
+                            handleTextContent={handleTextContent}
+                            handleAnnotations={handleAnnotations}
+                            handleTemplateSelection={handleTemplateSelection}
+                        />
                     }
-                    {!editResume && !useResume && resumeTest &&
-                        <>
-                            <h2 className="sm:text-4xl text-2xl font-bold text-slate-900 mb-8">
-                                {session?.user?.id ? 'Output' : 'Demo Output'}
-                            </h2>
-                            <ResumeDisplay
-                                resumeTest={resumeTest}
-                            />
-                        </>
-                    }
-                    {session?.user?.id && activeResume && 
+                    {formHidden && session?.user?.id && activeResume &&
                         <div className='w-full flex flex-col items-center justify-center'>
                             {useResume ?
                                 <>
-                                    {useResume &&
-                                        <ResumeBuilder
-                                            data={activeResume} // sampleResume
-                                            toggleEdit={toggleEdit}
-                                            editResume={editResume}
-                                            resumeId={activeResume._id.toString()}
-                                            userId={session.user.id}
-                                        />
-                                    }
+                                    <ResumeBuilder
+                                        data={activeResume} // sampleResume
+                                        toggleEdit={toggleEdit}
+                                        editResume={editResume}
+                                        resumeId={activeResume._id.toString()}
+                                        userId={session.user.id}
+                                    />
                                 </>
                                 :
                                 <>
-                                    {!useResume &&
-                                        <ResumeBuilder
-                                            data={transformParsedResume(activeResume)}
-                                            toggleEdit={toggleEdit}
-                                            editResume={editResume}
-                                            resumeScanId={activeResume._id.toString()}
-                                            userId={session.user.id}
-                                        />
-                                    }
+                                    <ResumeDisplay
+                                        resumeTest={activeResume}
+                                    />
+                                    <ResumeBuilder
+                                        data={transformParsedResume(activeResume)}
+                                        toggleEdit={toggleEdit}
+                                        editResume={editResume}
+                                        resumeScanId={activeResume._id.toString()}
+                                        userId={session.user.id}
+                                    />
                                 </>
                             }
                         </div>

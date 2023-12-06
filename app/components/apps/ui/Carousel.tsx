@@ -19,7 +19,7 @@ function Carousel<T>({ items, renderItem }: CarouselProps<T>) {
 
     return (
         <div>
-            <div className="flex justify-between my-4">
+            <div className="flex justify-between mb-2">
                 <Button onClick={goToPrevious} disabled={currentIndex === 0}>
                     Previous
                 </Button>
