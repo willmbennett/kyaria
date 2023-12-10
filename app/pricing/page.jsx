@@ -14,11 +14,11 @@ export default function PricingPage() {
   return (
     <>
       <PricingCards />
-      <PlanFeatures />
+      {/*<PlanFeatures />
       <FeaturedTestimonials />
       <PlansTable />
       <Faqs />
-      <CallToAction />
+  <CallToAction />*/}
     </>
   )
 }
