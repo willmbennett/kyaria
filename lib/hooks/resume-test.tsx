@@ -14,7 +14,7 @@ interface FormSubmitParams {
     setLoading: Dispatch<SetStateAction<boolean>>;
     setFormHidden: Dispatch<SetStateAction<boolean>>;
     setUseResume: Dispatch<SetStateAction<boolean>>;
-    setResumeIndex: Dispatch<SetStateAction<string>>;
+    setResumeIndex: Dispatch<SetStateAction<string | null>>;
     setFile: Dispatch<SetStateAction<PDFFile>>;
     resumeUploadText: string;
     router: AppRouterInstance;

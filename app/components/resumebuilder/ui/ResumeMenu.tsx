@@ -8,8 +8,8 @@ import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 
 interface ResumeListMenuProps {
     resumeScans: ResumeScanDataClass[];
-    resumeIndex: string
-    setResumeIndex: (resume: string) => void;
+    resumeIndex: string | null
+    setResumeIndex: (resume: string | null) => void;
     resumes: ResumeClass[];
     setUseResume: (arg: boolean) => void;
     toggleEdit: () => void;
@@ -141,12 +141,16 @@ const ResumeListMenu: React.FC<ResumeListMenuProps> = ({
                 <ul className="w-full space-y-1">
                     {resumes.map((resume, index) => renderItem(resume, index, true))}
                 </ul>
-                <p className="text-lg font-semibold sticky top-0 py-2">Resumes Scans (Legacy)</p>
-                <ul className="w-full space-y-1">
-                    {resumeScans.map((resumeScan, index) => renderItem(resumeScan, index, false))}
-                </ul>
+                {resumeScans.length != 0 &&
+                    <>
+                        <p className="text-lg font-semibold sticky top-0 py-2">Resumes Scans (Legacy)</p>
+                        <ul className="w-full space-y-1">
+                            {resumeScans.map((resumeScan, index) => renderItem(resumeScan, index, false))}
+                        </ul>
+                    </>
+                }
             </div>
-        </div>
+        </div >
     );
 };
 

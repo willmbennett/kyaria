@@ -132,7 +132,7 @@ const ResumePDF: React.FC<ResumePDFProps> = ({ data, sections }) => {
               ))}
             </View>
           </View>
-          <View>
+          <View style={pdfstyles.resumeSection}>
             {title && <Text style={pdfstyles.title}>{title.toLocaleUpperCase()}</Text>}
             {summary &&
               <View style={pdfstyles.entryContainer}>
