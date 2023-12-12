@@ -9,8 +9,8 @@ import { ResumeBuilderHero } from "../components/resumebuilder/ResumeBuilderHero
 
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions);
-  //const userId = session?.user?.id
-  const userId = '651c521bb37b5e173811e79e'
+  const userId = session?.user?.id
+  //const userId = '651c521bb37b5e173811e79e'
 
   if (!userId) {
     return (
