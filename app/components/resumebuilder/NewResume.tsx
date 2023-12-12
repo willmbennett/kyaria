@@ -4,7 +4,6 @@ import ResumeTemplates from './Template';
 import { LoadingComponent } from './ui/LoadingComponent';
 import { PDFViewer } from './ui/PDFViewer';
 import { FieldErrors, SubmitHandler, UseFormHandleSubmit } from 'react-hook-form';
-import { Session } from 'next-auth';
 import { Button } from '../Button';
 import { ResumeClass } from '../../../models/Resume';
 
@@ -15,7 +14,7 @@ type FormFields = {
 type PDFFile = File | null;
 
 interface ResumeUploadSectionProps {
-    session: Session | null;
+    userId: string;
     handleSubmit: UseFormHandleSubmit<FormFields, undefined>;
     onSubmit: SubmitHandler<FormFields>;
     onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -33,7 +32,7 @@ interface ResumeUploadSectionProps {
 
 const NewResumeSection = (
     {
-        session,
+        userId,
         handleSubmit,
         onSubmit,
         onFileChange, 
@@ -56,7 +55,7 @@ const NewResumeSection = (
 
     return (
         <>
-            {!loading && session?.user?.id && (
+            {!loading && (
                 <>
                     <div className='flex flex-row space-x-2'>
                         {!useTemplate && <p className='py-2'>Upload your resume, or </p>}
@@ -79,7 +78,7 @@ const NewResumeSection = (
                         />
                     }
                     {useTemplate &&
-                        <ResumeTemplates userId={session?.user?.id} handleTemplateSelection={handleTemplateSelection} />
+                        <ResumeTemplates userId={userId} handleTemplateSelection={handleTemplateSelection} />
                     }
                 </>
             )}

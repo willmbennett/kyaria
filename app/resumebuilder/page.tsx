@@ -9,15 +9,23 @@ import { ResumeBuilderHero } from "../components/resumebuilder/ResumeBuilderHero
 
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions);
-  const resumesPromise = getResumes(session?.user?.id || '650f813286f63a9d8c0080ee')
+  //const userId = session?.user?.id
+  const userId = '651c521bb37b5e173811e79e'
 
+  if (!userId) {
+    return (
+      <div className="w-screen min-h-screen">
+        {ResumeBuilderHero()}
+      </div >
+    );
+  }
+  const resumesPromise = getResumes(userId)
   return (
     <div className="w-screen min-h-screen">
-      {!session?.user?.id && ResumeBuilderHero()}
-      {session?.user?.id && <>
+      {userId && <>
         {/* @ts-expect-error Server Component */}
         < Await promise={resumesPromise}>
-          {({ resumes, resumeScans }: { resumes: ResumeClass[], resumeScans: ResumeScanDataClass[] }) => <ResumeTest session={session} resumeScans={resumeScans} resumes={resumes} />}
+          {({ resumes, resumeScans }: { resumes: ResumeClass[], resumeScans: ResumeScanDataClass[] }) => <ResumeTest userId={userId} resumeScans={resumeScans} resumes={resumes} />}
         </Await>
       </>}
     </div >

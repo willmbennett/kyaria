@@ -58,8 +58,8 @@ const ResumeSection: React.FC<SectionProps> = ({ title, register, control, secti
             case 'date':
                 return (
                     <div key={fieldConfig.name} className="mb-4 flex flex-col">
-                        <label className={`${(usePresent)? 'invisible': ''} text-gray-600 text-sm mb-1`}>{fieldConfig.placeholder.toUpperCase()}</label>
-                        <input type="date" {...register(fieldName)} className={`${(usePresent)? 'invisible': ''} border rounded w-full p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`} />
+                        <label className={`${(usePresent) ? 'invisible' : ''} text-gray-600 text-sm mb-1`}>{fieldConfig.placeholder.toUpperCase()}</label>
+                        <input type="date" {...register(fieldName)} className={`${(usePresent) ? 'invisible' : ''} border rounded w-full p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`} />
                     </div>
                 );
             case 'check':
@@ -97,10 +97,41 @@ const ResumeSection: React.FC<SectionProps> = ({ title, register, control, secti
         );
     };
 
+    const addBlankSection = () => {
+        const blankSection = fieldsConfig.reduce<Partial<SectionItem>>((acc, field) => {
+            let initialValue: any;
+
+            switch (field.type) {
+                case 'text':
+                case 'textarea':
+                case 'date':
+                    initialValue = ''; // Empty string for text, textarea, and date fields
+                    break;
+                case 'check':
+                    initialValue = false; // Boolean for checkbox
+                    break;
+                case 'gpa':
+                    initialValue = ''; // Assuming GPA is a string, modify as needed
+                    break;
+                case 'bulletPoints':
+                    initialValue = []; // Assuming bulletPoints is an array, modify as needed
+                    break;
+                default:
+                    initialValue = null; // Fallback for any unhandled field types
+            }
+
+            acc[field.name] = initialValue;
+            return acc;
+        }, {});
+
+        append(blankSection);
+    };
+
+
     return (
         <>
             {fields.map(renderFields)}
-            <Button size='md' type="button" onClick={() => append({})} >Add {title}</Button>
+            <Button size='md' type="button" onClick={addBlankSection} >Add {title}</Button>
         </>
     );
 };
