@@ -189,7 +189,7 @@ export const parseDate = (dateStr?: string): Date => {
 export type sectionType = ProfessionalExperience | Education | Publication | Project | Award | Certification | Volunteering
 
 // Determine the key to sort by. This could be more dynamic based on sectionConfig if needed.
-const getSortDateField = (sectionConfig: GeneralSectionConfig) => {
+const getSortDateField = (sectionConfig: GeneralSectionConfig): string | null => {
     // Check if 'end_date' field is configured
     const hasEndDate = sectionConfig.fieldsConfig.some(field => field.name === 'end_date');
     if (hasEndDate) return 'end_date';
@@ -265,7 +265,7 @@ export const sortDataBasedOnConfig = (data: sectionType[]
         return returnedValue
     };
 
-    return data.sort(customSort)
+    return [...data].sort(customSort);
 };
 export type sectionOptions = "social_links" | "skills" | "professional_experience" | "education" | "projects" | 'awards' | 'publications' | 'certifications' | 'interests' | 'volunteering'
 

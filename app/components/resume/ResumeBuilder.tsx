@@ -98,6 +98,8 @@ const ResumeBuilder = (
         const hasStartDate = config.fieldsConfig.some(field => field.name === 'start_date');
         const hasDate = config.fieldsConfig.some(field => field.name === 'date');
 
+        //console.log('section: ', section)
+
         const updatedSection = (section || []).map(item => {
             const updatedItem = { ...item };
 
@@ -125,16 +127,20 @@ const ResumeBuilder = (
                 item.details = item.details.filter(detail => detail.show !== false);
             }
 
+            //console.log('updatedItem: ', updatedItem)
+
             return updatedItem;
-        }).filter(item => item.show === null || item.show !== false)
+        })
 
-        const sortedResumeSection = sortDataBasedOnConfig(updatedSection, config) || [];
+        //const sortedResumeSection = sortDataBasedOnConfig(updatedSection, config) || [];
 
-        return sortedResumeSection as T[];;
+        //console.log('sortedResumeSection: ', sortedResumeSection)
+
+        return updatedSection as T[];;
     };
 
     const methods = useForm<ResumeBuilderFormData>({
-        values: {
+        defaultValues: {
             email,
             phone,
             location,

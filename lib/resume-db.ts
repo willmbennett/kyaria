@@ -38,8 +38,8 @@ export async function getResumes(userId: string) {
             transformProps(resumes, ObjectIdtoString, "resumeScan");
             transformProps(resumeScans, castToString, '_id');
             transformProps(resumeScans, dateToString, ["createdAt", "updatedAt"]);
-            console.log('resumes: ', resumes)
-            console.log('resumeScans: ', resumeScans)
+            //console.log('resumes: ', resumes)
+            //console.log('resumeScans: ', resumeScans)
             return {
                 resumes,
                 resumeScans

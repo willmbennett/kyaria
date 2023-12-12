@@ -36,11 +36,11 @@ type FormFields = {
 
 export default function ResumeTest(
     {
-        session,
+        userId,
         resumeScans,
         resumes
     }: {
-        session: Session | null,
+        userId: string,
         resumeScans: ResumeScanDataClass[],
         resumes: ResumeClass[]
     }) {
@@ -87,13 +87,13 @@ export default function ResumeTest(
             setUseResume,
             setResumeIndex,
             resumeUploadText,
-            session,
+            userId,
             router
         });
     };
 
     const handleTemplateSelection = async (resumeTemplate: Partial<ResumeClass>) => {
-        const userResumeWithIds = { fromTemplate: true, ...resumeTemplate, userId: session?.user?.id }
+        const userResumeWithIds = { fromTemplate: true, ...resumeTemplate, userId: userId }
         console.log('userResumeWithIds', userResumeWithIds)
         const resumeId = await createResumeAction(userResumeWithIds, '/')
         if (resumeId) {
@@ -127,14 +127,14 @@ export default function ResumeTest(
                             toggleEdit={toggleEdit}
                             resetForm={resetForm}
                             setFormHidden={setFormHidden}
-                            userId={session?.user?.id}
+                            userId={userId}
                         />
                     </div>
                 }
                 <div className={`items-center flex flex-col text-center ${editResume ? 'w-full' : 'lg:w-2/3'}`}>
-                    {!editResume && !formHidden &&
+                    {!editResume && !formHidden && 
                         <NewResumeSection
-                            session={session}
+                            userId={userId}
                             handleSubmit={handleSubmit}
                             onSubmit={onSubmit}
                             onFileChange={onFileChange}
@@ -149,7 +149,7 @@ export default function ResumeTest(
                             handleTemplateSelection={handleTemplateSelection}
                         />
                     }
-                    {formHidden && session?.user?.id && activeResume && hasResumes && 
+                    {formHidden && activeResume && hasResumes && 
                         <div className='w-full flex flex-col items-center justify-center'>
                             {useResume ?
                                 <>
@@ -158,20 +158,23 @@ export default function ResumeTest(
                                         toggleEdit={toggleEdit}
                                         editResume={editResume}
                                         resumeId={activeResume._id.toString()}
-                                        userId={session.user.id}
+                                        userId={userId}
+                                        key={activeResume._id.toString()}
                                     />
                                 </>
                                 :
                                 <>
                                     <ResumeDisplay
                                         resumeTest={activeResume}
+                                        key={activeResume._id.toString()}
                                     />
                                     <ResumeBuilder
                                         data={transformParsedResume(activeResume)}
                                         toggleEdit={toggleEdit}
                                         editResume={editResume}
                                         resumeScanId={activeResume._id.toString()}
-                                        userId={session.user.id}
+                                        userId={userId}
+                                        key={activeResume._id.toString()}
                                     />
                                 </>
                             }

@@ -4,6 +4,7 @@ import { ResumeScanDataClass } from '../../../../models/ResumeScan';
 import { Button } from '../../Button';
 import { Disclosure, Transition, Popover, Menu } from '@headlessui/react'
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
+import { useRouter } from 'next/navigation';
 
 
 interface ResumeListMenuProps {
@@ -14,7 +15,7 @@ interface ResumeListMenuProps {
     setUseResume: (arg: boolean) => void;
     toggleEdit: () => void;
     resetForm: () => void;
-    userId?: string;
+    userId: string;
     setFormHidden: (arg: boolean) => void;
 }
 
@@ -29,7 +30,7 @@ const DropdownMenu = ({ actions }: { actions: Action[] }) => (
         {({ open }) => (
             <div className='w-full h-full'>
                 <Menu.Button className={`group flex items-center font-medium outline-none duration-150 ease-in-out focus:outline-none w-10`}>
-                    <ChevronDownIcon className={`ml-2 h-5 w-5 duration-300 ${open ? 'rotate-180 text-slate-900' : 'text-slate-600/90 group-hover:text-slate-900'}`} aria-hidden="true" />
+                    <ChevronDownIcon className={`ml-2 h-5 w-5 duration-300 ${open ? 'rotate-180 text-gray-secondary-50' : 'text-white group-hover:text-slate-200'}`} aria-hidden="true" />
                 </Menu.Button>
 
                 <Menu.Items className="absolute right-0 z-20 mt-3 min-w-30 space-y-1 bg-gray-secondary-50 p-1 outline-none drop-shadow filter focus:outline-none">
@@ -87,10 +88,11 @@ const ResumeListMenu: React.FC<ResumeListMenuProps> = ({
     userId,
     setFormHidden
 }) => {
-
+    const router = useRouter()
     // Combined function to handle click events for both resume scans and resumes
     const handleItemClick = (item: Item, itemIsResume: boolean, edit?: boolean | false) => {
-        //console.log('Made it to click')
+         //console.log('Made it to click')
+
         setFormHidden(true)
         if (itemIsResume) {
             //console.log('Resume Item: ', item)
@@ -101,6 +103,9 @@ const ResumeListMenu: React.FC<ResumeListMenuProps> = ({
             setResumeIndex(item._id.toString());
             setUseResume(false);
         }
+        //console.log('About to refresh router')
+        router.refresh()
+
         if (edit) {
             toggleEdit()
         }

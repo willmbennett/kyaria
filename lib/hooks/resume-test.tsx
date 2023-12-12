@@ -18,7 +18,7 @@ interface FormSubmitParams {
     setFile: Dispatch<SetStateAction<PDFFile>>;
     resumeUploadText: string;
     router: AppRouterInstance;
-    session: Session | null; // Replace with your session type
+    userId: string | null; // Replace with your session type
 }
 
 
@@ -56,7 +56,7 @@ export async function handleFormSubmit(
         setUseResume,
         setResumeIndex,
         resumeUploadText,
-        session,
+        userId,
         router
     }: FormSubmitParams
 ): Promise<void> {
@@ -83,14 +83,11 @@ export async function handleFormSubmit(
         //const parsedResume: Partial<ResumeScanDataClass> = testResumeData
         //console.log('Parsed Resume');
         //console.log(parsedResume);
-
-        const userId = session?.user?.id
         //console.log(userId)
 
-        if (session?.user?.id) {
+        if (userId) {
             console.log('1)  Made it to Resume Scan creation')
             const path = '/'
-            const userId = session.user.id
             const dataToSave = { ...parsedResume, userId }
             const resumeScanId = await createResumeScanAction(dataToSave, path)
             //console.log('Created resume scan', resumeScanId)

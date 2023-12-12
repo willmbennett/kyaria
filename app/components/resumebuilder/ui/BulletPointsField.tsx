@@ -42,7 +42,7 @@ const BulletPointItem = ({ name, index, control, onRemove }: BulletPointItemProp
                 id: "1", role: "system", content: "You are a professional resume writer experienced in enhancing bullet points. Use the format Action Verb + What You Did +	Additional Descriptive Information/Results including quantities. If the bullet doesn't have a quantity make one up but leave it blank like [number] or [percent]%."
             },
             {
-                id: "2", role: "user", content: `Please improve this resume bullet point: "${bulletPoint}"`
+                id: "2", role: "user", content: `Please improve this resume bullet point: "${bulletPoint}". Keep it a single sentance.`
             },
             { id: '1', role: 'assistant', content: bulletPoint }
         ];
@@ -85,18 +85,24 @@ const BulletPointsField = ({ name, control }: Props) => {
     const { fields, append, remove } = useFieldArray({ control, name });
 
     return (
-        <div className='w-full text-left'>
-            <label className="text-gray-600 text-sm mb-1">Bullets</label>
-            {fields.map((field, index) => (
-                <BulletPointItem
-                    key={field.id}
-                    name={name}
-                    index={index}
-                    control={control}
-                    onRemove={remove}
-                />
-            ))}
-            <Button size='md' type="button" onClick={() => append({ content: '' })}>Add Bullet Point</Button>
+        <div className='w-full text-left flex flex-col'>
+            {fields.length > 0 &&
+                <>
+                    <label className="text-gray-600 text-sm mb-1">Bullets</label>
+                    {fields.map((field, index) => (
+                        <BulletPointItem
+                            key={field.id}
+                            name={name}
+                            index={index}
+                            control={control}
+                            onRemove={remove}
+                        />
+                    ))}
+                </>
+            }
+            <div>
+                <Button size='md' type="button" onClick={() => append({ content: '' })}>Add Bullet Point</Button>
+            </div>
         </div>
     );
 };
