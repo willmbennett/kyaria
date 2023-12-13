@@ -6,6 +6,11 @@ import { ResumeScanDataClass } from "../../models/ResumeScan";
 import { getResumes } from "../../lib/resume-db";
 import { ResumeClass } from "../../models/Resume";
 import { ResumeBuilderHero } from "../components/resumebuilder/ResumeBuilderHero";
+import { CallToAction } from "../components/landingpage/CallToAction";
+import { Faqs } from "../components/landingpage/Faqs";
+import { FeaturesGrid } from "../components/landingpage/FeaturesGrid";
+import { Process } from "../components/resumebuilder/landingpage/Process";
+import { FeatureBlocks } from "../components/resumebuilder/landingpage/FeatureBlocks";
 
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions);
@@ -15,7 +20,12 @@ export default async function ProfilePage() {
   if (!userId) {
     return (
       <div className="w-screen min-h-screen">
-        {ResumeBuilderHero()}
+        <ResumeBuilderHero />
+        <FeatureBlocks />
+        <Process />
+        {/*<TestimonialsSlide />*/}
+        <Faqs />
+        <CallToAction />
       </div >
     );
   }

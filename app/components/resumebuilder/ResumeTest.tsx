@@ -46,8 +46,8 @@ export default function ResumeTest(
     }) {
     const hasResumes = !(resumes.length === 0 && resumeScans.length === 0)
     const [resumeIndex, setResumeIndex] = useState<string | null>(resumes.length > 0 ? resumes[0]._id.toString() : resumeScans.length > 0 ? resumeScans[0]._id.toString() : null);
-    const activeResume = resumes ? resumes.filter(resume => resume._id == resumeIndex)[0] : resumeScans.filter(resume => resume._id == resumeIndex)[0]
     const [useResume, setUseResume] = useState(resumes.length > 0 ? true : false)
+    const activeResume = useResume ? resumes.filter(resume => resume._id == resumeIndex)[0] : resumeScans.filter(resume => resume._id == resumeIndex)[0]
     const [loading, setLoading] = useState(false)
     const [formHidden, setFormHidden] = useState(hasResumes);
     const [editResume, setEditResume] = useState(false);
@@ -116,7 +116,7 @@ export default function ResumeTest(
     return (
         <div className={`flex justify-center w-full`}>
             <div className={`py-4 flex flex-col md:flex-row space-x-2 justify-center ${editResume ? 'w-full' : 'w-full lg:w-4/5'}`}>
-                {!editResume && hasResumes && 
+                {!editResume && hasResumes &&
                     <div className='w-full md:w-1/3 h-screen'>
                         <ResumeListMenu
                             resumeScans={resumeScans}
@@ -132,7 +132,7 @@ export default function ResumeTest(
                     </div>
                 }
                 <div className={`items-center flex flex-col text-center ${editResume ? 'w-full' : 'lg:w-2/3'}`}>
-                    {!editResume && !formHidden && 
+                    {!editResume && !formHidden &&
                         <NewResumeSection
                             userId={userId}
                             handleSubmit={handleSubmit}
@@ -149,7 +149,7 @@ export default function ResumeTest(
                             handleTemplateSelection={handleTemplateSelection}
                         />
                     }
-                    {formHidden && activeResume && hasResumes && 
+                    {formHidden && activeResume && hasResumes &&
                         <div className='w-full flex flex-col items-center justify-center'>
                             {useResume ?
                                 <>
@@ -163,10 +163,9 @@ export default function ResumeTest(
                                     />
                                 </>
                                 :
-                                <>
+                                <div key={activeResume._id.toString()} className="w-full">
                                     <ResumeDisplay
                                         resumeTest={activeResume}
-                                        key={activeResume._id.toString()}
                                     />
                                     <ResumeBuilder
                                         data={transformParsedResume(activeResume)}
@@ -174,14 +173,13 @@ export default function ResumeTest(
                                         editResume={editResume}
                                         resumeScanId={activeResume._id.toString()}
                                         userId={userId}
-                                        key={activeResume._id.toString()}
                                     />
-                                </>
+                                </div>
                             }
                         </div>
                     }
                 </div>
-                {!editResume && hasResumes && 
+                {!editResume && hasResumes &&
                     <div>
                         <FeedbackAside />
                     </div>

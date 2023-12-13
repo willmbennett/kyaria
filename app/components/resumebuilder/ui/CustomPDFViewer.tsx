@@ -2,15 +2,16 @@ import { ResumeBuilderFormData } from "../../../resumebuilder/resumetest-helper"
 import { PDFViewer } from '@react-pdf/renderer';
 import ResumePDF from "../../resume/ResumePDF";
 import { pdfstyles } from "../../resume/styles";
+import { UseFormWatch } from "react-hook-form";
 
 interface ResumePDFProps {
-    data: ResumeBuilderFormData;
+    watch: UseFormWatch<ResumeBuilderFormData>;
     sections: string[]
 }
 
-const CustomPDFViewer = ({ data, sections }: ResumePDFProps) => (
+const CustomPDFViewer = ({ watch, sections }: ResumePDFProps) => (
     <PDFViewer className="viewer rounded shadow-lg" showToolbar={false} style={pdfstyles.viewer}>
-        <ResumePDF key={sections.join('-')} data={data} sections={sections} />
+        <ResumePDF key={sections.join('-')} watch={watch} sections={sections} />
     </PDFViewer>
 );
 
