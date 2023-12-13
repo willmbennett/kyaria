@@ -294,7 +294,7 @@ export type FieldConfig = {
     placeholder: string;
     type: 'text' | 'textarea' | 'date' | 'gpa' | 'bulletPoints' | 'check';
     group?: string;
-    pdftype?: 'text' | 'textBold' | 'date' | 'startDate' | 'endDate' | 'gpa' | 'bulletPoints' | 'link';
+    pdftype?: 'text' | 'textBold' | 'date' | 'startDate' | 'endDate' | 'current' | 'gpa' | 'bulletPoints' | 'link';
     pdfgroup?: string;
 };
 
@@ -334,7 +334,7 @@ export const sectionConfigs: SectionConfig[] = [
             { name: "location", placeholder: "Location", type: "text", pdftype: "text", pdfgroup: "title" },
             { name: "start_date", placeholder: "Start Date", type: "date", group: "date", pdftype: "startDate", pdfgroup: "title" },
             { name: "end_date", placeholder: "End Date", type: "date", group: "date", pdftype: "endDate", pdfgroup: "title" },
-            { name: "current", placeholder: "Is Current", type: "check", group: "date" },
+            { name: "current", placeholder: "Is Current", type: "check", group: "date", pdftype: "current", pdfgroup: "title" },
             { name: "summary", placeholder: "Summary", type: "textarea", pdftype: "text", pdfgroup: "body" },
             { name: "responsibilities", placeholder: "Bullets", type: "bulletPoints", pdftype: "bulletPoints", pdfgroup: "body" }
         ]
@@ -352,7 +352,7 @@ export const sectionConfigs: SectionConfig[] = [
             { name: "location", placeholder: "Location", type: "text", pdftype: "text", pdfgroup: "title" },
             { name: "start_date", placeholder: "Start Date", type: "date", group: "date", pdftype: "startDate", pdfgroup: "title" },
             { name: "end_date", placeholder: "End Date", type: "date", group: "date", pdftype: "endDate", pdfgroup: "title" },
-            { name: "current", placeholder: "Is Current", type: "check", group: "date" },
+            { name: "current", placeholder: "Is Current", type: "check", group: "date", pdftype: "current", pdfgroup: "title" },
             { name: "summary", placeholder: "Summary", type: "textarea", pdftype: "text", pdfgroup: "body" },
             { name: "details", placeholder: "Bullets", type: "bulletPoints", pdftype: "bulletPoints", pdfgroup: "body" }
         ]
@@ -420,7 +420,7 @@ export const sectionConfigs: SectionConfig[] = [
             { name: "start_date", placeholder: "Start Date", type: "date", group: "date", pdftype: "startDate", pdfgroup: "title" },
             { name: "end_date", placeholder: "End Date", type: "date", group: "date", pdftype: "endDate", pdfgroup: "title" },
             { name: "summary", placeholder: "Summary", type: "textarea", pdftype: "text", pdfgroup: "body" },
-            { name: "current", placeholder: "Is Current", type: "check", group: "date" },
+            { name: "current", placeholder: "Is Current", type: "check", group: "date", pdftype: "current", pdfgroup: "title" },
             { name: "details", placeholder: "Bullets", type: "bulletPoints", pdftype: "bulletPoints", pdfgroup: "body" }
         ]
     },

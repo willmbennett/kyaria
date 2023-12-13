@@ -5,6 +5,7 @@ import { Award, Certification, Education, ProfessionalExperience, Project, Publi
 import { pdfstyles } from './styles';
 import { ListSection } from './sections/ListSection';
 import PDFResumeSection from './sections/PDFResumeSection';
+import { UseFormWatch } from 'react-hook-form';
 
 
 type ContactElement = {
@@ -14,7 +15,7 @@ type ContactElement = {
 };
 
 interface ResumePDFProps {
-  data: ResumeBuilderFormData;
+  watch: UseFormWatch<ResumeBuilderFormData>;
   sections: string[]
 }
 
@@ -75,38 +76,26 @@ const renderField = (
 
 
 // ResumePDF component
-const ResumePDF: React.FC<ResumePDFProps> = ({ data, sections }) => {
+const ResumePDF: React.FC<ResumePDFProps> = ({ watch, sections }) => {
   const {
-    name,
-    title,
-    email,
-    phone,
-    location,
-    summary,
-    skills,
-    professional_experience,
-    education,
-    interests,
-    projects,
-    certifications,
-    awards,
-    publications,
-    volunteering
-  } = data
+    name, title, email, phone, location, social_links, summary, skills,
+    professional_experience, education, interests, projects,
+    certifications, awards, publications, volunteering
+  }: ResumeBuilderFormData = watch();
 
   const contactElements: ContactElement[] = [];
-  if (data.phone) {
+  if (phone) {
     contactElements.push({ type: 'text', value: phone || '' });
   }
-  if (data.email) {
+  if (email) {
     contactElements.push({ type: 'text', value: email || '' });
   }
-  if (data.location) {
+  if (location) {
     contactElements.push({ type: 'text', value: location || '' });
   }
 
   // Add social links to contact elements
-  data.social_links?.forEach(link => {
+  social_links?.forEach(link => {
     contactElements.push({ type: 'link', value: link.name, url: link.url });
   });
 
@@ -132,14 +121,16 @@ const ResumePDF: React.FC<ResumePDFProps> = ({ data, sections }) => {
               ))}
             </View>
           </View>
-          <View style={pdfstyles.resumeSection}>
-            {title && <Text style={pdfstyles.title}>{title.toLocaleUpperCase()}</Text>}
-            {summary &&
-              <View style={pdfstyles.entryContainer}>
-                <Text style={pdfstyles.text}>{summary}</Text>
-              </View>
-            }
-          </View>
+          {title &&
+            <View>
+              <Text style={pdfstyles.title}>{title.toLocaleUpperCase()}</Text>
+            </View>
+          }
+          {summary &&
+            <View>
+              <Text style={pdfstyles.text}>{summary}</Text>
+            </View>
+          }
         </View>
         {sections.map((section, idx) =>
           <View key={idx}>

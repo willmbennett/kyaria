@@ -46,7 +46,7 @@ const EntryView = ({ item, fieldsConfig, index }: { item: sectionType, fieldsCon
     const renderOrder = ['title', 'subtitle', 'body'];
 
     return (
-        <View style={index != 0? pdfstyles.resumeEntry : {}}>
+        <View style={index != 0 ? pdfstyles.resumeEntry : {}}>
             {renderOrder.map(group => {
                 // Render each group only if it exists in groupedFields
                 return groupedFields[group] ? (
@@ -63,7 +63,7 @@ const hasProperty = <T extends object>(obj: T, key: keyof any): key is keyof T =
 
 const RenderFieldGroups = ({ group, item, groupFields }: { group: string, item: sectionType, groupFields: FieldConfig[] }) => {
     const titleTextGroups = groupFields.filter(g => (g.pdfgroup == group) && ['text', 'textBold', 'link', 'gpa'].includes(g.pdftype || ''))
-    const titleDateGroups = groupFields.filter(g => (g.pdfgroup == group) && ['date', 'startDate', 'endDate'].includes(g.pdftype || ''))
+    const titleDateGroups = groupFields.filter(g => (g.pdfgroup == group) && ['date', 'startDate', 'endDate', 'current'].includes(g.pdftype || ''))
 
     switch (group) {
         case 'title':
@@ -78,7 +78,20 @@ const RenderFieldGroups = ({ group, item, groupFields }: { group: string, item: 
                         ))}
                     </View>
                     <View style={pdfstyles.entryTitle}>
-                        {titleDateGroups.filter(field => hasProperty(item, field.name) && item[field.name]).map((field, idx) => (
+                        {titleDateGroups.filter(field => {
+                            // Check if the field exists and is not empty
+                            if (!hasProperty(item, field.name) || !item[field.name]) {
+                                return false;
+                            }
+
+                            // If the field is 'endDate', check if 'current' is true. If so, skip this field.
+                            if (field.pdftype === 'endDate' && item['current' as keyof sectionType]) {
+                                return false;
+                            }
+
+                            // For all other cases, include the field
+                            return true;
+                        }).map((field, idx) => (
                             <View style={pdfstyles.entryTitle} key={idx}>
                                 {idx > 0 && <Text style={pdfstyles.entryDateSeparator}>-</Text>}
                                 <RenderField key={idx} field={field} item={item} />
@@ -91,12 +104,20 @@ const RenderFieldGroups = ({ group, item, groupFields }: { group: string, item: 
             return (
                 <View style={pdfstyles.entryHeader}>
                     <View style={pdfstyles.entryTitle}>
-                        {titleTextGroups.filter(field => hasProperty(item, field.name) && item[field.name]).map((field, idx) => (
-                            <View style={pdfstyles.entryTitle} key={idx}>
-                                {idx > 0 && <Text>, </Text>}
-                                <RenderField key={idx} field={field} item={item} />
-                            </View>
-                        ))}
+                        {titleTextGroups
+                            .filter(field =>
+                                hasProperty(item, field.name) &&
+                                item[field.name] &&
+                                (field.name as string !== 'gpa' || (item[field.name] as GPA).score !== '') // Additional check for gpa
+                            )
+                            .map((field, idx) => (
+                                <View style={pdfstyles.entryTitle} key={idx}>
+                                    {idx > 0 && <Text>, </Text>}
+                                    <RenderField key={idx} field={field} item={item} />
+                                </View>
+                            ))
+                        }
+
                     </View>
                 </View>
             )
@@ -138,7 +159,12 @@ const RenderField = ({ field, item }: { field: FieldConfig, item: sectionType })
                 return item[fieldName] ? <Text style={pdfstyles.entryDate}>{formatDate(item[fieldName]?.toString())}</Text> : null;
 
             case 'endDate':
-                return <Text style={pdfstyles.entryDate}>{item['current' as keyof sectionType] ? 'PRESENT' : formatDate(item[fieldName]?.toString())}</Text>;
+                // Only display the end date if 'current' is not set to true
+                return <Text style={pdfstyles.entryDate}>{formatDate(item[fieldName]?.toString())}</Text>;
+
+            case 'current':
+                // Display 'PRESENT' only if 'end_date' is not set
+                return <Text style={pdfstyles.entryDate}>PRESENT</Text>;
 
             case 'bulletPoints':
                 const bulletPoints = item[fieldName];

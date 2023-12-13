@@ -266,7 +266,7 @@ const ResumeBuilder = (
         const name = watch('name')?.replace(' ', '_')
         const sectionOrder = watch('sectionOrder')
         const blob = await ReactPDF.pdf((
-            <ResumePDF key={sectionOrder.join('-')} data={watch()} sections={sectionOrder} />
+            <ResumePDF key={sectionOrder.join('-')} watch={watch} sections={sectionOrder} />
         )).toBlob();
 
         // Example: Save the blob as a file (or you can handle it as needed)
@@ -385,7 +385,7 @@ const ResumeBuilder = (
                 </>}
                 <div className='w-full h-auto'>
                     <div className='sticky top-0 h-screen'>
-                        <DynamicResumePDF key={sections.join('-')} data={watch()} sections={sections} />
+                        <DynamicResumePDF key={sections.join('-')} watch={watch} sections={sections} />
                     </div>
 
                 </div>

@@ -23,6 +23,7 @@ import { useSession } from 'next-auth/react';
 const navigation = {
   company: [
     { name: 'About us', href: '/about' },
+    { name: 'Pricing', href: '/pricing' },
     /*{ name: 'Careers', href: '#' },*/
     /*{ name: 'Customers', href: '#' },*/
     { name: 'Privacy', href: '/policies/privacy' },
