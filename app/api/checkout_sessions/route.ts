@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function POST() {
+export async function POST(): Promise<NextResponse<any>> {
   //console.log('Made it here')
   try {
     const session = await stripe.checkout.sessions.create({
@@ -46,12 +46,8 @@ export async function POST() {
 
     //console.log(session)
     return NextResponse.json({ clientSecret: session.client_secret }, { status: 200 });
-  } catch (err) {
-    if (err instanceof Error) {
-      return NextResponse.json({ error: err.message }, { status: 500 });
-    } else {
-      console.log({ error: err })
-      return NextResponse.json({ error: err }, { status: 500 });
-    }
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: error }, { status: 500 });
   }
 }
