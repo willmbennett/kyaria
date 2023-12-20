@@ -3,7 +3,6 @@ import JobMenu from './JobMenu'
 import JobDescription from './pages/JobDescription'
 import { useEffect, useState } from 'react';
 import CoverLetter from './pages/CoverLetter';
-import Resume from './pages/Resume';
 import Experience from './pages/Experience';
 import Emails from './pages/Emails';
 import Story from './pages/Story';
