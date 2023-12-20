@@ -40,11 +40,14 @@ export async function POST(req: Request) {
         }
 
     } catch (err) {
-        if (err instanceof Error) {
-            // On error, log and return the error message.
-            console.log(`❌ Error message: ${err.message}`);
-            return NextResponse.json({ "Webhook Error": err.message }, { status: 500 });
-        }
+        const errorMessage =
+            err instanceof Error
+                ? err.message
+                : 'An error occured.';
+        return NextResponse.json(
+            { message: errorMessage, ok: false },
+            { status: 503 },
+        );
     }
 };
 
@@ -109,7 +112,7 @@ async function processEvent(event: Stripe.Event) {
             await updateSubscriptionAction(customer, { status: 'active' }, '/')
             break;
         }
-        
+
         default: {
             console.warn(`Unhandled event type: ${event.type}`);
             break;

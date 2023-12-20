@@ -17,12 +17,14 @@ export async function GET(req: NextRequest) {
       subscription: session.subscription
     }, { status: 200 });
   } catch (err) {
-    if (err instanceof Error) {
-      return NextResponse.json({ error: err.message }, { status: 500 });
-    } else {
-      console.log({ error: err })
-      return NextResponse.json({ error: err }, { status: 500 });
-    }
+    const errorMessage =
+      err instanceof Error
+        ? err.message
+        : 'An error occured.';
+    return NextResponse.json(
+      { message: errorMessage, ok: false },
+      { status: 503 },
+    );
   }
 }
 
@@ -46,8 +48,14 @@ export async function POST(): Promise<NextResponse<any>> {
 
     //console.log(session)
     return NextResponse.json({ clientSecret: session.client_secret }, { status: 200 });
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: error }, { status: 500 });
+  } catch (err) {
+    const errorMessage =
+      err instanceof Error
+        ? err.message
+        : 'An error occured.';
+    return NextResponse.json(
+      { message: errorMessage, ok: false },
+      { status: 503 },
+    );
   }
 }
