@@ -41,10 +41,10 @@ export function HomeHero() {
             </li>
           </ul>
           <div className="mt-10 flex flex-col sm:flex-row sm:space-x-5 md:mt-12 md:justify-center xl:justify-start">
-            <AuthButton />
+            <AuthButton altText="Get Started"/>
           </div>
           <p className="mt-4 flex text-md text-slate-600/90 md:justify-center xl:justify-start xl:text-base">
-            It's 100% free, no credit card or subscription required.
+            Subscription to Kyaria.ai Pro required, only $10 per month.
           </p>
         </div>
       </Container>
