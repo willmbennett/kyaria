@@ -1,4 +1,3 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
@@ -50,6 +49,9 @@ export async function POST() {
   } catch (err) {
     if (err instanceof Error) {
       return NextResponse.json({ error: err.message }, { status: 500 });
+    } else {
+      console.log({ error: err })
+      return NextResponse.json({ error: err }, { status: 500 });
     }
   }
 }
