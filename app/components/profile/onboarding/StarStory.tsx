@@ -203,6 +203,7 @@ export default function StarStory({
                             currentState={currentState}
                             saveToDatabase={updateProfileAction}
                             temp={0.7}
+                            activeSubscription={true}
                         />
                     </>
                 )}

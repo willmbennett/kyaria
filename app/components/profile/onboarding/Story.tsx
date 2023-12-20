@@ -91,6 +91,7 @@ export default function Story({
                     currentState={currentState || ''}
                     saveToDatabase={updateProfileAction}
                     temp={0.7}
+                    activeSubscription={true}
                 />
             </div>
         </>

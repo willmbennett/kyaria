@@ -34,6 +34,7 @@ export default function Responsibility({
                     childIndex={childIndex}
                     saveToDatabase={saveToDatabase}
                     jobKeyWords={jobKeyWords}
+                    activeSubscription={true}
                 />
             </div>
         </>
