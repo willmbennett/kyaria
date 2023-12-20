@@ -35,6 +35,7 @@ export function ProductDemo({ jobApp }: { jobApp: any }) {
           </div>
           <JobApplication
             jobApp={jobApp}
+            activeSubscription={true}
           />
         </div>
       </Container>

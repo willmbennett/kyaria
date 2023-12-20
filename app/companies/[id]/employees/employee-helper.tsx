@@ -58,10 +58,11 @@ export async function getData({ companyId, limit, roleFilter }: getDataProps): P
         //console.log(employeeCategories)
 
 
-        // Then pull all the employees
+        // Then pull all the employees (capped to 100 to reduce API $$$)
 
         const roleFilterUrl = roleFilter != 'All' ? `+strict%3Acategories.name%3A+"${encodeURIComponent(roleFilter)}"` : ''
-        const apiUrl = `https://kg.diffbot.com/kg/v3/dql?type=query&token=${process.env.DIFFBOT_API_KEY}&query=type%3APerson+employments.%7BisCurrent%3A+true${roleFilterUrl}+employer.diffbotUri%3A"http%3A%2F%2Fdiffbot.com%2Fentity%2F${companyId}"%7D+revSortBy%3Aimportance&size=${limit}`
+        const limitWithCap = limit>100? 100 : limit
+        const apiUrl = `https://kg.diffbot.com/kg/v3/dql?type=query&token=${process.env.DIFFBOT_API_KEY}&query=type%3APerson+employments.%7BisCurrent%3A+true${roleFilterUrl}+employer.diffbotUri%3A"http%3A%2F%2Fdiffbot.com%2Fentity%2F${companyId}"%7D+revSortBy%3Aimportance&size=${limitWithCap}`
 
         //console.log(apiUrl)
 

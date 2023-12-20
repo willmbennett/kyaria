@@ -4,6 +4,20 @@ import connectDB from "./connect-db";
 import { castToString, dateToString, ObjectIdtoString, stringToObjectId } from "./utils";
 var transformProps = require('transform-props');
 
+export async function countTotalResumes() {
+    try {
+        await connectDB();
+
+        const totalResumes = await ResumeModel.countDocuments();
+        //console.log('Total resumes:', totalResumes);
+
+        return { totalResumes };
+    } catch (error) {
+        console.error('Error counting resumes:', error);
+        return { error: 'Error counting resumes' };
+    }
+}
+
 export async function getResumes(userId: string) {
     try {
         await connectDB();

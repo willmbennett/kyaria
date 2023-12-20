@@ -6,6 +6,16 @@ import { Button } from '../../Button';
 import StarStory from '../ui/StarStory';
 import { useRouter, usePathname } from "next/navigation";
 
+interface ExperienceProps {
+    professionalExperience: ProfessionalExperience[],
+    resumeId: string,
+    profileId: string,
+    jobStripped: Partial<JobClass>,
+    jobKeyWords: string[],
+    userId: string,
+    activeSubscription: boolean
+}
+
 export default function Experience({
     professionalExperience,
     resumeId,
@@ -13,14 +23,8 @@ export default function Experience({
     jobStripped,
     jobKeyWords,
     userId,
-}: {
-    professionalExperience: ProfessionalExperience[],
-    resumeId: string,
-    profileId: string,
-    jobStripped: Partial<JobClass>,
-    jobKeyWords: string[],
-    userId: string
-}) {
+    activeSubscription
+}: ExperienceProps) {
     const router = useRouter()
     const path = usePathname()
     // State to track the current index
@@ -105,6 +109,7 @@ export default function Experience({
                             parentIndex={items[currentIndex].expIndex}
                             childIndex={items[currentIndex].respIndex}
                             userId={userId}
+                            activeSubscription={activeSubscription}
                         />
                     </div>
                 </div>

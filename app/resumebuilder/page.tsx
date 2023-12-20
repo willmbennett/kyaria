@@ -1,43 +1,52 @@
 import ResumeTest from "../components/resumebuilder/ResumeTest";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../lib/auth";
 import Await from "../jobs/await";
 import { ResumeScanDataClass } from "../../models/ResumeScan";
-import { getResumes } from "../../lib/resume-db";
+import { countTotalResumes, getResumes } from "../../lib/resume-db";
 import { ResumeClass } from "../../models/Resume";
-import { ResumeBuilderHero } from "../components/resumebuilder/ResumeBuilderHero";
-import { CallToAction } from "../components/landingpage/CallToAction";
-import { Faqs } from "../components/landingpage/Faqs";
+import { ResumeBuilderHero } from "../components/resumebuilder/landingpage/ResumeBuilderHero";
+import { CallToAction } from "../components/resumebuilder/landingpage/CallToAction";
 import { FeaturesGrid } from "../components/landingpage/FeaturesGrid";
 import { Process } from "../components/resumebuilder/landingpage/Process";
 import { FeatureBlocks } from "../components/resumebuilder/landingpage/FeatureBlocks";
+import { Faqs } from "../components/resumebuilder/landingpage/Faqs";
+import { checkSubscription } from "../../lib/hooks/check-subscription";
+
+interface resumeTestProps {
+  resumes: ResumeClass[],
+  resumeScans: ResumeScanDataClass[]
+}
 
 export default async function ProfilePage() {
-  const session = await getServerSession(authOptions);
-  const userId = session?.user?.id
-  //const userId = '651c521bb37b5e173811e79e'
+  const { activeSubscription, userId } = await checkSubscription()
+  const { totalResumes } = await countTotalResumes()
 
   if (!userId) {
     return (
-      <div className="w-screen min-h-screen">
+      <>
         <ResumeBuilderHero />
-        <FeatureBlocks />
+        <FeatureBlocks totalResumes={totalResumes || 200} />
         <Process />
         {/*<TestimonialsSlide />*/}
         <Faqs />
         <CallToAction />
-      </div >
+      </>
     );
   }
+
   const resumesPromise = getResumes(userId)
   return (
-    <div className="w-screen min-h-screen">
-      {userId && <>
-        {/* @ts-expect-error Server Component */}
-        < Await promise={resumesPromise}>
-          {({ resumes, resumeScans }: { resumes: ResumeClass[], resumeScans: ResumeScanDataClass[] }) => <ResumeTest userId={userId} resumeScans={resumeScans} resumes={resumes} />}
-        </Await>
-      </>}
-    </div >
+    <>
+      {/* @ts-expect-error Server Component */}
+      < Await promise={resumesPromise}>
+        {({ resumes, resumeScans }: resumeTestProps) =>
+          <ResumeTest
+            userId={userId}
+            resumeScans={resumeScans}
+            resumes={resumes} 
+            activeSubscription={activeSubscription}
+            />
+        }
+      </Await>
+    </>
   );
 }

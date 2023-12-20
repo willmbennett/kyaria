@@ -63,4 +63,4 @@ class AppClass {
 }
 
 const AppModel = getModelForClass(AppClass);
-export { AppModel, AppClass };
+export { AppModel, AppClass, Emails };

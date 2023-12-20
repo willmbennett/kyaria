@@ -4,7 +4,7 @@ import Image from 'next/image'
 import clsx from 'clsx'
 import { Disclosure, Transition } from '@headlessui/react'
 
-import { Container } from './Container'
+import { Container } from '../../landingpage/Container'
 import faqImage from '/public/images/stock/business-woman.jpg'
 
 const faqs = [
@@ -19,14 +19,14 @@ const faqs = [
       "Kyaria.ai's Pro plan costs $10 per month, which gives you access to the resume builder and all features still in beta.",
   },
   {
-    question: 'How do I know my AI-generated results are good.',
+    question: 'How will my scan with application tracking systems (ATS)',
     answer:
-      'Results are built upon prompts and templates provided by experienced industry professionals. However, it is still possible to get results that you are not happy with. If that happens, you can regenerate a response or copy and paste to a text editor of your choice to refine further.',
+      'Our resumes are built using an ATS-friendly template created by industry professionals and has been extensively tested using our integration with Sovren, a leading resume parser.',
   },
   {
-    question: 'What do you mean when you say you leverage AI?',
+    question: 'What do you mean when you say you AI-powered?',
     answer:
-      'We utilize ChatGPT to generate text data, we provide custom prompts and necessary data to generate the best possible outcomes.',
+      'We utilize ChatGPT 4.0-turbo with custom prompts to help you optimize resume summaries, skills, and bullet points.',
   },
 ]
 

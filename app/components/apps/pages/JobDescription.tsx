@@ -19,13 +19,15 @@ export default function JobDescription({
     addBoard,
     profile,
     topWords,
-    companyDiffbotId
+    companyDiffbotId,
+    activeSubscription
 }: {
     jobData: any,
     addBoard?: boolean,
     profile?: any,
     topWords: string[],
     companyDiffbotId?: string | null
+    activeSubscription?: boolean
 }) {
     const router = useRouter()
     const { data: session } = useSession()
@@ -98,7 +100,7 @@ export default function JobDescription({
                     )}
                     {addBoard && (<>
                         {profile ? (
-                            <>
+                            <> {activeSubscription ?
                                 <form onSubmit={handleSubmit(onSubmit)}>
                                     <p className="text-left font-medium text-lg mb-4 mx-2">
                                         <input {...register('board')} placeholder="board" className="hidden" />
@@ -111,6 +113,16 @@ export default function JobDescription({
                                         </Button>
                                     </p>
                                 </form>
+                                :
+                                <div className="text-left font-medium text-lg mb-4 mx-2">
+                                    <Button
+                                        href='/pricing'
+                                        size="md"
+                                    >
+                                        Subscribe to add to your board
+                                    </Button>
+                                </div>
+                            }
                             </>
                         ) : (
                             <>
@@ -130,22 +142,33 @@ export default function JobDescription({
                 <p className="text-left font-medium text-lg mb-4">
                     <strong>Keywords:</strong> {topWords.join(', ')}
                 </p>
-                <EditJobDescription
-                    label="Company"
-                    jobId={jobId}
-                    setKey={`company`}
-                    currentState={company}
-                    userCanEdit={edit}
-                />
-                {companyDiffbotId &&
-                    <Link href={`/companies/${companyDiffbotId}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 hover:underline inline-block mr-2"
-                    >
-                        See more information on {company}
-                    </Link>
-                }
+                <div className="flex flex-row justify-start">
+                    <div className="w-auto">
+                        <EditJobDescription
+                            label="Company"
+                            jobId={jobId}
+                            setKey={`company`}
+                            currentState={company}
+                            userCanEdit={edit}
+                        />
+                    </div>
+                    {companyDiffbotId &&
+                        <div>
+                            {
+                                activeSubscription ?
+                                    <Button href={`/companies/${companyDiffbotId}`}
+                                    >
+                                        See more information on {company}
+                                    </Button>
+                                    :
+                                    <Button href="/pricing"
+                                    >
+                                        Subscribe to see company information
+                                    </Button>
+                            }
+                        </div>
+                    }
+                </div>
                 <EditJobDescription
                     label="Location"
                     jobId={jobId}

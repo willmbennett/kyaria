@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Avatar from '/public/images/avatars/avatar-will.jpg'
 import homeHeroImg from '/public/images/stock/job-interview2.jpg'
 import { Container } from './Container'
-import { Button } from '../Button'
+import AuthButton from '../resumebuilder/AuthButton'
 
 export function HomeHero() {
   return (
@@ -41,12 +41,7 @@ export function HomeHero() {
             </li>
           </ul>
           <div className="mt-10 flex flex-col sm:flex-row sm:space-x-5 md:mt-12 md:justify-center xl:justify-start">
-            <Button
-              href="/auth/signin"
-              className="mt-3.5 w-full sm:mt-0 sm:w-auto"
-            >
-              Sign in
-            </Button>
+            <AuthButton />
           </div>
           <p className="mt-4 flex text-md text-slate-600/90 md:justify-center xl:justify-start xl:text-base">
             It's 100% free, no credit card or subscription required.

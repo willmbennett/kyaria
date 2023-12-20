@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { JobClass } from "../../../../models/Job";
+import { ResumeClass } from "../../../../models/Resume";
 import { updateJobAppAction } from "../../../board/_action";
 import { Employee } from "../../../companies/[id]/employees/employee-helper";
 import ChatWithGPT from "../../board/ChatWithGPT";
@@ -8,8 +10,9 @@ import Carousel from "../ui/Carousel";
 interface NetworkingProps {
     companyDiffbotUri: string
     company: string,
-    userResumeStripped: any,
-    jobStripped: any
+    userResumeStripped: Partial<ResumeClass>,
+    jobStripped: Partial<JobClass>,
+    activeSubscription: boolean
 }
 
 export default function Networking(
@@ -17,7 +20,8 @@ export default function Networking(
         companyDiffbotUri,
         company,
         userResumeStripped,
-        jobStripped
+        jobStripped,
+        activeSubscription
     }: NetworkingProps
 ) {
     const [employeeData, setEmployeeData] = useState<Employee[]>([]);
@@ -65,6 +69,7 @@ export default function Networking(
                     currentState=''
                     saveToDatabase={updateJobAppAction}
                     temp={0.7}
+                    activeSubscription={activeSubscription}
                 />
             </div>
         )

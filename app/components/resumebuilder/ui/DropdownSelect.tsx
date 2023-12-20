@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 interface DropDownProps<T> {
     items: T[];
     options: string[];
-    renderItem: (item: T) => JSX.Element;
+    renderItem: (item: T, index: number) => JSX.Element;
 }
 
 const dropDownMenu = (options: string[], currentIndex: number, setCurrentIndex: (index: number) => void) => (
@@ -58,7 +58,7 @@ function DropDownSelect<T>({ items, options, renderItem }: DropDownProps<T>) {
             <div className="flex justify-between mb-2">
                 {dropDownMenu(options, currentIndex, setCurrentIndex)}
             </div>
-            {items.length > 0 && items[currentIndex] && renderItem(items[currentIndex])}
+            {items.length > 0 && items[currentIndex] && renderItem(items[currentIndex], currentIndex)}
         </div>
     );
 }

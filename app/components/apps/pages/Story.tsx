@@ -7,6 +7,17 @@ import { useSession } from "next-auth/react";
 import { useState } from 'react';
 import { Button } from '../../Button';
 
+interface StoryProps {
+    jobAppId: string,
+    currentStory: string,
+    userResumeStripped: any,
+    job: any,
+    jobKeyWords: string[],
+    profileStory: string,
+    userId: string,
+    profileId: string,
+    activeSubscription: boolean
+}
 
 export default function Story({
     jobAppId,
@@ -16,17 +27,9 @@ export default function Story({
     jobKeyWords,
     profileStory,
     userId,
-    profileId
-}: {
-    jobAppId: string,
-    currentStory: string,
-    userResumeStripped: any,
-    job: any,
-    jobKeyWords: string[],
-    profileStory: string,
-    userId: string,
-    profileId: string
-}) {
+    profileId,
+    activeSubscription
+}: StoryProps) {
     const { data: session } = useSession()
     const userCanEdit = session?.user?.id == '650f813286f63a9d8c0080ee' || session?.user?.id == userId
     const [savedToProfile, setSavedToProfile] = useState(false)
@@ -130,6 +133,7 @@ Job Posting Details: ${JSON.stringify(job)}`
                     saveToDatabase={updateJobAppAction}
                     temp={0.7}
                     jobKeyWords={jobKeyWords}
+                    activeSubscription={activeSubscription}
                 />
             </div>
         </>

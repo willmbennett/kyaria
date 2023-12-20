@@ -1,21 +1,22 @@
-import { getServerSession } from "next-auth/next";
 import Link from "next/link";
-import { authOptions } from "../../lib/auth";
 import { getUserJobApps } from "../../lib/app-db";
 import { getProfile } from "../../lib/profile-db";
 import Board from "../components/apps/Board";
 import Await from "../jobs/await";
 import { redirect } from "next/navigation";
 import { Button } from "../components/Button";
+import { AppClass } from "../../models/App";
+import { checkSubscription } from "../../lib/hooks/check-subscription";
 
 export default async function BoarPage() {
-  const session = await getServerSession(authOptions)
-  if (!session) {
+  const { activeSubscription, userId } = await checkSubscription()
+  
+  if (!userId) {
     redirect('/auth/signin')
   }
 
-  const promise = getUserJobApps({ userId: session?.user?.id || '' })
-  const { profile } = await getProfile(session?.user?.id || ''); // true means hide any deleted items from profiles
+  const promise = getUserJobApps({ userId: userId })
+  const { profile } = await getProfile(userId || ''); // true means hide any deleted items from profiles
 
   return (
     <>
@@ -23,7 +24,7 @@ export default async function BoarPage() {
         <h1 className="sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900 mb-10">
           Create a Profile First
         </h1>
-        <Link href={`profile/${session?.user?.id}`}>
+        <Link href={`profile/${userId}`}>
           <Button
             variant="solid"
             size="md"
@@ -36,9 +37,10 @@ export default async function BoarPage() {
       {profile && (<>
         {/* @ts-expect-error Server Component */}
         < Await promise={promise}>
-          {({ jobApps }) => <Board
+          {({ jobApps }: {jobApps: AppClass[]}) => <Board
             jobApps={jobApps}
             profile={profile}
+            activeSubscription={activeSubscription}
           />}
         </Await>
       </>)

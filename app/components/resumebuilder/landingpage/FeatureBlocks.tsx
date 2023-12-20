@@ -6,7 +6,7 @@ import featureImage1 from '/public/images/stock/interview-meeting.jpg'
 import featureImage2 from '/public/images/stock/student-laptop.jpg'
 import AuthButton from '../AuthButton'
 
-export function FeatureBlocks() {
+export function FeatureBlocks({ totalResumes }: {totalResumes: number}) {
   return (
     <section className="relative overflow-hidden bg-white pb-20 pt-32 lg:pb-28 lg:pt-24">
       <Container>
@@ -32,7 +32,7 @@ export function FeatureBlocks() {
               Craft the perfect resume using the power of AI
             </h2>
             <p className="mt-6 leading-relaxed text-slate-700 sm:mt-8 sm:text-lg sm:leading-8">
-              We've done all the heavy lifting for you to help you create the perfect resume. No need to worry about writing perfect summaries, skills sections, or bullet points, our resume builder will guide you.
+              We've done all the heavy lifting for you to help you create the perfect resume. No need to worry about formatting, writing summaries, skills sections, or bullet points, our resume builder will guide you.
             </p>
             <AuthButton
               variant="ghost"
@@ -53,7 +53,7 @@ export function FeatureBlocks() {
             />
             <div className="absolute left-0 top-0 w-64 -translate-y-24 bg-gray-secondary-100/95 p-6 backdrop-blur-sm sm:py-7 lg:bottom-0 lg:left-[unset] lg:right-0 lg:top-[unset] lg:translate-y-24 2xl:translate-x-16">
               <p className="text-4xl font-semibold text-slate-900 xl:text-5xl">
-                191
+                {totalResumes.toLocaleString()}
               </p>
               <p className="mt-5 text-slate-700">
                 Resumes Created

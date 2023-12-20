@@ -21,7 +21,7 @@ import { Button } from '../Button';
 
 type ApplicationState = 'Research' | 'Phone Screen' | 'Interviewing' | 'Post-Offer';
 
-export function JobApplication({ jobApp }: { jobApp: any }) {
+export function JobApplication({ jobApp, activeSubscription }: { jobApp: any, activeSubscription: boolean }) {
   const [hideMenu, setHideMenu] = useState(false);
 
   function toggleEdit() {
@@ -73,9 +73,9 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
     'institution'
   ];
   const profileStripped = stripObject(profile, profileKeys)
-  const userResumeStripped = stripObject(userResume, profileKeys)
+  const userResumeStripped: Partial<ResumeClass> = stripObject(userResume, profileKeys)
   const jobKeys = ["jobTitle", 'company', "aboutCompany", "jobDescription", "qualifications", "responsibilities"];
-  const jobStripped = stripObject(job, jobKeys)
+  const jobStripped: Partial<JobClass> = stripObject(job, jobKeys)
   const resumeId = userResume._id.toString()
   const companyDiffbotId = job.companyDiffbotUri ? job.companyDiffbotUri.split('/').pop() : null;
 
@@ -175,7 +175,8 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
             jobApp,
             toggleEdit,
             hideMenu,
-            companyDiffbotId,
+            activeSubscription,
+            companyDiffbotId
           )}
         </div>
         {!hideMenu &&
@@ -191,12 +192,12 @@ export function JobApplication({ jobApp }: { jobApp: any }) {
 function renderCurrentSection(
   currentSection: string,
   jobData: JobClass,
-  jobStripped: any,
+  jobStripped: Partial<JobClass>,
   jobKeyWords: string[],
   userResume: ResumeClass,
-  userResumeStripped: any,
+  userResumeStripped: Partial<ResumeClass>,
   profile: ProfileClass,
-  profileStripped: any,
+  profileStripped: Partial<ProfileClass>,
   userId: string,
   profileId: string,
   resumeId: string,
@@ -204,11 +205,12 @@ function renderCurrentSection(
   jobApp: AppClass,
   toggleEdit: any,
   hideMenu: boolean,
+  activeSubscription: boolean,
   companyDiffbotId?: string | null
 ) {
   switch (currentSection) {
     case 'jobDescription':
-      return <JobDescription jobData={jobData} topWords={jobKeyWords} companyDiffbotId={companyDiffbotId} />;
+      return <JobDescription jobData={jobData} topWords={jobKeyWords} companyDiffbotId={companyDiffbotId} activeSubscription={activeSubscription} />;
     case 'mockInterview':
       return (
         <MockInterview
@@ -216,6 +218,7 @@ function renderCurrentSection(
           jobStripped={jobStripped}
           jobTitle={jobData.jobTitle}
           company={jobData.company}
+          activeSubscription={activeSubscription}
         />
       );
     case 'coverLetter':
@@ -228,6 +231,7 @@ function renderCurrentSection(
           job={jobData}
           userResume={userResume}
           jobKeyWords={jobKeyWords}
+          activeSubscription={activeSubscription}
         />
       );
     case 'resume':
@@ -238,6 +242,7 @@ function renderCurrentSection(
             data={userResume}
             toggleEdit={toggleEdit}
             editResume={hideMenu}
+            activeSubscription={activeSubscription}
           />
         </div>
       );
@@ -252,6 +257,7 @@ function renderCurrentSection(
           profileStory={profile.story || ''}
           userId={userId}
           profileId={profileId}
+          activeSubscription={activeSubscription}
         />
       );
     case 'networking':
@@ -261,6 +267,7 @@ function renderCurrentSection(
           userResumeStripped={userResumeStripped}
           jobStripped={jobStripped}
           company={jobData.company}
+          activeSubscription={activeSubscription}
         />
       );
     case 'experience':
@@ -272,6 +279,7 @@ function renderCurrentSection(
           jobStripped={jobStripped}
           jobKeyWords={jobKeyWords}
           userId={userId}
+          activeSubscription={activeSubscription}
         />
       );
     case 'emails':
@@ -282,6 +290,7 @@ function renderCurrentSection(
           jobStripped={jobStripped}
           jobKeyWords={jobKeyWords}
           userResumeStripped={userResumeStripped}
+          activeSubscription={activeSubscription}
         />
       );
     default:

@@ -34,16 +34,20 @@ type FormFields = {
     input: string;
 };
 
+interface resumeTestProps {
+    userId: string,
+    resumeScans: ResumeScanDataClass[],
+    resumes: ResumeClass[],
+    activeSubscription: boolean
+}
+
 export default function ResumeTest(
     {
         userId,
         resumeScans,
-        resumes
-    }: {
-        userId: string,
-        resumeScans: ResumeScanDataClass[],
-        resumes: ResumeClass[]
-    }) {
+        resumes,
+        activeSubscription
+    }: resumeTestProps) {
     const hasResumes = !(resumes.length === 0 && resumeScans.length === 0)
     const [resumeIndex, setResumeIndex] = useState<string | null>(resumes.length > 0 ? resumes[0]._id.toString() : resumeScans.length > 0 ? resumeScans[0]._id.toString() : null);
     const [useResume, setUseResume] = useState(resumes.length > 0 ? true : false)
@@ -128,11 +132,12 @@ export default function ResumeTest(
                             resetForm={resetForm}
                             setFormHidden={setFormHidden}
                             userId={userId}
+                            activeSubscription={activeSubscription}
                         />
                     </div>
                 }
                 <div className={`items-center flex flex-col text-center ${editResume ? 'w-full' : 'lg:w-2/3'}`}>
-                    {!editResume && !formHidden &&
+                    {!editResume && !formHidden && activeSubscription && 
                         <NewResumeSection
                             userId={userId}
                             handleSubmit={handleSubmit}
@@ -160,6 +165,7 @@ export default function ResumeTest(
                                         resumeId={activeResume._id.toString()}
                                         userId={userId}
                                         key={activeResume._id.toString()}
+                                        activeSubscription={activeSubscription}
                                     />
                                 </>
                                 :
@@ -173,6 +179,7 @@ export default function ResumeTest(
                                         editResume={editResume}
                                         resumeScanId={activeResume._id.toString()}
                                         userId={userId}
+                                        activeSubscription={activeSubscription}
                                     />
                                 </div>
                             }

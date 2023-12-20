@@ -9,6 +9,7 @@ import { Inter } from 'next/font/google'
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { TooltipProvider } from './components/ui/tooltip';
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
@@ -66,6 +67,7 @@ export default async function RootLayout({
             <Footer />
           </TooltipProvider >
         </SessionProvider>
+        <SpeedInsights />
       </body>
     </html>
   );

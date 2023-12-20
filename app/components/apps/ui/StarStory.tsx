@@ -17,15 +17,7 @@ type QuestionFormFields = {
     details: string
 };
 
-export default function StarStory({
-    resumeId,
-    profileId,
-    userId,
-    item,
-    jobStripped,
-    parentIndex,
-    childIndex
-}: {
+interface StarStoryProps {
     resumeId: string,
     profileId: string,
     userId: string,
@@ -37,8 +29,20 @@ export default function StarStory({
     },
     jobStripped: Partial<JobClass>,
     parentIndex: number,
-    childIndex: number
-}) {
+    childIndex: number,
+    activeSubscription: boolean
+}
+
+export default function StarStory({
+    resumeId,
+    profileId,
+    userId,
+    item,
+    jobStripped,
+    parentIndex,
+    childIndex,
+    activeSubscription
+}: StarStoryProps) {
     const { data: session } = useSession()
     const userCanEdit = session?.user?.id == '650f813286f63a9d8c0080ee' || session?.user?.id == userId
     const [savedToProfile, setSavedToProfile] = useState(false)
@@ -236,6 +240,7 @@ export default function StarStory({
                 childIndex={childIndex}
                 saveToDatabase={updateResumeAction}
                 temp={0.7}
+                activeSubscription={activeSubscription}
             />
         </>
     )}

@@ -1,9 +1,9 @@
 import Image from 'next/image'
 
-import { Container } from './Container'
+import { Container } from '../../landingpage/Container'
 import ctaImage1 from '/public/images/stock/job-interview2.jpg'
 import ctaImage2 from 'public/images/stock/entrepreneurship-3822492_1280.jpg'
-import AuthButton from '../resumebuilder/AuthButton'
+import AuthButton from '../AuthButton'
 
 export function CallToAction() {
   return (
@@ -11,14 +11,13 @@ export function CallToAction() {
       <Container className="relative items-center md:grid md:grid-cols-12 md:gap-12">
         <div className="mx-auto max-w-lg md:col-span-6 md:mx-0 lg:pr-12">
           <h2 className="text-center text-4xl font-semibold leading-tight text-slate-900 sm:text-5xl sm:leading-tight md:text-left">
-            Launch your career today
+            Build your resume today
           </h2>
           <p className="mt-6 text-center text-[17px] leading-relaxed text-slate-700 sm:text-lg sm:leading-relaxed md:text-left ">
-            Stop spending hours writing endless cover-letters, resumes, and emails.
-            Never worry about how to answer interview questions or introduce yourself again.
+            Stop worrying about about formatting, writing summaries, skills sections, or perfect bullet points, our resume builder will do it for you.
           </p>
           <div className="mt-10 flex w-full justify-center md:justify-start">
-          <AuthButton />
+            <AuthButton />
           </div>
         </div>
         <div className="col-span-6 hidden grid-cols-12 md:grid">

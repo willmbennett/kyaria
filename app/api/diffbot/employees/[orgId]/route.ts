@@ -21,7 +21,7 @@ export async function GET(
     try {
         const roleFilter = 'Human Resources and Recruiting'
         //console.log(orgId)
-        const apiUrl = `https://kg.diffbot.com/kg/v3/dql?type=query&token=${process.env.DIFFBOT_API_KEY}&query=type%3APerson+employments.%7BisCurrent%3A+true+strict%3Acategories.name%3A+"${encodeURIComponent(roleFilter)}"+employer.diffbotUri%3A"http%3A%2F%2Fdiffbot.com%2Fentity%2F${orgId}"%7D+revSortBy%3Aimportance&size=30`
+        const apiUrl = `https://kg.diffbot.com/kg/v3/dql?type=query&token=${process.env.DIFFBOT_API_KEY}&query=type%3APerson+employments.%7BisCurrent%3A+true+strict%3Acategories.name%3A+"${encodeURIComponent(roleFilter)}"+employer.diffbotUri%3A"http%3A%2F%2Fdiffbot.com%2Fentity%2F${orgId}"%7D+revSortBy%3Aimportance&size=10`
 
         //console.log(apiUrl)
 
