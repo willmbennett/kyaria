@@ -1,4 +1,4 @@
-import type { NextApiRequest } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
@@ -20,6 +20,9 @@ export async function GET(req: NextRequest) {
   } catch (err) {
     if (err instanceof Error) {
       return NextResponse.json({ error: err.message }, { status: 500 });
+    } else {
+      console.log({ error: err })
+      return NextResponse.json({ error: err }, { status: 500 });
     }
   }
 }
@@ -32,7 +35,7 @@ export async function POST() {
       line_items: [
         {
           // Provide the exact Price ID (for example, pr_1234) of the product you want to sell 
-          price: process.env.NODE_ENV === 'development'? 'price_1OOlMMIvuOCAdHq0shmeD8Kq': 'price_1OOrJPIvuOCAdHq0C0cdrfTO',
+          price: process.env.NODE_ENV === 'development' ? 'price_1OOlMMIvuOCAdHq0shmeD8Kq' : 'price_1OOrJPIvuOCAdHq0C0cdrfTO',
           quantity: 1,
         },
       ],
