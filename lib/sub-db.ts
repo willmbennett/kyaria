@@ -64,14 +64,16 @@ export async function getSubscription(userId: string) {
 
 export async function updateSubscription(customer: string, data: Partial<SubscriptionClass>) {
     try {
+        console.log("Attempting to connect to the database...");
         await connectDB();
-        console.log("Made it to updateSubscription")
-        console.log(`customer: ${customer}`)
+        console.log("Database connection successful.");
+
+        console.log(`Searching for existing subscription for customer: ${customer}...`);
         const existingSubscription = await SubscriptionModel.findOne({ customerId: customer });
 
-        console.log(`data to update subscription with: ${JSON.stringify(data)}`)
-        console.log(`existingSubscription: ${existingSubscription}`)
         if (existingSubscription) {
+            console.log(`Existing subscription found for customer: ${customer}, proceeding to update.`);
+            console.log(`Data to update subscription with: ${JSON.stringify(data)}`);
 
             const subscription = await SubscriptionModel.findByIdAndUpdate(
                 existingSubscription._id,
@@ -83,18 +85,18 @@ export async function updateSubscription(customer: string, data: Partial<Subscri
             if (subscription) {
                 transformProps(subscription, ObjectIdtoString, '_id');
                 transformProps(subscription, dateToString, ["createdAt", "updatedAt"]);
-                console.log(subscription)
-                return {
-                    subscription,
-                };
+                console.log(`Subscription updated successfully:`, subscription);
+                return { subscription };
             } else {
+                console.log(`No subscription found for the given ID: ${existingSubscription._id}`);
                 return { error: "Subscription not found" };
             }
         } else {
+            console.log(`No existing subscription found for customer: ${customer}`);
             return { error: "Subscription not found" };
         }
     } catch (error) {
-        console.log(error)
-        return { error };
+        console.error(`Error in updateSubscription for customer: ${customer}:`, error);
+        return { error: error };
     }
 }
