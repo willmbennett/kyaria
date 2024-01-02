@@ -132,6 +132,7 @@ export const ResponsibilityItem = (
                             currentState={responsibility.starStory}
                             saveToDatabase={updateProfileAction}
                             temp={0.7}
+                            activeSubscription={true}
                         />
                     </div>
                 }

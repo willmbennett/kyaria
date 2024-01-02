@@ -17,6 +17,7 @@ interface ResumeListMenuProps {
     resetForm: () => void;
     userId: string;
     setFormHidden: (arg: boolean) => void;
+    activeSubscription: boolean;
 }
 
 
@@ -86,7 +87,8 @@ const ResumeListMenu: React.FC<ResumeListMenuProps> = ({
     toggleEdit,
     resetForm,
     userId,
-    setFormHidden
+    setFormHidden,
+    activeSubscription
 }) => {
     const router = useRouter()
     // Combined function to handle click events for both resume scans and resumes
@@ -135,9 +137,13 @@ const ResumeListMenu: React.FC<ResumeListMenuProps> = ({
         <div className="sticky top-60 flex flex-col p-2 w-full h-1/2 space-y-1">
             <div className='flex flex-row justify-between w-full'>
                 <p className="text-lg font-semibold">Resumes</p>
-                {userId &&
+                {activeSubscription?
                     <Button onClick={resetForm} size='sm'>
                         New Resume
+                    </Button>
+                    :
+                    <Button href='/pricing' size='sm'>
+                        Subscribe to add new
                     </Button>
                 }
             </div>

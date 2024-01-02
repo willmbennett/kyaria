@@ -4,16 +4,18 @@ import { FeaturedTestimonials } from '../components/landingpage/FeaturedTestimon
 import { PlansTable } from '../components/landingpage/PlansTable'
 import { Faqs } from '../components/landingpage/Faqs'
 import { CallToAction } from '../components/landingpage/CallToAction'
+import { checkSubscription } from '../../lib/hooks/check-subscription'
 
 export const metadata = {
   title: 'Wavvy - Pricing',
   description: 'Get our fully featured bundle for only $39 a month.',
 }
 
-export default function PricingPage() {
+export default async function PricingPage() {
+  const {activeSubscription, userId } = await checkSubscription()
   return (
     <>
-      <PricingCards />
+      <PricingCards activeSubscription={activeSubscription} userId={userId || ''}/>
       {/*<PlanFeatures />
       <FeaturedTestimonials />
       <PlansTable />

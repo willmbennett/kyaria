@@ -18,6 +18,7 @@ interface Props {
   parentIndex?: number;
   childIndex?: number;
   jobKeyWords?: string[]
+  activeSubscription: boolean
 }
 
 type FormFields = {
@@ -34,7 +35,8 @@ export default function ChatWithGPT({
   copy = true,
   parentIndex,
   childIndex,
-  jobKeyWords
+  jobKeyWords,
+  activeSubscription=false
 }: Props) {
   const path = usePathname()
   const router = useRouter()
@@ -184,6 +186,7 @@ export default function ChatWithGPT({
             >
               Save
             </Button>
+            {activeSubscription &&  
             <Button
               variant="ghost"
               size="md"
@@ -193,8 +196,9 @@ export default function ChatWithGPT({
             >
               Reset
             </Button>
+            }
           </>)}
-          {!loading && (<>
+          {!loading && activeSubscription && (<>
             <Button
               variant="solid"
               size="md"
@@ -203,6 +207,17 @@ export default function ChatWithGPT({
               className="m-3"
             >
               {currentState == ''? 'Generate': 'Tailor'}
+            </Button>
+          </>)}
+          {!loading && !activeSubscription && (<>
+            <Button
+              variant="solid"
+              size="md"
+              href="/pricing"
+              type="button"
+              className="m-3"
+            >
+              Subscribe to Generate
             </Button>
           </>)}
           {loading && (

@@ -4,15 +4,21 @@ import CreateJobApp from "../board/CreateJobApp";
 //import { ObjectId } from "mongodb";
 import Kanban from "./KanbanBoard";
 import { Button } from "../Button";
+import { AppClass } from "../../../models/App";
+import { ProfileClass } from "../../../models/Profile";
+
+interface resumeTestProps {
+  jobApps: Partial<AppClass>[],
+  profile: Partial<ProfileClass>,
+  activeSubscription: boolean
+}
 
 export default function Board(
   {
     jobApps,
-    profile
-  }: {
-    jobApps: any,
-    profile: any
-  }
+    profile,
+    activeSubscription
+  }: resumeTestProps
 ) {
   const [creatingJobApp, setCreatingJobApp] = useState(false);
 
@@ -29,22 +35,34 @@ export default function Board(
           <h1 className="sm:text-lg text-xl font-bold text-slate-900">
             Your Job Board
           </h1>
-          <Button
-            variant="solid"
-            size="md"
-            type="button"
-            onClick={handleCreateJobClick}
-            className="mt-3"
-          >
-            Add a New Job Post
-          </Button>
+          {activeSubscription ?
+            <Button
+              variant="solid"
+              size="md"
+              type="button"
+              onClick={handleCreateJobClick}
+              className="mt-3"
+            >
+              Add a New Job Post
+            </Button>
+            :
+            <Button
+              variant="solid"
+              size="md"
+              type="button"
+              href="/pricing"
+              className="mt-3"
+            >
+              Subscribe to Add Job Posts
+            </Button>
+          }
         </div>
         <Kanban
           jobApps={jobApps}
           jobStates={jobStates}
         />
       </>)}
-      {creatingJobApp && (
+      {creatingJobApp && profile.userId && (
         <div className="w-full items-center text-center justify-center flex flex-col">
           <h1 className="sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900 my-10">
             Create a New Job

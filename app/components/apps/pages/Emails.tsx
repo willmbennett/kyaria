@@ -1,24 +1,31 @@
 "use client"
 import { useState } from 'react';
+import { Emails } from '../../../../models/App';
+import { JobClass } from '../../../../models/Job';
+import { ResumeClass } from '../../../../models/Resume';
 import { updateJobAppAction } from '../../../board/_action';
 import ChatWithGPT from '../../board/ChatWithGPT';
 
 const ACTIVE_ROUTE = "bg-gray-200 hover:bg-gray-600 hover:text-white";
 const INACTIVE_ROUTE = "hover:bg-gray-600 hover:text-white";
 
+interface ExperienceProps {
+    jobAppId: string,
+    emails: Emails[],
+    jobKeyWords: string[],
+    userResumeStripped: Partial<ResumeClass>,
+    jobStripped: Partial<JobClass>,
+    activeSubscription: boolean
+}
+
 export default function Experience({
     jobAppId,
     emails,
     jobKeyWords,
     userResumeStripped,
-    jobStripped
-}: {
-    jobAppId: string,
-    emails: any,
-    jobKeyWords: string[],
-    userResumeStripped: any,
-    jobStripped: any
-}) {
+    jobStripped,
+    activeSubscription
+}: ExperienceProps) {
     const [showOptions, setShowOptions] = useState(false);
     const [selectedEmail, setSelectedEmail] = useState(emails[0]);
     const [emailIndex, setEmailIndex] = useState(0);
@@ -108,6 +115,7 @@ export default function Experience({
                                     saveToDatabase={updateJobAppAction}
                                     temp={0.9}
                                     jobKeyWords={jobKeyWords}
+                                    activeSubscription={activeSubscription}
                                 />
                             </div>
                         )

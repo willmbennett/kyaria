@@ -4,8 +4,9 @@ import { Container } from './Container'
 import { Button } from '../Button'
 import featureImage1 from '/public/images/stock/interview-meeting.jpg'
 import featureImage2 from '/public/images/stock/student-laptop.jpg'
+import AuthButton from '../resumebuilder/AuthButton'
 
-export function FeatureBlocks() {
+export function FeatureBlocks({totalResumes}: {totalResumes: number}) {
   return (
     <section className="relative overflow-hidden bg-white pb-20 pt-32 lg:pb-28 lg:pt-24">
       <Container>
@@ -36,14 +37,7 @@ export function FeatureBlocks() {
               Why? Because we're job-seekers first. Our mission is to help you land the 
               job of your dreams and we're not going to stop till you've made it.
             </p>
-            <Button
-              href="/auth/signin"
-              variant="ghost"
-              size="md"
-              className="mt-10 sm:mt-12"
-            >
-              Get started
-            </Button>
+            <AuthButton variant="ghost" size="md" className="mt-10 sm:mt-12" altText='Get started'/>
           </div>
         </div>
 
@@ -57,10 +51,10 @@ export function FeatureBlocks() {
             />
             <div className="absolute left-0 top-0 w-64 -translate-y-24 bg-gray-secondary-100/95 p-6 backdrop-blur-sm sm:py-7 lg:bottom-0 lg:left-[unset] lg:right-0 lg:top-[unset] lg:translate-y-24 2xl:translate-x-16">
               <p className="text-4xl font-semibold text-slate-900 xl:text-5xl">
-                1
+                {totalResumes.toLocaleString()}
               </p>
               <p className="mt-5 text-slate-700">
-                Time setup
+                Resumes Created
               </p>
             </div>
           </div>
@@ -73,14 +67,7 @@ export function FeatureBlocks() {
               jump to streamlining your job search. Simply add jobs that you're interested in
               and we'll provide you a customized comprehensive packet of everything you need to succeed.
             </p>
-            <Button
-              href="/auth/signin"
-              variant="ghost"
-              size="md"
-              className="mt-10 sm:mt-12"
-            >
-              Get started
-            </Button>
+            <AuthButton variant="ghost" size="md" className="mt-10 sm:mt-12" altText='Get started'/>
           </div>
         </div>
       </Container>

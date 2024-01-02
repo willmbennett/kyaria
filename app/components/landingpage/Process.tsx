@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { Container } from './Container'
 import { Button } from '../Button'
 import processImage from '/public/images/stock/interview.jpg'
+import AuthButton from '../resumebuilder/AuthButton'
 
 export function Process() {
   return (
@@ -32,14 +33,7 @@ export function Process() {
               </span>
             </div>
           </div>
-          <Button
-            href="/auth/signin"
-            variant="ghost"
-            color="light"
-            className="mt-16 sm:mt-20"
-          >
-            Get Started
-          </Button>
+          <AuthButton variant="ghost" color="light" className="mt-16 sm:mt-20" altText='Get started'/>
         </div>
       </Container>
       <div className="relative mt-16 h-80 w-full sm:h-96 lg:absolute lg:inset-y-0 lg:right-0 lg:mt-0 lg:h-full lg:w-5/12">

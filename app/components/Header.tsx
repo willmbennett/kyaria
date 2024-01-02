@@ -23,7 +23,7 @@ type pageListType = {
 const links = [
   { label: 'About', href: '/about' },
   { label: 'Pricing', href: '/pricing' },
-  /*{ label: 'Contact', href: '/contact' },*/
+  /*{ label: 'Contact', href: '/contact' },*/ 
 ]
 /*
 const pages = [
@@ -64,6 +64,7 @@ export function Header() {
 
   const signedInMenuLinks = [
     { label: 'Profile', href: `/profile/${session?.user?.id}` },
+    { label: 'Manage Subscription', href: `https://billing.stripe.com/p/login/fZedQQbuK5Ke2Q06oo` },
   ]
 
   function MenuIcon({ open }: { open: any }) {

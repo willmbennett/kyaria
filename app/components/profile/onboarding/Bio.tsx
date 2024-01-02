@@ -125,6 +125,7 @@ export default function Bio({
                     currentState={currentState || ''}
                     saveToDatabase={updateProfileAction}
                     temp={0.7}
+                    activeSubscription={true}
                 />
             </div>
 

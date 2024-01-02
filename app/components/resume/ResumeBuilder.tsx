@@ -27,6 +27,16 @@ type sectionOptions = "social_links" | "skills" | "professional_experience" | "e
 
 const socialPlatforms = ['LinkedIn', 'GitHub', 'Twitter', 'Facebook', 'Instagram', 'Website', 'Blog']; // Add more platforms as needed
 
+interface ResumeBuilderProps {
+    data: Partial<ResumeClass>;
+    toggleEdit: any;
+    editResume: boolean;
+    resumeId?: string;
+    resumeScanId?: string;
+    userId?: string;
+    activeSubscription?: boolean;
+}
+
 const ResumeBuilder = (
     {
         data,
@@ -34,15 +44,9 @@ const ResumeBuilder = (
         editResume,
         resumeId,
         resumeScanId,
-        userId
-    }: {
-        data: Partial<ResumeClass>,
-        toggleEdit: any,
-        editResume: boolean,
-        resumeId?: string,
-        resumeScanId?: string
-        userId?: string
-    }) => {
+        userId,
+        activeSubscription=false
+    }: ResumeBuilderProps) => {
     const {
         name,
         title,
@@ -288,7 +292,7 @@ const ResumeBuilder = (
                 {editResume && <>
                     <div className='w-full'>
                         <div className='flex flex-row w-full justify-center items-center space-x-2 py-3 sticky top-0 bg-white'>
-                            <Button variant='ghost' size='sm' onClick={savetoDatabase}>Save</Button>
+                            {activeSubscription && <Button variant='ghost' size='sm' onClick={savetoDatabase}>Save</Button>}
                             <Button variant='ghost' size='sm' onClick={toggleEdit}>Exit</Button>
                             <Button size='sm' onClick={generatePDF}>Download</Button>
                             <div className='flex flex-row space-x-2'>
@@ -323,64 +327,68 @@ const ResumeBuilder = (
                             </div>
 
                         </div>
-                        <FormProvider {...methods}>
-                            <form>
-                                <Section title={"Contact Information".toUpperCase()}>
-                                    <div className='mb-6 p-4 border bg-slate-100 border-slate-400 shadow rounded-md'>
-                                        {inputFields.map((field, index) => (
-                                            <SingleInput
-                                                key={index}
-                                                sectionName={field.sectionName}
-                                                register={register}
-                                                optimize={field.optimize}
-                                            />
-                                        ))}
-
-                                        <h2 className="text-lg font-semibold mb-4">{'Social Links'.toUpperCase()}</h2>
-                                        {fields.map((field: SocialField, index) => (
-                                            <div key={field.id} className="flex items-center mb-2">
-                                                <Controller
-                                                    name={`social_links.${index}.name`}
-                                                    control={control}
-                                                    render={({ field }) => (
-                                                        <select {...field} className="border p-1 rounded w-full">
-                                                            {socialPlatforms.map((platform, idx) => (
-                                                                <option key={idx} value={platform}>
-                                                                    {platform}
-                                                                </option>
-                                                            ))}
-                                                        </select>
-                                                    )}
-                                                    defaultValue={field.name || socialPlatforms[0]} // Set default value
+                        {activeSubscription ?
+                            <FormProvider {...methods}>
+                                <form>
+                                    <Section title={"Contact Information".toUpperCase()}>
+                                        <div className='mb-6 p-4 border bg-slate-100 border-slate-400 shadow rounded-md'>
+                                            {inputFields.map((field, index) => (
+                                                <SingleInput
+                                                    key={index}
+                                                    sectionName={field.sectionName}
+                                                    register={register}
+                                                    optimize={field.optimize}
                                                 />
-                                                <Controller
-                                                    name={`social_links.${index}.url`}
-                                                    control={control}
-                                                    render={({ field }) => <input type="url" {...field} placeholder="Social Link URL" className="border p-1 rounded w-full" />}
-                                                />
-                                                <button onClick={() => remove(index)} className="ml-2 text-red-500">Remove</button>
-                                            </div>
-                                        ))}
-                                        <Button size='md' type="button" onClick={() => append({ name: socialPlatforms[0], url: '' })} className="text-blue-500">Add Social Link</Button>
-                                    </div>
-                                </Section>
+                                            ))}
 
-                                <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} id={id}>
-                                    <SortableContext items={sections} strategy={verticalListSortingStrategy}>
-                                        {sections.map((section: sectionOptions, idx: number) =>
-                                            <SortableResumeSection
-                                                key={section}
-                                                id={section}
-                                                name={section}
-                                                control={control}
-                                                register={register}
-                                                setValue={setValue}
-                                                watch={watch}
-                                            />)}
-                                    </SortableContext>
-                                </DndContext>
-                            </form>
-                        </FormProvider>
+                                            <h2 className="text-lg font-semibold mb-4">{'Social Links'.toUpperCase()}</h2>
+                                            {fields.map((field: SocialField, index) => (
+                                                <div key={field.id} className="flex items-center mb-2">
+                                                    <Controller
+                                                        name={`social_links.${index}.name`}
+                                                        control={control}
+                                                        render={({ field }) => (
+                                                            <select {...field} className="border p-1 rounded w-full">
+                                                                {socialPlatforms.map((platform, idx) => (
+                                                                    <option key={idx} value={platform}>
+                                                                        {platform}
+                                                                    </option>
+                                                                ))}
+                                                            </select>
+                                                        )}
+                                                        defaultValue={field.name || socialPlatforms[0]} // Set default value
+                                                    />
+                                                    <Controller
+                                                        name={`social_links.${index}.url`}
+                                                        control={control}
+                                                        render={({ field }) => <input type="url" {...field} placeholder="Social Link URL" className="border p-1 rounded w-full" />}
+                                                    />
+                                                    <button onClick={() => remove(index)} className="ml-2 text-red-500">Remove</button>
+                                                </div>
+                                            ))}
+                                            <Button size='md' type="button" onClick={() => append({ name: socialPlatforms[0], url: '' })} className="text-blue-500">Add Social Link</Button>
+                                        </div>
+                                    </Section>
+
+                                    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} id={id}>
+                                        <SortableContext items={sections} strategy={verticalListSortingStrategy}>
+                                            {sections.map((section: sectionOptions, idx: number) =>
+                                                <SortableResumeSection
+                                                    key={section}
+                                                    id={section}
+                                                    name={section}
+                                                    control={control}
+                                                    register={register}
+                                                    setValue={setValue}
+                                                    watch={watch}
+                                                />)}
+                                        </SortableContext>
+                                    </DndContext>
+                                </form>
+                            </FormProvider>
+                            :
+                            <Button href="/pricing">Subscribe to Edit</Button>
+                        }
                     </div>
                 </>}
                 <div className='w-full h-auto'>

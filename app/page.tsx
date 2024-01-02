@@ -11,10 +11,12 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '../lib/auth'
 import { ProductDemo } from './components/landingpage/ProductDemo'
 import { getJobApp } from '../lib/app-db'
+import { countTotalResumes } from '../lib/resume-db'
 
 export default async function HomePage() {
   const session = await getServerSession(authOptions);
   const { jobApp } = await getJobApp("651c2c45705785cff67bb3c9");
+  const { totalResumes } = await countTotalResumes()
 
   return (
     <>
@@ -27,7 +29,7 @@ export default async function HomePage() {
           <HomeHero />
           {/*<LogosRow />*/}
           <ProductDemo jobApp={jobApp} />
-          <FeatureBlocks />
+          <FeatureBlocks totalResumes={totalResumes || 200}/>
           <FeaturesGrid />
           <Process />
           {/*<TestimonialsSlide />*/}

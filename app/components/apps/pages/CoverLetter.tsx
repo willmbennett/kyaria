@@ -4,15 +4,7 @@ import ChatWithGPT from '../../board/ChatWithGPT';
 import { updateJobAppAction } from '../../../board/_action';
 import { CoverLetterPDF } from '../CoverLetterPDF';
 
-export default function CoverLetter({
-    jobAppId,
-    currentCoverLetter,
-    userResume,
-    userResumeStripped,
-    jobStripped,
-    job,
-    jobKeyWords
-}: {
+interface CoverLetterProps {
     jobAppId: string,
     currentCoverLetter: string,
     userResume: any,
@@ -20,7 +12,19 @@ export default function CoverLetter({
     jobStripped:any,
     job: any
     jobKeyWords: string[]
-}) {
+    activeSubscription: boolean
+}
+
+export default function CoverLetter({
+    jobAppId,
+    currentCoverLetter,
+    userResume,
+    userResumeStripped,
+    jobStripped,
+    job,
+    jobKeyWords,
+    activeSubscription
+}: CoverLetterProps) {
     const message = [
         {
             "role": "system",
@@ -64,6 +68,7 @@ export default function CoverLetter({
                 saveToDatabase={updateJobAppAction}
                 temp={0.5}
                 jobKeyWords={jobKeyWords}
+                activeSubscription={activeSubscription}
             />
 
             <h3 className="text-xl font-semibold mt-5">Download your cover letter as a pdf</h3>

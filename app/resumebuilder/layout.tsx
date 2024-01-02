@@ -27,7 +27,8 @@ export default async function AppLayout({
     children: React.ReactNode;
 }) {
 
-    return (<div className='flex flex-col w-full md:flex-row justify-center'>
-        {children}
-    </div>);
+    return (
+        <div className="w-screen min-h-screen">
+            {children}
+        </div>);
 }
