@@ -29,7 +29,7 @@ export async function POST(req: Request) {
         //console.log('event: ', event)
 
         if (event) {
-            process.nextTick(() => processEvent(event)); // Asynchronously process the event
+            await processEvent(event);
             // Successfully constructed event.
             console.log('✅ Success:', event.id);
 
@@ -87,7 +87,7 @@ async function processEvent(event: Stripe.Event) {
             // Update user subscription status in your database
             console.log(`Subscription deleted: ${subscription.id}`);
             console.log(`customer: ${customer}`);
-            await updateSubscriptionAction(customer, { status: 'cancelled' }, '/')
+            await updateSubscriptionAction(customer, { status: subscription.status }, '/')
             break;
         }
 
@@ -98,7 +98,18 @@ async function processEvent(event: Stripe.Event) {
             // Update user subscription status in your database
             console.log(`Subscription paused: ${subscription.id}`);
             console.log(`customer: ${customer}`);
-            await updateSubscriptionAction(customer, { status: 'paused' }, '/')
+            await updateSubscriptionAction(customer, { status: subscription.status }, '/')
+            break;
+        }
+
+        // Handle subscription update
+        case 'customer.subscription.updated': {
+            const subscription = event.data.object as Stripe.Subscription;
+            const customer = subscription.customer.toString()
+            // Update user subscription status in your database
+            console.log(`Subscription updated: ${subscription.id}`);
+            console.log(`customer: ${customer}`);
+            await updateSubscriptionAction(customer, { status: subscription.status }, '/')
             break;
         }
 

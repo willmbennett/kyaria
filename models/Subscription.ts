@@ -17,7 +17,7 @@ import {
         allowMixed: Severity.ALLOW
     }
 })
-@index({ userId: 1,  customerId: 1}, { unique: true }) // compound index
+@index({ userId: 1, customerId: 1 }, { unique: true }) // compound index
 class SubscriptionClass {
 
     @prop({ required: true, unique: true })
@@ -26,7 +26,7 @@ class SubscriptionClass {
     @prop({ required: true, unique: true })
     public customerId: string;
 
-    @prop({ required: true, enum: ['active', 'inactive', 'paused', 'cancelled'] })
+    @prop({ required: true, enum: ['incomplete', 'incomplete_expired', 'trialing', 'active', 'past_due', 'canceled', 'unpaid'] })
     public status: string;
 
     @prop()
