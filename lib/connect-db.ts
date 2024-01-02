@@ -18,34 +18,34 @@ if (!cached) {
 }
 
 async function dbConnect() {
-  console.log("dbConnect: Starting database connection process...");
+  //console.log("dbConnect: Starting database connection process...");
 
   if (cached.conn) {
-    console.log("dbConnect: Using existing database connection.");
+    //console.log("dbConnect: Using existing database connection.");
     return cached.conn;
   }
 
   if (!cached.promise) {
-    console.log("dbConnect: Creating new connection promise.");
+    //console.log("dbConnect: Creating new connection promise.");
     const opts = {
       bufferCommands: false,
     };
 
     cached.promise = mongoose.connect(MONGODB_URI, opts)
       .then((mongoose) => {
-        console.log("dbConnect: Database connected successfully.");
+        //console.log("dbConnect: Database connected successfully.");
         return mongoose;
       })
       .catch((error) => {
-        console.error("dbConnect: Error in mongoose.connect:", error);
+        //console.error("dbConnect: Error in mongoose.connect:", error);
         throw error;
       });
   }
 
   try {
-    console.log("dbConnect: Awaiting connection promise...");
+    //console.log("dbConnect: Awaiting connection promise...");
     cached.conn = await cached.promise;
-    console.log("dbConnect: Database connection established.");
+    //console.log("dbConnect: Database connection established.");
   } catch (e) {
     console.error("dbConnect: Error establishing database connection:", e);
     cached.promise = null;

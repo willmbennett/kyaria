@@ -31,7 +31,7 @@ export async function POST(req: Request) {
         if (event) {
             await processEvent(event);
             // Successfully constructed event.
-            console.log('✅ Success:', event.id);
+            //console.log('✅ Success:', event.id);
 
             // Return a response to acknowledge receipt of the event.
             return NextResponse.json({ received: true }, { status: 200 });
@@ -76,7 +76,7 @@ async function processEvent(event: Stripe.Event) {
         case 'customer.subscription.created': {
             const subscription = event.data.object as Stripe.Subscription;
             // Update user subscription status in your database
-            console.log(`Subscription created: ${subscription.id}`);
+            //console.log(`Subscription created: ${subscription.id}`);
             break;
         }
 
@@ -85,8 +85,8 @@ async function processEvent(event: Stripe.Event) {
             const subscription = event.data.object as Stripe.Subscription;
             const customer = subscription.customer.toString()
             // Update user subscription status in your database
-            console.log(`Subscription deleted: ${subscription.id}`);
-            console.log(`customer: ${customer}`);
+            //console.log(`Subscription deleted: ${subscription.id}`);
+            //console.log(`customer: ${customer}`);
             await updateSubscriptionAction(customer, { status: subscription.status }, '/')
             break;
         }
@@ -96,8 +96,8 @@ async function processEvent(event: Stripe.Event) {
             const subscription = event.data.object as Stripe.Subscription;
             const customer = subscription.customer.toString()
             // Update user subscription status in your database
-            console.log(`Subscription paused: ${subscription.id}`);
-            console.log(`customer: ${customer}`);
+            //console.log(`Subscription paused: ${subscription.id}`);
+            //console.log(`customer: ${customer}`);
             await updateSubscriptionAction(customer, { status: subscription.status }, '/')
             break;
         }
@@ -107,8 +107,8 @@ async function processEvent(event: Stripe.Event) {
             const subscription = event.data.object as Stripe.Subscription;
             const customer = subscription.customer.toString()
             // Update user subscription status in your database
-            console.log(`Subscription updated: ${subscription.id}`);
-            console.log(`customer: ${customer}`);
+            //console.log(`Subscription updated: ${subscription.id}`);
+            //console.log(`customer: ${customer}`);
             await updateSubscriptionAction(customer, { status: subscription.status }, '/')
             break;
         }
@@ -118,8 +118,8 @@ async function processEvent(event: Stripe.Event) {
             const subscription = event.data.object as Stripe.Subscription;
             const customer = subscription.customer.toString()
             // Update user subscription status in your database
-            console.log(`Subscription resumed: ${subscription.id}`);
-            console.log(`customer: ${customer}`);
+            //console.log(`Subscription resumed: ${subscription.id}`);
+            //console.log(`customer: ${customer}`);
             await updateSubscriptionAction(customer, { status: 'active' }, '/')
             break;
         }

@@ -5,13 +5,13 @@ var transformProps = require('transform-props');
 
 export async function createSubscription(data: Partial<SubscriptionClass>) {
     await connectDB();
-    console.log("Checking for existing subscription");
+    //console.log("Checking for existing subscription");
 
     // Check if a subscription already exists for this userId
     const existingSubscription = await SubscriptionModel.findOne({ userId: data.userId });
 
     if (existingSubscription) {
-        console.log("Subscription already exists for userId:", data.userId);
+        //console.log("Subscription already exists for userId:", data.userId);
         await updateSubscription(existingSubscription.customerId, { status: 'active' })
         await SubscriptionModel.findByIdAndUpdate(existingSubscription._id,
             {
@@ -64,16 +64,16 @@ export async function getSubscription(userId: string) {
 
 export async function updateSubscription(customer: string, data: Partial<SubscriptionClass>) {
     try {
-        console.log("Attempting to connect to the database...");
+        //console.log("Attempting to connect to the database...");
         await connectDB();
-        console.log("Database connection successful.");
+        //console.log("Database connection successful.");
 
-        console.log(`Searching for existing subscription for customer: ${customer}...`);
+        //console.log(`Searching for existing subscription for customer: ${customer}...`);
         const existingSubscription = await SubscriptionModel.findOne({ customerId: customer });
 
         if (existingSubscription) {
-            console.log(`Existing subscription found for customer: ${customer}, proceeding to update.`);
-            console.log(`Data to update subscription with: ${JSON.stringify(data)}`);
+            //console.log(`Existing subscription found for customer: ${customer}, proceeding to update.`);
+            //console.log(`Data to update subscription with: ${JSON.stringify(data)}`);
 
             const subscription = await SubscriptionModel.findByIdAndUpdate(
                 existingSubscription._id,
@@ -85,7 +85,7 @@ export async function updateSubscription(customer: string, data: Partial<Subscri
             if (subscription) {
                 transformProps(subscription, ObjectIdtoString, '_id');
                 transformProps(subscription, dateToString, ["createdAt", "updatedAt"]);
-                console.log(`Subscription updated successfully:`, subscription);
+                //console.log(`Subscription updated successfully:`, subscription);
                 return { subscription };
             } else {
                 console.log(`No subscription found for the given ID: ${existingSubscription._id}`);
