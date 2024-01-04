@@ -2,7 +2,16 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { Button } from '../Button';
 
-export const PostFormImage = ({ image, index, handleImageClick, featuredImage }) => {
+
+// Define the types for your component's props
+type PostFormImageProps = {
+    image: string;
+    index: number;
+    handleImageClick: (imageUrl: string) => void;
+    featuredImage: string;
+};
+
+export const PostFormImage = ({ image, index, handleImageClick, featuredImage }: PostFormImageProps) => {
     const [copySuccess, setCopySuccess] = useState('');
 
     const handleCopyClick = async () => {
