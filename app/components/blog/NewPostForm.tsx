@@ -199,7 +199,7 @@ export default function NewPostForm({ userId, userName }: { userId: string, user
                                 placeholder="Enter Markdown content here"
                             />
                         ) : (
-                            <PostContent content={watch('content')} />
+                            <PostContent content={watch('content') || ''} />
                         )}
                         <Button type="submit">Submit</Button>
                     </div>
