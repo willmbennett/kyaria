@@ -18,7 +18,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import CreatableSelect from "react-select/creatable";
-import { NewPostFormData } from "../../../lib/hooks/blog";
+import { NewPostFormData } from "../../blog/blog-helper";
 
 type ArrayField = { id: string, label: string; value: string }
 

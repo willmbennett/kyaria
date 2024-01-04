@@ -15,14 +15,14 @@ import { PostContent } from "./PostContent";
 import { sampleData } from "../../blog/blog-helper";
 
 export default function NewPostForm({ userId, userName }: { userId: string, userName: string }) {
-    const defaultValues = {
+    const defaultValues = process.env.NODE_ENV === 'development' ? {
         title: sampleData.title,
         content: sampleData.content,
         author: sampleData.author,
         tags: sampleData.tags.map(tag => ({ label: tag, value: tag })),
         featuredImage: sampleData.featuredImage,
         images: sampleData.images
-    };
+    } : {};
 
     const methods = useForm<NewPostFormData>({ defaultValues: defaultValues });
     const [imageUrls, setImageUrls] = useState<string[]>(sampleData.images);
