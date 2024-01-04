@@ -13,6 +13,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { PostContent } from "./PostContent";
 import { sampleData } from "../../blog/blog-helper";
+import { PostFormImage } from "./PostFormImage";
 
 export default function NewPostForm({ userId, userName }: { userId: string, userName: string }) {
     const defaultValues = process.env.NODE_ENV === 'development' ? {
@@ -138,33 +139,15 @@ export default function NewPostForm({ userId, userName }: { userId: string, user
                             <div className="flex flex-col">
                                 <p>Select Featured Image</p>
                                 <div className="grid grid-cols-3 gap-4 my-4">
-                                    {imageUrls.map((image, index) => {
-                                        const [copySuccess, setCopySuccess] = useState('');
-                                        const handleCopyClick = async (imageUrl: string, index: number) => {
-                                            try {
-                                                await navigator.clipboard.writeText(`![Image](${imageUrl})`);
-                                                setCopySuccess(`Copied!`);
-                                                setTimeout(() => setCopySuccess(''), 2000); // Reset the message after 2 seconds
-                                            } catch (err) {
-                                                console.error('Failed to copy:', err);
-                                            }
-                                        };
-                                        return (
-                                            <div className="flex flex-col space-y-1" key={index}>
-                                                <div key={index} className={`cursor-pointer border-2 ${image === featuredImage ? 'border-blue-500' : 'border-transparent'}`}
-                                                    onClick={() => handleImageClick(image)}
-                                                >
-                                                    <Image src={image} width={500} height={300} className="w-full" alt={`Image ${index}`} />
-
-                                                </div>
-                                                <Button size="sm" variant="secondary" type="button" onClick={() => handleCopyClick(image, index)} className="btn">
-                                                    Copy Markdown
-                                                </Button>
-                                                {copySuccess && <p>{copySuccess}</p>}
-                                            </div>
-                                        )
-                                    })}
-
+                                    {imageUrls.map((image, index) => (
+                                        <PostFormImage
+                                            key={index}
+                                            image={image}
+                                            index={index}
+                                            handleImageClick={handleImageClick}
+                                            featuredImage={featuredImage}
+                                        />
+                                    ))}
                                 </div>
                             </div>
                         }
