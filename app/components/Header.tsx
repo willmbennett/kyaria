@@ -23,7 +23,8 @@ type pageListType = {
 const links = [
   { label: 'About', href: '/about' },
   { label: 'Pricing', href: '/pricing' },
-  /*{ label: 'Contact', href: '/contact' },*/ 
+  { label: 'Blog', href: '/blog' },
+  /*{ label: 'Contact', href: '/contact' },*/
 ]
 /*
 const pages = [
@@ -60,7 +61,7 @@ export function Header() {
     /*{ label: 'Contact', href: '/contact' },*/
   ]
 
-  const desktopMenuLinks = session? signedInLinks : links
+  const desktopMenuLinks = session ? signedInLinks : links
 
   const signedInMenuLinks = [
     { label: 'Profile', href: `/profile/${session?.user?.id}` },
@@ -251,14 +252,16 @@ export function Header() {
                 </Link>
               </Menu.Item>
             ))}
-            <Button
-              size="md"
-              variant="solid"
-              className="w-full"
-              onClick={() => signOut()}
-            >
-              Sign Out
-            </Button>
+            {title == 'Menu' &&
+              <Button
+                size="md"
+                variant="solid"
+                className="w-full"
+                onClick={() => signOut()}
+              >
+                Sign Out
+              </Button>
+            }
           </Menu.Items>
         </>
       )}
@@ -302,7 +305,11 @@ export function Header() {
                   {link.label}
                 </Link>
               ))}
-              {!session && desktopDropDownMenu('For Job Seekers', userPages)}
+              {session ?
+                desktopDropDownMenu('More', links)
+                :
+                desktopDropDownMenu('For Job Seekers', userPages)
+              }
             </div>
           </div>
 
