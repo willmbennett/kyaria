@@ -21,7 +21,7 @@ export async function generateMetadata(
     // fetch data
     const { post } = await getPost(id) as { post: PostClass };
 
-    const images = post.images ? post.images : []
+    const images = post.featuredImage ? [post.featuredImage] : []
 
     return {
         title: post.title,

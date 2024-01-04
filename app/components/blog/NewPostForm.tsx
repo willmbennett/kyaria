@@ -22,10 +22,10 @@ export default function NewPostForm({ userId, userName }: { userId: string, user
         tags: sampleData.tags.map(tag => ({ label: tag, value: tag })),
         featuredImage: sampleData.featuredImage,
         images: sampleData.images
-    } : {};
+    } : { author: userName };
 
     const methods = useForm<NewPostFormData>({ defaultValues: defaultValues });
-    const [imageUrls, setImageUrls] = useState<string[]>(sampleData.images);
+    const [imageUrls, setImageUrls] = useState<string[]>(process.env.NODE_ENV === 'development' ? sampleData.images : []);
     const [featuredImage, setFeaturedImage] = useState<string>('');
     const [mode, setMode] = useState('edit'); // 'edit' or 'preview'
 
@@ -54,6 +54,7 @@ export default function NewPostForm({ userId, userName }: { userId: string, user
     };
 
     const handleImageClick = (imageUrl: string) => {
+        console.log(imageUrl)
         setFeaturedImage(imageUrl);
     };
 
@@ -85,7 +86,7 @@ export default function NewPostForm({ userId, userName }: { userId: string, user
         const postData = {
             ...data,
             userId: userId,
-            featureImage: featuredImage,
+            featuredImage: featuredImage,
             images: imageUrls,
             tags: tags
         };
@@ -115,7 +116,7 @@ export default function NewPostForm({ userId, userName }: { userId: string, user
                         <TextareaAutosize
                             {...register('author')}
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            placeholder={userName}
+                            placeholder="Name"
                         />
                         <label className="block text-gray-700 text-sm font-bold mb-2">
                             Images (.png, .jpg, .jpeg only)
