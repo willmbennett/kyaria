@@ -28,9 +28,16 @@ export async function generateMetadata(
         description,
         openGraph: {
             images,
+            title: post.title,
             url: `https://www.kyaria.ai/blog/${id}`,
             type: 'article', // You can set more specific type based on your content
             // Additional Open Graph properties can be set here
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: post.title,
+            description,
+            images
         },
         // Additional metadata like Twitter card data can also be included
     };
