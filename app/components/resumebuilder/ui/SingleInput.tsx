@@ -24,8 +24,7 @@ const SingleInput: React.FC<SingleInputProps> = ({ sectionName, register, optimi
         },
         initialMessages: [
             {
-                id: "1", role: "system", content: `You are an advanced career coach specialized in writing resume professional resume summaries. Here is the user's resume ${JSON.stringify(userResume)}. Use this resume as context when writing summaries.
-                Use the following format as an outline for the response: Professional Title (if relevant) + Key Experiences (with the total number of years worked) + Top Achievements (preferably measurable results) + Top Skills/Expertise/Unique Values (relevant to the job and industry).`
+                id: "1", role: "system", content: `You are an advanced career coach specialized in writing resume professional resume summaries. Here is the user's resume ${JSON.stringify(userResume)}. Use this resume as context when writing summaries. Use the following format as an outline for the response: Professional Title (if relevant) + Key Experiences (with the total number of years worked) + Top Achievements (preferably measurable results) + Top Skills/Expertise/Unique Values (relevant to the job and industry). Keep the length around 100 words`
             },
             {
                 id: "2", role: "user", content: `${section ?

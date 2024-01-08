@@ -45,7 +45,7 @@ const ResumeBuilder = (
         resumeId,
         resumeScanId,
         userId,
-        activeSubscription=false
+        activeSubscription = false
     }: ResumeBuilderProps) => {
     const {
         name,
@@ -168,11 +168,13 @@ const ResumeBuilder = (
     const { register, control, watch, setValue } = methods
 
     const [currentResume, setCurrentResume] = useState(convertFormDataToResumeModel(watch()));
+    const [currentFormData, setCurrentFormData] = useState(watch());
     const newResume = convertFormDataToResumeModel(watch())
 
     const savetoDatabase = async () => {
         setSaveStatus('saving');
         const resumeToSave = convertFormDataToResumeModel(watch())
+        setCurrentFormData(watch());
         //console.log(resumeToSave)
         try {
             const userResumeWithIds = { userId, resumeScan: resumeScanId, ...resumeToSave }
@@ -270,7 +272,7 @@ const ResumeBuilder = (
         const name = watch('name')?.replace(' ', '_')
         const sectionOrder = watch('sectionOrder')
         const blob = await ReactPDF.pdf((
-            <ResumePDF key={sectionOrder.join('-')} watch={watch} sections={sectionOrder} />
+            <ResumePDF key={sectionOrder.join('-')} data={currentFormData} sections={sectionOrder} />
         )).toBlob();
 
         // Example: Save the blob as a file (or you can handle it as needed)
@@ -393,7 +395,7 @@ const ResumeBuilder = (
                 </>}
                 <div className='w-full h-auto'>
                     <div className='sticky top-0 h-screen'>
-                        <DynamicResumePDF key={sections.join('-')} watch={watch} sections={sections} />
+                        <DynamicResumePDF key={sections.join('-')} data={currentFormData} sections={sections} />
                     </div>
 
                 </div>

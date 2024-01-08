@@ -15,7 +15,7 @@ type ContactElement = {
 };
 
 interface ResumePDFProps {
-  watch: UseFormWatch<ResumeBuilderFormData>;
+  data: ResumeBuilderFormData;
   sections: string[]
 }
 
@@ -76,12 +76,12 @@ const renderField = (
 
 
 // ResumePDF component
-const ResumePDF: React.FC<ResumePDFProps> = ({ watch, sections }) => {
+const ResumePDF: React.FC<ResumePDFProps> = ({ data, sections }) => {
   const {
     name, title, email, phone, location, social_links, summary, skills,
     professional_experience, education, interests, projects,
     certifications, awards, publications, volunteering
-  }: ResumeBuilderFormData = watch();
+  } = data;
 
   const contactElements: ContactElement[] = [];
   if (phone) {
@@ -121,16 +121,10 @@ const ResumePDF: React.FC<ResumePDFProps> = ({ watch, sections }) => {
               ))}
             </View>
           </View>
-          {title &&
-            <View>
-              <Text style={pdfstyles.title}>{title.toLocaleUpperCase()}</Text>
-            </View>
-          }
-          {summary &&
-            <View>
-              <Text style={pdfstyles.text}>{summary}</Text>
-            </View>
-          }
+          <View wrap={false} style={pdfstyles.summarySection}>
+            {title && <Text style={pdfstyles.title}>{title.toLocaleUpperCase()}</Text>}
+            {summary && <Text style={pdfstyles.text}>{summary}</Text>}
+          </View>
         </View>
         {sections.map((section, idx) =>
           <View key={idx}>
@@ -149,7 +143,7 @@ const ResumePDF: React.FC<ResumePDFProps> = ({ watch, sections }) => {
           </View>
         )}
       </Page>
-    </Document>
+    </Document >
   );
 };
 
