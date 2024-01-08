@@ -174,7 +174,8 @@ const RenderField = ({ field, item }: { field: FieldConfig, item: sectionType })
                         <>
                             {bulletPoints.map((detail: Details, idx: number) => (
                                 <View style={pdfstyles.bulletItem} key={idx}>
-                                    <Text style={pdfstyles.bulletPoint}>• {detail.content}</Text>
+                                    <Text style={pdfstyles.bulletPoint}>• </Text>
+                                    <Text style={pdfstyles.bulletPoint}>{detail.content}</Text>
                                 </View>
                             ))}
                         </>

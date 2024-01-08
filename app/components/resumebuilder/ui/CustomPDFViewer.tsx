@@ -5,13 +5,13 @@ import { pdfstyles } from "../../resume/styles";
 import { UseFormWatch } from "react-hook-form";
 
 interface ResumePDFProps {
-    watch: UseFormWatch<ResumeBuilderFormData>;
+    data: ResumeBuilderFormData;
     sections: string[]
 }
 
-const CustomPDFViewer = ({ watch, sections }: ResumePDFProps) => (
+const CustomPDFViewer = ({ data, sections }: ResumePDFProps) => (
     <PDFViewer className="viewer rounded shadow-lg" showToolbar={false} style={pdfstyles.viewer}>
-        <ResumePDF key={sections.join('-')} watch={watch} sections={sections} />
+        <ResumePDF key={sections.join('-')} data={data} sections={sections} />
     </PDFViewer>
 );
 

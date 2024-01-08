@@ -14,6 +14,9 @@ export const pdfstyles = StyleSheet.create({
     fontFamily: 'Times-Roman',
     fontSize: 11
   },
+  summarySection: {
+    marginTop: 10
+  },
   resumeSection: {
     marginTop: sectionMargin
   },
@@ -54,7 +57,6 @@ export const pdfstyles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 11,
     fontFamily: 'Times-Bold',
-    marginTop: 2 * sectionMargin
   },
   name: {
     fontSize: 22,

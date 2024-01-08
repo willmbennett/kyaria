@@ -72,7 +72,7 @@ export async function getPosts() {
             query = { _id: { $ne: '65945f629905a4a7d3c36d41' } }; // exclude this post in production
         }
 
-        const posts = await PostModel.find(query);
+        const posts = await PostModel.find(query).sort({ createdAt: -1 });
 
         if (posts) {
             transformProps(posts, castToString, '_id');
