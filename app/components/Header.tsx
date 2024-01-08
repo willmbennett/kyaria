@@ -68,6 +68,8 @@ export function Header() {
     { label: 'Manage Subscription', href: `https://billing.stripe.com/p/login/fZedQQbuK5Ke2Q06oo` },
   ]
 
+  const MobileLinks = session ? [...signedInMenuLinks, ...signedInLinks] : links
+
   function MenuIcon({ open }: { open: any }) {
     return (
       <span className={`relative h-3.5 w-4`}>
@@ -136,7 +138,7 @@ export function Header() {
             >
               <div>
                 <div className="flex flex-col divide-y divide-gray-secondary-400/75">
-                  {session && [...signedInMenuLinks, ...signedInLinks].map((link) => (
+                  {MobileLinks.map((link) => (
                     <Link
                       key={`${link.label}-mobile`}
                       href={link.href}
@@ -147,8 +149,7 @@ export function Header() {
                       {link.label}
                     </Link>
                   ))}
-                  {!session && mobileDropDownMenu('For Job Seekers', session ? signedInLinks : userPages)}
-
+                  {mobileDropDownMenu(session ? 'More' : 'For Job Seekers', session ? links : userPages)}
                 </div>
                 <div className="mt-6">
                   <Button
