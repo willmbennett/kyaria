@@ -48,7 +48,6 @@ const EntryView = ({ item, fieldsConfig, index }: { item: sectionType, fieldsCon
     return (
         <View style={index != 0 ? pdfstyles.resumeEntry : {}}>
             {renderOrder.map(group => {
-                // Render each group only if it exists in groupedFields
                 return groupedFields[group] ? (
                     <RenderFieldGroups key={group} group={group} item={item} groupFields={groupedFields[group]} />
                 ) : null;
@@ -126,7 +125,6 @@ const RenderFieldGroups = ({ group, item, groupFields }: { group: string, item: 
                 <View style={pdfstyles.entryContainer}>
                     <View style={pdfstyles.entryMain}>
                         {groupFields.filter(g => g.pdfgroup == group).map((field, idx) => (
-                            // Render each field based on its type (text, date, bulletPoints, etc.)
                             <RenderField key={idx} field={field} item={item} />
                         ))}
                     </View>
@@ -169,16 +167,15 @@ const RenderField = ({ field, item }: { field: FieldConfig, item: sectionType })
             case 'bulletPoints':
                 const bulletPoints = item[fieldName];
                 if (Array.isArray(bulletPoints)) {
-                    // Now it's safe to treat bulletPoints as Details[]
                     return (
-                        <>
+                        <View>
                             {bulletPoints.map((detail: Details, idx: number) => (
                                 <View style={pdfstyles.bulletItem} key={idx}>
-                                    <Text style={pdfstyles.bulletPoint}>• </Text>
-                                    <Text style={pdfstyles.bulletPoint}>{detail.content}</Text>
+                                    <Text style={pdfstyles.bulletPoint}>•</Text>
+                                    <Text style={pdfstyles.bulletText}>{detail.content}</Text>
                                 </View>
                             ))}
-                        </>
+                        </View>
                     );
                 }
                 return null;
