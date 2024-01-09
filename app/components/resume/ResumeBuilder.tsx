@@ -203,22 +203,11 @@ const ResumeBuilder = (
         }
     }
 
-    function debounce<T extends (...args: any[]) => void>(callback: T, delay: number): (...args: Parameters<T>) => void {
-        let timeoutId: NodeJS.Timeout | null = null;
-
-        return function (...args: Parameters<T>) {
-            if (timeoutId) {
-                clearTimeout(timeoutId);
-            }
-            timeoutId = setTimeout(() => callback(...args), delay);
-        };
-    }
-
     const debouncedSaveToDatabase = useCallback(
-        debounce(() => {
-            savetoDatabase();
-        }, 5000),
-        [newResume] // Dependencies array is empty to ensure this is only created once
+        debounce(async () => {
+            await savetoDatabase();
+        }, 1000),
+        [] // dependencies array is empty to ensure this is created only once
     );
 
     useEffect(() => {
@@ -229,7 +218,10 @@ const ResumeBuilder = (
             //console.log('Made it to save');
             debouncedSaveToDatabase();
         }
-    }, [newResume]);
+        return () => {
+            debouncedSaveToDatabase.cancel();
+        };
+    }, [newResume, editResume, debouncedSaveToDatabase]);
 
     const { fields, append, remove } = useFieldArray({
         control,
