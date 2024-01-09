@@ -169,16 +169,15 @@ const RenderField = ({ field, item }: { field: FieldConfig, item: sectionType })
             case 'bulletPoints':
                 const bulletPoints = item[fieldName];
                 if (Array.isArray(bulletPoints)) {
-                    // Now it's safe to treat bulletPoints as Details[]
                     return (
-                        <>
+                        <View>
                             {bulletPoints.map((detail: Details, idx: number) => (
                                 <View style={pdfstyles.bulletItem} key={idx}>
-                                    <Text style={pdfstyles.bulletPoint}>• </Text>
-                                    <Text style={pdfstyles.bulletPoint}>{detail.content}</Text>
+                                    <Text style={pdfstyles.bulletPoint}>•</Text>
+                                    <Text style={pdfstyles.bulletText}>{detail.content}</Text>
                                 </View>
                             ))}
-                        </>
+                        </View>
                     );
                 }
                 return null;

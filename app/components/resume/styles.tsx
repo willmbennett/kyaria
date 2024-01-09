@@ -92,17 +92,19 @@ export const pdfstyles = StyleSheet.create({
   textbold: {
     fontFamily: 'Times-Bold',
   },
-  bulletListContainer: {
-    flexDirection: 'column',
-    flex: 1, // Take the full width if needed
-  },
   bulletItem: {
     flexDirection: 'row', // For the bullet and the text to be in the same line
+    flexWrap: 'wrap', // Allows text to wrap to the next line
     alignItems: 'flex-start', // Adjust vertical alignment as needed
-    // Add more styling for bullet items here
+    marginBottom: 3, // Space between bullet points
   },
   bulletPoint: {
-    marginLeft: 5,
+    width: 10, // Width of bullet point area
+    textAlign: 'right', // Aligns the bullet point within its area
   },
-  // ... other styles as needed
+  bulletText: {
+    flex: 1, // Takes up remaining space in the flex container
+    paddingLeft: 5, // Space between bullet point and text
+    // Adjust text styling as needed
+  },
 });
