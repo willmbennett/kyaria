@@ -141,37 +141,41 @@ const ResumeBuilder = (
         //console.log('sortedResumeSection: ', sortedResumeSection)
 
         return updatedSection as T[];;
+
     };
 
+    const currentResume: ResumeBuilderFormData = {
+        email,
+        phone,
+        location,
+        summary,
+        title,
+        name,
+        education: handleResumeInport('education', education),
+        professional_experience: handleResumeInport('professional_experience', professional_experience),
+        skills: defaultSkills || [],
+        projects: handleResumeInport('projects', projects),
+        interests: defaultInterests || [],
+        social_links: socialLinksArray,
+        certifications: handleResumeInport('certifications', certifications),
+        publications: handleResumeInport('publications', publications),
+        awards: handleResumeInport('awards', awards),
+        volunteering: handleResumeInport('volunteering', volunteering),
+        sectionOrder: resumeSections
+    }
+
     const methods = useForm<ResumeBuilderFormData>({
-        defaultValues: {
-            email,
-            phone,
-            location,
-            summary,
-            title,
-            name,
-            education: handleResumeInport('education', education),
-            professional_experience: handleResumeInport('professional_experience', professional_experience),
-            skills: defaultSkills || [],
-            projects: handleResumeInport('projects', projects),
-            interests: defaultInterests || [],
-            social_links: socialLinksArray,
-            certifications: handleResumeInport('certifications', certifications),
-            publications: handleResumeInport('publications', publications),
-            awards: handleResumeInport('awards', awards),
-            volunteering: handleResumeInport('volunteering', volunteering),
-            sectionOrder: resumeSections
-        }
+        defaultValues: currentResume
     });
 
     const { register, control, watch, setValue } = methods
+    const newResume = watch()
 
-    const [currentResume, setCurrentResume] = useState(convertFormDataToResumeModel(watch()));
-    const newResume = convertFormDataToResumeModel(watch())
+
 
     const savetoDatabase = async () => {
         setSaveStatus('saving');
+        //console.log('Saving')
         const resumeToSave = convertFormDataToResumeModel(watch())
         //console.log(resumeToSave)
         try {
@@ -191,6 +195,7 @@ const ResumeBuilder = (
             setTimeout(() => {
                 setSaveStatus('up to date');
             }, 1000); // Adjust the delay as needed
+            //console.log('about to save resume')
         } catch (error) {
             //console.error('Error saving to database:', error);
             setSaveStatus(`error: ${error}`);
@@ -213,7 +218,7 @@ const ResumeBuilder = (
         debounce(() => {
             savetoDatabase();
         }, 5000),
-        [] // Dependencies array is empty to ensure this is only created once
+        [newResume] // Dependencies array is empty to ensure this is only created once
     );
 
     useEffect(() => {
@@ -223,9 +228,8 @@ const ResumeBuilder = (
         if ((resumeChanged) && editResume) {
             //console.log('Made it to save');
             debouncedSaveToDatabase();
-            setCurrentResume(newResume); // Update the current state
         }
-    }, [newResume, currentResume, editResume, debouncedSaveToDatabase, savetoDatabase]);
+    }, [newResume]);
 
     const { fields, append, remove } = useFieldArray({
         control,
@@ -270,7 +274,7 @@ const ResumeBuilder = (
         const name = watch('name')?.replace(' ', '_')
         const sectionOrder = watch('sectionOrder')
         const blob = await ReactPDF.pdf((
-            <ResumePDF key={sectionOrder.join('-')} watch={watch} sections={sectionOrder} />
+            <ResumePDF key={sectionOrder.join('-')} data={currentResume} sections={sectionOrder} />
         )).toBlob();
 
         // Example: Save the blob as a file (or you can handle it as needed)
@@ -288,13 +292,14 @@ const ResumeBuilder = (
 
     return (
         <div className='w-full flex flex-col px-4'>
+
             <div className='flex flex-row w-full space-x-2'>
                 {editResume && <>
                     <div className='w-full'>
                         <div className='flex flex-row w-full justify-center items-center space-x-2 py-3 sticky top-0 bg-white'>
-                            {activeSubscription && <Button variant='ghost' size='sm' onClick={savetoDatabase}>Save</Button>}
-                            <Button variant='ghost' size='sm' onClick={toggleEdit}>Exit</Button>
-                            <Button size='sm' onClick={generatePDF}>Download</Button>
+                            {activeSubscription && <Button type='button' variant='ghost' size='sm' onClick={savetoDatabase}>Save</Button>}
+                            <Button type='button' variant='ghost' size='sm' onClick={toggleEdit}>Exit</Button>
+                            <Button type='button' size='sm' onClick={generatePDF}>Download</Button>
                             <div className='flex flex-row space-x-2'>
                                 {saveStatus === 'saving' && (
                                     <div className='text-slate-500 flex flex-row items-center justify-center space-x-2'>
@@ -393,7 +398,7 @@ const ResumeBuilder = (
                 </>}
                 <div className='w-full h-auto'>
                     <div className='sticky top-0 h-screen'>
-                        <DynamicResumePDF key={sections.join('-')} watch={watch} sections={sections} />
+                        <DynamicResumePDF key={sections.join('-')} data={currentResume} sections={sections} />
                     </div>
 
                 </div>

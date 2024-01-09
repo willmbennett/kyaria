@@ -15,7 +15,7 @@ type ContactElement = {
 };
 
 interface ResumePDFProps {
-  watch: UseFormWatch<ResumeBuilderFormData>;
+  data: ResumeBuilderFormData;
   sections: string[]
 }
 
@@ -76,12 +76,12 @@ const renderField = (
 
 
 // ResumePDF component
-const ResumePDF: React.FC<ResumePDFProps> = ({ watch, sections }) => {
+const ResumePDF: React.FC<ResumePDFProps> = ({ data, sections }) => {
   const {
     name, title, email, phone, location, social_links, summary, skills,
     professional_experience, education, interests, projects,
     certifications, awards, publications, volunteering
-  } = watch();
+  } = data;
 
   const contactElements: ContactElement[] = [];
   if (phone) {

@@ -101,7 +101,7 @@ const BulletPointsField = ({ name, control }: Props) => {
                 </>
             }
             <div>
-                <Button size='md' type="button" onClick={() => append({ content: '' })}>Add Bullet Point</Button>
+                <Button size='md' type="button" onClick={() => append({ content: '', show: true })}>Add Bullet Point</Button>
             </div>
         </div>
     );
