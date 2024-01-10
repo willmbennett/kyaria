@@ -25,7 +25,7 @@ export async function GET(
             return NextResponse.json({ error: 'Invalid URL provided.' }, { status: 400 });
         }
 
-        const apiUrl = `https://api.diffbot.com/v3/analyze?url=${encodeURIComponent(url)}&token=${process.env.DIFFBOT_API_KEY}`; // Replace 'YOUR_API_KEY' with your actual Diffbot API key
+        const apiUrl = `https://api.diffbot.com/v3/job?url=${encodeURIComponent(url)}&token=${process.env.DIFFBOT_API_KEY}`; // Replace 'YOUR_API_KEY' with your actual Diffbot API key
 
         const options = {
             method: 'GET',

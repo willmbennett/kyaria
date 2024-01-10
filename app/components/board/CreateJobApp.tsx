@@ -43,7 +43,7 @@ export default function CreateJobApp(
 
             const apiData = await response.json();
 
-            //console.log(apiData)
+            console.log(apiData)
 
             const transformedData = transformDiffBotApiResponse(apiData, data.input)
             // Handle the API response data here (e.g., setValues, etc.)
