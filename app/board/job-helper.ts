@@ -177,7 +177,13 @@ interface Skill {
 
 // Function to transform the API response to a simplified Job object
 export function transformDiffBotApiResponse(apiResponse: any, altUrl: string): Job {
+
+  if (!apiResponse.objects || apiResponse.objects.length === 0) {
+    return createBlankJob(altUrl); // Return a blank or default job object
+  }
+
   const jobData = apiResponse.objects[0]; // Assuming there's only one job object in the response
+  
 
   const transformedJob: Job = {
     jobTitle: jobData.title || 'Title Not Found',
@@ -207,4 +213,24 @@ export function transformDiffBotApiResponse(apiResponse: any, altUrl: string): J
   }
 
   return transformedJob;
+}
+
+function createBlankJob(altUrl: string): Job {
+  // Create and return a blank or default job structure
+  return {
+    jobTitle: 'Untitled Job',
+    link: altUrl,
+    diffbotUri: '',
+    company: 'Company Not Found',
+    companyDiffbotUri: '',
+    location: '',
+    remote: 'false',
+    aboutCompany: '',
+    jobDescription: '',
+    qualifications: [''],
+    responsibilities: [''],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    skills: [],
+  };
 }
