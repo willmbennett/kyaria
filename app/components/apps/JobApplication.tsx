@@ -242,6 +242,7 @@ function renderCurrentSection(
             toggleEdit={toggleEdit}
             editResume={hideMenu}
             activeSubscription={activeSubscription}
+            resumeId={userResume._id.toString()}
           />
         </div>
       );

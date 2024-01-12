@@ -111,7 +111,7 @@ const ResumeSection: React.FC<SectionProps> = ({ title, register, control, secti
                     initialValue = false; // Boolean for checkbox
                     break;
                 case 'gpa':
-                    initialValue = ''; // Assuming GPA is a string, modify as needed
+                    initialValue = {score: '', scoringSystem: '4.0'}; // Assuming GPA is a string, modify as needed
                     break;
                 case 'bulletPoints':
                     initialValue = []; // Assuming bulletPoints is an array, modify as needed
