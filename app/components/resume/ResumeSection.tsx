@@ -70,7 +70,7 @@ const ResumeSection: React.FC<SectionProps> = ({ title, register, control, secti
                     </div>
                 );
             case 'gpa':
-                return <GPAField key={fieldConfig.name} name="education" control={control} defaultValues={{ score: "", scoringSystem: "4.0" }} />
+                return <GPAField key={fieldConfig.name} name={fieldName} control={control} />;
             case 'bulletPoints':
                 return <BulletPointsField key={fieldConfig.name} name={fieldName} control={control} />;
             default:

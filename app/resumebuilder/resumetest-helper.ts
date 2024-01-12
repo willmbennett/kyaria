@@ -24,11 +24,20 @@ const handleResumeImport = <T extends sectionType>(id: string, section?: section
     const hasEndDate = config.fieldsConfig.some(field => field.name === 'end_date');
     const hasStartDate = config.fieldsConfig.some(field => field.name === 'start_date');
     const hasDate = config.fieldsConfig.some(field => field.name === 'date');
+    const isEducation = id === 'education';
 
     //console.log('section: ', section)
 
     const updatedSection = (section || []).map(item => {
         const updatedItem = _.cloneDeep(item);
+
+        // Handle GPA for education section
+        if (isEducation && 'gpa' in updatedItem) {
+            updatedItem.gpa = {
+                score: updatedItem.gpa?.score || '', // Default score to '0' if undefined
+                scoringSystem: updatedItem.gpa?.scoringSystem || '4.0' // Default scoringSystem to '4.0' if undefined
+            };
+        }
 
         // Format date fields correctly, if they exist
         if (hasDate) {
