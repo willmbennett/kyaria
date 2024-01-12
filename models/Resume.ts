@@ -131,6 +131,9 @@ class Certification {
     public start_date?: string;
 
     @prop()
+    public summary?: string;
+
+    @prop()
     public end_date?: string;
 
     @prop({ default: true })

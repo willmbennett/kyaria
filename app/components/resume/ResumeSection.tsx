@@ -70,7 +70,7 @@ const ResumeSection: React.FC<SectionProps> = ({ title, register, control, secti
                     </div>
                 );
             case 'gpa':
-                return <GPAField key={fieldConfig.name} name={fieldName} control={control} />;
+                return <GPAField key={fieldConfig.name} name="education" control={control} defaultValues={{ score: "", scoringSystem: "4.0" }} />
             case 'bulletPoints':
                 return <BulletPointsField key={fieldConfig.name} name={fieldName} control={control} />;
             default:
@@ -111,7 +111,7 @@ const ResumeSection: React.FC<SectionProps> = ({ title, register, control, secti
                     initialValue = false; // Boolean for checkbox
                     break;
                 case 'gpa':
-                    initialValue = ''; // Assuming GPA is a string, modify as needed
+                    initialValue = {score: '', scoringSystem: '4.0'}; // Assuming GPA is a string, modify as needed
                     break;
                 case 'bulletPoints':
                     initialValue = []; // Assuming bulletPoints is an array, modify as needed
