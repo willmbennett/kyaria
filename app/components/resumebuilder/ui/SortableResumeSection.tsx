@@ -6,9 +6,10 @@ import { Control, UseFormRegister, UseFormSetValue, UseFormWatch } from 'react-h
 import { ResumeBuilderFormData, sectionConfigs } from '../../../resumebuilder/resumetest-helper';
 import ResumeSection from '../../resume/ResumeSection';
 import ListInput from '../../resume/ListInput';
+import { JobClass } from '../../../../models/Job';
 
 
-const renderField = ({ id, name, control, register, setValue, watch }: ListInputProps) => {
+const renderField = ({ id, name, control, register, setValue, watch, job }: ListInputProps) => {
 
     const sectionConfig = sectionConfigs.find(config => config.id === id);
     switch (sectionConfig?.sectionType) {
@@ -19,6 +20,7 @@ const renderField = ({ id, name, control, register, setValue, watch }: ListInput
                     control={control}
                     setValue={setValue}
                     watch={watch}
+                    job={job}
                 />
             );
         case 'section':
@@ -44,9 +46,10 @@ type ListInputProps = {
     register: UseFormRegister<ResumeBuilderFormData>;
     setValue: UseFormSetValue<ResumeBuilderFormData>;
     watch: UseFormWatch<ResumeBuilderFormData>;
+    job?: Partial<JobClass>
 };
 
-function SortableResumeSection({ id, name, control, register, setValue, watch }: ListInputProps) {
+function SortableResumeSection({ id, name, control, register, setValue, watch, job }: ListInputProps) {
     const [showComponent, setShowComponent] = useState(false);
 
     const {
@@ -84,7 +87,7 @@ function SortableResumeSection({ id, name, control, register, setValue, watch }:
                     </button>
                     {!isDragging &&
                         <div className={`transition-all ease-in-out duration-300 ${showComponent ? '' : 'max-h-0 overflow-hidden'}`}>
-                            {showComponent && renderField({ id, name, control, register, setValue, watch })}
+                            {showComponent && renderField({ id, name, control, register, setValue, watch, job })}
                         </div>
                     }
                 </div>

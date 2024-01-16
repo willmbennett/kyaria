@@ -191,7 +191,7 @@ export function JobApplication({ jobApp, activeSubscription }: { jobApp: any, ac
 function renderCurrentSection(
   currentSection: string,
   jobData: JobClass,
-  jobStripped: Partial<JobClass>,
+  jobStripped:  Partial<JobClass>,
   jobKeyWords: string[],
   userResume: ResumeClass,
   userResumeStripped: Partial<ResumeClass>,
@@ -243,6 +243,7 @@ function renderCurrentSection(
             editResume={hideMenu}
             activeSubscription={activeSubscription}
             resumeId={userResume._id.toString()}
+            job={jobStripped}
           />
         </div>
       );

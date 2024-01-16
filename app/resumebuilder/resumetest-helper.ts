@@ -10,6 +10,7 @@ export interface ResumeBuilderProps {
     resumeScanId?: string;
     userId?: string;
     activeSubscription?: boolean;
+    job?: Partial<JobClass>;
 }
 
 interface SocialLinksMap {
@@ -127,6 +128,7 @@ export const transformDataToFormValues = (data: Partial<ResumeClass>): ResumeBui
 
 
 import _ from 'lodash';
+import { JobClass } from "../../models/Job";
 
 export function convertFormDataToResumeModel(formData: any, originalData: any): any {
     const updatedData = _.cloneDeep(originalData);
