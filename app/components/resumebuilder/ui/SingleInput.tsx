@@ -3,14 +3,16 @@ import { Message, useChat } from 'ai/react';
 import { useFormContext, UseFormRegister } from 'react-hook-form';
 import TextareaAutosize from 'react-textarea-autosize';
 import { Button } from '../../Button';
+import { JobClass } from '../../../../models/Job';
 
 type SingleInputProps = {
     sectionName: string
     register: UseFormRegister<any>;
     optimize?: boolean
+    job?: Partial<JobClass>
 };
 
-const SingleInput: React.FC<SingleInputProps> = ({ sectionName, register, optimize }) => {
+const SingleInput: React.FC<SingleInputProps> = ({ sectionName, register, optimize, job }) => {
     const [finishedLoading, setFinishedLoading] = useState(false)
     const [loading, setLoading] = useState(false)
     const { watch, setValue } = useFormContext();
@@ -28,9 +30,9 @@ const SingleInput: React.FC<SingleInputProps> = ({ sectionName, register, optimi
             },
             {
                 id: "2", role: "user", content: `${section ?
-                    `Please refine this summary for clarity and impact: ${section}. Your response should just be the refined text.`
+                    `Please refine this summary for clarity and impact: ${section}${job? `and tailor it for this job post ${JSON.stringify(job)}` : ''}. Your response should just be the refined text.`
                     :
-                    `Help me write a summary. Your response should just be the summary text.`
+                    `Help me write a summary ${job? `and tailor it for this job post ${JSON.stringify(job)}` : ''}. Your response should just be the summary text.`
                     }`
             },
             { id: '1', role: 'assistant', content: section }

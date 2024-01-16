@@ -20,6 +20,7 @@ import { CSS } from "@dnd-kit/utilities";
 import CreatableSelect from "react-select/creatable";
 import { ResumeBuilderFormData } from "../../resumebuilder/resumetest-helper";
 import { Button } from "../Button";
+import { JobClass } from "../../../models/Job";
 
 type SkillField = { id: string, label: string; value: string }
 
@@ -30,6 +31,7 @@ type ListInputProps = {
     control: Control<ResumeBuilderFormData>;
     setValue: UseFormSetValue<ResumeBuilderFormData>;
     watch: UseFormWatch<ResumeBuilderFormData>;
+    job?: Partial<JobClass>
 };
 
 const MultiValue = (props: MultiValueProps<SkillField>) => {
@@ -118,7 +120,7 @@ function Loading() {
     </>
   }
 
-const ListInput: React.FC<ListInputProps> = ({ name, control, setValue, watch }) => {
+const ListInput: React.FC<ListInputProps> = ({ name, control, setValue, watch, job }) => {
     const { fields, append, remove, move } = useFieldArray({ control, name });
     const [inputValue, setInputValue] = useState('');
     const [loading, setLoading] = useState(false);
@@ -169,6 +171,8 @@ const ListInput: React.FC<ListInputProps> = ({ name, control, setValue, watch })
             return move(oldIndex, newIndex);
         }
     };
+
+    const tailorRoleString = job? `to this job post ${JSON.stringify(job)}` : (userResume.title? `to this role ${JSON.stringify(userResume.title)}` : '')
 
     async function optimizeSkills() {
 
@@ -307,7 +311,7 @@ Zoho Projects
 ` 
             },
             {
-                role: "user", content: `Please tailor the skills section of my resume: ${JSON.stringify(userResume)}${userResume.title? `to this role ${JSON.stringify(userResume.title)}` : ''}. Return the list of the top 10-15 skills in this json format: {"skills": string[]}`
+                role: "user", content: `Please tailor the skills section of my resume: ${JSON.stringify(userResume)} ${tailorRoleString}. Return the list of the top 10-15 skills in this json format: {"skills": string[]}`
             }
         ]
 

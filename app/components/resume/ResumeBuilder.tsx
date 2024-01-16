@@ -28,7 +28,8 @@ const ResumeBuilder = (
         resumeId,
         resumeScanId,
         userId,
-        activeSubscription = false
+        activeSubscription = false,
+        job
     }: ResumeBuilderProps) => {
     const defaultValues = transformDataToFormValues(data)
     const methods = useForm<ResumeBuilderFormData>({ defaultValues });
@@ -50,7 +51,7 @@ const ResumeBuilder = (
                             <SaveStatusIndicator saveStatus={saveStatus} />
                         </div>
                         {activeSubscription ?
-                            <ResumeForm handleDragEnd={handleDragEnd} sections={sections} methods={methods}/>
+                            <ResumeForm handleDragEnd={handleDragEnd} sections={sections} methods={methods} job={job}/>
                             :
                             <Button href="/pricing">Subscribe to Edit</Button>
                         }

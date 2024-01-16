@@ -1,25 +1,18 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { ResumeBuilderFormData } from '../../resumebuilder/resumetest-helper';
+import { JobClass } from '../../../models/Job';
 import SingleInput from '../resumebuilder/ui/SingleInput';
 
-const ContactInformation = ({
-    name,
-    title,
-    phone,
-    email,
-    location,
-    summary
-}: Partial<ResumeBuilderFormData>) => {
+const ContactInformation = ({ job }: { job?: Partial<JobClass> }) => {
     const { register } = useFormContext(); // Using React Hook Form's context
 
     const inputFields = [
-        { sectionName: 'name', initialValue: name },
-        { sectionName: 'title', initialValue: title },
-        { sectionName: 'phone', initialValue: phone },
-        { sectionName: 'email', initialValue: email },
-        { sectionName: 'location', initialValue: location },
-        { sectionName: 'summary', initialValue: summary, optimize: true }
+        { sectionName: 'name' },
+        { sectionName: 'title' },
+        { sectionName: 'phone' },
+        { sectionName: 'email' },
+        { sectionName: 'location' },
+        { sectionName: 'summary', optimize: true }
     ];
 
     return (
@@ -30,6 +23,7 @@ const ContactInformation = ({
                     sectionName={field.sectionName}
                     register={register}
                     optimize={field.optimize}
+                    job={job}
                 />
             ))}
         </div>
