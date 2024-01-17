@@ -23,13 +23,8 @@ export default function KanbanColumn({ state, jobApps, jobStates }: KanbanColumn
     const columnStyle = isOver ? "border-blue-500 bg-blue-100" : "border-gray-300 bg-white";
 
     return (
-        <div ref={setNodeRef} className={`w-80 rounded-xl mx-2 text-center items-center p-2 border ${columnStyle}`}>
+        <div ref={setNodeRef} className={`w-80  rounded-xl mx-2 text-center items-center p-2 border ${columnStyle}`}>
             <h5 className="text-xl font-medium leading-tight py-2">{state}</h5>
-            {isOver && (
-                <div className="absolute inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
-
-                </div>
-            )}
             {!isOver && <>
                 {activeApps && activeApps.map((app: any) => (
                     <AppItem
