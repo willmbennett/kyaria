@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getUserJobApps } from "../../lib/app-db";
 import { getProfile } from "../../lib/profile-db";
-import Board from "../components/apps/Board";
+import Board from "../components/board/Board";
 import Await from "../jobs/await";
 import { redirect } from "next/navigation";
 import { Button } from "../components/Button";

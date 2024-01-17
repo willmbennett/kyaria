@@ -5,21 +5,27 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { updateJobAppAction } from "../../board/_action";
 import { Button } from "../Button";
+import { useDraggable } from '@dnd-kit/core';
+import { CSS } from '@dnd-kit/utilities';
+import { AppClass } from "../../../models/App";
+import { JobClass } from "../../../models/Job";
 
 const ACTIVE_ROUTE = "bg-gray-200 hover:bg-gray-600 hover:text-white";
 const INACTIVE_ROUTE = "hover:bg-gray-600 hover:text-white";
 
 export default function AppItem(
   { app,
-    jobStates
+    jobStates,
+    state
   }: {
-    app: any,
+    app: Partial<AppClass>,
     jobStates: string[]
+    state: string
   }) {
   const router = useRouter()
-  let { _id, job, createdAt } = app
-  let { jobTitle, company, location, employmentType, salaryRange } = job;
-  const date = parseISO(createdAt);
+  let { _id, job, createdAt } = app as AppClass
+  let { jobTitle, company, location, employmentType, salaryRange } = job as JobClass;
+  const date = parseISO(createdAt?.toString() || '');
   const [showOptions, setShowOptions] = useState(false);
 
   const optionsClick = () => {
@@ -27,22 +33,31 @@ export default function AppItem(
   };
 
   const handleClose = async () => {
-    const { jobApp } = await updateJobAppAction(_id, { active: !app.active }, "/")
+    const { jobApp } = await updateJobAppAction(_id.toString(), { active: !app.active }, "/")
     //console.log(jobApp)
     router.push(`/board`, { scroll: false })
   };
 
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: app._id?.toString() || ''
+  });
+  
   return (
-    <div className={`mt-2 text-left border rounded-xl block ${app.active ? "" : "bg-slate-200"} shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]`}>
+    <div
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+      className={`mt-2 text-left border rounded-xl block ${app.active ? "bg-white" : "bg-slate-200"} shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-lg transition-shadow duration-200`}
+    >
       <div>
         <div className="flex p-2 justify-between w-full">
-          <Link href={`/apps/${_id}`} target="_blank">
-            <div className="w-full py-1 ">
-              <h5 className="text-lg font-medium leading-tight ">
-                {jobTitle}
-              </h5>
-            </div>
-          </Link>
+
+          <div className="w-full py-1 ">
+            <h5 className="text-lg font-medium leading-tight ">
+              {jobTitle}
+            </h5>
+          </div>
           <div className="remove text-right">
             <button onClick={handleClose} className="p-1">
               <svg fill="#ffcccb" height="20px" width="20px"
@@ -52,28 +67,28 @@ export default function AppItem(
             </button>
           </div>
         </div>
-        <Link href={`/apps/${_id}`} target="_blank">
-          <div className="w-full px-2 pb-2 text-xs text-left border-b-2 border-neutral-100">
-            {createdAt && (<time dateTime={createdAt}>{format(date, 'MM/dd')}</time>)}
+        <div className="w-full px-2 pb-2 text-xs text-left border-b-2 border-neutral-100">
+          {createdAt && (<time dateTime={createdAt.toString()}>{format(date, 'MM/dd')}</time>)}
+        </div>
+        <div className="p-3">
+          <h5
+            className="mb-2 text-md font-medium leading-tight">
+            {company} - {location}
+          </h5>
+          <p className="mb-2 text-sm text-base text-neutral-600">
+            {employmentType ? employmentType : ""} {employmentType && salaryRange && ' | '} {salaryRange ? `${salaryRange}` : " "}
+          </p>
+          <div className="flex items-center justify-center">
+            <Button
+              variant="solid"
+              size="md"
+              type="button"
+              href={`/apps/${_id}`}
+            >
+              View packet
+            </Button>
           </div>
-          <div className="p-3">
-            <h5
-              className="mb-2 text-md font-medium leading-tight">
-              {company} - {location}
-            </h5>
-            <p className="mb-2 text-sm text-base text-neutral-600">
-              {employmentType ? employmentType : ""} {employmentType && salaryRange && ' | '} {salaryRange ? `${salaryRange}` : " "}
-            </p>
-            <div className="flex items-center justify-center">
-              <Button
-                variant="solid"
-                size="md"
-              >
-                View packet
-              </Button>
-            </div>
-          </div>
-        </Link>
+        </div>
       </div>
       <div className="relative inline-block text-left w-full">
         <div>
@@ -81,7 +96,7 @@ export default function AppItem(
             onClick={optionsClick}
             type="button"
             className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" id="menu-button" aria-expanded="true" aria-haspopup="true">
-            {app.state}
+            {state}
             <svg className="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
             </svg>
@@ -94,7 +109,7 @@ export default function AppItem(
                 jobStates.map((l, i) => {
                   const selectOption = async () => {
                     setShowOptions(!showOptions);
-                    const { jobApp } = await updateJobAppAction(_id, { state: jobStates[i] }, "/")
+                    const { jobApp } = await updateJobAppAction(_id.toString(), { state: jobStates[i] }, "/")
                     //console.log(jobApp)
                     router.push(`/board`, { scroll: false })
                   };
