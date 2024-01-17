@@ -1,6 +1,6 @@
 'use client'
 import { useState } from "react";
-import CreateJobApp from "../board/CreateJobApp";
+import CreateJobApp from "./CreateJobApp";
 //import { ObjectId } from "mongodb";
 import Kanban from "./KanbanBoard";
 import { Button } from "../Button";
@@ -59,7 +59,6 @@ export default function Board(
         </div>
         <Kanban
           jobApps={jobApps}
-          jobStates={jobStates}
         />
       </>)}
       {creatingJobApp && profile.userId && (
