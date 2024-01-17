@@ -125,11 +125,11 @@ export default function AppItem(
               {
                 jobStates.map((l, i) => {
                   const selectOption = async () => {
-                    console.log('made it to click')
+                    //console.log('made it to click')
                     setShowOptions(!showOptions);
                     const newState = jobStates[i]
                     const stateUpdate = { state: newState }
-                    console.log('stateUpdate: ', newState)
+                    //console.log('stateUpdate: ', newState)
                     updateAppState(_id.toString(), jobStates[i])
                     const { jobApp } = await updateJobAppAction(_id.toString(), stateUpdate, "/")
                     //console.log(jobApp)
