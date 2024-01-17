@@ -1,5 +1,5 @@
 'use client'
-import { DndContext, DragEndEvent, DragOverlay, DragStartEvent } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { useRouter } from 'next/navigation';
 import { useId, useState } from 'react';
 import { AppClass } from '../../../models/App';
@@ -19,6 +19,7 @@ export default function Kanban(
     const router = useRouter()
 
     const [activeId, setActiveId] = useState<string>();
+    const [apps, setApps] = useState<Partial<AppClass>[]>(jobApps);
 
     const handleDragEnd = async (event: DragEndEvent) => {
         // Logic to handle item drop, updating the state of jobApps accordingly
@@ -33,12 +34,37 @@ export default function Kanban(
         if (newState && jobStates.includes(newState) && appId) {
             const dataUpdate = { state: newState }
             //console.log('dataUpdate: ', dataUpdate)
-            setAppStates(prev => ({ ...prev, [appId]: newState }));
             const { jobApp } = await updateJobAppAction(appId, dataUpdate, "/")
             //console.log(jobApp)
             router.refresh()
         }
     };
+
+    const handleDragOver = async (event: DragOverEvent) => {
+        // Logic to handle item drop, updating the state of jobApps accordingly
+        //console.log(event)
+
+        const newState = event.over?.id as string
+        const appId = event.active.id.toString()
+
+        //console.log('newState: ', newState)
+        //console.log('appId: ', appId)
+
+        if (newState && jobStates.includes(newState) && appId) {
+
+            updateAppState(appId, newState)
+            //console.log(jobApp)
+            router.refresh()
+        }
+    };
+
+    const updateAppState = (appId: string, newState: string) => {
+        const updatedApps = apps.map(app =>
+            app._id === appId ? { ...app, state: newState } : app
+        );
+
+        setApps(updatedApps)
+    }
 
     const handleDragStart = (event: DragStartEvent) => {
         // Logic to handle item drop, updating the state of jobApps accordingly
@@ -46,38 +72,47 @@ export default function Kanban(
         setActiveId(event.active.id.toString());
     };
 
+    const mouseSensor = useSensor(MouseSensor, {
+        // Require the mouse to move by 10 pixels before activating
+        activationConstraint: {
+            distance: 10,
+        },
+    });
+    const touchSensor = useSensor(TouchSensor, {
+        // Press delay of 250ms, with tolerance of 5px of movement
+        activationConstraint: {
+            delay: 250,
+            tolerance: 5,
+        },
+    });
+
+    const sensors = useSensors(
+        mouseSensor,
+        touchSensor,
+    );
+
     const id = useId()
-
-    const initialStateMapping = jobApps.reduce((acc, job) => {
-        // Ensure that _id and state are defined
-        if (job._id && job.state) {
-            const idAsString = job._id.toString(); // Convert ObjectId to string
-            acc[idAsString] = job.state;
-        }
-        return acc;
-    }, {} as { [key: string]: string });
-
-
-    const [appStates, setAppStates] = useState(initialStateMapping);
 
     return (
         <>
             <div className="box-border w-full mt-4 overflow-scroll rounded-xl">
                 <div className="box-border inline-flex min-h-screen overflow-scroll p-4">
-                    <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart} id={id}>
-                        {jobStates.map((state: string) => 
-                        <KanbanColumn 
-                        key={state} 
-                        state={state} 
-                        jobApps={jobApps.filter(job => appStates[job._id?.toString() || ''] === state)} 
-                        jobStates={jobStates} 
-                        />)}
+                    <DndContext sensors={sensors} onDragEnd={handleDragEnd} onDragStart={handleDragStart} onDragOver={handleDragOver} id={id}>
+                        {jobStates.map((state: string) =>
+                            <KanbanColumn
+                                key={state}
+                                state={state}
+                                jobApps={apps.filter(job => job.state === state)}
+                                updateAppState={updateAppState}
+                                jobStates={jobStates}
+                            />)}
                         <DragOverlay>
-                            {activeId && jobApps.find(job => job._id === activeId) ? (
+                            {activeId && apps.find(job => job._id === activeId) ? (
                                 <AppItem
-                                    app={jobApps.find(job => job._id === activeId) as Partial<AppClass>}
+                                    app={apps.find(job => job._id === activeId) as Partial<AppClass>}
+                                    updateAppState={updateAppState}
                                     jobStates={jobStates}
-                                    state={appStates[activeId]}
+                                    state={apps.find(job => job._id === activeId)?.state || 'WISHLIST'}
                                 />
                             ) : null}
                         </DragOverlay>

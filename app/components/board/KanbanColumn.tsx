@@ -7,9 +7,10 @@ interface KanbanColumnProps {
     state: string;
     jobApps: Partial<AppClass>[];
     jobStates: string[];
+    updateAppState: (appId: string, newState: string) => void;
 }
 
-export default function KanbanColumn({ state, jobApps, jobStates }: KanbanColumnProps) {
+export default function KanbanColumn({ state, jobApps, updateAppState, jobStates }: KanbanColumnProps) {
     const { setNodeRef, isOver } = useDroppable({ id: state });
 
     const activeApps = jobApps.filter((app: any) => app.active);
@@ -30,6 +31,7 @@ export default function KanbanColumn({ state, jobApps, jobStates }: KanbanColumn
                     <AppItem
                         key={app._id}
                         app={app}
+                        updateAppState={updateAppState}
                         jobStates={jobStates}
                         state={state}
                     />
@@ -51,6 +53,7 @@ export default function KanbanColumn({ state, jobApps, jobStates }: KanbanColumn
                         <AppItem
                             key={app._id}
                             app={app}
+                            updateAppState={updateAppState}
                             jobStates={jobStates}
                             state={state}
                         />
