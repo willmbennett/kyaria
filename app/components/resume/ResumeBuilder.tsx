@@ -10,14 +10,8 @@ import {
 } from '../../resumebuilder/resumetest-helper';
 import SaveStatusIndicator from './SaveStatusIndicator';
 import ResumeForm from './ResumeForm';
-import {useGeneratePDF, useSaveResume, useDragAndDrop } from '../../../lib/hooks/resume-test';
-import ResumeLoadingComponent from './ResumeLoadingComponent';
-
-// Dynamic import with loading component
-const DynamicResumePDF = dynamic(() => import('../resumebuilder/ui/CustomPDFViewer'), {
-    loading: () => <ResumeLoadingComponent />,
-    ssr: false
-});
+import { useGeneratePDF, useSaveResume, useDragAndDrop } from '../../../lib/hooks/resume-test';
+import CustomPDFViewer from '../resumebuilder/ui/CustomPDFViewer';
 
 
 const ResumeBuilder = (
@@ -51,7 +45,7 @@ const ResumeBuilder = (
                             <SaveStatusIndicator saveStatus={saveStatus} />
                         </div>
                         {activeSubscription ?
-                            <ResumeForm handleDragEnd={handleDragEnd} sections={sections} methods={methods} job={job}/>
+                            <ResumeForm handleDragEnd={handleDragEnd} sections={sections} methods={methods} job={job} />
                             :
                             <Button href="/pricing">Subscribe to Edit</Button>
                         }
@@ -59,7 +53,9 @@ const ResumeBuilder = (
                 </>}
                 <div className='w-full h-auto'>
                     <div className='sticky top-0 h-screen'>
-                        <DynamicResumePDF key={sections.join('-')} data={defaultValues} sections={sections} />
+                        {defaultValues && sections &&
+                            <CustomPDFViewer key={sections.join('-')} data={watch()} sections={sections} />
+                        }
                     </div>
 
                 </div>

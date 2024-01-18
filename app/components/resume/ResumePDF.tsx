@@ -5,7 +5,6 @@ import { Award, Certification, Education, ProfessionalExperience, Project, Publi
 import { pdfstyles } from './styles';
 import { ListSection } from './sections/ListSection';
 import PDFResumeSection from './sections/PDFResumeSection';
-import { UseFormWatch } from 'react-hook-form';
 
 
 type ContactElement = {
