@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { pdfjs } from 'react-pdf';
 import "react-pdf/dist/esm/Page/TextLayer.css";
@@ -51,7 +51,9 @@ export default function ResumeTest(
     const hasResumes = !(resumes.length === 0 && resumeScans.length === 0)
     const [resumeIndex, setResumeIndex] = useState<string | null>(resumes.length > 0 ? resumes[0]._id.toString() : resumeScans.length > 0 ? resumeScans[0]._id.toString() : null);
     const [useResume, setUseResume] = useState(resumes.length > 0 ? true : false)
-    const activeResume = useResume ? resumes.filter(resume => resume._id == resumeIndex)[0] : resumeScans.filter(resume => resume._id == resumeIndex)[0]
+    const activeResume = useMemo(() => {
+        return useResume ? resumes.find(resume => resume._id == resumeIndex) : resumeScans.find(scan => scan._id == resumeIndex);
+    }, [resumeIndex, useResume, resumes, resumeScans]);
     const [loading, setLoading] = useState(false)
     const [formHidden, setFormHidden] = useState(hasResumes);
     const [editResume, setEditResume] = useState(false);
@@ -137,7 +139,7 @@ export default function ResumeTest(
                     </div>
                 }
                 <div className={`items-center flex flex-col text-center ${editResume ? 'w-full' : 'lg:w-2/3'}`}>
-                    {!editResume && !formHidden && activeSubscription && 
+                    {!editResume && !formHidden && activeSubscription &&
                         <NewResumeSection
                             userId={userId}
                             handleSubmit={handleSubmit}

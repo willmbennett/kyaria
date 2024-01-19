@@ -86,7 +86,7 @@ const ResumeSection: React.FC<SectionProps> = ({ title, register, control, secti
         }, {});
 
         return (
-            <div key={item.id} className="mb-6 p-4 border bg-slate-100 border-slate-400 shadow rounded-md">
+            <div key={item.id} className="mb-6 p-4">
                 {Object.entries(groupedFields).map(([group, groupFields]) => (
                     <div key={group} className="flex space-x-4 p-2">
                         {groupFields.map(fieldConfig => renderField(fieldConfig, item, index))}

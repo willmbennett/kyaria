@@ -88,6 +88,8 @@ export const transformDataToFormValues = (data: Partial<ResumeClass>): ResumeBui
         sectionOrder
     } = data;
 
+    //console.log('Transforming Data')
+
     const resumeSections: sectionOptions[] = sectionOrder && sectionOrder.length > 0 ? sectionOrder as sectionOptions[] : [
         'skills',
         'professional_experience',

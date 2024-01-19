@@ -12,7 +12,7 @@ export const pdfstyles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 30,
     fontFamily: 'Times-Roman',
-    fontSize: 11
+    fontSize: 11,
   },
   summarySection: {
     marginTop: 10
