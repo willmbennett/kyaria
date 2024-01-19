@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import dynamic from 'next/dynamic';
 import { Button } from '../Button';
@@ -25,10 +25,9 @@ const ResumeBuilder = (
         activeSubscription = false,
         job
     }: ResumeBuilderProps) => {
-    const defaultValues = transformDataToFormValues(data)
+    const defaultValues = useMemo(() => transformDataToFormValues(data), [data]);
     const methods = useForm<ResumeBuilderFormData>({ defaultValues });
     const { watch, setValue } = methods
-    const sections = watch('sectionOrder')
     const { saveStatus, saveToDatabase } = useSaveResume({ userId, resumeId, resumeScanId, editResume, data, defaultValues, watch });
     const handleDragEnd = useDragAndDrop({ watch, setValue });
     const generatePDF = useGeneratePDF({ defaultValues });
@@ -45,7 +44,7 @@ const ResumeBuilder = (
                             <SaveStatusIndicator saveStatus={saveStatus} />
                         </div>
                         {activeSubscription ?
-                            <ResumeForm handleDragEnd={handleDragEnd} sections={sections} methods={methods} job={job} />
+                            <ResumeForm handleDragEnd={handleDragEnd} sections={defaultValues.sectionOrder} methods={methods} job={job} />
                             :
                             <Button href="/pricing">Subscribe to Edit</Button>
                         }
@@ -53,8 +52,8 @@ const ResumeBuilder = (
                 </>}
                 <div className='w-full h-auto'>
                     <div className='sticky top-0 h-screen'>
-                        {defaultValues && sections &&
-                            <CustomPDFViewer key={sections.join('-')} data={watch()} sections={sections} />
+                        {defaultValues &&
+                            <CustomPDFViewer data={defaultValues} />
                         }
                     </div>
 
