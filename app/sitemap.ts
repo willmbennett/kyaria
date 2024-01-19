@@ -41,7 +41,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (posts) {
         const postUrls: MetadataRoute.Sitemap =
             posts.map((post) => ({
-                url: `http://example.com/posts/${post._id}`,
+                url: `https://www.kyaria.ai/blog/${post._id}`,
                 lastModified: new Date(post.updatedAt.toLocaleString()),
                 changeFrequency: 'yearly',
                 priority: 0.8
