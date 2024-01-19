@@ -240,7 +240,7 @@ export const useGeneratePDF = ({ defaultValues }: UseGeneratePDFProps) => {
         const name = defaultValues.name?.replace(/\s/g, '_') || ''
         const sectionOrder = defaultValues.sectionOrder
         const blob = await ReactPDF.pdf(
-            <ResumePDF key={sectionOrder.join('-')} data={defaultValues} sections={sectionOrder} />
+            <ResumePDF key={sectionOrder.join('-')} data={defaultValues} />
         ).toBlob();
 
         const url = URL.createObjectURL(blob);

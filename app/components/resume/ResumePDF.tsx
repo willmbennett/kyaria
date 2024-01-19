@@ -5,7 +5,6 @@ import { Award, Certification, Education, ProfessionalExperience, Project, Publi
 import { pdfstyles } from './styles';
 import { ListSection } from './sections/ListSection';
 import PDFResumeSection from './sections/PDFResumeSection';
-import { UseFormWatch } from 'react-hook-form';
 
 
 type ContactElement = {
@@ -16,7 +15,6 @@ type ContactElement = {
 
 interface ResumePDFProps {
   data: ResumeBuilderFormData;
-  sections: string[]
 }
 
 interface ListInputProps {
@@ -76,11 +74,11 @@ const renderField = (
 
 
 // ResumePDF component
-const ResumePDF: React.FC<ResumePDFProps> = ({ data, sections }) => {
+const ResumePDF: React.FC<ResumePDFProps> = ({ data }) => {
   const {
     name, title, email, phone, location, social_links, summary, skills,
     professional_experience, education, interests, projects,
-    certifications, awards, publications, volunteering
+    certifications, awards, publications, volunteering, sectionOrder
   } = data;
 
   const contactElements: ContactElement[] = [];
@@ -126,19 +124,19 @@ const ResumePDF: React.FC<ResumePDFProps> = ({ data, sections }) => {
             {summary && <Text style={pdfstyles.text}>{summary}</Text>}
           </View>
         </View>
-        {sections.map((section, idx) =>
+        {sectionOrder.map((sectionOrder, idx) =>
           <View key={idx}>
             {renderField({
-              id: section,
-              skills: section === 'skills' ? skills : undefined,
-              professional_experience: section === 'professional_experience' ? professional_experience : undefined,
-              education: section === 'education' ? education : undefined,
-              interests: section === 'interests' ? interests : undefined,
-              projects: section === 'projects' ? projects : undefined,
-              certifications: section === 'certifications' ? certifications : undefined,
-              awards: section === 'awards' ? awards : undefined,
-              publications: section === 'publications' ? publications : undefined,
-              volunteering: section === 'volunteering' ? volunteering : undefined,
+              id: sectionOrder,
+              skills: sectionOrder === 'skills' ? skills : undefined,
+              professional_experience: sectionOrder === 'professional_experience' ? professional_experience : undefined,
+              education: sectionOrder === 'education' ? education : undefined,
+              interests: sectionOrder === 'interests' ? interests : undefined,
+              projects: sectionOrder === 'projects' ? projects : undefined,
+              certifications: sectionOrder === 'certifications' ? certifications : undefined,
+              awards: sectionOrder === 'awards' ? awards : undefined,
+              publications: sectionOrder === 'publications' ? publications : undefined,
+              volunteering: sectionOrder === 'volunteering' ? volunteering : undefined,
             })}
           </View>
         )}

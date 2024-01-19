@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import dynamic from 'next/dynamic';
 import { Button } from '../Button';
@@ -10,14 +10,8 @@ import {
 } from '../../resumebuilder/resumetest-helper';
 import SaveStatusIndicator from './SaveStatusIndicator';
 import ResumeForm from './ResumeForm';
-import {useGeneratePDF, useSaveResume, useDragAndDrop } from '../../../lib/hooks/resume-test';
-import ResumeLoadingComponent from './ResumeLoadingComponent';
-
-// Dynamic import with loading component
-const DynamicResumePDF = dynamic(() => import('../resumebuilder/ui/CustomPDFViewer'), {
-    loading: () => <ResumeLoadingComponent />,
-    ssr: false
-});
+import { useGeneratePDF, useSaveResume } from '../../../lib/hooks/resume-test';
+import CustomPDFViewer from '../resumebuilder/ui/CustomPDFViewer';
 
 
 const ResumeBuilder = (
@@ -31,35 +25,38 @@ const ResumeBuilder = (
         activeSubscription = false,
         job
     }: ResumeBuilderProps) => {
-    const defaultValues = transformDataToFormValues(data)
+    const defaultValues = useMemo(() => transformDataToFormValues(data), [data]);
     const methods = useForm<ResumeBuilderFormData>({ defaultValues });
     const { watch, setValue } = methods
-    const sections = watch('sectionOrder')
     const { saveStatus, saveToDatabase } = useSaveResume({ userId, resumeId, resumeScanId, editResume, data, defaultValues, watch });
-    const handleDragEnd = useDragAndDrop({ watch, setValue });
     const generatePDF = useGeneratePDF({ defaultValues });
 
     return (
-        <div className='w-full flex flex-col px-4'>
-            <div className='flex flex-row w-full space-x-2'>
-                {editResume && <>
-                    <div className='w-full'>
-                        <div className='flex flex-row w-full justify-center items-center space-x-2 py-3 sticky top-0 bg-white'>
-                            {activeSubscription && <Button type='button' variant='ghost' size='sm' onClick={saveToDatabase}>Save</Button>}
+        <div className='flex w-full p-4'>
+            <div className={`w-full flex md:p-4 ${editResume ? 'flex-col md:flex-row space-y-2 md:space-x-2 border bg-slate-100 border-slate-400 shadow rounded-md' : ''}`}>
+                {editResume &&
+                    <div className={`w-full ${editResume ? 'md:w-1/2' : ''}`}>
+                        <div className='flex flex-row w-full justify-center items-center space-x-2 py-3 sticky top-0 bg-slate-100'>
+                            {activeSubscription && saveStatus == 'error' && <Button type='button' variant='ghost' size='sm' onClick={saveToDatabase}>Save</Button>}
                             <Button type='button' variant='ghost' size='sm' onClick={toggleEdit}>Exit</Button>
                             <Button type='button' size='sm' onClick={generatePDF}>Download</Button>
                             <SaveStatusIndicator saveStatus={saveStatus} />
                         </div>
-                        {activeSubscription ?
-                            <ResumeForm handleDragEnd={handleDragEnd} sections={sections} methods={methods} job={job}/>
-                            :
-                            <Button href="/pricing">Subscribe to Edit</Button>
-                        }
+                        <div className='w-full p-4'>
+                            {activeSubscription ?
+
+                                <ResumeForm methods={methods} job={job} />
+                                :
+                                <Button href="/pricing">Subscribe to Edit</Button>
+                            }
+                        </div>
                     </div>
-                </>}
-                <div className='w-full h-auto'>
-                    <div className='sticky top-0 h-screen'>
-                        <DynamicResumePDF key={sections.join('-')} data={defaultValues} sections={sections} />
+                }
+                <div className={`flex w-full ${editResume ? 'md:w-1/2' : ''}`}>
+                    <div className='w-full sticky top-0 h-screen'>
+                        {defaultValues &&
+                            <CustomPDFViewer data={defaultValues} />
+                        }
                     </div>
 
                 </div>

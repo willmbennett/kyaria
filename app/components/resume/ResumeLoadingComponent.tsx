@@ -3,7 +3,7 @@ import React from 'react';
 
 const ResumeLoadingComponent = () => {
   return (
-    <div className="viewer rounded shadow-lg h-screen w-full p-10">
+    <div className="h-screen w-full md:w-[62vh] p-10 bg-white shadow-lg p-4 border border-gray-200">
       {/* Header with Name and Title Placeholder */}
       <div className="text-center mb-5">
         <div className="text-5xl bg-gray-300 h-8 w-48 mx-auto mb-2"></div> {/* Name Placeholder */}
