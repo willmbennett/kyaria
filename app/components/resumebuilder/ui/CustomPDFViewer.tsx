@@ -29,7 +29,6 @@ const CustomPDFViewer = ({ data }: ResumePDFProps) => {
     const [currentPdfUrl, setCurrentPdfUrl] = useState<string | null>(null);
     const [newPdfUrl, setNewPdfUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
-    const [previewLoaded, setPreviewLoaded] = useState(false);
 
 
     const generatePDF = useCallback(async () => {
@@ -78,14 +77,6 @@ const CustomPDFViewer = ({ data }: ResumePDFProps) => {
         if (oldUrl) URL.revokeObjectURL(oldUrl);
     };
 
-    const handlePreviewLoadStart = () => {
-        setPreviewLoaded(false);
-    };
-
-    const handlePreviewRenderSuccess = () => {
-        setPreviewLoaded(true);
-    };
-
     function changePage(offset: number) {
         setPageNumber((prevPageNumber) => prevPageNumber + offset);
     }
@@ -128,14 +119,12 @@ const CustomPDFViewer = ({ data }: ResumePDFProps) => {
             <div className='flex w-full h-full'>
                 <div className="flex w-full h-full bg-white shadow-lg p-4 border border-gray-200">
                     <div className={`flex w-full justify-center ${loading ? 'block' : 'hidden'}`}>
-                        {previewLoaded ? (
-                            <Document loading={<></>} onLoadStart={handlePreviewLoadStart} file={currentPdfUrl}>
-                                <Page loading={<></>} onRenderSuccess={handlePreviewRenderSuccess} pageNumber={pageNumber} />
+                        {loading && !currentPdfUrl ? <ResumeLoadingComponent /> : null}
+                        {currentPdfUrl && (
+                            <Document loading={<></>} file={currentPdfUrl}>
+                                <Page loading={<></>} pageNumber={pageNumber} />
                             </Document>
-                        )
-                            :
-                            <ResumeLoadingComponent />
-                        }
+                        )}
                     </div>
                     <div className={`flex w-full justify-center ${loading ? 'hidden' : 'block'}`}>
                         {newPdfUrl && (
