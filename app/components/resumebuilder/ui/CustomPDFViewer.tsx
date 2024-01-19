@@ -117,19 +117,19 @@ const CustomPDFViewer = ({ data }: ResumePDFProps) => {
                 </div>
             }
             <div className='flex w-full h-full'>
-                <div className="flex w-full h-full bg-white shadow-lg p-4 border border-gray-200">
+                <div className="flex w-full h-full">
                     <div className={`flex w-full justify-center ${loading ? 'block' : 'hidden'}`}>
-                        {loading && !currentPdfUrl ? <ResumeLoadingComponent /> : null}
+                        {!currentPdfUrl && <ResumeLoadingComponent />}
                         {currentPdfUrl && (
-                            <Document loading={<></>} file={currentPdfUrl}>
-                                <Page loading={<></>} pageNumber={pageNumber} />
+                            <Document className={'flex w-full h-full justify-center'} loading={<></>} file={currentPdfUrl}>
+                                <Page className="bg-white shadow-lg border border-gray-200" loading={<></>} pageNumber={pageNumber} />
                             </Document>
                         )}
                     </div>
                     <div className={`flex w-full justify-center ${loading ? 'hidden' : 'block'}`}>
                         {newPdfUrl && (
-                            <Document onLoadSuccess={handleDocumentLoad} loading={<></>} file={newPdfUrl}>
-                                <Page onRenderSuccess={handleLoadSuccess} loading={<></>} pageNumber={pageNumber} />
+                            <Document className={'flex w-full h-full justify-center'} onLoadSuccess={handleDocumentLoad} loading={<></>} file={newPdfUrl}>
+                                <Page className="bg-white shadow-lg border border-gray-200" onRenderSuccess={handleLoadSuccess} loading={<></>} pageNumber={pageNumber} />
                             </Document>
                         )}
                     </div>
