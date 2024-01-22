@@ -9,10 +9,8 @@ export default async function ProfilePage() {
         redirect('/');
     }
     return (
-        <div className="flex w-full justify-center">
-            <div className="max-w-5xl p-4">
-                <NewResumeForm userId={userId} />
-            </div>
+        <div className="w-full justify-center">
+            <NewResumeForm userId={userId} />
         </div>
     );
 }

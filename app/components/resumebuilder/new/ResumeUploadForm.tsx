@@ -56,8 +56,8 @@ export const ResumeUploadForm = ({ userId }: { userId: string }) => {
     const onSubmit: SubmitHandler<FormFields> = async () => {
         //console.log('resumeUploadText: ', resumeUploadText)
         setLoading(true);
-        console.log('Resume Text')
-        console.log(resumeUploadText)
+        //console.log('Resume Text')
+        //console.log(resumeUploadText)
 
         const response = await fetch('/api/sovren', {
             method: 'POST',
@@ -77,11 +77,11 @@ export const ResumeUploadForm = ({ userId }: { userId: string }) => {
 
             //const parsedResume: Partial<ResumeScanDataClass> = testResumeData
             //console.log('Parsed Resume');
-            console.log(parsedResume);
+            //console.log(parsedResume);
             //console.log(userId)
 
             if (userId) {
-                console.log('1)  Made it to Resume Scan creation')
+                //console.log('1)  Made it to Resume Scan creation')
                 const path = '/'
                 const dataToSave = { ...parsedResume, userId }
                 const resumeScanId = await createResumeScanAction(dataToSave, path)
@@ -102,36 +102,59 @@ export const ResumeUploadForm = ({ userId }: { userId: string }) => {
         };
     }
 
-    return (
-        <>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <p className='py-2'>
-                    <FileUploader onFileChange={onFileChange} />
-                    {errors.input && <p>{errors.input.message}</p>}
+    const handleReset = () => {
+        setFile(null)
+        setResumeUploadText('')
+        setNumPages(null)
+    }
 
-                </p>
-                {file && (
-                    <div className="space-x-2">
-                        <Button
-                            variant="solid"
-                            size="md"
-                            type="submit"
-                        >
-                            Submit
-                        </Button>
-                    </div>
-                )}
-            </form>
-            {loading && <LoadingComponent />}
-            {file && !loading && (
-                <PDFViewer
-                    file={file}
-                    onLoadSuccess={onDocumentLoadSuccess}
-                    numPages={numPages}
-                    handleTextContent={handleTextContent}
-                    handleAnnotations={handleAnnotations}
-                />
-            )}
-        </>
+    return (
+        <div className="w-full flex flex-col justify-center space-y-2 bg-slate-100 border border-slate-200 p-4">
+            <h1 className="text-center sm:text-3xl text-2xl font-bold text-slate-900 mt-3">
+                Upload your resume
+            </h1>
+            <div className="flex justify-center w-full">
+                <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-2 md:flex-row w-full justify-center items-center">
+                    <p>
+                        <FileUploader onFileChange={onFileChange} />
+                        {errors.input && <p>{errors.input.message}</p>}
+
+                    </p>
+                    {file && (
+                        <div className="space-x-2">
+                            <Button
+                                variant="ghost"
+                                size="md"
+                                type="button"
+                                onClick={handleReset}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                variant="solid"
+                                size="md"
+                                type="submit"
+                            >
+                                Submit
+                            </Button>
+                        </div>
+                    )}
+                </form>
+            </div>
+            <div className="flex justify-center">
+                <div className="flex w-full shadow-lg border border-gray-200">
+                    {loading && <LoadingComponent />}
+                    {file && !loading && (
+                        <PDFViewer
+                            file={file}
+                            onLoadSuccess={onDocumentLoadSuccess}
+                            numPages={numPages}
+                            handleTextContent={handleTextContent}
+                            handleAnnotations={handleAnnotations}
+                        />
+                    )}
+                </div>
+            </div>
+        </div>
     );
 }

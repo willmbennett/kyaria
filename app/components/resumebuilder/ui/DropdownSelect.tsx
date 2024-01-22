@@ -54,7 +54,7 @@ function DropDownSelect<T>({ items, options, renderItem }: DropDownProps<T>) {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     return (
-        <div>
+        <div className='w-full'>
             <div className="flex justify-between mb-2">
                 {dropDownMenu(options, currentIndex, setCurrentIndex)}
             </div>

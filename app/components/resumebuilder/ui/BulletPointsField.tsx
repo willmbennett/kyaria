@@ -64,7 +64,7 @@ const BulletPointItem = ({ name, index, control, onRemove }: BulletPointItemProp
     }, [finishedLoading]);
 
     return (
-        <div className="mb-2 flex flex-row">
+        <div className="flex flex-col space-y-2 lg:space-x-2 lg:flex-row my-2">
             <Controller
                 name={`${name}[${index}].content`}
                 control={control}
@@ -72,9 +72,9 @@ const BulletPointItem = ({ name, index, control, onRemove }: BulletPointItemProp
                     <TextareaAutosize {...field} className="border p-1 rounded w-full" value={(loading && lastmessage.role == 'assistant' && lastmessage.content) || field.value} />
                 )}
             />
-            <div className='flex flex-row items-center'>
-                <Button variant='secondary' size='md' type="button" onClick={() => onRemove(index)} className="ml-2 text-red-500">Remove</Button>
-                <Button size='md' type="button" onClick={optimizeClick} className="ml-2" disabled={loading}>Optimize</Button>
+            <div className='flex flex-row items-center space-x-2'>
+                <Button variant='secondary' size='md' type="button" onClick={() => onRemove(index)} className="text-red-500">Remove</Button>
+                <Button size='md' type="button" onClick={optimizeClick} disabled={loading}>Optimize</Button>
             </div>
         </div>
     );

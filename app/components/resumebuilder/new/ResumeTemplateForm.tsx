@@ -24,7 +24,7 @@ const ResumeTemplateForm = ({ userId }: { userId: string }) => {
 
     return (
         <>
-            <ResumeTemplates userId={userId} handleTemplateSelection={handleTemplateSelection} />
+            <ResumeTemplates handleTemplateSelection={handleTemplateSelection} />
         </>
     );
 }

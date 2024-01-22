@@ -54,8 +54,8 @@ const ResumeForm: React.FC<ResumeFormProps> = ({ methods, job }) => {
 
     return (
         <FormProvider {...methods}>
-            <form>
-                <div className='w-full space-y-3'>
+            <form className='w-full h-full overflow-y-scroll lg:overscroll-none p-4 border border-slate-200 shadow-inner'>
+                <div className='w-full space-y-3 flex flex-col justify-center '>
                     <Section title={"Header".toUpperCase()}>
                         <ContactInformation job={job} />
                         <SocialLinksSection />

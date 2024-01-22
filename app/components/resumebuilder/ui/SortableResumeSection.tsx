@@ -67,7 +67,7 @@ function SortableResumeSection({ id, name, control, register, setValue, watch, j
     };
 
     return (
-        <div className='flex flex-row items-top justify-center w-full h-full shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-lg transition-shadow duration-200'>
+        <div className='flex flex-row items-top justify-center w-full shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-lg transition-shadow duration-200'>
             <div className='w-full bg-white rounded-xl'>
                 <div ref={setNodeRef} style={style} {...attributes} {...listeners} className='flex p-3 rounded-xl justify-between items-center hover:cursor-grab '>
                     <h2 className='text-lg font-semibold'>{name.replace('_', ' ').toLocaleUpperCase()}</h2>

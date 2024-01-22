@@ -97,7 +97,7 @@ const CustomPDFViewer = ({ data, saveStatus, useEdit = false }: ResumePDFProps) 
     }
 
     return (
-        <div className='flex h-full flex-col justify-center w-[62vh]'>
+        <div className='flex h-full flex-col justify-center w-full max-w-[62vh]'>
             <div className={`pb-3 flex w-full items-center flex-row ${numPages > 1 ? 'justify-between' : 'justify-center'}`}>
                 {numPages > 1 && <Button
                     size='sm'
@@ -124,7 +124,7 @@ const CustomPDFViewer = ({ data, saveStatus, useEdit = false }: ResumePDFProps) 
                 </Button>}
             </div>
             <div className='flex w-full h-full'>
-                <div className={`flex w-full justify-center ${loading ? 'block' : 'hidden'}`}>
+                <div className={`flex w-full justify-center overflow-x-auto ${loading ? 'block' : 'hidden'}`}>
                     {!currentPdfUrl && <ResumeLoadingComponent />}
                     {currentPdfUrl && (
                         <Document className={'flex w-full h-full justify-center'} loading={<></>} file={currentPdfUrl}>
@@ -132,7 +132,7 @@ const CustomPDFViewer = ({ data, saveStatus, useEdit = false }: ResumePDFProps) 
                         </Document>
                     )}
                 </div>
-                <div className={`flex w-full justify-center ${loading ? 'hidden' : 'block'}`}>
+                <div className={`flex w-full justify-center overflow-x-auto ${loading ? 'hidden' : 'block'}`}>
                     {newPdfUrl && (
                         <Document className={'flex w-full h-full justify-center'} onLoadSuccess={handleDocumentLoad} loading={<></>} file={newPdfUrl}>
                             <Page className="bg-white shadow-lg border border-gray-200" onRenderSuccess={handleLoadSuccess} loading={<></>} pageNumber={pageNumber} />

@@ -7,29 +7,33 @@ import { TestimonialsSlide } from './components/landingpage/TestimonialsSlide'
 import { Faqs } from './components/landingpage/Faqs'
 import { CallToAction } from './components/landingpage/CallToAction'
 import { SignedInHero } from './components/landingpage/SignedInHero'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '../lib/auth'
 import { ProductDemo } from './components/landingpage/ProductDemo'
 import { getJobApp } from '../lib/app-db'
 import { countTotalResumes } from '../lib/resume-db'
+import { checkSubscription } from '../lib/hooks/check-subscription'
+import { redirect } from 'next/navigation'
 
 export default async function HomePage() {
-  const session = await getServerSession(authOptions);
+  const { activeSubscription, userId } = await checkSubscription()
   const { jobApp } = await getJobApp("651c2c45705785cff67bb3c9");
   const { totalResumes } = await countTotalResumes()
 
+  if (userId && !activeSubscription) {
+    redirect('/resumeBuilder');
+  }
+
   return (
     <>
-      {session?.user?.id && (<>
-        <SignedInHero userId={session.user.id} />
+      {userId && (<>
+        <SignedInHero userId={userId} />
         <ProductDemo jobApp={jobApp} />
       </>)}
-      {!session && (
+      {!userId && (
         <>
           <HomeHero />
           {/*<LogosRow />*/}
           <ProductDemo jobApp={jobApp} />
-          <FeatureBlocks totalResumes={totalResumes || 200}/>
+          <FeatureBlocks totalResumes={totalResumes || 200} />
           <FeaturesGrid />
           <Process />
           {/*<TestimonialsSlide />*/}
