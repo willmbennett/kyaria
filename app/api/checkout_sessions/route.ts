@@ -5,10 +5,10 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '');
 
 export async function GET(req: NextRequest) {
   const session_id = req.nextUrl.searchParams.get('session_id')
-  //console.log(session_id)
+
   try {
     const session = await stripe.checkout.sessions.retrieve(session_id || '');
-    console.log(session)
+    //console.log(session)
     return NextResponse.json({
       status: session.status,
       customer_email: session.customer_details?.email,
@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(): Promise<NextResponse<any>> {
-  //console.log('Made it here')
+  console.log('Made it here')
   try {
     const session = await stripe.checkout.sessions.create({
       ui_mode: 'embedded',
@@ -42,13 +42,13 @@ export async function POST(): Promise<NextResponse<any>> {
       ],
       allow_promotion_codes: true,
       mode: 'subscription',
-      return_url: `return?session_id={CHECKOUT_SESSION_ID}`,
-      automatic_tax: { enabled: true },
+      return_url: `${process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'https://kyaria.ai/'}return?session_id={CHECKOUT_SESSION_ID}`,
     });
 
     //console.log(session)
     return NextResponse.json({ clientSecret: session.client_secret }, { status: 200 });
   } catch (err) {
+    console.log(err)
     const errorMessage =
       err instanceof Error
         ? err.message
