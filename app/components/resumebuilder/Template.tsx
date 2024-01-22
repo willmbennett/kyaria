@@ -1,53 +1,77 @@
+import { Menu } from '@headlessui/react';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import { useState } from 'react';
 import { ResumeClass } from "../../../models/Resume";
 import { resumeTemplates } from "../../resumebuilder/resume-templates";
 import { Button } from "../Button";
-import ResumeBuilder from "../resume/ResumeBuilder";
 import CustomPDFViewer from "./ui/CustomPDFViewer";
-import DropDownSelect from "./ui/DropdownSelect";
 
-interface resumeTemplates {
-    templateName: string;
-    template: ResumeClass;
-}
 
-export default function ResumeTemplates(
-    {
-        userId,
-        handleTemplateSelection
-    }: {
-        userId: string,
-        handleTemplateSelection: (resume: ResumeClass) => void;
-    }) {
+const dropDownMenu = (options: string[], currentIndex: number, setCurrentIndex: (index: number) => void) => (
+    <Menu as="div" className="relative">
+        {({ open }) => (
+            <>
+                <Menu.Button
+                    className={`group flex items-center px-4  py-2  font-medium outline-none duration-150 ease-in-out focus:outline-none ${open
+                        ? 'bg-slate-100 text-slate-900'
+                        : 'text-slate-700 hover:bg-slate-100  hover:text-slate-900'
+                        }`}
+                >
+                    <span>{options[currentIndex]}</span>
+                    <ChevronDownIcon
+                        className={`ml-2 h-5 w-5 duration-300 ${open
+                            ? 'rotate-180 text-slate-900'
+                            : 'text-slate-600/90 group-hover:text-slate-900'
+                            }`}
+                        aria-hidden="true"
+                    />
+                </Menu.Button>
 
-    const renderTemplate = (template: resumeTemplates, currentIndex: number) => {
 
-        return (
-            <div key={currentIndex} className="flex flex-col justify-center items-center w-full bg-slate-200 border border-slate-300 shadow">
-                <div className="px-4 py-2 flex flex-row w-full items-center justify-start space-x-2">
-                    <Button
-                        onClick={() => handleTemplateSelection(template.template)}
-                        size="sm"
-                        type="button"
-                    >
-                        Select Template
-                    </Button>
-                </div>
-                <CustomPDFViewer data={template.template} />
-            </div>
-        )
-    }
+                <Menu.Items className="absolute right-0 z-20 mt-3 w-auto space-y-1 bg-gray-secondary-50 p-2.5 outline-none drop-shadow filter focus:outline-none">
+                    {options.map((option: string, i) => (
+                        <Menu.Item key={`${option}-dropdown-desktop`}>
+                            <button
+                                onClick={() => (setCurrentIndex(i))}
+                                className={`block px-5 py-3.5 font-medium ${currentIndex == i
+                                    ? 'bg-gray-secondary-100/60 text-slate-900'
+                                    : 'text-slate-700 transition duration-300 ease-in-out hover:bg-gray-secondary-100/60 hover:text-slate-900'
+                                    }`}
+                            >
+                                {option}
+                            </button>
+                        </Menu.Item>
+                    ))}
+                </Menu.Items>
+            </>
+        )}
+    </Menu>
+)
 
+export default function ResumeTemplates({ handleTemplateSelection }: { handleTemplateSelection: (resume: ResumeClass) => void; }) {
+
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const selectedTemplate = resumeTemplates[currentIndex];
+    const options = resumeTemplates.map(t => t.templateName)
 
     return (
-        <div className="container mx-auto px-4">
+        <div className="flex flex-col 2-full p-4 bg-slate-200 border border-slate-300 shadow justify-center items-center">
             <h1 className="text-center sm:text-3xl text-2xl font-bold text-slate-900 mt-3">
                 Resume Templates
             </h1>
-            <DropDownSelect
-                items={resumeTemplates}
-                options={resumeTemplates.map(t => t.templateName)}
-                renderItem={renderTemplate}
-            />
+            <div className="max-w-[62vh] px-4 py-2 flex flex-row w-full items-center justify-center space-x-2">
+                {dropDownMenu(options, currentIndex, setCurrentIndex)}
+                <Button
+                    onClick={() => handleTemplateSelection(selectedTemplate.template)}
+                    size="sm"
+                    type="button"
+                >
+                    Select Template
+                </Button>
+            </div>
+            <div className="w-full flex justify-center items-center w-[62vh]">
+                <CustomPDFViewer data={selectedTemplate.template} />
+            </div>
         </div>
     );
 }

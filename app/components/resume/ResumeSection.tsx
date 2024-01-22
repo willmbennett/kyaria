@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { UseFormRegister, Control, useFieldArray, UseFormWatch } from 'react-hook-form';
 import BulletPointsField from '../resumebuilder/ui/BulletPointsField';
 import GPAField from '../resumebuilder/ui/GPAField';
@@ -79,20 +79,42 @@ const ResumeSection: React.FC<SectionProps> = ({ title, register, control, secti
     };
 
     const renderFields = (item: SectionItem, index: number) => {
+        const [showComponent, setShowComponent] = useState(false);
         const groupedFields = fieldsConfig.reduce<FieldGroups>((acc, fieldConfig) => {
             const group = fieldConfig.group || fieldConfig.name; // Fallback to name if no group specified
             acc[group] = acc[group] ? [...acc[group], fieldConfig] : [fieldConfig];
             return acc;
         }, {});
+        const previewItems = fieldsConfig.slice(0, 2); // Adjust the number as needed
+
 
         return (
-            <div key={item.id} className="mb-6 p-4">
-                {Object.entries(groupedFields).map(([group, groupFields]) => (
-                    <div key={group} className="flex space-x-4 p-2">
+            <div key={item.id} className="mb-6 py-4">
+                <div className='w-full flex flex-col lg:flex-row items-center justify-between'>
+                    <div className='flex flex-row space-x-2'>
+                        {previewItems.map(fieldConfig =>
+                            <h3 className='flex flex-row space-x-2 text-lg font-semibold'>
+                                {renderFieldPreview(fieldConfig, item, index)}
+                            </h3>
+                        )}
+                    </div>
+                    <div className='flex flex-row space-x-2'>
+                        <Button
+                            type='button'
+                            variant='ghost'
+                            size='sm'
+                            onClick={() => setShowComponent(!showComponent)}
+                        >
+                            {showComponent ? 'Hide' : 'Edit'}
+                        </Button>
+                        <Button type="button" onClick={() => remove(index)} size='md' variant='secondary'>Remove</Button>
+                    </div>
+                </div>
+                {showComponent && Object.entries(groupedFields).map(([group, groupFields]) => (
+                    <div key={group} className="flex flex-col lg:flex-row lg:space-x-4 py-2">
                         {groupFields.map(fieldConfig => renderField(fieldConfig, item, index))}
                     </div>
                 ))}
-                <Button type="button" onClick={() => remove(index)} size='md' variant='secondary'>Remove</Button>
             </div>
         );
     };
@@ -111,7 +133,7 @@ const ResumeSection: React.FC<SectionProps> = ({ title, register, control, secti
                     initialValue = false; // Boolean for checkbox
                     break;
                 case 'gpa':
-                    initialValue = {score: '', scoringSystem: '4.0'}; // Assuming GPA is a string, modify as needed
+                    initialValue = { score: '', scoringSystem: '4.0' }; // Assuming GPA is a string, modify as needed
                     break;
                 case 'bulletPoints':
                     initialValue = []; // Assuming bulletPoints is an array, modify as needed
@@ -127,12 +149,18 @@ const ResumeSection: React.FC<SectionProps> = ({ title, register, control, secti
         append(blankSection);
     };
 
+    const renderFieldPreview = (fieldConfig: FieldConfig, item: SectionItem, index: number) => {
+        const fieldName = `${sectionName}[${index}].${fieldConfig.name}`;
+        const value = watch(fieldName as keyof ResumeBuilderFormData)
+        return <span>{value as string}</span>
+    };
+
 
     return (
-        <>
+        <div className='flex flex-col w-full'>
             {fields.map(renderFields)}
             <Button size='md' type="button" onClick={addBlankSection} >Add {title}</Button>
-        </>
+        </div>
     );
 };
 

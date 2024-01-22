@@ -27,29 +27,27 @@ const ResumeBuilder = (
     const { saveStatus } = useSaveResume({ userId, resumeId, resumeScanId, data, defaultValues, watch });
 
     return (
-        <div className='w-screen h-screen bg-white px-4'> {/* Ensured sticky bar is at the top with a higher z-index */}
-            <div className='w-full h-full flex md:p-4 flex-col md:flex-row space-y-2 md:space-x-2 border bg-slate-100 border-slate-400 shadow rounded-md'>
-                <div className='w-full h-full overflow-scroll overscroll-none'>
-                    <div className='p-3 w-full justify-start sticky top-0 bg-slate-100'>
-                        <div className='flex flex-row space-x-4'>
-                            <h1 className="text-start text-2xl font-semibold text-slate-900 ">
-                                Resume Builder
-                            </h1>
-                            <Button size='sm' variant='ghost' href="/resumebuilder">← Back to Resumes</Button>
-                        </div>
+        <div className='w-full min-h-screen lg:h-screen bg-white p-2 lg:pl-4 lg:pr-8'> {/* Ensured sticky bar is at the top with a higher z-index */}
+            <div className='w-full h-full flex md:p-4 flex-col space-y-4 md:flex-row space-y-2 md:space-x-2 border bg-slate-100 border-slate-400 shadow rounded-md'>
+                <div className='flex flex-col w-full h-full'>
+                    <div className='py-3 flex flex-row w-full space-x-4 justify-center lg:justify-start'>
+                        <h1 className="text-start text-2xl font-semibold text-slate-900 ">
+                            Resume Builder
+                        </h1>
+                        <Button size='sm' variant='ghost' href="/resumebuilder">← Back to Resumes</Button>
                     </div>
-                    <div className="w-full min-h-full p-4 border border-slate-200 shadow-inner">
-                        {activeSubscription ?
+                    {activeSubscription ?
 
-                            <ResumeForm methods={methods} job={job} />
-                            :
-                            <Button href="/pricing">Subscribe to Edit</Button>
-                        }
-                    </div>
+                        <ResumeForm methods={methods} job={job} />
+                        :
+                        <Button href="/pricing">Subscribe to Edit</Button>
+                    }
                 </div>
-                {defaultValues &&
-                    <CustomPDFViewer data={data} saveStatus={saveStatus} />
-                }
+                <div className='flex w-full items-center justify-center'>
+                    {defaultValues &&
+                        <CustomPDFViewer data={data} saveStatus={saveStatus} />
+                    }
+                </div>
             </div>
         </div>
     );

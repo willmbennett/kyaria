@@ -15,7 +15,7 @@ export default async function ResumeScanPage({ params }: { params: { id: string 
     }
 
     return (
-        <div className="flex flex-col justify-center">
+        <div className="flex flex-col justify-center pb-14">
             {/* @ts-expect-error Server Component */}
             <Await promise={promise}>
                 {({ resume }: { resume: ResumeClass }) => (
