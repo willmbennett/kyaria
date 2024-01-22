@@ -109,7 +109,7 @@ const CustomPDFViewer = ({ data, saveStatus, useEdit = false }: ResumePDFProps) 
                 </Button>}
                 <div className='flex flex-row  justify-center items-center space-x-2'>
                     <p>Page {pageNumber || (numPages ? 1 : "--")} of {numPages || "--"}</p>
-                    {useEdit && <Button type='button' size='sm' href={`resumebuilder/${data._id}`}>Edit</Button>}
+                    {useEdit && <Button type='button' size='sm' href={`/resumebuilder/${data._id}`}>Edit</Button>}
                     <Button type='button' size='sm' onClick={downloadPDF}>Download</Button>
                     {saveStatus && <SaveStatusIndicator saveStatus={saveStatus} />}
                 </div>

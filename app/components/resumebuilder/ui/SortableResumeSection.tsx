@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React, { useState } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Control, UseFormRegister, UseFormSetValue, UseFormWatch } from 'react-hook-form';
@@ -7,7 +7,7 @@ import { ResumeBuilderFormData, sectionConfigs } from '../../../resumebuilder/re
 import ResumeSection from '../../resume/ResumeSection';
 import ListInput from '../../resume/ListInput';
 import { JobClass } from '../../../../models/Job';
-import Section from './Section';
+import { Button } from '../../Button';
 
 
 const renderField = ({ id, name, control, register, setValue, watch, job }: ListInputProps) => {
@@ -51,7 +51,7 @@ type ListInputProps = {
 };
 
 function SortableResumeSection({ id, name, control, register, setValue, watch, job }: ListInputProps) {
-
+    const [showComponent, setShowComponent] = useState(false);
     const {
         attributes,
         listeners,
@@ -67,10 +67,26 @@ function SortableResumeSection({ id, name, control, register, setValue, watch, j
     };
 
     return (
-        <div ref={setNodeRef} style={style} {...attributes} {...listeners} className='flex flex-row items-top justify-center w-full h-full hover:cursor-grab shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-lg transition-shadow duration-200'>
-            <Section title={name.replace('_', ' ').toLocaleUpperCase()} isDragging={isDragging}>
-                {renderField({id, name, control, register, setValue, watch, job})}
-            </Section>
+        <div className='flex flex-row items-top justify-center w-full h-full shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-lg transition-shadow duration-200'>
+            <div className='w-full bg-white rounded-xl'>
+                <div ref={setNodeRef} style={style} {...attributes} {...listeners} className='flex p-3 rounded-xl justify-between items-center hover:cursor-grab '>
+                    <h2 className='text-lg font-semibold'>{name.replace('_', ' ').toLocaleUpperCase()}</h2>
+                    <Button
+                        type='button'
+                        variant='ghost'
+                        size='sm'
+                        onClick={() => setShowComponent(!showComponent)}
+                    >
+                        {showComponent ? 'Hide' : 'Edit'}
+                    </Button>
+                </div>
+
+                {showComponent && !isDragging &&
+                    <div className={`mb-6 p-4 transition-all ease-in-out duration-300 ${showComponent ? '' : 'max-h-0 overflow-hidden'}`}>
+                        {renderField({ id, name, control, register, setValue, watch, job })}
+                    </div>
+                }
+            </div>
         </div>
     );
 }
