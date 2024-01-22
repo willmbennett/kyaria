@@ -6,13 +6,14 @@ import { useState } from "react";
 import { useDocumentLoadSuccess, useFileHandler } from "../../../../lib/hooks/resume-test";
 import { LoadingComponent } from "../ui/LoadingComponent";
 import { createResumeScanAction } from "../../../resumebuilder/_action";
-import { transformParsedResume } from "../../../resumebuilder/resumetest-helper";
+import { testResumeData, transformParsedResume } from "../../../resumebuilder/resumetest-helper";
 import { createResumeAction } from "../../../board/_action";
 import { useRouter } from "next/navigation";
 import { PDFViewer } from "../ui/PDFViewer";
 import { pdfjs } from 'react-pdf';
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css"
+import { ResumeScanDataClass } from "../../../../models/ResumeScan";
 
 type FormFields = {
     input: string;
@@ -54,53 +55,52 @@ export const ResumeUploadForm = ({ userId }: { userId: string }) => {
     }
 
     const onSubmit: SubmitHandler<FormFields> = async () => {
-        //console.log('resumeUploadText: ', resumeUploadText)
         setLoading(true);
-        //console.log('Resume Text')
-        //console.log(resumeUploadText)
 
-        const response = await fetch('/api/sovren', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ content: resumeUploadText })
-        });
+        try {
+            const response = await fetch('/api/sovren', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: resumeUploadText })
+            });
 
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
 
-        if (!response.ok) {
-            // If the response is not ok, print the status and throw an error
-            console.error('Server responded with status:', response.status);
-            throw new Error(`HTTP error! status: ${response.status}`);
-        } else {
             const { parsedResume } = await response.json();
-
-            //const parsedResume: Partial<ResumeScanDataClass> = testResumeData
-            //console.log('Parsed Resume');
-            //console.log(parsedResume);
-            //console.log(userId)
+            //console.log('Parsed Resume', parsedResume);
 
             if (userId) {
-                //console.log('1)  Made it to Resume Scan creation')
-                const path = '/'
-                const dataToSave = { ...parsedResume, userId }
-                const resumeScanId = await createResumeScanAction(dataToSave, path)
-                //console.log('Created resume scan', resumeScanId)
-                if (resumeScanId) {
-                    //console.log('2)  Made it to Resume creation')
-                    const resumeToCreate = transformParsedResume(parsedResume)
-                    delete resumeToCreate._id
-                    const userResumeWithIds = { resumeScan: resumeScanId, ...resumeToCreate, userId: userId }
-                    const resumeId = await createResumeAction(userResumeWithIds, '/')
-                    if (resumeId) {
-                        setLoading(false)
-                        setFile(null);
-                        router.push(`/resumebuilder/${resumeId}`)
-                    }
+                const path = '/';
+                const dataToSave = { ...parsedResume, userId };
+                const resumeScanId = await createResumeScanAction(dataToSave, path);
+
+                if (!resumeScanId) {
+                    throw new Error("Failed to create resume scan");
                 }
+                //console.log('Created resume scan', resumeScanId);
+
+                const resumeToCreate = transformParsedResume(parsedResume);
+                delete resumeToCreate._id;
+                const userResumeWithIds = { resumeScan: resumeScanId, ...resumeToCreate, userId };
+
+                const resumeId = await createResumeAction(userResumeWithIds, '/');
+                if (!resumeId) {
+                    throw new Error("Failed to create resume");
+                }
+                //console.log('resumeId: ', resumeId);
+
+                router.push(`/resumebuilder/${resumeId}`);
             }
-        };
-    }
+        } catch (error) {
+            console.error('Error in resume upload:', error);
+        } finally {
+            setLoading(false);
+            setFile(null);
+        }
+    };
+
 
     const handleReset = () => {
         setFile(null)
