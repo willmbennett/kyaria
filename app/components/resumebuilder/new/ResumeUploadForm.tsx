@@ -2,7 +2,7 @@
 import { Button } from "../../Button";
 import { FileUploader } from "../ui/FileUploader";
 import { FieldErrors, SubmitHandler, useForm, UseFormHandleSubmit } from 'react-hook-form';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDocumentLoadSuccess, useFileHandler } from "../../../../lib/hooks/resume-test";
 import { LoadingComponent } from "../ui/LoadingComponent";
 import { createResumeScanAction } from "../../../resumebuilder/_action";
@@ -74,12 +74,14 @@ export const ResumeUploadForm = ({ userId }: { userId: string }) => {
             if (userId) {
                 const path = '/';
                 const dataToSave = { ...parsedResume, userId };
+                //console.log('1111111111111111111111111111')
                 const resumeScanId = await createResumeScanAction(dataToSave, path);
-
+                //console.log('2222222222222222222222222222')
+                //console.log('resumeScanId: ', resumeScanId)
                 if (!resumeScanId) {
                     throw new Error("Failed to create resume scan");
                 }
-                //console.log('Created resume scan', resumeScanId);
+                console.log('Created resume scan', resumeScanId);
 
                 const resumeToCreate = transformParsedResume(parsedResume);
                 delete resumeToCreate._id;
@@ -96,6 +98,7 @@ export const ResumeUploadForm = ({ userId }: { userId: string }) => {
         } catch (error) {
             console.error('Error in resume upload:', error);
         } finally {
+            //console.log('made it to finally')
             setLoading(false);
             setFile(null);
         }

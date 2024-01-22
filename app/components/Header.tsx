@@ -40,8 +40,16 @@ const pages = [
 
 const userPages = [
   { label: 'Resume Builder', href: '/resumebuilder' },
+  /*{ label: 'Pricing', href: '/pricing' },*/
+  /*{ label: 'Contact', href: '/contact' },*/
+]
+
+const loggedInLinks = [
   { label: 'Jobs (beta)', href: '/jobs' },
   { label: 'AI Career Concierge (beta)', href: '/board' },
+  { label: 'About', href: '/about' },
+  { label: 'Pricing', href: '/pricing' },
+  { label: 'Blog', href: '/blog' },
   /*{ label: 'Pricing', href: '/pricing' },*/
   /*{ label: 'Contact', href: '/contact' },*/
 ]
@@ -55,8 +63,6 @@ export function Header() {
 
   const signedInLinks = [
     { label: 'Resume Builder', href: '/resumebuilder' },
-    { label: 'Job Board (beta)', href: '/board' },
-    { label: 'Jobs (beta)', href: '/jobs' },
     /*{ label: 'Pricing', href: '/pricing' },*/
     /*{ label: 'Contact', href: '/contact' },*/
   ]
@@ -64,11 +70,11 @@ export function Header() {
   const desktopMenuLinks = session ? signedInLinks : links
 
   const signedInMenuLinks = [
-    { label: 'Profile', href: `/profile/${session?.user?.id}` },
+    { label: 'Profile (beta)', href: `/profile/${session?.user?.id}` },
     { label: 'Manage Subscription', href: `https://billing.stripe.com/p/login/fZedQQbuK5Ke2Q06oo` },
   ]
 
-  const MobileLinks = session ? [...signedInMenuLinks, ...signedInLinks] : links
+  const MobileLinks = session ? [ ...signedInLinks, ...signedInMenuLinks] : links
 
   function MenuIcon({ open }: { open: any }) {
     return (
@@ -149,7 +155,7 @@ export function Header() {
                       {link.label}
                     </Link>
                   ))}
-                  {mobileDropDownMenu(session ? 'More' : 'For Job Seekers', session ? links : userPages)}
+                  {mobileDropDownMenu(session ? 'More' : 'For Job Seekers', session ? loggedInLinks : userPages)}
                 </div>
                 <div className="mt-6">
                   <Button
@@ -307,7 +313,7 @@ export function Header() {
                 </Link>
               ))}
               {session ?
-                desktopDropDownMenu('More', links)
+                desktopDropDownMenu('More', loggedInLinks)
                 :
                 desktopDropDownMenu('For Job Seekers', userPages)
               }
