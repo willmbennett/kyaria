@@ -12,7 +12,7 @@ async function getData(setClientSecret: Dispatch<SetStateAction<string | undefin
     const res = await fetch("/api/checkout_sessions", {
         method: "POST",
     })
-    
+
     if (!res.ok) {
         // This will activate the closest `error.js` Error Boundary
         const { error } = await res.json()
@@ -26,10 +26,14 @@ async function getData(setClientSecret: Dispatch<SetStateAction<string | undefin
 
 export default function Checkout() {
     const [clientSecret, setClientSecret] = useState<string | undefined>();
+    const [hasFetched, setHasFetched] = useState(false);
 
     useEffect(() => {
-        getData(setClientSecret)
-    }, []);
+        if (!hasFetched) {
+            getData(setClientSecret);
+            setHasFetched(true);
+        }
+    }, [hasFetched]);
 
     if (!clientSecret) {
         return LoadingShell(); // Or any other placeholder content

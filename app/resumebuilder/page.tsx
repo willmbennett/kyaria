@@ -29,6 +29,10 @@ export default async function ProfilePage() {
     );
   }
 
+  if (!activeSubscription) {
+    redirect('/pricing')
+  }
+
   return (
     <>
       {/* @ts-expect-error Server Component */}

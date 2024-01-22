@@ -1,4 +1,5 @@
 import type { Metadata, ResolvingMetadata } from 'next'
+import Script from 'next/script';
 import { Suspense } from 'react'
 import { getPost } from '../../../lib/post-db'
 import { PostClass } from '../../../models/Post';
@@ -55,7 +56,27 @@ export default async function Posts({ params }: { params: { id: string } }) {
                 {/* @ts-expect-error Server Component */}
                 <Await promise={postPromise}>
                     {({ post }: { post: PostClass }) => (
-                        <Post post={post} />
+                        <>
+                            <Script
+                                type="application/ld+json"
+                                id="google-structured-data"
+                                dangerouslySetInnerHTML={{
+                                    __html: `{
+                                "@context": "https://www.kyaria.ai",
+                                "@type": "NewsArticle",
+                                "headline": "${post.title}",
+                                "image": ${JSON.stringify(post.images)},
+                                "datePublished": "${post.createdAt}",
+                                "dateModified": "${post.createdAt}",
+                                "author": [{
+                                    "@type": "Person",
+                                    "name": "${post.author}"
+                                  }]
+                              }`,
+                                }}
+                            />
+                            <Post post={post} />
+                        </>
                     )}
                 </Await>
             </Suspense>
