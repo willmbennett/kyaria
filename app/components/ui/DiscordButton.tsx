@@ -19,6 +19,7 @@ export const DiscordButton = () => {
                         src={discord}
                         className="object-cover"
                         alt="Discord"
+                        priority
                     />
                 </div>
             </Link>

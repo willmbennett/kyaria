@@ -122,7 +122,6 @@ type UseSaveResumeProps = {
     userId: string | undefined;
     resumeId?: string;
     resumeScanId?: string;
-    editResume: boolean;
     data: Partial<ResumeClass>;
     defaultValues: ResumeBuilderFormData;
     watch: UseFormWatch<ResumeBuilderFormData>;
@@ -132,7 +131,7 @@ interface UpdateDataType {
     [key: string]: any;
 }
 
-export const useSaveResume = ({ userId, resumeId, resumeScanId, editResume, data, defaultValues, watch }: UseSaveResumeProps) => {
+export const useSaveResume = ({ userId, resumeId, resumeScanId, data, defaultValues, watch }: UseSaveResumeProps) => {
     const [saveStatus, setSaveStatus] = useState<'saving' | 'up to date' | 'error'>('up to date');
     const router = useRouter();
     const newResume = watch();
@@ -165,7 +164,7 @@ export const useSaveResume = ({ userId, resumeId, resumeScanId, editResume, data
         }
     }, [userId, resumeId, resumeScanId, newResume, router]);
 
-    const debouncedSaveToDatabase = useCallback(debounce(saveToDatabase, 1000), [saveToDatabase]);
+    const debouncedSaveToDatabase = useCallback(debounce(saveToDatabase, 500), [saveToDatabase]);
 
     useEffect(() => {
         const resumeToSave = convertFormDataToResumeModel(newResume, data) as ResumeClass
@@ -177,13 +176,13 @@ export const useSaveResume = ({ userId, resumeId, resumeScanId, editResume, data
         // Fallbacks for name and email
         resumeToSave.name = newResume.name || '';
         resumeToSave.email = newResume.email || '';
-        if (!isEqual(data, resumeToSave) && editResume) {
+        if (!isEqual(data, resumeToSave)) {
             debouncedSaveToDatabase();
         }
         return () => {
             debouncedSaveToDatabase.cancel();
         };
-    }, [newResume, editResume, debouncedSaveToDatabase, data]);
+    }, [newResume, debouncedSaveToDatabase, data]);
 
     return { saveStatus, saveToDatabase };
 };
@@ -231,16 +230,11 @@ export const useDragAndDrop = ({ watch, setValue }: UseDragAndDropProps) => {
     return handleDragEnd;
 };
 
-type UseGeneratePDFProps = {
-    defaultValues: ResumeBuilderFormData;
-};
-
-export const useGeneratePDF = ({ defaultValues }: UseGeneratePDFProps) => {
+export const useGeneratePDF = ({ data }: { data: ResumeClass}) => {
     const generatePDF = useCallback(async () => {
-        const name = defaultValues.name?.replace(/\s/g, '_') || ''
-        const sectionOrder = defaultValues.sectionOrder
+        const name = data.name?.replace(/\s/g, '_') || ''
         const blob = await ReactPDF.pdf(
-            <ResumePDF key={sectionOrder.join('-')} data={defaultValues} />
+            <ResumePDF data={data} />
         ).toBlob();
 
         const url = URL.createObjectURL(blob);
@@ -248,7 +242,7 @@ export const useGeneratePDF = ({ defaultValues }: UseGeneratePDFProps) => {
         link.href = url;
         link.download = `${name}_Resume.pdf`;
         link.click();
-    }, [defaultValues]);
+    }, [data]);
 
     return generatePDF;
 };

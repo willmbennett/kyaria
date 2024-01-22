@@ -36,27 +36,14 @@ export async function getResumes(userId: string) {
             .lean()
             .exec();
 
-
-        // Extract resumeScan IDs from resumes and convert them to ObjectIds
-        const resumeScanIdsToExclude = resumes.map(resume => resume.resumeScan);
-
-        const resumeScans = await ResumeScanDataModel.find({
-            userId: userId,
-            _id: { $nin: resumeScanIdsToExclude }
-        })
-            .sort({ createdAt: -1, _id: -1 }) // Sorting by createdAt in descending order, then by _id in descending order
-            .lean().exec();
         if (resumes) {
             transformProps(resumes, castToString, '_id');
             transformProps(resumes, dateToString, ["createdAt", "updatedAt"]);
             transformProps(resumes, ObjectIdtoString, "resumeScan");
-            transformProps(resumeScans, castToString, '_id');
-            transformProps(resumeScans, dateToString, ["createdAt", "updatedAt"]);
             //console.log('resumes: ', resumes)
             //console.log('resumeScans: ', resumeScans)
             return {
-                resumes,
-                resumeScans
+                resumes
             };
 
         } else {
@@ -83,10 +70,6 @@ export async function getResume(id: string) {
             .lean()
             .exec();
         //console.log('Resume: ', resume)
-        const resumeScan = await ResumeScanDataModel.findById(resume?.resumeScan)
-            .lean()
-            .exec();
-        //console.log('resumeScan: ', resumeScan)
 
         //console.log(profile)
         if (resume) {
@@ -94,12 +77,9 @@ export async function getResume(id: string) {
             transformProps(resume, castToString, '_id');
             transformProps(resume, dateToString, ["createdAt", "updatedAt"]);
             transformProps(resume, ObjectIdtoString, "resumeScan");
-            transformProps(resumeScan, castToString, '_id');
-            transformProps(resumeScan, dateToString, ["createdAt", "updatedAt"]);
             //console.log(profile)
             return {
-                resume,
-                resumeScan
+                resume
             };
 
         } else {

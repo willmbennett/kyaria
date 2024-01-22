@@ -14,9 +14,8 @@ import { ProfileClass } from '../../../models/Profile';
 import MockInterview from './pages/MockInterview';
 import ProgressBar from './ui/ProgressBar';
 import Networking from './pages/Networking';
-import ResumeBuilder from '../resume/ResumeBuilder';
 import FeedbackAside from '../landingpage/FeedbackAside';
-import { Button } from '../Button';
+import CustomPDFViewer from '../resumebuilder/ui/CustomPDFViewer';
 
 type ApplicationState = 'Research' | 'Phone Screen' | 'Interviewing' | 'Post-Offer';
 
@@ -236,15 +235,7 @@ function renderCurrentSection(
     case 'resume':
       return (
         <div className='w-full flex flex-col items-center justify-center'>
-          {!hideMenu && <Button size='md' onClick={toggleEdit}>Edit Resume</Button>}
-          <ResumeBuilder
-            data={userResume}
-            toggleEdit={toggleEdit}
-            editResume={hideMenu}
-            activeSubscription={activeSubscription}
-            resumeId={userResume._id.toString()}
-            job={jobStripped}
-          />
+          <CustomPDFViewer data={userResume} useEdit={true} />
         </div>
       );
     case 'story':

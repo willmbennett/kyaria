@@ -1,6 +1,5 @@
 import ResumeTest from "../components/resumebuilder/ResumeTest";
 import Await from "../jobs/await";
-import { ResumeScanDataClass } from "../../models/ResumeScan";
 import { countTotalResumes, getResumes } from "../../lib/resume-db";
 import { ResumeClass } from "../../models/Resume";
 import { ResumeBuilderHero } from "../components/resumebuilder/landingpage/ResumeBuilderHero";
@@ -10,15 +9,12 @@ import { Process } from "../components/resumebuilder/landingpage/Process";
 import { FeatureBlocks } from "../components/resumebuilder/landingpage/FeatureBlocks";
 import { Faqs } from "../components/resumebuilder/landingpage/Faqs";
 import { checkSubscription } from "../../lib/hooks/check-subscription";
-
-interface resumeTestProps {
-  resumes: ResumeClass[],
-  resumeScans: ResumeScanDataClass[]
-}
+import { redirect, RedirectType } from "next/navigation";
 
 export default async function ProfilePage() {
   const { activeSubscription, userId } = await checkSubscription()
   const { totalResumes } = await countTotalResumes()
+  const resumesPromise = getResumes(userId)
 
   if (!userId) {
     return (
@@ -33,19 +29,25 @@ export default async function ProfilePage() {
     );
   }
 
-  const resumesPromise = getResumes(userId)
   return (
     <>
       {/* @ts-expect-error Server Component */}
       < Await promise={resumesPromise}>
-        {({ resumes, resumeScans }: resumeTestProps) =>
-          <ResumeTest
-            userId={userId}
-            resumeScans={resumeScans}
-            resumes={resumes} 
-            activeSubscription={activeSubscription}
+        {({ resumes }: { resumes: ResumeClass[] }) => {
+
+          //If the user doesn't have any resumes send them to the new page
+          if (!resumes) {
+            redirect('resumebuilder/new', 'replace' as RedirectType)
+          }
+          
+          return (
+            <ResumeTest
+              userId={userId}
+              resumes={resumes}
+              activeSubscription={activeSubscription}
             />
-        }
+          )
+        }}
       </Await>
     </>
   );

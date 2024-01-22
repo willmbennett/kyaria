@@ -68,7 +68,7 @@ function SortableResumeSection({ id, name, control, register, setValue, watch, j
 
     return (
         <div ref={setNodeRef} style={style} {...attributes} {...listeners} className='flex flex-row items-top justify-center w-full h-full hover:cursor-grab shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-lg transition-shadow duration-200'>
-            <Section title={name.toUpperCase()} isDragging={isDragging}>
+            <Section title={name.replace('_', ' ').toLocaleUpperCase()} isDragging={isDragging}>
                 {renderField({id, name, control, register, setValue, watch, job})}
             </Section>
         </div>
