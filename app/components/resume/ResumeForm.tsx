@@ -56,7 +56,7 @@ const ResumeForm: React.FC<ResumeFormProps> = ({ methods, job }) => {
         <FormProvider {...methods}>
             <form>
                 <div className='w-full space-y-3'>
-                    <Section title={"Contact Information".toUpperCase()}>
+                    <Section title={"Header".toUpperCase()}>
                         <ContactInformation job={job} />
                         <SocialLinksSection />
                     </Section>
@@ -77,7 +77,7 @@ const ResumeForm: React.FC<ResumeFormProps> = ({ methods, job }) => {
                         </SortableContext>
                         <DragOverlay>
                             {sections && overlaySection ? (
-                                <Section title={overlaySection.toUpperCase()}>
+                                <Section title={overlaySection.replace('_', ' ').toUpperCase()}>
                                 </Section>
                             ) : null}
                         </DragOverlay>

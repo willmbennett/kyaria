@@ -3,9 +3,8 @@ import { ResumeScanDataClass } from "../../models/ResumeScan";
 import { format, parse, isValid, isToday, startOfToday } from 'date-fns';
 
 export interface ResumeBuilderProps {
-    data: Partial<ResumeClass>;
+    data: ResumeClass;
     toggleEdit: any;
-    editResume: boolean;
     resumeId?: string;
     resumeScanId?: string;
     userId?: string;

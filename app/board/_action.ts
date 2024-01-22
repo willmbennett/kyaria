@@ -6,7 +6,7 @@ import {
   updateJobApp
 } from "../../lib/app-db";
 import { revalidatePath } from "next/cache";
-import { createResume, getResume, updateResume } from "../../lib/resume-db";
+import { createResume, updateResume } from "../../lib/resume-db";
 
 export async function createJobApplicationAction(data: any, path: string) {
   const { jobApp } = await createJobApplication(data);
@@ -38,7 +38,9 @@ export async function deleteJobAppAction({
 }
 
 export async function createResumeAction(data: any, path: string) {
+  //console.log('made it to server action')
   const { resumeId } = await createResume(data);
+  //console.log('server action resumeId:', resumeId)
   revalidatePath(path);
   return resumeId
 }
@@ -50,10 +52,4 @@ export async function updateResumeAction(
 ) {
   await updateResume(id, data);
   revalidatePath(path);
-}
-
-export async function getResumeAction(resumeId: string, path: string) {
-  const { resume, resumeScan } = await getResume(resumeId)
-  revalidatePath(path);
-  return { resume, resumeScan }
 }

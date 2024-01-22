@@ -20,7 +20,7 @@ const Section: React.FC<SectionProps> = ({ title, children, isDragging = false }
           size='sm'
           onClick={() => setShowComponent(!showComponent)}
         >
-          {showComponent ? 'Cancel' : 'Edit'}
+          {showComponent ? 'Hide' : 'Edit'}
         </Button>
       </div>
       {showComponent && !isDragging &&

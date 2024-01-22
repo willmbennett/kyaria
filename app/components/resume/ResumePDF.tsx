@@ -1,7 +1,7 @@
 import React from 'react';
 import { Page, Text, View, Document, Link } from '@react-pdf/renderer';
 import { GeneralSectionConfig, ResumeBuilderFormData, sectionConfigs } from '../../resumebuilder/resumetest-helper';
-import { Award, Certification, Education, ProfessionalExperience, Project, Publication, Volunteering } from '../../../models/Resume';
+import { Award, Certification, Education, ProfessionalExperience, Project, Publication, ResumeClass, Volunteering } from '../../../models/Resume';
 import { pdfstyles } from './styles';
 import { ListSection } from './sections/ListSection';
 import PDFResumeSection from './sections/PDFResumeSection';
@@ -13,23 +13,16 @@ type ContactElement = {
   url?: string; // Optional property for links
 };
 
-interface ResumePDFProps {
-  data: ResumeBuilderFormData;
-}
-
 interface ListInputProps {
   id: string
-  skills?: {
-    label: string;
-    value: string;
-  }[];
+  skills?: string[]
   professional_experience?: ProfessionalExperience[];
   education?: Education[];
   projects?: Project[];
   publications?: Publication[];
   awards?: Award[];
   certifications?: Certification[];
-  interests?: { label: string; value: string }[];
+  interests?: string[]
   volunteering?: Volunteering[];
 }
 
@@ -74,12 +67,24 @@ const renderField = (
 
 
 // ResumePDF component
-const ResumePDF: React.FC<ResumePDFProps> = ({ data }) => {
+const ResumePDF = ({ data }: { data: ResumeClass }) => {
   const {
     name, title, email, phone, location, social_links, summary, skills,
     professional_experience, education, interests, projects,
     certifications, awards, publications, volunteering, sectionOrder
   } = data;
+
+  const resumeSections = sectionOrder || [
+    'skills',
+    'professional_experience',
+    'education',
+    'projects',
+    'awards',
+    'publications',
+    'certifications',
+    'volunteering',
+    'interests'
+  ];
 
   const contactElements: ContactElement[] = [];
   if (phone) {
@@ -92,10 +97,16 @@ const ResumePDF: React.FC<ResumePDFProps> = ({ data }) => {
     contactElements.push({ type: 'text', value: location || '' });
   }
 
-  // Add social links to contact elements
-  social_links?.forEach(link => {
-    contactElements.push({ type: 'link', value: link.name, url: link.url });
-  });
+  if (social_links) {
+    // Iterate over the keys of the social_links object
+    for (const name in social_links) {
+      // Check if the key is actually a property of the object and not inherited
+      if (social_links.hasOwnProperty(name)) {
+        contactElements.push({ type: 'link', value: name, url: social_links[name] });
+      }
+    }
+  }
+
 
   return (
     <Document>
@@ -124,19 +135,19 @@ const ResumePDF: React.FC<ResumePDFProps> = ({ data }) => {
             {summary && <Text style={pdfstyles.text}>{summary}</Text>}
           </View>
         </View>
-        {sectionOrder.map((sectionOrder, idx) =>
+        {resumeSections.map((section, idx) =>
           <View key={idx}>
             {renderField({
-              id: sectionOrder,
-              skills: sectionOrder === 'skills' ? skills : undefined,
-              professional_experience: sectionOrder === 'professional_experience' ? professional_experience : undefined,
-              education: sectionOrder === 'education' ? education : undefined,
-              interests: sectionOrder === 'interests' ? interests : undefined,
-              projects: sectionOrder === 'projects' ? projects : undefined,
-              certifications: sectionOrder === 'certifications' ? certifications : undefined,
-              awards: sectionOrder === 'awards' ? awards : undefined,
-              publications: sectionOrder === 'publications' ? publications : undefined,
-              volunteering: sectionOrder === 'volunteering' ? volunteering : undefined,
+              id: section,
+              skills: section === 'skills' ? skills : undefined,
+              professional_experience: section === 'professional_experience' ? professional_experience : undefined,
+              education: section === 'education' ? education : undefined,
+              interests: section === 'interests' ? interests : undefined,
+              projects: section === 'projects' ? projects : undefined,
+              certifications: section === 'certifications' ? certifications : undefined,
+              awards: section === 'awards' ? awards : undefined,
+              publications: section === 'publications' ? publications : undefined,
+              volunteering: section === 'volunteering' ? volunteering : undefined,
             })}
           </View>
         )}
