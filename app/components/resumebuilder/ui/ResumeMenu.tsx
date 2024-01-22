@@ -27,7 +27,7 @@ const ResumeListMenu: React.FC<ResumeListMenuProps> = ({
             <div className='flex flex-row items-center justify-between w-full mb-2'>
                 <p className="text-sm md:text-md lg:text-lg font-semibold">Resumes</p>
                 {activeSubscription ?
-                    <Button href='resumebuilder/new' size='sm'>New Resume</Button> :
+                    <a className='duration-150 ease-in-out inline-flex items-center justify-center font-medium group px-2 py-1.5 text-sm bg-slate-700 text-white hover:bg-slate-900' href='resumebuilder/new'>New Resume</a> :
                     <Button href='/pricing' size='sm'>Subscribe to add new</Button>
                 }
             </div>
