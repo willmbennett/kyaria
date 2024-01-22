@@ -56,8 +56,8 @@ export const ResumeUploadForm = ({ userId }: { userId: string }) => {
     const onSubmit: SubmitHandler<FormFields> = async () => {
         //console.log('resumeUploadText: ', resumeUploadText)
         setLoading(true);
-        //console.log('Resume Text')
-        //console.log(resumeUploadText)
+        console.log('Resume Text')
+        console.log(resumeUploadText)
 
         const response = await fetch('/api/sovren', {
             method: 'POST',
@@ -70,14 +70,14 @@ export const ResumeUploadForm = ({ userId }: { userId: string }) => {
 
         if (!response.ok) {
             // If the response is not ok, print the status and throw an error
-            //console.error('Server responded with status:', response.status);
+            console.error('Server responded with status:', response.status);
             throw new Error(`HTTP error! status: ${response.status}`);
         } else {
             const { parsedResume } = await response.json();
 
             //const parsedResume: Partial<ResumeScanDataClass> = testResumeData
             //console.log('Parsed Resume');
-            //console.log(parsedResume);
+            console.log(parsedResume);
             //console.log(userId)
 
             if (userId) {
@@ -95,7 +95,7 @@ export const ResumeUploadForm = ({ userId }: { userId: string }) => {
                     if (resumeId) {
                         setLoading(false)
                         setFile(null);
-                        router.push(`resumebuilder/${resumeId}`)
+                        router.push(`/resumebuilder/${resumeId}`)
                     }
                 }
             }

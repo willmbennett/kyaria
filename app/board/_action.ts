@@ -38,7 +38,9 @@ export async function deleteJobAppAction({
 }
 
 export async function createResumeAction(data: any, path: string) {
+  //console.log('made it to server action')
   const { resumeId } = await createResume(data);
+  //console.log('server action resumeId:', resumeId)
   revalidatePath(path);
   return resumeId
 }

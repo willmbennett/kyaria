@@ -101,9 +101,9 @@ export async function createResume(data: ResumeClass) {
         console.log(`Created resume: ${JSON.stringify(resume)}`)
 
         if (resume) {
-            //console.log('about to transform props')
+            console.log('about to transform props')
             const resumeId = castToString(resume._id)
-            //console.log(resumeId)
+            console.log(resumeId)
             return {
                 resumeId
             };

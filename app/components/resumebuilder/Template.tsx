@@ -2,11 +2,12 @@ import { ResumeClass } from "../../../models/Resume";
 import { resumeTemplates } from "../../resumebuilder/resume-templates";
 import { Button } from "../Button";
 import ResumeBuilder from "../resume/ResumeBuilder";
+import CustomPDFViewer from "./ui/CustomPDFViewer";
 import DropDownSelect from "./ui/DropdownSelect";
 
 interface resumeTemplates {
     templateName: string;
-    template: Partial<ResumeClass>;
+    template: ResumeClass;
 }
 
 export default function ResumeTemplates(
@@ -15,7 +16,7 @@ export default function ResumeTemplates(
         handleTemplateSelection
     }: {
         userId: string,
-        handleTemplateSelection: (resume: Partial<ResumeClass>) => void;
+        handleTemplateSelection: (resume: ResumeClass) => void;
     }) {
 
     const renderTemplate = (template: resumeTemplates, currentIndex: number) => {
@@ -31,12 +32,7 @@ export default function ResumeTemplates(
                         Select Template
                     </Button>
                 </div>
-                <ResumeBuilder
-                    data={template.template} // sampleResume
-                    toggleEdit={undefined}
-                    editResume={false}
-                    userId={userId}
-                />
+                <CustomPDFViewer data={template.template} />
             </div>
         )
     }

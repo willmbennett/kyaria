@@ -2,7 +2,7 @@ import { ResumeClass } from "../../models/Resume";
 
 type resumeTemplateType = {
     templateName: string;
-    template: Partial<ResumeClass>
+    template: ResumeClass;
 }
 
 export const resumeTemplates: resumeTemplateType[] = [
@@ -10,6 +10,10 @@ export const resumeTemplates: resumeTemplateType[] = [
         "templateName": "Senior Product Manager",
         "template":
         {
+            "_id": '',
+            "userId": '',
+            "createdAt": '',
+            "updatedAt": '',
             "name": "Alex Johnson",
             "title": "Senior Product Manager",
             "email": "alex.johnson@email.com",
@@ -184,6 +188,10 @@ export const resumeTemplates: resumeTemplateType[] = [
         "templateName": "Software Bootcamp Graduate",
         "template":
         {
+            "_id": '',
+            "userId": '',
+            "createdAt": '',
+            "updatedAt": '',
             "sectionOrder": [
                 "skills",
                 "projects",
@@ -357,6 +365,10 @@ export const resumeTemplates: resumeTemplateType[] = [
     {
         "templateName": "Senior Software Engineer",
         "template": {
+            "_id": '',
+            "userId": '',
+            "createdAt": '',
+            "updatedAt": '',
             "sectionOrder": [
                 "skills",
                 "professional_experience",
