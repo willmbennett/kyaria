@@ -162,7 +162,7 @@ const RenderField = ({ field, item }: { field: FieldConfig, item: sectionType })
 
             case 'current':
                 // Display 'PRESENT' only if 'end_date' is not set
-                return <Text style={pdfstyles.entryDate}>PRESENT</Text>;
+                return <Text style={pdfstyles.entryDate}>Present</Text>;
 
             case 'bulletPoints':
                 const bulletPoints = item[fieldName];

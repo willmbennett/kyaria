@@ -13,7 +13,7 @@ import { PDFViewer } from "../ui/PDFViewer";
 import { pdfjs } from 'react-pdf';
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css"
-import { ResumeScanDataClass } from "../../../../models/ResumeScan";
+import type { PDFDocumentProxy } from 'pdfjs-dist';
 
 type FormFields = {
     input: string;
@@ -35,7 +35,10 @@ export const ResumeUploadForm = ({ userId }: { userId: string }) => {
     const router = useRouter()
 
     const onFileChange = useFileHandler(setFile);
-    const onDocumentLoadSuccess = useDocumentLoadSuccess(setNumPages);
+    const onDocumentLoadSuccess = ({ numPages: nextNumPages }: PDFDocumentProxy): void => {
+
+        setNumPages(nextNumPages);
+    };
 
     function handleTextContent(textContent: { items: any[]; }) {
         const strings = textContent.items.map(item => item.str);
@@ -144,20 +147,22 @@ export const ResumeUploadForm = ({ userId }: { userId: string }) => {
                     )}
                 </form>
             </div>
-            <div className="flex justify-center">
-                <div className="flex w-full shadow-lg border border-gray-200">
-                    {loading && <LoadingComponent />}
-                    {file && !loading && (
-                        <PDFViewer
-                            file={file}
-                            onLoadSuccess={onDocumentLoadSuccess}
-                            numPages={numPages}
-                            handleTextContent={handleTextContent}
-                            handleAnnotations={handleAnnotations}
-                        />
-                    )}
+            {file &&
+                <div className="flex justify-center">
+                    <div className="bg-white flex w-full shadow-lg border border-gray-200">
+                        {loading && <LoadingComponent />}
+                        {!loading && (
+                            <PDFViewer
+                                file={file}
+                                onLoadSuccess={onDocumentLoadSuccess}
+                                numPages={numPages}
+                                handleTextContent={handleTextContent}
+                                handleAnnotations={handleAnnotations}
+                            />
+                        )}
+                    </div>
                 </div>
-            </div>
+            }
         </div>
     );
 }

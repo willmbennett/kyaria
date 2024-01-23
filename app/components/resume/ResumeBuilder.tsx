@@ -16,7 +16,6 @@ const ResumeBuilder = (
     {
         data,
         resumeId,
-        resumeScanId,
         userId,
         activeSubscription = false,
         job
@@ -24,7 +23,7 @@ const ResumeBuilder = (
     const defaultValues = useMemo(() => transformDataToFormValues(data), [data]);
     const methods = useForm<ResumeBuilderFormData>({ defaultValues });
     const { watch } = methods
-    const { saveStatus } = useSaveResume({ userId, resumeId, resumeScanId, data, defaultValues, watch });
+    const { saveStatus } = useSaveResume({ userId, resumeId, data, watch });
 
     return (
         <div className='w-full min-h-screen lg:h-screen bg-white p-2 lg:pl-4 lg:pr-8'> {/* Ensured sticky bar is at the top with a higher z-index */}
@@ -45,7 +44,7 @@ const ResumeBuilder = (
                 </div>
                 <div className='flex w-full items-center justify-center'>
                     {defaultValues &&
-                        <CustomPDFViewer data={data} saveStatus={saveStatus} />
+                        <CustomPDFViewer data={data} saveStatus={saveStatus} userId={userId} />
                     }
                 </div>
             </div>

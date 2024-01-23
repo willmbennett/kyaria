@@ -2,9 +2,8 @@
 import React, { useState } from 'react';
 import { ResumeUploadForm } from './ResumeUploadForm';
 import { Button } from '../../Button';
-import ResumeTemplateForm from './ResumeTemplateForm';
 import { Container } from '../../landingpage/Container';
-import { CheckCircleIcon } from '@heroicons/react/24/solid'
+import ResumeTemplates from './Template';
 
 const NewResumeForm = ({ userId }: { userId: string }) => {
 
@@ -48,7 +47,7 @@ const NewResumeForm = ({ userId }: { userId: string }) => {
                         />
                     }
                     {useTemplate &&
-                        <ResumeTemplateForm userId={userId} />
+                        <ResumeTemplates userId={userId} />
                     }
                 </div>
             </div>

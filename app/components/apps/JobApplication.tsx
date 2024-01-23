@@ -235,7 +235,7 @@ function renderCurrentSection(
     case 'resume':
       return (
         <div className='w-full flex flex-col items-center justify-center'>
-          <CustomPDFViewer data={userResume} useEdit={true} />
+          <CustomPDFViewer data={userResume} useEdit={true} userId={userId} />
         </div>
       );
     case 'story':

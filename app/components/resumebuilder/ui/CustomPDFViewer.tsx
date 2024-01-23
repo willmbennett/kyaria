@@ -10,14 +10,17 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { debounce, isEqual } from 'lodash';
 import { pdfstyles } from '../../resume/styles';
 import { Button } from '../../Button';
-import { useGeneratePDF } from '../../../../lib/hooks/resume-test';
+import { useCopyResume, useGeneratePDF } from '../../../../lib/hooks/resume-test';
 import SaveStatusIndicator from '../../resume/SaveStatusIndicator';
 import { ResumeClass } from '../../../../models/Resume';
+import { createResumeAction } from '../../../board/_action';
+import { useRouter } from 'next/navigation';
 
 interface ResumePDFProps {
     data: ResumeClass;
     saveStatus?: "error" | "saving" | "up to date";
     useEdit?: boolean;
+    userId: string
 }
 
 type pdfUrlTye = {
@@ -28,12 +31,13 @@ type pdfUrlTye = {
 pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.js', import.meta.url).toString();
 
 
-const CustomPDFViewer = ({ data, saveStatus, useEdit = false }: ResumePDFProps) => {
+const CustomPDFViewer = ({ data, saveStatus, useEdit = false, userId }: ResumePDFProps) => {
     const [numPages, setNumPages] = useState(1);
     const [pageNumber, setPageNumber] = useState(1);
     const [currentPdfUrl, setCurrentPdfUrl] = useState<string | null>(null);
     const [newPdfUrl, setNewPdfUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
+    const router = useRouter()
 
     const downloadPDF = useGeneratePDF({ data });
 
@@ -96,6 +100,8 @@ const CustomPDFViewer = ({ data, saveStatus, useEdit = false }: ResumePDFProps) 
         changePage(1);
     }
 
+    const { handleCopy, isLoading } = useCopyResume(data, userId)
+
     return (
         <div className='flex h-full flex-col justify-center w-full max-w-[62vh]'>
             <div className={`pb-3 flex w-full items-center flex-row ${numPages > 1 ? 'justify-between' : 'justify-center'}`}>
@@ -111,6 +117,25 @@ const CustomPDFViewer = ({ data, saveStatus, useEdit = false }: ResumePDFProps) 
                     <p>Page {pageNumber || (numPages ? 1 : "--")} of {numPages || "--"}</p>
                     {useEdit && <Button type='button' size='sm' href={`/resumebuilder/${data._id}`}>Edit</Button>}
                     <Button type='button' size='sm' onClick={downloadPDF}>Download</Button>
+                    {isLoading ? (
+                        <div className='text-slate-500 flex flex-row items-center justify-center space-x-2'>
+                            <style jsx>{`
+          .saving {
+            animation: spin 1s linear infinite;
+          }
+  
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+      `}</style>
+                            <svg className="saving" xmlns="http://www.w3.org/2000/svg" height="16" width="16" fill='rgb(100 116 139)' viewBox="0 0 512 512"><path d="M304 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm0 416a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM48 304a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm464-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM142.9 437A48 48 0 1 0 75 369.1 48 48 0 1 0 142.9 437zm0-294.2A48 48 0 1 0 75 75a48 48 0 1 0 67.9 67.9zM369.1 437A48 48 0 1 0 437 369.1 48 48 0 1 0 369.1 437z" /></svg>
+                            <p>Copying</p>
+                        </div>
+                    )
+                        :
+                        <Button type='button' size='sm' onClick={handleCopy}>Copy</Button>
+                    }
                     {saveStatus && <SaveStatusIndicator saveStatus={saveStatus} />}
                 </div>
                 {numPages > 1 && <Button

@@ -1,5 +1,5 @@
 export const LoadingComponent = () => (
-    <div className='flex-col items-center'>
+    <div className='flex w-full flex-col items-center text-center p-4'>
         <p className="mb-4 text-sm text-base text-neutral-600 w-full max-w-screen">
             Loading...
         </p>
