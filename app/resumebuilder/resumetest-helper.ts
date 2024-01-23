@@ -199,13 +199,13 @@ export const demoResume = { "ContactInformation": { "CandidateName": { "Formatte
 
 export const formatDate = (dateDetail: string | undefined) => {
     if (!dateDetail) return ''; // Handle undefined dateDetail
-    else if (dateDetail == 'present') return 'PRESENT'; // Handle undefined dateDetail
+    else if (dateDetail == 'present') return 'Present'; // Handle undefined dateDetail
     try {
         //console.log(dateDetail)
         const parsedDate = parseDate(dateDetail)
         if (parsedDate) {
             if (isToday(parsedDate)) {
-                return 'PRESENT';
+                return 'Present';
             }
             else if (parsedDate > startOfToday()) {
                 //return 'EXPECTED ' + format(parsedDate, 'MM/yyyy');
