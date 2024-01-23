@@ -20,7 +20,7 @@ export default function Post({ post }: { post: PostClass }) {
                     <h1 itemProp="headline" className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">{title}</h1>
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
                         {author && <h6 itemProp="author" className="text-lg font-medium text-neutral-700" itemType="https://schema.org/Person">By
-                        <span itemProp="name">Jane Doe</span></h6>}
+                        <span itemProp="name"> {author}</span></h6>}
                         <time itemProp="datePublished" className="text-sm text-neutral-500" dateTime={createdAt.toLocaleString()}>
                             {format(date, 'LLLL d, yyyy')}
                         </time>
