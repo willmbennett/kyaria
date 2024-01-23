@@ -184,7 +184,7 @@ const RenderField = ({ field, item }: { field: FieldConfig, item: sectionType })
                 return (item[fieldName] as GPA).score ? <Text style={pdfstyles.text}>{`GPA: ${(item[fieldName] as GPA).score}${(item[fieldName] as GPA).scoringSystem ? `/${(item[fieldName] as GPA).scoringSystem}` : ''}`}</Text> : null;
 
             case 'link':
-                return item[fieldName] ? <Link src={item['Link' as keyof sectionType]?.toString() || ''} style={pdfstyles.contactInfoLink}>{item['LinkTitle' as keyof sectionType] || field.placeholder}</Link> : null;
+                return item[fieldName] ? <Link src={item[fieldName]?.toString() || ''} style={pdfstyles.contactInfoLink}>{item['LinkTitle' as keyof sectionType] || field.placeholder}</Link> : null;
 
             // Add more cases as needed for different field types
             default:

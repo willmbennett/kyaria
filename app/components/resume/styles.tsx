@@ -13,9 +13,10 @@ export const pdfstyles = StyleSheet.create({
     padding: 30,
     fontFamily: 'Times-Roman',
     fontSize: 11,
+    lineHeight: '1.3', // Adjust the line height for spacing
   },
   summarySection: {
-    marginTop: 10
+    marginTop: 10,
   },
   resumeSection: {
     marginTop: sectionMargin
@@ -45,7 +46,8 @@ export const pdfstyles = StyleSheet.create({
   },
   entryDate: {
     flexShrink: 0,
-    textAlign: 'right'
+    textAlign: 'right',
+    fontFamily: 'Times-Bold',
   },
   entryDateSeparator: {
     marginHorizontal: 3
@@ -85,7 +87,6 @@ export const pdfstyles = StyleSheet.create({
   sectionHeader: {
     fontSize: 14,
     fontFamily: 'Times-Bold',
-    marginBottom: 2
   },
   text: {
   },
@@ -96,7 +97,6 @@ export const pdfstyles = StyleSheet.create({
     flexDirection: 'row', // For the bullet and the text to be in the same line
     flexWrap: 'wrap', // Allows text to wrap to the next line
     alignItems: 'flex-start', // Adjust vertical alignment as needed
-    marginBottom: 3, // Space between bullet points
   },
   bulletPoint: {
     width: 10, // Width of bullet point area
