@@ -1,6 +1,7 @@
 import { ResumeClass } from '../../../../models/Resume';
 import { Button } from '../../Button';
 import { useRouter } from 'next/navigation';
+import { format } from 'date-fns';
 
 interface ResumeListMenuProps {
     resumeIndex: string | null;
@@ -35,7 +36,7 @@ const ResumeListMenu: React.FC<ResumeListMenuProps> = ({
                 {resumes.map((resume, index) => (
                     <li key={resume._id.toString()} className={`flex items-center justify-center p-1 h-auto space-y-1 ${resume._id === resumeIndex ? 'border border-slate-600 shadow bg-slate-500 text-white' : 'bg-slate-200'}`}>
                         <div onClick={() => handleItemClick(resume._id.toString())} className="px-2 py-1.5 w-full rounded text-sm cursor-pointer">
-                            <p className='text-xs'>{`${resume.createdAt ? new Date(resume.createdAt).toLocaleDateString() : resumes.length - index} - ${resume.title || resume.name}`}</p>
+                            <p className='text-xs'>{`${resume.createdAt ? format(new Date(resume.createdAt), 'MM/yyyy') : resumes.length - index} - ${resume.title || resume.name}`}</p>
                         </div>
                     </li>
                 ))}
