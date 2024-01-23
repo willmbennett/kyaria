@@ -8,7 +8,7 @@ const ResumeTemplateForm = ({ userId }: { userId: string }) => {
     const router = useRouter()
 
     const handleTemplateSelection = async (resumeTemplate: ResumeClass) => {
-        const templateData: Partial<ResumeClass> = resumeTemplate
+        const templateData: Partial<ResumeClass> = { ...resumeTemplate } 
         delete templateData._id
         delete templateData.createdAt
         delete templateData.updatedAt
@@ -24,7 +24,7 @@ const ResumeTemplateForm = ({ userId }: { userId: string }) => {
 
     return (
         <>
-            <ResumeTemplates handleTemplateSelection={handleTemplateSelection} />
+            <ResumeTemplates handleTemplateSelection={handleTemplateSelection} userId={userId} />
         </>
     );
 }

@@ -117,11 +117,9 @@ export async function handleFormSubmit(
 }
 
 type UseSaveResumeProps = {
-    userId: string | undefined;
-    resumeId?: string;
-    resumeScanId?: string;
+    userId: string;
+    resumeId: string;
     data: Partial<ResumeClass>;
-    defaultValues: ResumeBuilderFormData;
     watch: UseFormWatch<ResumeBuilderFormData>;
 };
 
@@ -129,7 +127,7 @@ interface UpdateDataType {
     [key: string]: any;
 }
 
-export const useSaveResume = ({ userId, resumeId, resumeScanId, data, defaultValues, watch }: UseSaveResumeProps) => {
+export const useSaveResume = ({ userId, resumeId, data, watch }: UseSaveResumeProps) => {
     const [saveStatus, setSaveStatus] = useState<'saving' | 'up to date' | 'error'>('up to date');
     const router = useRouter();
     const newResume = watch();
@@ -140,7 +138,6 @@ export const useSaveResume = ({ userId, resumeId, resumeScanId, data, defaultVal
             const resumeToSave = convertFormDataToResumeModel(newResume, data);
             const differences = findDifferences(resumeToSave, data);
             //console.log("Differences found:", differences);
-            const userResumeWithIds = { userId, resumeScan: resumeScanId, ...resumeToSave };
             // Construct update data
             const updateData: UpdateDataType = {};
             for (const key in differences) {
@@ -149,24 +146,20 @@ export const useSaveResume = ({ userId, resumeId, resumeScanId, data, defaultVal
             }
             //console.log('updateData: ', updateData)
             if (Object.keys(updateData).length > 0) {
-                if (resumeId) {
-                    await updateResumeAction(resumeId, { ...updateData }, '/');
-                } else if (resumeScanId) {
-                    await createResumeAction(userResumeWithIds, '/');
-                }
+                await updateResumeAction(resumeId, { ...updateData }, '/');
             }
             router.refresh();
             setTimeout(() => setSaveStatus('up to date'), 1000);
         } catch (error) {
             setSaveStatus('error');
         }
-    }, [userId, resumeId, resumeScanId, newResume, router]);
+    }, [userId, resumeId, newResume, router]);
 
     const debouncedSaveToDatabase = useCallback(debounce(saveToDatabase, 500), [saveToDatabase]);
 
     useEffect(() => {
         const resumeToSave = convertFormDataToResumeModel(newResume, data) as ResumeClass
-        const differences = findDifferences(resumeToSave, data);
+        //const differences = findDifferences(resumeToSave, data);
         //console.log("newResume:", newResume);
         //console.log("Data after conversion:", resumeToSave);
         //console.log("Original Data:", data);
@@ -228,7 +221,7 @@ export const useDragAndDrop = ({ watch, setValue }: UseDragAndDropProps) => {
     return handleDragEnd;
 };
 
-export const useGeneratePDF = ({ data }: { data: ResumeClass}) => {
+export const useGeneratePDF = ({ data }: { data: ResumeClass }) => {
     const generatePDF = useCallback(async () => {
         const name = data.name?.replace(/\s/g, '_') || ''
         const blob = await ReactPDF.pdf(
@@ -243,5 +236,36 @@ export const useGeneratePDF = ({ data }: { data: ResumeClass}) => {
     }, [data]);
 
     return generatePDF;
+};
+
+export const useCopyResume = (data: ResumeClass, userId: string) => {
+    const [isLoading, setLoading] = useState(false);
+    const router = useRouter();
+
+    const handleCopy = useCallback(async () => {
+        setLoading(true); // Start loading
+
+        try {
+            const resumeCopy: Partial<ResumeClass> = { ...data };
+
+            delete resumeCopy._id;
+            delete resumeCopy.createdAt;
+            delete resumeCopy.updatedAt;
+            delete resumeCopy.userId;
+
+            const userResumeWithIds = { fromTemplate: true, ...resumeCopy, userId };
+            const resumeId = await createResumeAction(userResumeWithIds, '/');
+
+            if (resumeId) {
+                router.push(`/resumebuilder/${resumeId}`);
+            }
+        } catch (error) {
+            console.error('Error during resume copy:', error);
+        } finally {
+            setLoading(false); // End loading
+        }
+    }, [data, userId, router]);
+
+    return { handleCopy, isLoading };
 };
 

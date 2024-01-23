@@ -5,9 +5,8 @@ import { format, parse, isValid, isToday, startOfToday } from 'date-fns';
 export interface ResumeBuilderProps {
     data: ResumeClass;
     toggleEdit: any;
-    resumeId?: string;
-    resumeScanId?: string;
-    userId?: string;
+    resumeId: string;
+    userId: string;
     activeSubscription?: boolean;
     job?: Partial<JobClass>;
 }

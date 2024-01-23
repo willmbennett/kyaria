@@ -48,7 +48,7 @@ const dropDownMenu = (options: string[], currentIndex: number, setCurrentIndex: 
     </Menu>
 )
 
-export default function ResumeTemplates({ handleTemplateSelection }: { handleTemplateSelection: (resume: ResumeClass) => void; }) {
+export default function ResumeTemplates({ handleTemplateSelection, userId }: { handleTemplateSelection: (resume: ResumeClass) => void, userId: string }) {
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const selectedTemplate = resumeTemplates[currentIndex];
@@ -70,7 +70,7 @@ export default function ResumeTemplates({ handleTemplateSelection }: { handleTem
                 </Button>
             </div>
             <div className="w-full flex justify-center items-center w-[62vh]">
-                <CustomPDFViewer data={selectedTemplate.template} />
+                <CustomPDFViewer data={selectedTemplate.template} userId={userId} />
             </div>
         </div>
     );
