@@ -80,6 +80,7 @@ const SingleInput: React.FC<SingleInputProps> = ({ sectionName, register, optimi
     };
 
     const handleModifyResponse = (action: 'shorten' | 'lengthen') => {
+        setFinishedLoading(false)
         setLoading(true);
 
         const prompt = action === 'shorten' ?
@@ -90,7 +91,8 @@ const SingleInput: React.FC<SingleInputProps> = ({ sectionName, register, optimi
             id: '3', // You may want to generate a unique ID for each new message
             role: 'user',
             content: prompt
-        }]
+        },
+        { id: '3', role: 'assistant', content: section }]
 
         setMessages(newMessages);
 
