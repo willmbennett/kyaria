@@ -157,11 +157,9 @@ const RenderField = ({ field, item }: { field: FieldConfig, item: sectionType })
                 return item[fieldName] ? <Text style={pdfstyles.entryDate}>{formatDate(item[fieldName]?.toString())}</Text> : null;
 
             case 'endDate':
-                // Only display the end date if 'current' is not set to true
                 return <Text style={pdfstyles.entryDate}>{formatDate(item[fieldName]?.toString())}</Text>;
 
             case 'current':
-                // Display 'PRESENT' only if 'end_date' is not set
                 return <Text style={pdfstyles.entryDate}>Present</Text>;
 
             case 'bulletPoints':
@@ -184,7 +182,7 @@ const RenderField = ({ field, item }: { field: FieldConfig, item: sectionType })
                 return (item[fieldName] as GPA).score ? <Text style={pdfstyles.text}>{`GPA: ${(item[fieldName] as GPA).score}${(item[fieldName] as GPA).scoringSystem ? `/${(item[fieldName] as GPA).scoringSystem}` : ''}`}</Text> : null;
 
             case 'link':
-                return item[fieldName] ? <Link src={item['Link' as keyof sectionType]?.toString() || ''} style={pdfstyles.contactInfoLink}>{item['LinkTitle' as keyof sectionType] || field.placeholder}</Link> : null;
+                return item[fieldName] ? <Link src={item[fieldName]?.toString() || ''} style={pdfstyles.contactInfoLink}><Text>{item['LinkTitle' as keyof sectionType] || field.placeholder}</Text></Link> : null;
 
             // Add more cases as needed for different field types
             default:

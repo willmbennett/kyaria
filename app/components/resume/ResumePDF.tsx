@@ -123,7 +123,9 @@ const ResumePDF = ({ data }: { data: ResumeClass }) => {
                   )}
                   {element.type === 'link' && (
                     <Link src={element.url || ''} style={pdfstyles.contactInfoLink}>
-                      {element.value}
+                      <Text>
+                        {element.value}
+                      </Text>
                     </Link>
                   )}
                 </React.Fragment>
@@ -131,8 +133,8 @@ const ResumePDF = ({ data }: { data: ResumeClass }) => {
             </View>
           </View>
           <View wrap={false} style={pdfstyles.summarySection}>
-            {title && <Text style={pdfstyles.title}>{title.toLocaleUpperCase()}</Text>}
-            {summary && <Text style={pdfstyles.text}>{summary}</Text>}
+            {title !== undefined && <Text style={pdfstyles.title}>{title.toLocaleUpperCase()}</Text>}
+            {summary !== undefined && <Text style={pdfstyles.text}>{summary}</Text>}
           </View>
         </View>
         {resumeSections.map((section, idx) =>

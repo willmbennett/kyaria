@@ -25,37 +25,22 @@ const handleResumeImport = <T extends sectionType>(id: string, section?: section
     const hasDate = config.fieldsConfig.some(field => field.name === 'date');
     const isEducation = id === 'education';
 
-    //console.log('section: ', section)
-
     const updatedSection = (section || []).map(item => {
         const updatedItem = _.cloneDeep(item);
-
+    
         // Handle GPA for education section
         if (isEducation && 'gpa' in updatedItem) {
             updatedItem.gpa = {
-                score: updatedItem.gpa?.score || '', // Default score to '0' if undefined
+                score: updatedItem.gpa?.score || '', // Default score to '' if undefined
                 scoringSystem: updatedItem.gpa?.scoringSystem || '4.0' // Default scoringSystem to '4.0' if undefined
             };
         }
-
-        // Format date fields correctly, if they exist
-        if (hasDate) {
-            const parsedDate = parseDate((updatedItem as dateSections).date);
-            (updatedItem as dateSections).date = format(parsedDate, 'yyyy-MM-dd');
-        }
-        if (hasEndDate) {
-            const parsedDate = parseDate((updatedItem as startEndSections).end_date);
-            (updatedItem as startEndSections).end_date = format(parsedDate, 'yyyy-MM-dd');
-        }
-        if (hasStartDate) {
-            const parsedDate = parseDate((updatedItem as startEndSections).start_date);
-            (updatedItem as startEndSections).start_date = format(parsedDate, 'yyyy-MM-dd');
-        }
-
+    
         //console.log('updatedItem: ', updatedItem)
-
+    
         return updatedItem;
-    })
+    });
+    
 
     //const sortedResumeSection = sortDataBasedOnConfig(updatedSection, config) || [];
 
@@ -208,10 +193,10 @@ export const formatDate = (dateDetail: string | undefined) => {
                 return 'Present';
             }
             else if (parsedDate > startOfToday()) {
-                //return 'EXPECTED ' + format(parsedDate, 'MM/yyyy');
-                return format(parsedDate, 'MM/yyyy');
+                return 'Expected ' + format(parsedDate, 'MMM yyyy');
+                //return format(parsedDate, 'MM/yyyy');
             }
-            return format(parsedDate, 'MM/yyyy');
+            return format(parsedDate, 'MMM yyyy');
         }
     } catch (error) {
         console.error('Invalid date format:', error);
@@ -321,23 +306,23 @@ export function transformParsedResume(sourceData: Partial<ResumeScanDataClass>):
     return transformedData;
 }
 
-export const parseDate = (dateStr?: string): Date => {
-    if (!dateStr || dateStr.toLowerCase() === 'present') {
+export const parseDate = (dateStr: string): Date | null => {
+    if (dateStr.toLowerCase() === 'present') {
         return new Date();
     }
 
     // List of date formats to try
     const dateFormats = ['MM/yyyy', 'yyyy-MM-dd', 'MM/dd/yyyy', 'MMMM yyyy'];
 
-    let parsedDate = new Date();
+    let parsedDate;
     for (const format of dateFormats) {
         parsedDate = parse(dateStr, format, new Date());
         if (isValid(parsedDate)) {
-            break;
+            return parsedDate;
         }
     }
 
-    return parsedDate; // Return new Date() as a fallback
+    return null; // Return new Date() as a fallback
 };
 
 export type sectionType = ProfessionalExperience | Education | Publication | Project | Award | Certification | Volunteering
@@ -391,8 +376,8 @@ export const sortDataBasedOnConfig = (data: sectionType[]
             return returnedValue
         }
 
-        const parsedDateA = parseDate(dateA);
-        const parsedDateB = parseDate(dateB);
+        const parsedDateA = dateA? parseDate(dateA) : null;
+        const parsedDateB = dateB? parseDate(dateB) : null;
 
         if (!parsedDateA && !parsedDateB) returnedValue = 0;
         if (!parsedDateA) {
@@ -550,7 +535,7 @@ export const sectionConfigs: SectionConfig[] = [
         fieldsConfig: [
             { name: "title", placeholder: "Job Title", type: "text", group: "emp", pdftype: "textBold", pdfgroup: "title" },
             { name: "company", placeholder: "Employer Name", type: "text", group: "emp", pdftype: "textBold", pdfgroup: "title" },
-            { name: "location", placeholder: "Location", type: "text", pdftype: "text", pdfgroup: "title" },
+            { name: "location", placeholder: "Location", type: "text", pdftype: "textBold", pdfgroup: "title" },
             { name: "start_date", placeholder: "Start Date", type: "date", group: "date", pdftype: "startDate", pdfgroup: "title" },
             { name: "end_date", placeholder: "End Date", type: "date", group: "date", pdftype: "endDate", pdfgroup: "title" },
             { name: "current", placeholder: "Is Current", type: "check", group: "date", pdftype: "current", pdfgroup: "title" },
@@ -568,7 +553,7 @@ export const sectionConfigs: SectionConfig[] = [
             { name: "organization", placeholder: "Organization", type: "text", group: "org", pdftype: "textBold", pdfgroup: "title" },
             { name: "Link", placeholder: "Link URL", type: "text", group: "link", pdftype: "link", pdfgroup: "title" },
             { name: "LinkTitle", placeholder: "Link Title", type: "text", group: "link", pdfgroup: "title" },
-            { name: "location", placeholder: "Location", type: "text", pdftype: "text", pdfgroup: "title" },
+            { name: "location", placeholder: "Location", type: "text", pdftype: "textBold", pdfgroup: "title" },
             { name: "start_date", placeholder: "Start Date", type: "date", group: "date", pdftype: "startDate", pdfgroup: "title" },
             { name: "end_date", placeholder: "End Date", type: "date", group: "date", pdftype: "endDate", pdfgroup: "title" },
             { name: "current", placeholder: "Is Current", type: "check", group: "date", pdftype: "current", pdfgroup: "title" },
@@ -584,7 +569,7 @@ export const sectionConfigs: SectionConfig[] = [
         fieldsConfig: [
             { name: "degree", placeholder: "Degree", type: "text", group: "edu", pdftype: "text", pdfgroup: "subtitle" },
             { name: "institution", placeholder: "School Name", type: "text", group: "edu", pdftype: "textBold", pdfgroup: "title" },
-            { name: "location", placeholder: "Location", type: "text", pdftype: "text", pdfgroup: "title" },
+            { name: "location", placeholder: "Location", type: "text", pdftype: "textBold", pdfgroup: "title" },
             { name: "gpa", placeholder: "GPA", type: "gpa", pdftype: "gpa", pdfgroup: "subtitle" },
             { name: "start_date", placeholder: "Start Date", type: "date", group: "date", pdftype: "startDate", pdfgroup: "title" },
             { name: "end_date", placeholder: "End Date", type: "date", group: "date", pdftype: "endDate", pdfgroup: "title" },
