@@ -3,18 +3,14 @@ import ReactPDF, { pdf } from '@react-pdf/renderer';
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css"
-import ResumePDF from "../../resume/ResumePDF";
-import { ResumeBuilderFormData } from "../../../resumebuilder/resumetest-helper";
-import ResumeLoadingComponent from '../../resume/ResumeLoadingComponent';
+import ResumePDF from "./ResumePDF";
+import ResumeLoadingComponent from './ResumeLoadingComponent';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { debounce, isEqual } from 'lodash';
-import { pdfstyles } from '../../resume/styles';
 import { Button } from '../../Button';
 import { useCopyResume, useGeneratePDF } from '../../../../lib/hooks/resume-test';
-import SaveStatusIndicator from '../../resume/SaveStatusIndicator';
+import SaveStatusIndicator from '../SaveStatusIndicator';
 import { ResumeClass } from '../../../../models/Resume';
-import { createResumeAction } from '../../../board/_action';
-import { useRouter } from 'next/navigation';
 
 interface ResumePDFProps {
     data: ResumeClass;
@@ -37,7 +33,7 @@ const CustomPDFViewer = ({ data, saveStatus, useEdit = false, userId }: ResumePD
     const [currentPdfUrl, setCurrentPdfUrl] = useState<string | null>(null);
     const [newPdfUrl, setNewPdfUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
-    const router = useRouter()
+    const [ firstLoad, setFirstLoad ] = useState(true);
 
     const downloadPDF = useGeneratePDF({ data });
 
@@ -51,6 +47,7 @@ const CustomPDFViewer = ({ data, saveStatus, useEdit = false, userId }: ResumePD
             //console.log('PDF generated, new URL:', newUrl);
             if (!currentPdfUrl) {
                 setCurrentPdfUrl(newUrl)
+                setFirstLoad(false)
             }
             setNewPdfUrl(newUrl)
         } catch (error) {
@@ -103,7 +100,7 @@ const CustomPDFViewer = ({ data, saveStatus, useEdit = false, userId }: ResumePD
     const { handleCopy, isLoading } = useCopyResume(data, userId)
 
     return (
-        <div className='flex h-full flex-col justify-center w-full max-w-[62vh]'>
+        <div className='flex h-full flex-col justify-center w-full lg:w-[62vh]'>
             <div className={`pb-3 flex w-full items-center flex-row ${numPages > 1 ? 'justify-between' : 'justify-center'}`}>
                 {numPages > 1 && <Button
                     size='sm'
@@ -148,19 +145,19 @@ const CustomPDFViewer = ({ data, saveStatus, useEdit = false, userId }: ResumePD
                     Next
                 </Button>}
             </div>
-            <div className='flex w-full h-full'>
-                <div className={`flex w-full justify-center overflow-x-auto ${loading ? 'block' : 'hidden'}`}>
+            <div className='flex h-full bg-white shadow-lg border border-gray-200 w-full'>
+                <div className={`flex w-full h-full justify-center overflow-x-auto ${loading ? 'block' : 'hidden'}`}>
                     {!currentPdfUrl && <ResumeLoadingComponent />}
-                    {currentPdfUrl && (
+                    {currentPdfUrl && !firstLoad && (
                         <Document className={'flex w-full h-full justify-center'} loading={<></>} file={currentPdfUrl}>
-                            <Page className="bg-white shadow-lg border border-gray-200" loading={<></>} pageNumber={pageNumber} />
+                            <Page loading={<></>} pageNumber={pageNumber} />
                         </Document>
                     )}
                 </div>
                 <div className={`flex w-full justify-center overflow-x-auto ${loading ? 'hidden' : 'block'}`}>
                     {newPdfUrl && (
                         <Document className={'flex w-full h-full justify-center'} onLoadSuccess={handleDocumentLoad} loading={<></>} file={newPdfUrl}>
-                            <Page className="bg-white shadow-lg border border-gray-200" onRenderSuccess={handleLoadSuccess} loading={<></>} pageNumber={pageNumber} />
+                            <Page onRenderSuccess={handleLoadSuccess} loading={<></>} pageNumber={pageNumber} />
                         </Document>
                     )}
                 </div>

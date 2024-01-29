@@ -1,7 +1,7 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { JobClass } from '../../../models/Job';
-import SingleInput from '../resumebuilder/ui/SingleInput';
+import { JobClass } from '../../../../models/Job';
+import SingleInput from './SingleInput';
 
 const ContactInformation = ({ job }: { job?: Partial<JobClass> }) => {
     const { register } = useFormContext(); // Using React Hook Form's context

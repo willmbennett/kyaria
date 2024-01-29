@@ -6,7 +6,7 @@ import { Container } from './Container'
 import { Button } from '../Button'
 import Checkout from './Checkout'
 import { useState } from 'react'
-import AuthButton from '../resumebuilder/AuthButton'
+import AuthButton from '../AuthButton'
 
 const tiers = [
   {

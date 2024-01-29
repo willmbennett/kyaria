@@ -1,4 +1,4 @@
-import ResumeTest from "../components/resumebuilder/ResumeTest";
+import ResumeBuilderHome from "../components/resumebuilder/ResumeBuilderHome";
 import Await from "../jobs/await";
 import { countTotalResumes, getResumes } from "../../lib/resume-db";
 import { ResumeClass } from "../../models/Resume";
@@ -45,7 +45,7 @@ export default async function ProfilePage() {
           }
           
           return (
-            <ResumeTest
+            <ResumeBuilderHome
               userId={userId}
               resumes={resumes}
               activeSubscription={activeSubscription}

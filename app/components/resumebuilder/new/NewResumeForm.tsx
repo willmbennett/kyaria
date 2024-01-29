@@ -14,7 +14,7 @@ const NewResumeForm = ({ userId }: { userId: string }) => {
     }
 
     return (
-        <section className="flex flex-col lg:flex-row overflow-hidden pt-5 w-full  pb-14">
+        <section className="flex flex-col lg:flex-row overflow-hidden pt-5 w-full  pb-14 lg: px-4">
             <Container>
                 <div className="mx-auto max-w-lg pb-14 md:mx-0 md:max-w-none md:pb-48 lg:pb-52 xl:max-w-xl xl:pb-14">
                     <div className='flex pb-3'>
@@ -39,7 +39,7 @@ const NewResumeForm = ({ userId }: { userId: string }) => {
                 </div>
             </Container>
 
-            <div className="w-full lg:w-1/2 h-full px-4">
+            <div className="w-full lg:w-1/2 h-full min-h-screen px-4 bg-slate-100 border border-slate-200 p-4">
                 <div className='flex flex-col space-y-2'>
                     {!useTemplate &&
                         <ResumeUploadForm

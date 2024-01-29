@@ -1,4 +1,4 @@
-import { pdfstyles } from "../styles";
+import { pdfstyles } from "./styles";
 import { Link, Text, View } from '@react-pdf/renderer';
 import { LineBreak } from "./LineBreak";
 import { FieldConfig, formatDate, GeneralSectionConfig, sectionType, sortDataBasedOnConfig } from "../../../resumebuilder/resumetest-helper";

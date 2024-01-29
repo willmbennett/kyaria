@@ -15,7 +15,7 @@ import MockInterview from './pages/MockInterview';
 import ProgressBar from './ui/ProgressBar';
 import Networking from './pages/Networking';
 import FeedbackAside from '../landingpage/FeedbackAside';
-import CustomPDFViewer from '../resumebuilder/ui/CustomPDFViewer';
+import CustomPDFViewer from '../resumebuilder/pdfviewer/CustomPDFViewer';
 
 type ApplicationState = 'Research' | 'Phone Screen' | 'Interviewing' | 'Post-Offer';
 

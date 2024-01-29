@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { Container } from './Container'
 import { Button } from '../Button'
 import processImage from '/public/images/stock/interview.jpg'
-import AuthButton from '../resumebuilder/AuthButton'
+import AuthButton from '../AuthButton'
 
 export function Process() {
   return (

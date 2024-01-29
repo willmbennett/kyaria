@@ -4,11 +4,11 @@ import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, us
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import ContactInformation from './ContactInformation'; // adjust import path
 import SocialLinksSection from './SocialLinksSection'; // adjust import path
-import SortableResumeSection from '../resumebuilder/ui/SortableResumeSection';
-import Section from '../resumebuilder/ui/Section';
-import { ResumeBuilderFormData, sectionOptions } from '../../resumebuilder/resumetest-helper';
-import { JobClass } from '../../../models/Job';
-import { useDragAndDrop } from '../../../lib/hooks/resume-test';
+import SortableResumeSection from './SortableResumeSection';
+import Section from './Section';
+import { ResumeBuilderFormData, sectionOptions } from '../../../resumebuilder/resumetest-helper';
+import { JobClass } from '../../../../models/Job';
+import { useDragAndDrop } from '../../../../lib/hooks/resume-test';
 
 type ResumeFormProps = {
     methods: UseFormReturn<ResumeBuilderFormData, any, undefined>

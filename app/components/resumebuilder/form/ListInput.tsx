@@ -18,9 +18,9 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import CreatableSelect from "react-select/creatable";
-import { ResumeBuilderFormData } from "../../resumebuilder/resumetest-helper";
-import { Button } from "../Button";
-import { JobClass } from "../../../models/Job";
+import { ResumeBuilderFormData } from "../../../resumebuilder/resumetest-helper";
+import { Button } from "../../Button";
+import { JobClass } from "../../../../models/Job";
 
 type SkillField = { id: string, label: string; value: string }
 

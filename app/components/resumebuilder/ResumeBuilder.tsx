@@ -7,9 +7,9 @@ import {
     ResumeBuilderProps,
     transformDataToFormValues
 } from '../../resumebuilder/resumetest-helper';
-import ResumeForm from './ResumeForm';
+import ResumeForm from './form/ResumeForm';
 import { useSaveResume } from '../../../lib/hooks/resume-test';
-import CustomPDFViewer from '../resumebuilder/ui/CustomPDFViewer';
+import CustomPDFViewer from './pdfviewer/CustomPDFViewer';
 
 
 const ResumeBuilder = (
@@ -24,7 +24,6 @@ const ResumeBuilder = (
     const methods = useForm<ResumeBuilderFormData>({ defaultValues });
     const { watch } = methods
     const { saveStatus } = useSaveResume({ userId, resumeId, data, watch });
-
     return (
         <div className='w-full min-h-screen lg:h-screen bg-white p-2 lg:pl-4 lg:pr-8'> {/* Ensured sticky bar is at the top with a higher z-index */}
             <div className='w-full h-full flex md:p-4 flex-col space-y-4 md:flex-row space-y-2 md:space-x-2 border bg-slate-100 border-slate-400 shadow rounded-md'>

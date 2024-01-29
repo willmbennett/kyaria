@@ -4,7 +4,7 @@ import { Container } from '../../landingpage/Container'
 import { Button } from '../../Button'
 import featureImage1 from '/public/images/stock/interview-meeting.jpg'
 import featureImage2 from '/public/images/stock/student-laptop.jpg'
-import AuthButton from '../AuthButton'
+import AuthButton from '../../AuthButton'
 
 export function FeatureBlocks({ totalResumes }: {totalResumes: number}) {
   return (

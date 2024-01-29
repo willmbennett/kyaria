@@ -188,6 +188,16 @@ class Degree {
     public Type?: string;
 }
 
+class GraduatedSchema {
+    @prop({ _id: false })
+    public Value?: boolean;
+}
+
+@ModelOptions({
+    options: {
+        allowMixed: Severity.ALLOW
+    }
+})
 class EducationDetail {
     @prop()
     public Id?: string;
@@ -207,10 +217,10 @@ class EducationDetail {
     @prop({ _id: false })
     public Degree?: Degree;
 
-    @prop({ type: () => [String] })
+    @prop()
     public Majors?: string[];
 
-    @prop({ type: () => [String] })
+    @prop()
     public Minors?: string[];
 
     @prop({ _id: false })
@@ -225,10 +235,8 @@ class EducationDetail {
     @prop({ _id: false })
     public EndDate?: DateDetails;
 
-    @prop({ _id: false })
-    public Graduated?: {
-        Value?: boolean;
-    };
+    @prop({ _id: false, type: () => GraduatedSchema })
+    public Graduated?: GraduatedSchema;
 }
 
 class HighestDegree {
@@ -266,13 +274,13 @@ class EmployerLocation {
     @prop()
     public PostalCode?: string;
 
-    @prop({ type: () => [String] })
+    @prop()
     public Regions?: string[];
 
     @prop()
     public Municipality?: string;
 
-    @prop({ type: () => [String] })
+    @prop()
     public StreetAddressLines?: string[];
 
     @prop({ _id: false })
@@ -298,6 +306,16 @@ class Bullet {
     public Text!: string;
 }
 
+class NumberEmployeesSupervised {
+    @prop({ _id: false })
+    public Value: number
+}
+
+@ModelOptions({
+    options: {
+        allowMixed: Severity.ALLOW
+    }
+})
 class Position {
     @prop({ required: true })
     public Id!: string;
@@ -305,10 +323,10 @@ class Position {
     @prop({ _id: false, required: true })
     public Employer?: Employer;
 
-    @prop({ type: () => [String] })
+    @prop()
     public RelatedToByDates?: string[];
 
-    @prop({ type: () => [String] })
+    @prop()
     public RelatedToByCompanyName?: string[];
 
     @prop()
@@ -317,7 +335,7 @@ class Position {
     @prop()
     public IsCurrent?: boolean;
 
-    @prop({ _id: false })
+    @prop()
     public JobTitle?: EmpName;
 
     @prop({ _id: false })
@@ -327,9 +345,7 @@ class Position {
     public EndDate?: DateDetails;
 
     @prop({ _id: false })
-    public NumberEmployeesSupervised?: {
-        Value: number;
-    };
+    public NumberEmployeesSupervised?: NumberEmployeesSupervised;
 
     @prop()
     public JobType?: string;
@@ -349,7 +365,7 @@ class Position {
     @prop()
     public Description?: string;
 
-    @prop({ type: () => [Bullet], _id: false, default: [] })
+    @prop({ type: () => [Bullet], _id: false })
     public Bullets?: Bullet[];
 }
 
@@ -385,6 +401,11 @@ class ExperienceSummary {
     public AttentionNeeded?: string;
 }
 
+@ModelOptions({
+    options: {
+        allowMixed: Severity.ALLOW
+    }
+})
 class EmploymentHistory {
     @prop()
     public ExperienceSummary?: ExperienceSummary;
@@ -402,6 +423,16 @@ class FoundIn {
     public Id?: string;
 }
 
+class MonthsExperience {
+    @prop({ _id: false })
+    public Value?: number
+}
+
+class LastUsed {
+    @prop({ _id: false })
+    public Value?: string
+}
+
 class Skill {
     @prop({ required: true })
     public Name!: string;
@@ -410,18 +441,19 @@ class Skill {
     public FoundIn!: FoundIn[];
 
     @prop({ _id: false })
-    public MonthsExperience?: {
-        Value: number;
-    };
+    public MonthsExperience?: MonthsExperience
 
     @prop({ _id: false })
-    public LastUsed?: {
-        Value: string;
-    };
+    public LastUsed?: LastUsed;
 }
 
+@ModelOptions({
+    options: {
+        allowMixed: Severity.ALLOW
+    }
+})
 class SkillsData {
-    @prop({ items: Skill, default: [] })
+    @prop({ items: Skill })
     public Raw!: Skill[];
 }
 
