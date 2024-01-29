@@ -1,15 +1,15 @@
 'use client'
 import { Button } from "../../Button";
-import { FileUploader } from "../ui/FileUploader";
-import { FieldErrors, SubmitHandler, useForm, UseFormHandleSubmit } from 'react-hook-form';
-import { useEffect, useState } from "react";
-import { useDocumentLoadSuccess, useFileHandler } from "../../../../lib/hooks/resume-test";
-import { LoadingComponent } from "../ui/LoadingComponent";
+import { FileUploader } from "./FileUploader";
+import { SubmitHandler, useForm, UseFormHandleSubmit } from 'react-hook-form';
+import { useState } from "react";
+import { useFileHandler } from "../../../../lib/hooks/resume-test";
+import { LoadingComponent } from "./LoadingComponent";
 import { createResumeScanAction } from "../../../resumebuilder/_action";
-import { testResumeData, transformParsedResume } from "../../../resumebuilder/resumetest-helper";
+import { transformParsedResume } from "../../../resumebuilder/resumetest-helper";
 import { createResumeAction } from "../../../board/_action";
 import { useRouter } from "next/navigation";
-import { PDFViewer } from "../ui/PDFViewer";
+import { PDFViewer } from "../pdfviewer/PDFViewer";
 import { pdfjs } from 'react-pdf';
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css"
@@ -29,6 +29,7 @@ type PDFFile = File | null;
 export const ResumeUploadForm = ({ userId }: { userId: string }) => {
     const [loading, setLoading] = useState(false)
     const [file, setFile] = useState<PDFFile>(null);
+    const [fileInputKey, setFileInputKey] = useState(Date.now());
     const [numPages, setNumPages] = useState<number | null>(null);
     const [resumeUploadText, setResumeUploadText] = useState('');
     const { handleSubmit, formState: { errors } } = useForm<FormFields>();
@@ -109,20 +110,22 @@ export const ResumeUploadForm = ({ userId }: { userId: string }) => {
 
 
     const handleReset = () => {
-        setFile(null)
-        setResumeUploadText('')
-        setNumPages(null)
-    }
+        setFile(null);
+        setResumeUploadText('');
+        setNumPages(null);
+        setFileInputKey(Date.now()); // Reset the key to force re-render of the file input
+    };
+
 
     return (
-        <div className="w-full flex flex-col justify-center space-y-2 bg-slate-100 border border-slate-200 p-4">
+        <div className="w-full flex flex-col justify-center space-y-2">
             <h1 className="text-center sm:text-3xl text-2xl font-bold text-slate-900 mt-3">
                 Upload your resume
             </h1>
             <div className="flex justify-center w-full">
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-2 md:flex-row w-full justify-center items-center">
                     <p>
-                        <FileUploader onFileChange={onFileChange} />
+                        <FileUploader key={fileInputKey} onFileChange={onFileChange} />
                         {errors.input && <p>{errors.input.message}</p>}
 
                     </p>
@@ -149,7 +152,7 @@ export const ResumeUploadForm = ({ userId }: { userId: string }) => {
             </div>
             {file &&
                 <div className="flex justify-center">
-                    <div className="bg-white flex w-full shadow-lg border border-gray-200">
+                    <div className="bg-white shadow-lg border border-gray-200">
                         {loading && <LoadingComponent />}
                         {!loading && (
                             <PDFViewer

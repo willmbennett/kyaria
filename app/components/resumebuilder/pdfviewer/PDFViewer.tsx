@@ -41,9 +41,9 @@ export const PDFViewer: React.FC<PDFViewerProps> = (
     }
 
     return (
-        <div className='w-full flex flex-col justify-center'>
+        <div className='w-full flex flex-col justify-center h-full'>
             {numPages &&
-                <div className={`p-3 flex w-full items-center flex-row ${numPages > 1 ? 'justify-between' : 'justify-center'}`}>
+                <div className={`p-3 flex w-full items-center flex-row justify-between ${numPages > 1 ? 'block' : 'hidden'}`}>
                     <Button
                         size='sm'
                         type="button"
@@ -63,8 +63,8 @@ export const PDFViewer: React.FC<PDFViewerProps> = (
                     </Button>
                 </div>
             }
-            <div className="flex w-full p-3 overflow-x-auto items-center justify-center"> {/* Ensuring the container doesn't spill off */}
-                <Document file={file} onLoadSuccess={onLoadSuccess} options={options} className="w-full max-w-[62vh]">
+            <div className="flex w-full h-full p-3 overflow-x-auto items-center justify-center shadow-lg border border-gray-200"> {/* Ensuring the container doesn't spill off */}
+                <Document file={file} onLoadSuccess={onLoadSuccess} options={options} className="w-full lg:w-[62vh]">
                     <Page
                         key={`page_${pageNumber}`}
                         pageNumber={pageNumber}

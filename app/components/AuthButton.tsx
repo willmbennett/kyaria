@@ -1,6 +1,6 @@
 
 'use client'
-import { Button } from '../Button'
+import { Button } from './Button'
 import { signIn } from "next-auth/react";
 
 // Add a TypeScript interface if you're using TypeScript

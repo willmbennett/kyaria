@@ -1,10 +1,10 @@
 'use client'
 import React, { useMemo, useState } from 'react';
-import ResumeListMenu from './ui/ResumeMenu';
+import ResumeListMenu from './ResumeMenu';
 import { transformDataToFormValues } from '../../resumebuilder/resumetest-helper';
 import FeedbackAside from '../landingpage/FeedbackAside';
 import { ResumeClass } from '../../../models/Resume';
-import CustomPDFViewer from './ui/CustomPDFViewer';
+import CustomPDFViewer from './pdfviewer/CustomPDFViewer';
 
 interface resumeTestProps {
     userId: string,
@@ -12,7 +12,7 @@ interface resumeTestProps {
     activeSubscription: boolean
 }
 
-export default function ResumeTest(
+export default function ResumeBuilderHome(
     {
         userId,
         resumes,

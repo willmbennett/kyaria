@@ -1,5 +1,5 @@
 import { Text, View } from '@react-pdf/renderer';
-import { pdfstyles } from '../styles';
+import { pdfstyles } from './styles';
 import { LineBreak } from './LineBreak';
 
 export const ListSection = ({ name, list }: { name: string, list: string[] }) => (

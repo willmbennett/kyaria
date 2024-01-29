@@ -1,10 +1,10 @@
 import React from 'react';
 import { Page, Text, View, Document, Link } from '@react-pdf/renderer';
-import { GeneralSectionConfig, ResumeBuilderFormData, sectionConfigs } from '../../resumebuilder/resumetest-helper';
-import { Award, Certification, Education, ProfessionalExperience, Project, Publication, ResumeClass, Volunteering } from '../../../models/Resume';
+import { GeneralSectionConfig, ResumeBuilderFormData, sectionConfigs } from '../../../resumebuilder/resumetest-helper';
+import { Award, Certification, Education, ProfessionalExperience, Project, Publication, ResumeClass, Volunteering } from '../../../../models/Resume';
 import { pdfstyles } from './styles';
-import { ListSection } from './sections/ListSection';
-import PDFResumeSection from './sections/PDFResumeSection';
+import { ListSection } from './ListSection';
+import PDFResumeSection from './PDFResumeSection';
 
 
 type ContactElement = {

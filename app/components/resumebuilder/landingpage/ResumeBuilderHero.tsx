@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Avatar from '/public/images/avatars/avatar-will.jpg'
 import homeHeroImg from '/public/images/products/resume-example.png'
 import { Container } from '../../landingpage/Container'
-import AuthButton from '../AuthButton'
+import AuthButton from '../../AuthButton'
 
 export function ResumeBuilderHero() {
   return (

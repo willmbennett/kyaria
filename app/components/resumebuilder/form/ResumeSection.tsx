@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { UseFormRegister, Control, useFieldArray, UseFormWatch, UseFieldArrayRemove } from 'react-hook-form';
-import BulletPointsField from '../resumebuilder/ui/BulletPointsField';
-import GPAField from '../resumebuilder/ui/GPAField';
+import BulletPointsField from '../pdfviewer/BulletPointsField';
+import GPAField from './GPAField';
 import InputField from './InputField';
 import TextareaAutosize from 'react-textarea-autosize';
-import { ResumeBuilderFormData } from '../../resumebuilder/resumetest-helper';
-import { Button } from '../Button';
+import { ResumeBuilderFormData } from '../../../resumebuilder/resumetest-helper';
+import { Button } from '../../Button';
 
 type SectionItem = {
     id: string;

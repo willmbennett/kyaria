@@ -1,5 +1,5 @@
 import { Line, Svg, View } from '@react-pdf/renderer';
-import { pdfstyles } from '../styles';
+import { pdfstyles } from './styles';
 
 export const LineBreak = () => (
   <View style={pdfstyles.lineBreak}>

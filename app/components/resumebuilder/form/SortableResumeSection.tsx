@@ -4,8 +4,8 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Control, UseFormRegister, UseFormSetValue, UseFormWatch } from 'react-hook-form';
 import { ResumeBuilderFormData, sectionConfigs } from '../../../resumebuilder/resumetest-helper';
-import ResumeSection from '../../resume/ResumeSection';
-import ListInput from '../../resume/ListInput';
+import ResumeSection from './ResumeSection';
+import ListInput from './ListInput';
 import { JobClass } from '../../../../models/Job';
 import { Button } from '../../Button';
 

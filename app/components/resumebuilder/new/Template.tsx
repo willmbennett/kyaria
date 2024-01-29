@@ -5,7 +5,7 @@ import { useCopyResume } from '../../../../lib/hooks/resume-test';
 import { ResumeClass } from "../../../../models/Resume";
 import { resumeTemplates } from "../../../resumebuilder/resume-templates";
 import { Button } from "../../Button";
-import CustomPDFViewer from "../ui/CustomPDFViewer";
+import CustomPDFViewer from "../pdfviewer/CustomPDFViewer";
 
 
 const dropDownMenu = (options: string[], currentIndex: number, setCurrentIndex: (index: number) => void) => (
@@ -56,7 +56,7 @@ export default function ResumeTemplates({ userId }: { userId: string }) {
     const options = resumeTemplates.map(t => t.templateName)
 
     return (
-        <div className="flex flex-col 2-full p-4 bg-slate-200 border border-slate-300 shadow justify-center items-center">
+        <div className="flex flex-col 2-full justify-center items-center">
             <div className="max-w-[62vh] py-2 flex flex-row w-full items-center text-center justify-between">
                 <h1 className="text-center sm:text-3xl text-2xl font-bold text-slate-900">
                     Resume Templates

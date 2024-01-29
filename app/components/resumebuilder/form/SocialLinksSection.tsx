@@ -1,7 +1,7 @@
 import React from 'react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
-import { ResumeBuilderFormData } from '../../resumebuilder/resumetest-helper';
-import { Button } from '../Button';
+import { ResumeBuilderFormData } from '../../../resumebuilder/resumetest-helper';
+import { Button } from '../../Button';
 import { Controller } from 'react-hook-form';
 type SocialField = { id: string, name: string, url: string }
 const socialPlatforms = ['LinkedIn', 'GitHub', 'Twitter', 'Facebook', 'Instagram', 'Website', 'Blog']; // Add more platforms as needed

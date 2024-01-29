@@ -1,5 +1,5 @@
 import Await from "../../jobs/await";
-import ResumeBuilder from "../../components/resume/ResumeBuilder";
+import ResumeBuilder from "../../components/resumebuilder/ResumeBuilder";
 import { redirect } from "next/navigation";
 import { getResume } from "../../../lib/resume-db";
 import { ResumeClass } from "../../../models/Resume";

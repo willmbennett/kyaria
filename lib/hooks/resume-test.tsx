@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 import { DragEndEvent } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
 import ReactPDF from '@react-pdf/renderer';
-import ResumePDF from '../../app/components/resume/ResumePDF';
+import ResumePDF from '../../app/components/resumebuilder/pdfviewer/ResumePDF';
 
 type PDFFile = File | null;
 
