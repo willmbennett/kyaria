@@ -10,6 +10,7 @@ import { FeatureBlocks } from "../components/resumebuilder/landingpage/FeatureBl
 import { Faqs } from "../components/resumebuilder/landingpage/Faqs";
 import { checkSubscription } from "../../lib/hooks/check-subscription";
 import { redirect, RedirectType } from "next/navigation";
+import { ProductDemo } from "../components/resumebuilder/landingpage/ProductDemo";
 
 export default async function ProfilePage() {
   const { activeSubscription, userId } = await checkSubscription()
@@ -20,6 +21,8 @@ export default async function ProfilePage() {
     return (
       <>
         <ResumeBuilderHero />
+        {/* @ts-expect-error Server Component */}
+        <ProductDemo />
         <FeatureBlocks totalResumes={totalResumes || 200} />
         <Process />
         {/*<TestimonialsSlide />*/}
@@ -43,7 +46,7 @@ export default async function ProfilePage() {
           if (!resumes) {
             redirect('resumebuilder/new', 'replace' as RedirectType)
           }
-          
+
           return (
             <ResumeBuilderHome
               userId={userId}

@@ -9,6 +9,7 @@ export interface ResumeBuilderProps {
     userId: string;
     activeSubscription?: boolean;
     job?: Partial<JobClass>;
+    useSave?: boolean
 }
 
 interface SocialLinksMap {

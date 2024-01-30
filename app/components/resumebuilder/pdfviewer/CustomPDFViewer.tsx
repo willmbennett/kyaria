@@ -16,7 +16,9 @@ interface ResumePDFProps {
     data: ResumeClass;
     saveStatus?: "error" | "saving" | "up to date";
     useEdit?: boolean;
-    userId: string
+    userId: string;
+    useSave: boolean;
+    activeSubscription: boolean;
 }
 
 type pdfUrlTye = {
@@ -27,13 +29,22 @@ type pdfUrlTye = {
 pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.js', import.meta.url).toString();
 
 
-const CustomPDFViewer = ({ data, saveStatus, useEdit = false, userId }: ResumePDFProps) => {
+const CustomPDFViewer = (
+    {
+        data,
+        saveStatus,
+        useEdit = false,
+        userId,
+        useSave,
+        activeSubscription
+    }: ResumePDFProps
+) => {
     const [numPages, setNumPages] = useState(1);
     const [pageNumber, setPageNumber] = useState(1);
     const [currentPdfUrl, setCurrentPdfUrl] = useState<string | null>(null);
     const [newPdfUrl, setNewPdfUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
-    const [ firstLoad, setFirstLoad ] = useState(true);
+    const [firstLoad, setFirstLoad] = useState(true);
 
     const downloadPDF = useGeneratePDF({ data });
 
@@ -131,7 +142,7 @@ const CustomPDFViewer = ({ data, saveStatus, useEdit = false, userId }: ResumePD
                         </div>
                     )
                         :
-                        <Button type='button' size='sm' onClick={handleCopy}>Copy</Button>
+                        <>{useSave && activeSubscription && <Button type='button' size='sm' onClick={handleCopy}>Copy</Button>}</>
                     }
                     {saveStatus && <SaveStatusIndicator saveStatus={saveStatus} />}
                 </div>

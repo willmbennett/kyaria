@@ -1,8 +1,9 @@
 'use client'
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '../Button';
 import {
+    convertFormDataToResumeModel,
     ResumeBuilderFormData,
     ResumeBuilderProps,
     transformDataToFormValues
@@ -12,20 +13,21 @@ import { useSaveResume } from '../../../lib/hooks/resume-test';
 import CustomPDFViewer from './pdfviewer/CustomPDFViewer';
 import Feedback from './Feedback';
 
-
 const ResumeBuilder = (
     {
         data,
         resumeId,
         userId,
         activeSubscription = false,
-        job
+        job,
+        useSave = true
     }: ResumeBuilderProps) => {
     const [toggleState, setToggleState] = useState(true)
     const defaultValues = useMemo(() => transformDataToFormValues(data), [data]);
     const methods = useForm<ResumeBuilderFormData>({ defaultValues });
     const { watch } = methods
-    const { saveStatus } = useSaveResume({ userId, resumeId, data, watch });
+    const { saveStatus } = useSaveResume({ userId, resumeId, data, watch, useSave })
+
     return (
         <div className='w-full min-h-screen lg:h-screen bg-white p-2 lg:pl-4 lg:pr-8'> {/* Ensured sticky bar is at the top with a higher z-index */}
             <div className='w-full h-full flex md:p-4 flex-col space-y-4 md:flex-row space-y-2 md:space-x-2 border bg-slate-100 border-slate-400 shadow rounded-md'>
@@ -56,7 +58,12 @@ const ResumeBuilder = (
                 </div>
                 <div className='flex w-full items-center justify-center'>
                     {defaultValues &&
-                        <CustomPDFViewer data={data} saveStatus={saveStatus} userId={userId} />
+                        <CustomPDFViewer 
+                        data={useSave? data : convertFormDataToResumeModel(watch(),data)} 
+                        saveStatus={saveStatus} userId={userId} 
+                        useSave={useSave} 
+                        activeSubscription={activeSubscription}
+                        />
                     }
                 </div>
             </div>
