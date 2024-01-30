@@ -39,7 +39,13 @@ export default function ResumeBuilderHome(
                 <div className='items-center flex flex-col text-center md:min-w-3/5'>
                     {activeResume &&
                         <div className='w-full flex flex-col items-center justify-center'>
-                            <CustomPDFViewer data={activeResume} useEdit={true} userId={userId} />
+                            <CustomPDFViewer 
+                            data={activeResume} 
+                            useEdit={true} 
+                            userId={userId} 
+                            useSave={true} 
+                            activeSubscription={activeSubscription}
+                            />
                         </div>
                     }
                 </div>
