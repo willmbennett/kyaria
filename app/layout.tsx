@@ -82,10 +82,12 @@ export default async function RootLayout({
         }} />
         {/* Event snippet for Page view conversion */}
         <Script
+          id="gtag-conversion"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
-              gtag('event', 'conversion', {'send_to': 'AW-11370402046/IauhCJ6r040ZEP6h6q0q'});
-            `,
+                    gtag('event', 'conversion', {'send_to': 'AW-11370402046/IauhCJ6r040ZEP6h6q0q'});
+          `,
           }}
         />
         <SessionProvider session={session}>
