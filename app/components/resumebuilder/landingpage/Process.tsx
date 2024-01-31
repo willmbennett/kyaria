@@ -10,13 +10,13 @@ export function Process() {
       <Container>
         <div className="relative z-10 mx-auto w-full max-w-lg sm:max-w-xl lg:mx-0">
           <h2 className="text-4xl font-semibold leading-tight text-white sm:text-5xl sm:leading-tight">
-            How the Resume Builder Works
+            How Our Resume Builder Works
           </h2>
           <div className="mt-12 space-y-8 divide-y divide-gray-secondary-400/90 sm:mt-16">
             <div className="flex items-center space-x-10">
               <span className="text-4xl font-semibold text-white">01</span>
               <span className="text-xl leading-snug text-slate-50">
-                Upload an existing resume or select a template to begin
+                Upload an existing resume or select a template
               </span>
             </div>
             <div className="flex items-center space-x-10 pt-8">
@@ -37,7 +37,7 @@ export function Process() {
             color="light"
             className="mt-16 sm:mt-20"
             altText="Get started"
-            />
+          />
         </div>
       </Container>
       <div className="relative mt-16 h-80 w-full sm:h-96 lg:absolute lg:inset-y-0 lg:right-0 lg:mt-0 lg:h-full lg:w-5/12">

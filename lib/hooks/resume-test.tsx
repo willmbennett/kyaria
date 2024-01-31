@@ -121,18 +121,21 @@ type UseSaveResumeProps = {
     resumeId: string;
     data: Partial<ResumeClass>;
     watch: UseFormWatch<ResumeBuilderFormData>;
+    useSave: boolean;
 };
 
 interface UpdateDataType {
     [key: string]: any;
 }
 
-export const useSaveResume = ({ userId, resumeId, data, watch }: UseSaveResumeProps) => {
+export const useSaveResume = ({ userId, resumeId, data, watch, useSave }: UseSaveResumeProps) => {
     const [saveStatus, setSaveStatus] = useState<'saving' | 'up to date' | 'error'>('up to date');
     const router = useRouter();
     const newResume = watch();
 
     const saveToDatabase = useCallback(async () => {
+        if (!useSave) return; // Exit early if useSave is false
+
         try {
             setSaveStatus('saving');
             const resumeToSave = convertFormDataToResumeModel(newResume, data);
@@ -158,17 +161,19 @@ export const useSaveResume = ({ userId, resumeId, data, watch }: UseSaveResumePr
     const debouncedSaveToDatabase = useCallback(debounce(saveToDatabase, 500), [saveToDatabase]);
 
     useEffect(() => {
-        const resumeToSave = convertFormDataToResumeModel(newResume, data) as ResumeClass
-        //const differences = findDifferences(resumeToSave, data);
-        //console.log("newResume:", newResume);
-        //console.log("Data after conversion:", resumeToSave);
-        //console.log("Original Data:", data);
-        //console.log("Differences found:", differences);
-        // Fallbacks for name and email
-        resumeToSave.name = newResume.name || '';
-        resumeToSave.email = newResume.email || '';
-        if (!isEqual(data, resumeToSave)) {
-            debouncedSaveToDatabase();
+        if (useSave) {
+            const resumeToSave = convertFormDataToResumeModel(newResume, data) as ResumeClass
+            //const differences = findDifferences(resumeToSave, data);
+            //console.log("newResume:", newResume);
+            //console.log("Data after conversion:", resumeToSave);
+            //console.log("Original Data:", data);
+            //console.log("Differences found:", differences);
+            // Fallbacks for name and email
+            resumeToSave.name = newResume.name || '';
+            resumeToSave.email = newResume.email || '';
+            if (!isEqual(data, resumeToSave)) {
+                debouncedSaveToDatabase();
+            }
         }
         return () => {
             debouncedSaveToDatabase.cancel();

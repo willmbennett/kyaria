@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { UseFormRegister, Control, useFieldArray, UseFormWatch, UseFieldArrayRemove } from 'react-hook-form';
 import BulletPointsField from '../pdfviewer/BulletPointsField';
 import GPAField from './GPAField';
@@ -41,10 +41,11 @@ interface ResumeItemProps {
     sectionName: string;
     control: Control<any>;
     remove: UseFieldArrayRemove
+    isVisible: boolean
+    toggleVisibility: () => void
 }
 
-const ResumeItem = ({ item, index, watch, register, sectionName, fieldsConfig, control, remove }: ResumeItemProps) => {
-    const [showComponent, setShowComponent] = useState(false);
+const ResumeItem = ({ item, index, watch, register, sectionName, fieldsConfig, control, remove, isVisible, toggleVisibility }: ResumeItemProps) => {
     const groupedFields = fieldsConfig.reduce<FieldGroups>((acc, fieldConfig) => {
         const group = fieldConfig.group || fieldConfig.name; // Fallback to name if no group specified
         acc[group] = acc[group] ? [...acc[group], fieldConfig] : [fieldConfig];
@@ -97,35 +98,46 @@ const ResumeItem = ({ item, index, watch, register, sectionName, fieldsConfig, c
 
     const renderFieldPreview = (fieldConfig: FieldConfig, item: SectionItem, index: number) => {
         const fieldName = `${sectionName}[${index}].${fieldConfig.name}`;
-        const value = watch(fieldName as keyof ResumeBuilderFormData)
-        return <span>{value as string}</span>
+        const value = watch(fieldName as keyof ResumeBuilderFormData);
+
+        // Check for empty state and return a placeholder or message
+        if (!value || (Array.isArray(value) && value.length === 0)) {
+            return <span className="text-gray-400">{fieldConfig.placeholder}</span>;
+        }
+
+        return <span>{value as string}</span>;
     };
+
 
 
     return (
         <div key={index} className="mb-6 py-4">
             <div className='w-full flex flex-col lg:flex-row items-center justify-between'>
                 <h3 className='text-lg font-semibold'>
-                    {previewItems.map((fieldConfig, i) =>
-                        <span key={i}>
-                            {renderFieldPreview(fieldConfig, item, index)}
-                            {i == 0 && <span> - </span>}
-                        </span>
-                    )}
+                    {previewItems.map((fieldConfig, i) => {
+                        const content = renderFieldPreview(fieldConfig, item, index);
+                        return (
+                            <React.Fragment key={i}>
+                                {content}
+                                {i < previewItems.length - 1 && <span> - </span>}
+                            </React.Fragment>
+                        );
+                    })}
                 </h3>
+
                 <div className='flex flex-row space-x-2'>
                     <Button
                         type='button'
                         variant='ghost'
                         size='sm'
-                        onClick={() => setShowComponent(!showComponent)}
+                        onClick={toggleVisibility}
                     >
-                        {showComponent ? 'Hide' : 'Edit'}
+                        {isVisible ? 'Hide' : 'Edit'}
                     </Button>
                     <Button type="button" onClick={() => remove(index)} size='md' variant='secondary'>Remove</Button>
                 </div>
             </div>
-            {showComponent && Object.entries(groupedFields).map(([group, groupFields]) => (
+            {isVisible && Object.entries(groupedFields).map(([group, groupFields]) => (
                 <div key={group} className="flex flex-col lg:flex-row lg:space-x-4 py-2">
                     {groupFields.map(fieldConfig => renderField(fieldConfig, item, index))}
                 </div>
@@ -136,6 +148,8 @@ const ResumeItem = ({ item, index, watch, register, sectionName, fieldsConfig, c
 
 const ResumeSection: React.FC<SectionProps> = ({ title, register, control, sectionName, fieldsConfig, watch }) => {
     const { fields, append, remove } = useFieldArray({ control, name: sectionName });
+    const [visibility, setVisibility] = useState<{ [key: string]: boolean }>({});
+    const prevLengthRef = useRef(fields.length);
 
     const addBlankSection = () => {
         const blankSection = fieldsConfig.reduce<Partial<SectionItem>>((acc, field) => {
@@ -167,6 +181,19 @@ const ResumeSection: React.FC<SectionProps> = ({ title, register, control, secti
         append(blankSection);
     };
 
+    useEffect(() => {
+        if (fields.length > prevLengthRef.current) {
+            const lastItem = fields[fields.length - 1];
+            setVisibility({ ...visibility, [lastItem.id]: true });
+        }
+        prevLengthRef.current = fields.length;
+    }, [fields.length]);
+
+
+    const toggleVisibility = (id: string) => {
+        setVisibility({ ...visibility, [id]: !visibility[id] });
+    };
+
 
     return (
         <div className='flex flex-col w-full'>
@@ -180,6 +207,8 @@ const ResumeSection: React.FC<SectionProps> = ({ title, register, control, secti
                 fieldsConfig={fieldsConfig}
                 control={control}
                 remove={remove}
+                isVisible={visibility[field.id]}
+                toggleVisibility={() => toggleVisibility(field.id)}
             />
             )}
             <Button size='md' type="button" onClick={addBlankSection} >Add {title}</Button>

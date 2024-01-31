@@ -190,7 +190,7 @@ export function JobApplication({ jobApp, activeSubscription }: { jobApp: any, ac
 function renderCurrentSection(
   currentSection: string,
   jobData: JobClass,
-  jobStripped:  Partial<JobClass>,
+  jobStripped: Partial<JobClass>,
   jobKeyWords: string[],
   userResume: ResumeClass,
   userResumeStripped: Partial<ResumeClass>,
@@ -235,7 +235,13 @@ function renderCurrentSection(
     case 'resume':
       return (
         <div className='w-full flex flex-col items-center justify-center'>
-          <CustomPDFViewer data={userResume} useEdit={true} userId={userId} />
+          <CustomPDFViewer
+            data={userResume}
+            useEdit={true}
+            userId={userId}
+            useSave={true}
+            activeSubscription={activeSubscription}
+          />
         </div>
       );
     case 'story':

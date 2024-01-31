@@ -87,7 +87,7 @@ function SortableResumeSection({ id, name, control, register, setValue, watch, j
                     </div>
                 }
             </div>
-        </div>
+        </div >
     );
 }
 

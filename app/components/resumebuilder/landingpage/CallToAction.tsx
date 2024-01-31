@@ -11,10 +11,10 @@ export function CallToAction() {
       <Container className="relative items-center md:grid md:grid-cols-12 md:gap-12">
         <div className="mx-auto max-w-lg md:col-span-6 md:mx-0 lg:pr-12">
           <h2 className="text-center text-4xl font-semibold leading-tight text-slate-900 sm:text-5xl sm:leading-tight md:text-left">
-            Build your resume today
+            Empower Your Career with a Professional Resume
           </h2>
           <p className="mt-6 text-center text-[17px] leading-relaxed text-slate-700 sm:text-lg sm:leading-relaxed md:text-left ">
-            Stop worrying about about formatting, writing summaries, skills sections, or perfect bullet points, our resume builder will do it for you.
+            Say goodbye to the hassle of formatting and word-smithing. Our intelligent resume builder streamlines the process, crafting personalized, impactful resumes with ease. From compelling summaries to skillfully tailored bullet points, we've got you covered. Start your journey to career success now!
           </p>
           <div className="mt-10 flex w-full justify-center md:justify-start">
             <AuthButton />

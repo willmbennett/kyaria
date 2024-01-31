@@ -64,7 +64,11 @@ export default function ResumeTemplates({ userId }: { userId: string }) {
                 {dropDownMenu(options, currentIndex, setCurrentIndex)}
             </div>
             <div className="w-full flex justify-center items-center w-[62vh]">
-                <CustomPDFViewer data={selectedTemplate.template} userId={userId} />
+                <CustomPDFViewer
+                    data={selectedTemplate.template}
+                    userId={userId}
+                    useSave={true}
+                    activeSubscription={true} />
             </div>
         </div>
     );
