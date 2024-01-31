@@ -10,6 +10,7 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { TooltipProvider } from './components/ui/tooltip';
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import Head from 'next/head';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
@@ -42,7 +43,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className='bg-white'>
-      <body className={clsx('min-h-screen font-sans', inter.variable)}>
+      <Head>
         {/*<Script
           id="ze-snippet"
           src="https://static.zdassets.com/ekr/snippet.js?key=135d1136-b2c1-4d54-8610-58a0b79632da"
@@ -80,6 +81,9 @@ export default async function RootLayout({
             !function(w,d){if(!w.rdt){var p=w.rdt=function(){p.sendEvent?p.sendEvent.apply(p,arguments):p.callQueue.push(arguments)};p.callQueue=[];var t=d.createElement("script");t.src="https://www.redditstatic.com/ads/pixel.js",t.async=!0;var s=d.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}}(window,document);rdt('init','a2_dx53gyf7fp62', {"optOut":false,"useDecimalCurrencyValues":true,"email":"${session?.user?.email || ''}","externalId":"${session?.user?.id || ''}"});rdt('track', "${session?.user?.id ? 'PageVisit' : 'ViewContent'}" );
             `
         }} />
+
+      </Head>
+      <body className={clsx('min-h-screen font-sans', inter.variable)}>
         <SessionProvider session={session}>
           <TooltipProvider >
             <Header />
