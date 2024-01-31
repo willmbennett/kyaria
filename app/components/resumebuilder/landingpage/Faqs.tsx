@@ -9,26 +9,23 @@ import faqImage from '/public/images/stock/business-woman.jpg'
 
 const faqs = [
   {
-    question: 'Do I need a resume to get started?',
-    answer:
-      'Nope, you can start with a template.',
+    question: 'Is a resume required to begin using your services?',
+    answer: 'Not at all! You can easily get started using our intuitive templates. These templates are designed to guide you through creating a professional resume, even if you\'re starting from scratch.'
   },
   {
-    question: 'What is your pricing like?',
-    answer:
-      "Kyaria.ai's Pro plan costs $10 per month, which gives you access to the resume builder and all features still in beta.",
+    question: 'Could you explain the pricing structure for Kyaria.ai?',
+    answer: 'Sure! Kyaria.ai offers a Pro plan at a monthly rate of $10. This plan provides full access to our advanced resume builder and exclusive features that are currently in beta, ensuring you have the most comprehensive tools at your disposal.'
   },
   {
-    question: 'How will my scan with application tracking systems (ATS)',
-    answer:
-      'Our resumes are built using an ATS-friendly template created by industry professionals and has been extensively tested using our integration with Sovren, a leading resume parser.',
+    question: 'How compatible are your resumes with Application Tracking Systems (ATS)?',
+    answer: 'Our resumes are meticulously crafted to be ATS-friendly. They are designed by industry experts using templates that have undergone rigorous testing with Textkernel, a prominent resume parsing system. This ensures high compatibility with ATS, maximizing your resume\'s visibility in job applications.'
   },
   {
-    question: 'What do you mean when you say you AI-powered?',
-    answer:
-      'We utilize ChatGPT 4.0-turbo with custom prompts to help you optimize resume summaries, skills, and bullet points.',
-  },
-]
+    question: 'What does "AI-powered" mean in the context of your services?',
+    answer: 'By "AI-powered," we refer to our use of the latest technology, ChatGPT 4.0-turbo, equipped with custom prompts. This advanced AI assists you in refining key resume elements like summaries, skills, and bullet points, ensuring a high level of quality and effectiveness in your job applications.'
+  }
+];
+
 
 export function Faqs() {
   return (

@@ -6,7 +6,7 @@ import featureImage1 from '/public/images/stock/interview-meeting.jpg'
 import featureImage2 from '/public/images/stock/student-laptop.jpg'
 import AuthButton from '../../AuthButton'
 
-export function FeatureBlocks({ totalResumes }: {totalResumes: number}) {
+export function FeatureBlocks({ totalResumes }: { totalResumes: number }) {
   return (
     <section className="relative overflow-hidden bg-white pb-20 pt-32 lg:pb-28 lg:pt-24">
       <Container>
@@ -53,7 +53,7 @@ export function FeatureBlocks({ totalResumes }: {totalResumes: number}) {
             />
             <div className="absolute left-0 top-0 w-64 -translate-y-24 bg-gray-secondary-100/95 p-6 backdrop-blur-sm sm:py-7 lg:bottom-0 lg:left-[unset] lg:right-0 lg:top-[unset] lg:translate-y-24 2xl:translate-x-16">
               <p className="text-4xl font-semibold text-slate-900 xl:text-5xl">
-                {totalResumes.toLocaleString()}
+                {totalResumes.toString()}
               </p>
               <p className="mt-5 text-slate-700">
                 Resumes Created
@@ -65,8 +65,7 @@ export function FeatureBlocks({ totalResumes }: {totalResumes: number}) {
               Quick and easy setup, intuitive to use
             </h2>
             <p className="mt-6 leading-relaxed text-slate-700 sm:mt-8 sm:text-lg sm:leading-8">
-              Start by uploading an existing resume or using a template. Our form-based resume builder offers a straighforward approach to resume building that lets you focus on what matters.
-            </p>
+              Start by uploading an existing resume or using one of our templates. Our form-based resume builder offers a straightforward approach to resume building that lets you focus on what matters.            </p>
             <AuthButton
               variant="ghost"
               size="md"

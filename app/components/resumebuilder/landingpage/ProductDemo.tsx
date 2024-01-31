@@ -34,8 +34,9 @@ export async function ProductDemo() {
               <span>Product Demo</span>
             </p>
             <p className="ml-3 text-slate-700 lg:ml-4 xl:ml-5 xl:text-lg my-5 max-w-2xl text-center">
-              Below you will find a live demo of our resume builder!
+              Explore the capabilities of our AI-powered resume builder through the interactive live demo below! Experience firsthand how effortlessly you can create a standout resume.
             </p>
+
           </div>
           {/* @ts-expect-error Server Component */}
           <Await promise={promise}>
