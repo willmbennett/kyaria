@@ -55,11 +55,31 @@ export default async function RootLayout({
               }}();
             `
         }} />
-          <Script dangerouslySetInnerHTML={{
+        {/* Load the Google Tag Manager script */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-11370402046"
+          strategy="afterInteractive" // This loads the script after the page has been interactively rendered
+          async
+        />
+
+        {/* Inline script for Google Tag Manager configuration */}
+        <Script
+          id="gtag-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
             __html: `
-            !function(w,d){if(!w.rdt){var p=w.rdt=function(){p.sendEvent?p.sendEvent.apply(p,arguments):p.callQueue.push(arguments)};p.callQueue=[];var t=d.createElement("script");t.src="https://www.redditstatic.com/ads/pixel.js",t.async=!0;var s=d.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}}(window,document);rdt('init','a2_dx53gyf7fp62', {"optOut":false,"useDecimalCurrencyValues":true,"email":"${session?.user?.email || ''}","externalId":"${session?.user?.id || ''}"});rdt('track', "${session?.user?.id? 'PageVisit': 'ViewContent'}" );
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+            gtag('config', 'AW-11370402046');
+          `,
+          }}
+        />
+        <Script dangerouslySetInnerHTML={{
+          __html: `
+            !function(w,d){if(!w.rdt){var p=w.rdt=function(){p.sendEvent?p.sendEvent.apply(p,arguments):p.callQueue.push(arguments)};p.callQueue=[];var t=d.createElement("script");t.src="https://www.redditstatic.com/ads/pixel.js",t.async=!0;var s=d.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}}(window,document);rdt('init','a2_dx53gyf7fp62', {"optOut":false,"useDecimalCurrencyValues":true,"email":"${session?.user?.email || ''}","externalId":"${session?.user?.id || ''}"});rdt('track', "${session?.user?.id ? 'PageVisit' : 'ViewContent'}" );
             `
-          }} />
+        }} />
         <SessionProvider session={session}>
           <TooltipProvider >
             <Header />
