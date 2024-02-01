@@ -1,7 +1,7 @@
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import Image from 'next/image'
 
-import Avatar from '/public/images/avatars/avatar-will.jpg'
+//import Avatar from '/public/images/avatars/avatar-will.jpg'
 import homeHeroImg from '/public/images/stock/job-interview2.jpg'
 import { Container } from '../../landingpage/Container'
 import AuthButton from '../../AuthButton'
@@ -76,7 +76,7 @@ export function ResumeBuilderHero() {
                     className="h-full w-full rounded-full object-cover object-center"
                     width={56}
                     height={56}
-                    src={Avatar}
+                    src='https://res.cloudinary.com/kyaria/image/upload/c_thumb,g_face,w_200/v1706748948/facebook_profile_cmjkp1.jpg'
                     alt="Home Hero Testimonial"
                     sizes="3.5rem"
                   />
