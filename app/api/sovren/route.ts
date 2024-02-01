@@ -18,11 +18,10 @@ export async function POST(request: Request) {
             return new NextResponse(JSON.stringify({ error: 'Please provide resume content in the request body under "content" key.' }), { status: 400 });
         }
 
-        const base64Doc = Buffer.from(content, 'utf-8').toString('base64');
         const modifiedDate = new Date().toISOString().substring(0, 10);
 
         const postData = JSON.stringify({
-            'DocumentAsBase64String': base64Doc,
+            'DocumentAsBase64String': content,
             'DocumentLastModified': modifiedDate
         });
 

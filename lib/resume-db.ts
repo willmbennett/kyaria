@@ -1,3 +1,4 @@
+import Error from "next/error";
 import { ResumeModel, ResumeClass } from "../models/Resume";
 import { ResumeScanDataModel } from "../models/ResumeScan";
 import connectDB from "./connect-db";
@@ -18,7 +19,7 @@ export async function countTotalResumes() {
     }
 }
 
-export async function getResumes(userId: string) {
+export async function getResumes(userId: string){
     try {
         await connectDB();
 

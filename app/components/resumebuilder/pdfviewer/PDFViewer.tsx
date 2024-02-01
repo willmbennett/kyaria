@@ -15,16 +15,12 @@ type PDFViewerProps = {
     file: File | null;
     onLoadSuccess: (pdf: PDFDocumentProxy) => void;
     numPages: number | null;
-    handleTextContent: (textContent: { items: any[]; }) => void;
-    handleAnnotations: (annotations: any[]) => void;
 };
 
 export const PDFViewer: React.FC<PDFViewerProps> = (
     { file,
         onLoadSuccess,
-        numPages,
-        handleTextContent,
-        handleAnnotations
+        numPages
     }
 ) => {
     const [pageNumber, setPageNumber] = useState(1);
@@ -68,8 +64,6 @@ export const PDFViewer: React.FC<PDFViewerProps> = (
                     <Page
                         key={`page_${pageNumber}`}
                         pageNumber={pageNumber}
-                        onGetTextSuccess={handleTextContent}
-                        onGetAnnotationsSuccess={handleAnnotations}
                         className="w-full"  // Set width to full
                     />
                 </Document>
