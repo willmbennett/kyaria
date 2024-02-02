@@ -11,6 +11,7 @@ module.exports = {
     serverComponentsExternalPackages: ['mongoose', '@typegoose/typegoose']
   },
   webpack(config) {
+    config.optimization.minimize = false;
     config.module.rules.push({
       test: /canvas\/build\/Release\/canvas\.node$/,
       type: 'asset/source',
