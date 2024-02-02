@@ -29,34 +29,16 @@ type PDFFile = File | null;
 export const ResumeUploadForm = ({ userId }: { userId: string }) => {
     const [loading, setLoading] = useState(false)
     const [file, setFile] = useState<PDFFile>(null);
+    const [base64File, setBase64File] = useState<string | null>(null);
     const [fileInputKey, setFileInputKey] = useState(Date.now());
     const [numPages, setNumPages] = useState<number | null>(null);
-    const [resumeUploadText, setResumeUploadText] = useState('');
     const { handleSubmit, formState: { errors } } = useForm<FormFields>();
     const router = useRouter()
 
-    const onFileChange = useFileHandler(setFile);
+    const onFileChange = useFileHandler(setFile, setBase64File);
     const onDocumentLoadSuccess = ({ numPages: nextNumPages }: PDFDocumentProxy): void => {
-
         setNumPages(nextNumPages);
     };
-
-    function handleTextContent(textContent: { items: any[]; }) {
-        const strings = textContent.items.map(item => item.str);
-        const fullText = strings.join(' ');
-        //console.log('fullText: ', fullText);  // This logs the entire text content of the PDF page
-        //console.log('resumeUploadText: ', resumeUploadText);  // This logs the entire text content of the PDF page
-        setResumeUploadText(resumeUploadText + ' ' + fullText)
-    }
-
-    function handleAnnotations(annotations: any[]) {
-        const links = annotations.map(item => item.url);
-        const LinkText = links.join(' ');
-        //console.log(LinkText)
-        //console.log('LinkText: ', LinkText);  // This logs the entire text content of the PDF page
-        //console.log('resumeUploadText: ', resumeUploadText);  // This logs the entire text content of the PDF page
-        setResumeUploadText(LinkText + ' ' + resumeUploadText)
-    }
 
     const onSubmit: SubmitHandler<FormFields> = async () => {
         setLoading(true);
@@ -65,7 +47,7 @@ export const ResumeUploadForm = ({ userId }: { userId: string }) => {
             const response = await fetch('/api/sovren', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ content: resumeUploadText })
+                body: JSON.stringify({ content: base64File })
             });
 
             if (!response.ok) {
@@ -111,7 +93,7 @@ export const ResumeUploadForm = ({ userId }: { userId: string }) => {
 
     const handleReset = () => {
         setFile(null);
-        setResumeUploadText('');
+        setBase64File(null)
         setNumPages(null);
         setFileInputKey(Date.now()); // Reset the key to force re-render of the file input
     };
@@ -159,8 +141,6 @@ export const ResumeUploadForm = ({ userId }: { userId: string }) => {
                                 file={file}
                                 onLoadSuccess={onDocumentLoadSuccess}
                                 numPages={numPages}
-                                handleTextContent={handleTextContent}
-                                handleAnnotations={handleAnnotations}
                             />
                         )}
                     </div>

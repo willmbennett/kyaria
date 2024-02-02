@@ -28,21 +28,38 @@ interface FormSubmitParams {
 }
 
 
-export const useFileHandler = (setFile: Dispatch<SetStateAction<PDFFile>>): ((event: React.ChangeEvent<HTMLInputElement>) => void) => {
+export const useFileHandler = (
+    setFile: Dispatch<SetStateAction<PDFFile>>,
+    setBase64File: Dispatch<SetStateAction<string | null>>
+): ((event: React.ChangeEvent<HTMLInputElement>) => void) => {
     const onFileChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-
         const { files } = event.target;
 
         if (files && files[0] && files[0].type === "application/pdf") {
-            setFile(files[0]);
+            setFile(files[0]); // Set the file object
+
+            // Read and encode the file as base64
+            const reader = new FileReader();
+            reader.readAsDataURL(files[0]);
+            reader.onload = () => {
+                const base64String = reader.result as string;
+                setBase64File(base64String.split(',')[1]); // Set only the base64 part
+            };
+            reader.onerror = error => {
+                console.error('Error reading file:', error);
+                setBase64File(null);
+            };
         } else {
             alert("Please upload a valid PDF file.");
-            event.target.value = "";
+            event.target.value = ""; // Reset input
+            setFile(null);
+            setBase64File(null);
         }
     };
 
     return onFileChange;
 };
+
 
 
 export const useDocumentLoadSuccess = (setNumPages: Dispatch<SetStateAction<number | null>>): ((pdf: PDFDocumentProxy) => void) => {

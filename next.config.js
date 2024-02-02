@@ -8,14 +8,13 @@ module.exports = {
     ],
   },
   experimental: {
-    serverActions: true,
     serverComponentsExternalPackages: ['mongoose', '@typegoose/typegoose']
   },
   webpack(config) {
     config.optimization.minimize = false;
     config.module.rules.push({
       test: /canvas\/build\/Release\/canvas\.node$/,
-      use: 'raw-loader',
+      type: 'asset/source',
     });
     return config;
   },

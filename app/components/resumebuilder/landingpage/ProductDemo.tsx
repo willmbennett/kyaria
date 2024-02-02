@@ -1,13 +1,9 @@
-import { getResume } from "../../../../lib/resume-db"
 import { ResumeClass } from "../../../../models/Resume"
-import Await from "../../../jobs/await"
 import { Container } from "../../landingpage/Container"
 import ResumeBuilder from "../ResumeBuilder"
 
+export const ProductDemo = ({resume, resumeId}: {resume: ResumeClass, resumeId: string}) => {
 
-export async function ProductDemo() {
-  const resumeId = '65adcbdf782ab1d399ea1aa4'
-  const promise = getResume(resumeId)
   return (
     <section className="relative pt-16 md:pt-20 xl:pt-32">
       <Container>
@@ -38,25 +34,14 @@ export async function ProductDemo() {
             </p>
 
           </div>
-          {/* @ts-expect-error Server Component */}
-          <Await promise={promise}>
-            {({ resume }: { resume: ResumeClass }) => (
-              <>
-                {
-                  resume ?
-                    <ResumeBuilder
-                      data={resume}
-                      toggleEdit={undefined}
-                      userId={''}
-                      activeSubscription={true}
-                      resumeId={resumeId}
-                      useSave={false}
-                    />
-                    : <p>Resume Not Found</p>
-                }
-              </>
-            )}
-          </Await>
+          <ResumeBuilder
+            data={resume}
+            toggleEdit={undefined}
+            userId={''}
+            activeSubscription={true}
+            resumeId={resumeId}
+            useSave={false}
+          />
         </div>
       </Container>
     </section>

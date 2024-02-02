@@ -1,6 +1,5 @@
 import ResumeBuilderHome from "../components/resumebuilder/ResumeBuilderHome";
-import Await from "../jobs/await";
-import { countTotalResumes, getResumes } from "../../lib/resume-db";
+import { countTotalResumes, getResume, getResumes } from "../../lib/resume-db";
 import { ResumeClass } from "../../models/Resume";
 import { ResumeBuilderHero } from "../components/resumebuilder/landingpage/ResumeBuilderHero";
 import { CallToAction } from "../components/resumebuilder/landingpage/CallToAction";
@@ -9,20 +8,29 @@ import { Process } from "../components/resumebuilder/landingpage/Process";
 import { FeatureBlocks } from "../components/resumebuilder/landingpage/FeatureBlocks";
 import { Faqs } from "../components/resumebuilder/landingpage/Faqs";
 import { checkSubscription } from "../../lib/hooks/check-subscription";
-import { redirect, RedirectType } from "next/navigation";
+import { redirect } from "next/navigation";
 import { ProductDemo } from "../components/resumebuilder/landingpage/ProductDemo";
+
+type getResumesType = {
+  resumes: ResumeClass[]
+}
+
+type getResumeType = {
+  resume: ResumeClass
+}
 
 export default async function ProfilePage() {
   const { activeSubscription, userId } = await checkSubscription()
   const { totalResumes } = await countTotalResumes()
-  const resumesPromise = getResumes(userId)
+  const { resumes } = await getResumes(userId) as getResumesType
+  const resumeId = '65adcbdf782ab1d399ea1aa4'
+  const { resume } = await getResume(resumeId) as getResumeType
 
   if (!userId) {
     return (
       <>
         <ResumeBuilderHero />
-        {/* @ts-expect-error Server Component */}
-        <ProductDemo />
+        <ProductDemo resume={resume} resumeId={resumeId}/>
         <FeatureBlocks totalResumes={totalResumes || 200} />
         <Process />
         {/*<TestimonialsSlide />*/}
@@ -37,25 +45,10 @@ export default async function ProfilePage() {
   }
 
   return (
-    <>
-      {/* @ts-expect-error Server Component */}
-      < Await promise={resumesPromise}>
-        {({ resumes }: { resumes: ResumeClass[] }) => {
-
-          //If the user doesn't have any resumes send them to the new page
-          if (!resumes) {
-            redirect('resumebuilder/new', 'replace' as RedirectType)
-          }
-
-          return (
-            <ResumeBuilderHome
-              userId={userId}
-              resumes={resumes}
-              activeSubscription={activeSubscription}
-            />
-          )
-        }}
-      </Await>
-    </>
+    <ResumeBuilderHome
+      userId={userId}
+      resumes={resumes}
+      activeSubscription={activeSubscription}
+    />
   );
 }
