@@ -1,15 +1,8 @@
-import { getResume } from "../../../../lib/resume-db"
 import { ResumeClass } from "../../../../models/Resume"
 import { Container } from "../../landingpage/Container"
 import ResumeBuilder from "../ResumeBuilder"
 
-type getResumeType = {
-  resume: ResumeClass
-}
-
-export async function ProductDemo() {
-  const resumeId = '65adcbdf782ab1d399ea1aa4'
-  const {resume} = await getResume(resumeId) as getResumeType
+export const ProductDemo = ({resume, resumeId}: {resume: ResumeClass, resumeId: string}) => {
 
   return (
     <section className="relative pt-16 md:pt-20 xl:pt-32">
