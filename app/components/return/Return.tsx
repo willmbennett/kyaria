@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 import { Container } from '../landingpage/Container'
 import ctaImage1 from '/public/images/stock/job-interview2.jpg'
-import ctaImage2 from 'public/images/stock/entrepreneurship-3822492_1280.jpg'
+import ctaImage2 from '/public/images/stock/entrepreneurship-3822492_1280.jpg'
 import { Button } from '../Button'
 
 export function Return({customerEmail}: {customerEmail: string}) {
