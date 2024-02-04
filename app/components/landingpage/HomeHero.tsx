@@ -12,10 +12,10 @@ export function HomeHero() {
       <Container>
         <div className="mx-auto max-w-lg pb-14 md:mx-0 md:max-w-none md:pb-48 lg:pb-52 xl:max-w-xl xl:pb-14">
           <h1 className="text-5xl font-semibold leading-tighter text-slate-900 md:mx-auto md:max-w-2xl md:text-center xl:mx-0 xl:text-left xl:text-6xl xl:leading-tighter">
-            Give yourself a competitive edge this recruiting season 
+            Give yourself a competitive edge this recruiting season
           </h1>
           <ul className="mt-6 flex flex-col space-y-4 md:mx-auto md:mt-8 md:max-w-3xl md:flex-row md:space-x-2 md:space-y-0 lg:space-x-4 xl:mx-0 xl:flex-col xl:space-x-0 xl:space-y-4">
-            
+
             <li className="flex items-center md:items-start xl:items-center">
               <CheckCircleIcon className="h-5 w-5 shrink-0 text-slate-800 md:h-6 md:w-6 xl:h-5 xl:w-5" />
               <p className="ml-3 text-slate-700 lg:ml-4 xl:ml-5 xl:text-lg">
@@ -41,7 +41,7 @@ export function HomeHero() {
             </li>
           </ul>
           <div className="mt-10 flex flex-col sm:flex-row sm:space-x-5 md:mt-12 md:justify-center xl:justify-start">
-            <AuthButton altText="Get Started"/>
+            <AuthButton altText="Get Started" />
           </div>
           <p className="mt-4 flex text-md text-slate-600/90 md:justify-center xl:justify-start xl:text-base">
             Subscription to Kyaria.ai Pro required, only $10 per month.
@@ -70,8 +70,7 @@ export function HomeHero() {
                 </svg>
 
                 <p className="relative">
-                  Kyaria has taken the headache out of the job search, and allowed me to focus on
-                  what really matters – finding the job that's right for me.
+                  My resume was DOA for years. Mostly because resume writing was such a pain, it was hard to know where to start. Kyaria made it so easy to get my resume back in shape. I didn't have to worry about not knowing keywords, phrases, or metrics recruiters are optimizing for, because Kyaria would either synthesize them for me or remind me. Cheers to never having an outdated resume again!
                 </p>
               </div>
               <div className="mt-7 flex items-center">
@@ -80,16 +79,16 @@ export function HomeHero() {
                     className="h-full w-full rounded-full object-cover object-center"
                     width={56}
                     height={56}
-                    src={Avatar}
+                    src='https://res.cloudinary.com/kyaria/image/upload/c_thumb,g_face,w_200/v1706748948/facebook_profile_cmjkp1.jpg'
                     alt="Home Hero Testimonial"
                     sizes="3.5rem"
                   />
                 </div>
                 <div className="ml-5">
-                  <p className="font-medium text-slate-900">Will Bennett</p>
+                  <p className="font-medium text-slate-900">Jessica Fan</p>
 
                   <p className="font-medium text-slate-500">
-                    Founder, Kyaria, LLC
+                    Senior Software Engineer at Google
                   </p>
                 </div>
               </div>
