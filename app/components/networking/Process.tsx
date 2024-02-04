@@ -17,7 +17,7 @@ export function Process() {
             <div className="flex items-center space-x-10">
               <span className="text-4xl font-semibold text-white">01</span>
               <span className="text-xl leading-snug text-slate-50">
-                Add your LinkedIn
+                Add your information
               </span>
             </div>
             <div className="flex items-center space-x-10 pt-8">
