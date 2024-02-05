@@ -166,7 +166,7 @@ function NetworkingDemo() {
                         </div>
                     </div>
                     {/* Networking Opportunities Step */}
-                    <div className={`transition-opacity justify-center items-center duration-500 ${step === 5 ? 'block' : 'hidden'} ${showStep5 ? 'opacity-100' : 'opacity-0'}`}>
+                    <div className={`transition-opacity w-full justify-center items-center duration-500 ${step === 5 ? 'block' : 'hidden'} ${showStep5 ? 'opacity-100' : 'opacity-0'}`}>
                         <div className="space-y-4 w-full text-center">
                             <h2 className="text-xl md:text-2xl font-semibold">Step 4: Auto-network</h2>
                             <div className='flex flex-col md:flex-row w-full justify-start md:space-x-2 space-y-2 md:space-y-0'>
