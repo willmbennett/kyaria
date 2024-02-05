@@ -40,6 +40,7 @@ const pages = [
 
 const userPages = [
   { label: 'Resume Builder', href: '/resumebuilder' },
+  { label: 'Networking', href: '/networking' },
   /*{ label: 'Pricing', href: '/pricing' },*/
   /*{ label: 'Contact', href: '/contact' },*/
 ]
