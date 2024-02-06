@@ -11,6 +11,8 @@ import Behaivoral from './onboarding/Behaivoral';
 import Bio from './onboarding/Bio';
 import CreateJobApp from '../board/CreateJobApp';
 import Menu from './onboarding/Menu';
+import { ProfileResumes } from './ProfileResumes';
+import { ResumeClass } from '../../../models/Resume';
 
 // Enum for the onboarding stages to enhance readability and maintainability
 enum OnboardingStage {
@@ -25,12 +27,21 @@ enum OnboardingStage {
 
 interface ProfileProps {
     userId: string;
+    userName: string;
     profile?: ProfileClass;
     sessionUserId?: string;
     edit: boolean;
+    resumes: ResumeClass[];
 }
 
-export default function Profile({ userId, profile, sessionUserId, edit }: ProfileProps) {
+export default function Profile(
+    { userId,
+        userName,
+        profile,
+        sessionUserId,
+        edit,
+        resumes
+    }: ProfileProps) {
 
     const [onboardingStage, setOnboardingStage] = useState<OnboardingStage>(profile ? OnboardingStage.Finished : OnboardingStage.ResumeUpload);
 
@@ -55,22 +66,12 @@ export default function Profile({ userId, profile, sessionUserId, edit }: Profil
     ];
     const profileStripped = stripObject(profile || {}, profileKeys)
 
-    const renderNonExistentProfile = () => (
-        <div className='py-4 flex flex-col items-center justify-center text-center'>
-            <h1 className="sm:text-6xl text-4xl font-bold text-slate-900 mb-8">We're sorry</h1>
-            <h2 className="sm:text-4xl text-2xl font-bold text-slate-900 mb-8">This profile doesn't exist</h2>
-            <Button href={`/profile/${sessionUserId}`} size='lg'>
-                Go to my profile
-            </Button>
-        </div>
-    );
-
     const renderOnboardingContent = () => {
         switch (onboardingStage) {
             case OnboardingStage.ResumeUpload:
                 return <ResumeParser setOnboardingStage={setOnboardingStage} userId={userId} />
             case OnboardingStage.Questionnaire:
-                return profile && <NewUserQuestionnaire profile={profile} setOnboardingStage={setOnboardingStage} currentState={profile.questionnaire}/>;
+                return profile && <NewUserQuestionnaire profile={profile} setOnboardingStage={setOnboardingStage} currentState={profile.questionnaire} />;
             case OnboardingStage.Story:
                 return profile &&
                     <Story
@@ -96,13 +97,13 @@ export default function Profile({ userId, profile, sessionUserId, edit }: Profil
                         setOnboardingStage={setOnboardingStage}
                         setOnboarding={setOnboarding}
                     />;
-            default:
-                return renderNonExistentProfile();
         }
     };
 
     return (
-        <>{onboarding &&
+        <>
+            {
+            /*onboarding &&
             <div className='md:flex md:flex-row w-full min-h-screen'>
                 <div className='md:w-1/4 items-top'>
                     <Menu setOnboardingStage={setOnboardingStage} onboardingStage={onboardingStage} profile={profile}/>
@@ -111,9 +112,12 @@ export default function Profile({ userId, profile, sessionUserId, edit }: Profil
                     {renderOnboardingContent()}
                 </div>
             </div>
-        }
+        */}
+            <ProfileResumes resumes={resumes}
+                userId={userId}
+                activeSubscription={false}
+            />
             {!onboarding && profile && <UserProfile userProfile={profile} edit={edit} />}
-            {profileNotFound && renderNonExistentProfile()}
         </>
     );
 }

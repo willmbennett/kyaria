@@ -95,7 +95,7 @@ export async function getProfile(userId: string, filter = false,) {
                 };
             } else {
                 return {
-                    profile
+                    profile: undefined
                 };
             }
 
