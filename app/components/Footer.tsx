@@ -69,17 +69,21 @@ const SocialLink: React.FC<SocialLinkProps> = ({ icon: Icon, href = '', ...props
   );
 };
 
+interface FooterProps {
+  userId: string;
+  userName: string;
+  email?: string;
+}
 
-export function Footer() {
-  const { data: session } = useSession();
-  const page = usePathname()
 
-  if (session?.user?.id) {
+export function Footer({userId, userName, email}: FooterProps) {
+
+  if (userId) {
     analytics.identify({
-      userId: session.user.id,
+      userId: userId,
       traits: {
-        name: session.user.name,
-        email: session.user.email
+        name: userName,
+        email: email
       }
     });
   }

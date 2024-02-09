@@ -1,7 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "flask-dev": "FLASK_DEBUG=1 pip3 install -r requirements.txt && python3 -m flask --app flask/server run -p 5328",
+    "next-dev": "next dev",
+    "dev": "concurrently \"npm run next-dev\" \"npm run flask-dev\"",
     "build": "next build",
     "start": "next start"
   },
@@ -35,6 +37,7 @@
     "class-variance-authority": "^0.7.0",
     "cloudinary": "^1.41.1",
     "clsx": "^2.0.0",
+    "concurrently": "^8.2.2",
     "date-fns": "^2.30.0",
     "eslint-config-next": "^14.1.0",
     "fast-xml-parser": "^4.3.2",

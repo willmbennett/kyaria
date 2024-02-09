@@ -6,6 +6,7 @@ export const checkSubscription = async () => {
     const session = await getServerSession(authOptions);
     const userId = session?.user?.id as string || ''
     const userName = session?.user?.name as string || ''
+    const email = session?.user?.email as string || ''
     const { subscription } = await getSubscription(userId)
 
     const userIdList = [
@@ -18,5 +19,5 @@ export const checkSubscription = async () => {
     ]
 
     const activeSubscription = userIdList.includes(userId) || subscription?.status == 'active'
-    return { userId, activeSubscription, userName }
+    return { userId, activeSubscription, userName, email }
 }

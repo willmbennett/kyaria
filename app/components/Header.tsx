@@ -1,8 +1,8 @@
 'use client'
 
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import { Fragment } from 'react'
-import Image from 'next/image'
+//import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Disclosure, Transition, Popover, Menu } from '@headlessui/react'
@@ -12,8 +12,8 @@ import { DiscordButton } from "./ui/DiscordButton";
 
 import { Container } from './landingpage/Container'
 import { Button } from './Button'
-import logo from '/public/images/logo-dark.png'
-import logoIcon from '/public/images/logo-icon.png'
+//import logo from '/public/images/logo-dark.png'
+//import logoIcon from '/public/images/logo-icon.png'
 
 type pageListType = {
   label: string,
@@ -56,11 +56,10 @@ const loggedInLinks = [
 ]
 
 
-//{ label: 'Profile', href: `/profile/${session?.user?.id}` },
+//{ label: 'Profile', href: `/profile/${userId?.user?.id}` },
 
-export function Header() {
+export function Header({userId}: {userId: string}) {
   const pathname = usePathname()
-  const { data: session } = useSession();
 
   const signedInLinks = [
     { label: 'Resume Builder', href: '/resumebuilder' },
@@ -68,14 +67,14 @@ export function Header() {
     /*{ label: 'Contact', href: '/contact' },*/
   ]
 
-  const desktopMenuLinks = session ? signedInLinks : links
+  const desktopMenuLinks = userId ? signedInLinks : links
 
   const signedInMenuLinks = [
-    { label: 'Profile (beta)', href: `/profile/${session?.user?.id}` },
+    { label: 'Profile (beta)', href: `/profile/${userId}` },
     { label: 'Manage Subscription', href: `https://billing.stripe.com/p/login/fZedQQbuK5Ke2Q06oo` },
   ]
 
-  const MobileLinks = session ? [ ...signedInLinks, ...signedInMenuLinks] : links
+  const MobileLinks = userId ? [ ...signedInLinks, ...signedInMenuLinks] : links
 
   function MenuIcon({ open }: { open: any }) {
     return (
@@ -156,16 +155,16 @@ export function Header() {
                       {link.label}
                     </Link>
                   ))}
-                  {mobileDropDownMenu(session ? 'More' : 'For Job Seekers', session ? loggedInLinks : userPages)}
+                  {mobileDropDownMenu(userId ? 'More' : 'For Job Seekers', userId ? loggedInLinks : userPages)}
                 </div>
                 <div className="mt-6">
                   <Button
                     size="md"
                     variant="ghost"
                     className="w-full"
-                    onClick={!session ? () => signIn() : () => signOut()}
+                    onClick={!userId ? () => signIn() : () => signOut()}
                   >
-                    {!session ? 'Sign In' : 'Sign Out'}
+                    {!userId ? 'Sign In' : 'Sign Out'}
                   </Button>
                 </div>
               </div>
@@ -313,7 +312,7 @@ export function Header() {
                   {link.label}
                 </Link>
               ))}
-              {session ?
+              {userId ?
                 desktopDropDownMenu('More', loggedInLinks)
                 :
                 desktopDropDownMenu('For Job Seekers', userPages)
@@ -327,7 +326,7 @@ export function Header() {
                 < DiscordButton />
               </div>
               <div className="hidden lg:block">
-                {!session &&
+                {!userId &&
                   <Button
                     size="md"
                     variant="solid"
@@ -338,7 +337,7 @@ export function Header() {
                   </Button>
                 }
               </div>
-              {session && desktopDropDownMenu('Menu', signedInMenuLinks)}
+              {userId && desktopDropDownMenu('Menu', signedInMenuLinks)}
               {/*<Button size="md" href="/signin">
                 Sign up free
               </Button>
