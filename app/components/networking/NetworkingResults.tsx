@@ -25,7 +25,7 @@ export const NetworkingResults = ({ embeddings, userResume }: NetworkingResultsP
         setIsLoading(true);
         //console.log(embeddings)
         const skip = (currentPage - 1) * itemsPerPage
-        console.log(`about to fetch data, Current page: ${currentPage} ,Limit: ${itemsPerPage}, Skip: ${skip}`);
+        //console.log(`about to fetch data, Current page: ${currentPage} ,Limit: ${itemsPerPage}, Skip: ${skip}`);
         try {
             const response = await fetch('/api/openai/semanticsearch/results', {
                 method: 'POST',
