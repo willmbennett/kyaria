@@ -1,21 +1,24 @@
-import React, { FC } from 'react';
+'use client'
+import React, { FC, useState } from 'react';
+import { ResumeClass } from '../../../models/Resume';
+import { format } from 'date-fns';
 
-interface IDropdownMenuProps {
-    selectedTheme: string;
-    setSelectedTheme: (theme: string) => void;
-    showOptions: boolean;
-    setShowOptions: (show: boolean) => void;
-    themes: string[];
+interface IResumeDropdownMenuProps {
+    selectedResumeId: string;
+    setSelectedResumeId: (id: string) => void;
+    resumes: ResumeClass[];
 }
 
-const DropdownMenu: FC<IDropdownMenuProps> = ({
-    selectedTheme,
-    setSelectedTheme,
-    showOptions,
-    setShowOptions,
-    themes
+const ResumeDropdownMenu: FC<IResumeDropdownMenuProps> = ({
+    selectedResumeId,
+    setSelectedResumeId,
+    resumes,
 }) => {
+    const [showOptions, setShowOptions] = useState(false);
     const optionsClick = () => setShowOptions(!showOptions);
+
+    // Find the selected resume by its ID to display its name
+    const selectedResume = resumes.find(resume => resume._id === selectedResumeId);
 
     return (
         <div className="relative inline-block text-left">
@@ -27,7 +30,7 @@ const DropdownMenu: FC<IDropdownMenuProps> = ({
                 aria-haspopup="true"
                 aria-expanded={showOptions ? 'true' : 'false'}
             >
-                {selectedTheme}
+                {selectedResume ? selectedResume.title || selectedResume.name : "Select a resume"}
                 <svg
                     className="-mr-1 ml-2 h-5 w-5"
                     xmlns="http://www.w3.org/2000/svg"
@@ -44,25 +47,25 @@ const DropdownMenu: FC<IDropdownMenuProps> = ({
             </button>
             {showOptions && (
                 <div
-                    className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    className="absolute right-0 z-10 mt-2 w-56 origin-top-right max-h-96 overflow-y-auto rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                     role="menu"
                     aria-orientation="vertical"
                     aria-labelledby="options-menu"
                     tabIndex={-1}
                 >
-                    <div className="py-1 h-96 overflow-y-auto" role="none">
-                        {themes.map((theme, index) => (
+                    <div className="py-1" role="none">
+                        {resumes.map((resume, index) => (
                             <button
-                                key={index}
+                                key={resume._id.toString()}
                                 onClick={() => {
-                                    setSelectedTheme(theme);
+                                    setSelectedResumeId(resume._id.toString());
                                     setShowOptions(false);
                                 }}
-                                className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left ${selectedTheme === theme ? 'bg-gray-100' : ''
+                                className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left ${selectedResumeId === resume._id.toString() ? 'bg-gray-100' : ''
                                     }`}
                                 role="menuitem"
                             >
-                                {theme}
+                                {index+1} - {resume.title || resume.name}
                             </button>
                         ))}
                     </div>
@@ -72,4 +75,4 @@ const DropdownMenu: FC<IDropdownMenuProps> = ({
     );
 };
 
-export default DropdownMenu;
+export default ResumeDropdownMenu;

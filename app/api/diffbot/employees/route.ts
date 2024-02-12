@@ -22,9 +22,11 @@ export async function POST(request: Request) {
         
         //console.log(orgId)
 
+        //https://kg.diffbot.com/kg/v3/dql?type=query&token=370f92ac1e272c3a138023799b72ccc0&query=type%3APerson+employments.{categories.name%3Aor(%22Management%22%2C%20%22Human%20Resources%20and%20Recruiting%22)%20isCurrent%3Atrue%20categories.name:%22Engineering%2C%20IT%20and%20Software%20Development%22}+location.isCurrent%3Atrue+location.country.diffbotUri%3A%22http%3A%2F%2Fdiffbot.com%2Fentity%2FE01d4EK33MmCosgI2KXa4-A%22+revSortBy%3Aimportance&size=1
+
         const apiUrl = `https://kg.diffbot.com/kg/v3/dql?type=query&token=${process.env.DIFFBOT_API_KEY}&query=type%3APerson+employments.{categories.name%3Aor(%22Management%22%2C%20%22Human%20Resources%20and%20Recruiting%22)%20isCurrent%3Atrue%20categories.name:%22Engineering%2C%20IT%20and%20Software%20Development%22}+location.isCurrent%3Atrue+location.country.diffbotUri%3A%22http%3A%2F%2Fdiffbot.com%2Fentity%2FE01d4EK33MmCosgI2KXa4-A%22+revSortBy%3Aimportance&size=${sizeLimit}&from=${skipAmount}`
 
-        console.log(apiUrl)
+        //console.log(apiUrl)
 
         
         const options = {
@@ -40,8 +42,8 @@ export async function POST(request: Request) {
 
         const { data } = await fetchResponse.json();
         
-        console.log('======= Fetrched Data (=======')
-        console.log(data)
+        //console.log('======= Fetrched Data (=======')
+        //console.log(data)
         
        //const data = ''
         return NextResponse.json(data, { status: 200 });

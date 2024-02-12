@@ -28,8 +28,10 @@ export default async function AppLayout({
 }) {
 
     return (
-        <div className='min-h-screen'>
-            {children}
+        <div className="flex w-full h-full justify-center">
+            <div className="w-full max-w-screen-xl h-screen p-4">
+                {children}
+            </div>
         </div>
     )
 }

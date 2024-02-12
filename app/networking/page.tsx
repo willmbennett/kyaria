@@ -7,42 +7,17 @@ import NetworkingDemo from "../components/networking/NetworkingDemo";
 import { NetworkingHero } from "../components/networking/NetworkingHero";
 import { Process } from "../components/networking/Process";
 import { StatsHighlight } from "../components/networking/StatsHighlight";
-import { NetworkingInbox } from "../components/networking/NetworkingInbox";
+import NetworkingSearch from "../components/networking/NetworkingSearch";
+import { getResumes } from "../../lib/resume-db";
+import { ResumeClass } from "../../models/Resume";
+import ResumeListMenu from "../components/resumebuilder/ResumeMenu";
+import { Container } from "../components/landingpage/Container";
 
-
-async function getTest() {
-  console.log('made it to flask test')
-  try {
-
-    const options = {
-      method: 'GET',
-      headers: { accept: 'application/json' },
-    };
-
-    console.log('options: ', options)
-
-    const flaskServerUrl = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:5328/flask/test' : '/flask/test'
-    
-    const fetchResponse = await fetch(flaskServerUrl, options);
-
-    if (!fetchResponse.ok) {
-      return { error: 'Failed to fetch data from the Diffbot API.' }
-    }
-
-    const { message } = await fetchResponse.json();
-    console.log('======= Fetrched Data (=======')
-    console.log(message)
-    //return { companyData: data[0].entity }
-  } catch (error) {
-    //console.error(error);
-    return error
-  }
-}
-
-export default async function ProfilePage() {
+export default async function NetworkingPage() {
   const { activeSubscription, userId } = await checkSubscription()
+  const { resumes } = await getResumes(userId) as { resumes: ResumeClass[] }
 
-  await getTest()
+  //await getTest()
 
   if (!userId) {
     return (
@@ -64,8 +39,18 @@ export default async function ProfilePage() {
   }
 
   return (
-    <>
-      <NetworkingInbox />
-    </>
+    <section className="flex w-full justify-center pt-16 md:pt-20 xl:pt-32">
+      {/* Hero section content */}
+      <Container className="flex flex-col justify-center w-full">
+        {/* Hero text and buttons */}
+        <h1 className="text-5xl pb-5 md:pb-10 lg:pb-16 font-semibold leading-tighter text-slate-900 md:mx-auto md:max-w-2xl md:text-center xl:mx-0 xl:text-left xl:text-6xl xl:leading-tighter">
+          Networking
+        </h1>
+        <div className="flex flex-col max-w-5xl w-full items-center justify-center">
+          <NetworkingSearch resumes={resumes} />
+        </div>
+      </Container>
+    </section>
   );
+
 }

@@ -14,10 +14,10 @@ class DateRange {
 class Contact {
     @prop({ required: true })
     public contactString: string;
-  
+
     @prop()
     public type?: string;
-  }
+}
 
 class Image {
     @prop()
@@ -284,6 +284,23 @@ class Union {
     public type?: string;
 }
 
+class ImageField {
+    @prop()
+    classifications?: string;
+
+    @prop()
+    fingerprint?: string;
+
+    @prop()
+    title?: string;
+
+    @prop()
+    isCached?: string;
+
+    @prop()
+    url?: string;
+}
+
 @ModelOptions({
     schemaOptions: {
         timestamps: true,
@@ -297,6 +314,21 @@ class Union {
 class PersonClass {
     @prop()
     public diffbotId?: string;
+
+    @prop()
+    public name?: string;
+
+    @prop()
+    public summary?: string;
+
+    @prop()
+    description?: string;
+
+    @prop()
+    allDescriptions?: string[];
+
+    @prop()
+    importance?: number;
 
     @prop()
     age?: number;
@@ -340,11 +372,11 @@ class PersonClass {
     @prop({ type: () => [Education] })
     educations?: Education[];
 
-    @prop({ type: () => [LinkedEntity] })
-    emailAddresses?: LinkedEntity[];
-
     @prop({ type: () => [Contact] })
-    employments?: Contact[];
+    emailAddresses?: Contact[];
+
+    @prop({ type: () => [Employment] })
+    employments?: Employment[];
 
     @prop()
     eyeColor?: string;
@@ -366,6 +398,12 @@ class PersonClass {
 
     @prop()
     hairColor?: string;
+
+    @prop()
+    image?: string;
+
+    @prop({ type: () => [ImageField] })
+    images?: ImageField[]
 
     @prop()
     height?: number;
@@ -441,6 +479,12 @@ class PersonClass {
 
     @prop()
     youtubeUri?: string;
+
+    @prop()
+    embeddingsText?: string;
+
+    @prop()
+    text_embeddings?: number[];
 
     _id: mongoose.Types.ObjectId | string;
     createdAt: Date | string;

@@ -63,6 +63,7 @@ export function Header({userId}: {userId: string}) {
 
   const signedInLinks = [
     { label: 'Resume Builder', href: '/resumebuilder' },
+    { label: 'Networking (beta)', href: '/networking' },
     /*{ label: 'Pricing', href: '/pricing' },*/
     /*{ label: 'Contact', href: '/contact' },*/
   ]

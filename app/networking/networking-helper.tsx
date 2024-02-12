@@ -1,3 +1,5 @@
+import { PersonClass } from "../../models/Person";
+
 export const networkingMessages = [
     {
         id: 1,
@@ -35,3 +37,84 @@ export const networkingMessages = [
     },
     // Additional conversations can be added here
 ];
+
+export function extractPersonTextForEmbedding(person: PersonClass): string {
+    let textComponents: string[] = [];
+
+    // Add basic fields
+    if (person.name) {
+        textComponents.push(person.name);
+    }
+
+    if (person.summary) {
+        textComponents.push(person.summary);
+    }
+
+    if (person.allDescriptions) {
+        textComponents.push(person.allDescriptions.join(''));
+    }
+
+
+    // Add description from employments if present
+    if (person.employments) {
+        person.employments.forEach(employment => {
+            if (employment.description) {
+                textComponents.push(employment.description);
+            }
+        });
+    }
+
+    // Add education majors and institutions
+    if (person.educations) {
+        person.educations.forEach(education => {
+            if (education.institution?.name) {
+                textComponents.push(education.institution.name);
+            }
+            if (education.major?.name) {
+                textComponents.push(education.major.name);
+            }
+        });
+    }
+
+    // Articles
+    if (person.articles) {
+        person.articles.forEach(article => {
+            if (article.summary) {
+                textComponents.push(article.summary);
+            }
+            if (article.name) {
+                textComponents.push(article.name);
+            }
+        });
+    }
+
+    // Awards
+    if (person.awards) {
+        person.awards.forEach(award => {
+            if (award.title) {
+                textComponents.push(award.title);
+            }
+        });
+    }
+
+    // Interests
+    if (person.interests) {
+        person.interests.forEach(interest => {
+            if (interest.name) {
+                textComponents.push(interest.name);
+            }
+        });
+    }
+
+    // Skills
+    if (person.skills) {
+        person.skills.forEach(skill => {
+            if (skill.name) {
+                textComponents.push(skill.name);
+            }
+        });
+    }
+
+    // Combine all text components into a single string
+    return textComponents.join(" ");
+}

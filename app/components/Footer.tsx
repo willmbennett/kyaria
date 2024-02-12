@@ -32,6 +32,7 @@ const navigation = {
   ],
   solutions: [
     { name: 'Resume Builder', href: '/resumebuilder' },
+    { name: 'Networking (beta)', href: '/networking' },
     { name: 'AI Career Concierge (beta)', href: '/board' },
     { name: 'Jobs (beta)', href: '/jobs' },
   ],
@@ -76,7 +77,7 @@ interface FooterProps {
 }
 
 
-export function Footer({userId, userName, email}: FooterProps) {
+export function Footer({ userId, userName, email }: FooterProps) {
 
   if (userId) {
     analytics.identify({

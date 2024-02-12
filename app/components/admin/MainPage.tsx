@@ -1,10 +1,11 @@
 'use client'
-import { FC, useState } from 'react';
+import { useState } from 'react';
 import PersonDummyData from '../../networking/person.json';
 import { PersonClass } from '../../../models/Person';
-import { createPersonAction } from '../../admin/_action';
+import { createPersonAction, updatePersonAction } from '../../admin/_action';
+import { extractPersonTextForEmbedding } from '../../networking/networking-helper';
 
-const MainPage: FC = () => {
+export const MainPage = () => {
     const [loading, setLoading] = useState<string | null>(null);
     const [response, setResponse] = useState<string | null>();
 
@@ -73,7 +74,7 @@ const MainPage: FC = () => {
         try {
             const response = await fetch('/api/diffbot/employees', {
                 method: 'POST',
-                body: JSON.stringify({ limit: 80, skip: 20 })
+                body: JSON.stringify({ limit: 800, skip: 200 })
             });
 
 
@@ -89,17 +90,33 @@ const MainPage: FC = () => {
 
             //const people = PersonDummyData.data.map(data => data.entity)
 
+            // Track progress
+            let processedCount = 0;
+
             // Assuming data is an array of person entities
             for (let person of people) {
+                console.log(`Processing person ${person.name || person.id}...`);
+
+                // Start by extracting text for embeddings
+                const embeddingsText = extractPersonTextForEmbedding(person);
+                console.log(`Extracted embeddings text for person ${person.name || person.id}.`);
 
                 const newPerson: Partial<PersonClass> = {
                     ...person,
-                    diffbotId: person.id, // Assuming the custom ID is coming in personData.id
+                    diffbotId: person.id, // Assuming the custom ID is coming in person.id
+                    embeddingsText,
                 };
                 delete (newPerson as any).id;
+
                 // Assuming createPersonAction takes a single person object and returns an ID or some identifier
+                console.log(`Creating person ${person.name || person.id} in the database...`);
                 const personId = await createPersonAction(newPerson, '/admin');
                 savedIds.push(personId);
+
+                console.log(`Successfully saved person ${person.name || person.id} with ID: ${personId}`);
+
+                // Update processed count
+                processedCount++;
             }
 
             setResponse(`Employees Fetched: ${savedIds}`);
@@ -129,7 +146,7 @@ const MainPage: FC = () => {
                                 3 - Scrape in jobs
                             </button>
                         </div>
-                        <div>
+                        <div className='flex flex-col'>
                             <p className="mb-4 text-gray-700">Employee fetching</p>
                             <button onClick={fetchEmployees} className="px-4 py-2 my-2 bg-red-500 text-white rounded hover:bg-red-600">
                                 Fetch Employees
@@ -144,5 +161,3 @@ const MainPage: FC = () => {
         </div>
     );
 }
-
-export default MainPage;
