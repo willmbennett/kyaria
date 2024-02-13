@@ -11,7 +11,7 @@ import { JobClass } from '../../../../models/Job';
 import { useDragAndDrop } from '../../../../lib/hooks/resume-test';
 
 type ResumeFormProps = {
-    methods: UseFormReturn<ResumeBuilderFormData, any, undefined>
+    methods: UseFormReturn<ResumeBuilderFormData, any, ResumeBuilderFormData>
     job?: Partial<JobClass>
 };
 
