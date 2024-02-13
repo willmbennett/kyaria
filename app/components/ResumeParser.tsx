@@ -11,10 +11,12 @@ import { createProfileAction } from '../profile/_action';
 import { usePathname, useRouter } from "next/navigation";
 import { transformParsedResume, demoJSON } from '../profile/profile-helper';
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-    'pdfjs-dist/build/pdf.worker.min.js',
-    import.meta.url,
-).toString();
+// pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+//     'pdfjs-dist/build/pdf.worker.min.js',
+//     import.meta.url,
+// ).toString();
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const options = {
     cMapUrl: '/cmaps/',

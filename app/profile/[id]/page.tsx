@@ -9,6 +9,7 @@ import { getResumes } from '../../../lib/resume-db';
 import { ResumeClass } from '../../../models/Resume';
 import { ProfileResumes } from '../../components/profile/ProfileResumes';
 import OnboardingMenu from '../../components/profile/onboarding/OnboardingMenu';
+import { ResumeUploadForm } from '../../components/resumebuilder/new/ResumeUploadForm';
 
 type getResumesType = {
   resumes: ResumeClass[]
@@ -29,15 +30,9 @@ export default async function ProfilePage({ params }: { params: { id: string } }
   }
 
   return (
-    <div className="flex max-w-5xl mx-auto flex-col md:flex-row justify-center py-2 min-h-screen">
-      <div className="flex w-full flex-col items-center text-center lg:px-4">
+    <div className="flex max-w-6xl mx-auto flex-col md:flex-row justify-center px-4 py-2 min-h-screen">
+      <div className="flex w-full flex-col lg:px-4">
         <OnboardingMenu />
-        {resumes.length > 0 &&
-          <ProfileResumes resumes={resumes}
-            userId={userId}
-            activeSubscription={false}
-          />
-        }
       </div>
       <div>
         <FeedbackAside />
