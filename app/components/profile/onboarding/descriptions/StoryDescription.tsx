@@ -6,7 +6,7 @@ const InterviewStoriesDescription = () => {
   const router = useRouter();
 
   const handleButtonClick = () => {
-    router.push('story');
+    router.push('/stories');
   };
 
   return (

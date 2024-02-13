@@ -1,6 +1,5 @@
 'use client'
 import React from 'react';
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ResumeDescription from "./descriptions/ResumeDescription";
 import QuestionnaireDescription from "./descriptions/QuestionnaireDescription";
@@ -33,52 +32,10 @@ type MenuItem = {
   instruction: React.ReactNode;
   description: React.ReactNode;
   disabled: boolean;
+  show: boolean;
   icon: React.ReactNode;
   completed: boolean;
 };
-
-const initialMenuItems: Map<OnboardingStage, MenuItem> = new Map([
-  [OnboardingStage.ResumeUpload, {
-    label: "Resume Upload",
-    instruction: <WelcomeMessage />,
-    description: <ResumeDescription />,
-    disabled: false,
-    icon: <DocumentTextIcon className='h-5 w-5"' />,
-    completed: false
-  }],
-  [OnboardingStage.Questionnaire, {
-    label: "Questionnaire",
-    instruction: <WelcomeMessage />,
-    description: <QuestionnaireDescription />,
-    disabled: false,
-    icon: <ClipboardDocumentListIcon className="h-5 w-5" />,
-    completed: false
-  }],
-  [OnboardingStage.ElevatorPitch, {
-    label: "Elevator Pitch",
-    instruction: <ProfileEnhancement />,
-    description: <ElevatorPitchDescription />,
-    disabled: true,
-    icon: <BoltIcon className="h-5 w-5" />,
-    completed: false
-  }],
-  [OnboardingStage.Bio, {
-    label: "LinkedIn Bio",
-    instruction: <ProfileEnhancement />,
-    description: <LinkedInBioDescription />,
-    disabled: true,
-    icon: <UserCircleIcon className="h-5 w-5" />,
-    completed: false
-  }],
-  [OnboardingStage.Story, {
-    label: "Interview Stories",
-    instruction: <ProfileEnhancement />,
-    description: <InterviewStoriesDescription />,
-    disabled: true,
-    icon: <StarIcon className="h-5 w-5" />,
-    completed: false
-  }]
-]);
 
 const onboardingStages: OnboardingStage[] = [
   OnboardingStage.ResumeUpload,
@@ -88,9 +45,82 @@ const onboardingStages: OnboardingStage[] = [
   OnboardingStage.Story,
 ];
 
-export default function OnboardingMenu() {
-  const router = useRouter();
-  const [activeTab, setActiveTab] = useState<OnboardingStage>(OnboardingStage.ResumeUpload);
+interface OnboardingMenuProps {
+  hasResumes: boolean;
+  hasQuestionaire: boolean
+  hasPitch: boolean
+  hasBio: boolean
+}
+
+export default function OnboardingMenu(
+  {
+    hasResumes,
+    hasQuestionaire,
+    hasPitch,
+    hasBio
+  }: OnboardingMenuProps) {
+
+  const initialMenuItems: Map<OnboardingStage, MenuItem> = new Map([
+    [OnboardingStage.ResumeUpload, {
+      label: "Resume Upload",
+      instruction: <WelcomeMessage />,
+      description: <ResumeDescription />,
+      disabled: false,
+      show: !hasResumes,
+      icon: <DocumentTextIcon className='h-5 w-5"' />,
+      completed: false
+    }],
+    [OnboardingStage.Questionnaire, {
+      label: "Questionnaire",
+      instruction: <WelcomeMessage />,
+      description: <QuestionnaireDescription />,
+      disabled: false,
+      show: !hasQuestionaire,
+      icon: <ClipboardDocumentListIcon className="h-5 w-5" />,
+      completed: false
+    }],
+    [OnboardingStage.ElevatorPitch, {
+      label: "Elevator Pitch",
+      instruction: <ProfileEnhancement />,
+      description: <ElevatorPitchDescription />,
+      disabled: !hasResumes,
+      show: !hasPitch,
+      icon: <BoltIcon className="h-5 w-5" />,
+      completed: false
+    }],
+    [OnboardingStage.Bio, {
+      label: "LinkedIn Bio",
+      instruction: <ProfileEnhancement />,
+      description: <LinkedInBioDescription />,
+      disabled: !hasResumes,
+      show: !hasBio,
+      icon: <UserCircleIcon className="h-5 w-5" />,
+      completed: false
+    }],
+    [OnboardingStage.Story, {
+      label: "Interview Stories",
+      instruction: <ProfileEnhancement />,
+      description: <InterviewStoriesDescription />,
+      disabled: !hasResumes,
+      show: false, //Temp setting this to false since it's going to take longer to build out
+      icon: <StarIcon className="h-5 w-5" />,
+      completed: false
+    }]
+  ]);
+
+  function getFirstVisibleTab(menuItems: Map<OnboardingStage, MenuItem>): OnboardingStage {
+    const entries = Array.from(menuItems.entries());
+    for (let [stage, item] of entries) {
+      if (item.show) {
+        return stage;
+      }
+    }
+    return OnboardingStage.ResumeUpload;
+  }
+
+
+  const [activeTab, setActiveTab] = useState<OnboardingStage>(() => getFirstVisibleTab(initialMenuItems));
+
   const [menuItems, setMenuItems] = useState<Map<OnboardingStage, MenuItem>>(initialMenuItems);
 
   const handleTabClick = (stage: OnboardingStage) => {
@@ -111,58 +141,45 @@ export default function OnboardingMenu() {
     });
   };
 
-  // undisable remaining stages when resume upload and questionnaire completed
-  React.useEffect(() => {
-    const resumeUploadCompleted = menuItems.get(OnboardingStage.ResumeUpload)?.completed;
-    const questionnaireCompleted = menuItems.get(OnboardingStage.Questionnaire)?.completed;
-
-    if (resumeUploadCompleted && questionnaireCompleted) {
-      setMenuItems(items => {
-        const updatedItems = new Map(items);
-        updatedItems.forEach((value, key) => {
-          if (key !== OnboardingStage.ResumeUpload && key !== OnboardingStage.Questionnaire) {
-            value.disabled = false;
-          }
-        });
-        return updatedItems;
-      });
-    }
-  }, [menuItems.get(OnboardingStage.ResumeUpload)?.completed, menuItems.get(OnboardingStage.Questionnaire)?.completed]);
-
   return (
     <div className="max-w-5xl">
       <div className="border-b border-gray-200 dark:border-gray-700 mb-4">
-        <h1 className="text-4xl mt-10">My Profile</h1>
         <div className="mb-4">{menuItems.get(activeTab)?.instruction}</div>
-        <ul className="flex flex-wrap mt-24 -mb-px" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
-          {onboardingStages.map((stage, index) => (
-            <li key={index} className="mr-2" role="presentation">
-              <TooltipPrimitive.Root>
-                <TooltipPrimitive.Trigger asChild>
-                  <button
-                    className={`${MENU_ITEM_BASE_STYLE}
-                      ${activeTab === stage ? ACTIVE_ROUTE_STYLE : `${menuItems.get(stage)?.disabled ? 'text-gray-300 border-transparent' : INACTIVE_ROUTE_STYLE}`}
-                      ${menuItems.get(stage)?.disabled ? 'cursor-not-allowed' : ''}`}
-                    id={`tab-${index}`}
-                    data-tabs-target={`#content-${index}`}
-                    type="button"
-                    role="tab"
-                    aria-controls={`content-${index}`}
-                    aria-selected={activeTab === stage}
-                    onClick={() => handleTabClick(stage)}
-                  >
-                    {menuItems.get(stage)?.icon && React.cloneElement(menuItems.get(stage)?.icon as React.ReactElement)}
-                    <span className="ml-2">{menuItems.get(stage)?.label}</span>
-                  </button>
-                </TooltipPrimitive.Trigger>
-                {menuItems.get(stage)?.disabled && (
-                  <TooltipPrimitive.Content side="top" align="center" sideOffset={5} className="text-xs text-gray-900 bg-gray-300 px-2 py-1 rounded-md">
-                    Please complete resume upload and questionnaire first
-                  </TooltipPrimitive.Content>
-                )}
-              </TooltipPrimitive.Root>
-            </li>
-          ))}
+        <ul className="flex flex-wrap -mb-px" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
+          {onboardingStages.map((stage, index) => {
+            const menuItem = menuItems.get(stage);
+            if (menuItem && menuItem.show) {
+              return (
+                <li key={index} className="mr-2" role="presentation">
+                  <TooltipPrimitive.Root>
+                    <TooltipPrimitive.Trigger asChild>
+                      <button
+                        className={`${MENU_ITEM_BASE_STYLE}
+                      ${activeTab === stage ? ACTIVE_ROUTE_STYLE : `${menuItem?.disabled ? 'text-gray-300 border-transparent' : INACTIVE_ROUTE_STYLE}`}
+                      ${menuItem?.disabled ? 'cursor-not-allowed' : ''}`}
+                        id={`tab-${index}`}
+                        data-tabs-target={`#content-${index}`}
+                        type="button"
+                        role="tab"
+                        aria-controls={`content-${index}`}
+                        aria-selected={activeTab === stage}
+                        onClick={() => handleTabClick(stage)}
+                      >
+                        {menuItem?.icon && React.cloneElement(menuItem?.icon as React.ReactElement)}
+                        <span className="ml-2">{menuItem?.label}</span>
+                      </button>
+                    </TooltipPrimitive.Trigger>
+                    {menuItem?.disabled && (
+                      <TooltipPrimitive.Content side="top" align="center" sideOffset={5} className="text-xs text-gray-900 bg-gray-300 px-2 py-1 rounded-md">
+                        Please complete resume upload and questionnaire first
+                      </TooltipPrimitive.Content>
+                    )}
+                  </TooltipPrimitive.Root>
+                </li>
+              )
+            }
+          }
+          )}
         </ul>
       </div>
       <div id="myTabContent">

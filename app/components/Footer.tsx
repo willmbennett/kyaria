@@ -32,6 +32,8 @@ const navigation = {
   ],
   solutions: [
     { name: 'Resume Builder', href: '/resumebuilder' },
+    { name: 'LinkedIn Bio', href: '/bio' },
+    { name: 'Elevator Pitch', href: '/pitch' },
     { name: 'AI Career Concierge (beta)', href: '/board' },
     { name: 'Jobs (beta)', href: '/jobs' },
   ],

@@ -7,7 +7,7 @@ const LinkedInBioDescription = () => {
   const router = useRouter();
 
   const handleButtonClick = () => {
-    router.push('bio');
+    router.push('/bio');
   };
 
   return (

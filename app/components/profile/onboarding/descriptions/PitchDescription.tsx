@@ -7,7 +7,7 @@ const ElevatorPitchDescription = () => {
   const router = useRouter();
 
   const handleButtonClick = () => {
-    router.push('pitch');
+    router.push('/pitch');
   };
 
   return (

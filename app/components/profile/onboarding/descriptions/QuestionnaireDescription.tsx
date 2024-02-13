@@ -7,7 +7,7 @@ const QuestionnaireDescription = () => {
   const router = useRouter();
 
   const handleButtonClick = () => {
-    router.push('questionnaire');
+    router.push('/questionnaire');
   };
 
   return (

@@ -15,7 +15,8 @@ export const checkSubscription = async () => {
         "6513c2cd8063290ee8e8515e",
         "65145be92f9b5cae6bf71f09",
         "6517481adbbff5b2580b0783",
-        "659c57bbbcaf1a18cdc1bcab"
+        "659c57bbbcaf1a18cdc1bcab",
+        "6538286f7d90de2a9a045b95"
     ]
 
     const activeSubscription = userIdList.includes(userId) || subscription?.status == 'active'

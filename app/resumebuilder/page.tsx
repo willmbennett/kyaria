@@ -30,7 +30,7 @@ export default async function ProfilePage() {
     return (
       <>
         <ResumeBuilderHero />
-        <ProductDemo resume={resume} resumeId={resumeId}/>
+        <ProductDemo resume={resume} resumeId={resumeId} />
         <FeatureBlocks totalResumes={totalResumes || 200} />
         <Process />
         {/*<TestimonialsSlide />*/}
@@ -42,6 +42,10 @@ export default async function ProfilePage() {
 
   if (!activeSubscription) {
     redirect('/pricing')
+  }
+
+  if (resumes.length == 0) {
+    redirect('/resumebuilder/new')
   }
 
   return (

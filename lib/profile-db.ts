@@ -31,7 +31,7 @@ export async function getProfiles(filter: ProfileFilter = {}) {
     }
 }
 
-export async function createProfile(data: ProfileClass) {
+export async function createProfile(data: Partial<ProfileClass>) {
     try {
         // You might not want to log sensitive user information in a production environment.
         // This is more suited for a development environment.
@@ -69,7 +69,7 @@ function filterHiddenFields(profile: ProfileClass) {
         });
     }
 
-    return(profile)
+    return (profile)
 }
 
 export async function getProfile(userId: string, filter = false,) {
@@ -80,7 +80,7 @@ export async function getProfile(userId: string, filter = false,) {
             return { error: "Profile not found" };
         }
 
-        //console.log(parsedId)
+        //console.log(userId)
         const profile = await ProfileModel.findOne({ userId: userId }).lean().exec();
 
         //console.log(profile)
@@ -95,7 +95,7 @@ export async function getProfile(userId: string, filter = false,) {
                 };
             } else {
                 return {
-                    profile: undefined
+                    profile
                 };
             }
 
