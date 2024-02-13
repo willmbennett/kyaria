@@ -3,9 +3,10 @@ import GoogleProvider from "next-auth/providers/google";
 import { MongoDBAdapter } from "@auth/mongodb-adapter"
 import clientPromise from "./mongodb"
 import { randomUUID, randomBytes } from "crypto";
+import type { Adapter } from 'next-auth/adapters';
 
 export const authOptions: NextAuthOptions = {
-  adapter: MongoDBAdapter(clientPromise),
+  adapter: MongoDBAdapter(clientPromise) as Adapter,
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: '/auth/signin'
