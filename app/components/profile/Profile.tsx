@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { ProfileClass } from '../../../models/Profile';
 import UserProfile from './UserProfile';
 import NewUserQuestionnaire from './NewUserQuestionaire';
-import ResumeParser from '../ResumeParser';
 import { Button } from '../Button';
 import Story from './onboarding/Story';
 import { stripObject } from '../../apps/[id]/app-helper';
@@ -68,8 +67,6 @@ export default function Profile(
 
     const renderOnboardingContent = () => {
         switch (onboardingStage) {
-            case OnboardingStage.ResumeUpload:
-                return <ResumeParser setOnboardingStage={setOnboardingStage} userId={userId} />
             case OnboardingStage.Questionnaire:
                 return profile && <NewUserQuestionnaire profile={profile} setOnboardingStage={setOnboardingStage} currentState={profile.questionnaire} />;
             case OnboardingStage.Story:
