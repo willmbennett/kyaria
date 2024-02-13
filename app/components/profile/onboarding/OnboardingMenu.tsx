@@ -151,7 +151,7 @@ export default function OnboardingMenu() {
                     aria-selected={activeTab === stage}
                     onClick={() => handleTabClick(stage)}
                   >
-                    {menuItems.get(stage)?.icon && React.cloneElement(menuItems.get(stage)?.icon)}
+                    {menuItems.get(stage)?.icon && React.cloneElement(menuItems.get(stage)?.icon as React.ReactElement)}
                     <span className="ml-2">{menuItems.get(stage)?.label}</span>
                   </button>
                 </TooltipPrimitive.Trigger>
