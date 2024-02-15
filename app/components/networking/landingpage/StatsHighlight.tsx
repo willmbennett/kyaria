@@ -1,4 +1,4 @@
-import { Container } from "../landingpage/Container";
+import { Container } from "../../landingpage/Container";
 
 const stats = [
   { number: '250.7M', text: 'Organizations' },

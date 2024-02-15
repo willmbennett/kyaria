@@ -1,58 +1,29 @@
 'use client'
-import React, { useState } from 'react';
-import { PersonClass } from '../../../models/Person';
-import PersonCard from './PersonCard';
+import React, { useEffect, useState } from 'react';
 import { ResumeClass } from '../../../models/Resume';
 import { Button } from '../Button';
 import { NetworkingResults } from './NetworkingResults';
 import ResumeDropdownMenu from './ResumeDropdownMenu';
 import Link from 'next/link';
+import { employerFuzzyMatchingAction, institutionFuzzyMatchingAction } from '../../networking/_action';
+import { usePathname } from 'next/navigation';
+import { useEntitySearch } from '../../../lib/hooks/use-entity-search';
+import { extractResumeText } from '../../networking/networking-helper';
+import EntityFilter from './filter/EntityFilter';
+import Collapsible from './filter/Collapsible';
 
 interface ResumeSearchProps {
     resumes: ResumeClass[]
 }
 
-function extractResumeText(obj: any, parentKey = '') {
-    let text = '';
-
-    // Define keys to exclude from text extraction
-    const excludeKeys = ['_id', 'resumeScan', 'createdAt', 'updatedAt', 'email', 'phone', 'social_links', 'userId'];
-
-    // Check if the current object is directly a string and not in the excluded keys
-    if (typeof obj === 'string' && !excludeKeys.includes(parentKey)) {
-        return obj + ' ';
-    }
-
-    // If the object is an array, iterate over it
-    if (Array.isArray(obj)) {
-        obj.forEach(item => {
-            text += extractResumeText(item);
-        });
-    }
-    // If the object is an object, iterate over its keys
-    else if (typeof obj === 'object' && obj !== null) {
-        Object.keys(obj).forEach(key => {
-            // Skip over excluded keys
-            if (!excludeKeys.includes(key)) {
-                // Special handling for the location to include it
-                if (key === 'location') {
-                    text += obj[key] + ' ';
-                } else {
-                    // Recursively process the current key
-                    text += extractResumeText(obj[key], key);
-                }
-            }
-        });
-    }
-
-    return text;
-}
-
 
 const NetworkingSearch = ({ resumes }: ResumeSearchProps) => {
+    const path = usePathname()
     const [query, setQuery] = useState('');
     const [useResume, setUseResume] = useState(false);
+    const [isCurrentEmployment, setIsCurrentEmployment] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isSearching, setIsSearching] = useState(false);
     const [embeddings, setEmbeddings] = useState<number[]>([]);
     const [selectedResumeId, setSelectedResumeId] = useState<string>(resumes[0]._id.toString() || '');
 
@@ -61,9 +32,42 @@ const NetworkingSearch = ({ resumes }: ResumeSearchProps) => {
     const resumeText = extractResumeText(selectedResume)
     const userQuery = useResume ? query + ' ' + resumeText : query
 
+    const institutionSearchAction = (query: string) => institutionFuzzyMatchingAction(query, path);
+    const {
+        query: institutionQuery,
+        setQuery: setInstitutionQuery,
+        isLoading: isSearchingInstitutions,
+        visibleResults: visibleInstitutionResults,
+        selected: selectedInstitutions,
+        selectEntity: selectInstitution,
+        removeSelectedEntity: removeSelectedInstitution,
+        debouncedSearch: debouncedInstitutionSearch,
+    } = useEntitySearch(institutionSearchAction);
+
+    useEffect(() => {
+        debouncedInstitutionSearch();
+    }, [debouncedInstitutionSearch]);
+
+    const employerSearchAction = (query: string) => employerFuzzyMatchingAction(query, path);
+    const {
+        query: employerQuery,
+        setQuery: setEmployerQuery,
+        isLoading: isSearchingEmployers,
+        visibleResults: visibleEmployerResults,
+        selected: selectedEmployers,
+        selectEntity: selectEmployer,
+        removeSelectedEntity: removeSelectdEmployer,
+        debouncedSearch: debouncedEmployerSearch,
+    } = useEntitySearch(employerSearchAction);
+
+    useEffect(() => {
+        debouncedEmployerSearch();
+    }, [debouncedEmployerSearch]);
+
 
     const handleSearch = async () => {
         setIsLoading(true);
+        setIsSearching(true)
         try {
             const response = await fetch('/api/openai/semanticsearch/embeddings', {
                 method: 'POST',
@@ -90,63 +94,128 @@ const NetworkingSearch = ({ resumes }: ResumeSearchProps) => {
         }
     };
 
+    const handleCancel = () => {
+        setIsSearching(false)
+    }
+
 
     return (
         <>
-            <div className='flex flex-col w-full space-y-4 pb-10'>
-                <h2 className="text-2xl font-semibold leading-tight text-slate-900">Select which resume to use</h2>
-                <p>This resume will be used to generate personalized emails, linkedin connection request messages, and can help refine your search results.</p>
-                {resumes.length > 0 ?
-                    <div className="mt-10 flex flex-col sm:flex-row sm:space-x-5 md:mt-12 md:justify-center items-center xl:justify-start">
-                        <ResumeDropdownMenu
-                            selectedResumeId={selectedResumeId}
-                            setSelectedResumeId={setSelectedResumeId}
-                            resumes={resumes}
-                        />
-                        {selectedResume && (
-                            <Link href={`/resumebuilder/${selectedResume._id.toString()}`} target="_blank">
-                                View Selected Resume
-                            </Link>
-                        )}
-                        <label className="flex items-center space-x-3">
-                            <input
-                                type="checkbox"
-                                className="form-checkbox"
-                                id="refineSearchWithResume"
-                                name="refineSearchWithResume"
-                                onChange={(e) => setUseResume(e.target.checked)}
+            <div className={`flex flex-col w-full space-y-10 pb-10 ${!isSearching && !isLoading ? 'visible' : 'invisible h-0'}`}>
+                <div>
+                    <h2 className="text-2xl font-semibold leading-tight text-slate-900">Select which resume to use</h2>
+                    <p>This resume will be used to generate personalized emails, linkedin connection request messages, and can help refine your search results.</p>
+                    {resumes.length > 0 ?
+                        <div className="mt-5 flex flex-col sm:flex-row sm:space-x-5 md:justify-center items-center xl:justify-start">
+                            <ResumeDropdownMenu
+                                selectedResumeId={selectedResumeId}
+                                setSelectedResumeId={setSelectedResumeId}
+                                resumes={resumes}
                             />
-                            <span className="text-sm text-gray-600">Refine search with my resume</span>
-                        </label>
-                    </div>
-                    :
-                    <div>
-                        <Button size='md' href='/resumebuilder/new' >Add a New Resume</Button>
-                    </div>
-                }
-                {selectedResume &&
-                    <>
-                        <h2 className="text-2xl font-semibold leading-tight text-slate-900">Add your networking goal</h2>
-                        <p>Your goal will be used to find the best people to network with.</p>
-                        <div className="mt-10 flex flex-col sm:flex-row sm:space-x-5 md:mt-12 md:justify-center xl:justify-start">
-
-                            <input
-                                type="text"
-                                value={query}
-                                onChange={(e) => setQuery(e.target.value)}
-                                placeholder="I'd like to find a job as a software engineer at Google..."
-                                className="input input-bordered input-primary w-full"
-                            />
-                            <Button onClick={handleSearch} disabled={isLoading || !selectedResumeId}>
-                                Search
-                            </Button>
+                            {selectedResume && (
+                                <Link href={`/resumebuilder/${selectedResume._id.toString()}`} target="_blank">
+                                    View Selected Resume
+                                </Link>
+                            )}
+                            <label className="flex items-center space-x-3">
+                                <input
+                                    type="checkbox"
+                                    className="form-checkbox"
+                                    id="refineSearchWithResume"
+                                    name="refineSearchWithResume"
+                                    onChange={(e) => setUseResume(e.target.checked)}
+                                />
+                                <span className="text-sm text-gray-600">Refine search with my resume</span>
+                            </label>
                         </div>
-                    </>
-                }
+                        :
+                        <div>
+                            <Button size='md' href='/resumebuilder/new' >Add a New Resume</Button>
+                        </div>
+                    }
+                </div>
+                <div className='inline-flex flex-col max-w-96'>
+                    <Collapsible title="Filters">
+                        <>
+                            <Collapsible title="Filter by School">
+                                <EntityFilter
+                                    query={institutionQuery}
+                                    setQuery={setInstitutionQuery}
+                                    results={visibleInstitutionResults}
+                                    selectedEntities={selectedInstitutions}
+                                    selectEntity={selectInstitution}
+                                    removeSelectedEntity={removeSelectedInstitution}
+                                    placeholder="Search for institutions..."
+                                />
+                            </Collapsible>
 
-                {isLoading && <p className="text-gray-700 dark:text-gray-400 mt-2 text-start">Searching...</p>}
-                {!isLoading && embeddings.length > 0 && selectedResume && <NetworkingResults embeddings={embeddings} userResume={selectedResume} />}
+                            <Collapsible title="Filter by Company">
+                                <div className='flex flex-col item-center space-y-4'>
+                                    <EntityFilter
+                                        query={employerQuery}
+                                        setQuery={setEmployerQuery}
+                                        results={visibleEmployerResults}
+                                        selectedEntities={selectedEmployers}
+                                        selectEntity={selectEmployer}
+                                        removeSelectedEntity={removeSelectdEmployer}
+                                        placeholder="Search for companies..."
+                                    />
+                                    {selectedEmployers.length > 0 &&
+                                        <label className="flex items-start space-x-3">
+                                            <input
+                                                type="checkbox"
+                                                className="isCurrentEmployment-checkbox"
+                                                id="isCurrentEmployment"
+                                                name="isCurrentEmployment"
+                                                onChange={(e) => setIsCurrentEmployment(e.target.checked)}
+                                            />
+                                            <span className="text-sm text-gray-600">Is current?</span>
+                                        </label>
+                                    }
+                                </div>
+                            </Collapsible>
+                        </>
+                    </Collapsible>
+                </div>
+
+
+                <div>
+                    {selectedResume &&
+                        <Collapsible title="Additional Information">
+                            <div>
+                                <h2 className="text-2xl font-semibold leading-tight text-slate-900"></h2>
+                                <p>Add any other information you want to search with.</p>
+                                <input
+                                    type="text"
+                                    value={query}
+                                    onChange={(e) => setQuery(e.target.value)}
+                                    placeholder="I'd like to find a job as a software engineer at Google..."
+                                    className="input input-bordered input-primary w-full"
+                                />
+                            </div>
+                        </Collapsible>
+                    }
+                </div>
+                <div>
+                    {!isLoading && selectedResumeId && userQuery != '' &&
+                        <Button onClick={handleSearch} disabled={isLoading || !selectedResumeId || userQuery === ''}>
+                            Search
+                        </Button>
+                    }
+                </div>
             </div>
+            {selectedResume && embeddings.length > 0 &&
+                <div className={`w-full pb-10 transition-opacity duration-500 ${isSearching ? 'opacity-100' : 'opacity-0'}`}>
+                    <Button size='sm' variant='ghost' onClick={handleCancel}>← Change search</Button>
+                    <NetworkingResults
+                        embeddings={embeddings}
+                        userResume={selectedResume}
+                        selectedInstitutions={selectedInstitutions}
+                        selectedEmployers={selectedEmployers}
+                        isCurrentEmployment={isCurrentEmployment}
+                    />
+                </div>
+            }
         </>
     );
 };

@@ -2,9 +2,9 @@ import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import Image from 'next/image'
 
 import homeHeroImg from '/public/images/stock/job-interview2.jpg'
-import AuthButton from '../AuthButton'
-import { Container } from '../landingpage/Container'
-import { Button } from '../Button'
+import AuthButton from '../../AuthButton'
+import { Container } from '../../landingpage/Container'
+import { Button } from '../../Button'
 
 export function NetworkingHero() {
   return (

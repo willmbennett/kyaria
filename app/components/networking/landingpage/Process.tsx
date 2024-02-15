@@ -1,9 +1,9 @@
 import Image from 'next/image'
 
 import processImage from '/public/images/stock/interview.jpg'
-import AuthButton from '../AuthButton'
-import { Container } from '../landingpage/Container'
-import { Button } from '../Button'
+import AuthButton from '../../AuthButton'
+import { Container } from '../../landingpage/Container'
+import { Button } from '../../Button'
 
 export function Process() {
   return (

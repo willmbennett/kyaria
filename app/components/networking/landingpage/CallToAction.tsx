@@ -2,9 +2,9 @@ import Image from 'next/image'
 
 import ctaImage1 from '/public/images/stock/job-interview2.jpg'
 import ctaImage2 from '/public/images/stock/entrepreneurship-3822492_1280.jpg'
-import AuthButton from '../AuthButton'
-import { Container } from '../landingpage/Container'
-import { Button } from '../Button'
+import AuthButton from '../../AuthButton'
+import { Container } from '../../landingpage/Container'
+import { Button } from '../../Button'
 
 export function CallToAction() {
   return (

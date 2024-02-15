@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { PersonClass } from "../../../models/Person";
-import PersonSummary from "./ChatOutput";
+import ChatOutput from "./ChatOutput";
 import { ResumeClass } from "../../../models/Resume";
 import { Button } from "../Button";
 import { useState } from "react";
@@ -62,7 +62,7 @@ Emily`
     ]
 
     return (
-        <div className="bg-white rounded-lg border border-gray-200 shadow-md overflow-hidden w-full flex flex-row space-x-2 p-3">
+        <div className="bg-white rounded-lg border border-gray-200 shadow-md overflow-hidden w-full flex flex-row space-x-5 p-10">
             {/* Image container with responsive image and circular style */}
             <div className="w-1/3">
                 <div className="flex justify-center mt-5">
@@ -151,13 +151,13 @@ Emily`
                 {cardContent == 'Email' &&
                     <>
                         <h5 className="text-xl font-semibold tracking-tight text-gray-900 text-center">About {name}</h5>
-                        <PersonSummary initialMessages={emailMessages} />
+                        <ChatOutput initialMessages={emailMessages} />
                     </>
                 }
                 {cardContent == 'LinkedIn' &&
                     <>
                         <h5 className="text-xl font-semibold tracking-tight text-gray-900 text-center">About {name}</h5>
-                        <PersonSummary initialMessages={linkedInMessages} />
+                        <ChatOutput initialMessages={linkedInMessages} />
                     </>
                 }
             </div>

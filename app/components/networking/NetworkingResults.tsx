@@ -4,12 +4,27 @@ import { ResumeClass } from '../../../models/Resume';
 import { Button } from '../Button';
 import { LoadingComponent } from './LoadingComponent';
 
+type results = {
+    targetDiffbotId: string;
+    name: string
+}
 
 interface NetworkingResultsProps {
     embeddings: number[];
     userResume: ResumeClass;
+    selectedInstitutions: results[];
+    selectedEmployers: results[];
+    isCurrentEmployment: boolean;
 }
-export const NetworkingResults = ({ embeddings, userResume }: NetworkingResultsProps) => {
+
+export const NetworkingResults = (
+    {
+        embeddings,
+        userResume,
+        selectedInstitutions,
+        selectedEmployers,
+        isCurrentEmployment
+    }: NetworkingResultsProps) => {
     const itemsPerPage = 5
     const [results, setResults] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +47,14 @@ export const NetworkingResults = ({ embeddings, userResume }: NetworkingResultsP
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ embeddings, skip, limit: itemsPerPage }),
+                body: JSON.stringify({
+                    embeddings,
+                    institutions: selectedInstitutions,
+                    employers: selectedEmployers,
+                    isCurrentEmployment,
+                    skip,
+                    limit: itemsPerPage
+                }),
             });
 
             if (response.ok) {
@@ -57,7 +79,7 @@ export const NetworkingResults = ({ embeddings, userResume }: NetworkingResultsP
             <div className="flex justify-between items-center my-4">
                 <Button
                     size='sm'
-                    variant={currentPage === 1? 'ghost': 'solid'}
+                    variant={currentPage === 1 ? 'ghost' : 'solid'}
                     onClick={() => handlePageChange(-1)}
                     disabled={currentPage === 1}
                 >
@@ -75,12 +97,12 @@ export const NetworkingResults = ({ embeddings, userResume }: NetworkingResultsP
     };
 
     return (
-        <div className="flex flex-col space-y-2 w-full">
+        <div className="relative space-y-2 w-full">
             {renderPaginationControls()}
             <div className="w-full">
                 <div className="flex flex-col space-y-2 w-full">
                     {isLoading ?
-                        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((p, i) => <LoadingComponent key={i} />)
+                        [1, 2, 3, 4, 5].map((p, i) => <LoadingComponent key={i} />)
                         :
                         results.length ?
                             results.map((person, index) => (

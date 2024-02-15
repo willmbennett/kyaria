@@ -88,6 +88,93 @@ export async function getPerson(id: string) {
     }
 }
 
+export async function checkDiffbotId(diffbotId: string) {
+    try {
+        await connectDB();
+
+        if (!diffbotId) {
+            return { error: "diffbotId not included" };
+        }
+
+        //console.log(diffbotId)
+
+        // Check if a subscription already exists for this userId
+        const person = await PersonModel.find({ diffbotId: diffbotId }).lean().exec()
+
+        //console.log(person)
+
+        if (person.length > 0) {
+            console.log('person exists with diffbotId:', diffbotId)
+            return {
+                existingPerson: true,
+            };
+        } else {
+            return { error: "Post not found" };
+        }
+    } catch (error) {
+        console.log(error)
+        return { error };
+    }
+}
+
+/*
+export async function fuzzymatching() {
+    try {
+        await connectDB();
+
+        console.log('made it here')
+
+        // define pipeline
+        const agg = [
+            {
+                $search: {
+                    index: 'person_search',
+                    autocomplete: {
+                        query: 'goog',
+                        path: "employments.employer.name",
+                        fuzzy: {
+                            maxEdits: 1,
+                            prefixLength: 1,
+                            maxExpansions: 256
+                        },
+                    },
+                    "returnStoredSource": true
+                },
+            },
+            { $limit: 10 }, // Adjust based on how many suggestions you want
+            {
+                $project: {
+                    _id: 0,
+                    employerNames: "$employments.employer.name",
+                },
+            },
+        ];
+
+        console.log('agg: ', agg)
+
+        // Check if a subscription already exists for this userId
+        const employers = await PersonModel.aggregate(agg)
+        // print results
+
+        employers.forEach((doc) => console.log(doc));
+
+        if (employers) {
+            transformProps(employers, castToString, '_id');
+            transformProps(employers, dateToString, ["createdAt", "updatedAt"]);
+            //console.log(subscription)
+            return {
+                employers,
+            };
+        } else {
+            return { error: "Post not found" };
+        }
+    } catch (error) {
+        console.log(error)
+        return { error };
+    }
+}
+*/
+
 export async function getPeopleTextExtraction(filter: { page: number, limit: number }) {
     try {
         await connectDB();
@@ -117,13 +204,11 @@ export async function getPeopleTextExtraction(filter: { page: number, limit: num
     }
 }
 
-export async function getPeople(filter: { page: number, limit: number }) {
+export async function getPeople(filter: { skip: number, limit: number }) {
     try {
         await connectDB();
-
-        const page = filter.page ?? 1;
         const limit = filter.limit ?? 10;
-        const skip = (page - 1) * limit;
+        const skip = filter.skip ?? 0
 
         //console.log(page, limit)
 
@@ -137,8 +222,6 @@ export async function getPeople(filter: { page: number, limit: number }) {
             //console.log(jobs)
             return {
                 people,
-                page,
-                limit,
                 results,
             };
         } else {

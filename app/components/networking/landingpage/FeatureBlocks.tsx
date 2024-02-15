@@ -1,9 +1,9 @@
 import Image from 'next/image'
 import featureImage1 from '/public/images/stock/interview-meeting.jpg'
 import featureImage2 from '/public/images/stock/student-laptop.jpg'
-import AuthButton from '../AuthButton'
-import { Container } from '../landingpage/Container'
-import { Button } from '../Button'
+import AuthButton from '../../AuthButton'
+import { Container } from '../../landingpage/Container'
+import { Button } from '../../Button'
 
 export function FeatureBlocks() {
   return (

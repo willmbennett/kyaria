@@ -118,3 +118,52 @@ export function extractPersonTextForEmbedding(person: PersonClass): string {
     // Combine all text components into a single string
     return textComponents.join(" ");
 }
+
+
+
+export function extractResumeText(obj: any, parentKey = '') {
+    let text = '';
+
+    // Define keys to exclude from text extraction
+    const includeKeys = [
+        'location',
+        'education',
+        'volunteering',
+        'professional_experience',
+        'projects',
+        'volunteering',
+        'company',
+        'institution',
+        'organization',
+        'title'
+    ];
+
+    // Check if the current object is directly a string and in the included keys
+    if (typeof obj === 'string' && includeKeys.includes(parentKey)) {
+        return obj + ' ';
+    }
+
+    // If the object is an array, iterate over it
+    if (Array.isArray(obj)) {
+        obj.forEach(item => {
+            text += extractResumeText(item);
+        });
+    }
+    // If the object is an object, iterate over its keys
+    else if (typeof obj === 'object' && obj !== null) {
+        Object.keys(obj).forEach(key => {
+            // Only include included keys
+            if (includeKeys.includes(key)) {
+                // Special handling for the location to include it
+                if (key === 'location') {
+                    text += obj[key] + ' ';
+                } else {
+                    // Recursively process the current key
+                    text += extractResumeText(obj[key], key);
+                }
+            }
+        });
+    }
+
+    return text;
+}

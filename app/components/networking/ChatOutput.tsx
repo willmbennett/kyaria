@@ -25,20 +25,21 @@ export default function ChatOutput(
 
     const lastmessage = messages[messages.length - 1]
 
-    const triggerPersonSummary = () => {
+    const triggerPersonSummary = useCallback(() => {
         //console.log('triggering reload of user data')
         reload();
-    }
+    }, [initialMessages])
 
-    const debouncedTriggerPersonSummary = useCallback(debounce(triggerPersonSummary, 500), [triggerPersonSummary]);
+    const debouncedTriggerPersonSummary = useCallback(debounce(triggerPersonSummary, 100), [triggerPersonSummary]);
 
 
     useEffect(() => {
-        // To ensure we only call reload once when the component mounts and if the last message is empty
-        // We directly check if lastMessage.content is empty without relying on a separate streaming state
-        debouncedTriggerPersonSummary()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); // Empty dependency array means this effect runs once on mount
+        debouncedTriggerPersonSummary();
+        return () => {
+            debouncedTriggerPersonSummary.cancel();
+        };
+    }, []);
+
 
 
     return (

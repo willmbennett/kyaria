@@ -6,7 +6,7 @@ import Avatar from '/public/images/avatars/team-03.jpg'
 import Avatar1 from '/public/images/avatars/team-01.jpg'
 import Avatar2 from '/public/images/avatars/avatar-01.jpg'
 import Avatar3 from '/public/images/avatars/team-02.jpg'
-import { Container } from '../landingpage/Container';
+import { Container } from '../../landingpage/Container';
 
 // Existing mockEmployees array with an additional entry
 

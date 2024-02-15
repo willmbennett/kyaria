@@ -21,7 +21,7 @@ class Contact {
 
 class Image {
     @prop()
-    classifications?: string;
+    classifications?: string | string[];
 
     @prop()
     fingerprint?: string;
@@ -284,23 +284,6 @@ class Union {
     public type?: string;
 }
 
-class ImageField {
-    @prop()
-    classifications?: string;
-
-    @prop()
-    fingerprint?: string;
-
-    @prop()
-    title?: string;
-
-    @prop()
-    isCached?: string;
-
-    @prop()
-    url?: string;
-}
-
 @ModelOptions({
     schemaOptions: {
         timestamps: true,
@@ -402,8 +385,8 @@ class PersonClass {
     @prop()
     image?: string;
 
-    @prop({ type: () => [ImageField] })
-    images?: ImageField[]
+    @prop({ type: () => [Image] })
+    images?: Image[]
 
     @prop()
     height?: number;
@@ -442,7 +425,7 @@ class PersonClass {
     };
 
     @prop()
-    npiNumbers?: string;
+    npiNumbers?: string | string[];
 
     @prop({ type: () => [LinkedEntity] })
     parents?: LinkedEntity[];
