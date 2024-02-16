@@ -65,9 +65,6 @@ export default function ChatWithGPT({
         role: "user",
         content: `Please help me refine this: ${watch("input")}`
       })
-    } else if (currentState == '') {
-      setMessages([])
-      reload()
     } else {
       reload()
     }
