@@ -13,16 +13,18 @@ import { PDFViewer } from "../pdfviewer/PDFViewer";
 import { pdfjs } from 'react-pdf';
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css"
-import type { PDFDocumentProxy } from 'pdfjs-dist';
+import { DocumentCallback } from "react-pdf/dist/cjs/shared/types";
 
 type FormFields = {
     input: string;
 };
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-    'pdfjs-dist/build/pdf.worker.min.js',
-    import.meta.url,
-).toString();
+// pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+//     'pdfjs-dist/build/pdf.worker.min.js',
+//     import.meta.url,
+// ).toString();
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 type PDFFile = File | null;
 
@@ -36,8 +38,8 @@ export const ResumeUploadForm = ({ userId }: { userId: string }) => {
     const router = useRouter()
 
     const onFileChange = useFileHandler(setFile, setBase64File);
-    const onDocumentLoadSuccess = ({ numPages: nextNumPages }: PDFDocumentProxy): void => {
-        setNumPages(nextNumPages);
+    const onDocumentLoadSuccess = (pdf: DocumentCallback): void => {
+        setNumPages(pdf.numPages);
     };
 
     const onSubmit: SubmitHandler<FormFields> = async () => {

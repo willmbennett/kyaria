@@ -64,6 +64,8 @@ export function Header() {
 
   const signedInLinks = [
     { label: 'Resume Builder', href: '/resumebuilder' },
+    { label: 'LinkedIn Bio', href: '/bio' },
+    { label: 'Elevator Pitch', href: '/pitch' },
     /*{ label: 'Pricing', href: '/pricing' },*/
     /*{ label: 'Contact', href: '/contact' },*/
   ]
@@ -71,7 +73,7 @@ export function Header() {
   const desktopMenuLinks = session ? signedInLinks : links
 
   const signedInMenuLinks = [
-    { label: 'Profile (beta)', href: `/profile/${session?.user?.id}` },
+    { label: 'Profile', href: `/profile/${session?.user?.id}` },
     { label: 'Manage Subscription', href: `https://billing.stripe.com/p/login/fZedQQbuK5Ke2Q06oo` },
   ]
 

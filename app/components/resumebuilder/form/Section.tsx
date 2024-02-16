@@ -3,7 +3,7 @@ import { Button } from '../../Button';
 
 interface SectionProps {
   title: string; // Add this line to include a title in the props
-  children: ReactNode;
+  children?: ReactNode;
   isDragging?: boolean
 }
 

@@ -5,6 +5,7 @@ import { JobClass } from '../../../../models/Job';
 import { ResumeClass } from '../../../../models/Resume';
 import { updateJobAppAction } from '../../../board/_action';
 import ChatWithGPT from '../../board/ChatWithGPT';
+import { Message } from 'ai';
 
 const ACTIVE_ROUTE = "bg-gray-200 hover:bg-gray-600 hover:text-white";
 const INACTIVE_ROUTE = "hover:bg-gray-600 hover:text-white";
@@ -91,13 +92,15 @@ export default function Experience({
                 </div>
                 {
                     emails.map((email: any, i: number) => {
-                        const message = [
+                        const message: Message[] = [
                             {
+                                "id": '1',
                                 "role": "system",
                                 "content": `You are a professional email writer specialized in creating personalized, compelling emails for jobseekers.
                                 Tone: conversational, spartan, use less corporate jargon`
                             },
                             {
+                                "id": '2',
                                 "role": "user",
                                 "content": `Please write me a ${selectedEmail.type} email for this job post: ${JSON.stringify(jobStripped)}.
                                 Include information from my profile ${JSON.stringify(userResumeStripped)} and keep the writing style consistent. 

@@ -1,25 +1,24 @@
 'use client'
 
-import { updateProfileAction } from '../../../profile/_action';
-import ChatWithGPT from '../../board/ChatWithGPT';
-import { Button } from '../../Button';
+import { Message } from 'ai';
+import { ResumeClass } from '../../../models/Resume';
+import { updateProfileAction } from '../../profile/_action';
+import ChatWithGPT from '../board/ChatWithGPT';
 
-export default function Bio({
+export const BioGen = ({
+    selectedResume,
     profileId,
-    profileStripped,
+    currentBio,
     desiredRole,
-    setOnboardingStage,
-    currentState
 }: {
+    selectedResume: ResumeClass,
     profileId: string,
-    profileStripped: any,
-    desiredRole: string,
-    setOnboardingStage: any,
-    currentState?: string
-}) {
-
-    const message = [
+    currentBio?: string,
+    desiredRole?: string // I made this one optional for now
+}) => {
+    const message: Message[] = [
         {
+            'id': '1',
             "role": "system",
             "content":
                 `
@@ -86,49 +85,29 @@ export default function Bio({
                     `
         },
         {
+            'id': '2',
             "role": "user",
             "content":
                 `Based on the following details, help me craft a compelling, LinkedIn Bio:
-                    - Desired role: ${desiredRole} 
-                    - My professional experience: ${JSON.stringify(profileStripped.professional_experience)} 
-                    - My skills: ${JSON.stringify(profileStripped.skills)} 
-                    - My education: ${JSON.stringify(profileStripped.education)}
+                    ${desiredRole && `- Desired role: ${desiredRole}`}
+                    - My professional experience: ${JSON.stringify(selectedResume.professional_experience)} 
+                    - My skills: ${JSON.stringify(selectedResume.skills)} 
+                    - My education: ${JSON.stringify(selectedResume.education)}
                     `
         }
     ];
 
-    // Reload the last call
-    const handleClick = () => {
-        setOnboardingStage('behaivoral')
-    };
-
     return (
-        <>
-            <h1 className="text-center sm:text-6xl text-4xl font-bold text-slate-900 mb-8">
-                Let's update your LinkedIn Bio
-            </h1>
-            <Button
-                variant="solid"
-                size="md"
-                onClick={handleClick}
-                type="button"
-                className="m-3"
-            >
-                Next Step
-            </Button>
-            <div className="lg:p-6 w-full">
-                <p>Click generate to get started!</p>
-                <ChatWithGPT
-                    documentID={profileId}
-                    message={message}
-                    setKey='bio'
-                    currentState={currentState || ''}
-                    saveToDatabase={updateProfileAction}
-                    temp={0.7}
-                    activeSubscription={true}
-                />
-            </div>
-
-        </>
+        <div className="lg:p-6 w-full">
+            <ChatWithGPT
+                documentID={profileId}
+                message={message}
+                setKey='bio'
+                currentState={currentBio || ''}
+                saveToDatabase={updateProfileAction}
+                temp={0.7}
+                activeSubscription={true}
+            />
+        </div>
     );
 }

@@ -1,39 +1,49 @@
-import Profile from '../../components/profile/Profile';
-import { getProfile } from "../../../lib/profile-db";
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '../../../lib/auth';
+import { createProfile, getProfile } from "../../../lib/profile-db";
 import { redirect } from 'next/navigation';
-import Await from '../../jobs/await';
-import FeedbackAside from '../../components/landingpage/FeedbackAside';
+import { checkSubscription } from '../../../lib/hooks/check-subscription';
+import { ProfileNotFound } from '../../components/profile/notfound/ProfileNotFound';
+import { getResumes } from '../../../lib/resume-db';
+import { ResumeClass } from '../../../models/Resume';
+import OnboardingMenu from '../../components/profile/onboarding/OnboardingMenu';
+
+type getResumesType = {
+  resumes: ResumeClass[]
+}
 
 export default async function ProfilePage({ params }: { params: { id: string } }) {
-  const session = await getServerSession(authOptions)
+  const { activeSubscription, userId, userName } = await checkSubscription()
+  const { profile } = await getProfile(params.id);
 
-  if (!session) {
-    redirect('/auth/signin')
-    return null; // Add this to ensure no further rendering happens after redirect
+  if (!profile) {
+    if (params.id == userId) {
+      await createProfile({ userId })
+      redirect(`/profile/${userId}`)
+    } else {
+      return <ProfileNotFound userId={userId} />
+    }
   }
+  const profileId = profile._id.toString()
 
-  const profilePromise = getProfile(params.id);
+  const { resumes } = await getResumes(userId) as getResumesType
+
+  const { bio, story, questionnaire } = profile
 
   return (
-    <div className="flex max-w-5xl mx-auto flex-col md:flex-row justify-center py-2 min-h-screen">
-      <div className="flex flex-1 w-full flex-col items-center text-center lg:px-4">
-        {/* @ts-expect-error Server Component */}
-        <Await promise={profilePromise}>
-          {({ profile }) =>
-            <Profile
-              userId={params.id}
-              profile={profile}
-              sessionUserId={session?.user?.id}
-              edit={params.id == session?.user?.id}
-            />
-          }
-        </Await>
-      </div>
-      <div>
-        <FeedbackAside />
-      </div>
+    <div className="flex flex-col w-full md:w-3/4 lg:px-4 space-y-10">
+      <h1 className="text-4xl font-semibold text-slate-900 p-6">{userName}'s Profile</h1>
+        <div className="bg-white shadow-sm p-6 rounded-lg">
+          <OnboardingMenu
+            // hasResumes={hasResumes}
+            // hasQuestionnaire={hasQuestionaire}
+            questionnaire={questionnaire}
+            bio={bio}
+            story={story}
+            activeSubscription={activeSubscription}
+            resumes={resumes}
+            userId={userId}
+            profileId={profileId}
+          />
+        </div>
     </div>
   );
 }

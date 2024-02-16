@@ -19,7 +19,7 @@ export default async function HomePage() {
   const { totalResumes } = await countTotalResumes()
 
   if (userId && !activeSubscription) {
-    redirect('/resumeBuilder');
+    redirect('/resumebuilder');
   }
 
   return (
