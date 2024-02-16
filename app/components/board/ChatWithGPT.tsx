@@ -42,12 +42,13 @@ export default function ChatWithGPT({
   const router = useRouter()
   const [finishedLoading, setFinishedLoading] = useState(false)
   const [loading, setLoading] = useState(false)
+  const initialMessages: Message[] = [...message, { id: '1', role: 'assistant', content: currentState }]
 
   const { messages, setMessages, reload, append, stop } = useChat({
     body: {
       temp: temp
     },
-    initialMessages: [...message, { id: '1', role: 'assistant', content: currentState }],
+    initialMessages,
     onFinish() {
       setFinishedLoading(true);
       setLoading(false);
@@ -66,7 +67,7 @@ export default function ChatWithGPT({
       })
     } else if (currentState == '') {
       setMessages([])
-      append(message);
+      reload()
     } else {
       reload()
     }
@@ -81,8 +82,7 @@ export default function ChatWithGPT({
   const handleReset = () => {
     setEdit(false);
     setLoading(true)
-    setMessages([])
-    append(message);
+    reload()
   };
 
   // cancel editing
