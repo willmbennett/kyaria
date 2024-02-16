@@ -69,11 +69,15 @@ export default function OnboardingMenu({
   const hasBio = bio ? true : false
   const onboarding = !hasResumes || !hasQuestionnaire || !hasPitch || !hasBio
 
-  let firstTabShown = OnboardingStage.ResumeUpload
-  if (hasResumes) firstTabShown = OnboardingStage.Questionnaire
-  if (hasQuestionnaire) firstTabShown = OnboardingStage.ElevatorPitch
-  if (hasPitch) firstTabShown = OnboardingStage.Bio
-  if (hasBio) firstTabShown = OnboardingStage.ResumeUpload
+  let firstTabShown = OnboardingStage.ResumeUpload; // Default starting point
+  // Adjust the logic to more accurately reflect the user's progress
+  if (hasResumes && !hasQuestionnaire) {
+    firstTabShown = OnboardingStage.Questionnaire;
+  } else if (hasQuestionnaire && !hasPitch) {
+    firstTabShown = OnboardingStage.ElevatorPitch;
+  } else if (hasPitch && !hasBio) {
+    firstTabShown = OnboardingStage.Bio;
+  }
 
   const [activeTab, setActiveTab] = useState<OnboardingStage>(firstTabShown);
 
