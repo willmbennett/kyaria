@@ -1,5 +1,6 @@
 'use client'
 
+import { Message } from 'ai';
 import { ResumeClass } from '../../../models/Resume';
 import { updateProfileAction } from '../../profile/_action';
 import ChatWithGPT from '../board/ChatWithGPT';
