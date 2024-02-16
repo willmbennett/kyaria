@@ -1,6 +1,6 @@
 'use client'
 import React from 'react';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ResumeDescription from "./descriptions/ResumeDescription";
 import QuestionnaireDescription from "./descriptions/QuestionnaireDescription";
 import ElevatorPitchDescription from "./descriptions/PitchDescription";
@@ -14,27 +14,21 @@ import { BoltIcon } from "@heroicons/react/24/outline";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/24/outline";
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
+import { OnboardingStage } from './Enum';
+import { Questionnaire } from '../../../../models/Profile';
+import { ResumeClass } from '../../../../models/Resume';
+import Router, { useRouter } from 'next/router';
 
 const MENU_ITEM_BASE_STYLE = `inline-flex items-center rounded-t-lg py-4 px-4 text-sm font-medium text-center border-b-2`;
 const ACTIVE_ROUTE_STYLE = `text-blue-500 border-b-2 border-blue-500`;
 const INACTIVE_ROUTE_STYLE = `text-gray-500 border-transparent hover:text-gray-600 hover:border-gray-300`;
 
-enum OnboardingStage {
-  ResumeUpload,
-  Questionnaire,
-  ElevatorPitch,
-  Bio,
-  Story
-}
-
 type MenuItem = {
   label: string;
   instruction: React.ReactNode;
-  description: React.ReactNode;
   disabled: boolean;
   show: boolean;
   icon: React.ReactNode;
-  completed: boolean;
 };
 
 const onboardingStages: OnboardingStage[] = [
@@ -46,82 +40,108 @@ const onboardingStages: OnboardingStage[] = [
 ];
 
 interface OnboardingMenuProps {
-  hasResumes: boolean;
-  hasQuestionaire: boolean
-  hasPitch: boolean
-  hasBio: boolean
+  // hasPitch: boolean;
+  // hasBio: boolean;
+  questionnaire: Questionnaire | undefined;
+  bio: string | undefined;
+  story: string | undefined;
+  activeSubscription: boolean;
+  resumes: ResumeClass[] | undefined;
+  userId: string;
+  profileId: string;
 }
 
-export default function OnboardingMenu(
-  {
-    hasResumes,
-    hasQuestionaire,
-    hasPitch,
-    hasBio
-  }: OnboardingMenuProps) {
+export default function OnboardingMenu({
+  // hasPitch,
+  // hasBio,
+  questionnaire,
+  bio,
+  story,
+  activeSubscription,
+  resumes,
+  userId,
+  profileId
+}: OnboardingMenuProps) {
+
+  const [hasResumes, setHasResume] = useState((resumes && resumes.length > 0) ? true : false);
+  const [hasQuestionnaire, setHasQuestionnaire] = useState((questionnaire) ? true : false);
+  const [activeTab, setActiveTab] = useState<OnboardingStage>(OnboardingStage.ResumeUpload);
+  const [isInstructionVisible, setIsInstructionVisible] = useState<boolean>(true);
+  
 
   const initialMenuItems: Map<OnboardingStage, MenuItem> = new Map([
     [OnboardingStage.ResumeUpload, {
       label: "Resume Upload",
       instruction: <WelcomeMessage />,
-      description: <ResumeDescription />,
       disabled: false,
-      show: !hasResumes,
+      show: true,
       icon: <DocumentTextIcon className='h-5 w-5"' />,
-      completed: false
     }],
     [OnboardingStage.Questionnaire, {
       label: "Questionnaire",
       instruction: <WelcomeMessage />,
-      description: <QuestionnaireDescription />,
       disabled: false,
-      show: !hasQuestionaire,
+      show: true,
       icon: <ClipboardDocumentListIcon className="h-5 w-5" />,
-      completed: false
     }],
     [OnboardingStage.ElevatorPitch, {
       label: "Elevator Pitch",
       instruction: <ProfileEnhancement />,
-      description: <ElevatorPitchDescription />,
-      disabled: !hasResumes,
-      show: !hasPitch,
+      disabled: !hasResumes || !hasQuestionnaire,
+      show: true,
       icon: <BoltIcon className="h-5 w-5" />,
-      completed: false
     }],
     [OnboardingStage.Bio, {
       label: "LinkedIn Bio",
       instruction: <ProfileEnhancement />,
-      description: <LinkedInBioDescription />,
-      disabled: !hasResumes,
-      show: !hasBio,
+      disabled: !hasResumes || !hasQuestionnaire,
+      show: true,
       icon: <UserCircleIcon className="h-5 w-5" />,
-      completed: false
     }],
     [OnboardingStage.Story, {
       label: "Interview Stories",
       instruction: <ProfileEnhancement />,
-      description: <InterviewStoriesDescription />,
       disabled: !hasResumes,
       show: false, //Temp setting this to false since it's going to take longer to build out
       icon: <StarIcon className="h-5 w-5" />,
-      completed: false
     }]
   ]);
 
-  function getFirstVisibleTab(menuItems: Map<OnboardingStage, MenuItem>): OnboardingStage {
-    const entries = Array.from(menuItems.entries());
-    for (let [stage, item] of entries) {
-      if (item.show) {
-        return stage;
-      }
-    }
-    return OnboardingStage.ResumeUpload;
-  }
-
-
-  const [activeTab, setActiveTab] = useState<OnboardingStage>(() => getFirstVisibleTab(initialMenuItems));
-
   const [menuItems, setMenuItems] = useState<Map<OnboardingStage, MenuItem>>(initialMenuItems);
+
+  useEffect(() => {
+    const ResumeOrQuestionnaireIncomplete = (activeTab === OnboardingStage.ResumeUpload || activeTab === OnboardingStage.Questionnaire) && (!resumes || !questionnaire)
+    const PitchOrBioIncomplete = (activeTab === OnboardingStage.ElevatorPitch || activeTab === OnboardingStage.Bio) && (!story || !bio);
+    
+    setIsInstructionVisible(ResumeOrQuestionnaireIncomplete || PitchOrBioIncomplete);
+  }, [activeTab, bio, resumes, questionnaire, story]);
+
+
+
+  useEffect(() => {
+    setHasResume((!resumes || resumes.length === 0) ? false : true);
+    setHasQuestionnaire((questionnaire) ? true : false);
+  }, [resumes, questionnaire]);
+
+  useEffect(() => {
+    setMenuItems((prevMenuItems) => {
+        const updatedMenuItems = new Map(prevMenuItems);
+        const elevatorPitchMenuItem = prevMenuItems.get(OnboardingStage.ElevatorPitch);
+        const bioMenuItem = prevMenuItems.get(OnboardingStage.Bio);
+        
+        if (elevatorPitchMenuItem && bioMenuItem) {
+            updatedMenuItems.set(OnboardingStage.ElevatorPitch, {
+                ...elevatorPitchMenuItem,
+                disabled: !hasResumes || !hasQuestionnaire
+            });
+            updatedMenuItems.set(OnboardingStage.Bio, {
+                ...bioMenuItem,
+                disabled: !hasResumes || !hasQuestionnaire
+            });
+        }
+        return updatedMenuItems;
+    });
+}, [hasResumes, hasQuestionnaire]);
 
   const handleTabClick = (stage: OnboardingStage) => {
     if (!menuItems.get(stage)?.disabled) {
@@ -129,22 +149,27 @@ export default function OnboardingMenu(
     }
   };
 
-  // used for testing states. Delete later
-  const toggleDisabledState = () => {
-    console.log(typeof activeTab);
-    setMenuItems(items => {
-      const updatedItems = new Map(items);
-      updatedItems.forEach((value, key) => {
-        value.completed = true;
-      });
-      return updatedItems;
-    });
+  const renderSection = (activeTab: OnboardingStage) => {
+    switch (activeTab) {
+      case OnboardingStage.ResumeUpload:
+        return <ResumeDescription resumes={resumes} userId={userId} activeSubscription={activeSubscription} />;
+      case OnboardingStage.Questionnaire:
+        return <QuestionnaireDescription questionnaire={questionnaire} userId={userId} profileId={profileId} />;
+      case OnboardingStage.ElevatorPitch:
+        return <ElevatorPitchDescription story={story} activeSubscription={activeSubscription} resumes={resumes} profileId={profileId} questionnaire={questionnaire} />;
+      case OnboardingStage.Bio:
+        return <LinkedInBioDescription bio={bio} activeSubscription={activeSubscription} resumes={resumes} profileId={profileId} questionnaire={questionnaire} />;
+      case OnboardingStage.Story:
+        return <InterviewStoriesDescription />;
+      default:
+        return null;
+    }
   };
 
   return (
     <div className="max-w-5xl">
       <div className="border-b border-gray-200 dark:border-gray-700 mb-4">
-        <div className="mb-4">{menuItems.get(activeTab)?.instruction}</div>
+        {isInstructionVisible && <div className="mb-4">{menuItems.get(activeTab)?.instruction}</div>}
         <ul className="flex flex-wrap -mb-px" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
           {onboardingStages.map((stage, index) => {
             const menuItem = menuItems.get(stage);
@@ -183,13 +208,10 @@ export default function OnboardingMenu(
         </ul>
       </div>
       <div id="myTabContent">
-        {onboardingStages.map((stage, index) => (
-          <div key={index} className={`p-4 rounded-lg dark:bg-gray-800 ${activeTab === stage ? '' : 'hidden'}`} id={`content-${index}`} role="tabpanel" aria-labelledby={`tab-${index}`}>
-            {menuItems.get(stage)?.description}
-          </div>
-        ))}
+      <div className={`p-4 rounded-lg dark:bg-gray-800`} role="tabpanel" aria-labelledby={`tab-${activeTab}`}>
+        { renderSection(activeTab) }
       </div>
-      {/* <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md" onClick={toggleDisabledState}>Undisable Tabs</button> */}
+      </div>
     </div>
   );
 }

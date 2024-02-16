@@ -1,23 +1,47 @@
-'use client'
-
-import { useRouter } from 'next/navigation';
+import { useState } from 'react'; // Import useState if not already imported
 import { Button } from "../../../Button";
+import { Pitch } from '../../../pitch/Pitch';
+import { ResumeClass } from '../../../../../models/Resume';
+import { Questionnaire } from '../../../../../models/Profile';
 
-const ElevatorPitchDescription = () => {
-  const router = useRouter();
+const ElevatorPitchDescription = ({
+  story,
+  activeSubscription,
+  resumes,
+  profileId,
+  questionnaire
+}: {
+  story: string | undefined;
+  activeSubscription: boolean;
+  resumes: ResumeClass[] | undefined;
+  profileId: string;
+  questionnaire: Questionnaire | undefined;
+}) => {
 
-  const handleButtonClick = () => {
-    router.push('/pitch');
-  };
+  const [isEditing, setIsEditing] = useState(false);
 
   return (
     <>
-      <ul className="list-disc pl-5 text-left">
-        <li><b>Elevator Pitch Construction:</b> Craft a compelling elevator pitch that highlights your key strengths and achievements.</li>
-      </ul>
-      <Button size="md" className="mt-10" onClick={handleButtonClick}>
-        Start Elevator Pitch
-      </Button>
+      {(story && activeSubscription) || isEditing ? (
+        (resumes && questionnaire && (
+          <Pitch
+            resumes={resumes}
+            profileId={profileId}
+            currentPitch={story || ''}
+            desiredRole={questionnaire.desiredRole}
+          />
+        )
+        )
+      ) : (
+        <>
+          <ul className="list-disc pl-5 text-left">
+            <li><b>Elevator Pitch Construction:</b> Craft a compelling elevator pitch that highlights your key strengths and achievements.</li>
+          </ul>
+          <Button size="md" className="mt-10" onClick={() => setIsEditing(true)}>
+            Create Elevator Pitch
+          </Button>
+        </>
+      )}
     </>
   );
 };

@@ -6,7 +6,7 @@ import { Button } from '../Button';
 import { roleOptions } from '../../profile/profile-helper';
 import { updateProfileAction } from '../../profile/_action';
 import { Questionnaire } from '../../../models/Profile';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'
 const H2_STYLE = 'text-left font-bold text-2xl py-4 mb-4'
@@ -15,14 +15,18 @@ export default function UserQuestionnaire(
     {
         userId,
         profileId,
-        currentState
+        currentState,
+        updateDisplay,
     }: {
         userId: string
         profileId: string,
         currentState?: Questionnaire
+        updateDisplay?: (data: Questionnaire) => void
     }
 ) {
     const router = useRouter()
+    const path = usePathname();
+
     const { register, handleSubmit, setValue, formState: { errors } } = useForm<Questionnaire>({
         defaultValues: currentState
     });
@@ -30,9 +34,12 @@ export default function UserQuestionnaire(
     const onSubmit: SubmitHandler<Questionnaire> = async (data: any) => {
         //console.log("Submitted data:", data);
         try {
-            const path = "/"
             const res = await updateProfileAction(profileId, { questionnaire: data }, path);
-            router.push(`/profile/${userId}`)
+            if (updateDisplay) {
+                updateDisplay(data);
+
+            }
+            router.refresh()
         } catch (err) {
             console.log(err)
         }
@@ -50,9 +57,6 @@ export default function UserQuestionnaire(
 
     return (
         <div>
-            <h1 className="text-center sm:text-6xl text-4xl font-bold text-slate-900 mb-8">
-                Questionnaire
-            </h1>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className={BASIC_FIELD_STYLE}>
                     <label htmlFor="desiredRole">What job role are you seeking?</label>

@@ -117,6 +117,7 @@ export default function ChatWithGPT({
     data[setKey] = returnedMessage
     //console.log(id, data)
     const update = await saveToDatabase(id, data, "/")
+    router.refresh()
 
     // Update the state
     //console.log(finishedLoading)

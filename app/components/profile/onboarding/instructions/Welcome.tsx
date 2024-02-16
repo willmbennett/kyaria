@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { OnboardingStage } from '../Enum';
+import { ResumeClass } from '../../../../../models/Resume';
+import { Questionnaire } from '../../../../../models/Profile';
 
 const WelcomeMessage = () => {
   return (
