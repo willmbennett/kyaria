@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { updateProfileAction } from '../../../profile/_action';
 import { Button } from '../../Button';
+import { Message } from 'ai';
 
 const ACTIVE_ROUTE = "bg-gray-200 hover:bg-gray-600 hover:text-white";
 const INACTIVE_ROUTE = "hover:bg-gray-600 hover:text-white";
@@ -63,8 +64,9 @@ export default function StarStory({
         defaultValues: { details: detail }
     });
 
-    const message = [
+    const message: Message[] = [
         {
+            "id": '1',
             "role": "system",
             "content": `You are an advanced career coach specialized in crafting compelling STAR stories. 
             Tone: conversational, spartan, use less corporate jargon
@@ -88,6 +90,7 @@ export default function StarStory({
             `
         },
         {
+            "id": '2',
             role: "user",
             content: `Create a STAR story ${selectedTheme == '' ? '' : `with the theme of ${selectedTheme}`} for this resume accomplishment: "${accomplishment}". 
             ${detail ? `Here are some details about the achievement: ${detail}` : ""}
@@ -125,11 +128,11 @@ export default function StarStory({
                     <form onSubmit={handleSubmit(onSubmit)} className="mb-4">
                         <div className="mb-3">
                             <label htmlFor="details" className="block mb-2 text-sm font-medium text-gray-700">Add some details on your accomplishment to improve your story</label>
-                            <textarea 
-                            {...register("details", { required: true })} 
-                            id="details" rows={10} 
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" 
-                            placeholder={defaultMessage}
+                            <textarea
+                                {...register("details", { required: true })}
+                                id="details" rows={10}
+                                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                placeholder={defaultMessage}
                             />
                             {errors.details && <p className="mt-1 text-xs text-red-600">Please specify your experience.</p>}
                         </div>

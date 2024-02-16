@@ -1,5 +1,6 @@
 'use client'
 
+import { Message } from 'ai';
 import { ResumeClass } from '../../../models/Resume';
 import { updateProfileAction } from '../../profile/_action';
 import ChatWithGPT from '../board/ChatWithGPT';
@@ -15,8 +16,9 @@ export const PitchGen = ({
     currentPitch?: string,
     desiredRole?: string // I made this one optional for now
 }) => {
-    const message = [
+    const message: Message[] = [
         {
+            "id": '1',
             "role": "system",
             "content":
                 `
@@ -48,6 +50,7 @@ export const PitchGen = ({
                     `
         },
         {
+            "id": '2',
             "role": "user",
             "content":
                 `${currentPitch ? `Improve this elevator pitch: ${currentPitch} using the following context` : 'Based on the following details, help me craft a compelling, narrative-style story:'}
@@ -66,7 +69,7 @@ export const PitchGen = ({
                 documentID={profileId}
                 message={message}
                 setKey='story'
-                currentState={currentPitch}
+                currentState={currentPitch || ''}
                 saveToDatabase={updateProfileAction}
                 temp={0.7}
                 activeSubscription={true}

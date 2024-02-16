@@ -1,5 +1,6 @@
 'use client'
 
+import { Message } from 'ai';
 import ChatWithGPT from '../../board/ChatWithGPT';
 
 export default function Responsibility({
@@ -15,8 +16,8 @@ export default function Responsibility({
     documentID: string,
     setKey: string,
     content: string,
-    message: any,
-    saveToDatabase: any,
+    message: Message[],
+    saveToDatabase: (id: any, data: any, path: string) => void,
     parentIndex: number,
     childIndex: number,
     jobKeyWords: string[]

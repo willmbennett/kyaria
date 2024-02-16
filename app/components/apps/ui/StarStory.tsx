@@ -9,6 +9,7 @@ import { Button } from '../../Button';
 import { updateProfileAction } from '../../../profile/_action';
 import { useSession } from "next-auth/react";
 import DropdownMenu from './DropdownMenu';
+import { Message } from 'ai';
 
 const ACTIVE_ROUTE = "bg-gray-200 hover:bg-gray-600 hover:text-white";
 const INACTIVE_ROUTE = "hover:bg-gray-600 hover:text-white";
@@ -75,8 +76,9 @@ export default function StarStory({
     };
 
 
-    const message = [
+    const message: Message[] = [
         {
+            "id": '1',
             "role": "system",
             "content": `You are an advanced career coach specialized in crafting compelling STAR stories, follow-up questions, and answers. 
             Tone: conversational, spartan, use less corporate jargon
@@ -126,6 +128,7 @@ export default function StarStory({
           `
         },
         {
+            "id": '2',
             role: "user",
             content: `Create a STAR story ${selectedTheme == '' ? '' : `with the theme of ${selectedTheme}`} for this resume achievement: "${content}". 
             ${detail ? `Here are some details about the achievement: ${detail}` : ""}
@@ -177,74 +180,74 @@ export default function StarStory({
 
     return (
         <div className="rounded-xl">
-    <h3 className="text-left mb-2 font-bold">Accomplishment</h3>
-    <p className="text-left mb-4">{content}</p>
-    
-    {showDetails ? (
-        <form onSubmit={handleSubmit(onSubmit)} className="mb-4">
-            <div className="mb-3">
-                <label htmlFor="details" className="block mb-2 text-sm font-medium text-gray-700">
-                    Add some details on your accomplishment to improve your story
-                </label>
-                <textarea
-                    {...register("details", { required: true })}
-                    id="details" rows={10}
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                    placeholder={defaultMessage}
-                />
-                {errors.details && <p className="mt-1 text-xs text-red-600">Please specify your experience.</p>}
-            </div>
-            <Button type="submit" size='md'>Add Details</Button>
-        </form>
-    ) : (
-        <>
-            <div className='flex justify-between items-center'>
-                <h3 className="text-left mb-2 font-bold">Details</h3>
-                <button
-                    type='button'
-                    onClick={toggleDetails}
-                    className="mb-4 inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                    Edit Details
-                </button>
-            </div>
-            <div className='flex w-full justify-between'>
-                <div className='flex flex-col'>
-                    <p>Select a theme for your answer</p>
-                </div>
-                <DropdownMenu
-                    selectedTheme={selectedTheme}
-                    setSelectedTheme={setSelectedTheme}
-                    showOptions={showOptions}
-                    setShowOptions={setShowOptions}
-                    themes={themes}
-                />
-            </div>
-            {userCanEdit && !savedToProfile && starStory && (
-                <div className='flex flex-col w-full text-center'>
-                    <p>Like what you see? Make this your default by saving to your profile. Note: it will overwrite the story saved to your profile.</p>
-                    <div className='flex w-full justify-center my-2'>
-                        <Button size='md' onClick={saveToProfile}>Make default</Button>
+            <h3 className="text-left mb-2 font-bold">Accomplishment</h3>
+            <p className="text-left mb-4">{content}</p>
+
+            {showDetails ? (
+                <form onSubmit={handleSubmit(onSubmit)} className="mb-4">
+                    <div className="mb-3">
+                        <label htmlFor="details" className="block mb-2 text-sm font-medium text-gray-700">
+                            Add some details on your accomplishment to improve your story
+                        </label>
+                        <textarea
+                            {...register("details", { required: true })}
+                            id="details" rows={10}
+                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            placeholder={defaultMessage}
+                        />
+                        {errors.details && <p className="mt-1 text-xs text-red-600">Please specify your experience.</p>}
                     </div>
-                </div>
+                    <Button type="submit" size='md'>Add Details</Button>
+                </form>
+            ) : (
+                <>
+                    <div className='flex justify-between items-center'>
+                        <h3 className="text-left mb-2 font-bold">Details</h3>
+                        <button
+                            type='button'
+                            onClick={toggleDetails}
+                            className="mb-4 inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        >
+                            Edit Details
+                        </button>
+                    </div>
+                    <div className='flex w-full justify-between'>
+                        <div className='flex flex-col'>
+                            <p>Select a theme for your answer</p>
+                        </div>
+                        <DropdownMenu
+                            selectedTheme={selectedTheme}
+                            setSelectedTheme={setSelectedTheme}
+                            showOptions={showOptions}
+                            setShowOptions={setShowOptions}
+                            themes={themes}
+                        />
+                    </div>
+                    {userCanEdit && !savedToProfile && starStory && (
+                        <div className='flex flex-col w-full text-center'>
+                            <p>Like what you see? Make this your default by saving to your profile. Note: it will overwrite the story saved to your profile.</p>
+                            <div className='flex w-full justify-center my-2'>
+                                <Button size='md' onClick={saveToProfile}>Make default</Button>
+                            </div>
+                        </div>
+                    )}
+                    <div className='flex w-full justify-center bg-slate-100'>
+                        <p>{savedToProfile && 'Updated your profile with the new story'}</p>
+                    </div>
+                    <ChatWithGPT
+                        documentID={resumeId}
+                        setKey={`${setKey}.starStory`}
+                        message={message}
+                        currentState={starStory || ''}
+                        parentIndex={parentIndex}
+                        childIndex={childIndex}
+                        saveToDatabase={updateResumeAction}
+                        temp={0.7}
+                        activeSubscription={activeSubscription}
+                    />
+                </>
             )}
-            <div className='flex w-full justify-center bg-slate-100'>
-                <p>{savedToProfile && 'Updated your profile with the new story'}</p>
-            </div>
-            <ChatWithGPT
-                documentID={resumeId}
-                setKey={`${setKey}.starStory`}
-                message={message}
-                currentState={starStory || ''}
-                parentIndex={parentIndex}
-                childIndex={childIndex}
-                saveToDatabase={updateResumeAction}
-                temp={0.7}
-                activeSubscription={activeSubscription}
-            />
-        </>
-    )}
-</div>
+        </div>
 
     );
 }

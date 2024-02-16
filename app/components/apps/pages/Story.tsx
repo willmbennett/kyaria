@@ -6,6 +6,7 @@ import { updateProfileAction } from '../../../profile/_action';
 import { useSession } from "next-auth/react";
 import { useState } from 'react';
 import { Button } from '../../Button';
+import { Message } from 'ai';
 
 interface StoryProps {
     jobAppId: string,
@@ -34,8 +35,9 @@ export default function Story({
     const userCanEdit = session?.user?.id == '650f813286f63a9d8c0080ee' || session?.user?.id == userId
     const [savedToProfile, setSavedToProfile] = useState(false)
 
-    const message = [
+    const message: Message[] = [
         {
+            "id": '1',
             "role": "system",
             "content":
                 `
@@ -70,6 +72,7 @@ export default function Story({
                     `
         },
         {
+            "id": '2',
             "role": "user",
             "content":
                 `${profileStory == '' ?
@@ -111,12 +114,12 @@ Job Posting Details: ${JSON.stringify(job)}`
                 <div className='flex flex-col w-full text-center'>
                     <p>Like what you see? Make this your default by saving to your profile. Note: it will overwrite the story saved to your profile.</p>
                     <div className='flex w-full justify-center my-2'>
-                    <Button
-                        size='md'
-                        onClick={saveToProfile}
-                    >
-                        Make default
-                    </Button>
+                        <Button
+                            size='md'
+                            onClick={saveToProfile}
+                        >
+                            Make default
+                        </Button>
                     </div>
                 </div>
             }

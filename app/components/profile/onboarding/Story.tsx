@@ -1,5 +1,6 @@
 'use client'
 
+import { Message } from 'ai';
 import { updateProfileAction } from '../../../profile/_action';
 import ChatWithGPT from '../../board/ChatWithGPT';
 import { Button } from '../../Button';
@@ -18,8 +19,9 @@ export default function Story({
     currentState?: string
 }) {
 
-    const message = [
+    const message: Message[] = [
         {
+            "id": '1',
             "role": "system",
             "content":
                 `
@@ -51,6 +53,7 @@ export default function Story({
                     `
         },
         {
+            "id": '2',
             "role": "user",
             "content":
                 `Based on the following details, help me craft a compelling, narrative-style story:

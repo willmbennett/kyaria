@@ -9,7 +9,7 @@ interface CoverLetterProps {
     currentCoverLetter: string,
     userResume: any,
     userResumeStripped: any,
-    jobStripped:any,
+    jobStripped: any,
     job: any
     jobKeyWords: string[]
     activeSubscription: boolean
@@ -25,8 +25,9 @@ export default function CoverLetter({
     jobKeyWords,
     activeSubscription
 }: CoverLetterProps) {
-    const message = [
+    const message: Message[] = [
         {
+            "id": '1',
             "role": "system",
             "content": `You are a professional cover letter writer specialized in creating personalized, compelling cover letters tailored to specific job descriptions. The letter should showcase the individual's experience, skills, and education, and should be organized into an introductory paragraph, a body, and a closing.
             Example:
@@ -43,6 +44,7 @@ export default function CoverLetter({
             `
         },
         {
+            "id": '2',
             "role": "user",
             "content": `Please write me a tailored cover letter for the following job description:
             - Job description: ${JSON.stringify(jobStripped)}
