@@ -26,13 +26,6 @@ export default async function ProfilePage({ params }: { params: { id: string } }
 
   const { resumes } = await getResumes(userId) as getResumesType
 
-  const hasResumes = resumes.length > 0
-  const hasQuestionaire = profile?.questionnaire ? true : false
-  const hasPitch = profile?.story ? true : false
-  const hasBio = profile?.bio ? true : false
-
-  const onboarding = !hasResumes || !hasQuestionaire || !hasPitch || !hasBio
-
   const { bio, story, questionnaire } = profile
 
   return (

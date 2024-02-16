@@ -27,28 +27,24 @@ export default function ResumeBuilderHome(
 
     return (
         <div className='flex justify-center w-full'>
-            <div className='px-2 py-4 w-full flex flex-col md:flex-row space-x-2 justify-center max-w-5xl'>
-                <div className='w-full md:w-2/5 h-screen'>
-                    <ResumeListMenu
-                        resumes={resumes}
-                        resumeIndex={resumeIndex}
-                        setResumeIndex={setResumeIndex}
-                        activeSubscription={activeSubscription}
-                    />
-                </div>
-                <div className='items-center flex flex-col text-center md:min-w-3/5'>
-                    {activeResume &&
-                        <div className='w-full flex flex-col items-center justify-center'>
-                            <CustomPDFViewer
-                                data={activeResume}
-                                useEdit={true}
-                                userId={userId}
-                                useSave={true}
-                                activeSubscription={activeSubscription}
-                            />
-                        </div>
-                    }
-                </div>
+            <div className='px-2 py-4 w-full flex flex-col space-x-2 justify-center max-w-5xl'>
+                <ResumeListMenu
+                    resumes={resumes}
+                    resumeIndex={resumeIndex}
+                    setResumeIndex={setResumeIndex}
+                    activeSubscription={activeSubscription}
+                />
+                {activeResume &&
+                    <div className='w-full flex flex-col items-center justify-center'>
+                        <CustomPDFViewer
+                            data={activeResume}
+                            useEdit={true}
+                            userId={userId}
+                            useSave={true}
+                            activeSubscription={activeSubscription}
+                        />
+                    </div>
+                }
             </div>
         </div >
     );

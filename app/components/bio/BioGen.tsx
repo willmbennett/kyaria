@@ -15,8 +15,9 @@ export const BioGen = ({
     currentBio?: string,
     desiredRole?: string // I made this one optional for now
 }) => {
-    const message = [
+    const message: Message[] = [
         {
+            'id': '1',
             "role": "system",
             "content":
                 `
@@ -83,6 +84,7 @@ export const BioGen = ({
                     `
         },
         {
+            'id': '2',
             "role": "user",
             "content":
                 `Based on the following details, help me craft a compelling, LinkedIn Bio:
@@ -100,7 +102,7 @@ export const BioGen = ({
                 documentID={profileId}
                 message={message}
                 setKey='bio'
-                currentState={currentBio}
+                currentState={currentBio || ''}
                 saveToDatabase={updateProfileAction}
                 temp={0.7}
                 activeSubscription={true}

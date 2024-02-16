@@ -26,20 +26,22 @@ export const Bio = ({
         <>
             <h2 className="text-2xl font-semibold leading-tight text-slate-900">Select which resume to use</h2>
             <p>This resume will be used to generate your bio.</p>
-            <div>
+            <div className='pt-3'>
                 <ResumeDropdownMenu
                     selectedResumeId={selectedResumeId}
                     setSelectedResumeId={setSelectedResumeId}
                     resumes={resumes}
                 />
             </div>
-            <h2 className="text-2xl font-semibold leading-tight text-slate-900">Generate your bio</h2>
-            <BioGen
-                selectedResume={selectedResume}
-                profileId={profileId}
-                currentBio={currentBio}
-                desiredRole={desiredRole}
-            />
+            <div className='pt-5'>
+                <h2 className="text-2xl font-semibold leading-tight text-slate-900">Generate your bio</h2>
+                <BioGen
+                    selectedResume={selectedResume}
+                    profileId={profileId}
+                    currentBio={currentBio}
+                    desiredRole={desiredRole}
+                />
+            </div>
         </>
     );
 }

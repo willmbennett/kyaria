@@ -26,21 +26,22 @@ export const Pitch = ({
         <>
             <h2 className="text-2xl font-semibold leading-tight text-slate-900">Select which resume to use</h2>
             <p>This resume will be used to help generate your pitch.</p>
-            <div>
+            <div className='pt-3'>
                 <ResumeDropdownMenu
                     selectedResumeId={selectedResumeId}
                     setSelectedResumeId={setSelectedResumeId}
                     resumes={resumes}
                 />
             </div>
-            <h2 className="text-2xl font-semibold leading-tight text-slate-900">Generate your pitch</h2>
-            <PitchGen
-                selectedResume={selectedResume}
-                profileId={profileId}
-                currentPitch={currentPitch}
-                desiredRole={desiredRole}
-            />
-
+            <div className='pt-5'>
+                <h2 className="text-2xl font-semibold leading-tight text-slate-900">Generate your pitch</h2>
+                <PitchGen
+                    selectedResume={selectedResume}
+                    profileId={profileId}
+                    currentPitch={currentPitch}
+                    desiredRole={desiredRole}
+                />
+            </div>
         </>
     );
 }

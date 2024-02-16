@@ -8,31 +8,29 @@ import { deleteProfileAction } from "../../../../profile/_action";
 
 const QuestionnaireDescription = ({ questionnaire, userId, profileId }: { questionnaire: Questionnaire | undefined, userId: string, profileId: string }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [questionnaireData, setQuestionnaireData] = useState(questionnaire);
 
   const updateDisplay = (data: Questionnaire) => {
     setIsEditing(false);
-    setQuestionnaireData(data);
   }
 
   const displayUserData = () => {
     return (
       <>
-        {questionnaireData &&
+        {questionnaire &&
           <div className="bg-white shadow-sm p-6 rounded-lg space-y-6">
             <h3 className="text-2xl font-bold text-slate-900">Your Questionnaire Answers</h3>
             <ul className="list-disc pl-5 space-y-2">
-              {questionnaireData.desiredRole && (
-                <li><strong>Desired Role:</strong> {questionnaireData.desiredRole}</li>
+              {questionnaire.desiredRole && (
+                <li><strong>Desired Role:</strong> {questionnaire.desiredRole}</li>
               )}
-              {questionnaireData.industryExperience !== undefined && (
-                <li><strong>Industry Experience:</strong> {questionnaireData.industryExperience} years</li>
+              {questionnaire.industryExperience !== undefined && (
+                <li><strong>Industry Experience:</strong> {questionnaire.industryExperience} years</li>
               )}
-              {questionnaireData.jobSearchStatus && (
-                <li><strong>Job Search Status:</strong> {questionnaireData.jobSearchStatus}</li>
+              {questionnaire.jobSearchStatus && (
+                <li><strong>Job Search Status:</strong> {questionnaire.jobSearchStatus}</li>
               )}
-              {questionnaireData.salaryMin !== undefined && questionnaireData.salaryMax !== undefined && (
-                <li><strong>Salary Range:</strong> ${questionnaireData.salaryMin.toLocaleString()} - ${questionnaireData.salaryMax.toLocaleString()}</li>
+              {questionnaire.salaryMin !== undefined && questionnaire.salaryMax !== undefined && (
+                <li><strong>Salary Range:</strong> ${questionnaire.salaryMin.toLocaleString()} - ${questionnaire.salaryMax.toLocaleString()}</li>
               )}
 
             </ul>
@@ -67,7 +65,7 @@ const QuestionnaireDescription = ({ questionnaire, userId, profileId }: { questi
         profileId={profileId}
         currentState={questionnaire}
         updateDisplay={updateDisplay}
-      />) : (questionnaireData ?
+      />) : (questionnaire ?
         displayUserData() :
         displayStartQuestionnaire()
       )}

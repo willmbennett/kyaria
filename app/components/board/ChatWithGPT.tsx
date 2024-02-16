@@ -10,9 +10,9 @@ import { usePathname, useRouter } from 'next/navigation';
 interface Props {
   documentID: string,
   setKey: string,
-  message: any;
-  currentState: any;
-  saveToDatabase: any;
+  message: Message[];
+  currentState: string;
+  saveToDatabase: (id: any, data: any, path: string) => void;
   temp?: number;
   copy?: boolean;
   parentIndex?: number;
@@ -36,7 +36,7 @@ export default function ChatWithGPT({
   parentIndex,
   childIndex,
   jobKeyWords,
-  activeSubscription=false
+  activeSubscription = false
 }: Props) {
   const path = usePathname()
   const router = useRouter()
@@ -187,16 +187,16 @@ export default function ChatWithGPT({
             >
               Save
             </Button>
-            {activeSubscription &&  
-            <Button
-              variant="ghost"
-              size="md"
-              onClick={handleReset}
-              type="button"
-              className="m-3"
-            >
-              Reset
-            </Button>
+            {activeSubscription &&
+              <Button
+                variant="ghost"
+                size="md"
+                onClick={handleReset}
+                type="button"
+                className="m-3"
+              >
+                Reset
+              </Button>
             }
           </>)}
           {!loading && activeSubscription && (<>
@@ -207,7 +207,7 @@ export default function ChatWithGPT({
               type="button"
               className="m-3"
             >
-              {currentState == ''? 'Generate': 'Tailor'}
+              {currentState == '' ? 'Generate' : 'Tailor'}
             </Button>
           </>)}
           {!loading && !activeSubscription && (<>

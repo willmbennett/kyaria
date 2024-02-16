@@ -46,12 +46,14 @@ export default async function AppLayout({
         <div className='min-h-screen'>
             <section className="flex w-full justify-center pt-16 md:pt-20 xl:pt-32">
                 {/* Hero section content */}
-                <Container className="flex flex-col justify-center w-full">
-                    <div>
-                        <Button size='sm' variant='ghost' href={`/profile/${userId}`}>← Back to Profile</Button>
+                <Container className="flex justify-center w-full">
+                    <div className="flex flex-col justify-center w-full max-w-5xl">
+                        <div className='pb-10'>
+                            <Button size='sm' variant='ghost' href={`/profile/${userId}`}>← Back to Profile</Button>
+                        </div>
+                        {/* Hero text and buttons */}
+                        {children}
                     </div>
-                    {/* Hero text and buttons */}
-                    {children}
                 </Container>
             </section>
         </div>
