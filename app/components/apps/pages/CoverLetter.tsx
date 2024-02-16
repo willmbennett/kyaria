@@ -3,6 +3,7 @@
 import ChatWithGPT from '../../board/ChatWithGPT';
 import { updateJobAppAction } from '../../../board/_action';
 import { CoverLetterPDF } from '../CoverLetterPDF';
+import { Message } from 'ai';
 
 interface CoverLetterProps {
     jobAppId: string,
