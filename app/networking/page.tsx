@@ -48,10 +48,11 @@ export default async function NetworkingPage() {
     <>
       <section className="flex w-full justify-center items-start pt-16 md:pt-20 xl:pt-32 min-h-screen bg-gradient-to-r from-white to-slate-400">
         <Container className="flex flex-col items-center justify-center w-full">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl pb-5 md:pb-10 lg:pb-16 font-bold leading-none text-center">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl pb-2 md:pb-5 lg:pb-8 font-bold leading-none text-center">
             Kyaria.ai Networking (beta)
           </h1>
-          <div className="max-w-5xl w-full mb-10 p-4 md:p-6 lg:p-8 bg-white bg-opacity-90 rounded-xl shadow-xl">
+          <p className="text-2xl md:text-3xl font-bold text-gray-800 pb-2 md:pb-5 lg:pb-8">Set up an ai-powered networking campaign to automatically network for you.</p>
+          <div className="max-w-5xl w-full mb-10 pt-4 px-4 md:pt-6 md:px-6 lg:pt-8 md:px-8 bg-white bg-opacity-90 rounded-xl shadow-xl">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
               {stats.map((stat, index) => (
                 <div key={index} className="flex flex-col items-center p-4 bg-gray-100 rounded-lg hover:bg-gray-200 transition-all duration-300">
@@ -59,6 +60,9 @@ export default async function NetworkingPage() {
                   <span className="mt-2 text-base text-gray-600">{stat.text}</span>
                 </div>
               ))}
+            </div>
+            <div className="py-2 lg:py-4 w-fill text-center">
+              <p className="text-slate-600">Powered by <a href="https://www.diffbot.com/" className="text-slate-900 font-medium underline">DiffBot</a></p>
             </div>
           </div>
           <div className="max-w-5xl w-full">

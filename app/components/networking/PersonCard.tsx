@@ -3,8 +3,9 @@ import { PersonClass } from "../../../models/Person";
 import ChatOutput from "./ChatOutput";
 import { ResumeClass } from "../../../models/Resume";
 import { Button } from "../Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Message } from "ai";
+import { CheckCircleIcon } from "@heroicons/react/20/solid";
 
 // Define the props for the component
 interface PersonCardProps {
@@ -18,7 +19,7 @@ export default function PersonCard(
         userResume
     }: PersonCardProps
 ) {
-    const [cardContent, setCardContent] = useState<'About' | 'Email' | 'LinkedIn'>('About')
+    const [sending, setSending] = useState(true)
     const {
         image,
         name,
@@ -34,7 +35,7 @@ export default function PersonCard(
         {
             id: "2",
             role: "user",
-            content: `Please write me a networking email that I can send to this person: ${JSON.stringify(person)}. Here is my resume: ${JSON.stringify(userResume)}.`
+            content: `Please write me a networking email subject line that I can send to this person: ${JSON.stringify(person)}. Here is my resume: ${JSON.stringify(userResume)}. Only output the first 70 characters though and end with ...`
         },
         { id: '3', role: 'assistant', content: '' }
     ]
@@ -43,23 +44,48 @@ export default function PersonCard(
         {
             id: '1',
             role: "system",
-            content: `Craft a concise, professional LinkedIn outreach message to a recruiter, focusing on a specific job interest. The message should be engaging, personalized, and under 300 characters. Include key elements like a brief introduction, something they have in common, and an invitation for further discussion. Tone: conversational, spartan, use less corporate jargon
-Example:
-Hi Mariah,
-
-Although I’ve never gotten the chance to work with you directly, I’ve heard rave reviews about your sales techniques and ability to work with tough clients. Hopefully one of these days I can see you in action! ’Til then, I’ll catch you in the break room.
-
-Best,
-
-Emily`
+            content: `Craft a truncated LinkedIn outreach message to a recruiter, focusing on a specific job interest. Only output the first 70 characters though and end with ...
+            Example: Hi Derek, I'm Will Bennett, a tech enthusiast with a background...`
         },
         {
             id: "2",
             role: "user",
-            content: `Please write me a linkedIn connection request that I can send to this person: ${JSON.stringify(person)}. Here is my resume: ${JSON.stringify(userResume)}. Tone: conversational, spartan, use less corporate jargon`
+            content: `Please write me a truncated linkedIn connection request that I can send to this person: ${JSON.stringify(person)}. Here is my resume: ${JSON.stringify(userResume)}. Tone: conversational, spartan, use less corporate jargon. Only output the first 70 characters though and end with ...`
         },
         { id: '3', role: 'assistant', content: '' }
     ]
+
+    useEffect(() => {
+        setSending(true);
+        const timer = setTimeout(() => {
+            setSending(false);
+        }, 10000); // Simulate sending for 5 seconds
+        return () => clearTimeout(timer);
+    }, []);
+
+    const renderSending = () => {
+        return (
+            <>
+                {
+                    sending ? (<div className='space-y-2'>
+                        <div className="flex justify-center items-center space-x-2">
+                            <p className="text-gray-700 dark:text-gray-400">Sending</p>
+                            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    ) : (
+                        <div className="flex justify-center space-x-2">
+                            <p className="text-gray-700 dark:text-gray-400">Sent</p>
+                            <CheckCircleIcon className="h-6 w-6 text-green-500" />
+                        </div>
+                    )
+                }
+            </>
+        )
+    }
 
     return (
         <div className="bg-white rounded-lg border border-gray-200 shadow-md overflow-hidden w-full flex flex-row space-x-5 p-10">
@@ -96,10 +122,10 @@ Emily`
                         </Link>
                     </div>
 
-                    {emailAddresses && emailAddresses.length > 0 && (<>
+                    {emailAddresses && emailAddresses.length > 0 && false && (<>
                         <p className="text-gray-700 dark:text-gray-400 mt-2 text-center">Contact Info</p>
                         <ul>
-                            {emailAddresses.map((e, i) => (
+                            {emailAddresses?.map((e, i) => (
                                 <li key={i}>{e.contactString}</li>
                             ))}
                         </ul>
@@ -107,59 +133,41 @@ Emily`
                 </div>
             </div>
             <div className="w-2/3 text-center">
-                <div className="flex justify-center space-x-4 p-4">
-                    <Button
-                        onClick={() => setCardContent('About')}
-                        disabled={cardContent === 'About'}
-                        variant={cardContent === 'About' ? 'solid' : 'ghost'}
-                        size="md"
-                        color="dark"
-                        type="button"
-                    >
-                        About
-                    </Button>
+                <>
+                    <div className="flex flex-col gap-4 h-full">
+                        {/* About Section */}
+                        <div className="flex h-1/3 flex-row items-center p-4 space-x-2 rounded-lg bg-gray-50">
+                            <h5 className="text-xl font-semibold tracking-tight text-gray-900 shrink-0">About</h5>
+                            <p className="text-justify flex-grow text-xs p-2">{description?.slice(0, 100) + '...' || 'No description available.'}</p>
+                        </div>
 
-                    <Button
-                        onClick={() => setCardContent('Email')}
-                        disabled={cardContent === 'Email'}
-                        variant={cardContent === 'Email' ? 'solid' : 'ghost'}
-                        size="md"
-                        color="dark"
-                        type="button"
-                    >
-                        Email
-                    </Button>
+                        {/* Email Section - Styled to resemble an inbox */}
+                        <div className="flex h-1/3 flex-row items-center bg-gray-100 p-4 space-x-2 rounded-lg">
+                            <h5 className="text-lg font-semibold shrink-0">Email</h5>
+                            <div className="flex flex-grow h-full items-center bg-white rounded-md border border-gray-300">
+                                <div className="truncate text-xs text-wrap p-2">
+                                    {/* Extracting only the subject line for the emailMessages */}
+                                    <ChatOutput initialMessages={emailMessages} />
+                                </div>
 
-                    <Button
-                        onClick={() => setCardContent('LinkedIn')}
-                        disabled={cardContent === 'LinkedIn'}
-                        variant={cardContent === 'LinkedIn' ? 'solid' : 'ghost'}
-                        size="md"
-                        color="dark"
-                        type="button"
-                    >
-                        LinkedIn
-                    </Button>
-                </div>
+                            </div>
+                            {renderSending()}
+                        </div>
 
-                {cardContent == 'About' &&
-                    <>
-                        <h5 className="text-xl font-semibold tracking-tight text-gray-900 text-center">About {name}</h5>
-                        <p>{person.description ? person.description : 'Description not found'}</p>
-                    </>
-                }
-                {cardContent == 'Email' &&
-                    <>
-                        <h5 className="text-xl font-semibold tracking-tight text-gray-900 text-center">About {name}</h5>
-                        <ChatOutput initialMessages={emailMessages} />
-                    </>
-                }
-                {cardContent == 'LinkedIn' &&
-                    <>
-                        <h5 className="text-xl font-semibold tracking-tight text-gray-900 text-center">About {name}</h5>
-                        <ChatOutput initialMessages={linkedInMessages} />
-                    </>
-                }
+                        {/* LinkedIn Section - Styled to resemble a LinkedIn message */}
+                        <div className="flex h-1/3 flex-row items-center bg-blue-100 space-x-2 p-2 rounded-lg">
+                            <h5 className="text-lg font-semibold shrink-0">LinkedIn</h5>
+                            <div className="flex flex-grow h-full items-center bg-white rounded-md border border-gray-300">
+                                <div className="truncate text-xs text-wrap p-2">
+                                    {/* Extracting a snippet for the LinkedInMessages */}
+                                    <ChatOutput initialMessages={linkedInMessages} />
+                                </div>
+                            </div>
+                            {renderSending()}
+                        </div>
+                    </div>
+
+                </>
             </div>
         </div>
     );
