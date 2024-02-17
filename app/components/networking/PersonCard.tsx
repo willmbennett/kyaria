@@ -59,7 +59,7 @@ export default function PersonCard(
         setSending(true);
         const timer = setTimeout(() => {
             setSending(false);
-        }, 10000); // Simulate sending for 5 seconds
+        }, 20000); // Simulate sending for 5 seconds
         return () => clearTimeout(timer);
     }, []);
 
