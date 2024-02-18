@@ -30,8 +30,8 @@ export default async function ProfilePage({ params }: { params: { id: string } }
 
   return (
     <div className="flex flex-col w-full md:w-3/4 lg:px-4 space-y-10">
-      <h1 className="text-4xl font-semibold text-slate-900 p-6">{userName}'s Profile</h1>
-        <div className="bg-white shadow-sm p-6 rounded-lg">
+      <h1 className="bg-white text-4xl font-semibold text-slate-900 p-6">{userName}'s Profile</h1>
+        <div className="shadow-sm p-6 rounded-lg">
           <OnboardingMenu
             // hasResumes={hasResumes}
             // hasQuestionnaire={hasQuestionaire}

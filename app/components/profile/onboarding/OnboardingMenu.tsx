@@ -18,7 +18,7 @@ import { Questionnaire } from '../../../../models/Profile';
 import { ResumeClass } from '../../../../models/Resume';
 import { WelcomeIntro } from './instructions/WelcomeIntro';
 
-const MENU_ITEM_BASE_STYLE = `inline-flex items-center rounded-t-lg py-4 px-4 text-sm font-medium text-center border-b-2`;
+const MENU_ITEM_BASE_STYLE = `inline-flex items-center rounded-t-lg md:py-4 md:px-4 py-2 px-2 text-sm font-medium text-center border-b-2 h-full`;
 const ACTIVE_ROUTE_STYLE = `text-blue-500 border-b-2 border-blue-500`;
 const INACTIVE_ROUTE_STYLE = `text-gray-500 border-transparent hover:text-gray-600 hover:border-gray-300`;
 
@@ -152,42 +152,44 @@ export default function OnboardingMenu({
     <div className="max-w-5xl">
       <div className="border-b border-gray-200 dark:border-gray-700 mb-4">
         {onboarding && menuItems.get(firstTabShown)?.instruction}
-        <ul className="flex flex-wrap -mb-px" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
-          {onboardingStages.map((stage, index) => {
-            const menuItem = menuItems.get(stage);
-            if (menuItem) {
-              return (
-                <li key={index} className="mr-2" role="presentation">
-                  <TooltipPrimitive.Root>
-                    <TooltipPrimitive.Trigger asChild>
-                      <button
-                        className={`${MENU_ITEM_BASE_STYLE}
+        <div className="overflow-x-auto">
+          <ul className="flex flex-nowrap -mb-px items-stretch mt-10" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
+            {onboardingStages.map((stage, index) => {
+              const menuItem = menuItems.get(stage);
+              if (menuItem) {
+                return (
+                  <li key={index} className="mr-2" role="presentation">
+                    <TooltipPrimitive.Root>
+                      <TooltipPrimitive.Trigger asChild>
+                        <button
+                          className={`${MENU_ITEM_BASE_STYLE}
                       ${activeTab === stage ? ACTIVE_ROUTE_STYLE : `${menuItem?.disabled ? 'text-gray-300 border-transparent' : INACTIVE_ROUTE_STYLE}`}
                       ${menuItem?.disabled ? 'cursor-not-allowed' : ''}`}
-                        id={`tab-${index}`}
-                        data-tabs-target={`#content-${index}`}
-                        type="button"
-                        role="tab"
-                        aria-controls={`content-${index}`}
-                        aria-selected={activeTab === stage}
-                        onClick={() => handleTabClick(stage)}
-                      >
-                        {menuItem?.icon && React.cloneElement(menuItem?.icon as React.ReactElement)}
-                        <span className="ml-2">{menuItem?.label}</span>
-                      </button>
-                    </TooltipPrimitive.Trigger>
-                    {menuItem?.disabled && (
-                      <TooltipPrimitive.Content side="top" align="center" sideOffset={5} className="text-xs text-gray-900 bg-gray-300 px-2 py-1 rounded-md">
-                        Please complete resume upload and questionnaire first
-                      </TooltipPrimitive.Content>
-                    )}
-                  </TooltipPrimitive.Root>
-                </li>
-              )
+                          id={`tab-${index}`}
+                          data-tabs-target={`#content-${index}`}
+                          type="button"
+                          role="tab"
+                          aria-controls={`content-${index}`}
+                          aria-selected={activeTab === stage}
+                          onClick={() => handleTabClick(stage)}
+                        >
+                          {menuItem?.icon && React.cloneElement(menuItem?.icon as React.ReactElement)}
+                          <span className="ml-2">{menuItem?.label}</span>
+                        </button>
+                      </TooltipPrimitive.Trigger>
+                      {menuItem?.disabled && (
+                        <TooltipPrimitive.Content side="top" align="center" sideOffset={5} className="text-xs text-gray-900 bg-gray-300 px-2 py-1 rounded-md">
+                          Please complete resume upload and questionnaire first
+                        </TooltipPrimitive.Content>
+                      )}
+                    </TooltipPrimitive.Root>
+                  </li>
+                )
+              }
             }
-          }
-          )}
-        </ul>
+            )}
+          </ul>
+        </div>
       </div>
       <div id="myTabContent">
         <div className={`p-4 rounded-lg dark:bg-gray-800`} role="tabpanel" aria-labelledby={`tab-${activeTab}`}>

@@ -1,6 +1,6 @@
 export const ProfileEnhancement = () => {
   return (
-    <div className="max-w-xl my-8">
+    <div className="max-w-xl">
       <h2 className="text-2xl font-bold mb-4">Elevate Your Professional Identity</h2>
       <p className="mb-4">Brilliant! With your resume uploaded and your aspirations noted, you're poised for a remarkable journey of professional enhancement. Here's how we can elevate your presence further:</p>
       <ul className="list-disc pl-5 text-left">
