@@ -109,7 +109,6 @@ export const NetworkingResults = (
                                 <PersonCard
                                     key={index}
                                     person={person}
-                                    userResume={userResume}
                                 />
                             ))
                             :

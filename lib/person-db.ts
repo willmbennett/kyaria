@@ -67,20 +67,73 @@ export async function getPerson(id: string) {
             return { error: "id not included" };
         }
 
+        console.log(id)
+
         const objectId = stringToObjectId(id)
 
         // Check if a subscription already exists for this userId
         const person = await PersonModel.findById(objectId);
 
+        //console.log('person:', person)
+
         if (person) {
-            transformProps(person, castToString, '_id');
-            transformProps(person, dateToString, ["createdAt", "updatedAt"]);
-            //console.log(subscription)
+            const {
+                _id,
+                image,
+                name,
+                summary,
+                crunchbaseUri,
+                linkedInUri,
+                emailAddresses,
+                description
+            } = person
+
+            const personFound = {
+                _id: castToString(_id),
+                image,
+                name,
+                summary,
+                crunchbaseUri,
+                linkedInUri,
+                emailAddresses,
+                description
+            }
             return {
-                person,
+                person: personFound
             };
         } else {
             return { error: "Post not found" };
+        }
+    } catch (error) {
+        console.log(error)
+        return { error };
+    }
+}
+
+export async function getPersonText(id: string) {
+    try {
+        await connectDB();
+
+        if (!id) {
+            return { error: "id not included" };
+        }
+
+        console.log(id)
+
+        const objectId = stringToObjectId(id)
+
+        // Check if a subscription already exists for this userId
+        const person = await PersonModel.findById(objectId);
+
+
+        if (person) {
+            return {
+                text: person.embeddingsText,
+                name: person.name,
+                emails: person.emailAddresses
+            };
+        } else {
+            return { error: "Person not found" };
         }
     } catch (error) {
         console.log(error)

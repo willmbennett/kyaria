@@ -4,21 +4,13 @@ import { FeatureBlocks } from "../components/networking/FeatureBlocks";
 import { NetworkingDemo } from "../components/networking/NetworkingDemo";
 import { NetworkingHero } from "../components/networking/NetworkingHero";
 import { Process } from "../components/networking/Process";
-import { StatsHighlight } from "../components/networking/StatsHighlight";
 import { redirect } from "next/navigation";
 import { checkSubscription } from "../../lib/hooks/check-subscription";
-import { CallToAction } from "../components/networking/landingpage/CallToAction";
-import { Faqs } from "../components/networking/landingpage/Faqs";
-import { FeatureBlocks } from "../components/networking/landingpage/FeatureBlocks";
-import NetworkingDemo from "../components/networking/landingpage/NetworkingDemo";
-import { NetworkingHero } from "../components/networking/landingpage/NetworkingHero";
-import { Process } from "../components/networking/landingpage/Process";
-import { StatsHighlight } from "../components/networking/landingpage/StatsHighlight";
 import NetworkingSearch from "../components/networking/NetworkingSearch";
 import { getResumes } from "../../lib/resume-db";
 import { ResumeClass } from "../../models/Resume";
-import ResumeListMenu from "../components/resumebuilder/ResumeMenu";
 import { Container } from "../components/landingpage/Container";
+import { StatsHighlight } from "../components/networking/landingpage/StatsHighlight";
 
 export default async function NetworkingPage() {
   const { activeSubscription, userId } = await checkSubscription()

@@ -97,23 +97,10 @@ const NetworkingSearch = ({ resumes }: ResumeSearchProps) => {
         }
     };
 
+
     const handleCancel = () => {
         setIsSearching(false)
     }
-
-    const [building, setBuilding] = useState(true)
-
-    const handleBuild = () => {
-        setBuilding(true);
-        setShowCampaign(true)
-    }
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setBuilding(false);
-        }, 40000); // Simulate building for 20 seconds
-        return () => clearTimeout(timer);
-    }, [building]);
-
 
     return (
         <>
@@ -210,105 +197,19 @@ const NetworkingSearch = ({ resumes }: ResumeSearchProps) => {
                                 />
                             </div>
                         </Collapsible>
-                        <Collapsible title="Set Schedule">
-                            <div className="space-y-4">
-                                <h2 className="text-2xl font-semibold leading-tight text-slate-900">Networking Campaign Schedule</h2>
-                                <p>Set how you want your networking campaign to run.</p>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label htmlFor="numberPeople" className="block mb-2 text-sm font-medium text-gray-900">Number of people per batch</label>
-                                        <input
-                                            type="number"
-                                            id="numberPeople"
-                                            value={numberOfPeople}
-                                            onChange={(e) => setNumberOfPeople(e.target.value)}
-                                            placeholder="e.g., 10"
-                                            className="input input-bordered input-primary w-full"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label htmlFor="batchFrequency" className="block mb-2 text-sm font-medium text-gray-900">Frequency of batches</label>
-                                        <select
-                                            id="batchFrequency"
-                                            value={batchFrequency}
-                                            onChange={(e) => setBatchFrequency(e.target.value)}
-                                            className="select select-bordered select-primary w-full"
-                                        >
-                                            <option value="">Select frequency</option>
-                                            <option value="daily">Daily</option>
-                                            <option value="weekly">Weekly</option>
-                                            <option value="biweekly">Biweekly</option>
-                                            <option value="monthly">Monthly</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </Collapsible>
-
                     </>
                 }
                 <div>
-                    {!isLoading && selectedResumeId && userQuery != '' && numberOfPeople && batchFrequency &&
-                        <Button onClick={handleBuild} disabled={!selectedResumeId || userQuery === ''}>
-                            Create Campaign
+                    {!isLoading && selectedResumeId && userQuery != '' &&
+                        <Button onClick={handleSearch} disabled={!selectedResumeId || userQuery === ''}>
+                            Search
                         </Button>
                     }
                 </div>
             </div>
-            {showCampaign &&
-                <div className="overflow-x-auto w-full">
-                    <h2 className="text-2xl font-semibold text-center text-slate-900 pb-2">Campaign 1</h2>
-                    <table className="table-auto w-full bg-gray-50">
-                        <thead className="text-xs font-semibold uppercase text-gray-400">
-                            <tr>
-                                <th className="py-3 px-2">Num People</th>
-                                <th className="py-3 px-2">Frequency</th>
-                                <th className="py-3 px-2">Companies</th>
-                                <th className="py-3 px-2">Institutions</th>
-                                <th className="py-3 px-2">Additional Information</th>
-                                <th className="py-3 px-2">Resume Selected</th>
-                                <th className="py-3 px-2">State</th>
-                                <th className="py-3 px-2">Link to Campaign</th>
-                            </tr>
-                        </thead>
-                        <tbody className="text-sm text-center divide-y divide-gray-100">
-                            <tr key={1}>
-                                <td className="py-3 px-2">{numberOfPeople}</td>
-                                <td className="py-3 px-2">{batchFrequency}</td>
-                                <td className="py-3 px-2">{selectedEmployers.map(i => i.name).join(", ")}</td>
-                                <td className="py-3 px-2">{selectedInstitutions.map(i => i.name).join(", ")}</td>
-                                <td className="py-3 px-2">{query}</td>
-                                <td className="py-3 px-2">1 - {selectedResume?.name}</td>
-                                <th className="py-3 px-2 text-center">
-                                    {building ? (
-                                        <div className="inline-flex items-center bg-yellow-100 text-yellow-800 text-sm font-semibold px-3 py-1 rounded-full">
-                                            <svg className="w-4 h-4 mr-1 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                <path d="M4 3H16V5H4V3M4 7H16V17H4V7M2 5V19C2 19.55 2.45 20 3 20H17C17.55 20 18 19.55 18 19V5C18 4.45 17.55 4 17 4H3C2.45 4 2 4.45 2 5Z" />
-                                            </svg>
-                                            Building
-                                        </div>
-                                    ) : (
-                                        <div className="inline-flex items-center bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full">
-                                            <svg className="w-4 h-4 mr-1 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                <path d="M10 15L5 10H7.5L10 12.5L14.5 8H17L10 15Z" />
-                                            </svg>
-                                            Sent
-                                        </div>
-                                    )}
-                                </th>
-                                <td className="py-3 px-2">
-                                    <Button size='sm' variant='ghost' onClick={handleSearch} disabled={isLoading || !selectedResumeId || userQuery === ''}>
-                                        View Campaign
-                                    </Button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            }
             {selectedResume && embeddings.length > 0 &&
                 <div className={`w-full pb-10 transition-opacity duration-500 ${isSearching ? 'opacity-100' : 'opacity-0'}`}>
-                    <Button size='sm' variant='ghost' onClick={handleCancel}>← Change campaign</Button>
+                    <Button size='sm' variant='ghost' onClick={handleCancel}>← Back to Search</Button>
                     <NetworkingResults
                         embeddings={embeddings}
                         userResume={selectedResume}
