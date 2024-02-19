@@ -25,8 +25,9 @@ export async function deleteProfileAction({
   id: any;
   path: string;
 }) {
-  await deleteProfile(id);
+  const res = await deleteProfile(id);
   revalidatePath(path);
+  return res
 }
 
 export async function getProfileAction(

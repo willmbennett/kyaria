@@ -5,6 +5,7 @@ import "react-pdf/dist/esm/Page/AnnotationLayer.css"
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import { useState } from 'react';
 import { Button } from '../../Button';
+import { OnDocumentLoadSuccess } from 'react-pdf/dist/cjs/shared/types';
 
 const options = {
     cMapUrl: '/cmaps/',
@@ -13,7 +14,7 @@ const options = {
 
 type PDFViewerProps = {
     file: File | null;
-    onLoadSuccess: (pdf: PDFDocumentProxy) => void;
+    onLoadSuccess: OnDocumentLoadSuccess;
     numPages: number | null;
 };
 

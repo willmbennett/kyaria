@@ -6,6 +6,7 @@ import { Employee } from "../../../companies/[id]/employees/employee-helper";
 import ChatWithGPT from "../../board/ChatWithGPT";
 import EmployeeItem from "../../companies/EmployeeItem";
 import Carousel from "../ui/Carousel";
+import { Message } from "ai";
 
 interface NetworkingProps {
     companyDiffbotUri: string
@@ -47,12 +48,14 @@ export default function Networking(
     }, [companyDiffbotUri]);
 
     const renderEmployee = (employee: Employee) => {
-        const message = [
+        const message: Message[] = [
             {
+                "id": '1',
                 "role": "system",
                 "content": "Craft a concise, professional LinkedIn outreach message to a recruiter, focusing on a specific job interest. The message should be engaging, personalized, and under 300 characters. Include key elements like a brief introduction, mention of the job of interest, a highlight from the resume, and an invitation for further discussion."
             },
             {
+                "id": '2',
                 "role": "user",
                 "content": `I'm applying for this job ${JSON.stringify(jobStripped)}. Write a LinkedIn message to the recruiter ${JSON.stringify(employee.name)}. Use details from my resume ${JSON.stringify(userResumeStripped)}, focusing on skills and experiences relevant to the job. Ensure the message is under 300 characters.`
             }

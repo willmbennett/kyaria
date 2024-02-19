@@ -10,9 +10,9 @@ import { usePathname, useRouter } from 'next/navigation';
 interface Props {
   documentID: string,
   setKey: string,
-  message: any;
-  currentState: any;
-  saveToDatabase: any;
+  message: Message[];
+  currentState: string;
+  saveToDatabase: (id: any, data: any, path: string) => void;
   temp?: number;
   copy?: boolean;
   parentIndex?: number;
@@ -36,18 +36,19 @@ export default function ChatWithGPT({
   parentIndex,
   childIndex,
   jobKeyWords,
-  activeSubscription=false
+  activeSubscription = false
 }: Props) {
   const path = usePathname()
   const router = useRouter()
   const [finishedLoading, setFinishedLoading] = useState(false)
   const [loading, setLoading] = useState(false)
+  const initialMessages: Message[] = [...message, { id: '1', role: 'assistant', content: currentState }]
 
   const { messages, setMessages, reload, append, stop } = useChat({
     body: {
       temp: temp
     },
-    initialMessages: [...message, { id: '1', role: 'assistant', content: currentState }],
+    initialMessages,
     onFinish() {
       setFinishedLoading(true);
       setLoading(false);
@@ -64,9 +65,6 @@ export default function ChatWithGPT({
         role: "user",
         content: `Please help me refine this: ${watch("input")}`
       })
-    } else if (currentState == '') {
-      setMessages([])
-      append(message);
     } else {
       reload()
     }
@@ -81,8 +79,7 @@ export default function ChatWithGPT({
   const handleReset = () => {
     setEdit(false);
     setLoading(true)
-    setMessages([])
-    append(message);
+    reload()
   };
 
   // cancel editing
@@ -117,6 +114,7 @@ export default function ChatWithGPT({
     data[setKey] = returnedMessage
     //console.log(id, data)
     const update = await saveToDatabase(id, data, "/")
+    router.refresh()
 
     // Update the state
     //console.log(finishedLoading)
@@ -186,16 +184,16 @@ export default function ChatWithGPT({
             >
               Save
             </Button>
-            {activeSubscription &&  
-            <Button
-              variant="ghost"
-              size="md"
-              onClick={handleReset}
-              type="button"
-              className="m-3"
-            >
-              Reset
-            </Button>
+            {activeSubscription &&
+              <Button
+                variant="ghost"
+                size="md"
+                onClick={handleReset}
+                type="button"
+                className="m-3"
+              >
+                Reset
+              </Button>
             }
           </>)}
           {!loading && activeSubscription && (<>
@@ -206,7 +204,7 @@ export default function ChatWithGPT({
               type="button"
               className="m-3"
             >
-              {currentState == ''? 'Generate': 'Tailor'}
+              {currentState == '' ? 'Generate' : 'Tailor'}
             </Button>
           </>)}
           {!loading && !activeSubscription && (<>

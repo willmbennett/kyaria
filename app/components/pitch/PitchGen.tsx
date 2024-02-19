@@ -1,24 +1,21 @@
 'use client'
 
 import { Message } from 'ai';
-import { updateProfileAction } from '../../../profile/_action';
-import ChatWithGPT from '../../board/ChatWithGPT';
-import { Button } from '../../Button';
+import { ResumeClass } from '../../../models/Resume';
+import { updateProfileAction } from '../../profile/_action';
+import ChatWithGPT from '../board/ChatWithGPT';
 
-export default function Story({
+export const PitchGen = ({
+    selectedResume,
     profileId,
-    profileStripped,
+    currentPitch,
     desiredRole,
-    setOnboardingStage,
-    currentState
 }: {
+    selectedResume: ResumeClass,
     profileId: string,
-    profileStripped: any,
-    desiredRole: string,
-    setOnboardingStage: any
-    currentState?: string
-}) {
-
+    currentPitch?: string,
+    desiredRole?: string // I made this one optional for now
+}) => {
     const message: Message[] = [
         {
             "id": '1',
@@ -56,47 +53,27 @@ export default function Story({
             "id": '2',
             "role": "user",
             "content":
-                `Based on the following details, help me craft a compelling, narrative-style story:
+                `${currentPitch ? `Improve this elevator pitch: ${currentPitch} using the following context` : 'Based on the following details, help me craft a compelling, narrative-style story:'}
                     - Desired role: ${desiredRole} 
-                    - My professional experience: ${JSON.stringify(profileStripped.professional_experience)} 
-                    - My skills: ${JSON.stringify(profileStripped.skills)} 
-                    - My education: ${JSON.stringify(profileStripped.education)}
+                    - My professional experience: ${JSON.stringify(selectedResume.professional_experience)} 
+                    - My skills: ${JSON.stringify(selectedResume.skills)} 
+                    - My education: ${JSON.stringify(selectedResume.education)}
                     Make sure to pay attention to dates and make it follow chronological order
                     `
         }
     ];
 
-    // Reload the last call
-    const handleClick = () => {
-        setOnboardingStage('bio')
-    };
-
     return (
-        <>
-            <h1 className="text-center sm:text-6xl text-4xl font-bold text-slate-900 mb-8">
-                Let's craft a winning Elevator Pitch
-            </h1>
-            <Button
-                variant="solid"
-                size="md"
-                onClick={handleClick}
-                type="button"
-                className="m-3"
-            >
-                Next Step
-            </Button>
-            <div className="lg:p-6 w-full">
-                <p>Click generate to get started!</p>
-                <ChatWithGPT
-                    documentID={profileId}
-                    message={message}
-                    setKey='story'
-                    currentState={currentState || ''}
-                    saveToDatabase={updateProfileAction}
-                    temp={0.7}
-                    activeSubscription={true}
-                />
-            </div>
-        </>
+        <div className="lg:p-6 w-full">
+            <ChatWithGPT
+                documentID={profileId}
+                message={message}
+                setKey='story'
+                currentState={currentPitch || ''}
+                saveToDatabase={updateProfileAction}
+                temp={0.7}
+                activeSubscription={true}
+            />
+        </div>
     );
 }

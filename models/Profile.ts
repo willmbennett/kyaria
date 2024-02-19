@@ -105,14 +105,14 @@ class Education {
 })
 @index({ userId: 1 })
 class ProfileClass {
-    @prop({ required: true })
-    public name!: string;
+    @prop()
+    public name?: string;
 
     @prop()
     public title?: string;
 
-    @prop({ required: true })
-    public email!: string;
+    @prop()
+    public email?: string;
 
     @prop()
     public phone?: string;
