@@ -40,7 +40,7 @@ const pages = [
 
 const userPages = [
   { label: 'Resume Builder', href: '/resumebuilder' },
-  { label: 'Networking', href: '/networking' },
+  { label: 'Networking (beta)', href: '/networking' },
   /*{ label: 'Pricing', href: '/pricing' },*/
   /*{ label: 'Contact', href: '/contact' },*/
 ]
@@ -73,7 +73,7 @@ export function Header({userId}: {userId: string}) {
   const desktopMenuLinks = userId ? signedInLinks : links
 
   const signedInMenuLinks = [
-    { label: 'Profile (beta)', href: `/profile/${userId}` },
+    { label: 'Profile', href: `/profile/${userId}` },
     { label: 'Manage Subscription', href: `https://billing.stripe.com/p/login/fZedQQbuK5Ke2Q06oo` },
   ]
 
