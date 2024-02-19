@@ -17,7 +17,8 @@ interface StoryProps {
     profileStory: string,
     userId: string,
     profileId: string,
-    activeSubscription: boolean
+    activeSubscription: boolean,
+    userCanEdit: boolean
 }
 
 export default function Story({
@@ -29,10 +30,9 @@ export default function Story({
     profileStory,
     userId,
     profileId,
-    activeSubscription
+    activeSubscription,
+    userCanEdit
 }: StoryProps) {
-    const { data: session } = useSession()
-    const userCanEdit = session?.user?.id == '650f813286f63a9d8c0080ee' || session?.user?.id == userId
     const [savedToProfile, setSavedToProfile] = useState(false)
 
     const message: Message[] = [

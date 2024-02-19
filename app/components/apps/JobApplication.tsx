@@ -19,17 +19,18 @@ import CustomPDFViewer from '../resumebuilder/pdfviewer/CustomPDFViewer';
 
 type ApplicationState = 'Research' | 'Phone Screen' | 'Interviewing' | 'Post-Offer';
 
-export function JobApplication({ jobApp, activeSubscription }: { jobApp: any, activeSubscription: boolean }) {
+export function JobApplication({ jobApp, activeSubscription, currentUserId }: { jobApp: AppClass, activeSubscription: boolean, currentUserId: string }) {
   const [hideMenu, setHideMenu] = useState(false);
+  const userCanEdit = currentUserId == jobApp.userId
 
   function toggleEdit() {
     setHideMenu(!hideMenu)
   }
 
   // Extract the high level objects
-  const userResume: ResumeClass = jobApp.userResume
-  const job: JobClass = jobApp.job
-  const profile: ProfileClass = jobApp.profile
+  const userResume: ResumeClass = jobApp.userResume as ResumeClass
+  const job: JobClass = jobApp.job as JobClass
+  const profile: ProfileClass = jobApp.profile as ProfileClass
   const userId = jobApp.userId
   const profileId = profile._id.toString()
   const jobAppId = jobApp._id.toString()
@@ -39,16 +40,16 @@ export function JobApplication({ jobApp, activeSubscription }: { jobApp: any, ac
   let jobKeyWords: string[] = [];
 
   // Extracting keywords from the skills property
-  if (jobApp.job.skills) {
-    jobKeyWords.push(...jobApp.job.skills.map((skill: any) => skill.skill));
+  if (job.skills) {
+    jobKeyWords.push(...job.skills.map((skill: any) => skill.skill));
   }
 
-  if (jobApp.job.tfidf) {
-    jobKeyWords.push(...jobApp.job.tfidf.map((tf: any) => tf.term).slice(0, 20));
+  if (job.tfidf) {
+    jobKeyWords.push(...job.tfidf.map((tf: any) => tf.term).slice(0, 20));
   }
 
   // If neither tfidf nor skills are provided, default the keywords to an array with an empty string
-  if (!jobApp.job.tfidf && !jobApp.job.skills) {
+  if (!job.tfidf && !job.skills) {
     jobKeyWords = [''];
   }
 
@@ -174,6 +175,7 @@ export function JobApplication({ jobApp, activeSubscription }: { jobApp: any, ac
             toggleEdit,
             hideMenu,
             activeSubscription,
+            userCanEdit,
             companyDiffbotId
           )}
         </div>
@@ -204,11 +206,12 @@ function renderCurrentSection(
   toggleEdit: any,
   hideMenu: boolean,
   activeSubscription: boolean,
+  userCanEdit: boolean,
   companyDiffbotId?: string | null
 ) {
   switch (currentSection) {
     case 'jobDescription':
-      return <JobDescription jobData={jobData} topWords={jobKeyWords} companyDiffbotId={companyDiffbotId} activeSubscription={activeSubscription} />;
+      return <JobDescription jobData={jobData} topWords={jobKeyWords} companyDiffbotId={companyDiffbotId} activeSubscription={activeSubscription} currentUserId={userId} />;
     case 'mockInterview':
       return (
         <MockInterview
@@ -256,6 +259,7 @@ function renderCurrentSection(
           userId={userId}
           profileId={profileId}
           activeSubscription={activeSubscription}
+          userCanEdit={userCanEdit}
         />
       );
     case 'networking':
@@ -278,6 +282,7 @@ function renderCurrentSection(
           jobKeyWords={jobKeyWords}
           userId={userId}
           activeSubscription={activeSubscription}
+          userCanEdit={userCanEdit}
         />
       );
     case 'emails':

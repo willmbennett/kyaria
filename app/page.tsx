@@ -26,13 +26,13 @@ export default async function HomePage() {
     <>
       {userId && (<>
         <SignedInHero userId={userId} />
-        <ProductDemo jobApp={jobApp} />
+        <ProductDemo jobApp={jobApp} userId={userId} />
       </>)}
       {!userId && (
         <>
           <HomeHero />
           {/*<LogosRow />*/}
-          <ProductDemo jobApp={jobApp} />
+          <ProductDemo jobApp={jobApp} userId={userId} />
           <FeatureBlocks totalResumes={totalResumes || 200} />
           <FeaturesGrid />
           <Process />

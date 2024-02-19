@@ -50,7 +50,7 @@ const DropdownMenu: FC<IDropdownMenuProps> = ({
                     aria-labelledby="options-menu"
                     tabIndex={-1}
                 >
-                    <div className="py-1" role="none">
+                    <div className="py-1 h-96 overflow-y-auto" role="none">
                         {themes.map((theme, index) => (
                             <button
                                 key={index}

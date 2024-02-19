@@ -31,7 +31,8 @@ interface StarStoryProps {
     jobStripped: Partial<JobClass>,
     parentIndex: number,
     childIndex: number,
-    activeSubscription: boolean
+    activeSubscription: boolean,
+    userCanEdit: boolean
 }
 
 export default function StarStory({
@@ -42,10 +43,9 @@ export default function StarStory({
     jobStripped,
     parentIndex,
     childIndex,
-    activeSubscription
+    activeSubscription,
+    userCanEdit
 }: StarStoryProps) {
-    const { data: session } = useSession()
-    const userCanEdit = session?.user?.id == '650f813286f63a9d8c0080ee' || session?.user?.id == userId
     const [savedToProfile, setSavedToProfile] = useState(false)
     const [showOptions, setShowOptions] = useState(false);
     const { _id, content, detail, starStory } = item
