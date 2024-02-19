@@ -5,8 +5,12 @@ import { JobApplication } from "../../components/apps/JobApplication";
 import { AppClass } from "../../../models/App";
 import { checkSubscription } from "../../../lib/hooks/check-subscription";
 
+interface getJobAppInterface {
+  jobApp: AppClass
+}
+
 export default async function JobAppPage({ params }: { params: { id: string } }) {
-  const promise = getJobApp(params.id);
+  const { jobApp } = await getJobApp(params.id) as getJobAppInterface
   const { activeSubscription, userId } = await checkSubscription()
 
   if (!userId) {
@@ -15,20 +19,11 @@ export default async function JobAppPage({ params }: { params: { id: string } })
 
   return (
     <>
-      {promise && (<>
-        {/* @ts-expect-error Server Component */}
-        < Await promise={promise}>
-          {({ jobApp }: { jobApp: AppClass }) => <>
-            {
-              jobApp ?
-                <JobApplication jobApp={jobApp} activeSubscription={activeSubscription} />
-                :
-                <p>Job app not found</p>
-            }
-          </>
-          }
-        </Await>
-      </>)
+      {
+        jobApp ?
+          <JobApplication jobApp={jobApp} activeSubscription={activeSubscription} currentUserId={userId} />
+          :
+          <p>Job app not found</p>
       }
     </>
   );
