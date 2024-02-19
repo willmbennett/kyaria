@@ -34,6 +34,7 @@ const navigation = {
     { name: 'Resume Builder', href: '/resumebuilder' },
     { name: 'LinkedIn Bio', href: '/bio' },
     { name: 'Elevator Pitch', href: '/pitch' },
+    { name: 'Networking (beta)', href: '/networking' },
     { name: 'AI Career Concierge (beta)', href: '/board' },
     { name: 'Jobs (beta)', href: '/jobs' },
   ],
@@ -71,17 +72,21 @@ const SocialLink: React.FC<SocialLinkProps> = ({ icon: Icon, href = '', ...props
   );
 };
 
+interface FooterProps {
+  userId: string;
+  userName: string;
+  email?: string;
+}
 
-export function Footer() {
-  const { data: session } = useSession();
-  const page = usePathname()
 
-  if (session?.user?.id) {
+export function Footer({ userId, userName, email }: FooterProps) {
+
+  if (userId) {
     analytics.identify({
-      userId: session.user.id,
+      userId: userId,
       traits: {
-        name: session.user.name,
-        email: session.user.email
+        name: userName,
+        email: email
       }
     });
   }

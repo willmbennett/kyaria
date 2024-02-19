@@ -20,17 +20,18 @@ export default function JobDescription({
     profile,
     topWords,
     companyDiffbotId,
-    activeSubscription
+    activeSubscription,
+    currentUserId
 }: {
     jobData: any,
     addBoard?: boolean,
     profile?: any,
     topWords: string[],
     companyDiffbotId?: string | null
-    activeSubscription?: boolean
+    activeSubscription?: boolean,
+    currentUserId: string
 }) {
     const router = useRouter()
-    const { data: session } = useSession()
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
         if (profile) {
@@ -71,7 +72,7 @@ export default function JobDescription({
 
     const jobId = _id.toString()
 
-    const edit = session?.user?.id == '650f813286f63a9d8c0080ee' || session?.user?.id == userId
+    const edit = currentUserId == '650f813286f63a9d8c0080ee' || currentUserId == userId
 
     return (
 

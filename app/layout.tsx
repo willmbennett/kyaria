@@ -1,15 +1,15 @@
 import { Metadata } from 'next';
-import SessionProvider from './components/SessionProvider'
 import '../styles/globals.css';
 import { authOptions } from '../lib/auth';
 import { getServerSession } from "next-auth/next"
 import Script from 'next/script';
 import clsx from 'clsx'
 import { Inter } from 'next/font/google'
-import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { TooltipProvider } from './components/ui/tooltip';
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { checkSubscription } from '../lib/hooks/check-subscription';
+import { Header } from './components/Header';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
@@ -38,7 +38,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(authOptions);
+  const { userId, userName, email } = await checkSubscription()
 
   return (
     <html lang="en" className='bg-white'>
@@ -75,11 +75,14 @@ export default async function RootLayout({
           `,
           }}
         />
-        <Script dangerouslySetInnerHTML={{
-          __html: `
-            !function(w,d){if(!w.rdt){var p=w.rdt=function(){p.sendEvent?p.sendEvent.apply(p,arguments):p.callQueue.push(arguments)};p.callQueue=[];var t=d.createElement("script");t.src="https://www.redditstatic.com/ads/pixel.js",t.async=!0;var s=d.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}}(window,document);rdt('init','a2_dx53gyf7fp62', {"optOut":false,"useDecimalCurrencyValues":true,"email":"${session?.user?.email || ''}","externalId":"${session?.user?.id || ''}"});rdt('track', "${session?.user?.id ? 'PageVisit' : 'ViewContent'}" );
+        <Script
+          id="segment-pageview"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+            !function(w,d){if(!w.rdt){var p=w.rdt=function(){p.sendEvent?p.sendEvent.apply(p,arguments):p.callQueue.push(arguments)};p.callQueue=[];var t=d.createElement("script");t.src="https://www.redditstatic.com/ads/pixel.js",t.async=!0;var s=d.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}}(window,document);rdt('init','a2_dx53gyf7fp62', {"optOut":false,"useDecimalCurrencyValues":true,"email":"${email || ''}","externalId":"${userId || ''}"});rdt('track', "${userId ? 'PageVisit' : 'ViewContent'}" );
             `
-        }} />
+          }} />
         {/* Event snippet for Page view conversion */}
         <Script
           id="gtag-conversion"
@@ -90,13 +93,11 @@ export default async function RootLayout({
           `,
           }}
         />
-        <SessionProvider session={session}>
-          <TooltipProvider >
-            <Header />
-            {children}
-            <Footer />
-          </TooltipProvider >
-        </SessionProvider>
+        <TooltipProvider >
+          <Header userId={userId} />
+          {children}
+          <Footer userId={userId} userName={userName} email={email} />
+        </TooltipProvider >
         <SpeedInsights />
       </body>
     </html>
