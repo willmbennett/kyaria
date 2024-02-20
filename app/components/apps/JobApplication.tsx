@@ -28,11 +28,11 @@ export function JobApplication({ jobApp, activeSubscription, currentUserId }: { 
   }
 
   // Extract the high level objects
-  const userResume: ResumeClass = jobApp.userResume as ResumeClass
-  const job: JobClass = jobApp.job as JobClass
-  const profile: ProfileClass = jobApp.profile as ProfileClass
+  const userResume = jobApp.userResume as ResumeClass
+  const job = jobApp.job as JobClass
+  const profile = jobApp.profile as ProfileClass
   const userId = jobApp.userId
-  const profileId = profile._id.toString()
+  const profileId = profile.toString()
   const jobAppId = jobApp._id.toString()
 
 
@@ -71,7 +71,6 @@ export function JobApplication({ jobApp, activeSubscription, currentUserId }: { 
     'company',
     'institution'
   ];
-  const profileStripped = stripObject(profile, profileKeys)
   const userResumeStripped: Partial<ResumeClass> = stripObject(userResume, profileKeys)
   const jobKeys = ["jobTitle", 'company', "aboutCompany", "jobDescription", "qualifications", "responsibilities"];
   const jobStripped: Partial<JobClass> = stripObject(job, jobKeys)
@@ -165,9 +164,8 @@ export function JobApplication({ jobApp, activeSubscription, currentUserId }: { 
             jobKeyWords,
             userResume,
             userResumeStripped,
-            profile,
-            profileStripped,
             userId,
+            profile,
             profileId,
             resumeId,
             jobAppId,
@@ -196,9 +194,8 @@ function renderCurrentSection(
   jobKeyWords: string[],
   userResume: ResumeClass,
   userResumeStripped: Partial<ResumeClass>,
-  profile: ProfileClass,
-  profileStripped: Partial<ProfileClass>,
   userId: string,
+  profile: ProfileClass,
   profileId: string,
   resumeId: string,
   jobAppId: string,

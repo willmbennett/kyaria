@@ -1,6 +1,7 @@
 "use server";
 
 import {
+  createApp,
   createJobApplication,
   deleteJobApp,
   updateJobApp
@@ -12,6 +13,12 @@ export async function createJobApplicationAction(data: any, path: string) {
   const { jobApp } = await createJobApplication(data);
   revalidatePath(path);
   return jobApp
+}
+
+export async function createAppAction(data: any, path: string) {
+  const { appId } = await createApp(data);
+  revalidatePath(path);
+  return appId
 }
 
 export async function updateJobAppAction(

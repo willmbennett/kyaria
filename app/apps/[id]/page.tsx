@@ -6,25 +6,20 @@ import { AppClass } from "../../../models/App";
 import { checkSubscription } from "../../../lib/hooks/check-subscription";
 
 interface getJobAppInterface {
-  jobApp: AppClass
+  app: AppClass
 }
 
 export default async function JobAppPage({ params }: { params: { id: string } }) {
-  const { jobApp } = await getJobApp(params.id) as getJobAppInterface
+  const { app } = await getJobApp(params.id) as getJobAppInterface
   const { activeSubscription, userId } = await checkSubscription()
 
   if (!userId) {
     redirect('/auth/signin')
   }
 
-  return (
-    <>
-      {
-        jobApp ?
-          <JobApplication jobApp={jobApp} activeSubscription={activeSubscription} currentUserId={userId} />
-          :
-          <p>Job app not found</p>
-      }
-    </>
-  );
+  if (!app) return <p>Job app not found</p>
+
+return (
+  <JobApplication jobApp={app} activeSubscription={activeSubscription} currentUserId={userId} />
+);
 }
