@@ -15,24 +15,26 @@ import { redirect } from 'next/navigation'
 
 export default async function HomePage() {
   const { activeSubscription, userId } = await checkSubscription()
-  const { jobApp } = await getJobApp("651c2c45705785cff67bb3c9");
+  const { app } = await getJobApp("651c2c45705785cff67bb3c9");
   const { totalResumes } = await countTotalResumes()
 
   if (userId && !activeSubscription) {
     redirect('/resumebuilder');
   }
 
+  console.log(app)
+
   return (
     <>
       {userId && (<>
         <SignedInHero userId={userId} />
-        <ProductDemo jobApp={jobApp} userId={userId} />
+        <ProductDemo jobApp={app} userId={userId} />
       </>)}
       {!userId && (
         <>
           <HomeHero />
           {/*<LogosRow />*/}
-          <ProductDemo jobApp={jobApp} userId={userId} />
+          <ProductDemo jobApp={app} userId={userId} />
           <FeatureBlocks totalResumes={totalResumes || 200} />
           <FeaturesGrid />
           <Process />

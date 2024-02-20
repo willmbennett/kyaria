@@ -30,10 +30,10 @@ class Emails {
     }
 })
 class AppClass {
-    @prop({ default: 'WISHLIST', required: true})
+    @prop({ default: 'WISHLIST', required: true })
     public state!: string;
 
-    @prop({ default: true, required: true})
+    @prop({ default: true, required: true })
     public active!: boolean;
 
     @prop()
@@ -45,7 +45,7 @@ class AppClass {
     @prop({ type: () => [Emails], required: true })
     public emails: Emails[];
 
-    @prop({ required: true})
+    @prop({ required: true })
     public userId!: string;
 
     @prop({ ref: () => ProfileClass, required: true })
