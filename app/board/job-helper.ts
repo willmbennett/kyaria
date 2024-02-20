@@ -12,6 +12,10 @@ export const emails = [
   { "type": "Reference Request", "content": "" }
 ]
 
+export type jobStateType = 'WISHLIST' | 'APPLIED' | 'PHONE SCREEN' | 'FIRST ROUND' | 'SECOND ROUND' | 'THIRD ROUND' | 'FINAL ROUND' | 'JOB OFFER' | 'ACCEPTED'
+
+export const jobStates = ['WISHLIST', 'APPLIED', 'PHONE SCREEN', 'FIRST ROUND', 'SECOND ROUND', 'THIRD ROUND', 'FINAL ROUND', 'JOB OFFER', 'ACCEPTED']
+
 
 export type FormFields = {
   jobTitle: string;

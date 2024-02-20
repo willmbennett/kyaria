@@ -6,8 +6,7 @@ import { AppClass } from '../../../models/App';
 import { updateJobAppAction } from '../../board/_action';
 import AppItem from '../apps/AppItem';
 import KanbanColumn from "./KanbanColumn";
-
-const jobStates = ['WISHLIST', 'APPLIED', 'PHONE SCREEN', 'FIRST ROUND', 'SECOND ROUND', 'THIRD ROUND', 'FINAL ROUND', 'JOB OFFER', 'ACCEPTED']
+import { jobStates } from '../../board/job-helper';
 
 export default function Kanban(
     {
