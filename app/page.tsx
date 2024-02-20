@@ -18,31 +18,29 @@ export default async function HomePage() {
   const { app } = await getJobApp("651c2c45705785cff67bb3c9");
   const { totalResumes } = await countTotalResumes()
 
-  if (userId && !activeSubscription) {
-    redirect('/resumebuilder');
+  if (!userId) {
+    return (
+      <>
+        <HomeHero />
+        {/*<LogosRow />*/}
+        {/*<ProductDemo jobApp={app} userId={userId} />*/}
+        <FeatureBlocks totalResumes={totalResumes || 200} />
+        <FeaturesGrid />
+        <Process />
+        {/*<TestimonialsSlide />*/}
+        <Faqs />
+        <CallToAction />
+      </>
+    )
+  }
+
+  if (!activeSubscription) {
+    redirect(`/profile/${userId}`);
   }
 
   console.log(app)
 
   return (
-    <>
-      {userId && (<>
-        <SignedInHero userId={userId} />
-        <ProductDemo jobApp={app} userId={userId} />
-      </>)}
-      {!userId && (
-        <>
-          <HomeHero />
-          {/*<LogosRow />*/}
-          <ProductDemo jobApp={app} userId={userId} />
-          <FeatureBlocks totalResumes={totalResumes || 200} />
-          <FeaturesGrid />
-          <Process />
-          {/*<TestimonialsSlide />*/}
-          <Faqs />
-          <CallToAction />
-        </>
-      )}
-    </>
+    <SignedInHero userId={userId} />
   )
 }

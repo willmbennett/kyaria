@@ -2,8 +2,8 @@
 
 import ChatWithGPT from '../../chat/ChatWithGPT';
 import { updateJobAppAction } from '../../../board/_action';
-import { CoverLetterPDF } from '../CoverLetterPDF';
 import { Message } from 'ai';
+import { CoverLetterViewer } from '../../coverletter/CoverLetterViewer';
 
 interface CoverLetterProps {
     jobAppId: string,
@@ -59,7 +59,7 @@ export default function CoverLetter({
 
 
     return (
-        <>
+        <div className='w-full flex flex-col items-center space-y-10'>
             <h1 className="text-center sm:text-6xl text-4xl font-bold mb-8">
                 Stand out with a cover letter
             </h1>
@@ -73,18 +73,11 @@ export default function CoverLetter({
                 jobKeyWords={jobKeyWords}
                 activeSubscription={activeSubscription}
             />
-
-            <h3 className="text-xl font-semibold mt-5">Download your cover letter as a pdf</h3>
-            <p className="text-gray-600 my-2">Once you create your cover letter you can see it here and download it.</p>
-            <CoverLetterPDF
-                name={userResume.name}
-                phone={userResume.telephone}
-                email={userResume.email}
-                address={userResume.location}
-                company={job.company}
-                companyLocation={job.location}
-                bodyText={currentCoverLetter}
+            <CoverLetterViewer
+                userResume={userResume}
+                job={job}
+                currentCoverLetter={currentCoverLetter}
             />
-        </>
+        </div>
     );
 }

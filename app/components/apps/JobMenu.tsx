@@ -3,37 +3,35 @@
 import { usePathname } from "next/navigation";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import useAppNavigation from "../../../lib/hooks/use-app-section";
 const ACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-1 my-1 rounded text-xl lg:text-lg text-gray-600 bg-gray-200 font-bold items-center justify-center hover:bg-gray-600 hover:text-white";
 const INACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-1 my-1 rounded text-xl lg:text-lg text-gray-600 font-bold items-center justify-center hover:bg-gray-600 hover:text-white";
 
-type ApplicationState = 'Research' | 'Phone Screen' | 'Interviewing' | 'Post-Offer';
-
 
 export default function JobMenu(
-  { currentSection,
-    setCurrentSection,
-    filteredPages
+  { companyDiffbotUri,
+    state,
+    currentSection,
+    filteredPages,
+    activeProgressSection
   }: {
+    companyDiffbotUri?: string
+    state: string
     currentSection: string,
-    setCurrentSection: any,
-    filteredPages: any
+    filteredPages: {
+      label: string;
+      section: string;
+    }[],
+    activeProgressSection: string
   }) {
   const router = useRouter()
-  const [active, setActive] = useState(false);
   const path = usePathname()
-
-  const handleClick = () => {
-    setActive(!active);
-  };
 
   return (
     <div className="bg-white border w-full md:sticky md:top-60 p-4 lg:rounded-lg h-auto my-2 flex flex-col">
-      {filteredPages.map((l: any, i: number) => {
+      {filteredPages.map((l, i) => {
         const handleClick = () => {
-          setActive(!active);
-          setCurrentSection(l.section)
-          router.push(path, { scroll: false })
+          router.push(`${path}?section=${l.section}${activeProgressSection? `&progress=${activeProgressSection}`: ''}`, { scroll: false })
         };
         return (
           <div key={i}>

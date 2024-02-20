@@ -33,11 +33,13 @@ export function ProductDemo({ jobApp, userId }: { jobApp: any, userId: string })
               Below you'll find an example of a packet that will be created for you every time you add a job post. This is a fully interactable live demo of a real profile and a recent job post.
             </p>
           </div>
+          {/*
           <JobApplication
             jobApp={jobApp}
             activeSubscription={true}
             currentUserId={userId}
           />
+  */}
         </div>
       </Container>
     </section>

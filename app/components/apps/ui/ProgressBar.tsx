@@ -2,38 +2,30 @@
 import React from 'react';
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { progressStates } from '../../../apps/[id]/app-helper';
 
 interface ProgressBarProps {
-    progressStates: string[],
-    currentProgress: string
-    setCurrentCurrentProgress: any
+    activeProgressSection: string
 }
-
-const ProgressBar: React.FC<ProgressBarProps> = (
-    {
-        progressStates,
-        currentProgress,
-        setCurrentCurrentProgress
-    }) => {
+const ProgressBar = ({ activeProgressSection }: ProgressBarProps) => {
     const router = useRouter()
     const path = usePathname()
 
     return (
         <div className="text-center p-2">
             <ul className='flex flex-row justify-center gap-4'>
-                {progressStates.map((p: string, index, array) => {
+                {progressStates.map((p, index) => {
                     const updateProgress = () => {
-                        setCurrentCurrentProgress(p)
-                        router.push(path, { scroll: false })
+                        router.push(`${path}?progress=${p.section}`)
                     }
 
                     return (
                         <button
-                            key={p}
+                            key={index}
                             onClick={updateProgress}
                         >
-                            <li className={`relative ${currentProgress === p ? 'text-blue-600 font-bold' : 'text-gray-400'}`}>
-                                {p}
+                            <li className={`relative ${activeProgressSection === p.section ? 'text-blue-600 font-bold' : 'text-gray-400'}`}>
+                                {p.label}
                             </li>
                         </button>
                     )
