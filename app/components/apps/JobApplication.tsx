@@ -146,7 +146,7 @@ export function JobApplication({ jobApp, activeSubscription, currentUserId }: { 
           setCurrentCurrentProgress={setCurrentCurrentProgress}
         />
       }
-      <div className="flex flex-col w-full md:flex-row py-2 min-h-screen lg:px-4 lg:mt-6">
+      <div className="flex flex-col w-full md:flex-row py-2 min-h-screen max-w-5xl lg:px-4 lg:mt-6">
         {!hideMenu &&
           <div className='md:w-1/4'>
             <JobMenu
@@ -156,7 +156,7 @@ export function JobApplication({ jobApp, activeSubscription, currentUserId }: { 
             />
           </div>
         }
-        <div className={`lg:m-3 p-2 ${hideMenu ? 'w-full' : 'lg:p-3 md:w-3/4'}`} key="1">
+        <div className={`lg:m-3 p-2 ${hideMenu ? 'w-full' : 'lg:p-3 md:w-3/4 '}`} key="1">
           {renderCurrentSection(
             currentSection,
             job,

@@ -19,7 +19,9 @@ export default async function JobAppPage({ params }: { params: { id: string } })
 
   if (!app) return <p>Job app not found</p>
 
-return (
-  <JobApplication jobApp={app} activeSubscription={activeSubscription} currentUserId={userId} />
-);
+  return (
+    <div className="flex items-center justify-center">
+      <JobApplication jobApp={app} activeSubscription={activeSubscription} currentUserId={userId} />
+    </div>
+  );
 }
