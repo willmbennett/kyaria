@@ -9,7 +9,7 @@ const useAppNavigation = (
     const currentProgress = progressStates.find(p => getProgress(state) == p.label)?.section || 'Research'
     //console.log('currentProgress: ', currentProgress)
     const activeProgressSection = searchParams['progress'] || currentProgress || 'research'
-    console.log('activeProgressSection: ', activeProgressSection)
+    //console.log('activeProgressSection: ', activeProgressSection)
     const activeProgress: ApplicationState = progressStates.find(p => activeProgressSection == p.section)?.label as ApplicationState || 'Research'
     //console.log('activeProgress: ', activeProgress)
 
@@ -34,7 +34,7 @@ const useAppNavigation = (
     //console.log('filteredPages: ', filteredPages)
 
     const currentSection = searchParams['section'] || filteredPages[0].section
-    console.log('currentSection: ', currentSection)
+    //console.log('currentSection: ', currentSection)
 
     return { currentSection, filteredPages, activeProgressSection }
 };
