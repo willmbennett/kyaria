@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useChat } from 'ai/react';
 import { Button } from '../Button';
-import { ChatMessage } from '../board/ChatMessage';
 import { Message } from 'ai';
+import { ChatMessage } from './ChatMessage';
 
 interface FeedbackProps {
     message: Message[]

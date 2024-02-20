@@ -3,7 +3,7 @@ import { JobClass } from "../../../../models/Job";
 import { ResumeClass } from "../../../../models/Resume";
 import { updateJobAppAction } from "../../../board/_action";
 import { Employee } from "../../../companies/[id]/employees/employee-helper";
-import ChatWithGPT from "../../board/ChatWithGPT";
+import ChatWithGPT from "../../chat/ChatWithGPT";
 import EmployeeItem from "../../companies/EmployeeItem";
 import Carousel from "../ui/Carousel";
 import { Message } from "ai";

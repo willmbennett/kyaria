@@ -1,19 +1,14 @@
 import { UseChatHelpers } from 'ai/react'
 import * as React from 'react'
 import Textarea from 'react-textarea-autosize'
-
-import { Button, buttonVariants } from '../ui/button'
-import { IconArrowElbow, IconPlus } from '../ui/icons'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger
-} from '../ui/tooltip'
-import { useEnterSubmit } from '../../../lib/hooks/use-enter-submit'
 import { usePathname, useRouter } from 'next/navigation'
-import { cn } from '../../../lib/utils'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
-import { ChatMessage } from '../board/ChatMessage'
+import { ChatMessage } from './ChatMessage'
+import { TooltipTrigger, TooltipContent, Tooltip } from '@radix-ui/react-tooltip';
+import { useEnterSubmit } from '../../../lib/hooks/use-enter-submit';
+import { cn } from '../../../lib/utils';
+import { Button, buttonVariants } from '../ui/button';
+import { IconPlus } from '../ui/icons';
 
 
 export interface PromptProps

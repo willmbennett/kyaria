@@ -4,7 +4,7 @@ import { AnchorHTMLAttributes, DetailedHTMLProps, ImgHTMLAttributes } from 'reac
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
-import { CodeBlock } from '../board/codeblock';
+import { CodeBlock } from '../chat/codeblock';
 
 type MarkdownComponentProps = {
     children?: React.ReactNode;

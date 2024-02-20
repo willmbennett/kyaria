@@ -1,6 +1,6 @@
 'use client'
 
-import ChatWithGPT from '../../board/ChatWithGPT';
+import ChatWithGPT from '../../chat/ChatWithGPT';
 import { useState } from 'react';
 import { updateResumeAction } from '../../../board/_action';
 import { JobClass } from '../../../../models/Job';
@@ -20,7 +20,6 @@ type QuestionFormFields = {
 
 interface StarStoryProps {
     resumeId: string,
-    profileId: string,
     userId: string,
     item: {
         _id?: string;
@@ -37,7 +36,6 @@ interface StarStoryProps {
 
 export default function StarStory({
     resumeId,
-    profileId,
     userId,
     item,
     jobStripped,
@@ -153,7 +151,7 @@ export default function StarStory({
 
         // Also update the user's profile
         //console.log(profileId, savedData)
-        const updateProfile = await updateProfileAction(profileId, savedData, "/")
+        //const updateProfile = await updateProfileAction(profileId, savedData, "/")
         //console.log("Updated Profile:", updateProfile);
         setShowDetails(false)
     };
@@ -165,18 +163,6 @@ export default function StarStory({
 - What tools/tech did you use.
 - How you went above and beyond your role.
 `
-
-    const saveToProfile = async () => {
-        if (userCanEdit) {
-            // Split the property path into segments
-            const savedData: { [key: string]: any } = {};
-            savedData[`${setKey}.starStory`] = starStory; // Set the detail property to the details provided.
-
-            //console.log(profileId, savedData)
-            await updateProfileAction(profileId, savedData, "/")
-            setSavedToProfile(true)
-        }
-    };
 
     return (
         <div className="rounded-xl">
@@ -223,14 +209,6 @@ export default function StarStory({
                             themes={themes}
                         />
                     </div>
-                    {userCanEdit && !savedToProfile && starStory && (
-                        <div className='flex flex-col w-full text-center'>
-                            <p>Like what you see? Make this your default by saving to your profile. Note: it will overwrite the story saved to your profile.</p>
-                            <div className='flex w-full justify-center my-2'>
-                                <Button size='md' onClick={saveToProfile}>Make default</Button>
-                            </div>
-                        </div>
-                    )}
                     <div className='flex w-full justify-center bg-slate-100'>
                         <p>{savedToProfile && 'Updated your profile with the new story'}</p>
                     </div>

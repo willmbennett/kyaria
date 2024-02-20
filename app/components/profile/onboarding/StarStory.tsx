@@ -1,6 +1,6 @@
 'use client'
 
-import ChatWithGPT from '../../board/ChatWithGPT';
+import ChatWithGPT from '../../chat/ChatWithGPT';
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { updateProfileAction } from '../../../profile/_action';

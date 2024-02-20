@@ -2,8 +2,8 @@
 import { Message } from "ai";
 import { useChat } from "ai/react";
 import { useCallback, useEffect, useState } from "react";
-import { ChatMessage } from "../board/ChatMessage";
 import { debounce } from "lodash";
+import { ChatMessage } from "../chat/ChatMessage";
 
 // Define the props for the component
 interface PersonCardProps {

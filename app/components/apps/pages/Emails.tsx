@@ -4,7 +4,7 @@ import { Emails } from '../../../../models/App';
 import { JobClass } from '../../../../models/Job';
 import { ResumeClass } from '../../../../models/Resume';
 import { updateJobAppAction } from '../../../board/_action';
-import ChatWithGPT from '../../board/ChatWithGPT';
+import ChatWithGPT from '../../chat/ChatWithGPT';
 import { Message } from 'ai';
 
 const ACTIVE_ROUTE = "bg-gray-200 hover:bg-gray-600 hover:text-white";
