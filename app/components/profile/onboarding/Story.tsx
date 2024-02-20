@@ -2,7 +2,7 @@
 
 import { Message } from 'ai';
 import { updateProfileAction } from '../../../profile/_action';
-import ChatWithGPT from '../../board/ChatWithGPT';
+import ChatWithGPT from '../../chat/ChatWithGPT';
 import { Button } from '../../Button';
 
 export default function Story({

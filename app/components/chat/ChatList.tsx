@@ -1,7 +1,7 @@
 import { type Message } from 'ai'
 
+import { ChatMessage } from './ChatMessage'
 import { Separator } from '../ui/separator'
-import { ChatMessage } from '../board/ChatMessage'
 
 export interface ChatList {
     messages: Message[]

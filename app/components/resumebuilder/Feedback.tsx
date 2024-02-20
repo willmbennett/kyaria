@@ -3,7 +3,7 @@ import { Message, useChat } from 'ai/react';
 import { Button } from '../Button';
 import { JobClass } from '../../../models/Job';
 import { ResumeBuilderFormData } from '../../resumebuilder/resumetest-helper';
-import { ChatMessage } from '../board/ChatMessage';
+import { ChatMessage } from '../chat/ChatMessage';
 
 interface FeedbackProps {
     userResume: ResumeBuilderFormData;

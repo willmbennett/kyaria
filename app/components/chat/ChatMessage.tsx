@@ -7,7 +7,7 @@ import remarkMath from 'remark-math'
 
 import { cn } from '../../../lib/utils'
 import { CodeBlock } from './codeblock'
-import { MemoizedReactMarkdown } from './markdown'
+import { MemoizedReactMarkdown } from '../apps/markdown'
 
 export interface ChatMessageProps {
   message: Message,

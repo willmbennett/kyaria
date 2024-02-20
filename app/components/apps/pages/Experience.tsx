@@ -9,7 +9,6 @@ import { useRouter, usePathname } from "next/navigation";
 interface ExperienceProps {
     professionalExperience: ProfessionalExperience[],
     resumeId: string,
-    profileId: string,
     jobStripped: Partial<JobClass>,
     jobKeyWords: string[],
     userId: string,
@@ -20,7 +19,6 @@ interface ExperienceProps {
 export default function Experience({
     professionalExperience,
     resumeId,
-    profileId,
     jobStripped,
     jobKeyWords,
     userId,
@@ -105,7 +103,6 @@ export default function Experience({
                     <div key={`${items[currentIndex].expIndex}-${items[currentIndex].respIndex}`}>
                         <StarStory
                             resumeId={resumeId}
-                            profileId={profileId}
                             item={items[currentIndex].responsibility}
                             jobStripped={jobStripped}
                             parentIndex={items[currentIndex].expIndex}

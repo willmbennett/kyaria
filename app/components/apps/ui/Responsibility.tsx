@@ -1,7 +1,7 @@
 'use client'
 
 import { Message } from 'ai';
-import ChatWithGPT from '../../board/ChatWithGPT';
+import ChatWithGPT from '../../chat/ChatWithGPT';
 
 export default function Responsibility({
     documentID,

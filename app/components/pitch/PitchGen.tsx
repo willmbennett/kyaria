@@ -3,7 +3,7 @@
 import { Message } from 'ai';
 import { ResumeClass } from '../../../models/Resume';
 import { updateProfileAction } from '../../profile/_action';
-import ChatWithGPT from '../board/ChatWithGPT';
+import ChatWithGPT from '../chat/ChatWithGPT';
 
 export const PitchGen = ({
     selectedResume,

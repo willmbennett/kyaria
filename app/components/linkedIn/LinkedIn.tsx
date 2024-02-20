@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { ResumeClass } from '../../../models/Resume';
 import ResumeDropdownMenu from '../ResumeDropdownMenu';
 import { Message } from 'ai';
-import { ChatGPTNoEdit } from '../email/ChatGPTNoEdit';
+import { ChatGPTNoEdit } from '../chat/ChatGPTNoEdit';
 import { PersonClass } from '../../../models/Person';
 import PersonCard from '../networking/PersonCard';
 

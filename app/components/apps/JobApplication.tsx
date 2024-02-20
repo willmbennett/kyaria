@@ -273,7 +273,6 @@ function renderCurrentSection(
       return (
         <Experience
           professionalExperience={userResume.professional_experience || []}
-          profileId={profileId}
           resumeId={resumeId}
           jobStripped={jobStripped}
           jobKeyWords={jobKeyWords}
