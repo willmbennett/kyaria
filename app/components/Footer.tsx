@@ -32,10 +32,10 @@ const navigation = {
   ],
   solutions: [
     { name: 'Resume Builder', href: '/resumebuilder' },
+    { name: 'AI Career Concierge', href: '/board' },
     { name: 'LinkedIn Bio', href: '/bio' },
     { name: 'Elevator Pitch', href: '/pitch' },
     { name: 'Networking (beta)', href: '/networking' },
-    { name: 'AI Career Concierge (beta)', href: '/board' },
     { name: 'Jobs (beta)', href: '/jobs' },
   ],
   integrations: [

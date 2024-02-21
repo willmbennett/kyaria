@@ -89,64 +89,73 @@ export default function ProfileTextEdit({
   };
 
 
-  return (<div className="flex flex-row items-center text-left w-full">
-    <div className='flex w-full'>
-      <div className='flex flex-row items-center space-x-4 w-full'>
-        {label && (<strong>{label}:</strong>)}
-        {!edit && (
-          <div className='items-center'>
-            <ReactMarkdown
-              children={currentState}
-              components={{
-                p: ({ children }) => (
-                  <p className="mb-1 mt-1">{children}</p>
-                  // Add your desired margin-bottom (padding) here, e.g., mb-4
-                ),
-              }}
-            />
-          </div>)}
-        {edit && userCanEdit && (
-          <form onSubmit={handleSubmit(onSubmit)} action="" className="flex items-center space-x-2 w-full">
-            <TextareaAutosize
-              {...register('input', { required: true })}
-              placeholder="Enter your text here..."
-              className="border rounded-md p-2 focus:outline-none focus:border-blue-500 w-full"
-              minRows={1}  // Minimum number of rows
-            />
-            {errors.input && <p className="text-red-500 text-xs">Please check your name</p>}
+  return (
+    <div className="flex flex-col w-full text-left items-start gap-2">
+      {label && (<strong>{label}:</strong>)}
+      {!edit && (
+        <div className='items-center'>
+          <ReactMarkdown
+            children={currentState}
+            components={{
+              p: ({ children }) => (
+                <p className="mb-1 mt-1">{children}</p>
+                // Add your desired margin-bottom (padding) here, e.g., mb-4
+              ),
+            }}
+          />
+        </div>)}
+      {edit && userCanEdit && (
+        <form onSubmit={handleSubmit(onSubmit)} action="" className="flex flex-wrap items-center gap-2 w-full">
+          <TextareaAutosize
+            {...register('input', { required: true })}
+            placeholder="Enter your text here..."
+            className="border rounded-md p-2 focus:outline-none focus:border-blue-500 w-full"
+            minRows={1}  // Minimum number of rows
+          />
+          {errors.input && <p className="text-red-500 text-xs">Please check your name</p>}
+          <div className='flex gap-2'>
             <Button
               type="submit"
               className="py-1 px-3"
-              size="md"
+              size="sm"
             >
               Save
             </Button>
-          </form>
-        )}
-        {userCanEdit && (<>
+            <Button
+              type="button"
+              className="py-1 px-3 border-none"
+              size="sm"
+              variant='ghost'
+              onClick={toggleEdit}
+            >
+              Cancel
+            </Button>
+          </div>
+        </form>
+      )}
+      {userCanEdit && !edit && (
+        <div>
           <Button
             type="button"
-            className="py-1 px-3 border-none"
-            size="md"
+            className="py-1 px-3 border-none text-slate-300"
+            size="sm"
             variant='ghost'
             onClick={toggleEdit}
           >
-            {edit ? "Cancel" : "Edit"}
+            Edit
           </Button>
           {deleatable && (
             <Button
               type="button"
               className="py-1 px-3 border-none"
-              size="md"
+              size="sm"
               variant='secondary'
               onClick={deleteItem}
             >
               Delete
             </Button>
           )}
-        </>)}
-      </div>
+        </div>)}
     </div>
-  </div>
   );
 }

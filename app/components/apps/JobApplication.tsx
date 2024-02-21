@@ -121,7 +121,12 @@ function renderCurrentSection(
 ) {
   switch (currentSection) {
     case 'jobdescription':
-      return <JobDescription jobData={jobData} topWords={jobKeyWords} companyDiffbotId={companyDiffbotId} activeSubscription={activeSubscription} currentUserId={userId} />;
+      return <JobDescription
+        jobData={jobData}
+        topWords={jobKeyWords}
+        companyDiffbotId={companyDiffbotId}
+        activeSubscription={activeSubscription}
+        currentUserId={userId} />;
     case 'mockinterview':
       return (
         <MockInterview

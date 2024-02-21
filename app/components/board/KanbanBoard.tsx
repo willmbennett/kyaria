@@ -6,19 +6,19 @@ import { AppClass } from '../../../models/App';
 import { updateJobAppAction } from '../../board/_action';
 import AppItem from '../apps/AppItem';
 import KanbanColumn from "./KanbanColumn";
-import { jobStates } from '../../board/job-helper';
+import { boardItemType, jobStates } from '../../board/job-helper';
 
 export default function Kanban(
     {
-        jobApps,
+        boardItems,
     }: {
-        jobApps: Partial<AppClass>[]
+        boardItems: boardItemType[]
     }) {
 
     const router = useRouter()
 
     const [activeId, setActiveId] = useState<string>();
-    const [apps, setApps] = useState<Partial<AppClass>[]>(jobApps);
+    const [apps, setApps] = useState<boardItemType[]>(boardItems);
 
     const handleDragEnd = async (event: DragEndEvent) => {
         // Logic to handle item drop, updating the state of jobApps accordingly
@@ -59,7 +59,7 @@ export default function Kanban(
 
     const updateAppState = (appId: string, newState: string) => {
         const updatedApps = apps.map(app =>
-            app._id === appId ? { ...app, state: newState } : app
+            app.id === appId ? { ...app, state: newState } : app
         );
 
         setApps(updatedApps)
@@ -101,17 +101,20 @@ export default function Kanban(
                             <KanbanColumn
                                 key={state}
                                 state={state}
-                                jobApps={apps.filter(job => job.state === state)}
+                                apps={apps}
                                 updateAppState={updateAppState}
+                                setApps={setApps}
                                 jobStates={jobStates}
                             />)}
                         <DragOverlay>
-                            {activeId && apps.find(job => job._id === activeId) ? (
+                            {activeId && apps.find(job => job.id === activeId) ? (
                                 <AppItem
-                                    app={apps.find(job => job._id === activeId) as Partial<AppClass>}
+                                    app={apps.find(job => job.id === activeId) as boardItemType}
+                                    apps={apps}
                                     updateAppState={updateAppState}
                                     jobStates={jobStates}
-                                    state={apps.find(job => job._id === activeId)?.state || 'WISHLIST'}
+                                    setApps={setApps}
+                                    state={apps.find(job => job.id === activeId)?.state || 'WISHLIST'}
                                 />
                             ) : null}
                         </DragOverlay>

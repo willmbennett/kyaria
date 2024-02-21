@@ -14,16 +14,18 @@ const useAppNavigation = (
     //console.log('activeProgress: ', activeProgress)
 
     // Dynamically create the 'Research' state pages based on the existence of companyDiffbotUri
+    /*
     const researchPages = ['jobdescription', 'elevatorpitch', 'coverletter', 'resume'];
     if (companyDiffbotUri) {
         researchPages.push('networking');
     }
+    */
 
     // Map the states to the corresponding pages
     const statePagesMap: { [key in ApplicationState]: string[] } = {
-        'Research': researchPages,
+        'Research': ['jobdescription', 'coverletter', 'resume'],
         'Phone Screen': ['story', 'emails', 'experience'],
-        'Interviewing': ['story', 'experience', 'mockinterview', 'emails'],
+        'Interviewing': ['story', 'experience', 'emails'],
         'Post-Offer': ['emails'],
     };
 

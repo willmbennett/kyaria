@@ -82,7 +82,7 @@ export default function CreateJobApp(
                 // Handle the API response data here (e.g., setValues, etc.)
                 console.log(transformedData)
 
-                const jobId = await createJobAction(transformedData, path)
+                const jobId = await createJobAction({...transformedData, userId: userId}, path)
                 console.log('jobId: ', jobId)
                 console.log('selectedResume: ', selectedResume)
                 if (jobId && selectedResume) {
@@ -100,6 +100,7 @@ export default function CreateJobApp(
                             profile: profile._id,
                             userResume: newResumeId
                         }
+                        console.log(userApp)
                         const appId = await createAppAction(userApp, path);
                         console.log('appId: ', appId)
                         console.log('App created Successfully')
@@ -124,9 +125,9 @@ export default function CreateJobApp(
 
     return (
         <>
-            <div className='flex-col items-center w-full space-y-10'>
-                <div className='flex flex-row gap-4 items-center'>
-                    <p>Select which resume you want to use for your campaign.</p>
+            <div className='flex-col items-center w-full space-y-10 max-w-2xl'>
+                <div className='flex flex-col gap-4 items-start'>
+                    <p>Select which resume you want to use for your campaign. We'll make a copy of it for you to use for this application.</p>
                     <ResumeDropdownMenu
                         selectedResumeId={selectedResumeId}
                         setSelectedResumeId={setSelectedResumeId}

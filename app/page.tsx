@@ -38,6 +38,10 @@ export default async function HomePage() {
     redirect(`/profile/${userId}`);
   }
 
+  if (userId) {
+    redirect(`/profile/${userId}`);
+  }
+
   console.log(app)
 
   return (
