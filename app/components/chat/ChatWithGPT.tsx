@@ -101,7 +101,7 @@ export default function ChatWithGPT({
     lastmessage.content = messageSaved
     //console.log(id, data)
     const update = await saveToDatabase(id, data, "/")
-    router.push(path, { scroll: false })
+    router.refresh()
   };
 
   const saveMessage = async () => {

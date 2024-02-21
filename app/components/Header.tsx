@@ -45,9 +45,11 @@ const userPages = [
   /*{ label: 'Contact', href: '/contact' },*/
 ]
 
-const loggedInLinks = [
+const loggedInMenuLinks = [
+  { label: 'LinkedIn Bio', href: '/bio' },
+  { label: 'Elevator Pitch', href: '/pitch' },
+  { label: 'Networking (beta)', href: '/networking' },
   { label: 'Jobs (beta)', href: '/jobs' },
-  { label: 'AI Career Concierge (beta)', href: '/board' },
   { label: 'About', href: '/about' },
   { label: 'Pricing', href: '/pricing' },
   { label: 'Blog', href: '/blog' },
@@ -58,14 +60,12 @@ const loggedInLinks = [
 
 //{ label: 'Profile', href: `/profile/${userId?.user?.id}` },
 
-export function Header({userId}: {userId: string}) {
+export function Header({ userId }: { userId: string }) {
   const pathname = usePathname()
 
   const signedInLinks = [
     { label: 'Resume Builder', href: '/resumebuilder' },
-    { label: 'LinkedIn Bio', href: '/bio' },
-    { label: 'Elevator Pitch', href: '/pitch' },
-    { label: 'Networking (beta)', href: '/networking' },
+    { label: 'AI Career Concierge', href: '/board' },
     /*{ label: 'Pricing', href: '/pricing' },*/
     /*{ label: 'Contact', href: '/contact' },*/
   ]
@@ -77,7 +77,7 @@ export function Header({userId}: {userId: string}) {
     { label: 'Manage Subscription', href: `https://billing.stripe.com/p/login/fZedQQbuK5Ke2Q06oo` },
   ]
 
-  const MobileLinks = userId ? [ ...signedInLinks, ...signedInMenuLinks] : links
+  const MobileLinks = userId ? [...signedInLinks, ...signedInMenuLinks] : links
 
   function MenuIcon({ open }: { open: any }) {
     return (
@@ -158,7 +158,7 @@ export function Header({userId}: {userId: string}) {
                       {link.label}
                     </Link>
                   ))}
-                  {mobileDropDownMenu(userId ? 'More' : 'For Job Seekers', userId ? loggedInLinks : userPages)}
+                  {mobileDropDownMenu(userId ? 'More' : 'For Job Seekers', userId ? loggedInMenuLinks : userPages)}
                 </div>
                 <div className="mt-6">
                   <Button
@@ -316,7 +316,7 @@ export function Header({userId}: {userId: string}) {
                 </Link>
               ))}
               {userId ?
-                desktopDropDownMenu('More', loggedInLinks)
+                desktopDropDownMenu('More', loggedInMenuLinks)
                 :
                 desktopDropDownMenu('For Job Seekers', userPages)
               }

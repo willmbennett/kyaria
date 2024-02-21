@@ -6,6 +6,8 @@ import { AppClass } from "../../models/App";
 import { checkSubscription } from "../../lib/hooks/check-subscription";
 import { ProfileClass } from "../../models/Profile";
 import Kanban from "../components/board/KanbanBoard";
+import { JobClass } from "../../models/Job";
+import { boardItemType } from "./job-helper";
 
 export default async function BoarPage() {
   const { activeSubscription, userId } = await checkSubscription()
@@ -14,12 +16,27 @@ export default async function BoarPage() {
     redirect('/auth/signin')
   }
 
-  const { jobApps } = await getUserJobApps({ userId: userId }) as { jobApps: AppClass[] }
   const { profile } = await getProfile(userId) as { profile: ProfileClass }
-
   if (!profile) {
     redirect(`/profile/${userId}`)
   }
+
+  const { jobApps } = await getUserJobApps({ userId: userId }) as { jobApps: AppClass[] }
+
+  const boardItems: boardItemType[] = jobApps.map(app => {
+    const job = app.job as JobClass
+    return ({
+      id: app._id.toString(),
+      createdAt: app.createdAt.toString(),
+      state: app.state,
+      active: app.active,
+      jobTitle: job.jobTitle,
+      company: job.company,
+      location: job.location,
+      employmentType: job.employmentType,
+      salaryRange: job.salaryRange
+    })
+  })
 
   return (
     <div className="flex w-full mx-auto flex-col items-center min-h-screen">
@@ -50,7 +67,7 @@ export default async function BoarPage() {
         }
       </div>
       <Kanban
-        jobApps={jobApps}
+        boardItems={boardItems}
       />
     </div>
   );

@@ -1,30 +1,36 @@
 import Link from "next/link";
 import { parseISO, format } from 'date-fns';
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, MouseEventHandler, SetStateAction, useState } from "react";
 import { useRouter } from "next/navigation";
 import { updateJobAppAction } from "../../board/_action";
 import { Button } from "../Button";
 import { useDraggable } from '@dnd-kit/core';
 import { AppClass } from "../../../models/App";
 import { JobClass } from "../../../models/Job";
+import { boardItemType } from "../../board/job-helper";
 
 const ACTIVE_ROUTE = "bg-gray-200 hover:bg-gray-600 hover:text-white";
 const INACTIVE_ROUTE = "hover:bg-gray-600 hover:text-white";
 
+interface AppItemProps {
+  app: boardItemType;
+  apps: boardItemType[];
+  updateAppState: (appId: string, newState: string) => void;
+  setApps: Dispatch<SetStateAction<boardItemType[]>>
+  jobStates: string[];
+  state: string;
+}
+
 export default function AppItem(
   { app,
+    apps,
     updateAppState,
     jobStates,
+    setApps,
     state
-  }: {
-    app: Partial<AppClass>,
-    updateAppState: (appId: string, newState: string) => void;
-    jobStates: string[],
-    state: string
-  }) {
+  }: AppItemProps) {
   const router = useRouter()
-  let { _id, job, createdAt } = app as AppClass
-  let { jobTitle, company, location, employmentType, salaryRange } = job as JobClass;
+  let { id, createdAt, jobTitle, company, location, employmentType, salaryRange } = app
   const date = parseISO(createdAt?.toString() || '');
   const [showOptions, setShowOptions] = useState(false);
   const [hasPrefetched, setHasPrefetched] = useState(false);
@@ -34,25 +40,36 @@ export default function AppItem(
     setShowOptions(!showOptions);
   };
 
-  const handleClose = async () => {
-    const { jobApp } = await updateJobAppAction(_id.toString(), { active: !app.active }, "/")
+  const updateAppActive = (appId: string, newActivity: boolean) => {
+    const updatedApps = apps.map(app =>
+        app.id === appId ? { ...app, active: newActivity } : app
+    );
+
+    setApps(updatedApps)
+}
+
+  const handleClose: MouseEventHandler<HTMLButtonElement> = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    await updateJobAppAction(id, { active: !app.active }, "/")
+    updateAppActive(id, !app.active)
     //console.log(jobApp)
-    router.push(`/board`, { scroll: false })
+    router.refresh()
   };
 
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
-    id: app._id?.toString() || ''
+    id: app.id || ''
   });
 
   const handleViewPacketClick = () => {
     // Programmatically navigate to the desired URL
-    router.push(`/apps/${_id}`);
+    router.push(`/apps/${id}`);
   };
 
   const handleMouseOver = () => {
     if (!hasPrefetched) {
       //console.log('prefetching')
-      router.prefetch(`/apps/${_id}`);
+      router.prefetch(`/apps/${id}`);
       setHasPrefetched(true);
     }
   };
@@ -60,7 +77,7 @@ export default function AppItem(
 
   return (
     <div onMouseOver={handleMouseOver} className={`mt-2 text-left border rounded-xl block ${app.active ? "bg-white" : "bg-slate-200"} shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-lg transition-shadow duration-200`}>
-      <Link href={`/apps/${_id}`} passHref>
+      <Link href={`/apps/${id}`} passHref>
         <div
           ref={setNodeRef}
           {...listeners}
@@ -130,8 +147,8 @@ export default function AppItem(
                     const newState = jobStates[i]
                     const stateUpdate = { state: newState }
                     //console.log('stateUpdate: ', newState)
-                    updateAppState(_id.toString(), jobStates[i])
-                    const { jobApp } = await updateJobAppAction(_id.toString(), stateUpdate, "/")
+                    updateAppState(id.toString(), jobStates[i])
+                    const { jobApp } = await updateJobAppAction(id.toString(), stateUpdate, "/")
                     //console.log(jobApp)
                     router.refresh()
                   };

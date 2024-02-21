@@ -4,7 +4,7 @@ import { JobClass } from '../../../../models/Job';
 import { ProfessionalExperience } from '../../../../models/Resume';
 import { Button } from '../../Button';
 import StarStory from '../ui/StarStory';
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 interface ExperienceProps {
     professionalExperience: ProfessionalExperience[],
@@ -26,7 +26,6 @@ export default function Experience({
     userCanEdit
 }: ExperienceProps) {
     const router = useRouter()
-    const path = usePathname()
     // State to track the current index
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -61,13 +60,13 @@ export default function Experience({
     // Update the current index to show the previous StarStory
     const goToPrevious = () => {
         setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
-        router.push(path, { scroll: false })
+        router.refresh()
     };
 
     // Update the current index to show the next StarStory
     const goToNext = () => {
         setCurrentIndex((prevIndex) => (prevIndex < items.length - 1 ? prevIndex + 1 : prevIndex));
-        router.push(path, { scroll: false })
+        router.refresh()
     };
 
     return (

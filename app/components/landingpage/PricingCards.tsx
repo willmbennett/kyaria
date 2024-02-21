@@ -13,21 +13,17 @@ const tiers = [
     name: 'Pro',
     href: '#',
     description:
-      'Access to our AI-powered Resume Builder plus access to all products in beta. ',
+      "The Pro package grants exclusive access to all current and beta products, empowering you with advanced resources at every step.",
     price: 10,
     features: [
-      'Resume builder with simple, straightforward interface',
-      'AI-powered optimization',
-      'ATS friendly resume template',
+      "AI-powered Resume Builder: Enjoy a user-friendly interface that simplifies creating impactful resumes.",
+      "Kanban-Style Job Board: Organize and track your job search with ease for maximum efficiency.",
+      "Comprehensive Application Kit: Elevate your job applications with customized resumes, cover letters, interview preparation, and professional email templates.",
+      "In-depth Company Research: Gain insights into potential employers with detailed information on company background, fundraising activities, and employee insights."
     ],
     betaFeatures: [
-      'AI-powered Behavioral Interview Prep',
-      'AI-powered "Tell Me About Yourself" helper',
-      'Kanban style job board',
-      'AI-powered Interview prep tool',
-      'AI-powered Email writing',
-      'Networking support',
-      'Company research',
+      "Next-Gen AI Networking: Leverage AI to build and expand your professional network effectively.",
+      "Personalized Job Recommendations: Receive job suggestions tailored to your skills, experience, and preferences."
     ],
   },
   /*{
@@ -91,7 +87,7 @@ export function PricingCards({ activeSubscription, userId }: { activeSubscriptio
             Launch your career for $10/month
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-center text-lg leading-relaxed text-slate-700 sm:mt-6">
-            Our pro plan gives access to our brand new state of the art AI-powered resume builder plus access to all our products currently still in beta. Get ahead of the competition!
+            Unlock the full potential of your job search with our comprehensive suite of AI-enhanced tools. Get ahead of the competition!
           </p>
           {['6526c43cca06a466f98a8358', '65281343cfe03a938334b768', '651e2fe7298cc2095da37448', '6525b8886c67f8dab5faec4b', '6514b9f6ffaf0f09ad31c43b', '650f813286f63a9d8c0080ee'].includes(userId || '') &&
             <p className="mx-auto mt-5 max-w-xl text-center text-lg leading-relaxed text-slate-700 sm:mt-6">

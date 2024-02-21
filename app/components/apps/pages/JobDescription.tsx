@@ -76,8 +76,8 @@ export default function JobDescription({
 
     return (
 
-        <>
-            <h1 className="text-center sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
+        <div className="w-full">
+            <h1 className="text-center text-3xl sm:text-5xl font-bold text-slate-900 my-8">
                 <EditJobDescription
                     jobId={jobId}
                     setKey={`jobTitle`}
@@ -85,141 +85,111 @@ export default function JobDescription({
                     userCanEdit={edit}
                 />
             </h1>
-            <div>
-                <div className="flex items-center justify-center">
-                    {jobData.link && (
-                        <p className="text-left font-medium text-lg mb-4 mx-2">
-                            <a href={jobData.link} target="_blank" rel="noopener noreferrer">
-                                <Button
-                                    variant="solid"
-                                    size="md"
-                                >
-                                    View Original Post
-                                </Button>
-                            </a>
-                        </p>
-                    )}
-                    {addBoard && (<>
+            <div className="space-y-6">
+                {jobData.link && (
+                    <div className="text-center">
+                        <a href={jobData.link} target="_blank" rel="noopener noreferrer">
+                            <Button variant="solid" size="md">
+                                View Original Post
+                            </Button>
+                        </a>
+                    </div>
+                )}
+                {addBoard && (
+                    <div className="text-center">
                         {profile ? (
-                            <> {activeSubscription ?
-                                <form onSubmit={handleSubmit(onSubmit)}>
-                                    <p className="text-left font-medium text-lg mb-4 mx-2">
+                            <>
+                                {activeSubscription ? (
+                                    <form onSubmit={handleSubmit(onSubmit)}>
                                         <input {...register('board')} placeholder="board" className="hidden" />
-                                        <Button
-                                            variant="solid"
-                                            type="submit"
-                                            size="md"
-                                        >
+                                        <Button variant="solid" type="submit" size="md">
                                             Add to Board
                                         </Button>
-                                    </p>
-                                </form>
-                                :
-                                <div className="text-left font-medium text-lg mb-4 mx-2">
-                                    <Button
-                                        href='/pricing'
-                                        size="md"
-                                    >
-                                        Subscribe to add to your board
-                                    </Button>
-                                </div>
-                            }
+                                    </form>
+                                ) : (
+                                    <a href="/pricing" className="inline-block">
+                                        <Button size="md">
+                                            Subscribe to add to your board
+                                        </Button>
+                                    </a>
+                                )}
                             </>
                         ) : (
-                            <>
-                                <p className="text-left font-medium text-lg mb-4 mx-2">
-                                    <Button
-                                        size="md"
-                                        variant="solid"
-                                        onClick={!profile ? () => signIn() : () => signOut()}
-                                    >
-                                        {!profile ? 'Sign In to Add to Board' : 'Sign Out'}
-                                    </Button>
-                                </p>
-                            </>
+                            <Button size="md" variant="solid" onClick={!profile ? () => signIn() : () => signOut()}>
+                                {!profile ? 'Sign In to Add to Board' : 'Sign Out'}
+                            </Button>
                         )}
-                    </>)}
-                </div>
-                <p className="text-left font-medium text-lg mb-4">
+                    </div>
+                )}
+                <p className="text-lg font-medium">
                     <strong>Keywords:</strong> {topWords.join(', ')}
                 </p>
-                <div className="flex flex-row justify-start">
-                    <div className="w-auto">
-                        <EditJobDescription
-                            label="Company"
-                            jobId={jobId}
-                            setKey={`company`}
-                            currentState={company}
-                            userCanEdit={edit}
-                        />
-                    </div>
-                    {companyDiffbotId &&
-                        <div>
-                            {
-                                activeSubscription ?
-                                    <Button href={`/companies/${companyDiffbotId}`}
-                                    >
-                                        See more information on {company}
-                                    </Button>
-                                    :
-                                    <Button href="/pricing"
-                                    >
-                                        Subscribe to see company information
-                                    </Button>
-                            }
-                        </div>
-                    }
+                <div className="flex flex-wrap gap-3 justify-start items-center">
+                    <EditJobDescription
+                        label="Company"
+                        jobId={jobId}
+                        setKey={`company`}
+                        currentState={company}
+                        userCanEdit={edit}
+                    />
+                    {companyDiffbotId && (
+                        <Button href={activeSubscription ? `/companies/${companyDiffbotId}` : "/pricing"} size="sm" variant="secondary">
+                            {activeSubscription ? `See more about ${company}` : "Subscribe to see company information"}
+                        </Button>
+                    )}
                 </div>
-                <EditJobDescription
-                    label="Location"
-                    jobId={jobId}
-                    setKey={`location`}
-                    currentState={location}
-                    userCanEdit={edit}
-                />
-                <EditJobDescription
-                    label="Employment Type"
-                    jobId={jobId}
-                    setKey={`employmentType`}
-                    currentState={employmentType || ''}
-                    userCanEdit={edit}
-                />
-                <EditJobDescription
-                    label="Salary Range"
-                    jobId={jobId}
-                    setKey={`salaryRange`}
-                    currentState={salaryRange || ''}
-                    userCanEdit={edit}
-                />
-                <EditJobDescription
-                    label="Remote"
-                    jobId={jobId}
-                    setKey={`remote`}
-                    currentState={remote || ''}
-                    userCanEdit={edit}
-                />
-                <h2 className="text-left font-bold text-2xl mb-4">About the Company</h2>
+                <div className="space-y-4">
+                    <EditJobDescription
+                        label="Location"
+                        jobId={jobId}
+                        setKey={`location`}
+                        currentState={location}
+                        userCanEdit={edit}
+                    />
+                    <EditJobDescription
+                        label="Employment Type"
+                        jobId={jobId}
+                        setKey={`employmentType`}
+                        currentState={employmentType || ''}
+                        userCanEdit={edit}
+                    />
+                    <EditJobDescription
+                        label="Salary Range"
+                        jobId={jobId}
+                        setKey={`salaryRange`}
+                        currentState={salaryRange || ''}
+                        userCanEdit={edit}
+                    />
+                    <EditJobDescription
+                        label="Remote"
+                        jobId={jobId}
+                        setKey={`remote`}
+                        currentState={remote || ''}
+                        userCanEdit={edit}
+                    />
+                </div>
+                <h2 className="text-2xl font-bold mb-4">About the Company</h2>
                 <EditJobDescription
                     jobId={jobId}
                     setKey={`aboutCompany`}
                     currentState={aboutCompany || ''}
                     userCanEdit={edit}
                 />
-                <h2 className="text-left font-bold text-2xl mb-4">Job Description</h2>
+                <h2 className="text-2xl font-bold mb-4">Job Description</h2>
                 <EditJobDescription
                     jobId={jobId}
                     setKey={`jobDescription`}
                     currentState={jobDescription || ''}
                     userCanEdit={edit}
                 />
-                <h2 className="text-left font-bold text-2xl mb-4">Qualifications</h2>
+                <h2 className="text-2xl font-bold mb-4">Qualifications</h2>
                 <EditList
                     listItems={qualifications || []}
                     id={jobId}
                     userCanEdit={edit}
                     parentName='qualifications'
                 />
-                <h2 className="text-left font-bold text-2xl mb-4">Responsibilities</h2>
+                <h2 className="text-2xl font-bold mb-4">Responsibilities</h2>
                 <EditList
                     listItems={responsibilities || []}
                     id={jobId}
@@ -227,6 +197,7 @@ export default function JobDescription({
                     parentName='responsibilities'
                 />
             </div>
-        </>
+        </div>
+
     );
 }

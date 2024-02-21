@@ -1,20 +1,24 @@
 import { useDroppable } from '@dnd-kit/core';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { AppClass } from '../../../models/App';
 import AppItem from "../apps/AppItem";
+import { boardItemType } from '../../board/job-helper';
 
 interface KanbanColumnProps {
     state: string;
-    jobApps: Partial<AppClass>[];
+    apps: boardItemType[];
     jobStates: string[];
     updateAppState: (appId: string, newState: string) => void;
+    setApps: Dispatch<SetStateAction<boardItemType[]>>
 }
 
-export default function KanbanColumn({ state, jobApps, updateAppState, jobStates }: KanbanColumnProps) {
+export default function KanbanColumn({ state, apps, updateAppState, jobStates, setApps }: KanbanColumnProps) {
     const { setNodeRef, isOver } = useDroppable({ id: state });
 
-    const activeApps = jobApps.filter((app: any) => app.active);
-    const inActiveApps = jobApps.filter((app: any) => !app.active);
+    const jobApps = apps.filter(job => job.state === state)
+
+    const activeApps = jobApps.filter(app => app.active);
+    const inActiveApps = jobApps.filter(app => !app.active);
     const [showInactive, setShowInactive] = useState(false);
 
     const toggleInactive = () => {
@@ -27,12 +31,14 @@ export default function KanbanColumn({ state, jobApps, updateAppState, jobStates
         <div ref={setNodeRef} className={`w-80  rounded-xl mx-2 text-center items-center p-2 border ${columnStyle}`}>
             <h5 className="text-xl font-medium leading-tight py-2">{state}</h5>
             {!isOver && <>
-                {activeApps && activeApps.map((app: any) => (
+                {activeApps && activeApps.map(app => (
                     <AppItem
-                        key={app._id}
+                        key={app.id}
                         app={app}
+                        apps={apps}
                         updateAppState={updateAppState}
                         jobStates={jobStates}
+                        setApps={setApps}
                         state={state}
                     />
                 )
@@ -49,14 +55,16 @@ export default function KanbanColumn({ state, jobApps, updateAppState, jobStates
                             <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
                         </svg>
                     </button>
-                    {showInactive && inActiveApps.map((app: any) => (
-                        <AppItem
-                            key={app._id}
-                            app={app}
-                            updateAppState={updateAppState}
-                            jobStates={jobStates}
-                            state={state}
-                        />
+                    {showInactive && inActiveApps.map(app => (
+                         <AppItem
+                         key={app.id}
+                         app={app}
+                         apps={apps}
+                         updateAppState={updateAppState}
+                         jobStates={jobStates}
+                         setApps={setApps}
+                         state={state}
+                     />
                     ))}
                 </>)}
             </>}

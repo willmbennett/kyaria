@@ -12,6 +12,18 @@ export const emails = [
   { "type": "Reference Request", "content": "" }
 ]
 
+export type boardItemType = {
+  id: string;
+  createdAt: string;
+  active: boolean;
+  state: string;
+  jobTitle: string;
+  company: string;
+  location: string;
+  employmentType?: string;
+  salaryRange?: string;
+}
+
 export type jobStateType = 'WISHLIST' | 'APPLIED' | 'PHONE SCREEN' | 'FIRST ROUND' | 'SECOND ROUND' | 'THIRD ROUND' | 'FINAL ROUND' | 'JOB OFFER' | 'ACCEPTED'
 
 export const jobStates = ['WISHLIST', 'APPLIED', 'PHONE SCREEN', 'FIRST ROUND', 'SECOND ROUND', 'THIRD ROUND', 'FINAL ROUND', 'JOB OFFER', 'ACCEPTED']
@@ -187,7 +199,7 @@ export function transformDiffBotApiResponse(apiResponse: any, altUrl: string): J
   }
 
   const jobData = apiResponse.objects[0]; // Assuming there's only one job object in the response
-  
+
 
   const transformedJob: Job = {
     jobTitle: jobData.title || 'Title Not Found',

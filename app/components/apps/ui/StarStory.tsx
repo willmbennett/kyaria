@@ -166,39 +166,45 @@ export default function StarStory({
 
     return (
         <div className="rounded-xl">
-            <h3 className="text-left mb-2 font-bold">Accomplishment</h3>
-            <p className="text-left mb-4">{content}</p>
+            <h3 className="mb-2 text-left font-bold">Accomplishment</h3>
+            <p className="mb-4 text-slate-400">{content}</p>
 
             {showDetails ? (
                 <form onSubmit={handleSubmit(onSubmit)} className="mb-4">
                     <div className="mb-3">
-                        <label htmlFor="details" className="block mb-2 text-sm font-medium text-gray-700">
+                        <label htmlFor="details" className="mb-2 block text-sm font-medium text-gray-700">
                             Add some details on your accomplishment to improve your story
                         </label>
                         <textarea
                             {...register("details", { required: true })}
-                            id="details" rows={10}
+                            id="details"
+                            rows={10}
                             className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             placeholder={defaultMessage}
                         />
                         {errors.details && <p className="mt-1 text-xs text-red-600">Please specify your experience.</p>}
                     </div>
-                    <Button type="submit" size='md'>Add Details</Button>
+                    <div className='flex flex-row gap-4'>
+                        <Button type="submit" size="md">Add Details</Button>
+                        <Button type="button" size="md" variant="ghost" onClick={toggleDetails}>Cancel</Button>
+                    </div>
                 </form>
             ) : (
                 <>
-                    <div className='flex justify-between items-center'>
-                        <h3 className="text-left mb-2 font-bold">Details</h3>
-                        <button
-                            type='button'
+                    <div className="flex items-center justify-between">
+                        <h3 className="mb-2 text-left font-bold">Details</h3>
+                        <Button
+                            type="button"
                             onClick={toggleDetails}
-                            className="mb-4 inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            variant="ghost"
+                            size="sm"
                         >
                             Edit Details
-                        </button>
+                        </Button>
                     </div>
-                    <div className='flex w-full justify-between'>
-                        <div className='flex flex-col'>
+                    {detail && <p className="pb-4 text-slate-400">{detail}</p>}
+                    <div className="flex justify-between w-full">
+                        <div className="flex flex-col">
                             <p>Select a theme for your answer</p>
                         </div>
                         <DropdownMenu
@@ -209,7 +215,7 @@ export default function StarStory({
                             themes={themes}
                         />
                     </div>
-                    <div className='flex w-full justify-center bg-slate-100'>
+                    <div className="flex justify-center w-full bg-slate-100">
                         <p>{savedToProfile && 'Updated your profile with the new story'}</p>
                     </div>
                     <ChatWithGPT
@@ -226,6 +232,7 @@ export default function StarStory({
                 </>
             )}
         </div>
+
 
     );
 }
