@@ -4,6 +4,10 @@ import ChatWithGPT from '../../chat/ChatWithGPT';
 import { updateJobAppAction } from '../../../board/_action';
 import { Message } from 'ai';
 import { CoverLetterViewer } from '../../coverletter/CoverLetterViewer';
+import { useCallback, useState } from 'react';
+import { Button } from '../../Button';
+import { CoverLetterPDF } from '../CoverLetterPDF';
+import ReactPDF from '@react-pdf/renderer';
 
 interface CoverLetterProps {
     jobAppId: string,
@@ -26,6 +30,7 @@ export default function CoverLetter({
     jobKeyWords,
     activeSubscription
 }: CoverLetterProps) {
+    const [editCoverLetter, setEditCoverLetter] = useState(false)
     const message: Message[] = [
         {
             "id": '1',
@@ -56,28 +61,60 @@ export default function CoverLetter({
         }
     ];
 
+    const toggleEdit = () => {
+        setEditCoverLetter(!editCoverLetter)
+    }
+
+    const downloadPDF = useCallback(async () => {
+        const name = userResume.name?.replace(/\s/g, '_') || ''
+        const blob = await ReactPDF.pdf(
+            <CoverLetterPDF
+                name={userResume.name}
+                phone={userResume.phone}
+                email={userResume.email}
+                address={userResume.location}
+                company={job.company}
+                companyLocation={job.location}
+                bodyText={currentCoverLetter}
+            />
+        ).toBlob();
+
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${name}_Cover_Letter.pdf`;
+        link.click();
+    }, [userResume, job, currentCoverLetter]);
 
 
     return (
-        <div className='w-full flex flex-col items-center space-y-10'>
+        <div className='w-full flex flex-col items-center gap-4'>
             <h1 className="text-center sm:text-6xl text-4xl font-bold mb-8">
                 Stand out with a cover letter
             </h1>
-            <ChatWithGPT
-                documentID={jobAppId}
-                setKey='userCoverLetter'
-                message={message}
-                currentState={currentCoverLetter}
-                saveToDatabase={updateJobAppAction}
-                temp={0.5}
-                jobKeyWords={jobKeyWords}
-                activeSubscription={activeSubscription}
-            />
-            <CoverLetterViewer
-                userResume={userResume}
-                job={job}
-                currentCoverLetter={currentCoverLetter}
-            />
+            <div className='flex gap-2'>
+                <Button size='sm' onClick={toggleEdit}>{editCoverLetter ? 'Done' : 'Edit'}</Button>
+                <Button type='button' size='sm' onClick={downloadPDF}>Download</Button>
+            </div>
+            {editCoverLetter &&
+                <ChatWithGPT
+                    documentID={jobAppId}
+                    setKey='userCoverLetter'
+                    message={message}
+                    currentState={currentCoverLetter}
+                    saveToDatabase={updateJobAppAction}
+                    temp={0.5}
+                    jobKeyWords={jobKeyWords}
+                    activeSubscription={activeSubscription}
+                />
+            }
+            {!editCoverLetter &&
+                <CoverLetterViewer
+                    userResume={userResume}
+                    job={job}
+                    currentCoverLetter={currentCoverLetter}
+                />
+            }
         </div>
     );
 }

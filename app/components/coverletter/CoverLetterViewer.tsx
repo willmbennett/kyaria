@@ -38,27 +38,6 @@ export const CoverLetterViewer = (
     const [loading, setLoading] = useState(true);
     const [firstLoad, setFirstLoad] = useState(true);
 
-    const downloadPDF = useCallback(async () => {
-        const name = userResume.name?.replace(/\s/g, '_') || ''
-        const blob = await ReactPDF.pdf(
-            <CoverLetterPDF
-                name={userResume.name}
-                phone={userResume.phone}
-                email={userResume.email}
-                address={userResume.location}
-                company={job.company}
-                companyLocation={job.location}
-                bodyText={currentCoverLetter}
-            />
-        ).toBlob();
-
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `${name}_Cover_Letter.pdf`;
-        link.click();
-    }, [userResume, job, currentCoverLetter]);
-
 
     const generatePDF = useCallback(async () => {
         setLoading(true);
@@ -141,7 +120,6 @@ export const CoverLetterViewer = (
                 </Button>}
                 <div className='flex flex-row  justify-center items-center space-x-2'>
                     {numPages > 1 && <p>Page {pageNumber || (numPages ? 1 : "--")} of {numPages || "--"}</p>}
-                    <Button type='button' size='sm' onClick={downloadPDF}>Download</Button>
                 </div>
                 {numPages > 1 && <Button
                     type="button"

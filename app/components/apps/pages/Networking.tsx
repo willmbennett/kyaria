@@ -1,3 +1,4 @@
+'use client'
 import { useEffect, useState } from "react";
 import { JobClass } from "../../../../models/Job";
 import { ResumeClass } from "../../../../models/Resume";

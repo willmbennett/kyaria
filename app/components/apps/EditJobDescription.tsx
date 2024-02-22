@@ -19,6 +19,7 @@ interface Props {
   array?: string[]
   parentName?: string,
   deleatable?: boolean;
+  useMarkdown?: boolean
 }
 
 type FormFields = {
@@ -36,7 +37,8 @@ export default function ProfileTextEdit({
   index,
   array,
   parentName,
-  deleatable = false
+  deleatable = false,
+  useMarkdown = false
 }: Props) {
   const [edit, setEdit] = useState(stateStart)
   const router = useRouter()
@@ -87,22 +89,26 @@ export default function ProfileTextEdit({
       router.push(path, { scroll: false });
     }
   };
-
+  const markdownContent = currentState.replace(/\n/g, '\n\n');
 
   return (
-    <div className="flex flex-col w-full text-left items-start gap-2">
+    <div className="flex flex-wrap items-center w-full text-left items-start gap-2">
       {label && (<strong>{label}:</strong>)}
       {!edit && (
         <div className='items-center'>
-          <ReactMarkdown
-            children={currentState}
-            components={{
-              p: ({ children }) => (
-                <p className="mb-1 mt-1">{children}</p>
-                // Add your desired margin-bottom (padding) here, e.g., mb-4
-              ),
-            }}
-          />
+          {useMarkdown ?
+            <ReactMarkdown
+              children={markdownContent}
+              components={{
+                p: ({ children }) => (
+                  <p className="mb-2">{children}</p>
+                  // Add your desired margin-bottom (padding) here, e.g., mb-4
+                ),
+              }}
+            />
+            :
+            <p>{currentState}</p>
+          }
         </div>)}
       {edit && userCanEdit && (
         <form onSubmit={handleSubmit(onSubmit)} action="" className="flex flex-wrap items-center gap-2 w-full">

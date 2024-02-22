@@ -9,6 +9,7 @@ import EditJobDescription from "../EditJobDescription";
 import Link from "next/link";
 import { EditList } from "../EditList";
 import { JobClass } from "../../../../models/Job";
+import { useState } from "react";
 
 export type FormFields = {
     board: string;
@@ -32,6 +33,7 @@ export default function JobDescription({
     currentUserId: string
 }) {
     const router = useRouter()
+    const [editingMode, setEditingMode] = useState(false)
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
         if (profile) {
@@ -72,7 +74,9 @@ export default function JobDescription({
 
     const jobId = _id.toString()
 
-    const edit = currentUserId == '650f813286f63a9d8c0080ee' || currentUserId == userId
+    const userCanEdit = (currentUserId == '650f813286f63a9d8c0080ee' || currentUserId == userId)
+
+    const edit = userCanEdit && editingMode
 
     return (
 
@@ -86,41 +90,48 @@ export default function JobDescription({
                 />
             </h1>
             <div className="space-y-6">
-                {jobData.link && (
-                    <div className="text-center">
-                        <a href={jobData.link} target="_blank" rel="noopener noreferrer">
-                            <Button variant="solid" size="md">
-                                View Original Post
-                            </Button>
-                        </a>
-                    </div>
-                )}
-                {addBoard && (
-                    <div className="text-center">
-                        {profile ? (
-                            <>
-                                {activeSubscription ? (
-                                    <form onSubmit={handleSubmit(onSubmit)}>
-                                        <input {...register('board')} placeholder="board" className="hidden" />
-                                        <Button variant="solid" type="submit" size="md">
-                                            Add to Board
-                                        </Button>
-                                    </form>
-                                ) : (
-                                    <a href="/pricing" className="inline-block">
-                                        <Button size="md">
-                                            Subscribe to add to your board
-                                        </Button>
-                                    </a>
-                                )}
-                            </>
-                        ) : (
-                            <Button size="md" variant="solid" onClick={!profile ? () => signIn() : () => signOut()}>
-                                {!profile ? 'Sign In to Add to Board' : 'Sign Out'}
-                            </Button>
-                        )}
-                    </div>
-                )}
+                <div className="flex gap-2">
+                    {jobData.link && (
+                        <div className="text-center">
+                            <a href={jobData.link} target="_blank" rel="noopener noreferrer">
+                                <Button variant="solid" size="md">
+                                    View Original Post
+                                </Button>
+                            </a>
+                        </div>
+                    )}
+                    {userCanEdit &&
+                        <Button size="sm" variant="ghost" onClick={() => setEditingMode(!editingMode)}>
+                            {editingMode ? 'Exit Edit Mode' : 'Edit Mode'}
+                        </Button>
+                    }
+                    {addBoard && (
+                        <div className="text-center">
+                            {profile ? (
+                                <>
+                                    {activeSubscription ? (
+                                        <form onSubmit={handleSubmit(onSubmit)}>
+                                            <input {...register('board')} placeholder="board" className="hidden" />
+                                            <Button variant="solid" type="submit" size="md">
+                                                Add to Board
+                                            </Button>
+                                        </form>
+                                    ) : (
+                                        <a href="/pricing" className="inline-block">
+                                            <Button size="md">
+                                                Subscribe to add to your board
+                                            </Button>
+                                        </a>
+                                    )}
+                                </>
+                            ) : (
+                                <Button size="md" variant="solid" onClick={!profile ? () => signIn() : () => signOut()}>
+                                    {!profile ? 'Sign In to Add to Board' : 'Sign Out'}
+                                </Button>
+                            )}
+                        </div>
+                    )}
+                </div>
                 <p className="text-lg font-medium">
                     <strong>Keywords:</strong> {topWords.join(', ')}
                 </p>
@@ -174,6 +185,7 @@ export default function JobDescription({
                     setKey={`aboutCompany`}
                     currentState={aboutCompany || ''}
                     userCanEdit={edit}
+                    useMarkdown={true}
                 />
                 <h2 className="text-2xl font-bold mb-4">Job Description</h2>
                 <EditJobDescription
@@ -181,6 +193,7 @@ export default function JobDescription({
                     setKey={`jobDescription`}
                     currentState={jobDescription || ''}
                     userCanEdit={edit}
+                    useMarkdown={true}
                 />
                 <h2 className="text-2xl font-bold mb-4">Qualifications</h2>
                 <EditList

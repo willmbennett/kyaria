@@ -94,7 +94,7 @@ export default function Kanban(
 
     return (
         <>
-            <div className="box-border w-full mt-4 overflow-scroll rounded-xl">
+            <div className="box-border w-full overflow-scroll rounded-xl">
                 <div className="box-border inline-flex min-h-screen overflow-scroll p-4">
                     <DndContext sensors={sensors} onDragEnd={handleDragEnd} onDragStart={handleDragStart} onDragOver={handleDragOver} id={id}>
                         {jobStates.map((state: string) =>

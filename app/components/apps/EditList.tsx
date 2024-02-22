@@ -36,10 +36,10 @@ export const EditList = (
 
     const parseNewLines = (inputString: string) => {
         return inputString
-          .split('\n')
-          .map((line: string) => line.trim()) // trim each line
-          .filter((line: string) => line !== ''); // remove empty lines
-      };      
+            .split('\n')
+            .map((line: string) => line.trim()) // trim each line
+            .filter((line: string) => line !== ''); // remove empty lines
+    };
 
     // Save the final message to the database
     const onSubmit: SubmitHandler<FormFields> = async (formData) => {
@@ -49,7 +49,7 @@ export const EditList = (
             const newArray = [
                 ...listItems,
                 ...newItems
-              ];
+            ];
 
             // Create a payload for the update
             const data = { [parentName]: newArray };
@@ -68,20 +68,23 @@ export const EditList = (
     return (
 
         <>
-            {listItems.length > 0 && listItems.map((item: any, index: number) => (
-                <div key={index}>
-                    <EditJobDescription
-                        jobId={id}
-                        setKey={`${parentName}.${index}`}
-                        currentState={item}
-                        userCanEdit={userCanEdit}
-                        deleatable={true}
-                        array={listItems}
-                        parentName={parentName}
-                        index={index}
-                    />
-                </div>
-            ))}
+            <div className='flex flex-col gap-2'>
+                {listItems.length > 0 && listItems.map((item: any, index: number) => (
+                    <div key={index} className='flex flex-row items-start gap-2'>
+                        <span>•</span>
+                        <EditJobDescription
+                            jobId={id}
+                            setKey={`${parentName}.${index}`}
+                            currentState={item}
+                            userCanEdit={userCanEdit}
+                            deleatable={true}
+                            array={listItems}
+                            parentName={parentName}
+                            index={index}
+                        />
+                    </div>
+                ))}
+            </div>
             {add && userCanEdit && (<>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div key={newExperienceId} className="ext-left font-bold text-2xl mb-4">

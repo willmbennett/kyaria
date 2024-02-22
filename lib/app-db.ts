@@ -5,6 +5,20 @@ import connectDB from "./connect-db";
 import { stringToObjectId, castToString, ObjectIdtoString, dateToString } from "./utils";
 var transformProps = require('transform-props');
 
+export async function countTotalApps() {
+    try {
+        await connectDB();
+
+        const totalApps = await AppModel.countDocuments();
+        //console.log('Total resumes:', totalResumes);
+
+        return { totalApps };
+    } catch (error) {
+        console.error('Error counting resumes:', error);
+        return { error: 'Error counting resumes' };
+    }
+}
+
 interface AppFilter {
     userId: string
 }

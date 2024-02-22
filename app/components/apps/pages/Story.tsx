@@ -7,15 +7,15 @@ import { useSession } from "next-auth/react";
 import { useState } from 'react';
 import { Button } from '../../Button';
 import { Message } from 'ai';
+import { ResumeClass } from '../../../../models/Resume';
+import { JobClass } from '../../../../models/Job';
 
 interface StoryProps {
     jobAppId: string,
     currentStory: string,
-    userResumeStripped: any,
-    job: any,
-    jobKeyWords: string[],
+    userResumeStripped: Partial<ResumeClass>,
+    job: Partial<JobClass>,
     profileStory: string,
-    userId: string,
     profileId: string,
     activeSubscription: boolean,
     userCanEdit: boolean
@@ -26,9 +26,7 @@ export default function Story({
     currentStory,
     userResumeStripped,
     job,
-    jobKeyWords,
     profileStory,
-    userId,
     profileId,
     activeSubscription,
     userCanEdit
@@ -135,7 +133,6 @@ Job Posting Details: ${JSON.stringify(job)}`
                     currentState={currentStory}
                     saveToDatabase={updateJobAppAction}
                     temp={0.7}
-                    jobKeyWords={jobKeyWords}
                     activeSubscription={activeSubscription}
                 />
             </div>
