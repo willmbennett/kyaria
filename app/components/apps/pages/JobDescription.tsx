@@ -5,7 +5,7 @@ import { emails } from "../../../board/job-helper";
 import { useRouter } from 'next/navigation'
 import { Button } from "../../Button";
 import { signIn, signOut, useSession } from "next-auth/react";
-import EditJobDescription from "../EditJobDescription";
+import { EditJobDescription } from "../EditJobDescription";
 import Link from "next/link";
 import { EditList } from "../EditList";
 import { JobClass } from "../../../../models/Job";

@@ -26,11 +26,11 @@ type FormFields = {
   input: string;
 };
 
-export default function ProfileTextEdit({
+export const EditJobDescription = ({
   label,
   jobId,
   setKey,
-  currentState,
+  currentState = '',
   userCanEdit,
   stateStart = false,
   toggleAdd,
@@ -39,7 +39,7 @@ export default function ProfileTextEdit({
   parentName,
   deleatable = false,
   useMarkdown = false
-}: Props) {
+}: Props) => {
   const [edit, setEdit] = useState(stateStart)
   const router = useRouter()
   const path = usePathname()

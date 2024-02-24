@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "../Button";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { updateJobAction } from "../../jobs/_action";
-import EditJobDescription from "./EditJobDescription";
+import { EditJobDescription } from "./EditJobDescription";
 
 const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'
 
