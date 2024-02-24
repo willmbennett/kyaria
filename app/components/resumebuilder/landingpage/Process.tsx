@@ -4,7 +4,7 @@ import { Container } from '../../landingpage/Container'
 import AuthButton from '../../AuthButton'
 import processImage from '/public/images/stock/interview.jpg'
 
-export function Process() {
+export default function Process() {
   return (
     <section className="relative overflow-hidden bg-slate-700 pt-24 lg:py-24">
       <Container>
