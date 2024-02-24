@@ -132,7 +132,7 @@ const testimonials = [
   ],
 ]
 
-export function TestimonialsSlide() {
+export default function TestimonialsSlide() {
   useEffect(() => {
     if (
       (navigator.userAgent.indexOf('Opera') ||

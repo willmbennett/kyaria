@@ -5,7 +5,7 @@ import AuthButton from '../AuthButton'
 import { Container } from '../landingpage/Container'
 import { Button } from '../Button'
 
-export function FeatureBlocks() {
+export default function FeatureBlocks() {
   return (
     <section className="relative overflow-hidden bg-white pb-20 pt-32 lg:pb-28 lg:pt-24">
       <Container>

@@ -16,7 +16,7 @@ const companies = [
   { name: 'Wired', logo: logoWired },
 ]
 
-export function LogosRow() {
+export default function LogosRow() {
   return (
     <section className="relative overflow-hidden bg-vanilla py-20 lg:pt-24">
       <Container>

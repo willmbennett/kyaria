@@ -5,7 +5,7 @@ import ctaImage1 from '/public/images/stock/job-interview2.jpg'
 import ctaImage2 from '/public/images/stock/entrepreneurship-3822492_1280.jpg'
 import AuthButton from '../../AuthButton'
 
-export function CallToAction() {
+export default function CallToAction() {
   return (
     <section className="overflow-hidden bg-white py-20 md:py-28 lg:py-32">
       <Container className="relative items-center md:grid md:grid-cols-12 md:gap-12">

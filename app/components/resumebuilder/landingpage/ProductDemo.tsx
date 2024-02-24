@@ -2,7 +2,7 @@ import { ResumeClass } from "../../../../models/Resume"
 import { Container } from "../../landingpage/Container"
 import ResumeBuilder from "../ResumeBuilder"
 
-export const ProductDemo = ({resume, resumeId}: {resume: ResumeClass, resumeId: string}) => {
+export default function ProductDemo({ resume, resumeId }: { resume: ResumeClass, resumeId: string }) {
 
   return (
     <section className="relative pt-16 md:pt-20 xl:pt-32">

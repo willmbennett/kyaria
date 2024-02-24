@@ -4,7 +4,6 @@ import { checkSubscription } from "../../../../lib/hooks/check-subscription";
 import { redirect } from "next/navigation";
 import { getPerson } from "../../../../lib/person-db";
 import { LinkedIn } from "../../../components/linkedIn/LinkedIn";
-import PersonCard from "../../../components/networking/PersonCard";
 import { PersonClass } from "../../../../models/Person";
 
 type getResumesType = {

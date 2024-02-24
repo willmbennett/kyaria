@@ -9,13 +9,14 @@ import Kanban from "../components/board/KanbanBoard";
 import { JobClass } from "../../models/Job";
 import { boardItemType } from "./job-helper";
 import { BoardHero } from "../components/board/landingpage/BoardHero";
-import { ProductDemo } from "../components/board/landingpage/ProductDemo";
-import { Process } from "../components/board/landingpage/Process";
-import { FeatureBlocks } from "../components/board/landingpage/FeatureBlocks";
-import { Faqs } from "../components/board/landingpage/Faqs";
-import { CallToAction } from "../components/board/landingpage/CallToAction";
+import dynamic from "next/dynamic";
+const ProductDemo = dynamic(() => import('../components/board/landingpage/ProductDemo'));
+const Process = dynamic(() => import('../components/board/landingpage/Process'));
+const FeatureBlocks = dynamic(() => import('../components/board/landingpage/FeatureBlocks'));
+const Faqs = dynamic(() => import('../components/board/landingpage/Faqs'));
+const CallToAction = dynamic(() => import('../components/board/landingpage/CallToAction'));
 
-export default async function BoarPage() {
+export default async function BoardPage() {
   const { activeSubscription, userId } = await checkSubscription()
   const { totalApps } = await countTotalApps()
 

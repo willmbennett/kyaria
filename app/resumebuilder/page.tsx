@@ -1,15 +1,19 @@
+import dynamic from 'next/dynamic';
 import ResumeBuilderHome from "../components/resumebuilder/ResumeBuilderHome";
 import { countTotalResumes, getResume, getResumes } from "../../lib/resume-db";
 import { ResumeClass } from "../../models/Resume";
 import { ResumeBuilderHero } from "../components/resumebuilder/landingpage/ResumeBuilderHero";
-import { CallToAction } from "../components/resumebuilder/landingpage/CallToAction";
-import { FeaturesGrid } from "../components/landingpage/FeaturesGrid";
-import { Process } from "../components/resumebuilder/landingpage/Process";
-import { FeatureBlocks } from "../components/resumebuilder/landingpage/FeatureBlocks";
-import { Faqs } from "../components/resumebuilder/landingpage/Faqs";
 import { checkSubscription } from "../../lib/hooks/check-subscription";
 import { redirect } from "next/navigation";
-import { ProductDemo } from "../components/resumebuilder/landingpage/ProductDemo";
+
+// Dynamically import components
+const CallToAction = dynamic(() => import("../components/resumebuilder/landingpage/CallToAction"));
+//const FeaturesGrid = dynamic(() => import("../components/landingpage/FeaturesGrid"));
+const Process = dynamic(() => import("../components/resumebuilder/landingpage/Process"));
+const FeatureBlocks = dynamic(() => import("../components/resumebuilder/landingpage/FeatureBlocks"));
+const Faqs = dynamic(() => import("../components/resumebuilder/landingpage/Faqs"));
+const ProductDemo = dynamic(() => import("../components/resumebuilder/landingpage/ProductDemo"));
+
 
 type getResumesType = {
   resumes: ResumeClass[]

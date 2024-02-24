@@ -249,7 +249,7 @@ const features = [
   },*/
 ]
 
-export function FeaturesGrid() {
+export default function FeaturesGrid() {
   return (
     <section className="relative overflow-hidden bg-white pb-8 pt-20 lg:pb-12 lg:pt-28">
       <Container>

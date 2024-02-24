@@ -5,7 +5,7 @@ import { Button } from '../Button'
 import processImage from '/public/images/stock/interview.jpg'
 import AuthButton from '../AuthButton'
 
-export function Process() {
+export default function Process() {
   return (
     <section className="relative overflow-hidden bg-slate-700 pt-24 lg:py-24">
       <Container>

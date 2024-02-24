@@ -3,7 +3,7 @@ import { Container } from './Container'
 import { useState } from 'react';
 import { JobApplication } from '../apps/JobApplication';
 
-export function ProductDemo({ jobApp, userId }: { jobApp: any, userId: string }) {
+export default function ProductDemo({ jobApp, userId }: { jobApp: any, userId: string }) {
   return (
     <section className="relative pt-16 md:pt-20 xl:pt-32">
       <Container>

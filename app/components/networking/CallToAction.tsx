@@ -6,7 +6,7 @@ import AuthButton from '../AuthButton'
 import { Container } from '../landingpage/Container'
 import { Button } from '../Button'
 
-export function CallToAction() {
+export default function CallToAction() {
   return (
     <section className="overflow-hidden bg-white py-20 md:py-28 lg:py-32">
       <Container className="relative items-center md:grid md:grid-cols-12 md:gap-12">

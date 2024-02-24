@@ -5,7 +5,7 @@ import AuthButton from '../AuthButton'
 import { Container } from '../landingpage/Container'
 import { Button } from '../Button'
 
-export function Process() {
+export default function Process() {
   return (
     <section className="relative overflow-hidden bg-slate-700 pt-24 lg:py-24">
       <Container>

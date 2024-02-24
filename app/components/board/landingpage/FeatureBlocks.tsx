@@ -6,7 +6,7 @@ import featureImage1 from '/public/images/stock/interview-meeting.jpg'
 import featureImage2 from '/public/images/stock/student-laptop.jpg'
 import AuthButton from '../../AuthButton'
 
-export function FeatureBlocks({ totalApps }: { totalApps: number }) {
+export default function FeatureBlocks({ totalApps }: { totalApps: number }) {
   return (
     <section className="relative overflow-hidden bg-white pb-20 pt-32 lg:pb-28 lg:pt-24">
       <Container>
