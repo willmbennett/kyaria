@@ -30,7 +30,9 @@ export const ProductDemo = () => {
             <p className="ml-3 text-slate-700 lg:ml-4 xl:ml-5 xl:text-lg my-5 max-w-2xl text-center">
               Explore how our Kanban job application tracker streamlines your job search.
             </p>
-
+            <Container className='flex w-full justify-center'>
+              <iframe width="1120" height="630" src="https://www.youtube.com/embed/AmZ6dEviIwc?si=7lj6hHj0eXINj10t&amp;controls=0" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
+            </Container>
           </div>
         </div>
       </Container>
