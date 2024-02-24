@@ -1,6 +1,6 @@
 import { Container } from '../landingpage/Container';
 
-export const NetworkingDemo = () => {
+export default function NetworkingDemo() {
     return (
         <section className="w-full text-center py-8 md:py-10 xl:py-16 space-y-10">
             <h1 className="text-3xl md:text-5xl font-semibold leading-tight text-slate-900">Kyaria's Networking AI

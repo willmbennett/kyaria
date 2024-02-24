@@ -6,7 +6,7 @@ const stats = [
   { number: '99.9%', text: 'Employee Headcount Coverage' },
 ];
 
-export const StatsHighlight = () => {
+export default function StatsHighlight () {
   return (
     <section className="py-12 bg-slate-100 space-y-10">
       <Container>

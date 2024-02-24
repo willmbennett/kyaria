@@ -1,7 +1,6 @@
 
 'use client'
 import { Button } from './Button'
-import { signIn } from "next-auth/react";
 
 // Add a TypeScript interface if you're using TypeScript
 interface AuthButtonProps {
@@ -13,7 +12,10 @@ interface AuthButtonProps {
 
 const AuthButton = ({ altText = "Sign in", ...props }: AuthButtonProps) => (
     <Button
-        onClick={() => signIn()}
+        onClick={async () => {
+            const { signIn } = (await import("next-auth/react"));
+            signIn()
+        }}
         className={`mt-3.5 w-full sm:mt-0 sm:w-auto ${props.className || ''}`}
         {...props} // Spread the rest of the props here
     >

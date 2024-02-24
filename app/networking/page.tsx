@@ -1,20 +1,23 @@
-import { CallToAction } from "../components/networking/CallToAction";
-import { Faqs } from "../components/networking/Faqs";
-import { FeatureBlocks } from "../components/networking/FeatureBlocks";
-import { NetworkingDemo } from "../components/networking/NetworkingDemo";
+import dynamic from 'next/dynamic';
 import { NetworkingHero } from "../components/networking/NetworkingHero";
-import { Process } from "../components/networking/Process";
 import { redirect } from "next/navigation";
 import { checkSubscription } from "../../lib/hooks/check-subscription";
-import NetworkingSearch from "../components/networking/NetworkingSearch";
 import { getResumes } from "../../lib/resume-db";
 import { ResumeClass } from "../../models/Resume";
-import { Container } from "../components/landingpage/Container";
-import { StatsHighlight } from "../components/networking/landingpage/StatsHighlight";
+import { Container } from '../components/landingpage/Container';
+
+// Dynamically import components
+const CallToAction = dynamic(() => import("../components/networking/CallToAction"));
+const Faqs = dynamic(() => import("../components/networking/Faqs"));
+const FeatureBlocks = dynamic(() => import("../components/networking/FeatureBlocks"));
+const NetworkingDemo = dynamic(() => import("../components/networking/NetworkingDemo"));
+const Process = dynamic(() => import("../components/networking/Process"));
+const NetworkingSearch = dynamic(() => import("../components/networking/NetworkingSearch"));
+const StatsHighlight = dynamic(() => import("../components/networking/landingpage/StatsHighlight"));
+
 
 export default async function NetworkingPage() {
   const { activeSubscription, userId } = await checkSubscription()
-  const { resumes } = await getResumes(userId) as { resumes: ResumeClass[] }
 
   //await getTest()
 
@@ -42,6 +45,8 @@ export default async function NetworkingPage() {
     { number: '244+', text: 'Industries Represented' },
     { number: '99.9%', text: 'Employee Headcount Coverage' },
   ];
+
+  const { resumes } = await getResumes(userId) as { resumes: ResumeClass[] }
 
   return (
     <>

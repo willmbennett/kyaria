@@ -1,6 +1,6 @@
 import { Container } from "../../landingpage/Container"
 
-export const ProductDemo = () => {
+export default function ProductDemo() {
 
   return (
     <section className="relative pt-16 md:pt-20 xl:pt-32">

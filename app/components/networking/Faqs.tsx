@@ -29,7 +29,7 @@ const faqs = [
   },
 ]
 
-export function Faqs() {
+export default function Faqs() {
   return (
     <section className="overflow-hidden bg-vanilla pb-64 md:pb-32 md:pt-24">
       <Container className="relative">
