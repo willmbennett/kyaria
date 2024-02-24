@@ -1,19 +1,12 @@
-import ResumeBuilderHome from "../../components/resumebuilder/ResumeBuilderHome";
-import { countTotalResumes, getResume, getResumes } from "../../../lib/resume-db";
+import { getResumes } from "../../../lib/resume-db";
 import { ResumeClass } from "../../../models/Resume";
 import { checkSubscription } from "../../../lib/hooks/check-subscription";
 import { redirect } from "next/navigation";
-import { ProductDemo } from "../../components/resumebuilder/landingpage/ProductDemo";
 import { Bio } from "../../components/bio/Bio";
 import { getProfile } from "../../../lib/profile-db";
-import { Container } from "../../components/landingpage/Container";
 
 type getResumesType = {
     resumes: ResumeClass[]
-}
-
-type getResumeType = {
-    resume: ResumeClass
 }
 
 export default async function ProfilePage() {
