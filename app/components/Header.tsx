@@ -39,20 +39,18 @@ const pages = [
 ]*/
 
 const userPages = [
-  { label: 'Resume Builder', href: '/resumebuilder' },
+  { label: 'Job Application Tracker ', href: '/board' },
   { label: 'Networking (beta)', href: '/networking' },
   /*{ label: 'Pricing', href: '/pricing' },*/
   /*{ label: 'Contact', href: '/contact' },*/
 ]
 
 const loggedInMenuLinks = [
+  { label: 'Resume Builder', href: '/resumebuilder' },
   { label: 'LinkedIn Bio', href: '/bio' },
   { label: 'Elevator Pitch', href: '/pitch' },
   { label: 'Networking (beta)', href: '/networking' },
   { label: 'Jobs (beta)', href: '/jobs' },
-  { label: 'About', href: '/about' },
-  { label: 'Pricing', href: '/pricing' },
-  { label: 'Blog', href: '/blog' },
   /*{ label: 'Pricing', href: '/pricing' },*/
   /*{ label: 'Contact', href: '/contact' },*/
 ]
@@ -64,8 +62,7 @@ export function Header({ userId }: { userId: string }) {
   const pathname = usePathname()
 
   const signedInLinks = [
-    { label: 'Resume Builder', href: '/resumebuilder' },
-    { label: 'AI Career Concierge', href: '/board' },
+    { label: 'Job Application Tracker ', href: '/board' },
     /*{ label: 'Pricing', href: '/pricing' },*/
     /*{ label: 'Contact', href: '/contact' },*/
   ]

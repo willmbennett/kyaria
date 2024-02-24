@@ -1,3 +1,6 @@
+import { usePathname, useRouter } from "next/navigation";
+import { AppClass, Emails } from "../../../models/App";
+import { createAppAction } from "../../board/_action";
 import { jobStateType } from "../../board/job-helper";
 
 // Define the ApplicationState type based on the keys you have provided
@@ -53,11 +56,11 @@ export const getProgress = (state: jobStateType) => {
 
 export const pageList = [
   { label: "Job Description", section: 'jobdescription' },
+  { label: "Resume", section: 'resume' },
+  { label: "Cover Letter", section: 'coverletter' },
   { label: "Elevator Pitch", section: 'story' },
   { label: "Networking", section: 'networking' },
   { label: "Interview Stories", section: `experience` },
   { label: "Mock Interview", section: 'mockinterview' },
   { label: "Emails", section: 'emails' },
-  { label: "Cover Letter", section: 'coverletter' },
-  { label: "Resume", section: 'resume' },
 ]

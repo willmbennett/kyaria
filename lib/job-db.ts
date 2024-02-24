@@ -271,6 +271,24 @@ export async function getJob(id: string) {
     }
 }
 
+export async function findJobByLink(link: string) {
+    try {
+        await connectDB();
+
+        //console.log(parsedId)
+        const job = await JobModel.findOne({ link: link }).lean().exec();
+
+        if (job) {
+            const jobId = job._id.toString()
+            return { jobId }
+        } else {
+            return { error: "Job not found" };
+        }
+    } catch (error) {
+        return { error };
+    }
+}
+
 export async function updateJob(id: string, data: any) {
     try {
         await connectDB();

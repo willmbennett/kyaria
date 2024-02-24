@@ -1,4 +1,3 @@
-'use client'
 import JobDescription from './pages/JobDescription'
 import CoverLetter from './pages/CoverLetter';
 import Experience from './pages/Experience';
@@ -11,7 +10,8 @@ import { JobClass } from '../../../models/Job';
 import { ProfileClass } from '../../../models/Profile';
 import MockInterview from './pages/MockInterview';
 import Networking from './pages/Networking';
-import CustomPDFViewer from '../resumebuilder/pdfviewer/CustomPDFViewer';
+import Resume from './pages/Resume';
+import React from 'react';
 
 interface JobApplicationProps {
   jobApp: AppClass;
@@ -19,6 +19,17 @@ interface JobApplicationProps {
   currentUserId: string;
   currentSection: string;
 }
+
+// Memoizing each component with React.memo
+const MemoizedJobDescription = React.memo(JobDescription);
+const MemoizedCoverLetter = React.memo(CoverLetter);
+const MemoizedExperience = React.memo(Experience);
+const MemoizedEmails = React.memo(Emails);
+const MemoizedStory = React.memo(Story);
+const MemoizedMockInterview = React.memo(MockInterview);
+const MemoizedNetworking = React.memo(Networking);
+const MemoizedResume = React.memo(Resume);
+
 
 export function JobApplication(
   {
@@ -79,138 +90,95 @@ export function JobApplication(
   const resumeId = userResume._id.toString()
   const companyDiffbotId = job.companyDiffbotUri ? job.companyDiffbotUri.split('/').pop() : null;
 
-  return (
-    <div className='w-full'>
-      {renderCurrentSection(
-        currentSection,
-        job,
-        jobStripped,
-        jobKeyWords,
-        userResume,
-        userResumeStripped,
-        userId,
-        profile,
-        profileId,
-        resumeId,
-        jobAppId,
-        jobApp,
-        activeSubscription,
-        userCanEdit,
-        companyDiffbotId
-      )}
-    </div>
-  );
-}
-
-function renderCurrentSection(
-  currentSection: string,
-  jobData: JobClass,
-  jobStripped: Partial<JobClass>,
-  jobKeyWords: string[],
-  userResume: ResumeClass,
-  userResumeStripped: Partial<ResumeClass>,
-  userId: string,
-  profile: ProfileClass,
-  profileId: string,
-  resumeId: string,
-  jobAppId: string,
-  jobApp: AppClass,
-  activeSubscription: boolean,
-  userCanEdit: boolean,
-  companyDiffbotId?: string | null
-) {
-  switch (currentSection) {
-    case 'jobdescription':
-      return <JobDescription
-        jobData={jobData}
+  const jobApplicationComponents: Map<string, {
+    component: React.JSX.Element,
+  }> = new Map([
+    ['jobdescription', {
+      component: <MemoizedJobDescription
+        jobData={job}
         topWords={jobKeyWords}
         companyDiffbotId={companyDiffbotId}
         activeSubscription={activeSubscription}
-        currentUserId={userId} />;
-    case 'mockinterview':
-      return (
-        <MockInterview
-          userName={userResume.name}
-          jobStripped={jobStripped}
-          jobTitle={jobData.jobTitle}
-          company={jobData.company}
-          activeSubscription={activeSubscription}
-        />
-      );
-    case 'coverletter':
-      return (
-        <CoverLetter
-          jobAppId={jobAppId}
-          currentCoverLetter={jobApp.userCoverLetter || ''}
-          userResumeStripped={userResumeStripped}
-          jobStripped={jobStripped}
-          job={jobData}
+        currentUserId={userId} />
+    }],
+    ['mockinterview', {
+      component: <MemoizedMockInterview
+        userName={userResume.name}
+        jobStripped={jobStripped}
+        jobTitle={job.jobTitle}
+        company={job.company}
+        activeSubscription={activeSubscription}
+      />
+    }],
+    ['coverletter', {
+      component: <MemoizedCoverLetter
+        jobAppId={jobAppId}
+        currentCoverLetter={jobApp.userCoverLetter || ''}
+        userResumeStripped={userResumeStripped}
+        jobStripped={jobStripped}
+        job={job}
+        userResume={userResume}
+        jobKeyWords={jobKeyWords}
+        activeSubscription={activeSubscription}
+      />
+    }],
+    ['resume', {
+      component:
+        <MemoizedResume
           userResume={userResume}
-          jobKeyWords={jobKeyWords}
-          activeSubscription={activeSubscription}
-        />
-      );
-    case 'resume':
-      return (
-        <div className='w-full flex flex-col items-center justify-center'>
-          <CustomPDFViewer
-            data={userResume}
-            useEdit={true}
-            userId={userId}
-            useSave={true}
-            activeSubscription={activeSubscription}
-          />
-        </div>
-      );
-    case 'story':
-      return (
-        <Story
-          jobAppId={jobAppId}
-          currentStory={jobApp.userStory || ''}
-          userResumeStripped={userResumeStripped}
-          job={jobData}
-          jobKeyWords={jobKeyWords}
-          profileStory={profile.story || ''}
-          userId={userId}
-          profileId={profileId}
-          activeSubscription={activeSubscription}
-          userCanEdit={userCanEdit}
-        />
-      );
-    case 'networking':
-      return (
-        <Networking
-          companyDiffbotUri={companyDiffbotId || ''}
-          userResumeStripped={userResumeStripped}
-          jobStripped={jobStripped}
-          company={jobData.company}
-          activeSubscription={activeSubscription}
-        />
-      );
-    case 'experience':
-      return (
-        <Experience
-          professionalExperience={userResume.professional_experience || []}
-          resumeId={resumeId}
-          jobStripped={jobStripped}
-          jobKeyWords={jobKeyWords}
           userId={userId}
           activeSubscription={activeSubscription}
-          userCanEdit={userCanEdit}
         />
-      );
-    case 'emails':
-      return (
-        <Emails
-          jobAppId={jobAppId}
-          emails={jobApp.emails}
-          jobStripped={jobStripped}
-          jobKeyWords={jobKeyWords}
-          userResumeStripped={userResumeStripped}
-          activeSubscription={activeSubscription}
-        />
-      );
-    default:
-      return null;
-  }
+    }],
+    ['story', {
+      component: <MemoizedStory
+        jobAppId={jobAppId}
+        currentStory={jobApp.userStory || ''}
+        userResumeStripped={userResumeStripped}
+        job={job}
+        profileStory={profile.story || ''}
+        profileId={profileId}
+        activeSubscription={activeSubscription}
+        userCanEdit={userCanEdit}
+      />
+    }],
+    ['networking', {
+      component: <MemoizedNetworking
+        companyDiffbotUri={companyDiffbotId || ''}
+        userResumeStripped={userResumeStripped}
+        jobStripped={jobStripped}
+        company={job.company}
+        activeSubscription={activeSubscription}
+      />
+    }],
+    ['experience', {
+      component: <MemoizedExperience
+        professionalExperience={userResume.professional_experience || []}
+        resumeId={resumeId}
+        jobStripped={jobStripped}
+        jobKeyWords={jobKeyWords}
+        userId={userId}
+        activeSubscription={activeSubscription}
+        userCanEdit={userCanEdit}
+      />
+    }],
+    ['emails', {
+      component: <MemoizedEmails
+        jobAppId={jobAppId}
+        emails={jobApp.emails}
+        jobStripped={jobStripped}
+        jobKeyWords={jobKeyWords}
+        userResumeStripped={userResumeStripped}
+        activeSubscription={activeSubscription}
+      />
+    }],
+    // Add other sections as needed
+  ]);
+
+
+  return (
+    <div className='w-full'>
+      {jobApplicationComponents.get(currentSection)?.component}
+    </div>
+  );
 }

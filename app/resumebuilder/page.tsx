@@ -22,7 +22,6 @@ type getResumeType = {
 export default async function ProfilePage() {
   const { activeSubscription, userId } = await checkSubscription()
   const { totalResumes } = await countTotalResumes()
-  const { resumes } = await getResumes(userId) as getResumesType
   const resumeId = '65adcbdf782ab1d399ea1aa4'
   const { resume } = await getResume(resumeId) as getResumeType
 
@@ -43,6 +42,8 @@ export default async function ProfilePage() {
   if (!activeSubscription) {
     redirect('/pricing')
   }
+
+  const { resumes } = await getResumes(userId) as getResumesType
 
   if (resumes.length == 0) {
     redirect('/resumebuilder/new')

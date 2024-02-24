@@ -1,4 +1,4 @@
-import { getUserJobApps } from "../../lib/app-db";
+import { countTotalApps, getUserJobApps } from "../../lib/app-db";
 import { getProfile } from "../../lib/profile-db";
 import { redirect } from "next/navigation";
 import { Button } from "../components/Button";
@@ -8,20 +8,37 @@ import { ProfileClass } from "../../models/Profile";
 import Kanban from "../components/board/KanbanBoard";
 import { JobClass } from "../../models/Job";
 import { boardItemType } from "./job-helper";
+import { BoardHero } from "../components/board/landingpage/BoardHero";
+import { ProductDemo } from "../components/board/landingpage/ProductDemo";
+import { Process } from "../components/board/landingpage/Process";
+import { FeatureBlocks } from "../components/board/landingpage/FeatureBlocks";
+import { Faqs } from "../components/board/landingpage/Faqs";
+import { CallToAction } from "../components/board/landingpage/CallToAction";
 
 export default async function BoarPage() {
   const { activeSubscription, userId } = await checkSubscription()
+  const { totalApps } = await countTotalApps()
 
   if (!userId) {
-    redirect('/auth/signin')
-  }
-
-  const { profile } = await getProfile(userId) as { profile: ProfileClass }
-  if (!profile) {
-    redirect(`/profile/${userId}`)
+    return (
+      <>
+        <BoardHero />
+        <ProductDemo />
+        {totalApps && <FeatureBlocks totalApps={totalApps} />}
+        <Process />
+        {/*<TestimonialsSlide />*/}
+        <Faqs />
+        <CallToAction />
+      </>
+    );
   }
 
   const { jobApps } = await getUserJobApps({ userId: userId }) as { jobApps: AppClass[] }
+
+  if (jobApps.length == 0) {
+    redirect('/apps/new')
+  }
+
 
   const boardItems: boardItemType[] = jobApps.map(app => {
     const job = app.job as JobClass
@@ -39,28 +56,26 @@ export default async function BoarPage() {
   })
 
   return (
-    <div className="flex w-full mx-auto flex-col items-center min-h-screen">
-      <div className="w-full bg-white pt-10 g-white p-2 text-center items-center justify-center">
+    <div className="flex w-full mx-auto flex-col  py-10 items-center min-h-screen">
+      <div className="flex gap-4 items-center">
         <h1 className="sm:text-lg text-xl font-bold text-slate-900">
           Your Job Board
         </h1>
         {activeSubscription ?
           <Button
             variant="solid"
-            size="md"
+            size="sm"
             type="button"
             href="/apps/new"
-            className="mt-3"
           >
             Add a New Job Post
           </Button>
           :
           <Button
             variant="solid"
-            size="md"
+            size="sm"
             type="button"
             href="/pricing"
-            className="mt-3"
           >
             Subscribe to Add Job Posts
           </Button>

@@ -1,15 +1,15 @@
 'use client'
 import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { usePathname, useRouter } from 'next/navigation'
 import { Button } from '../../Button';
-import { transformDiffBotApiResponse, emails } from '../../../board/job-helper';
-import { createAppAction, createJobApplicationAction, createResumeAction } from '../../../board/_action';
+import { emails } from '../../../board/job-helper';
 import { ProfileClass } from '../../../../models/Profile';
-import { AppClass } from '../../../../models/App';
-import { createJobAction } from '../../../jobs/_action';
 import ResumeDropdownMenu from '../../ResumeDropdownMenu';
 import { ResumeClass } from '../../../../models/Resume';
+import { useCreateApp } from '../../../../lib/hooks/use-create-app';
+import { useCreateJob } from '../../../../lib/hooks/use-create-job';
+import { useCopyResume } from '../../../../lib/hooks/use-copy-resume';
+import { usePathname, useRouter } from 'next/navigation';
 
 const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'
 
@@ -25,102 +25,42 @@ export default function CreateJobApp(
     }: {
         userId: string,
         profile: ProfileClass,
-        resumes: ResumeClass[]
+        resumes: ResumeClass[],
     }) {
-    const router = useRouter()
     const [loading, setLoading] = useState(false)
     const { register, handleSubmit, formState: { errors } } = useForm<FormFields>();
-    const path = usePathname()
     const [selectedResumeId, setSelectedResumeId] = useState<string>(resumes[0]._id.toString() || '');
-
     // Find the selected resume based on the selectedResumeId
     const selectedResume = resumes.find(resume => resume._id === selectedResumeId);
+    const path = usePathname()
+    const router = useRouter()
+    const { createApp } = useCreateApp(path)
+    const { findOrCreateJob } = useCreateJob(path)
+    const { handleCopyResume } = useCopyResume()
 
-    const handleCopyResume = async (data: ResumeClass) => {
-        try {
-            const resumeCopy: Partial<ResumeClass> = { ...data };
-
-            delete resumeCopy._id;
-            delete resumeCopy.createdAt;
-            delete resumeCopy.updatedAt;
-            delete resumeCopy.userId;
-
-            const userResumeWithIds = { fromTemplate: true, ...resumeCopy, userId };
-            const resumeId = await createResumeAction(userResumeWithIds, '/');
-
-            if (resumeId) {
-                return resumeId
-            }
-        } catch (error) {
-            console.error('Error during resume copy:', error);
-        }
-    }
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
-        try {
-            setLoading(true);
-
-            // Make the API call to your Next.js route
-            const response = await fetch(`/api/diffbot/job?url=${encodeURIComponent(data.input)}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch data from the API.');
-            }
-
-            const apiData = await response.json();
-
-            //console.log(apiData)
-
-            if (apiData) {
-
-                const transformedData = transformDiffBotApiResponse(apiData, data.input)
-                // Handle the API response data here (e.g., setValues, etc.)
-                console.log(transformedData)
-
-                const jobId = await createJobAction({...transformedData, userId: userId}, path)
-                console.log('jobId: ', jobId)
-                console.log('selectedResume: ', selectedResume)
-                if (jobId && selectedResume) {
-                    console.log('Made it to resume creation')
-                    const newResumeId = await handleCopyResume(selectedResume)
-                    console.log('newResumeId: ', newResumeId)
+        if (selectedResume) {
+            try {
+                setLoading(true);
+                const jobId = await findOrCreateJob(data.input, userId, selectedResume)
+                if (jobId) {
+                    //console.log('Made it to resume creation')
+                    const newResumeId = await handleCopyResume(userId, selectedResume)
+                    //console.log('newResumeId: ', newResumeId)
 
                     if (newResumeId) {
-                        console.log('Made it to app creation')
-                        const userApp: Partial<AppClass> = {
-                            job: jobId,
-                            userId: userId,
-                            emails: emails,
-                            userStory: profile.story || '',
-                            profile: profile._id,
-                            userResume: newResumeId
-                        }
-                        console.log(userApp)
-                        const appId = await createAppAction(userApp, path);
-                        console.log('appId: ', appId)
-                        console.log('App created Successfully')
-                        if (appId)
-                            //console.log(userApp)
-                            router.push(`${appId}`)
+                        const { appId } = await createApp(jobId, userId, emails, profile.story, profile._id.toString(), newResumeId)
+                        if (appId) router.push(`/apps/${appId}`)
                     }
                 }
+            } catch (error) {
+                //console.error(error);
+                // Handle the error (e.g., display an error message to the user)
+                alert('Creating job failed')
+                setLoading(false);
             }
-
-
-        } catch (error) {
-            console.error(error);
-            // Handle the error (e.g., display an error message to the user)
-            alert('Creating job failed')
-            router.refresh()
-        } finally {
-            setLoading(false);
         }
-
     };
 
     return (

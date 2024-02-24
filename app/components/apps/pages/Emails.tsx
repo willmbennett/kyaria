@@ -96,14 +96,13 @@ export default function Experience({
                             {
                                 "id": '1',
                                 "role": "system",
-                                "content": `You are a professional email writer specialized in creating personalized, compelling emails for jobseekers.
-                                Tone: conversational, spartan, use less corporate jargon`
+                                "content": `You are a professional email writer specialized in creating concise, personalized, compelling emails for jobseekers. Tone: conversational, spartan, use less corporate jargon`
                             },
                             {
                                 "id": '2',
                                 "role": "user",
                                 "content": `Please write me a ${selectedEmail.type} email for this job post: ${JSON.stringify(jobStripped)}.
-                                Include information from my profile ${JSON.stringify(userResumeStripped)} and keep the writing style consistent. 
+                                Include information from my profile ${JSON.stringify(userResumeStripped)} and keep the writing style consistent. Be concise and keep the email short. 
                             `
                             }
                         ]
