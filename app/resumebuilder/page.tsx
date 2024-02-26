@@ -43,10 +43,6 @@ export default async function ProfilePage() {
     );
   }
 
-  if (!activeSubscription) {
-    redirect('/pricing')
-  }
-
   const { resumes } = await getResumes(userId) as getResumesType
 
   if (resumes.length == 0) {

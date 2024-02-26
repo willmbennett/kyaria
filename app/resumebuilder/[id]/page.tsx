@@ -16,10 +16,6 @@ export default async function ResumeScanPage({ params }: { params: { id: string 
         redirect('/');
     }
 
-    if (!userId) {
-        redirect('/resumebuilder');
-    }
-
     return (
         <div className="flex justify-center pb-14">
             <ResumeBuilder

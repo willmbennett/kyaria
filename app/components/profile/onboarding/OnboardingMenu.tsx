@@ -12,11 +12,15 @@ import { ClipboardDocumentListIcon } from "@heroicons/react/24/outline";
 import { BoltIcon } from "@heroicons/react/24/outline";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/24/outline";
+import { BuildingOfficeIcon } from "@heroicons/react/24/outline";
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import { OnboardingStage } from './Enum';
 import { Questionnaire } from '../../../../models/Profile';
 import { ResumeClass } from '../../../../models/Resume';
 import { WelcomeIntro } from './instructions/WelcomeIntro';
+import { AppClass } from '../../../../models/App';
+import { AddAJobApplication } from './instructions/AddAJobApplication';
+import { AppsDescription } from './descriptions/AppsDescription';
 
 const MENU_ITEM_BASE_STYLE = `inline-flex items-center rounded-t-lg md:py-4 md:px-4 py-2 px-2 text-sm font-medium text-center border-b-2 h-full`;
 const ACTIVE_ROUTE_STYLE = `text-blue-500 border-b-2 border-blue-500`;
@@ -26,7 +30,7 @@ type MenuItem = {
   label: string;
   instruction: React.ReactNode;
   disabled: boolean;
-  showOnboarding: boolean;
+  show: boolean;
   section: JSX.Element
   icon: React.ReactNode;
 };
@@ -34,6 +38,7 @@ type MenuItem = {
 const onboardingStages: OnboardingStage[] = [
   OnboardingStage.ResumeUpload,
   OnboardingStage.Questionnaire,
+  OnboardingStage.Apps,
   OnboardingStage.ElevatorPitch,
   OnboardingStage.Bio,
   //OnboardingStage.Story,
@@ -47,6 +52,7 @@ interface OnboardingMenuProps {
   story: string | undefined;
   activeSubscription: boolean;
   resumes: ResumeClass[] | undefined;
+  apps: AppClass[] | undefined;
   userId: string;
   profileId: string;
 }
@@ -59,21 +65,27 @@ export default function OnboardingMenu({
   story,
   activeSubscription,
   resumes,
+  apps,
   userId,
   profileId
 }: OnboardingMenuProps) {
 
   const hasResumes = resumes && resumes.length > 0 ? true : false
   const hasQuestionnaire = questionnaire ? true : false
+  const hasApps = apps && apps.length > 0 ? true : false
   const hasPitch = story ? true : false
   const hasBio = bio ? true : false
   const onboarding = !hasResumes || !hasQuestionnaire || !hasPitch || !hasBio
 
   let firstTabShown = OnboardingStage.ResumeUpload; // Default starting point
   // Adjust the logic to more accurately reflect the user's progress
-  if (hasResumes && !hasQuestionnaire) {
+  if (!hasResumes) {
+    firstTabShown = OnboardingStage.ResumeUpload;
+  } else if (hasResumes && !hasQuestionnaire) {
     firstTabShown = OnboardingStage.Questionnaire;
-  } else if (hasQuestionnaire && !hasPitch) {
+  } else if (hasQuestionnaire && !hasApps) {
+    firstTabShown = OnboardingStage.Apps;
+  } else if (hasApps && !hasPitch) {
     firstTabShown = OnboardingStage.ElevatorPitch;
   } else if (hasPitch && !hasBio) {
     firstTabShown = OnboardingStage.Bio;
@@ -83,10 +95,10 @@ export default function OnboardingMenu({
 
   const menuItems: Map<OnboardingStage, MenuItem> = new Map([
     [OnboardingStage.ResumeUpload, {
-      label: "Resume Upload",
+      label: "Resumes",
       instruction: <WelcomeIntro />,
       disabled: false,
-      showOnboarding: !hasResumes,
+      show: true,
       section: <ResumeDescription
         resumes={resumes}
         userId={userId}
@@ -98,18 +110,29 @@ export default function OnboardingMenu({
       label: "Questionnaire",
       instruction: <WelcomeIntro />,
       disabled: false,
-      showOnboarding: !hasQuestionnaire,
+      show: true,
       section: <QuestionnaireDescription
         questionnaire={questionnaire}
         userId={userId}
         profileId={profileId} />,
       icon: <ClipboardDocumentListIcon className="h-5 w-5" />,
     }],
+    [OnboardingStage.Apps, {
+      label: "Job Applications",
+      instruction: <AddAJobApplication />,
+      disabled: !hasResumes,
+      show: !hasApps,
+      section: <AppsDescription
+        userId={userId}
+        profileId={profileId}
+        resumes={resumes} />,
+      icon: <BuildingOfficeIcon className="h-5 w-5" />,
+    }],
     [OnboardingStage.ElevatorPitch, {
       label: "Elevator Pitch",
       instruction: <ProfileEnhancement />,
-      disabled: !hasResumes || !hasQuestionnaire,
-      showOnboarding: !hasPitch,
+      disabled: !hasResumes,
+      show: !hasPitch,
       section: <ElevatorPitchDescription
         story={story}
         activeSubscription={activeSubscription}
@@ -121,8 +144,8 @@ export default function OnboardingMenu({
     [OnboardingStage.Bio, {
       label: "LinkedIn Bio",
       instruction: <ProfileEnhancement />,
-      disabled: !hasResumes || !hasQuestionnaire,
-      showOnboarding: !hasBio,
+      disabled: !hasResumes,
+      show: !hasBio,
       section: <LinkedInBioDescription
         bio={bio}
         activeSubscription={activeSubscription}
@@ -156,7 +179,7 @@ export default function OnboardingMenu({
           <ul className="flex flex-nowrap -mb-px items-stretch mt-10" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
             {onboardingStages.map((stage, index) => {
               const menuItem = menuItems.get(stage);
-              if (menuItem) {
+              if (menuItem && menuItem.show) {
                 return (
                   <li key={index} className="mr-2" role="presentation">
                     <TooltipPrimitive.Root>

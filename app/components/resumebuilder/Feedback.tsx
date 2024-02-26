@@ -8,9 +8,10 @@ import { ChatMessage } from '../chat/ChatMessage';
 interface FeedbackProps {
     userResume: ResumeBuilderFormData;
     job?: Partial<JobClass>;
+    activeSubscription: boolean;
 };
 
-const Feedback = ({ userResume, job }: FeedbackProps) => {
+const Feedback = ({ userResume, job, activeSubscription }: FeedbackProps) => {
     const [loading, setLoading] = useState(false)
 
     // Usage
@@ -52,17 +53,20 @@ const Feedback = ({ userResume, job }: FeedbackProps) => {
 
     return (
         <div className="flex flex-col justify-start h-full space-y-2"> {/* Ensures the container takes full height */}
-            <h1 className="text-start text-xl font-semibold text-slate-900 pt-3">
-                Resume Feedback
-            </h1>
-            <Button variant={loading ? 'ghost' : 'solid'} size='md' type="button" onClick={loading ? handleStop : handleStart} >{buttonName}</Button>
+            <div>
+                {activeSubscription ?
+                    <Button variant={loading ? 'ghost' : 'solid'} size='md' type="button" onClick={loading ? handleStop : handleStart} >{buttonName}</Button>
+                    :
+                    < Button size='sm' href="/pricing">Subscribe to get feedback</Button>
+                }
+            </div>
             {/* This div will be the scrolling container */}
             <div className='flex w-full h-full overflow-y-scroll overscroll-none'>
                 {messages.map((message) => (
                     message.role === 'assistant' && <ChatMessage key={message.id} message={message} />
                 ))}
             </div>
-        </div>
+        </div >
     );
 };
 

@@ -47,12 +47,24 @@ const CustomPDFViewer = (
     const [loading, setLoading] = useState(true);
     const [firstLoad, setFirstLoad] = useState(true);
 
-    const downloadPDF = useGeneratePDF({ data });
+    //console.log('data: ', data)
+
+    const downloadPDF = useCallback(async () => {
+        //console.log(`Made it to [downloadPDF] with blob: ${newPdfUrl}`)
+        if (newPdfUrl) {
+            const name = data.name?.replace(/\s/g, '_') || ''
+            const link = document.createElement('a');
+            link.href = newPdfUrl;
+            link.download = `${name}_Resume.pdf`;
+            link.click();
+        }
+    }, [data, currentPdfUrl]);
 
 
     const generatePDF = useCallback(async () => {
         setLoading(true);
         //console.log('Starting PDF generation');
+        //console.log(data)
         try {
             const blob = await ReactPDF.pdf(<ResumePDF data={data} />).toBlob();
             const newUrl = URL.createObjectURL(blob);
@@ -91,10 +103,15 @@ const CustomPDFViewer = (
 
 
     const handleLoadSuccess = () => {
+        //console.log('finished loading new page')
         setLoading(false);
-        const oldUrl = currentPdfUrl
+        // Clean up old url if not the same as new
+        if (currentPdfUrl && (currentPdfUrl != newPdfUrl)) {
+            URL.revokeObjectURL(currentPdfUrl)
+        }
+        //console.log(`About to set old url: `, newPdfUrl)
         setCurrentPdfUrl(newPdfUrl)
-        if (oldUrl) URL.revokeObjectURL(oldUrl);
+
     };
 
     function changePage(offset: number) {

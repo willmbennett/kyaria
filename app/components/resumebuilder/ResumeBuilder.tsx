@@ -45,24 +45,24 @@ const ResumeBuilder = (
                     <div className='flex w-full h-full overflow-y-scroll lg:overscroll-none p-4 border border-slate-200 shadow-inner'>
                         {/*Toggle State True == Editing*/}
                         <div className={`h-full w-full ${!toggleState ? 'relative top-0' : 'hidden '}`}>
-                            <Feedback userResume={defaultValues} job={job} />
+                            <Feedback userResume={defaultValues} job={job} activeSubscription={activeSubscription} />
                         </div>
                         <div className={`h-full w-full ${toggleState ? 'relative top-0' : 'hidden '}`}>
                             {activeSubscription ?
                                 <ResumeForm methods={methods} job={job} />
                                 :
-                                <Button href="/pricing">Subscribe to Edit</Button>
+                                <Button size='sm' href="/pricing">Subscribe to Edit</Button>
                             }
                         </div>
                     </div>
                 </div>
                 <div className='flex w-full items-center justify-center'>
                     {defaultValues &&
-                        <CustomPDFViewer 
-                        data={useSave? data : convertFormDataToResumeModel(watch(),data)} 
-                        saveStatus={saveStatus} userId={userId} 
-                        useSave={useSave} 
-                        activeSubscription={activeSubscription}
+                        <CustomPDFViewer
+                            data={useSave ? data : convertFormDataToResumeModel(watch(), data)}
+                            saveStatus={saveStatus} userId={userId}
+                            useSave={useSave}
+                            activeSubscription={activeSubscription}
                         />
                     }
                 </div>

@@ -74,7 +74,7 @@ const ResumePDF = ({ data }: { data: ResumeClass }) => {
     certifications, awards, publications, volunteering, sectionOrder
   } = data;
 
-  const resumeSections = sectionOrder || [
+  const resumeSections = (sectionOrder && sectionOrder.length > 0) ? sectionOrder : [
     'skills',
     'professional_experience',
     'education',
