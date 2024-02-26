@@ -29,6 +29,7 @@ const ElevatorPitchDescription = ({
             profileId={profileId}
             currentPitch={story || ''}
             desiredRole={questionnaire.desiredRole}
+            activeSubscription={true}
           />
         )
         )

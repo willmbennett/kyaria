@@ -10,11 +10,13 @@ export const BioGen = ({
     profileId,
     currentBio,
     desiredRole,
+    activeSubscription
 }: {
     selectedResume: ResumeClass,
     profileId: string,
     currentBio?: string,
-    desiredRole?: string // I made this one optional for now
+    desiredRole?: string,
+    activeSubscription: boolean
 }) => {
     const message: Message[] = [
         {
@@ -106,7 +108,7 @@ export const BioGen = ({
                 currentState={currentBio || ''}
                 saveToDatabase={updateProfileAction}
                 temp={0.7}
-                activeSubscription={true}
+                activeSubscription={activeSubscription}
             />
         </div>
     );

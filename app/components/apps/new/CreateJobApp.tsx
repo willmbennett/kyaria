@@ -10,6 +10,7 @@ import { useCreateApp } from '../../../../lib/hooks/use-create-app';
 import { useCreateJob } from '../../../../lib/hooks/use-create-job';
 import { useCopyResume } from '../../../../lib/hooks/use-copy-resume';
 import { usePathname, useRouter } from 'next/navigation';
+import { IconSpinner } from '../../ui/icons';
 
 const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'
 
@@ -20,11 +21,13 @@ type FormFields = {
 export default function CreateJobApp(
     {
         userId,
-        profile,
+        profileId,
+        story = '',
         resumes
     }: {
         userId: string,
-        profile: ProfileClass,
+        profileId: string,
+        story?: string;
         resumes: ResumeClass[],
     }) {
     const [loading, setLoading] = useState(false)
@@ -50,7 +53,7 @@ export default function CreateJobApp(
                     //console.log('newResumeId: ', newResumeId)
 
                     if (newResumeId) {
-                        const { appId } = await createApp(jobId, userId, emails, profile.story, profile._id.toString(), newResumeId)
+                        const { appId } = await createApp(jobId, userId, emails, story, profileId, newResumeId)
                         if (appId) router.push(`/apps/${appId}`)
                     }
                 }
@@ -96,11 +99,11 @@ export default function CreateJobApp(
                     )}
                 </div>
                 {loading && (
-                    <div className='flex-col items-center'>
-                        <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-8">
-                            Fetching your job post
-                        </h1>
-                    </div>)}
+                    <div className="flex gap-2 items-center">
+                        <p>Fetching the job post</p>
+                        <IconSpinner />
+                    </div>
+                )}
             </div>
         </>
     );

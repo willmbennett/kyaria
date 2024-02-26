@@ -27,13 +27,13 @@ interface FormSubmitParams {
     userId: string | null; // Replace with your session type
 }
 
-
 export const useFileHandler = (
-    setFile: Dispatch<SetStateAction<PDFFile>>,
+    setFile: Dispatch<SetStateAction<File | null>>,
     setBase64File: Dispatch<SetStateAction<string | null>>
-): ((event: React.ChangeEvent<HTMLInputElement>) => void) => {
-    const onFileChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-        const { files } = event.target;
+): ((event: React.ChangeEvent<HTMLInputElement> | FileList) => void) => {
+    const onFileChange = (event: React.ChangeEvent<HTMLInputElement> | FileList): void => {
+        // Determine if the event is from input change or file drop
+        const files = event instanceof FileList ? event : event.target.files;
 
         if (files && files[0] && files[0].type === "application/pdf") {
             setFile(files[0]); // Set the file object
@@ -51,7 +51,10 @@ export const useFileHandler = (
             };
         } else {
             alert("Please upload a valid PDF file.");
-            event.target.value = ""; // Reset input
+            // For input event, reset the input value
+            if (!(event instanceof FileList) && event.target) {
+                event.target.value = ""; // Reset input for traditional file input
+            }
             setFile(null);
             setBase64File(null);
         }
@@ -59,6 +62,7 @@ export const useFileHandler = (
 
     return onFileChange;
 };
+
 
 
 

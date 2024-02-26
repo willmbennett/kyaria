@@ -17,25 +17,8 @@ export default async function NewAppPage() {
         redirect('/')
     }
 
-    if (!activeSubscription) {
-        redirect('/pricing')
-    }
-
-    if (!profile) {
+    if (!profile || resumes.length == 0) {
         redirect('/profile')
-    }
-
-    if (resumes.length == 0) {
-        return (
-            <section className="flex flex-col lg:flex-row overflow-hidden pt-5 w-full pb-14 lg: px-4">
-                <Container>
-                    <h1 className="pb-10 text-5xl font-semibold leading-tighter text-slate-900 md:mx-auto md:max-w-2xl md:text-center xl:mx-0 xl:text-6xl xl:leading-tighter">
-                        Create a resume first
-                    </h1>
-                    <Button size='sm' href="/resumebuilder">Create a resume</Button>
-                </Container>
-            </section >
-        )
     }
 
     return (
@@ -48,11 +31,18 @@ export default async function NewAppPage() {
                     <h1 className="pb-10 text-5xl font-semibold leading-tighter text-slate-900 md:mx-auto md:max-w-2xl md:text-center xl:mx-0 xl:text-6xl xl:leading-tighter">
                         Add a new Job Application
                     </h1>
-                    <CreateJobApp
-                        userId={userId}
-                        profile={profile}
-                        resumes={resumes}
-                    />
+                    {activeSubscription ?
+                        <CreateJobApp
+                            userId={userId}
+                            profileId={profile._id.toString()}
+                            story={profile.story}
+                            resumes={resumes}
+                        />
+                        :
+                        <div className="w-full flex justify-center">
+                            <Button href="/pricing"> Subscribe to add more Job Posts </Button>
+                        </div>
+                    }
                 </div>
             </Container>
         </section>
