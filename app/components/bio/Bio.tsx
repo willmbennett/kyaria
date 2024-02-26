@@ -10,11 +10,13 @@ export const Bio = ({
     profileId,
     currentBio,
     desiredRole,
+    activeSubscription
 }: {
     resumes: ResumeClass[],
     profileId: string,
     currentBio?: string,
-    desiredRole?: string // I made this one optional for now
+    desiredRole?: string,
+    activeSubscription: boolean
 }) => {
 
     const [selectedResumeId, setSelectedResumeId] = useState<string>(resumes[0]._id.toString() || '');
@@ -40,6 +42,7 @@ export const Bio = ({
                     profileId={profileId}
                     currentBio={currentBio}
                     desiredRole={desiredRole}
+                    activeSubscription={activeSubscription}
                 />
             </div>
         </>

@@ -30,16 +30,11 @@ export default async function AppLayout({
 }: {
     children: React.ReactNode;
 }) {
-    const { activeSubscription, userId } = await checkSubscription()
+    const { userId } = await checkSubscription()
 
     //For now just redirect the user home (no landing page)
     if (!userId) {
         redirect('/')
-    }
-
-    //If no subscription redirect to subscribe
-    if (!activeSubscription) {
-        redirect('/pricing')
     }
 
     return (

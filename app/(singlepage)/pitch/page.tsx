@@ -10,7 +10,7 @@ type getResumesType = {
 }
 
 export default async function ProfilePage() {
-    const { userId } = await checkSubscription()
+    const { userId, activeSubscription } = await checkSubscription()
     console.log('userId: ', userId)
     const { resumes } = await getResumes(userId) as getResumesType
     const { profile } = await getProfile(userId);
@@ -39,6 +39,7 @@ export default async function ProfilePage() {
                     profileId={profileId}
                     currentPitch={profile?.story || ''}
                     desiredRole={profile?.questionnaire?.desiredRole}
+                    activeSubscription={activeSubscription}
                 />
             </div>
         </div>

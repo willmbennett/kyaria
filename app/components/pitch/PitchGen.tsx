@@ -10,11 +10,13 @@ export const PitchGen = ({
     profileId,
     currentPitch,
     desiredRole,
+    activeSubscription
 }: {
     selectedResume: ResumeClass,
     profileId: string,
     currentPitch?: string,
-    desiredRole?: string // I made this one optional for now
+    desiredRole?: string,
+    activeSubscription: boolean
 }) => {
     const message: Message[] = [
         {
@@ -72,7 +74,7 @@ export const PitchGen = ({
                 currentState={currentPitch || ''}
                 saveToDatabase={updateProfileAction}
                 temp={0.7}
-                activeSubscription={true}
+                activeSubscription={activeSubscription}
             />
         </div>
     );

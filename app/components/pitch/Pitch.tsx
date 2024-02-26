@@ -10,11 +10,13 @@ export const Pitch = ({
     profileId,
     currentPitch,
     desiredRole,
+    activeSubscription
 }: {
     resumes: ResumeClass[],
     profileId: string,
     currentPitch?: string,
-    desiredRole?: string // I made this one optional for now
+    desiredRole?: string,
+    activeSubscription: boolean
 }) => {
 
     const [selectedResumeId, setSelectedResumeId] = useState<string>(resumes[0]._id.toString() || '');
@@ -40,6 +42,7 @@ export const Pitch = ({
                     profileId={profileId}
                     currentPitch={currentPitch}
                     desiredRole={desiredRole}
+                    activeSubscription={activeSubscription}
                 />
             </div>
         </>
