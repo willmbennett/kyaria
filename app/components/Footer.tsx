@@ -18,7 +18,6 @@ import {
   LinkedInIcon,
   TiktokIcon,
 } from './SocialIcons'
-import { useSession } from 'next-auth/react';
 
 const navigation = {
   company: [
@@ -35,6 +34,7 @@ const navigation = {
     { name: 'AI Career Concierge', href: '/board' },
     { name: 'LinkedIn Bio', href: '/bio' },
     { name: 'Elevator Pitch', href: '/pitch' },
+    { name: 'AI Career Coaching (beta)', href: '/eve' },
     { name: 'Networking (beta)', href: '/networking' },
     { name: 'Jobs (beta)', href: '/jobs' },
   ],

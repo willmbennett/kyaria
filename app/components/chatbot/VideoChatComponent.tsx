@@ -62,6 +62,6 @@ export const VideoChatComponent = () => {
     }
 
     return (
-        <video id="sm-video" width="100%" height="100%"></video>
+        <video className='p-8 bg-white shadow-lg rounded-lg' id="sm-video" width="100%" height="100%"></video>
     );
 }

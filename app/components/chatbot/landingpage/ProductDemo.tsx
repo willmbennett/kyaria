@@ -1,9 +1,13 @@
 'use client'
+import { motion } from "framer-motion";
 import { Container } from "../../landingpage/Container"
 import { CldVideoPlayer, CloudinaryVideoPlayer } from "next-cloudinary"
 
 import 'next-cloudinary/dist/cld-video-player.css';
 export default function ProductDemo() {
+
+  const text = "Instead of selling you on Eve, we'll let her do the talking."
+  const letters = Array.from(text);
 
   return (
     <section className="relative py-16 md:py-20 xl:py-32">
@@ -27,8 +31,19 @@ export default function ProductDemo() {
                   strokeWidth={3}
                 />
               </svg>
+              <span>
+                {letters.map((letter, index) => (
+                  <motion.span
+                    key={index}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                  >
+                    {letter}
+                  </motion.span>
 
-              <span>Meet Eve</span>
+                ))}
+              </span>
             </p>
             <Container className='flex w-full justify-center'>
               <CldVideoPlayer

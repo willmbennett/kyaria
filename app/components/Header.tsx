@@ -40,6 +40,7 @@ const pages = [
 
 const userPages = [
   { label: 'Job Application Tracker ', href: '/board' },
+  { label: 'AI Career Coaching (beta)', href: '/eve' },
   { label: 'Networking (beta)', href: '/networking' },
   /*{ label: 'Pricing', href: '/pricing' },*/
   /*{ label: 'Contact', href: '/contact' },*/
@@ -63,6 +64,7 @@ export function Header({ userId }: { userId: string }) {
 
   const signedInLinks = [
     { label: 'Job Application Tracker ', href: '/board' },
+    { label: 'AI Career Coaching (beta)', href: '/eve' },
     /*{ label: 'Pricing', href: '/pricing' },*/
     /*{ label: 'Contact', href: '/contact' },*/
   ]
