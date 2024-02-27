@@ -18,7 +18,7 @@ export default async function NewAppPage() {
     }
 
     if (!profile || resumes.length == 0) {
-        redirect('/profile')
+        redirect(`/profile/${userId}`)
     }
 
     return (
