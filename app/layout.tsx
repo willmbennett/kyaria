@@ -1,7 +1,5 @@
 import { Metadata } from 'next';
 import '../styles/globals.css';
-import { authOptions } from '../lib/auth';
-import { getServerSession } from "next-auth/next"
 import Script from 'next/script';
 import clsx from 'clsx'
 import { Inter } from 'next/font/google'
@@ -20,6 +18,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://www.kyaria.ai'),
   title,
   description,
+  referrer: 'strict-origin-when-cross-origin',
   openGraph: {
     title,
     description,
