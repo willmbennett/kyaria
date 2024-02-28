@@ -94,18 +94,28 @@ export default function Kanban(
 
     return (
         <>
-            <div className="box-border w-full overflow-scroll rounded-xl">
-                <div className="box-border inline-flex min-h-screen overflow-scroll p-4">
+            <div className="w-full p-4">
+                <div className="flex min-h-screen w-full gap-4 border border-slate-100 p-4 rounded-xl">
                     <DndContext sensors={sensors} onDragEnd={handleDragEnd} onDragStart={handleDragStart} onDragOver={handleDragOver} id={id}>
-                        {jobStates.map((state: string) =>
-                            <KanbanColumn
-                                key={state}
-                                state={state}
-                                apps={apps}
-                                updateAppState={updateAppState}
-                                setApps={setApps}
-                                jobStates={jobStates}
-                            />)}
+                        <div id='kanban-container' className='relative overflow-x-scroll w-screen h-full'>
+                            <div className='flex'>
+                                {jobStates.map((state, index) =>
+                                    <div key={index} className='flex flex-col gap-4 text-center'>
+                                        <h5 className="text-xl font-medium leading-tight">{state}</h5>
+                                        <div className='flex gap-2 h-full'>
+                                            <KanbanColumn
+                                                state={state}
+                                                apps={apps}
+                                                updateAppState={updateAppState}
+                                                setApps={setApps}
+                                                jobStates={jobStates}
+                                            />
+                                            {index < jobStates.length - 1 && <div className="h-full w-1 bg-slate-300 mx-2 shadow-xl"></div>}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                         <DragOverlay>
                             {activeId && apps.find(job => job.id === activeId) ? (
                                 <AppItem
