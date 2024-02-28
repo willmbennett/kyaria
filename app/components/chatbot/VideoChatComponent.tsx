@@ -38,8 +38,8 @@ export const VideoChatComponent = () => {
             const options: SceneOptions = {
                 apiKey: process.env.NEXT_PUBLIC_SOULMACHINES_API_KEY,
                 videoElement: videoRef.current,
-                requestedMediaDevices: { microphone: true, camera: true },
-                requiredMediaDevices: { microphone: true, camera: true },
+                requestedMediaDevices: { microphone: true },
+                requiredMediaDevices: { microphone: true },
             };
 
             const scene = new Scene(options);
