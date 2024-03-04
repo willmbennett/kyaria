@@ -61,3 +61,5 @@ htmlcov/
 dist/
 build/
 *.egg-info/
+
+.api

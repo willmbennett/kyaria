@@ -4,10 +4,10 @@ import { ChevronDownIcon } from "@heroicons/react/24/solid";
 interface CameraSelectMenuProps {
     videoDevices: MediaDeviceInfo[];
     selectedVideoDeviceId: string;
-    setSelectedVideoDeviceId: (deviceId: string) => void;
+    selectVideoDevice: (deviceId: string) => void;
 }
 
-export const CameraSelectMenu = ({ videoDevices, selectedVideoDeviceId, setSelectedVideoDeviceId }: CameraSelectMenuProps) => {
+export const CameraSelectMenu = ({ videoDevices, selectedVideoDeviceId, selectVideoDevice }: CameraSelectMenuProps) => {
     return (
         <Menu as="div" className="relative">
             {({ open }) => (
@@ -33,7 +33,7 @@ export const CameraSelectMenu = ({ videoDevices, selectedVideoDeviceId, setSelec
                             <Menu.Item key={`${device.deviceId}-dropdown-camera`}>
                                 <button
                                     key={device.deviceId}
-                                    onClick={() => setSelectedVideoDeviceId(device.deviceId)}
+                                    onClick={() => selectVideoDevice(device.deviceId)}
                                     className={`block px-5 py-3.5 font-medium ${device.deviceId == selectedVideoDeviceId
                                         ? 'bg-gray-secondary-100/60 text-slate-900'
                                         : 'text-slate-700 transition duration-300 ease-in-out hover:bg-gray-secondary-100/60 hover:text-slate-900'

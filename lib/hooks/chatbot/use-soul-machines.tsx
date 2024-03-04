@@ -7,15 +7,19 @@ interface ConnectionSuccessResponse {
     scene: Scene;
 }
 
-export const useSceneManagement = (videoRef: RefObject<HTMLVideoElement>, requestMediaAccess: boolean) => {
+interface useSceneManagementProps {
+    incomingVideo: HTMLVideoElement | null;
+    useChatBot: boolean;
+}
+
+export const useSceneManagement = ({ incomingVideo, useChatBot }: useSceneManagementProps) => {
     const [scene, setScene] = useState<Scene | null>(null);
-    const [audioDestination, setAudioDestination] = useState<MediaStreamAudioDestinationNode | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     useEffect(() => {
         // Ensure videoRef.current is not null; otherwise, pass undefined.
-        if (!requestMediaAccess && videoRef.current && !scene) {
-            const videoElement = videoRef.current
+        if (useChatBot && incomingVideo && !scene) {
+            const videoElement = incomingVideo
 
             const options: SceneOptions = {
                 apiKey: process.env.NEXT_PUBLIC_SOULMACHINES_API_KEY,
@@ -46,41 +50,11 @@ export const useSceneManagement = (videoRef: RefObject<HTMLVideoElement>, reques
                 newScene.disconnect();
             };
         }
-    }, [videoRef, scene, requestMediaAccess])
+    }, [incomingVideo, useChatBot])
 
     const onConnectionSuccess = ({ sessionId, scene }: ConnectionSuccessResponse) => {
         console.log(`Success! Session ID: ${sessionId}`);
         scene.startVideo().catch(console.error);
-        // Setup AudioContext and MediaElementAudioSourceNode here
-        if (scene.videoElement) {
-            const audioCtx = new AudioContext();
-
-            // If the AudioContext is not in the 'running' state, attempt to resume it
-            if (audioCtx.state !== 'running') {
-                console.log("AudioContext is not running, attempting to resume...");
-                audioCtx.resume().then(() => {
-                    console.log("AudioContext successfully resumed and is now in 'running' state.");
-                }).catch((error) => {
-                    console.error("Failed to resume AudioContext:", error);
-                });
-            }
-
-            const srcNode = audioCtx.createMediaElementSource(scene.videoElement);
-            console.log("MediaElementAudioSourceNode created successfully.");
-
-            srcNode.connect(audioCtx.destination); // Connect to the destination to ensure audio plays
-            console.log("MediaElementAudioSourceNode connected to AudioContext's destination.");
-
-            // Create a MediaStreamAudioDestinationNode for scene's video audio
-            const destination = audioCtx.createMediaStreamDestination();
-            srcNode.connect(destination); // Connect the scene's audio source to this destination
-
-            destination.stream.getAudioTracks().forEach(track => {
-                console.log(`Track [${track.label}]: enabled=${track.enabled}, muted=${track.muted}, state=${track.readyState}`);
-            });
-
-            setAudioDestination(destination);
-        }
     };
 
     const onConnectionError = (error: Error) => {
@@ -88,5 +62,5 @@ export const useSceneManagement = (videoRef: RefObject<HTMLVideoElement>, reques
         setErrorMessage(error.message);
     };
 
-    return { scene, errorMessage, audioDestination };
+    return { errorMessage };
 };

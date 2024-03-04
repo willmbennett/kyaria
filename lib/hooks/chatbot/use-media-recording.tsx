@@ -1,36 +1,69 @@
 import { RefObject, useEffect, useRef, useState } from "react";
 
 interface useRecordingProps {
-    canvasRef: RefObject<HTMLCanvasElement>
-    getAudioStream: () => MediaStream | null,
-    audioDestination: MediaStreamAudioDestinationNode | null,
+    canvas: HTMLCanvasElement | null;
+    incomingVideo: HTMLVideoElement | null;
+    audioTracks: MediaStreamTrack[] | null;
 }
 
 export const useRecording = ({
-    canvasRef,
-    getAudioStream,
-    audioDestination
+    canvas,
+    incomingVideo,
+    audioTracks,
 }: useRecordingProps) => {
     const [isRecording, setIsRecording] = useState(false);
     const [recordedChunks, setRecordedChunks] = useState<BlobPart[]>([]);
     const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+    const [incomingAudioDestination, setIncomingAudioDestination] = useState<MediaStreamAudioDestinationNode | null>(null);
+
+    // Setup AudioContext and MediaElementAudioSourceNode here
+    useEffect(() => {
+        if (incomingVideo && !incomingAudioDestination) {
+            const audioCtx = new AudioContext();
+
+            // If the AudioContext is not in the 'running' state, attempt to resume it
+            if (audioCtx.state !== 'running') {
+                console.log("AudioContext is not running, attempting to resume...");
+                audioCtx.resume().then(() => {
+                    console.log("AudioContext successfully resumed and is now in 'running' state.");
+                }).catch((error) => {
+                    console.error("Failed to resume AudioContext:", error);
+                });
+            }
+
+            const srcNode = audioCtx.createMediaElementSource(incomingVideo);
+            console.log("MediaElementAudioSourceNode created successfully.");
+
+            srcNode.connect(audioCtx.destination); // Connect to the destination to ensure audio plays
+            console.log("MediaElementAudioSourceNode connected to AudioContext's destination.");
+
+            // Create a MediaStreamAudioDestinationNode for scene's video audio
+            const destination = audioCtx.createMediaStreamDestination();
+            srcNode.connect(destination); // Connect the scene's audio source to this destination
+
+            destination.stream.getAudioTracks().forEach(track => {
+                console.log(`Track [${track.label}]: enabled=${track.enabled}, muted=${track.muted}, state=${track.readyState}`);
+            });
+
+            setIncomingAudioDestination(destination);
+        }
+    }), [incomingVideo, incomingAudioDestination]
 
 
     const startRecording = async () => {
-        if (canvasRef.current && audioDestination) {
+        if (canvas && incomingAudioDestination) {
             console.log("Starting recording...");
 
-            const canvasStream = canvasRef.current.captureStream(30);
+            const canvasStream = canvas.captureStream(30);
 
             // Now directly use getAudioStream for microphone audio
-            const micAudioStream = getAudioStream();
-            if (micAudioStream) {
-                micAudioStream.getAudioTracks().forEach(track => canvasStream.addTrack(track));
+            if (audioTracks) {
+                audioTracks.forEach(track => canvasStream.addTrack(track));
                 console.log("Added microphone audio track to canvas stream.");
             }
 
             // Add the audio track from the destination to the canvas stream
-            audioDestination.stream.getAudioTracks().forEach(track => {
+            incomingAudioDestination.stream.getAudioTracks().forEach(track => {
                 canvasStream.addTrack(track);
                 console.log("Added scene's video audio track to canvas stream:", track.label);
             });

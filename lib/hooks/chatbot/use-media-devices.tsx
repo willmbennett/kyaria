@@ -1,96 +1,118 @@
-import { RefObject, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-export const useMediaDevices = (outgoingVideoRef: RefObject<HTMLVideoElement>) => {
-    const [requestMediaAccess, setRequestMediaAccess] = useState(true);
+interface useMediaDevicesProps {
+    incomingVideo: HTMLVideoElement | null;
+    outgoingVideo: HTMLVideoElement | null;
+    useChatBot: boolean;
+}
+
+const useMediaDevices = ({ incomingVideo, outgoingVideo, useChatBot }: useMediaDevicesProps) => {
+    const [hasMediaAccess, setHasMediaAccess] = useState<boolean>(false);
     const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([]);
     const [selectedVideoDeviceId, setSelectedVideoDeviceId] = useState('');
     const [stream, setStream] = useState<MediaStream | null>(null);
+    const [audioTracks, setAudioTracks] = useState<MediaStreamTrack[] | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [isMuted, setIsMuted] = useState(false);
     const [isVideoEnabled, setIsVideoEnabled] = useState(true);
 
-    const handleMediaAccess = async (deviceId?: string) => {
-        try {
-            const constraints = {
-                video: deviceId ? { deviceId: { exact: deviceId } } : true,
-                audio: true
-            };
-            const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
-            if (outgoingVideoRef.current) {
-                outgoingVideoRef.current.srcObject = mediaStream;
-            }
-            setStream(mediaStream);
-            setRequestMediaAccess(false);
-        } catch (error: any) {
-            console.error('Error accessing media devices:', error);
-            setErrorMessage(error.message || 'Permission denied by user.');
-            setRequestMediaAccess(true);
-        }
-    };
-
-    const getAudioStream = () => {
-        if (!stream) {
-            console.log("No media stream available for audio extraction.");
-            return null;
-        }
-
-        const audioTracks = stream.getAudioTracks();
-        console.log(`Found ${audioTracks.length} audio track(s) in the stream.`);
-        if (audioTracks.length > 0) {
-            return new MediaStream(audioTracks);
-        } else {
-            console.log("No audio tracks found in the media stream.");
-            return null;
-        }
-    };
-
+    // Initial request for media access
     useEffect(() => {
-        (async () => {
-            const devices = await navigator.mediaDevices.enumerateDevices();
-            const videoInputs = devices.filter(device => device.kind === 'videoinput');
-            setVideoDevices(videoInputs);
-            if (videoInputs.length > 0) {
-                const initialDeviceId = videoInputs[0].deviceId;
-                setSelectedVideoDeviceId(initialDeviceId);
-                handleMediaAccess(initialDeviceId); // Initial access with the first device
+        const requestMediaAccess = async () => {
+            try {
+                await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                console.log("Media access granted");
+                setHasMediaAccess(true);
+            } catch (error: any) {
+                console.error("Error requesting media access:", error);
+                setErrorMessage(error.message);
+                setHasMediaAccess(false);
             }
-        })();
+        };
+
+        requestMediaAccess();
     }, []);
 
+    // Handle media access granted: Enumerate devices and set initial device
     useEffect(() => {
-        if (selectedVideoDeviceId) {
-            handleMediaAccess(selectedVideoDeviceId);
-        }
-    }, [selectedVideoDeviceId]);
+        if (!hasMediaAccess) return;
 
+        const fetchAndSetDevices = async () => {
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const videoInputs = devices.filter(device => device.kind === "videoinput");
+            console.log("Video devices found:", videoInputs);
+            setVideoDevices(videoInputs);
+
+            if (videoInputs.length > 0) {
+                setSelectedVideoDeviceId(videoInputs[0].deviceId);
+            }
+        };
+
+        fetchAndSetDevices();
+    }, [hasMediaAccess]);
+
+    // Whenever the selected device ID changes, request access with that device
     useEffect(() => {
-        return () => stream?.getTracks().forEach(track => track.stop());
+        if (!selectedVideoDeviceId || !hasMediaAccess) return;
+
+        const getMediaStream = async () => {
+            try {
+                const mediaStream = await navigator.mediaDevices.getUserMedia({
+                    video: { deviceId: { exact: selectedVideoDeviceId } },
+                    audio: true,
+                });
+
+                setStream(mediaStream);
+                const audioTracks = mediaStream.getAudioTracks();
+                setAudioTracks(audioTracks)
+                outgoingVideo && (outgoingVideo.srcObject = mediaStream);
+                if (!useChatBot && incomingVideo) {
+                    incomingVideo.srcObject = mediaStream;
+                }
+                console.log("Media stream set with device ID:", selectedVideoDeviceId);
+            } catch (error: any) {
+                console.error("Error accessing specific media device:", error);
+                setErrorMessage(error.message);
+            }
+        };
+
+        getMediaStream();
+    }, [selectedVideoDeviceId, hasMediaAccess, useChatBot, incomingVideo, outgoingVideo]);
+
+    // Cleanup: Stop all media tracks when the component unmounts
+    useEffect(() => {
+        return () => {
+            stream?.getTracks().forEach(track => track.stop());
+        };
     }, [stream]);
 
+    // Toggle mute for all audio tracks
     const toggleMute = () => {
-        stream?.getAudioTracks().forEach(track => {
-            track.enabled = !track.enabled;
-        });
-        setIsMuted(prev => !prev);
+        stream?.getAudioTracks().forEach(track => (track.enabled = !track.enabled));
+        setIsMuted(!isMuted);
+        console.log("Toggling mute:", !isMuted);
     };
 
+    // Toggle video for all video tracks
     const toggleVideo = () => {
-        stream?.getVideoTracks().forEach(track => {
-            track.enabled = !track.enabled;
-        });
-        setIsVideoEnabled(prev => !prev);
+        stream?.getVideoTracks().forEach(track => (track.enabled = !track.enabled));
+        setIsVideoEnabled(!isVideoEnabled);
+        console.log("Toggling video:", !isVideoEnabled);
     };
 
     return {
-        requestMediaAccess,
+        hasMediaAccess,
         videoDevices,
+        audioTracks,
         selectedVideoDeviceId,
         setSelectedVideoDeviceId,
+        stream,
         errorMessage,
         isMuted,
         toggleMute,
         isVideoEnabled,
-        toggleVideo,
-        getAudioStream,
+        toggleVideo
     };
 };
+
+export default useMediaDevices;

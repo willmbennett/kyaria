@@ -1,38 +1,35 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { drawVideosToCanvas } from "../../../app/eve/eve-helper";
-import { Scene } from "@soulmachines/smwebsdk";
 
 interface useCanvasProps {
-    canvasRef: React.RefObject<HTMLCanvasElement>;
-    canvasContainerRef: React.RefObject<HTMLDivElement>;
-    scene: Scene | null
-    outgoingVideoRef: React.RefObject<HTMLVideoElement>;
-    requestMediaAccess: boolean;
+    canvas: HTMLCanvasElement | null;
+    canvasContainer: HTMLDivElement | null;
+    incomingVideo: HTMLVideoElement | null;
+    outgoingVideo: HTMLVideoElement | null;
 }
 
 export const useCanvas = ({
-    canvasRef,
-    canvasContainerRef,
-    scene,
-    outgoingVideoRef,
-    requestMediaAccess
+    canvas,
+    canvasContainer,
+    incomingVideo,
+    outgoingVideo
 }: useCanvasProps) => {
     useEffect(() => {
         // Ensure we're not requesting media access anymore and all refs are current
-        if (!requestMediaAccess && canvasRef.current && canvasContainerRef.current && scene?.videoElement && outgoingVideoRef.current) {
+        if (canvas && canvasContainer && incomingVideo && outgoingVideo) {
             // Setup canvas size
-            const { width, height } = canvasContainerRef.current.getBoundingClientRect();
-            canvasRef.current.width = width;
-            canvasRef.current.height = height;
+            const { width, height } = canvasContainer.getBoundingClientRect();
+            canvas.width = width;
+            canvas.height = height;
 
             // Log current status for debugging
             console.log('Drawing to canvas');
-            console.log('Canvas: ', canvasRef.current);
-            console.log('VideoRef: ', scene.videoElement);
-            console.log('OutgoingVideoRef: ', outgoingVideoRef.current);
+            console.log('Canvas: ', canvas);
+            console.log('incomingVideo: ', incomingVideo);
+            console.log('outgoingVideo: ', outgoingVideo);
 
             // Draw videos to canvas
-            drawVideosToCanvas(canvasRef.current, scene.videoElement, outgoingVideoRef.current);
+            drawVideosToCanvas(canvas, incomingVideo, outgoingVideo);
         }
-    }, [canvasRef, canvasContainerRef, scene, outgoingVideoRef, requestMediaAccess]);
+    }, [canvas, canvasContainer, incomingVideo, outgoingVideo]);
 }

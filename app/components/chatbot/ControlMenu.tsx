@@ -5,7 +5,7 @@ import { MicrophoneIcon, VideoCameraIcon } from '@heroicons/react/24/solid';
 interface ControlMenuProps {
     videoDevices: MediaDeviceInfo[];
     selectedVideoDeviceId: string;
-    setSelectedVideoDeviceId: (deviceId: string) => void;
+    selectVideoDevice: (deviceId: string) => void;
     isMuted: boolean;
     toggleMute: () => void;
     isVideoEnabled: boolean;
@@ -20,7 +20,7 @@ interface ControlMenuProps {
 export const ControlMenu = ({
     videoDevices,
     selectedVideoDeviceId,
-    setSelectedVideoDeviceId,
+    selectVideoDevice,
     isMuted,
     toggleMute,
     isVideoEnabled,
@@ -38,7 +38,7 @@ export const ControlMenu = ({
         <button onClick={toggleVideo} className={`p-2 rounded-full transition-colors duration-100 bg-slate-100 hover:bg-slate-200 ${isVideoEnabled ? '' : 'text-white bg-red-600 hover:bg-red-700'}`}>
             <VideoCameraIcon className={`h-6 w-6`} />
         </button>
-        <CameraSelectMenu videoDevices={videoDevices} setSelectedVideoDeviceId={setSelectedVideoDeviceId} selectedVideoDeviceId={selectedVideoDeviceId} />
+        <CameraSelectMenu videoDevices={videoDevices} selectVideoDevice={selectVideoDevice} selectedVideoDeviceId={selectedVideoDeviceId} />
         {isRecording && <p>Recording...</p>}
         {!isRecording ?
             <button
