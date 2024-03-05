@@ -3,6 +3,8 @@ import { checkSubscription } from "../../lib/hooks/check-subscription";
 import { ChatBotHero } from "../components/chatbot/landingpage/ChatBotHero";
 import { Metadata } from "next";
 import TimedAccessComponent from "../components/chatbot/VideoSubscriptionWrapper";
+import { getResumes } from "../../lib/resume-db";
+import { ResumeClass } from "../../models/Resume";
 const ProductDemo = dynamic(() => import('../components/chatbot/landingpage/ProductDemo'));
 const Process = dynamic(() => import('../components/chatbot/landingpage/Process'));
 
@@ -10,26 +12,33 @@ const title = "Eve: Kyaria.ai's Revolutionary AI Career Coach | Affordable & 24/
 const description = "Discover Eve, the world's first virtual career coach. Get personalized, smart career advice 24/7 at just $10/month. Save on career coaching with cutting-edge AI technology. Start your journey to career success with Eve today!";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://www.kyaria.ai'),
-  title,
-  description,
-  referrer: 'strict-origin-when-cross-origin',
-  openGraph: {
+    metadataBase: new URL('https://www.kyaria.ai'),
     title,
     description,
-    locale: 'en_US',
-    type: 'website',
-    url: 'https://www.kyaria.ai/eve'
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title,
-    description,
-  },
+    referrer: 'strict-origin-when-cross-origin',
+    openGraph: {
+        title,
+        description,
+        locale: 'en_US',
+        type: 'website',
+        url: 'https://www.kyaria.ai/eve'
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title,
+        description,
+    },
 };
+
+type getResumesType = {
+    resumes: ResumeClass[]
+}
+
+//import { list } from '@vercel/blob'
 
 export default async function ChatbotPage() {
     const { userId, userName, activeSubscription } = await checkSubscription()
+    const { resumes } = await getResumes(userId) as getResumesType
 
     if (!userId) {
         return (
@@ -40,6 +49,17 @@ export default async function ChatbotPage() {
             </>
         );
     }
+
+    /*
+    const { blobs } = await list({
+        prefix: 'eve-idle-2.mov',
+        limit: 1,
+    })
+
+    const { url } = blobs[0]
+
+    console.log(url)
+    */
 
     return (
         <div className="min-h-screen flex flex-col w-full py-10">
@@ -52,7 +72,7 @@ export default async function ChatbotPage() {
                 </p>
             </div>
             <div className="w-full">
-                <TimedAccessComponent activeSubscription={activeSubscription}/>
+                <TimedAccessComponent activeSubscription={activeSubscription} resumes={resumes}/>
             </div>
         </div>
     );

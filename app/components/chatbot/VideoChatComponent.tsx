@@ -1,103 +1,115 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { Button } from '../Button';
-import { useMediaDevices } from '../../../lib/hooks/chatbot/use-media-devices';
-import { useRecording } from '../../../lib/hooks/chatbot/use-media-recording';
-import { useSceneManagement } from '../../../lib/hooks/chatbot/use-soul-machines';
-import { useCanvas } from '../../../lib/hooks/chatbot/use-canvas';
+import useMediaDevices from '../../../lib/chatbot/use-media-devices';
+//import { useRecording } from '../../../lib/chatbot/use-media-recording';
+//import { useSceneManagement } from '../../../lib/hooks/chatbot/use-soul-machines';
+//import { useCanvas } from '../../../lib/chatbot/use-canvas';
 import { ControlMenu } from './ControlMenu';
+import { useDIDApi } from '../../../lib/chatbot/use-d-id';
+//import { useSceneManagement } from '../../../lib/chatbot/use-soul-machines';
+import { ResumeClass } from '../../../models/Resume';
+import { useChatGPT } from '../../../lib/chatbot/use-chat-gpt';
 import { useRouter } from 'next/navigation';
 
-export const VideoChatComponent = () => {
+interface VideoChatComponentProps {
+    selectedResume?: ResumeClass;
+}
+
+const VideoChatComponent = ({
+    selectedResume
+}: VideoChatComponentProps) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const outgoingVideoRef = useRef<HTMLVideoElement>(null);
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    const canvasContainerRef = useRef<HTMLDivElement>(null); // Optional: used for dynamic 
+    //const previewRef = useRef<HTMLVideoElement>(null);
     const router = useRouter()
+
+    // Use this to turn on and off the chatbot
+    const useChatBot = true
+
+    let incomingVideo = videoRef.current
+    let outgoingVideo = outgoingVideoRef.current
 
     // Set up the user's media
     const {
-        requestMediaAccess,
-        getAudioStream,
         videoDevices,
+        selectedVideoDeviceId,
+        setSelectedVideoDeviceId,
+        stream,
+        errorMessage: MediaError,
         isMuted,
         toggleMute,
         isVideoEnabled,
-        toggleVideo,
-        selectedVideoDeviceId,
-        setSelectedVideoDeviceId,
-        errorMessage: MediaError
-    } = useMediaDevices(outgoingVideoRef);
+        toggleVideo
+    } = useMediaDevices(outgoingVideo);
+
+
+    const { submitScript, errorMessage, connected, isStreaming } = useDIDApi({ incomingVideo, useChatBot });
 
     // Set up Soul Machines
-    const { scene, errorMessage: SceneError, audioDestination } = useSceneManagement(videoRef, requestMediaAccess);
-
-
-    if (audioDestination) {
-        const audioTrack = audioDestination.stream.getAudioTracks()[0];
-        audioTrack.onended = () => console.log("Audio track ended");
-        audioTrack.onmute = () => console.log("Audio track muted");
-        audioTrack.onunmute = () => console.log("Audio track unmuted");
-    }
+    /*
+        const { errorMessage: SceneError } = useSceneManagement({
+            incomingVideo,
+            useChatBot
+        });
+        */
 
     // Set up the canvas
+    /*
     useCanvas({
-        canvasRef,
-        canvasContainerRef,
-        scene,
-        outgoingVideoRef,
-        requestMediaAccess
+        canvas,
+        canvasContainer,
+        incomingVideo,
+        outgoingVideo
     })
+    */
 
     // Set up recording
-    const {
-        recordedChunks,
-        isRecording,
-        startRecording,
-        stopRecording,
-        downloadRecording
-    } = useRecording({
-        canvasRef,
-        audioDestination,
-        getAudioStream
+    /*
+    const { status, startRecording, stopRecording, downloadRecording, mediaBlobUrl } = useRecording({
+        incomingVideo,
+        outgoingStream: stream,
+        outgoingAudioTracks: audioTracks,
+        preview
     })
+    */
+
+    useChatGPT({ selectedResume, submitScript, connected, isStreaming })
 
     return (
-        <div className="flex flex-col gap-4 justify-center items-center w-full md:p-4">
-            {requestMediaAccess ? (
-                <div className='flex gap-2 items-center justify-center'>
-                    <p>Please allow access to your camera and microphone to proceed.</p>
-                    <div className='flex flex-col justify-center items-center gap-2'>
-                        {(MediaError || SceneError) && <p className="text-red-500">{`Error: ${MediaError || SceneError}`}</p>}
-                        <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => router.refresh()}>Start Video</Button>
+        <>
+            <div className="flex flex-col gap-4 justify-center items-center w-full md:p-4">
+                {errorMessage && <p className="text-red-500">{`Error: ${errorMessage}`}</p>}
+                <div className="flex flex-col md:flex-row justify-center items-center gap-4 w-full max-w-6xl mx-auto p-4">
+                    <div className="aspect-square w-full md:w-1/2 flex justify-center items-center p-2"> {/* Ensure square aspect ratio and padding */}
+                        <video src="https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/eve-idle-3-LlpYTFQlHHmLL6NVodTQaPq7ALM6RO.mov" ref={videoRef} className="w-full h-full object-cover rounded-lg shadow-lg" autoPlay loop playsInline></video>
+                    </div>
+                    <div className="aspect-square w-full md:w-1/2 flex justify-center items-center p-2"> {/* Ensure square aspect ratio and padding */}
+                        <video ref={outgoingVideoRef} className="w-full h-full object-cover rounded-lg shadow-lg" autoPlay playsInline muted></video>
                     </div>
                 </div>
-            ) : (
-                <>
-                    <div className="flex w-full justify-center">
-                        <div className="canvas-container w-full max-w-6xl h-screen md:h-auto" ref={canvasContainerRef}>
-                            <canvas ref={canvasRef} className='w-full h-full'></canvas>
-                        </div>
-                        <video ref={videoRef} className='object-cover w-full hidden' autoPlay playsInline></video>
-                        <video ref={outgoingVideoRef} className='object-cover h-0 w-0' autoPlay playsInline muted></video>
-                    </div>
+                {stream ?
                     <ControlMenu
                         videoDevices={videoDevices}
                         selectedVideoDeviceId={selectedVideoDeviceId}
-                        setSelectedVideoDeviceId={setSelectedVideoDeviceId}
+                        selectVideoDevice={setSelectedVideoDeviceId}
                         isMuted={isMuted}
                         toggleMute={toggleMute}
                         isVideoEnabled={isVideoEnabled}
                         toggleVideo={toggleVideo}
-                        isRecording={isRecording}
-                        startRecording={startRecording}
-                        stopRecording={stopRecording}
-                        recordedChunks={recordedChunks}
-                        downloadRecording={downloadRecording}
                     />
-                </>
-            )
-            }
-        </div >
+                    : <div className='flex gap-2 items-center justify-center'>
+                        <p>Please allow access to your camera and microphone to proceed.</p>
+                        <div className='flex flex-col justify-center items-center gap-2'>
+                            {MediaError && <p className="text-red-500">{`Error: ${MediaError}`}</p>}
+                            <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => router.refresh()}>Start Video</Button>
+                        </div>
+                    </div>
+                }
+
+            </div >
+        </>
     );
 };
+
+export default VideoChatComponent;

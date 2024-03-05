@@ -1,5 +1,3 @@
-import { RefObject } from "react";
-
 export const drawVideosToCanvas = (canvas: HTMLCanvasElement, incomingVideoElement: HTMLVideoElement, outgoingVideoElement: HTMLVideoElement) => {
     const context = canvas.getContext('2d');
     const width = canvas.width;
@@ -53,3 +51,5 @@ export const drawVideosToCanvas = (canvas: HTMLCanvasElement, incomingVideoEleme
 
     draw(); // Start the loop
 }
+
+  

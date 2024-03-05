@@ -1,17 +1,24 @@
 'use client'
-import React, { useState, useEffect } from 'react';
-import { VideoChatComponent } from './VideoChatComponent';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Button } from '../Button';
-
+import dynamic from 'next/dynamic';
+import ResumeDropdownMenu from '../ResumeDropdownMenu';
+import { ResumeClass } from '../../../models/Resume';
+import VideoChatComponent from './VideoChatComponent';
 // Assuming Button and VideoChatComponent are already defined/imported
 
 interface TimedAccessComponentProps {
     activeSubscription: boolean;
+    resumes: ResumeClass[]
 }
 
-const TimedAccessComponent: React.FC<TimedAccessComponentProps> = ({ activeSubscription }) => {
+const TimedAccessComponent: React.FC<TimedAccessComponentProps> = ({ activeSubscription, resumes }) => {
     const [offerExpired, setOfferExpired] = useState(false);
     const [countdown, setCountdown] = useState(60); // Countdown from 60 seconds
+
+    const [selectedResumeId, setSelectedResumeId] = useState<string>(resumes[0]._id.toString() || '');
+    // Find the selected resume based on the selectedResumeId
+    const selectedResume = useMemo(() => resumes.find(resume => resume._id === selectedResumeId), [selectedResumeId])
 
     useEffect(() => {
         let timer: ReturnType<typeof setTimeout> | null = null;
@@ -42,7 +49,9 @@ const TimedAccessComponent: React.FC<TimedAccessComponentProps> = ({ activeSubsc
         <>
             {activeSubscription ? (
                 <>
-                    <VideoChatComponent />
+                    <VideoChatComponent
+                        selectedResume={selectedResume}
+                    />
                 </>
             ) : (
                 <>
@@ -58,7 +67,9 @@ const TimedAccessComponent: React.FC<TimedAccessComponentProps> = ({ activeSubsc
                             <div className='flex w-full justify-end'>
                                 <p>Free time remaining: {countdown} seconds</p>
                             </div>
-                            <VideoChatComponent />
+                            <VideoChatComponent
+                                selectedResume={selectedResume}
+                            />
                         </>
                     }
                 </>
