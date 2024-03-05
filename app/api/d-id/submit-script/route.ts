@@ -60,7 +60,7 @@ export async function POST(request: Request) {
 const maxRetryCount = 3;
 const maxDelaySec = 4;
 
-async function fetchWithRetries(url: string, options: RequestInit, retries = 1) {
+async function fetchWithRetries(url: string, options: RequestInit, retries = 1): Promise<Response> {
     console.log(`fetchWithRetries called, attempt: ${retries}, url: ${url}`);
     try {
         const response = await fetch(url, options);
