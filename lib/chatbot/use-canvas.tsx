@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { drawVideosToCanvas } from "../../../app/eve/eve-helper";
+import { drawVideosToCanvas } from "../../app/eve/eve-helper";
 
 interface useCanvasProps {
     canvas: HTMLCanvasElement | null;

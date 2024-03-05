@@ -1,10 +1,11 @@
 // pages/api/create-session.ts
+import { Message } from 'ai';
 import { NextRequest, NextResponse } from 'next/server';
 
 interface BodyInterface {
     streamId: string,
     sessionId: string,
-    scriptText: string,
+    text: string,
 }
 
 // Assuming IceServerType is defined somewhere in your project
@@ -14,8 +15,8 @@ interface IceServerType {
 
 export async function POST(request: Request) {
     console.log('Starting POST function');
-    const { streamId, sessionId, scriptText }: BodyInterface = await request.json()
-    console.log('Request body:', JSON.stringify({ streamId, sessionId, scriptText }));
+    const { streamId, sessionId, text }: BodyInterface = await request.json()
+    console.log('Request body:', JSON.stringify({ streamId, sessionId, text }));
     try {
         console.log('Attempting to fetch with retries');
         const response = await fetchWithRetries(`https://api.d-id.com/talks/streams/${streamId}`, {
@@ -32,8 +33,8 @@ export async function POST(request: Request) {
                         type: 'microsoft',
                         voice_id: 'en-US-JennyNeural'
                     },
-                    ssml: 'false',
-                    input: scriptText, // Use the script text from the request
+                    input: text,
+                    ssml: 'true'
                 },
                 config: { fluent: 'false', pad_audio: '0.0' },
                 audio_optimization: '2',

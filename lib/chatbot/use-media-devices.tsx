@@ -1,18 +1,12 @@
 import { useEffect, useState } from "react";
 
-interface useMediaDevicesProps {
-    incomingVideo: HTMLVideoElement | null;
-    outgoingVideo: HTMLVideoElement | null;
-    useChatBot: boolean;
-}
-
-const useMediaDevices = ({ incomingVideo, outgoingVideo, useChatBot }: useMediaDevicesProps) => {
+const useMediaDevices = (outgoingVideo: HTMLVideoElement | null) => {
     const [hasMediaAccess, setHasMediaAccess] = useState<boolean>(false);
     const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([]);
     const [selectedVideoDeviceId, setSelectedVideoDeviceId] = useState('');
     const [stream, setStream] = useState<MediaStream | null>(null);
     const [audioTracks, setAudioTracks] = useState<MediaStreamTrack[] | null>(null);
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [errorMessage, setErrorMessage] = useState<string>();
     const [isMuted, setIsMuted] = useState(false);
     const [isVideoEnabled, setIsVideoEnabled] = useState(true);
 
@@ -21,7 +15,7 @@ const useMediaDevices = ({ incomingVideo, outgoingVideo, useChatBot }: useMediaD
         const requestMediaAccess = async () => {
             try {
                 await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                console.log("Media access granted");
+                //console.log("Media access granted");
                 setHasMediaAccess(true);
             } catch (error: any) {
                 console.error("Error requesting media access:", error);
@@ -40,7 +34,7 @@ const useMediaDevices = ({ incomingVideo, outgoingVideo, useChatBot }: useMediaD
         const fetchAndSetDevices = async () => {
             const devices = await navigator.mediaDevices.enumerateDevices();
             const videoInputs = devices.filter(device => device.kind === "videoinput");
-            console.log("Video devices found:", videoInputs);
+            //console.log("Video devices found:", videoInputs);
             setVideoDevices(videoInputs);
 
             if (videoInputs.length > 0) {
@@ -65,11 +59,7 @@ const useMediaDevices = ({ incomingVideo, outgoingVideo, useChatBot }: useMediaD
                 setStream(mediaStream);
                 const audioTracks = mediaStream.getAudioTracks();
                 setAudioTracks(audioTracks)
-                outgoingVideo && (outgoingVideo.srcObject = mediaStream);
-                if (!useChatBot && incomingVideo) {
-                    incomingVideo.srcObject = mediaStream;
-                }
-                console.log("Media stream set with device ID:", selectedVideoDeviceId);
+                //console.log("Media stream set with device ID:", selectedVideoDeviceId);
             } catch (error: any) {
                 console.error("Error accessing specific media device:", error);
                 setErrorMessage(error.message);
@@ -77,7 +67,14 @@ const useMediaDevices = ({ incomingVideo, outgoingVideo, useChatBot }: useMediaD
         };
 
         getMediaStream();
-    }, [selectedVideoDeviceId, hasMediaAccess, useChatBot, incomingVideo, outgoingVideo]);
+    }, [selectedVideoDeviceId, hasMediaAccess, outgoingVideo]);
+
+
+    useEffect(() => {
+        if (stream && outgoingVideo) {
+            outgoingVideo.srcObject = stream
+        }
+    }, [stream, outgoingVideo]);
 
     // Cleanup: Stop all media tracks when the component unmounts
     useEffect(() => {
@@ -90,14 +87,14 @@ const useMediaDevices = ({ incomingVideo, outgoingVideo, useChatBot }: useMediaD
     const toggleMute = () => {
         stream?.getAudioTracks().forEach(track => (track.enabled = !track.enabled));
         setIsMuted(!isMuted);
-        console.log("Toggling mute:", !isMuted);
+        //console.log("Toggling mute:", !isMuted);
     };
 
     // Toggle video for all video tracks
     const toggleVideo = () => {
         stream?.getVideoTracks().forEach(track => (track.enabled = !track.enabled));
         setIsVideoEnabled(!isVideoEnabled);
-        console.log("Toggling video:", !isVideoEnabled);
+        //console.log("Toggling video:", !isVideoEnabled);
     };
 
     return {

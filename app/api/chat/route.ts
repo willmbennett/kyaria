@@ -11,7 +11,7 @@ const openai = new OpenAIApi(config);
 export const runtime = 'edge';
 
 export async function POST(req: Request) {
-  const { messages, temp } = await req.json();
+  const { messages, temp, max_tokens } = await req.json();
   //console.log(messages)
 
   // Ask OpenAI for a streaming completion given the prompt
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     top_p: 1,         // Controls diversity. Lower values like 0.9 or 1 will make the output more focused, only change this OR temperature
     frequency_penalty: 0, // Optional: You may tweak this for more domain-specific answers
     presence_penalty: 0,  // Optional: You may tweak this to make the model more "present" in the conversation
-    max_tokens: 4000,      // Limit the response length
+    max_tokens: max_tokens | 4000,      // Limit the response length
     stream: true,         // Enable streaming
     messages: messages    // Your conversation history
   });
