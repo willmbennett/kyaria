@@ -1,6 +1,8 @@
 import { Message } from "ai";
 import { ResumeModel } from "../models/Resume";
 import { ChatClass, ChatModel } from "../models/Chat";
+import connectDB from "./connect-db";
+import { stringToObjectId } from "./utils";
 
 const createPersonalizedGreeting = (name?: string) => {
     const greetings = ["Hi", "Hey", "Hello"];
@@ -58,4 +60,60 @@ export const createInitialChat = async (userId: string, sessionId: string) => {
     //console.log('newChatHistory: ', newChatHistory)
 
     return { newChatHistory }
+}
+
+export async function findChat(sessionId: string) {
+    try {
+        await connectDB();
+
+        if (!sessionId) {
+            return { error: "Job Application not found" };
+        }
+
+        //console.log(id)
+        const chat = await ChatModel.findOne({ sessionId })
+            .sort({ createdAt: -1, _id: -1 }) // Sorting by createdAt in descending order, then by _id in descending order
+            .exec();
+
+        if (chat) {
+            return {
+                chat,
+            };
+        } else {
+            return { error: "Job not found" };
+        }
+    } catch (error) {
+        return { error };
+    }
+}
+
+
+
+export async function updateChat(id: string, chatHistory: Message[]) {
+    try {
+        await connectDB();
+
+        const parsedId = stringToObjectId(id);
+
+        //console.log(id)
+
+        //console.log(`data to update job with: ${JSON.stringify(data)}`)
+
+        const updatedChat = await ChatModel.findByIdAndUpdate(
+            parsedId,
+            { messages: chatHistory }
+        )
+            .lean()
+            .exec();
+
+        if (updatedChat) {
+            return {
+                updatedChat,
+            };
+        } else {
+            return { error: "Chat application not found" };
+        }
+    } catch (error) {
+        return { error };
+    }
 }

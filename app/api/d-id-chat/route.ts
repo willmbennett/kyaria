@@ -1,8 +1,8 @@
 import { Configuration, ChatCompletionRequestMessage, OpenAIApi } from 'openai-edge';
 import { NextResponse } from 'next/server';
-import { ChatModel } from '../../../models/Chat';
+import { ChatClass, ChatModel } from '../../../models/Chat';
 import { Message } from 'ai';
-import { createInitialChat } from '../../../lib/chat-db';
+import { createInitialChat, findChat, updateChat } from '../../../lib/chat-db';
 
 // Create an OpenAI API client (that's edge friendly!)
 const config = new Configuration({
@@ -32,7 +32,7 @@ export async function POST(req: Request) {
   let chatHistory: Message[]
   let chatId
 
-  const foundChatHistory = await ChatModel.findOne({ sessionId })
+  const { chat: foundChatHistory } = await findChat(sessionId)
 
   //console.log('foundChatHistory: ', foundChatHistory)
 
@@ -96,12 +96,10 @@ export async function POST(req: Request) {
       content: messagetoSend
     })
 
-    const updatedChat = await ChatModel.findByIdAndUpdate(
-      chatId,
-      { messages: chatHistory }
+    const { updatedChat } = await updateChat(
+      chatId.toString(),
+      chatHistory
     )
-      .lean()
-      .exec();
 
     try {
       //console.log('Attempting to fetch with retries');
