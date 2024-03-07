@@ -34,7 +34,7 @@ export async function GET(
             apiUrl = `https://kg.diffbot.com/kg/v3/dql?type=query&token=${process.env.DIFFBOT_API_KEY}&query=type%3AOrganization+strict%3Aname%3A"${encodeURIComponent(org)}"&size=1`;
         }
 
-        console.log(apiUrl)
+      //console.log(apiUrl)
 
         const options = {
             method: 'GET',

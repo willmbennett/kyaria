@@ -60,7 +60,7 @@ export async function getEmployer(id: string) {
 
 export async function createEmployer(data: EmployerClass) {
     try {
-        console.log(`Employer to create: ${JSON.stringify(data)}`);
+      //console.log(`Employer to create: ${JSON.stringify(data)}`);
 
         const employer = await EmployerModel.create(data);
         //console.log(`Created Profile: ${JSON.stringify(profile)}`);
@@ -97,7 +97,7 @@ export async function checkEmployerDiffbotId(targetDiffbotId: string) {
         //console.log(person)
 
         if (employer.length > 0) {
-            console.log('person exists with diffbotId:', targetDiffbotId)
+          //console.log('person exists with diffbotId:', targetDiffbotId)
             return {
                 existingEmployer: true,
             };
@@ -114,7 +114,7 @@ export async function employerFuzzyMatching(query: string) {
     try {
         await connectDB();
 
-        console.log('made it here')
+      //console.log('made it here')
 
         // define pipeline
         const agg = [
@@ -142,7 +142,7 @@ export async function employerFuzzyMatching(query: string) {
             },
         ];
 
-        console.log('agg: ', agg)
+      //console.log('agg: ', agg)
 
         // Check if a subscription already exists for this userId
         const employers = await EmployerModel.aggregate(agg)

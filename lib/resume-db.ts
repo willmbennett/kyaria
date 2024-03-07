@@ -19,7 +19,7 @@ export async function countTotalResumes() {
     }
 }
 
-export async function getResumes(userId: string){
+export async function getResumes(userId: string) {
     try {
         await connectDB();
 
@@ -44,7 +44,41 @@ export async function getResumes(userId: string){
             };
 
         } else {
-            console.log({ error: "Error pulling resumes" })
+          //console.log({ error: "Error pulling resumes" })
+            return { error: "Error pulling resumes" };
+        }
+    } catch (error) {
+        console.log(error)
+        return { error };
+    }
+}
+
+export async function getFirstResume(userId: string) {
+    try {
+        await connectDB();
+
+        if (!userId) {
+            return { error: "resumes not found" };
+        }
+        const resume = await ResumeModel.findOne({
+            userId: userId,
+        })
+            .sort({ createdAt: -1, _id: -1 }) // Sorting by createdAt in descending order, then by _id in descending order
+            .lean()
+            .exec();
+
+      //console.log('prior to transforming resume: ')
+        if (resume) {
+            transformProps(resume, castToString, '_id');
+            transformProps(resume, dateToString, ["createdAt", "updatedAt"]);
+            transformProps(resume, ObjectIdtoString, "resumeScan");
+          //console.log('post transforming resume')
+            return {
+                resume
+            };
+
+        } else {
+          //console.log({ error: "Error pulling resumes" })
             return { error: "Error pulling resumes" };
         }
     } catch (error) {
@@ -91,16 +125,16 @@ export async function createResume(data: ResumeClass) {
     try {
         await connectDB();
 
-        console.log(`Resume to create: ${JSON.stringify(data)}`)
+      //console.log(`Resume to create: ${JSON.stringify(data)}`)
 
         const resume = await ResumeModel.create(data);
 
-        console.log(`Created resume: ${JSON.stringify(resume)}`)
+      //console.log(`Created resume: ${JSON.stringify(resume)}`)
 
         if (resume) {
-            console.log('about to transform props')
+          //console.log('about to transform props')
             const resumeId = castToString(resume._id)
-            console.log(resumeId)
+          //console.log(resumeId)
             return {
                 resumeId
             };
@@ -123,7 +157,7 @@ export async function updateResume(id: string, data: any) {
 
         //console.log(id)
 
-        console.log(`data to update resume with: ${JSON.stringify(data)}`)
+      //console.log(`data to update resume with: ${JSON.stringify(data)}`)
 
         const resume = await ResumeModel.findByIdAndUpdate(
             parsedId,
@@ -133,7 +167,7 @@ export async function updateResume(id: string, data: any) {
             .exec();
 
         if (resume) {
-            console.log(`updated resume: ${JSON.stringify(resume)}`)
+          //console.log(`updated resume: ${JSON.stringify(resume)}`)
             return {
                 resume,
             };

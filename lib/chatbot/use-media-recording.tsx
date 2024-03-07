@@ -11,7 +11,7 @@ interface useRecordingProps {
 }
 
 export const useRecording = ({ incomingVideo, outgoingStream, outgoingAudioTracks, preview }: useRecordingProps) => {
-    console.log('outgoingStream: ', outgoingStream)
+  //console.log('outgoingStream: ', outgoingStream)
     const mixer = new MultiStreamsMixer([outgoingStream]);
     const mixedStream = mixer.getMixedStream()
     mixer.frameInterval = 10; // Set frame interval to 10ms for smoother video
@@ -22,8 +22,8 @@ export const useRecording = ({ incomingVideo, outgoingStream, outgoingAudioTrack
 
 
     useEffect(() => {
-        console.log('Made it to useEffect [preview]')
-        console.log('preview: ', preview)
+      //console.log('Made it to useEffect [preview]')
+      //console.log('preview: ', preview)
         if (preview && !previewInialized) {
             preview.srcObject = mixedStream
             setPreviewInialized(true)
@@ -31,22 +31,22 @@ export const useRecording = ({ incomingVideo, outgoingStream, outgoingAudioTrack
     }, [preview])
 
     useEffect(() => {
-        console.log('Made it to useEffect [outgoingAudioTracks]')
-        console.log('outgoingAudioTracks: ', outgoingAudioTracks)
+      //console.log('Made it to useEffect [outgoingAudioTracks]')
+      //console.log('outgoingAudioTracks: ', outgoingAudioTracks)
         if (outgoingAudioTracks && !outgoingTracks) {
-            console.log(`Outgoing stream tracks: ${outgoingStream.getTracks().map((track: { kind: string, label: string }) => track.kind + ', ' + track.label).join('; ')}`);
+          //console.log(`Outgoing stream tracks: ${outgoingStream.getTracks().map((track: { kind: string, label: string }) => track.kind + ', ' + track.label).join('; ')}`);
             mixer.appendStreams([new MediaStream(outgoingAudioTracks)]);
             setOutgoingTracks(true)
         }
     }, [outgoingAudioTracks])
 
     useEffect(() => {
-        console.log('Made it to useEffect [incomingMediaStream]')
-        console.log('incomingMediaStream: ', incomingVideo)
+      //console.log('Made it to useEffect [incomingMediaStream]')
+      //console.log('incomingMediaStream: ', incomingVideo)
         if (incomingVideo && !incomingStreamInitialized) {
             const incomingStream = (incomingVideo as any).captureStream();
-            console.log('incomingStream: ', incomingStream)
-            console.log(`Incoming stream tracks: ${incomingStream.getTracks().map((track: { kind: string, label: string }) => track.kind + ', ' + track.label).join('; ')}`);
+          //console.log('incomingStream: ', incomingStream)
+          //console.log(`Incoming stream tracks: ${incomingStream.getTracks().map((track: { kind: string, label: string }) => track.kind + ', ' + track.label).join('; ')}`);
             mixer.appendStreams([incomingStream]);
             setIncomingStreamInitialized(true)
         }

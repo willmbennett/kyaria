@@ -16,7 +16,7 @@ type getPersonType = {
 
 export default async function EmailPage({ params }: { params: { id: string } }) {
     const { userId } = await checkSubscription()
-    console.log('userId: ', userId)
+    //console.log('userId: ', userId)
     const { resumes } = await getResumes(userId) as getResumesType
     const { person } = await getPerson(params.id) as getPersonType
 

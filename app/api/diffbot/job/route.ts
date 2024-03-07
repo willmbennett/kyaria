@@ -33,7 +33,7 @@ export async function GET(
         };
 
         const fetchResponse = await fetchWithRetry(apiUrl, options);
-        console.log('Data fetched successfully:', fetchResponse);
+      //console.log('Data fetched successfully:', fetchResponse);
 
         return NextResponse.json(fetchResponse, { status: 200 });
     } catch (error) {

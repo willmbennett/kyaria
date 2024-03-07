@@ -22,11 +22,11 @@ export async function createSubscription(data: Partial<SubscriptionClass>) {
         // You can decide to return the existing subscription or just a confirmation message
         return { subscription: existingSubscription._id.toString() };
     } else {
-        console.log("Creating new subscription");
+      //console.log("Creating new subscription");
         const newSubscription = await SubscriptionModel.create(data);
 
         if (newSubscription) {
-            console.log("New subscription created:", newSubscription);
+          //console.log("New subscription created:", newSubscription);
             return { subscription: newSubscription._id.toString() };
         } else {
             console.error("Failed to create subscription");
@@ -88,11 +88,11 @@ export async function updateSubscription(customer: string, data: Partial<Subscri
                 //console.log(`Subscription updated successfully:`, subscription);
                 return { subscription };
             } else {
-                console.log(`No subscription found for the given ID: ${existingSubscription._id}`);
+              //console.log(`No subscription found for the given ID: ${existingSubscription._id}`);
                 return { error: "Subscription not found" };
             }
         } else {
-            console.log(`No existing subscription found for customer: ${customer}`);
+          //console.log(`No existing subscription found for customer: ${customer}`);
             return { error: "Subscription not found" };
         }
     } catch (error) {

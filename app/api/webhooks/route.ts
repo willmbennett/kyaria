@@ -10,7 +10,7 @@ const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET as string;
 
 
 export async function POST(req: Request) {
-    console.log('made it to webookhander')
+    //console.log('made it to webookhander')
     const rawBody = await req.text()
     const body = JSON.parse(rawBody.toString());
     //console.log("Yay, we got the body back", { body })
@@ -56,19 +56,17 @@ async function processEvent(event: Stripe.Event) {
     switch (event.type) {
         case 'payment_intent.succeeded': {
             const paymentIntent = event.data.object;
-            console.log(`PaymentIntent status: ${paymentIntent.status}`);
+            //console.log(`PaymentIntent status: ${paymentIntent.status}`);
             break;
         }
         case 'payment_intent.payment_failed': {
             const paymentIntent = event.data.object;
-            console.log(
-                `❌ Payment failed: ${paymentIntent.last_payment_error?.message}`
-            );
+            console.log(`❌ Payment failed: ${paymentIntent.last_payment_error?.message}`);
             break;
         }
         case 'charge.succeeded': {
             const charge = event.data.object;
-            console.log(`Charge id: ${charge.id}`);
+            //console.log(`Charge id: ${charge.id}`);
             break;
         }
 

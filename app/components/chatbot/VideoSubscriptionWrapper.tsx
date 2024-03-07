@@ -9,16 +9,12 @@ import VideoChatComponent from './VideoChatComponent';
 
 interface TimedAccessComponentProps {
     activeSubscription: boolean;
-    resumes: ResumeClass[]
+    userId: string;
 }
 
-const TimedAccessComponent: React.FC<TimedAccessComponentProps> = ({ activeSubscription, resumes }) => {
+const TimedAccessComponent: React.FC<TimedAccessComponentProps> = ({ activeSubscription, userId }) => {
     const [offerExpired, setOfferExpired] = useState(false);
     const [countdown, setCountdown] = useState(60); // Countdown from 60 seconds
-
-    const [selectedResumeId, setSelectedResumeId] = useState<string>(resumes[0]._id.toString() || '');
-    // Find the selected resume based on the selectedResumeId
-    const selectedResume = useMemo(() => resumes.find(resume => resume._id === selectedResumeId), [selectedResumeId])
 
     useEffect(() => {
         let timer: ReturnType<typeof setTimeout> | null = null;
@@ -49,9 +45,7 @@ const TimedAccessComponent: React.FC<TimedAccessComponentProps> = ({ activeSubsc
         <>
             {activeSubscription ? (
                 <>
-                    <VideoChatComponent
-                        selectedResume={selectedResume}
-                    />
+                    <VideoChatComponent userId={userId} />
                 </>
             ) : (
                 <>
@@ -67,9 +61,7 @@ const TimedAccessComponent: React.FC<TimedAccessComponentProps> = ({ activeSubsc
                             <div className='flex w-full justify-end'>
                                 <p>Free time remaining: {countdown} seconds</p>
                             </div>
-                            <VideoChatComponent
-                                selectedResume={selectedResume}
-                            />
+                            <VideoChatComponent userId={userId} />
                         </>
                     }
                 </>

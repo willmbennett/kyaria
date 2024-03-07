@@ -51,6 +51,7 @@
     "lodash": "^4.17.21",
     "micro": "^10.0.1",
     "micro-cors": "^0.1.1",
+    "microsoft-cognitiveservices-speech-sdk": "^1.36.0",
     "mixpanel-browser": "^2.47.0",
     "mongodb": "^6.0.0",
     "mongoose": "^7.5.2",
@@ -82,7 +83,8 @@
     "stripe": "^14.9.0",
     "tailwind-merge": "^1.14.0",
     "transform-props": "^1.0.1",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "web-speech-cognitive-services": "^7.1.4-master.9e026d9"
   },
   "devDependencies": {
     "@types/formidable": "^3.4.3",

@@ -9,7 +9,7 @@ const openai = new OpenAI();
 export async function POST(
     request: NextRequest
 ) {
-    console.log(request.body)
+  //console.log(request.body)
 
     const session = await getServerSession(authOptions);
 
@@ -20,7 +20,7 @@ export async function POST(
     try {
         const requestBody = await request.text();
         const { messages } = JSON.parse(requestBody);
-        console.log("messages", messages)
+      //console.log("messages", messages)
         const completion = await openai.chat.completions.create({
             messages,
             model: "gpt-4-0125-preview",
@@ -29,7 +29,7 @@ export async function POST(
 
         // Process the response from OpenAI and format it as needed
         const optimizedData = completion.choices[0].message.content;
-        console.log("optimizedData", optimizedData)
+      //console.log("optimizedData", optimizedData)
         if (optimizedData) {
             const parsedData = JSON.parse(optimizedData);
             return NextResponse.json(parsedData, { status: 200 });

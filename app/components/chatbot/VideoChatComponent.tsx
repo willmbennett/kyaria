@@ -1,5 +1,5 @@
 'use client';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Button } from '../Button';
 import useMediaDevices from '../../../lib/chatbot/use-media-devices';
 //import { useRecording } from '../../../lib/chatbot/use-media-recording';
@@ -11,14 +11,9 @@ import { useDIDApi } from '../../../lib/chatbot/use-d-id';
 import { ResumeClass } from '../../../models/Resume';
 import { useChatGPT } from '../../../lib/chatbot/use-chat-gpt';
 import { useRouter } from 'next/navigation';
+import styles from '../../eve/styles.module.css'
 
-interface VideoChatComponentProps {
-    selectedResume?: ResumeClass;
-}
-
-const VideoChatComponent = ({
-    selectedResume
-}: VideoChatComponentProps) => {
+const VideoChatComponent = ({ userId }: { userId: string }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const outgoingVideoRef = useRef<HTMLVideoElement>(null);
     //const previewRef = useRef<HTMLVideoElement>(null);
@@ -44,7 +39,7 @@ const VideoChatComponent = ({
     } = useMediaDevices(outgoingVideo);
 
 
-    const { submitScript, errorMessage, connected, isStreaming } = useDIDApi({ incomingVideo, useChatBot });
+    const { submitScript, errorMessage, connected, isStreaming } = useDIDApi({ incomingVideo, useChatBot, userId });
 
     // Set up Soul Machines
     /*
@@ -74,17 +69,25 @@ const VideoChatComponent = ({
     })
     */
 
-    useChatGPT({ selectedResume, submitScript, connected, isStreaming })
+    const { browserSupportsSpeechRecognition, transcript, listening } = useChatGPT({ submitScript, connected, isStreaming, useChatBot })
 
     return (
         <>
             <div className="flex flex-col gap-4 justify-center items-center w-full md:p-4">
                 {errorMessage && <p className="text-red-500">{`Error: ${errorMessage}`}</p>}
                 <div className="flex flex-col md:flex-row justify-center items-center gap-4 w-full max-w-6xl mx-auto p-4">
-                    <div className="aspect-square w-full md:w-1/2 flex justify-center items-center p-2"> {/* Ensure square aspect ratio and padding */}
-                        <video src="https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/eve-idle-3-LlpYTFQlHHmLL6NVodTQaPq7ALM6RO.mov" ref={videoRef} className="w-full h-full object-cover rounded-lg shadow-lg" autoPlay loop playsInline></video>
+                    <div className="aspect-square w-full md:w-1/2 flex justify-center items-center relative rounded-lg shadow-lg">
+                        <p className="text-center" style={{ opacity: connected ? 0 : 1 }} >
+                            Eve is getting ready to meet you!
+                        </p>
+
+                        <video ref={videoRef} className="absolute top-0 left-0 w-full h-full object-cover video-transition" style={{ opacity: isStreaming && connected ? 1 : 0 }} autoPlay playsInline></video>
+
+                        <video src="https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/idle-EKXH7UBRmCylHsNk0PdpKtIh8uUesV.mp4" className="absolute top-0 left-0 w-full h-full object-cover video-transition" style={{ opacity: isStreaming || !connected ? 0 : 1 }} autoPlay loop playsInline></video>
                     </div>
-                    <div className="aspect-square w-full md:w-1/2 flex justify-center items-center p-2"> {/* Ensure square aspect ratio and padding */}
+
+
+                    <div className="aspect-square w-full md:w-1/2 flex justify-center items-center relative">
                         <video ref={outgoingVideoRef} className="w-full h-full object-cover rounded-lg shadow-lg" autoPlay playsInline muted></video>
                     </div>
                 </div>
@@ -106,7 +109,6 @@ const VideoChatComponent = ({
                         </div>
                     </div>
                 }
-
             </div >
         </>
     );

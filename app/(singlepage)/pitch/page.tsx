@@ -11,12 +11,12 @@ type getResumesType = {
 
 export default async function ProfilePage() {
     const { userId, activeSubscription } = await checkSubscription()
-    console.log('userId: ', userId)
+    //console.log('userId: ', userId)
     const { resumes } = await getResumes(userId) as getResumesType
     const { profile } = await getProfile(userId);
     const profileId = profile?._id.toString()
 
-    console.log('profile: ', profile)
+    //console.log('profile: ', profile)
 
     // If no profile redirect to profile
     if (!profileId) {

@@ -59,7 +59,7 @@ export async function getInstitution(id: string) {
 
 export async function createInstitution(data: Partial<InstitutionClass>) {
     try {
-        console.log(`Institution to create: ${JSON.stringify(data)}`);
+      //console.log(`Institution to create: ${JSON.stringify(data)}`);
 
         const institution = await InstitutionModel.create(data);
         //console.log(`Created Profile: ${JSON.stringify(profile)}`);
@@ -96,7 +96,7 @@ export async function checkInstitutionDiffbotId(targetDiffbotId: string) {
         //console.log(person)
 
         if (institution.length > 0) {
-            console.log('Institution exists with diffbotId:', targetDiffbotId)
+          //console.log('Institution exists with diffbotId:', targetDiffbotId)
             return {
                 existingInstitution: true,
             };
@@ -113,7 +113,7 @@ export async function institutionFuzzyMatching(query: string) {
     try {
         await connectDB();
 
-        console.log('made it here')
+      //console.log('made it here')
 
         // define pipeline
         const agg = [
@@ -141,12 +141,12 @@ export async function institutionFuzzyMatching(query: string) {
             },
         ];
 
-        console.log('agg: ', agg)
+      //console.log('agg: ', agg)
 
         // Check if a subscription already exists for this userId
         const institutions = await InstitutionModel.aggregate(agg)
         // print results
-        console.log(institutions)
+      //console.log(institutions)
 
         if (institutions) {
             transformProps(institutions, castToString, '_id');

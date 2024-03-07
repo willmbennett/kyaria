@@ -53,7 +53,7 @@ export const useSceneManagement = ({ incomingVideo, useChatBot }: useSceneManage
     }, [incomingVideo, useChatBot])
 
     const onConnectionSuccess = ({ sessionId, scene }: ConnectionSuccessResponse) => {
-        console.log(`Success! Session ID: ${sessionId}`);
+      //console.log(`Success! Session ID: ${sessionId}`);
         scene.startVideo().catch(console.error);
     };
 

@@ -35,9 +35,9 @@ export async function updatePerson(id: string, data: any) {
 
         const parsedId = stringToObjectId(id);
 
-        console.log(id)
+      //console.log(id)
 
-        console.log(`data to update profile with: ${JSON.stringify(data)}`)
+      //console.log(`data to update profile with: ${JSON.stringify(data)}`)
 
         const profile = await PersonModel.findByIdAndUpdate(
             parsedId,
@@ -67,7 +67,7 @@ export async function getPerson(id: string) {
             return { error: "id not included" };
         }
 
-        console.log(id)
+      //console.log(id)
 
         const objectId = stringToObjectId(id)
 
@@ -118,7 +118,7 @@ export async function getPersonText(id: string) {
             return { error: "id not included" };
         }
 
-        console.log(id)
+      //console.log(id)
 
         const objectId = stringToObjectId(id)
 
@@ -157,7 +157,7 @@ export async function checkDiffbotId(diffbotId: string) {
         //console.log(person)
 
         if (person.length > 0) {
-            console.log('person exists with diffbotId:', diffbotId)
+          //console.log('person exists with diffbotId:', diffbotId)
             return {
                 existingPerson: true,
             };
@@ -175,7 +175,7 @@ export async function fuzzymatching() {
     try {
         await connectDB();
 
-        console.log('made it here')
+      //console.log('made it here')
 
         // define pipeline
         const agg = [
@@ -203,7 +203,7 @@ export async function fuzzymatching() {
             },
         ];
 
-        console.log('agg: ', agg)
+      //console.log('agg: ', agg)
 
         // Check if a subscription already exists for this userId
         const employers = await PersonModel.aggregate(agg)

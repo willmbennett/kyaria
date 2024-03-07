@@ -1,9 +1,11 @@
 import { Message } from 'ai';
+import { ChatCompletionRequestMessage } from 'openai-edge';
 import { useState, useEffect, useCallback } from 'react';
 
 interface UseDIDApiProps {
     incomingVideo: HTMLVideoElement | null;
     useChatBot: boolean;
+    userId: string;
 }
 
 type SessionResponseType = {
@@ -33,7 +35,7 @@ type IceServerType = {
     'credential'?: string
 }
 
-export const useDIDApi = ({ incomingVideo, useChatBot }: UseDIDApiProps) => {
+export const useDIDApi = ({ incomingVideo, useChatBot, userId }: UseDIDApiProps) => {
     const [state, setState] = useState<DIDApiState>({
         isConnecting: false,
         isConnected: false,
@@ -292,8 +294,6 @@ export const useDIDApi = ({ incomingVideo, useChatBot }: UseDIDApiProps) => {
     }, [state.isConnected, setupPeerConnection]); // Removed state.session from dependencies to avoid re-creating this function when the session state changes
 
 
-
-
     const terminateSession = useCallback(async () => {
         try {
             const response = await fetch('/api/d-id/destroy-session', {
@@ -315,21 +315,26 @@ export const useDIDApi = ({ incomingVideo, useChatBot }: UseDIDApiProps) => {
         }
     }, [state.session])
 
-    const submitScript = useCallback(async (text: string) => {
-        //onsole.log('Made it to Submit Script')
+    const submitScript = useCallback(async (message: string | null) => {
+        //console.log('Made it to Submit Script')
         //console.log('state.peerConnection.signalingState: ', state.peerConnection?.signalingState)
         //console.log('state.peerConnection.iceConnectionState: ', state.peerConnection?.iceConnectionState)
         if (state.peerConnection?.signalingState === 'stable' || state.peerConnection?.iceConnectionState === 'connected') {
-            const response = await fetch('/api/d-id/submit-script', {
+
+            const dataToSubmit = {
+                streamId: state.session?.id,
+                sessionId: state.session?.session_id,
+                message,
+                userId
+            }
+
+            //console.log('dataToSubmit: ', dataToSubmit)
+            const response = await fetch('/api/d-id-chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    streamId: state.session?.id,
-                    sessionId: state.session?.session_id,
-                    text
-                }),
+                body: JSON.stringify(dataToSubmit),
             });
 
             if (!response.ok) {
@@ -339,7 +344,7 @@ export const useDIDApi = ({ incomingVideo, useChatBot }: UseDIDApiProps) => {
             const data = await response.json();
             //console.log('Script submitted successfully:', data);
         }
-    }, [state.session, state.peerConnection]);
+    }, [state.session, state.peerConnection, userId]);
 
     // Function to stop the stream and disconnect
     const disconnect = useCallback(async () => {
@@ -401,7 +406,6 @@ export const useDIDApi = ({ incomingVideo, useChatBot }: UseDIDApiProps) => {
             });
         } else {
             //console.log('Video is not playing or videoElement is null, playing idle video.');
-            playIdleVideo();
             setState(prevState => {
                 //console.log('Setting state to false.');
                 return { ...prevState, streaming: false };
@@ -409,22 +413,10 @@ export const useDIDApi = ({ incomingVideo, useChatBot }: UseDIDApiProps) => {
         }
     }
 
-
-    function playIdleVideo() {
-        if (state.videoElement) {
-            //console.log('Playing idle video.');
-            state.videoElement.srcObject = null; // Clear any existing stream
-            state.videoElement.src = 'https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/eve-idle-3-LlpYTFQlHHmLL6NVodTQaPq7ALM6RO.mov';
-            state.videoElement.loop = true;
-        } else {
-            //console.log('playIdleVideo called, but videoElement is null.');
-        }
-    }
-
     useEffect(() => {
         //console.log('useEffect triggered.');
         /*
-        console.log('Current state:', {
+      //console.log('Current state:', {
             isConnecting: state.isConnecting,
             isConnected: state.isConnected,
             videoElement: state.videoElement, // Logs true if videoElement is not null
@@ -432,12 +424,12 @@ export const useDIDApi = ({ incomingVideo, useChatBot }: UseDIDApiProps) => {
         */
 
         // Only call connect if videoElement is updated and we are neither connecting nor connected.
-        if (!state.isConnecting && !state.isConnected && state.videoElement) {
+        if (!state.isConnecting && !state.isConnected && state.videoElement && useChatBot) {
             //console.log('Conditions met. Calling connect...');
             connect();
         } else {
             /*
-            console.log('Conditions not met for connect:', {
+          //console.log('Conditions not met for connect:', {
                 isConnecting: state.isConnecting,
                 isConnected: state.isConnected,
                 videoElementPresent: state.videoElement,

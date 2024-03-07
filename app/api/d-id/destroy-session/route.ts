@@ -7,12 +7,12 @@ interface DestroySessionRequestBody {
 }
 
 export async function DELETE(request: Request) {
-    console.log('Starting DELETE function for deleting streams');
+    //console.log('Starting DELETE function for deleting streams');
     const { streamId, session_id }: DestroySessionRequestBody = await request.json();
-    console.log('Request body for ICE candidate submission:', JSON.stringify({ streamId, session_id }));
+    //console.log('Request body for ICE candidate submission:', JSON.stringify({ streamId, session_id }));
 
     try {
-        console.log(`Attempting to submit ICE candidate for stream ID: ${streamId}`);
+        //console.log(`Attempting to submit ICE candidate for stream ID: ${streamId}`);
         const response = await fetch(`https://api.d-id.com/talks/streams/${streamId}`, {
             method: 'DELETE',
             headers: {
@@ -23,12 +23,12 @@ export async function DELETE(request: Request) {
         });
 
         if (!response.ok) {
-            console.log(`Response not OK while deleting session for stream ID: ${streamId}`);
+            //console.log(`Response not OK while deleting session for stream ID: ${streamId}`);
             const errorData = await response.json();
             console.error('Error data received:', errorData);
             return NextResponse.json(errorData.message || { message: 'Failed to terminate session' }, { status: 500 });
         }
-        console.log(`Successfully terminated session for stream ID: ${streamId}`);
+        //console.log(`Successfully terminated session for stream ID: ${streamId}`);
         return NextResponse.json({ message: 'Session terminated successfully' }, { status: 200 });
     } catch (error: any) {
         console.error('Caught error in session termination function:', error.message);
