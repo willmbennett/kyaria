@@ -113,7 +113,7 @@ export async function handleFormSubmit(
         //console.log(userId)
 
         if (userId) {
-            console.log('1)  Made it to Resume Scan creation')
+          //console.log('1)  Made it to Resume Scan creation')
             const path = '/'
             const dataToSave = { ...parsedResume, userId }
             const resumeScanId = await createResumeScanAction(dataToSave, path)

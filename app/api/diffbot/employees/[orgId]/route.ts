@@ -7,7 +7,7 @@ export async function GET(
     request: Request,
     { params }: { params: { orgId: string } }
 ) {
-    console.log(params)
+  //console.log(params)
 
     const session = await getServerSession(authOptions);
     const orgId = params.orgId // get the company's id

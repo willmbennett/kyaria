@@ -4,19 +4,19 @@ import { stringToObjectId, castToString, ObjectIdtoString, dateToString } from "
 var transformProps = require('transform-props');
 
 export async function createPost(data: Partial<PostClass>) {
-    console.log('Creating new post with data:', data); // Log entry with data
+  //console.log('Creating new post with data:', data); // Log entry with data
 
     try {
         await connectDB();
-        console.log('Database connection established');
+      //console.log('Database connection established');
 
         const newPost = await PostModel.create(data);
 
         if (newPost) {
-            console.log('New post created successfully:', newPost);
+          //console.log('New post created successfully:', newPost);
 
             const postId = castToString(newPost._id);
-            console.log('Transformed postId:', postId); // Log transformed postId
+          //console.log('Transformed postId:', postId); // Log transformed postId
 
             return { postId };
         } else {

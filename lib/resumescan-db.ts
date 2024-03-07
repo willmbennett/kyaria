@@ -7,16 +7,16 @@ export async function createResumeScan(data: ResumeScanDataClass) {
     try {
         await connectDB();
 
-        console.log(`Resume Scan to create: ${JSON.stringify(data)}`)
+      //console.log(`Resume Scan to create: ${JSON.stringify(data)}`)
 
         const resumeScan = await ResumeScanDataModel.create(data);
 
-        console.log(`Created Resume Scan: ${JSON.stringify(resumeScan)}`)
+      //console.log(`Created Resume Scan: ${JSON.stringify(resumeScan)}`)
 
         if (resumeScan) {
-            console.log('about to transform props')
+          //console.log('about to transform props')
             const resumeScanId = castToString(resumeScan._id)
-            console.log(resumeScanId)
+          //console.log(resumeScanId)
             return {
                 resumeScanId
             };

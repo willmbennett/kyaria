@@ -14,7 +14,7 @@ export const PersonPage = () => {
         try {
 
             const filter = { limit: 1000, skip: 7000 }
-            console.log(filter)
+          //console.log(filter)
             const response = await fetch('/api/diffbot/employees', {
                 method: 'POST',
                 body: JSON.stringify(filter)
@@ -39,21 +39,21 @@ export const PersonPage = () => {
 
             // Assuming data is an array of person entities
             for (let person of people) {
-                console.log(`Processing ${processedCount} out of ${totalToProcess}`)
-                console.log(`Processing person ${person.name || person.id}...`);
+              //console.log(`Processing ${processedCount} out of ${totalToProcess}`)
+              //console.log(`Processing person ${person.name || person.id}...`);
 
                 const diffbotId = person.id
 
                 const existingPerson = await checkDiffbotIdAction(diffbotId, '/admin')
 
                 if (existingPerson) {
-                    console.log(`Person ${person.name || diffbotId} already exists. Skipping.`);
+                  //console.log(`Person ${person.name || diffbotId} already exists. Skipping.`);
                     continue; // Skip this person and continue with the next one
                 }
 
                 // Start by extracting text for embeddings
                 const embeddingsText = extractPersonTextForEmbedding(person);
-                console.log(`Extracted embeddings text for person ${person.name || person.id}.`);
+              //console.log(`Extracted embeddings text for person ${person.name || person.id}.`);
 
                 const newPerson: Partial<PersonClass> = {
                     ...person,
@@ -63,11 +63,11 @@ export const PersonPage = () => {
                 delete (newPerson as any).id;
 
                 // Assuming createPersonAction takes a single person object and returns an ID or some identifier
-                console.log(`Creating person ${person.name || diffbotId} in the database...`);
+              //console.log(`Creating person ${person.name || diffbotId} in the database...`);
                 const personId = await createPersonAction(newPerson, '/admin');
                 savedIds.push(personId);
 
-                console.log(`Successfully saved person ${person.name || diffbotId} with ID: ${personId}`);
+              //console.log(`Successfully saved person ${person.name || diffbotId} with ID: ${personId}`);
 
 
                 // Update processed count
@@ -86,23 +86,23 @@ export const PersonPage = () => {
         const numEmployees = 7982; // Number of employees currently
         const skipEmployees = 2181; // Number of employees to skip, set this up as of 2/14
         const batchSize = 10
-        console.log(`Starting to create employers from ${skipEmployees} employees out of ${numEmployees} in batches of ${batchSize}`);
+      //console.log(`Starting to create employers from ${skipEmployees} employees out of ${numEmployees} in batches of ${batchSize}`);
 
         for (let j = skipEmployees; j < numEmployees; j += batchSize) {
 
             let employersMap = new Map(); // Use a Map to store unique employers
 
             for (let i = 0; i < batchSize; i++) {
-                console.log(`Processing batch starting at employee ${j + i}`);
+              //console.log(`Processing batch starting at employee ${j + i}`);
                 const filter = { skip: j, limit: 1 };
                 const people = await getPeopleAction(filter, '/admin');
 
                 if (!Array.isArray(people)) {
-                    console.log(`Expected an array of people, received: ${typeof people}. Skipping batch.`);
+                  //console.log(`Expected an array of people, received: ${typeof people}. Skipping batch.`);
                     continue;
                 }
 
-                console.log(`Retrieved ${people.length} people in current batch.`);
+              //console.log(`Retrieved ${people.length} people in current batch.`);
                 people.forEach(person => {
                     person.employments?.forEach(employment => {
                         if (employment.employer && employment.employer.targetDiffbotId) {
@@ -115,19 +115,19 @@ export const PersonPage = () => {
             const uniqueEmployers = Array.from(employersMap.values());
 
             const employerCreationPromises = uniqueEmployers.map(async (employer) => {
-                console.log(`Processing employer with targetDiffbotId: ${employer.targetDiffbotId}`);
+              //console.log(`Processing employer with targetDiffbotId: ${employer.targetDiffbotId}`);
                 const employerExists = await checkEmployerDiffbotIdAction(employer.targetDiffbotId, '/admin');
                 if (!employerExists) {
-                    console.log(`Creating new employer with targetDiffbotId: ${employer.targetDiffbotId}`);
+                  //console.log(`Creating new employer with targetDiffbotId: ${employer.targetDiffbotId}`);
                     const employerId = await createEmployerAction(employer, '/admin'); // Pass the entire employer object
                     if (employerId) console.log(`Created new employer: `, employerId);
                 } else {
-                    console.log(`Employer with targetDiffbotId: ${employer.targetDiffbotId} already exists. Skipping creation.`);
+                  //console.log(`Employer with targetDiffbotId: ${employer.targetDiffbotId} already exists. Skipping creation.`);
                 }
             });
 
             await Promise.all(employerCreationPromises);
-            console.log(`Completed creating employers for all ${batchSize} employees.`);
+          //console.log(`Completed creating employers for all ${batchSize} employees.`);
         }
     };
 
@@ -137,23 +137,23 @@ export const PersonPage = () => {
         const numEmployees = 1000; // Number of employees currently
         const skipEmployees = 100; // Number of employees to skip, set this up as of 2/14
         const batchSize = 10
-        console.log(`Starting to create institution from ${skipEmployees} employees out of ${numEmployees} in batches of ${batchSize}`);
+      //console.log(`Starting to create institution from ${skipEmployees} employees out of ${numEmployees} in batches of ${batchSize}`);
 
         for (let j = skipEmployees; j < numEmployees; j += batchSize) {
 
             let institutionsMap = new Map(); // Use a Map to store unique employers
 
             for (let i = 0; i < batchSize; i++) {
-                console.log(`Processing batch starting at employee ${j + i}`);
+              //console.log(`Processing batch starting at employee ${j + i}`);
                 const filter = { skip: j, limit: 1 };
                 const people = await getPeopleAction(filter, '/admin');
 
                 if (!Array.isArray(people)) {
-                    console.log(`Expected an array of people, received: ${typeof people}. Skipping batch.`);
+                  //console.log(`Expected an array of people, received: ${typeof people}. Skipping batch.`);
                     continue;
                 }
 
-                console.log(`Retrieved ${people.length} people in current batch.`);
+              //console.log(`Retrieved ${people.length} people in current batch.`);
                 people.forEach(person => {
                     person.educations?.forEach(eduction => {
                         if (eduction.institution && eduction.institution.targetDiffbotId) {
@@ -166,19 +166,19 @@ export const PersonPage = () => {
             const uniqueInstitutions = Array.from(institutionsMap.values());
 
             const employerCreationPromises = uniqueInstitutions.map(async (institution) => {
-                console.log(`Processing instution with targetDiffbotId: ${institution.targetDiffbotId}`);
+              //console.log(`Processing instution with targetDiffbotId: ${institution.targetDiffbotId}`);
                 const instutionExists = await checkInstitutionDiffbotIdAction(institution.targetDiffbotId, '/admin');
                 if (!instutionExists) {
-                    console.log(`Creating new instution with targetDiffbotId: ${institution.targetDiffbotId}`);
+                  //console.log(`Creating new instution with targetDiffbotId: ${institution.targetDiffbotId}`);
                     const instutionId = await createInstitutionAction(institution, '/admin'); // Pass the entire employer object
                     if (instutionId) console.log(`Created new instutution: `, instutionId);
                 } else {
-                    console.log(`Instution with targetDiffbotId: ${institution.targetDiffbotId} already exists. Skipping creation.`);
+                  //console.log(`Instution with targetDiffbotId: ${institution.targetDiffbotId} already exists. Skipping creation.`);
                 }
             });
 
             await Promise.all(employerCreationPromises);
-            console.log(`Completed creating instutions for all ${batchSize} employees.`);
+          //console.log(`Completed creating instutions for all ${batchSize} employees.`);
         }
     };
 

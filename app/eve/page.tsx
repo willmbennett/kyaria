@@ -5,6 +5,7 @@ import { Metadata } from "next";
 import TimedAccessComponent from "../components/chatbot/VideoSubscriptionWrapper";
 import { getResumes } from "../../lib/resume-db";
 import { ResumeClass } from "../../models/Resume";
+
 const ProductDemo = dynamic(() => import('../components/chatbot/landingpage/ProductDemo'));
 const Process = dynamic(() => import('../components/chatbot/landingpage/Process'));
 
@@ -37,8 +38,8 @@ type getResumesType = {
 //import { list } from '@vercel/blob'
 
 export default async function ChatbotPage() {
-    const { userId, userName, activeSubscription } = await checkSubscription()
-    const { resumes } = await getResumes(userId) as getResumesType
+    const { userId, activeSubscription } = await checkSubscription()
+
 
     if (!userId) {
         return (
@@ -58,7 +59,7 @@ export default async function ChatbotPage() {
 
     const { url } = blobs[0]
 
-    console.log(url)
+  //console.log(url)
     */
 
     return (
@@ -72,7 +73,7 @@ export default async function ChatbotPage() {
                 </p>
             </div>
             <div className="w-full">
-                <TimedAccessComponent activeSubscription={activeSubscription} resumes={resumes}/>
+                <TimedAccessComponent activeSubscription={activeSubscription} userId={userId} />
             </div>
         </div>
     );

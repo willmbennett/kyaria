@@ -189,7 +189,7 @@ export async function getJobApp(id: string) {
             return { error: "Job Application not found" };
         }
 
-        console.log(id)
+      //console.log(id)
         const app = await AppModel.findById(id)
             .populate(["job", "userResume", "profile"])
             .lean()

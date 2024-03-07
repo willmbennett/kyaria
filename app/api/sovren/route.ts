@@ -12,7 +12,7 @@ export async function POST(request: Request) {
             redirect('/auth/signin')
         }
 
-        console.log(content);
+      //console.log(content);
 
         if (!content || typeof content !== 'string') {
             return new NextResponse(JSON.stringify({ error: 'Please provide resume content in the request body under "content" key.' }), { status: 400 });
@@ -41,7 +41,7 @@ export async function POST(request: Request) {
 
         return new Promise<NextResponse>((resolve, reject) => {
             const req = https.request(options, (response) => {
-                console.log(`STATUS: ${response.statusCode}`);
+              //console.log(`STATUS: ${response.statusCode}`);
                 response.setEncoding('utf8');
 
                 let responseAsString = '';

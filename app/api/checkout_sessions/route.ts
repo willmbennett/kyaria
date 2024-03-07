@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(): Promise<NextResponse<any>> {
-  console.log('Made it here')
+  //console.log('Made it here')
   try {
     const session = await stripe.checkout.sessions.create({
       ui_mode: 'embedded',

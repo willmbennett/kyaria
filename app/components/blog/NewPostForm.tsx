@@ -39,12 +39,12 @@ export default function NewPostForm({ userId, userName }: { userId: string, user
     };
 
     const handleSuccess = (result: any) => {
-        console.log('Upload result received:', result);
+      //console.log('Upload result received:', result);
 
         if (result?.info) {
             const item = result?.info
             if (item.secure_url) {
-                console.log(`Image uploaded: ${item.secure_url}`);
+              //console.log(`Image uploaded: ${item.secure_url}`);
                 setImageUrls(prevUrls => [...prevUrls, item.secure_url]);
             } else {
                 console.warn('An item without a secure_url was encountered');
@@ -55,16 +55,16 @@ export default function NewPostForm({ userId, userName }: { userId: string, user
     };
 
     const handleImageClick = (imageUrl: string) => {
-        console.log(imageUrl)
+      //console.log(imageUrl)
         setFeaturedImage(imageUrl);
     };
 
     const savetoDatabase = async (data: Partial<PostClass>) => {
-        console.log('Data to save', data); // Log the data being saved
+      //console.log('Data to save', data); // Log the data being saved
 
         try {
             const { postId, error } = await createPostAction(data, '/');
-            console.log('Created Post: ', postId); // Log the result after successful creation
+          //console.log('Created Post: ', postId); // Log the result after successful creation
 
             if (error) {
                 console.error('Error returned from createPostAction:', error); // Log if there's an error returned
@@ -78,7 +78,7 @@ export default function NewPostForm({ userId, userName }: { userId: string, user
     };
 
     const onSubmit = (data: NewPostFormData) => {
-        console.log('Form submission data:', data); // Log the raw form data
+      //console.log('Form submission data:', data); // Log the raw form data
 
         // Convert tags to your desired format, if necessary
         const tags = data.tags?.map(tag => tag.value);
@@ -92,7 +92,7 @@ export default function NewPostForm({ userId, userName }: { userId: string, user
             tags: tags
         };
 
-        console.log('Post data after processing:', postData); // Log the post data after processing
+      //console.log('Post data after processing:', postData); // Log the post data after processing
         savetoDatabase(postData); // Send the data to the server/API
     };
 

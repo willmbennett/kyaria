@@ -51,7 +51,7 @@ export const ResumeUploadForm = ({ userId, goToResume = false }: ResumeUploadFor
             // Optionally navigate to an error page or display an error message
         },
         onSuccess: async (resumeId) => {
-            console.log('Resume successfully created with ID:', resumeId);
+          //console.log('Resume successfully created with ID:', resumeId);
             // Await the completion of the navigation
             if (goToResume) {
                 router.push(`/resumebuilder/${resumeId}`);

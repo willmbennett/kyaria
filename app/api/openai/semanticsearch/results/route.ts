@@ -20,7 +20,7 @@ async function findSimilarDocuments(
     isCurrentEmployment: boolean,
     skip: number,
     limit: number) {
-    console.log("Connecting to MongoDB...");
+  //console.log("Connecting to MongoDB...");
     const { db } = await connectDB(); // Destructure to get native db and client
 
     try {
@@ -52,8 +52,8 @@ async function findSimilarDocuments(
             combinedFilter = filterConditions[0];
         }
 
-        console.log('filter:')
-        console.log(JSON.stringify(combinedFilter))
+      //console.log('filter:')
+      //console.log(JSON.stringify(combinedFilter))
 
         // Common vectorSearch stage, applying filters dynamically
         const vectorSearchStage: any = { // Replace 'any' with a more specific type if known.
@@ -76,12 +76,12 @@ async function findSimilarDocuments(
         ];
 
 
-        console.log(agg)
+      //console.log(agg)
 
-        console.log(`Running aggregation with skip: ${skip} and limit: ${limit}...`);
+      //console.log(`Running aggregation with skip: ${skip} and limit: ${limit}...`);
         const documents = await collection.aggregate(agg).toArray();
 
-        console.log(`Found ${documents.length} documents.`);
+      //console.log(`Found ${documents.length} documents.`);
         return documents;
     } catch (error) {
         console.error("Error during MongoDB operation:", error);
@@ -92,7 +92,7 @@ async function findSimilarDocuments(
 export async function POST(
     request: NextRequest
 ) {
-    console.log("Handling request...");
+  //console.log("Handling request...");
 
     try {
         const session = await getServerSession(authOptions);
@@ -104,10 +104,10 @@ export async function POST(
         const requestBody = await request.json();
         const { embeddings, institutions, employers, isCurrentEmployment, limit = 1, skip = 0 } = requestBody;
 
-        console.log(`Request body parsed, Limit: ${limit}, Skip: ${skip}`);
+      //console.log(`Request body parsed, Limit: ${limit}, Skip: ${skip}`);
 
         if (!embeddings) {
-            console.log("Embedding is required but was not provided.");
+          //console.log("Embedding is required but was not provided.");
             return NextResponse.json({ error: 'Embeddings are required' }, { status: 400 });
         }
 
@@ -118,7 +118,7 @@ export async function POST(
             isCurrentEmployment,
             skip,
             limit);
-        console.log(`Sending back ${documents.length} documents.`);
+      //console.log(`Sending back ${documents.length} documents.`);
         return NextResponse.json(documents, { status: 200 });
 
     } catch (error) {

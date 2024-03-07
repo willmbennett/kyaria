@@ -68,19 +68,19 @@ function shouldRetry(error: any): boolean {
 
 
 async function fetchFeedWithPuppeteer(feed: string) {
-    console.log(`Starting to fetch the feed: ${feed}`);
+  //console.log(`Starting to fetch the feed: ${feed}`);
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
     await page.goto(feed, { waitUntil: 'networkidle0', timeout: 60000 });
     const rssData = await page.content();
     await browser.close();
-    console.log(`Completed fetching the feed: ${feed}`);
+  //console.log(`Completed fetching the feed: ${feed}`);
     return rssData;
 }
 
 export async function POST() {
-    console.log('Starting the POST request processing');
+  //console.log('Starting the POST request processing');
 
     const session = await getServerSession(authOptions);
 
@@ -89,8 +89,8 @@ export async function POST() {
         return redirect('/auth/signin');
     }
 
-    console.log('RSS feed list:');
-    console.log(rssFeedList)
+  //console.log('RSS feed list:');
+  //console.log(rssFeedList)
     let linkList: string[] = [];
     let jobsInserted = 0;
     const parser = new XMLParser();
@@ -100,7 +100,7 @@ export async function POST() {
             const feed = feedObj.rssFeed;
             const role = feedObj.role;
 
-            console.log(`Fetching RSS feed for role: ${role}`);
+          //console.log(`Fetching RSS feed for role: ${role}`);
 
             let rssData;
             try {
@@ -110,7 +110,7 @@ export async function POST() {
                 continue;
             }
 
-            console.log(`Parsing the RSS data from: ${feed}`);
+          //console.log(`Parsing the RSS data from: ${feed}`);
             let rssObj;
             try {
                 rssObj = parser.parse(rssData);
@@ -135,15 +135,15 @@ export async function POST() {
 
             const links = actualRssObj?.rss?.channel?.item?.map((item: any) => item.link) || [];
             linkList = linkList.concat(links);
-            console.log(`Extracted ${links.length} links from feed: ${feed}`);
+          //console.log(`Extracted ${links.length} links from feed: ${feed}`);
         }
 
-        console.log(`Processing ${linkList.length} links to scrape job data`);
+      //console.log(`Processing ${linkList.length} links to scrape job data`);
         for (const link of linkList) {
-            console.log(`Processing job link: ${link}`);
+          //console.log(`Processing job link: ${link}`);
             try {
                 const apiUrl = `https://api.diffbot.com/v3/analyze?url=${encodeURIComponent(link)}&token=${process.env.DIFFBOT_API_KEY}`;
-                console.log(`Diffbot API URL: ${apiUrl}`);
+              //console.log(`Diffbot API URL: ${apiUrl}`);
 
                 const options = {
                     method: 'GET',
@@ -151,13 +151,13 @@ export async function POST() {
                 };
 
                 const data = await fetchWithRetry(apiUrl, options);
-                console.log('Data fetched successfully:', data);
+              //console.log('Data fetched successfully:', data);
                 const transformedResponse = transformDiffBotApiResponse(data, link);
-                console.log('------Transformed Response------')
-                console.log(JSON.stringify(transformedResponse))
+              //console.log('------Transformed Response------')
+              //console.log(JSON.stringify(transformedResponse))
                 const jobId = await createJobAction(transformedResponse, '/');
                 if (jobId) {
-                    console.log(`Added Job with ID: ${jobId}`);
+                  //console.log(`Added Job with ID: ${jobId}`);
                     jobsInserted++;
                 }
             } catch (jobError) {
@@ -165,7 +165,7 @@ export async function POST() {
             }
         }
 
-        console.log(`Processed ${linkList.length} links and added ${jobsInserted} jobs.`);
+      //console.log(`Processed ${linkList.length} links and added ${jobsInserted} jobs.`);
         return NextResponse.json({ linksFound: linkList.length, jobsAdded: jobsInserted }, { status: 200 });
 
     } catch (error) {
