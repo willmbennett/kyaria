@@ -10,6 +10,9 @@ const config = new Configuration({
 const openai = new OpenAIApi(config);
 // Set the runtime to edge for best performance
 //export const runtime = 'edge';
+export const maxDuration = 60; // This function can run for a maximum of 5 seconds
+export const dynamic = 'force-dynamic';
+
 
 type BodyType = {
   sessionId: string,
