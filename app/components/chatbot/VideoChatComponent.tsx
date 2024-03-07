@@ -83,7 +83,7 @@ const VideoChatComponent = ({ userId }: { userId: string }) => {
 
                         <video ref={videoRef} className="absolute top-0 left-0 w-full h-full object-cover video-transition" style={{ opacity: isStreaming && connected ? 1 : 0 }} autoPlay playsInline></video>
 
-                        <video src="https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/eve-idle-3-LlpYTFQlHHmLL6NVodTQaPq7ALM6RO.mov" className="absolute top-0 left-0 w-full h-full object-cover video-transition" style={{ opacity: isStreaming || !connected ? 0 : 1 }} autoPlay loop playsInline></video>
+                        <video src="https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/idle-EKXH7UBRmCylHsNk0PdpKtIh8uUesV.mp4" className="absolute top-0 left-0 w-full h-full object-cover video-transition" style={{ opacity: isStreaming || !connected ? 0 : 1 }} autoPlay loop playsInline></video>
                     </div>
 
 
