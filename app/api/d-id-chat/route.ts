@@ -8,10 +8,9 @@ const config = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(config);
-// Set the runtime to edge for best performance
-//export const runtime = 'edge';
+
+// Change the duration for the dunction
 export const maxDuration = 60; // This function can run for a maximum of 5 seconds
-export const dynamic = 'force-dynamic';
 
 
 type BodyType = {
