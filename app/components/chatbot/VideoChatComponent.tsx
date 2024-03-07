@@ -75,8 +75,6 @@ const VideoChatComponent = ({ userId }: { userId: string }) => {
         <>
             <div className="flex flex-col gap-4 justify-center items-center w-full md:p-4">
                 {errorMessage && <p className="text-red-500">{`Error: ${errorMessage}`}</p>}
-                <p>{transcript}</p>
-                <p>listening: {JSON.stringify(listening)}</p>
                 <div className="flex flex-col md:flex-row justify-center items-center gap-4 w-full max-w-6xl mx-auto p-4">
                     <div className="aspect-square w-full md:w-1/2 flex justify-center items-center relative rounded-lg shadow-lg">
                         <p className="text-center" style={{ opacity: connected ? 0 : 1 }} >

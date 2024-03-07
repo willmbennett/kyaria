@@ -10,6 +10,7 @@ import { Message } from "ai";
 
 @ModelOptions({
     schemaOptions: {
+        timestamps: true,
         versionKey: false,
         collection: "chats",
     },
