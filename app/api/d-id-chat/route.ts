@@ -1,8 +1,7 @@
 import { Configuration, ChatCompletionRequestMessage, OpenAIApi } from 'openai-edge';
 import { NextResponse } from 'next/server';
-import { ChatClass, ChatModel } from '../../../models/Chat';
 import { Message } from 'ai';
-import { createInitialChat, findChat, updateChat } from '../../../lib/chat-db';
+import { createInitialChatAction, findChatAction, updateChatAction } from '../../eve/_action';
 
 // Create an OpenAI API client (that's edge friendly!)
 const config = new Configuration({
@@ -32,25 +31,25 @@ export async function POST(req: Request) {
   let chatHistory: Message[]
   let chatId
 
-  const { chat: foundChatHistory } = await findChat(sessionId)
+  const chat = await findChatAction(sessionId, '/eve')
 
   //console.log('foundChatHistory: ', foundChatHistory)
 
-  if (foundChatHistory) {
-    chatHistory = foundChatHistory.messages
-    chatId = foundChatHistory._id
+  if (chat) {
+    chatHistory = chat.messages
+    chatId = chat._id
   } else {
-    const { newChatHistory } = await createInitialChat(userId, sessionId)
+    const newChatHistory = await createInitialChatAction({ userId, sessionId }, '/eve')
+    if (!newChatHistory) {
+      return NextResponse.json({ message: `Could not create or find chat` }, { status: 500 });
+
+    }
     chatHistory = newChatHistory.messages
     chatId = newChatHistory._id
   }
 
   //console.log('chatHistory: ', chatHistory)
   //console.log('chatId: ', chatId)
-
-  if (!chatHistory || !chatId) {
-    return NextResponse.json({ message: `Could not create or find chat` }, { status: 500 });
-  }
 
   if (message) {
     chatHistory.push({
@@ -96,9 +95,10 @@ export async function POST(req: Request) {
       content: messagetoSend
     })
 
-    const { updatedChat } = await updateChat(
+    await updateChatAction(
       chatId.toString(),
-      chatHistory
+      chatHistory,
+      '/eve'
     )
 
     try {
