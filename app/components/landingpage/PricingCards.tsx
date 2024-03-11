@@ -79,7 +79,7 @@ export function PricingCards({ activeSubscription, userId }: { activeSubscriptio
   };
 
   return (
-    <section className="relative overflow-hidden bg-vanilla pt-16 sm:pt-24">
+    <section className="relative overflow-hidden bg-vanilla pt-16 sm:pt-24 min-h-screen">
 
       <Container>
         <div className="mx-auto flex max-w-lg flex-col items-center sm:max-w-xl md:max-w-2xl lg:mx-0 lg:max-w-none">

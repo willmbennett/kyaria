@@ -1,9 +1,6 @@
 'use client'
-import React, { useState, useEffect, useMemo } from 'react';
-import { Button } from '../Button';
-import dynamic from 'next/dynamic';
-import ResumeDropdownMenu from '../ResumeDropdownMenu';
-import { ResumeClass } from '../../../models/Resume';
+import React, { useState, useEffect } from 'react';
+import { Button } from '../Button'
 import VideoChatComponent from './VideoChatComponent';
 // Assuming Button and VideoChatComponent are already defined/imported
 
@@ -42,31 +39,21 @@ const TimedAccessComponent: React.FC<TimedAccessComponentProps> = ({ activeSubsc
     }, []);
 
     return (
-        <>
-            {activeSubscription ? (
+        <div className='flex flex-col gap-3 w-full justify-center items-center'>
+            {offerExpired ?
                 <>
+                    <p>We're sorry but you ran out of time</p>
+                    <div>
+                        <Button href="/pricing">Subscribe to chat more</Button>
+                    </div>
+                </>
+                :
+                <>
+                    <p>Free time remaining: {countdown} seconds</p>
                     <VideoChatComponent userId={userId} />
                 </>
-            ) : (
-                <>
-                    {offerExpired ?
-                        <div className='flex flex-col gap-3 w-full justify-center items-center'>
-                            <p>We're sorry but you ran out of time</p>
-                            <div>
-                                <Button href="/pricing">Subscribe to chat more</Button>
-                            </div>
-                        </div>
-                        :
-                        <>
-                            <div className='flex w-full justify-end'>
-                                <p>Free time remaining: {countdown} seconds</p>
-                            </div>
-                            <VideoChatComponent userId={userId} />
-                        </>
-                    }
-                </>
-            )}
-        </>
+            }
+        </div>
     );
 };
 

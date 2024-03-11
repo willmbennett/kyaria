@@ -1,5 +1,5 @@
 'use client';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { Button } from '../Button';
 import useMediaDevices from '../../../lib/chatbot/use-media-devices';
 //import { useRecording } from '../../../lib/chatbot/use-media-recording';
@@ -8,7 +8,6 @@ import useMediaDevices from '../../../lib/chatbot/use-media-devices';
 import { ControlMenu } from './ControlMenu';
 import { useDIDApi } from '../../../lib/chatbot/use-d-id';
 //import { useSceneManagement } from '../../../lib/chatbot/use-soul-machines';
-import { ResumeClass } from '../../../models/Resume';
 import { useChatGPT } from '../../../lib/chatbot/use-chat-gpt';
 import { useRouter } from 'next/navigation';
 import styles from '../../eve/styles.module.css'
