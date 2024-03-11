@@ -9,7 +9,7 @@ export const ChatBotPopup = ({ userId, userName }: { userId: string, userName: s
     const [show, setShow] = useState(true)
     const router = useRouter()
 
-    if (path == '/eve') return;
+    if (path == '/eve') return <></>;
 
 
     const containerVariants = {
