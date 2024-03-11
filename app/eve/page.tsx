@@ -5,6 +5,7 @@ import { Metadata } from "next";
 import TimedAccessComponent from "../components/chatbot/VideoSubscriptionWrapper";
 import { getResumes } from "../../lib/resume-db";
 import { ResumeClass } from "../../models/Resume";
+import VideoChatComponent from "../components/chatbot/VideoChatComponent";
 
 const ProductDemo = dynamic(() => import('../components/chatbot/landingpage/ProductDemo'));
 const Process = dynamic(() => import('../components/chatbot/landingpage/Process'));
@@ -73,7 +74,11 @@ export default async function ChatbotPage() {
                 </p>
             </div>
             <div className="w-full">
-                <TimedAccessComponent activeSubscription={activeSubscription} userId={userId} />
+                {activeSubscription ? (
+                    <VideoChatComponent userId={userId} />
+                ) : (
+                    <TimedAccessComponent activeSubscription={activeSubscription} userId={userId} />
+                )}
             </div>
         </div>
     );

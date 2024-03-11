@@ -1,10 +1,7 @@
 'use client'
-import { Message } from "ai";
 import { ResumeClass } from "../../models/Resume";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useChat } from "ai/react";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
-import { ChatCompletionRequestMessage } from "openai-edge";
 
 interface useChatGPTProps {
     selectedResume?: ResumeClass;
