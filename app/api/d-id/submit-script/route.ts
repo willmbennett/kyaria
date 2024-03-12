@@ -33,6 +33,7 @@ export async function POST(request: Request) {
                         type: 'microsoft',
                         voice_id: 'en-US-JennyNeural'
                     },
+                    config: { fluent: true, pad_audio: 0.5 },
                     input: text,
                     ssml: 'true'
                 },
