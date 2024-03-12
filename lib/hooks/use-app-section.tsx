@@ -23,7 +23,7 @@ const useAppNavigation = (
 
     // Map the states to the corresponding pages
     const statePagesMap: { [key in ApplicationState]: string[] } = {
-        'Research': ['jobdescription', 'coverletter', 'resume', 'emails'],
+        'Research': ['jobdescription', 'coverletter', 'resume', 'emails', 'notes'],
         'Phone Screen': ['story', 'emails', 'experience'],
         'Interviewing': ['story', 'experience', 'emails'],
         'Post-Offer': ['emails'],
