@@ -39,7 +39,7 @@ const VideoChatComponent = ({ userId, session }: { userId: string, session: Sess
     } = useMediaDevices(outgoingVideo);
 
 
-    const { submitScript, errorMessage, connected, isStreaming } = useDIDApi({ incomingVideo, useChatBot, userId, session });
+    const { state, cleanup, submitScript, errorMessage, connected, isStreaming } = useDIDApi({ incomingVideo, useChatBot, userId, session });
 
     // Set up Soul Machines
     /*
@@ -74,6 +74,8 @@ const VideoChatComponent = ({ userId, session }: { userId: string, session: Sess
     return (
         <>
             <div className="flex flex-col gap-4 justify-center items-center w-full md:p-4">
+                <p>{JSON.stringify(state)}</p>
+                <button onClick={() => state.closePC && cleanup(state.closePC)}>Cleanup</button>
                 {errorMessage && <p className="text-red-500">{`Error: ${errorMessage}`}</p>}
                 <div className="flex flex-col md:flex-row justify-center items-center gap-4 w-full max-w-6xl mx-auto p-4">
                     <div className="aspect-square w-full md:w-1/2 flex justify-center items-center relative rounded-lg shadow-lg">

@@ -20,10 +20,12 @@ type BodyType = {
   userId: string
 }
 
+const logging = true
+
 export async function POST(req: Request) {
-  //console.log('Made it to [d-id-chat] api route')
+  if (logging) console.log('Made it to [d-id-chat] api route')
   const body: BodyType = await req.json();
-  //console.log('body:', body)
+  if (logging) console.log('body:', body)
   const { sessionId, streamId, message, userId }: BodyType = body
 
   if (!sessionId || !streamId || !userId) {
@@ -35,7 +37,7 @@ export async function POST(req: Request) {
 
   const chat = await findChatAction(sessionId, '/eve')
 
-  //console.log('foundChatHistory: ', foundChatHistory)
+  if (logging) console.log('foundChatHistory: ', chat)
 
   if (chat) {
     chatHistory = chat.messages
@@ -50,9 +52,9 @@ export async function POST(req: Request) {
     chatId = newChatHistory._id
   }
 
-  //console.log('chatHistory: ', chatHistory)
-  
-  //console.log('chatId: ', chatId)
+  if (logging) console.log('chatHistory: ', chatHistory)
+
+  if (logging) console.log('chatId: ', chatId)
 
   if (message) {
     chatHistory.push({
@@ -61,13 +63,13 @@ export async function POST(req: Request) {
       content: message
     })
 
-    //console.log('Added user message')
-    //console.log('chatHistory: ', chatHistory)
+    if (logging) console.log('Added user message')
+    if (logging) console.log('chatHistory: ', chatHistory)
   }
 
   const messagesToSend = chatHistory.map(m => ({ role: m.role, content: m.content } as ChatCompletionRequestMessage))
 
-  //console.log('messagesToSend: ', messagesToSend)
+  if (logging) console.log('messagesToSend: ', messagesToSend)
 
   let messagetoSend: string
   try {
@@ -84,7 +86,7 @@ export async function POST(req: Request) {
 
     const resData = await openAiRes.json();
     messagetoSend = resData.choices[0].message.content
-    //console.log('resData: ', resData.choices[0].message.content)
+    if (logging) console.log('resData: ', resData.choices[0].message.content)
 
   } catch (error: any) {
     console.error('Caught error in POST function:', error.message);
@@ -105,7 +107,7 @@ export async function POST(req: Request) {
     )
 
     try {
-      //console.log('Attempting to fetch with retries');
+      if (logging) console.log('Attempting to fetch with retries');
       const response = await fetchWithRetries(`https://api.d-id.com/talks/streams/${streamId}`, {
         method: 'POST',
         headers: {
@@ -129,14 +131,14 @@ export async function POST(req: Request) {
         }),
       });
 
-      //console.log('Fetch successful, parsing response');
+      if (logging) console.log('Fetch successful, parsing response');
       const data = await response.json();
       if (!response.ok) {
         console.error('Response not OK:', data);
         throw new Error(data.message || 'Failed to create session');
       }
 
-      //console.log('Successfully created session:', JSON.stringify(data));
+      if (logging) console.log('Successfully created session:', JSON.stringify(data));
       return NextResponse.json({ session: data }, { status: 200 });
     } catch (error: any) {
       console.error('Caught error in POST function:', error.message);
@@ -153,20 +155,20 @@ const maxRetryCount = 3;
 const maxDelaySec = 4;
 
 async function fetchWithRetries(url: string, options: RequestInit, retries = 1): Promise<Response> {
-  //console.log(`fetchWithRetries called, attempt: ${retries}, url: ${url}`);
+  if (logging) console.log(`fetchWithRetries called, attempt: ${retries}, url: ${url}`);
   try {
     const response = await fetch(url, options);
-    //console.log(`Fetch attempt ${retries} successful`);
+    if (logging) console.log(`Fetch attempt ${retries} successful`);
     return response;
   } catch (err) {
     console.error(`Fetch attempt ${retries} failed with error: ${err}`);
     if (retries <= maxRetryCount) {
       const delay = Math.min(Math.pow(2, retries) / 4 + Math.random(), maxDelaySec) * 1000;
-      //console.log(`Waiting ${delay}ms before retrying...`);
+      if (logging) console.log(`Waiting ${delay}ms before retrying...`);
 
       await new Promise((resolve) => setTimeout(resolve, delay));
 
-      //console.log(`Retrying fetch, attempt number: ${retries + 1}`);
+      if (logging) console.log(`Retrying fetch, attempt number: ${retries + 1}`);
       return fetchWithRetries(url, options, retries + 1);
     } else {
       console.error(`Max retries exceeded for URL: ${url}`);

@@ -13,13 +13,15 @@ export type SessionResponseType = {
     "ice_servers": IceServerType[]
 }
 
+export type ClosePCType = (pc?: RTCPeerConnection) => void
+
 export interface DIDApiState {
     isConnecting: boolean;
     isConnected: boolean;
     errorMessage: string | null;
     peerConnection: RTCPeerConnection | null
     sessionClientAnswer: RTCSessionDescriptionInit | null
-    closePC: ((pc?: RTCPeerConnection) => void) | null
+    closePC: ClosePCType | null
     statsIntervalId: NodeJS.Timer | null;
     streaming: boolean;
 }
@@ -179,7 +181,7 @@ export const handleListenerCreation = (
 
         let lastBytesReceived = 0; // Initialize lastBytesReceived for comparison
         let videoIsPlaying = false; // Local state to track video playing status
-        const statsInterval = 100; // Interval in milliseconds for checking stats
+        const statsInterval = 500; // Interval in milliseconds for checking stats
 
         // Create a new interval to check track stats
         const newStatsIntervalId = setInterval(async () => {
@@ -334,7 +336,7 @@ export const createAndSubmitSDPAnswer = async (peerConnection: RTCPeerConnection
     return { sessionClientAnswer }
 };
 
-const terminateSession = async (session: SessionResponseType) => {
+export const terminateSession = async (session: SessionResponseType) => {
     try {
         const response = await fetch('/api/d-id/destroy-session', {
             method: 'DELETE',
@@ -395,8 +397,8 @@ interface HandleScriptSubmissionProps {
 export const handleScriptSubmission = async ({ session, message, userId }: HandleScriptSubmissionProps) => {
     if (logging) console.log('Made it to Submit Script')
     const dataToSubmit = {
-        streamId: session?.id,
-        sessionId: session?.session_id,
+        streamId: session.id,
+        sessionId: session.session_id,
         message,
         userId
     }
