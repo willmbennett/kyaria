@@ -2,6 +2,7 @@
 import { ResumeClass } from "../../models/Resume";
 import { useCallback, useEffect, useRef, useState } from "react";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import 'regenerator-runtime/runtime'
 
 interface useChatGPTProps {
     selectedResume?: ResumeClass;
@@ -40,7 +41,7 @@ export const useChatGPT = ({ submitScript, connected, isStreaming, useChatBot }:
                     setMessage(null)
                 }
             } else {
-              //console.log('message: ', message)
+                //console.log('message: ', message)
             }
         }
     }, [message, useChatBot, connected, sentInitialMessage])

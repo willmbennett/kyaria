@@ -11,8 +11,9 @@ import { useDIDApi } from '../../../lib/chatbot/use-d-id';
 import { useChatGPT } from '../../../lib/chatbot/use-chat-gpt';
 import { useRouter } from 'next/navigation';
 import styles from '../../eve/styles.module.css'
+import { SessionResponseType } from '../../eve/d-id-helper';
 
-const VideoChatComponent = ({ userId }: { userId: string }) => {
+const VideoChatComponent = ({ userId, session }: { userId: string, session: SessionResponseType }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const outgoingVideoRef = useRef<HTMLVideoElement>(null);
     //const previewRef = useRef<HTMLVideoElement>(null);
@@ -38,7 +39,7 @@ const VideoChatComponent = ({ userId }: { userId: string }) => {
     } = useMediaDevices(outgoingVideo);
 
 
-    const { submitScript, errorMessage, connected, isStreaming } = useDIDApi({ incomingVideo, useChatBot, userId });
+    const { submitScript, errorMessage, connected, isStreaming } = useDIDApi({ incomingVideo, useChatBot, userId, session });
 
     // Set up Soul Machines
     /*

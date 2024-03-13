@@ -72,7 +72,7 @@ export function Header({ userId }: { userId: string }) {
   const desktopMenuLinks = userId ? signedInLinks : links
 
   const signedInMenuLinks = [
-    { label: 'Profile', href: `/profile/${userId}` },
+    { label: 'Profile', href: userId ? `/profile/${userId}` : '/' },
     { label: 'Manage Subscription', href: `https://billing.stripe.com/p/login/fZedQQbuK5Ke2Q06oo` },
   ]
 

@@ -6,6 +6,7 @@ import TimedAccessComponent from "../components/chatbot/VideoSubscriptionWrapper
 import { getResumes } from "../../lib/resume-db";
 import { ResumeClass } from "../../models/Resume";
 import VideoChatComponent from "../components/chatbot/VideoChatComponent";
+import { createSession } from "./d-id-helper";
 
 const ProductDemo = dynamic(() => import('../components/chatbot/landingpage/ProductDemo'));
 const Process = dynamic(() => import('../components/chatbot/landingpage/Process'));
@@ -52,16 +53,11 @@ export default async function ChatbotPage() {
         );
     }
 
-    /*
-    const { blobs } = await list({
-        prefix: 'eve-idle-2.mov',
-        limit: 1,
-    })
+    const { session } = await createSession()
 
-    const { url } = blobs[0]
-
-  //console.log(url)
-    */
+    if (!session) {
+        return <p>I'm sorry Eve is having trouble waking up</p>
+    }
 
     return (
         <div className="min-h-screen flex flex-col w-full py-10">
@@ -75,9 +71,9 @@ export default async function ChatbotPage() {
             </div>
             <div className="w-full">
                 {activeSubscription ? (
-                    <VideoChatComponent userId={userId} />
+                    <VideoChatComponent userId={userId} session={session} />
                 ) : (
-                    <TimedAccessComponent activeSubscription={activeSubscription} userId={userId} />
+                    <TimedAccessComponent activeSubscription={activeSubscription} userId={userId} session={session} />
                 )}
             </div>
         </div>

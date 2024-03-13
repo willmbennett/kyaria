@@ -2,14 +2,16 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '../Button'
 import VideoChatComponent from './VideoChatComponent';
+import { SessionResponseType } from '../../eve/d-id-helper';
 // Assuming Button and VideoChatComponent are already defined/imported
 
 interface TimedAccessComponentProps {
     activeSubscription: boolean;
     userId: string;
+    session: SessionResponseType;
 }
 
-const TimedAccessComponent: React.FC<TimedAccessComponentProps> = ({ activeSubscription, userId }) => {
+const TimedAccessComponent: React.FC<TimedAccessComponentProps> = ({ activeSubscription, userId, session }) => {
     const [offerExpired, setOfferExpired] = useState(false);
     const [countdown, setCountdown] = useState(60); // Countdown from 60 seconds
 
@@ -50,7 +52,7 @@ const TimedAccessComponent: React.FC<TimedAccessComponentProps> = ({ activeSubsc
                 :
                 <>
                     <p>Free time remaining: {countdown} seconds</p>
-                    <VideoChatComponent userId={userId} />
+                    <VideoChatComponent userId={userId} session={session} />
                 </>
             }
         </div>
