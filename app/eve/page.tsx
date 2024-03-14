@@ -1,12 +1,8 @@
 import dynamic from "next/dynamic";
+import { Metadata } from "next";
 import { checkSubscription } from "../../lib/hooks/check-subscription";
 import { ChatBotHero } from "../components/chatbot/landingpage/ChatBotHero";
-import { Metadata } from "next";
-import TimedAccessComponent from "../components/chatbot/VideoSubscriptionWrapper";
-import { getResumes } from "../../lib/resume-db";
-import { ResumeClass } from "../../models/Resume";
-import VideoChatComponent from "../components/chatbot/VideoChatComponent";
-import { createSession } from "./d-id-helper";
+import { ChatBotMenu } from "../components/chatbot/ChatBotMenu";
 
 const ProductDemo = dynamic(() => import('../components/chatbot/landingpage/ProductDemo'));
 const Process = dynamic(() => import('../components/chatbot/landingpage/Process'));
@@ -33,14 +29,10 @@ export const metadata: Metadata = {
     },
 };
 
-type getResumesType = {
-    resumes: ResumeClass[]
-}
-
 //import { list } from '@vercel/blob'
 
-export default async function ChatbotPage() {
-    const { userId, activeSubscription } = await checkSubscription()
+export default async function ChatBotHomePage() {
+    const { userId } = await checkSubscription()
 
 
     if (!userId) {
@@ -52,6 +44,7 @@ export default async function ChatbotPage() {
             </>
         );
     }
+
     return (
         <div className="min-h-screen flex flex-col w-full py-10">
             <div className="w-full text-center p-4">
@@ -61,13 +54,7 @@ export default async function ChatbotPage() {
                 <p className="text-lg text-gray-600">
                     Get personalized career advice and grow your professional skills with our AI-powered coach.
                 </p>
-            </div>
-            <div className="w-full">
-                {activeSubscription ? (
-                    <VideoChatComponent userId={userId} />
-                ) : (
-                    <TimedAccessComponent activeSubscription={activeSubscription} userId={userId} />
-                )}
+                <ChatBotMenu userId={userId} />
             </div>
         </div>
     );

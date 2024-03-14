@@ -20,6 +20,8 @@ export const checkSubscription = async () => {
         "65cd21c5e03b4c037573216d"
     ]
 
+    const admin = userIdList.includes(userId)
+
     const activeSubscription = userIdList.includes(userId) || subscription?.status == 'active'
-    return { userId, activeSubscription, userName, email }
+    return { userId, activeSubscription, userName, email, admin }
 }

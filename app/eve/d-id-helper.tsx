@@ -45,7 +45,7 @@ export const connect = async (incomingVideo: HTMLVideoElement, setState: Dispatc
     const { streamId, offer, iceServers, sessionId } = await createSession()
 
     if (!streamId) {
-        console.log('Unable to create session')
+        if (logging) console.log('Unable to create session')
         return { sessionId, streamId, peerConnection: null, closePC: null }
     }
 
@@ -69,7 +69,7 @@ export const connect = async (incomingVideo: HTMLVideoElement, setState: Dispatc
 // Create a D-ID session
 export const createSession = async (): Promise<SessionResponseType> => {
     try {
-        console.log('Creating session...'); // Initial logging to indicate process start
+        if (logging) console.log('Creating session...'); // Initial logging to indicate process start
 
         const response = await fetch('/api/d-id/create-session', {
             method: 'POST',
@@ -103,7 +103,7 @@ export const createSession = async (): Promise<SessionResponseType> => {
             sessionId: session_id, // Adjust the name if necessary
         };
 
-        console.log('Session created:', sessionResponse); // Log the successful response
+        if (logging) console.log('Session created:', sessionResponse); // Log the successful response
         return sessionResponse;
 
     } catch (err: unknown) {
@@ -292,7 +292,7 @@ interface HandleSDPAnswerSubmissionProps {
 
 export const handleSDPAnswerSubmission = async ({ sessionClientAnswer, streamId, sessionId }: HandleSDPAnswerSubmissionProps) => {
     try {
-        console.log('About to [handleSDPAnswerSubmission]', { sessionClientAnswer, streamId, sessionId })
+        if (logging) console.log('About to [handleSDPAnswerSubmission]', { sessionClientAnswer, streamId, sessionId })
         const response = await fetch('/api/d-id/submit-sdp', {
             method: 'POST',
             headers: {
@@ -352,11 +352,11 @@ export const setupPeerConnection = async ({
 
     // Generate the SDP answer by calling the createAnswer() method on the peer connection.
     const sessionClientAnswer = await peerConnection.createAnswer();
-    console.log('Successfully created answer. Answer:', JSON.stringify(sessionClientAnswer));
+    if (logging) console.log('Successfully created answer. Answer:', JSON.stringify(sessionClientAnswer));
 
     // Set the generated SDP answer as the local description of the peer connection using the setLocalDescription() method.
     await peerConnection.setLocalDescription(sessionClientAnswer);
-    console.log('Successfully set local description. Current signaling state:', peerConnection.signalingState);
+    if (logging) console.log('Successfully set local description. Current signaling state:', peerConnection.signalingState);
 
     // Once you have obtained the SDP answer as a string, you can send it back to the server using the /talks/streams/{session_id}/sdp endpoint.
     await handleSDPAnswerSubmission({ streamId, sessionId, sessionClientAnswer })
@@ -418,19 +418,23 @@ export const handleDisconnect = async ({ closePC, incomingVideo, newSessionId, n
 }
 
 interface HandleScriptSubmissionProps {
-    sessionId: string,
-    streamId: string,
+    sessionId: string | null;
+    streamId: string | null;
     message: string | null;
-    userId: string
+    userId: string;
+    useChatBot: boolean;
+    chatId: string;
 }
 
-export const handleScriptSubmission = async ({ sessionId, streamId, message, userId }: HandleScriptSubmissionProps) => {
+export const handleScriptSubmission = async ({ sessionId, streamId, message, userId, useChatBot, chatId }: HandleScriptSubmissionProps) => {
     if (logging) console.log('Made it to Submit Script')
     const dataToSubmit = {
         streamId,
         sessionId,
         message,
-        userId
+        userId,
+        useChatBot,
+        chatId
     }
 
     if (logging) console.log('dataToSubmit: ', dataToSubmit)

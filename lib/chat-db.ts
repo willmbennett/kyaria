@@ -2,7 +2,7 @@ import { Message } from "ai";
 import { ResumeModel } from "../models/Resume";
 import { ChatClass, ChatModel } from "../models/Chat";
 import connectDB from "./connect-db";
-import { stringToObjectId } from "./utils";
+import { castToString, stringToObjectId } from "./utils";
 
 const createPersonalizedGreeting = (name?: string) => {
     const greetings = ["Hi", "Hey", "Hello"];
@@ -22,11 +22,10 @@ const createPersonalizedGreeting = (name?: string) => {
     return { personalizedGreeting }
 }
 
-export const createInitialChat = async (userId: string, sessionId: string) => {
+export const createInitialChat = async (userId: string) => {
     try {
         await connectDB();
 
-        //console.log(messages)
         const resume = await ResumeModel.findOne({
             userId,
         })
@@ -54,18 +53,55 @@ export const createInitialChat = async (userId: string, sessionId: string) => {
 
         const newChatData: Partial<ChatClass> = {
             userId,
-            sessionId,
             messages
         }
-        //console.log('Creating new chat with data: ', newChatData)
-        const newChatHistory = await ChatModel.create(newChatData);
-        //console.log('newChatHistory: ', newChatHistory)
+        console.log('Creating new chat with data: ', newChatData)
+        const newChat = await ChatModel.create(newChatData);
+        console.log('newChat: ', newChat)
+
+        if (newChat) {
+            //console.log('New post created successfully:', newPost);
+
+            const chatId = castToString(newChat._id);
+            //console.log('Transformed postId:', postId); // Log transformed postId
+
+            return { chatId };
+        } else {
+            console.error('Failed to create chat:'); // Log failure case with data
+            return { error: "Chat not found" };
+        }
 
         return { newChatHistory }
+    } catch (error: any) {
+        console.log(error.message)
+        return { error };
+    }
+}
+
+export async function getChat(id: string) {
+    try {
+        await connectDB();
+
+        if (!id) {
+            return { error: "chat not found" };
+        }
+
+        //console.log(id)
+        const chat = await ChatModel.findById(id)
+            .exec();
+
+        if (chat) {
+            return {
+                chat,
+            };
+        } else {
+            return { error: "Job not found" };
+        }
     } catch (error) {
         return { error };
     }
 }
+
 
 export async function findChat(sessionId: string) {
     try {
@@ -91,8 +127,6 @@ export async function findChat(sessionId: string) {
         return { error };
     }
 }
-
-
 
 export async function updateChat(id: string, chatHistory: Message[]) {
     try {

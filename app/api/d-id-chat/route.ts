@@ -1,7 +1,7 @@
 import { Configuration, ChatCompletionRequestMessage, OpenAIApi } from 'openai-edge';
 import { NextResponse } from 'next/server';
 import { Message } from 'ai';
-import { createInitialChatAction, findChatAction, updateChatAction } from '../../eve/_action';
+import { createInitialChatAction, getChatAction, updateChatAction } from '../../eve/_action';
 
 // Create an OpenAI API client (that's edge friendly!)
 const config = new Configuration({
@@ -17,7 +17,9 @@ type BodyType = {
   sessionId: string,
   streamId: string,
   message: string | null,
-  userId: string
+  userId: string,
+  useChatBot: boolean,
+  chatId: string
 }
 
 const logging = false
@@ -26,35 +28,22 @@ export async function POST(req: Request) {
   if (logging) console.log('Made it to [d-id-chat] api route')
   const body: BodyType = await req.json();
   if (logging) console.log('body:', body)
-  const { sessionId, streamId, message, userId }: BodyType = body
+  const { sessionId, streamId, message, userId, useChatBot, chatId }: BodyType = body
 
-  if (!sessionId || !streamId || !userId) {
+  if (useChatBot && (!sessionId || !streamId || !userId)) {
     return NextResponse.json({ message: `Bad data: ${body}` }, { status: 500 });
   }
 
-  let chatHistory: Message[]
-  let chatId
+  const chat = await getChatAction(chatId, '/eve')
+  if (logging) console.log('found chat: ', chat)
+  if (!chat) {
+    return NextResponse.json({ message: `Could not create or find chat` }, { status: 500 });
 
-  const chat = await findChatAction(sessionId, '/eve')
-
-  if (logging) console.log('foundChatHistory: ', chat)
-
-  if (chat) {
-    chatHistory = chat.messages
-    chatId = chat._id
-  } else {
-    const newChatHistory = await createInitialChatAction({ userId, sessionId }, '/eve')
-    if (!newChatHistory) {
-      return NextResponse.json({ message: `Could not create or find chat` }, { status: 500 });
-
-    }
-    chatHistory = newChatHistory.messages
-    chatId = newChatHistory._id
   }
 
-  if (logging) console.log('chatHistory: ', chatHistory)
+  const chatHistory: Message[] = chat.messages
 
-  if (logging) console.log('chatId: ', chatId)
+  if (logging) console.log('chatHistory: ', chatHistory)
 
   if (message) {
     chatHistory.push({
@@ -106,49 +95,53 @@ export async function POST(req: Request) {
       '/eve'
     )
 
-    try {
-      const body = {
-        script: {
-          type: 'text',
-          subtitles: 'false',
-          provider: {
-            type: 'microsoft',
-            voice_id: 'en-US-JennyNeural'
+    if (useChatBot) {
+      try {
+        const body = {
+          script: {
+            type: 'text',
+            subtitles: 'false',
+            provider: {
+              type: 'microsoft',
+              voice_id: 'en-US-JennyNeural'
+            },
+            input: messageToSend,
+            ssml: 'false'
           },
-          input: messageToSend,
-          ssml: 'false'
-        },
-        config: { fluent: 'true', pad_audio: '0.5' },
-        audio_optimization: '2',
-        session_id: sessionId
-      }
-      if (logging) {
-        console.log('Attempting to fetch with retries');
-        console.log('Body to send to D-ID')
-        console.log(body)
-      }
+          config: { fluent: 'true', pad_audio: '0.5' },
+          audio_optimization: '2',
+          session_id: sessionId
+        }
+        if (logging) {
+          console.log('Attempting to fetch with retries');
+          console.log('Body to send to D-ID')
+          console.log(body)
+        }
 
-      const response = await fetchWithRetries(`https://api.d-id.com/talks/streams/${streamId}`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Basic ${process.env.D_ID_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      });
+        const response = await fetchWithRetries(`https://api.d-id.com/talks/streams/${streamId}`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Basic ${process.env.D_ID_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        });
 
-      if (logging) console.log('Fetch successful, parsing response');
-      const data = await response.json();
-      if (!response.ok) {
-        console.error('Response not OK:', data);
-        throw new Error(data.message || 'Failed to create session');
+        if (logging) console.log('Fetch successful, parsing response');
+        const data = await response.json();
+        if (!response.ok) {
+          console.error('Response not OK:', data);
+          throw new Error(data.message || 'Failed to create session');
+        }
+
+        if (logging) console.log('Successfully created session:', JSON.stringify(data));
+        return NextResponse.json({ session: data }, { status: 200 });
+      } catch (error: any) {
+        console.error('Caught error in POST function:', error.message);
+        return NextResponse.json({ message: error.message }, { status: 500 });
       }
-
-      if (logging) console.log('Successfully created session:', JSON.stringify(data));
-      return NextResponse.json({ session: data }, { status: 200 });
-    } catch (error: any) {
-      console.error('Caught error in POST function:', error.message);
-      return NextResponse.json({ message: error.message }, { status: 500 });
+    } else {
+      return NextResponse.json({ message: `Updated chat history without chatbot successfully` }, { status: 200 });
     }
   } else {
     return NextResponse.json({ message: 'resData is empty' }, { status: 500 });

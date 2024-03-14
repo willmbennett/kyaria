@@ -1,4 +1,5 @@
 'use client'
+import { Message } from "ai";
 import { ResumeClass } from "../../models/Resume";
 import { useCallback, useEffect, useRef, useState } from "react";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
@@ -9,14 +10,17 @@ interface useChatGPTProps {
     submitScript: (message: string | null) => Promise<void>
     connected: boolean;
     isStreaming: boolean;
-    useChatBot: boolean
+    useChatBot: boolean;
+    startChat: boolean;
+    messages: Message[];
 }
 
-export const useChatGPT = ({ submitScript, connected, isStreaming, useChatBot }: useChatGPTProps) => {
+const logging = false
+
+export const useChatGPT = ({ submitScript, connected, isStreaming, useChatBot, startChat, messages }: useChatGPTProps) => {
     const [message, setMessage] = useState<string | null>(null)
     const submissionTimeoutRef = useRef<NodeJS.Timeout>(); // Handle figuring out when the user finishes speaking
-    const [sentInitialMessage, setSentinitalMessage] = useState(false)
-    //console.log('initialMessageWithCreatedAt', initialMessageWithCreatedAt)
+    const sentInitialMessage = messages.length > 2
 
     const {
         transcript,
@@ -25,45 +29,49 @@ export const useChatGPT = ({ submitScript, connected, isStreaming, useChatBot }:
         browserSupportsSpeechRecognition
     } = useSpeechRecognition();
 
+    useEffect(() => {
+        if (!browserSupportsSpeechRecognition) {
+            throw new Error("Your browser doesn't support speech recognition")
+        }
+    }, [browserSupportsSpeechRecognition]);
+
     const submitMessages = useCallback(async () => {
         await submitScript(message);
     }, [message, submitScript])
 
     useEffect(() => {
-        if (connected) {
-            if (useChatBot) {
-                if (!sentInitialMessage || message) {
-                    submitMessages()
-                    setSentinitalMessage(true)
-                }
-                else if (message) {
-                    submitMessages()
-                    setMessage(null)
-                }
-            } else {
-                //console.log('message: ', message)
+        if (logging) console.log(`useEffect triggered. Conditions: { connected: ${connected}, useChatBot: ${useChatBot}, sentInitialMessage: ${sentInitialMessage}, message: ${message} }`);
+
+        if (connected || (!useChatBot && startChat)) {
+            if (logging) console.log('Condition passed: either connected or not using ChatBot.');
+
+            if (!sentInitialMessage || message) {
+                if (logging) console.log('Submitting messages because either the initial message has not been sent or there is a new message.');
+                submitMessages();
+                setMessage(null);
             }
         }
-    }, [message, useChatBot, connected, sentInitialMessage])
+    }, [message, useChatBot, startChat, connected, sentInitialMessage]);
+
 
     useEffect(() => {
-        //console.log(`Effect running: listening = ${listening}, isStreaming = ${isStreaming}`);
+        if (logging) console.log(`Effect running: listening = ${listening}, isStreaming = ${isStreaming}`);
 
-        if (!listening && !isStreaming && connected && sentInitialMessage) {
-            //console.log('Starting speech recognition...');
+        if (!listening && !isStreaming && (connected || (!useChatBot && startChat)) && sentInitialMessage) {
+            if (logging) console.log('Starting speech recognition...');
             SpeechRecognition.startListening({ continuous: true });
         } else if (isStreaming) {
-            //console.log('Aborting speech recognition...');
+            if (logging) console.log('Aborting speech recognition...');
             SpeechRecognition.abortListening();
         }
 
         return () => {
             if (listening) {
-                //console.log('Cleaning up: aborting speech recognition...');
+                if (logging) console.log('Cleaning up: aborting speech recognition...');
                 SpeechRecognition.abortListening();
             }
         };
-    }, [listening, isStreaming, connected, sentInitialMessage]); // Dependency array
+    }, [listening, isStreaming, connected, sentInitialMessage, useChatBot, startChat]); // Dependency array
 
 
     useEffect(() => {
@@ -81,5 +89,5 @@ export const useChatGPT = ({ submitScript, connected, isStreaming, useChatBot }:
         return () => clearTimeout(submissionTimeoutRef.current);
     }, [transcript]);
 
-    return { browserSupportsSpeechRecognition, transcript, listening }
+    return { transcript, listening }
 }

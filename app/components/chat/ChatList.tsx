@@ -13,11 +13,11 @@ export function ChatList({ messages }: ChatList) {
     }
 
     return (
-        <div className="relative mx-auto max-w-2xl px-4">
+        <div className="relative">
             {messages.map((message, index) => (<div key={index}>
-                <div className={message.role == 'assistant' ? "" : "text-right"}>
+                <div className={message.role == 'assistant' ? "text-left" : "text-right"}>
                     <p className='my-1 font-bold'>
-                        {message.role == 'assistant' ? "Interviewer" : "You"}
+                        {message.role == 'assistant' ? "Eve" : "You"}
                     </p>
                 </div>
                 <div className={`p-3 my-2 rounded-xl boarder-2 ${message.role == 'assistant' ? "bg-gray-100" : "bg-slate-200 text-right"}`}>

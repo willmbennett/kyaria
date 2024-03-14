@@ -1,13 +1,18 @@
 import { useState, useEffect, useCallback } from 'react';
-import { ClosePCType, DIDApiState, SessionResponseType, connect, createSession, handleDisconnect, handleScriptSubmission, setupPeerConnection } from '../../app/eve/d-id-helper';
+import { ClosePCType, DIDApiState, connect, handleDisconnect, handleScriptSubmission } from '../../app/eve/d-id-helper';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 interface UseDIDApiProps {
     incomingVideo: HTMLVideoElement | null;
     useChatBot: boolean;
     userId: string;
+    chatId: string;
+    router: AppRouterInstance
 }
 
-export const useDIDApi = ({ incomingVideo, useChatBot, userId }: UseDIDApiProps) => {
+const logging = false
+
+export const useDIDApi = ({ incomingVideo, useChatBot, userId, chatId, router }: UseDIDApiProps) => {
     const [state, setState] = useState<DIDApiState>({
         isConnecting: false,
         isConnected: false,
@@ -45,20 +50,23 @@ export const useDIDApi = ({ incomingVideo, useChatBot, userId }: UseDIDApiProps)
 
 
     const submitScript = useCallback(async (message: string | null) => {
-        if (state.isConnected && state.sessionId && state.streamId)
+        if ((state.isConnected && state.sessionId && state.streamId) || !useChatBot)
             await handleScriptSubmission({
                 sessionId: state.sessionId,
                 streamId: state.streamId,
                 message,
-                userId
+                userId,
+                useChatBot,
+                chatId
             })
-    }, [state.sessionId, state.isConnected, userId]);
+        router.refresh()
+    }, [state.sessionId, state.isConnected, userId, useChatBot]);
 
 
     const cleanup = useCallback(async ({ closePC, newSessionId, newStreamId }: { closePC: ClosePCType, newSessionId: string, newStreamId: string }) => {
-        console.log('At [disconnect] call, incomingVideo: ', incomingVideo)
-        console.log('At [disconnect] call, newSessionId: ', newSessionId)
-        console.log('At [disconnect] call, newStreamId: ', newStreamId)
+        if (logging) console.log('At [disconnect] call, incomingVideo: ', incomingVideo)
+        if (logging) console.log('At [disconnect] call, newSessionId: ', newSessionId)
+        if (logging) console.log('At [disconnect] call, newStreamId: ', newStreamId)
         await handleDisconnect({ closePC, incomingVideo, newSessionId, newStreamId });
         if (logging) console.log('Disconnected successfully.');
     }, [incomingVideo])
@@ -125,7 +133,7 @@ export const useDIDApi = ({ incomingVideo, useChatBot, userId }: UseDIDApiProps)
                 })();
             }
         };
-    }, [incomingVideo]);
+    }, [incomingVideo, useChatBot]);
 
     return { state, connect, cleanup, errorMessage: state.errorMessage, submitScript, connected: state.isConnected, isStreaming: state.streaming };
 }
