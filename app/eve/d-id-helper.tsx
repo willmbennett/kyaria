@@ -1,4 +1,5 @@
-import { SetStateAction } from "react"
+'use client'
+import { Dispatch, SetStateAction } from "react"
 
 type IceServerType = {
     "urls": string | string[]
@@ -7,10 +8,18 @@ type IceServerType = {
 }
 
 export type SessionResponseType = {
-    "id": string,
-    "session_id": string,
-    "offer": RTCSessionDescriptionInit,
-    "ice_servers": IceServerType[]
+    streamId: string,
+    sessionId: string,
+    offer: RTCSessionDescriptionInit,
+    iceServers: IceServerType[]
+}
+
+export type SessionApiResponseType = {
+    id?: string;
+    session_id?: string;
+    offer?: RTCSessionDescriptionInit;
+    ice_servers?: IceServerType[];
+    message?: string;
 }
 
 export type ClosePCType = (pc?: RTCPeerConnection) => void
@@ -19,103 +28,114 @@ export interface DIDApiState {
     isConnecting: boolean;
     isConnected: boolean;
     errorMessage: string | null;
-    peerConnection: RTCPeerConnection | null
-    sessionClientAnswer: RTCSessionDescriptionInit | null
+    sessionId: string | null;
+    streamId: string | null;
+    peerConnection: RTCPeerConnection | null;
     closePC: ClosePCType | null
-    statsIntervalId: NodeJS.Timer | null;
     streaming: boolean;
 }
 
-const logging = true
+const logging = false
 
-const maxRetryCount = 3;
-const maxDelaySec = 4;
+// Function to initialize the peer connection and start the stream
+export const connect = async (incomingVideo: HTMLVideoElement, setState: Dispatch<SetStateAction<DIDApiState>>) => {
+    // Connect to D-ID
+    // Create a new session
+    if (logging) console.log('About to create session:');
+    const { streamId, offer, iceServers, sessionId } = await createSession()
 
-async function fetchWithRetries(url: string, options: RequestInit, retries = 1): Promise<Response> {
-    //console.log(`fetchWithRetries called, attempt: ${retries}, url: ${url}`);
-    try {
-        const response = await fetch(url, options);
-        //console.log(`Fetch attempt ${retries} successful`);
-        return response;
-    } catch (err) {
-        console.error(`Fetch attempt ${retries} failed with error: ${err}`);
-        if (retries <= maxRetryCount) {
-            const delay = Math.min(Math.pow(2, retries) / 4 + Math.random(), maxDelaySec) * 1000;
-            //console.log(`Waiting ${delay}ms before retrying...`);
-
-            await new Promise((resolve) => setTimeout(resolve, delay));
-
-            //console.log(`Retrying fetch, attempt number: ${retries + 1}`);
-            return fetchWithRetries(url, options, retries + 1);
-        } else {
-            console.error(`Max retries exceeded for URL: ${url}`);
-            throw new Error(`Max retries exceeded. error: ${err}`);
-        }
+    if (!streamId) {
+        console.log('Unable to create session')
+        return { sessionId, streamId, peerConnection: null, closePC: null }
     }
+
+    // Setup a peer connection
+    if (logging) console.log('Setting up PeerConnection with session:', { streamId, offer, iceServers, sessionId });
+    const {
+        peerConnection,
+        closePC
+    } = await setupPeerConnection({
+        streamId,
+        offer,
+        iceServers,
+        sessionId,
+        incomingVideo, setState
+    });
+    if (logging) console.log('PeerConnection setup complete:', peerConnection);
+
+    return { sessionId, streamId, peerConnection, closePC }
 }
 
-
 // Create a D-ID session
-export const createSession = async () => {
-    /*
-    const response = await fetch('/api/d-id/create-session', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ source_url: 'https://res.cloudinary.com/kyaria/image/upload/v1709423279/eve.png' }),
-    });
-
-    if (!response.ok) {
-        throw new Error('Failed to create session');
-    }
-
-    const { session }: { session: SessionResponseType } = await response.json();
-    return { session };
-    */
-
+export const createSession = async (): Promise<SessionResponseType> => {
     try {
-        //console.log('Attempting to fetch with retries');
-        const response = await fetchWithRetries('https://api.d-id.com/talks/streams', {
+        console.log('Creating session...'); // Initial logging to indicate process start
+
+        const response = await fetch('/api/d-id/create-session', {
             method: 'POST',
             headers: {
-                Authorization: `Basic ${process.env.D_ID_API_KEY}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ source_url: 'https://res.cloudinary.com/kyaria/image/upload/v1709423279/eve.png' }),
         });
 
-        //console.log('Fetch successful, parsing response');
-        const data = await response.json();
+        // Log raw response if not OK
         if (!response.ok) {
-            console.error('Response not OK:', data);
-            throw new Error(data.message || 'Failed to create session');
+            const errorBody = await response.text(); // Try to read body as text to log it
+            console.error(`Failed to create session. Status: ${response.status}, Body: ${errorBody}`);
+            throw new Error(`Failed to create session. Status: ${response.status}`);
         }
 
-        const session = data as SessionResponseType
+        // Parse the response body and destructuring it
+        const { id, offer, ice_servers, session_id }: SessionApiResponseType = await response.json();
 
-        //console.log('Successfully created session:', JSON.stringify(data));
-        return { session }
-    } catch (error: any) {
-        console.error('Caught error in POST function:', error.message);
-        return { session: null }
+        // Construct the SessionResponseType object with proper field names if needed
+        if (!id || !offer || !ice_servers || !session_id) {
+            const errorMessage = 'Session Information not returned'
+            console.log('Error: ', errorMessage)
+            throw new Error(errorMessage)
+        }
+
+        const sessionResponse: SessionResponseType = {
+            streamId: id, // Adjust the name if necessary
+            offer,
+            iceServers: ice_servers, // Adjust the name if necessary
+            sessionId: session_id, // Adjust the name if necessary
+        };
+
+        console.log('Session created:', sessionResponse); // Log the successful response
+        return sessionResponse;
+
+    } catch (err: unknown) {
+        if (err instanceof Error) {
+            console.error('Error with creating session:', err.message);
+            throw new Error(`Error with creating session: ${err.message}`);
+        } else {
+            console.error('Unknown error with creating session:', err);
+            throw new Error('Unknown error with creating session');
+        }
     }
 };
 
+
 interface handleListenerCreationProps {
-    session: SessionResponseType,
+    streamId: string,
+    sessionId: string,
     peerConnection: RTCPeerConnection,
     setState: (value: SetStateAction<DIDApiState>) => void
-    videoElement: HTMLVideoElement | null
+    incomingVideo: HTMLVideoElement | null
 }
 
-export const handleListenerCreation = (
-    {
-        session,
-        peerConnection,
-        setState,
-        videoElement
-    }: handleListenerCreationProps) => {
+// Peer connection Section
+
+// Listener creation
+export const handleListenerCreation = ({
+    streamId,
+    sessionId,
+    peerConnection,
+    setState,
+    incomingVideo
+}: handleListenerCreationProps) => {
 
     // Define event handler functions here
     const onIceGatheringStateChange = () => {
@@ -124,51 +144,35 @@ export const handleListenerCreation = (
 
     const onConnectionStateChange = () => {
         if (logging) console.log("Connection State Change:", peerConnection?.connectionState);
-        if (peerConnection?.connectionState === 'connected') {
-            setState(prevState => ({ ...prevState, isConnected: true }));
-        }
     };
 
-    const onIceCandidate = async (event: RTCPeerConnectionIceEvent) => {
-        if (logging) console.log('ICE Candidate Event Fired', event); // Log when the event is fired
+    const onIceCandidate = (event: RTCPeerConnectionIceEvent) => {
+        if (logging) console.log('ICE Candidate Event Fired'); // Log when the event is fired
         if (event.candidate) {
-            if (logging) console.log('Submitting ICE Candidate:', event.candidate); // Log the candidate being submitted
             try {
                 const candidate = event.candidate.toJSON();
-                if (logging) console.log('ICE Candidate JSON:', candidate); // Log the JSON representation of the candidate
-
                 const IceBody = {
-                    streamId: session.id, // Ensure session is correctly referenced
+                    streamId,
                     candidate: candidate.candidate,
                     sdpMid: candidate.sdpMid,
                     sdpMLineIndex: candidate.sdpMLineIndex,
-                    session_id: session.session_id,
+                    session_id: sessionId,
                 }
 
                 if (logging) console.log('IceBody: ', IceBody)
-                const response = await fetch('/api/d-id/submit-ice', {
+                fetch('/api/d-id/submit-ice', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(IceBody),
                 });
-
-                if (!response.ok) {
-                    console.error('Failed to submit ICE candidate, response status:', response.status); // Log failure with status
-                    throw new Error('Failed to submit ICE candidate');
-                }
-                if (logging) console.log('Successfully submitted ICE candidate for stream ID:', session.id); // Log success
+                if (logging) console.log('Successfully submitted ICE candidate for stream ID:', sessionId); // Log success
             } catch (error: any) {
                 console.error('Error submitting ICE candidate:', error); // Log any caught errors
             }
         } else {
-            if (!event.candidate) {
-                if (logging) console.log('No ICE candidate available in the event.'); // Log when there's no candidate
-            }
-            if (!session) {
-                console.error('Session information is not available.'); // Log missing session
-            }
+            if (logging) console.log('No ICE candidate available in the event.'); // Log when there's no candidate
         }
     };
 
@@ -177,7 +181,17 @@ export const handleListenerCreation = (
     };
 
     const onTrack = (event: RTCTrackEvent) => {
+        /**
+   * The following code is designed to provide information about wether currently there is data
+   * that's being streamed - It does so by periodically looking for changes in total stream data size
+   *
+   * This information in our case is used in order to show idle video while no video is streaming.
+   * To create this idle video use the POST https://api.d-id.com/talks (or clips) endpoint with a silent audio file or a text script with only ssml breaks
+   * https://docs.aws.amazon.com/polly/latest/dg/supportedtags.html#break-tag
+   * for seamless results use `config.fluent: true` and provide the same configuration as the streaming video
+   */
         if (logging) console.log("Track event received:", event.track.kind);
+        if (!event.track) return;
 
         let lastBytesReceived = 0; // Initialize lastBytesReceived for comparison
         let videoIsPlaying = false; // Local state to track video playing status
@@ -188,34 +202,37 @@ export const handleListenerCreation = (
             const stats = await peerConnection.getStats(event.track);
             stats.forEach((report) => {
                 if (report.type === 'inbound-rtp' && report.kind === 'video') {
-                    const currentBytesReceived = report.bytesReceived || 0;
+                    const currentBytesReceived = report.bytesReceived || lastBytesReceived;
                     if (logging) console.log(`Current bytes received for video:`, currentBytesReceived);
 
                     // Determine if video status has changed based on bytesReceived
                     const newVideoIsPlaying = currentBytesReceived > lastBytesReceived;
+
+                    // If there is a change in whether there's an incoming stream
                     if (newVideoIsPlaying !== videoIsPlaying) {
                         videoIsPlaying = newVideoIsPlaying;
                         if (logging) console.log(`Video playing status changed: ${videoIsPlaying}`);
-                        if (logging) console.log(`state.videoElement=${videoElement}`);
+                        if (logging) console.log(`incomingVideo=${incomingVideo}`);
 
-                        if (videoIsPlaying && videoElement) {
+                        if (videoIsPlaying && incomingVideo) {
                             // Set the stream
                             const stream = event.streams[0]
                             if (logging) console.log('Setting video element srcObject to incoming stream.', stream);
-                            videoElement.srcObject = stream;
-                            setState(prevState => {
-                                if (logging) console.log('Updating state with new mediaStream.');
-                                return { ...prevState, mediaStream: stream, streaming: true };
-                            });
+                            incomingVideo.srcObject = stream;
+                            // safari hotfix
+                            if (incomingVideo.paused) {
+                                incomingVideo
+                                    .play()
+                                    .then((_) => { })
+                                    .catch((e) => { });
+                            }
+                            if (logging) console.log('Updating state with new mediaStream.');
+                            setState(prevState => ({ ...prevState, streaming: true }));
                         } else {
                             if (logging) console.log('Video is not playing or videoElement is null, playing idle video.');
-                            setState(prevState => {
-                                if (logging) console.log('Setting state to false.');
-                                return { ...prevState, streaming: false };
-                            });
+                            setState(prevState => ({ ...prevState, streaming: false }));
                         }
                     }
-
                     // Update lastBytesReceived for the next comparison
                     lastBytesReceived = currentBytesReceived;
                 }
@@ -229,10 +246,10 @@ export const handleListenerCreation = (
     const onIceConnectionStateChange = () => {
         if (logging) console.log("ICE Connection State Change:", peerConnection?.iceConnectionState);
         if (peerConnection && (peerConnection.iceConnectionState === 'failed' || peerConnection.iceConnectionState === 'closed')) {
-            if (videoElement && videoElement.srcObject) {
+            if (incomingVideo && incomingVideo.srcObject) {
                 if (logging) console.log('stopping video streams');
-                (videoElement.srcObject as any).getTracks().forEach((track: any) => track.stop());
-                videoElement.srcObject = null;
+                (incomingVideo.srcObject as any).getTracks().forEach((track: any) => track.stop());
+                incomingVideo.srcObject = null;
             }
             closePC();
         }
@@ -267,83 +284,94 @@ export const handleListenerCreation = (
     return { closePC }
 }
 
-export const handleRemoteDescription = async (peerConnection: RTCPeerConnection, session: SessionResponseType) => {
+interface HandleSDPAnswerSubmissionProps {
+    sessionClientAnswer: RTCSessionDescriptionInit,
+    streamId: string,
+    sessionId: string
+}
+
+export const handleSDPAnswerSubmission = async ({ sessionClientAnswer, streamId, sessionId }: HandleSDPAnswerSubmissionProps) => {
     try {
-        await peerConnection.setRemoteDescription(new RTCSessionDescription(session.offer));
-        if (logging) console.log('Successfully set remote description. Current signaling state:', peerConnection.signalingState);
-    } catch (error) {
-        console.error('Failed to set remote description:', error);
-        console.error('Failed offer:', JSON.stringify(session.offer));
-        throw error; // Rethrow error to ensure execution stops here if this fails
+        console.log('About to [handleSDPAnswerSubmission]', { sessionClientAnswer, streamId, sessionId })
+        const response = await fetch('/api/d-id/submit-sdp', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                streamId,
+                answer: sessionClientAnswer,
+                session_id: sessionId,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to submit SDP answer. Status: ${response.status}`);
+        }
+
+    } catch (err: any) {
+        console.log('Error with [handleSDPAnswerSubmission]: ', err.message)
+        throw new Error(err.message)
     }
 }
 
-export const handleSDPAnswerSubmission = async (peerConnection: RTCPeerConnection, session: SessionResponseType) => {
-    const { sessionClientAnswer } = await createAndSetLocalDescription(peerConnection)
-
-    const response = await fetch('/api/d-id/submit-sdp', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            streamId: session.id,
-            answer: sessionClientAnswer,
-            session_id: session.session_id,
-        }),
-    });
-
-    if (!response.ok) {
-        throw new Error(`Failed to submit SDP answer. Status: ${response.status}`);
-    }
-
-    return { sessionClientAnswer }
+interface SetupPeerConnectionProps {
+    streamId: string,
+    sessionId: string,
+    offer: RTCSessionDescriptionInit,
+    iceServers: IceServerType[]
+    incomingVideo: HTMLVideoElement;
+    setState: (value: SetStateAction<DIDApiState>) => void;
 }
-
-async function createAndSetLocalDescription(peerConnection: RTCPeerConnection) {
-    const sessionClientAnswer = await peerConnection.createAnswer();
-    console.log('Successfully created answer. Answer:', JSON.stringify(sessionClientAnswer));
-    await peerConnection.setLocalDescription(sessionClientAnswer);
-    console.log('Successfully set local description. Current signaling state:', peerConnection.signalingState);
-    return { sessionClientAnswer };
-}
-
 // Function to setup the peer connection
-export const setupPeerConnection = async (session: SessionResponseType, videoElement: HTMLVideoElement, setState: (value: SetStateAction<DIDApiState>) => void) => {
+export const setupPeerConnection = async ({
+    streamId,
+    sessionId,
+    offer,
+    iceServers,
+    incomingVideo,
+    setState
+}: SetupPeerConnectionProps) => {
     if (logging) console.log('Made it to [setupPeerConnection]')
-    if (logging) console.log('About to set up peerConnection with ice servers: ', session.ice_servers)
-    const peerConnection = new RTCPeerConnection({ iceServers: session.ice_servers });
+
+    if (logging) console.log('About to set up peerConnection with ice servers: ', iceServers)
+    const peerConnection = new RTCPeerConnection({ iceServers });
     if (logging) console.log('Created new peerConnection: ', peerConnection)
 
     const { closePC } = handleListenerCreation({
-        session,
+        streamId,
+        sessionId,
         peerConnection,
         setState,
-        videoElement
+        incomingVideo
     })
 
-    handleRemoteDescription(peerConnection, session)
+    // Set the received SDP offer as the remote description of the peer connection using the setRemoteDescription() method.
+    await peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
+    if (logging) console.log('Successfully set remote description. Current signaling state:', peerConnection.signalingState);
+
+    // Generate the SDP answer by calling the createAnswer() method on the peer connection.
+    const sessionClientAnswer = await peerConnection.createAnswer();
+    console.log('Successfully created answer. Answer:', JSON.stringify(sessionClientAnswer));
+
+    // Set the generated SDP answer as the local description of the peer connection using the setLocalDescription() method.
+    await peerConnection.setLocalDescription(sessionClientAnswer);
+    console.log('Successfully set local description. Current signaling state:', peerConnection.signalingState);
+
+    // Once you have obtained the SDP answer as a string, you can send it back to the server using the /talks/streams/{session_id}/sdp endpoint.
+    await handleSDPAnswerSubmission({ streamId, sessionId, sessionClientAnswer })
 
     return { peerConnection, closePC };
 }
 
-// Function to create and submit SDP answer
-export const createAndSubmitSDPAnswer = async (peerConnection: RTCPeerConnection, session: SessionResponseType) => {
-    if (logging) console.log('About to set remote description with offer');
-    if (logging) console.log('Offer:', JSON.stringify(session.offer)); // Pretty print the offer for readability
-
-    const { sessionClientAnswer } = await handleSDPAnswerSubmission(peerConnection, session)
-    return { sessionClientAnswer }
-};
-
-export const terminateSession = async (session: SessionResponseType) => {
+export const terminateSession = async ({ newSessionId, newStreamId }: { newSessionId: string, newStreamId: string }) => {
     try {
         const response = await fetch('/api/d-id/destroy-session', {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ streamId: session.id, session_id: session.session_id }),
+            body: JSON.stringify({ streamId: newStreamId, session_id: newSessionId }),
         });
 
         const data = await response.json();
@@ -360,10 +388,11 @@ export const terminateSession = async (session: SessionResponseType) => {
 interface HandleDisconnectProps {
     closePC: ((pc?: RTCPeerConnection | undefined) => void) | null
     incomingVideo: HTMLVideoElement | null;
-    session: SessionResponseType
+    newSessionId: string;
+    newStreamId: string
 }
 
-export const handleDisconnect = async ({ closePC, incomingVideo, session }: HandleDisconnectProps) => {
+export const handleDisconnect = async ({ closePC, incomingVideo, newSessionId, newStreamId }: HandleDisconnectProps) => {
     // Early return if not connected.
     try {
         // Stop media tracks and close PeerConnection.
@@ -377,10 +406,10 @@ export const handleDisconnect = async ({ closePC, incomingVideo, session }: Hand
         }
 
         // Terminate the server session if it exists.
-        if (logging) console.log('Checkign for session to terminate: ', session)
-        if (session) {
+        if (logging) console.log('Checkign for session to terminate: ', { newSessionId, newStreamId })
+        if (newSessionId && newStreamId) {
             if (logging) console.log('Session found, about to terminate')
-            await terminateSession(session);
+            await terminateSession({ newSessionId, newStreamId });
             if (logging) console.log('Session terminated.');
         }
     } catch (error) {
@@ -389,16 +418,17 @@ export const handleDisconnect = async ({ closePC, incomingVideo, session }: Hand
 }
 
 interface HandleScriptSubmissionProps {
-    session: SessionResponseType,
+    sessionId: string,
+    streamId: string,
     message: string | null;
     userId: string
 }
 
-export const handleScriptSubmission = async ({ session, message, userId }: HandleScriptSubmissionProps) => {
+export const handleScriptSubmission = async ({ sessionId, streamId, message, userId }: HandleScriptSubmissionProps) => {
     if (logging) console.log('Made it to Submit Script')
     const dataToSubmit = {
-        streamId: session.id,
-        sessionId: session.session_id,
+        streamId,
+        sessionId,
         message,
         userId
     }

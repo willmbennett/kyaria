@@ -9,6 +9,7 @@ interface ControlMenuProps {
     toggleMute: () => void;
     isVideoEnabled: boolean;
     toggleVideo: () => void;
+    connected: boolean;
 }
 
 export const ControlMenu = ({
@@ -18,9 +19,14 @@ export const ControlMenu = ({
     isMuted,
     toggleMute,
     isVideoEnabled,
-    toggleVideo
+    toggleVideo,
+    connected
 }: ControlMenuProps) => (
     <div className='flex gap-2 items-center'>
+        <div className="relative flex items-center justify-center">
+            <span className={`animate-ping absolute inline-flex h-2 w-2 rounded-full ${connected ? 'bg-green-400' : 'bg-red-400'} opacity-75`}></span>
+            <span className={`relative inline-flex rounded-full h-2 w-2 ${connected ? 'bg-green-500' : 'bg-red-500'}`}></span>
+        </div>
         <button onClick={toggleMute} className={`p-2 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors duration-100 ${isMuted ? 'text-white bg-red-600 hover:bg-red-700' : ''}`}>
             <MicrophoneIcon className={`h-6 w-6`} />
         </button>

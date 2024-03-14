@@ -20,7 +20,7 @@ type BodyType = {
   userId: string
 }
 
-const logging = true
+const logging = false
 
 export async function POST(req: Request) {
   if (logging) console.log('Made it to [d-id-chat] api route')
@@ -71,7 +71,7 @@ export async function POST(req: Request) {
 
   if (logging) console.log('messagesToSend: ', messagesToSend)
 
-  let messagetoSend: string
+  let messageToSend: string
   try {
     const openAiRes = await openai.createChatCompletion({
       model: 'gpt-4-0125-preview',  // Use the GPT-4 Turbo model for better performance
@@ -85,7 +85,7 @@ export async function POST(req: Request) {
     });
 
     const resData = await openAiRes.json();
-    messagetoSend = resData.choices[0].message.content
+    messageToSend = resData.choices[0].message.content
     if (logging) console.log('resData: ', resData.choices[0].message.content)
 
   } catch (error: any) {
@@ -93,11 +93,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: error.message }, { status: 500 });
   }
 
-  if (messagetoSend) {
+  if (messageToSend) {
     chatHistory.push({
       id: (chatHistory.length + 1).toString(),
       role: 'assistant',
-      content: messagetoSend
+      content: messageToSend
     })
 
     await updateChatAction(
@@ -107,28 +107,34 @@ export async function POST(req: Request) {
     )
 
     try {
-      if (logging) console.log('Attempting to fetch with retries');
+      const body = {
+        script: {
+          type: 'text',
+          subtitles: 'false',
+          provider: {
+            type: 'microsoft',
+            voice_id: 'en-US-JennyNeural'
+          },
+          input: messageToSend,
+          ssml: 'false'
+        },
+        config: { fluent: 'true', pad_audio: '0.5' },
+        audio_optimization: '2',
+        session_id: sessionId
+      }
+      if (logging) {
+        console.log('Attempting to fetch with retries');
+        console.log('Body to send to D-ID')
+        console.log(body)
+      }
+
       const response = await fetchWithRetries(`https://api.d-id.com/talks/streams/${streamId}`, {
         method: 'POST',
         headers: {
           Authorization: `Basic ${process.env.D_ID_API_KEY}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          script: {
-            type: 'text',
-            subtitles: 'false',
-            provider: {
-              type: 'microsoft',
-              voice_id: 'en-US-JennyNeural'
-            },
-            input: messagetoSend,
-            ssml: 'true'
-          },
-          config: { fluent: 'false', pad_audio: '0.0' },
-          audio_optimization: '2',
-          session_id: sessionId
-        }),
+        body: JSON.stringify(body),
       });
 
       if (logging) console.log('Fetch successful, parsing response');

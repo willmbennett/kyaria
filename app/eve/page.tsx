@@ -52,13 +52,6 @@ export default async function ChatbotPage() {
             </>
         );
     }
-
-    const { session } = await createSession()
-
-    if (!session) {
-        return <p>I'm sorry Eve is having trouble waking up</p>
-    }
-
     return (
         <div className="min-h-screen flex flex-col w-full py-10">
             <div className="w-full text-center p-4">
@@ -71,9 +64,9 @@ export default async function ChatbotPage() {
             </div>
             <div className="w-full">
                 {activeSubscription ? (
-                    <VideoChatComponent userId={userId} session={session} />
+                    <VideoChatComponent userId={userId} />
                 ) : (
-                    <TimedAccessComponent activeSubscription={activeSubscription} userId={userId} session={session} />
+                    <TimedAccessComponent activeSubscription={activeSubscription} userId={userId} />
                 )}
             </div>
         </div>

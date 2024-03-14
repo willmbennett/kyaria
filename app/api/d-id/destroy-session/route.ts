@@ -6,7 +6,7 @@ interface DestroySessionRequestBody {
     session_id: string;
 }
 
-const logging = true
+const logging = false
 
 export async function DELETE(request: Request) {
     if (logging) console.log('Starting DELETE function for deleting streams');
