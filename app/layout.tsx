@@ -9,6 +9,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import { checkSubscription } from '../lib/hooks/check-subscription';
 import { Header } from './components/Header';
 import { ChatBotPopup } from './components/chatbot/landingpage/ChatPopup';
+import { Providers } from './components/chatbot/sidebar/Providers';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
@@ -93,12 +94,17 @@ export default async function RootLayout({
           `,
           }}
         />
-        <TooltipProvider >
+        <Providers
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
           <Header userId={userId} />
           {children}
           <ChatBotPopup userId={userId} userName={userName} />
           <Footer userId={userId} userName={userName} email={email} />
-        </TooltipProvider >
+        </Providers>
         <SpeedInsights />
       </body>
     </html>

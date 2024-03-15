@@ -3,7 +3,6 @@ import { SidebarMobile } from '../components/chatbot/sidebar/MobileSidebar';
 import { ChatHistory } from '../components/chatbot/sidebar/ChatHistory';
 import { checkSubscription } from '../../lib/hooks/check-subscription';
 import { SidebarDesktop } from '../components/chatbot/sidebar/SidebarDesktop';
-import { Providers } from '../components/chatbot/sidebar/Providers';
 import { SidebarToggle } from '../components/chatbot/sidebar/ToggleSidebar';
 
 const title = "Eve: Kyaria.ai's Revolutionary AI Career Coach | Affordable & 24/7 Access";
@@ -37,19 +36,12 @@ export default async function EveLayout({
 
     return (
         <div className='md:h-screen my-10'>
-            <Providers
-                attribute="class"
-                defaultTheme="system"
-                enableSystem
-                disableTransitionOnChange
-            >
-                <SidebarMobile>
-                    <ChatHistory userId={userId} />
-                </SidebarMobile>
-                <SidebarToggle />
-                <SidebarDesktop userId={userId} />
-                {children}
-            </Providers>
+            <SidebarMobile>
+                <ChatHistory userId={userId} />
+            </SidebarMobile>
+            <SidebarToggle />
+            <SidebarDesktop userId={userId} />
+            {children}
         </div>
     )
 }
