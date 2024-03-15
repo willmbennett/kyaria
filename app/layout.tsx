@@ -94,7 +94,6 @@ export default async function RootLayout({
           `,
           }}
         />
-        {/* @ts-ignore */}
         <Providers
           attribute="class"
           defaultTheme="system"
