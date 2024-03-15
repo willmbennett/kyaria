@@ -42,7 +42,7 @@ export default async function RootLayout({
   const { userId, userName, email } = await checkSubscription()
 
   return (
-    <html lang="en" className='bg-white'>
+    <html lang="en" className='bg-white' suppressHydrationWarning>
       <body className={clsx('min-h-screen font-sans', inter.variable)}>
         {/*<Script
           id="ze-snippet"
@@ -94,6 +94,7 @@ export default async function RootLayout({
           `,
           }}
         />
+        {/* @ts-ignore */}
         <Providers
           attribute="class"
           defaultTheme="system"
