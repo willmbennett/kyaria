@@ -51,5 +51,3 @@ export const drawVideosToCanvas = (canvas: HTMLCanvasElement, incomingVideoEleme
 
     draw(); // Start the loop
 }
-
-  

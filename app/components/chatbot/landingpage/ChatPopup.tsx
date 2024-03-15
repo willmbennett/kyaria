@@ -9,7 +9,7 @@ export const ChatBotPopup = ({ userId, userName }: { userId: string, userName: s
     const [show, setShow] = useState(true)
     const router = useRouter()
 
-    if (path == '/eve') return <></>;
+    if (path.startsWith('/eve')) return <></>;
 
 
     const containerVariants = {
@@ -19,7 +19,6 @@ export const ChatBotPopup = ({ userId, userName }: { userId: string, userName: s
 
     return (
         <div className="fixed bottom-0 right-0 mb-4 mr-4 z-10">
-
 
             <motion.div
                 className="flex flex-col gap-1 md:gap-2 items-end w-32 md:w-40 lg:w-52"

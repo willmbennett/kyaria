@@ -21,8 +21,12 @@ export async function getChatAction(id: string, path: string) {
     return chat
 }
 
-export async function createInitialChatAction(userId: string, path: string) {
-    const { chatId } = await createInitialChat(userId);
+interface createInitialChatActionData {
+    userId: string,
+}
+
+export async function createInitialChatAction(data: createInitialChatActionData, path: string) {
+    const { chatId } = await createInitialChat(data.userId);
     revalidatePath(path);
     return chatId
 }

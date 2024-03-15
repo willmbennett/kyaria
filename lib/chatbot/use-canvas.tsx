@@ -23,10 +23,10 @@ export const useCanvas = ({
             canvas.height = height;
 
             // Log current status for debugging
-          //console.log('Drawing to canvas');
-          //console.log('Canvas: ', canvas);
-          //console.log('incomingVideo: ', incomingVideo);
-          //console.log('outgoingVideo: ', outgoingVideo);
+            //console.log('Drawing to canvas');
+            //console.log('Canvas: ', canvas);
+            //console.log('incomingVideo: ', incomingVideo);
+            //console.log('outgoingVideo: ', outgoingVideo);
 
             // Draw videos to canvas
             drawVideosToCanvas(canvas, incomingVideo, outgoingVideo);

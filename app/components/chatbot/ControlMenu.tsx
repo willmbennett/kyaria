@@ -1,3 +1,4 @@
+import { Button } from '../Button';
 import { CameraSelectMenu } from './CameraSelectMenu';
 import { MicrophoneIcon, VideoCameraIcon } from '@heroicons/react/24/solid';
 
@@ -9,6 +10,10 @@ interface ControlMenuProps {
     toggleMute: () => void;
     isVideoEnabled: boolean;
     toggleVideo: () => void;
+    connected: boolean;
+    listening: boolean;
+    toggleTranscript: () => void;
+    showTranscript: boolean;
 }
 
 export const ControlMenu = ({
@@ -18,16 +23,35 @@ export const ControlMenu = ({
     isMuted,
     toggleMute,
     isVideoEnabled,
-    toggleVideo
+    toggleVideo,
+    connected,
+    listening,
+    toggleTranscript,
+    showTranscript
 }: ControlMenuProps) => (
     <div className='flex gap-2 items-center'>
+        <div className="relative flex items-center justify-center">
+            <span className={`animate-ping absolute inline-flex h-2 w-2 rounded-full ${connected ? 'bg-green-400' : 'bg-red-400'} opacity-75`}></span>
+            <span className={`relative inline-flex rounded-full h-2 w-2 ${connected ? 'bg-green-500' : 'bg-red-500'}`}></span>
+        </div>
         <button onClick={toggleMute} className={`p-2 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors duration-100 ${isMuted ? 'text-white bg-red-600 hover:bg-red-700' : ''}`}>
-            <MicrophoneIcon className={`h-6 w-6`} />
+            <div className="relative flex items-center justify-center">
+                {listening && !isMuted && (
+                    <span className="animate-ping absolute top-0 inline-flex h-2 w-2 rounded-full bg-green-400 opacity-75"></span>
+                )}
+                <MicrophoneIcon className={`relative inline-flex h-6 w-6 ${listening && !isMuted ? 'text-green-500' : 'text-red-500'}`} />
+            </div>
         </button>
         <button onClick={toggleVideo} className={`p-2 rounded-full transition-colors duration-100 bg-slate-100 hover:bg-slate-200 ${isVideoEnabled ? '' : 'text-white bg-red-600 hover:bg-red-700'}`}>
             <VideoCameraIcon className={`h-6 w-6`} />
         </button>
         <CameraSelectMenu videoDevices={videoDevices} selectVideoDevice={selectVideoDevice} selectedVideoDeviceId={selectedVideoDeviceId} />
+        <Button
+            onClick={toggleTranscript}
+            size='sm'
+        >
+            {showTranscript ? 'Show Video' : 'Show Transcript'}
+        </Button>
         {/*
         {recordingStatus == 'recording' && <p>Recording...</p>}
         {recordingStatus != 'recording' ?

@@ -2,7 +2,8 @@ import { Message } from "ai";
 import { ResumeModel } from "../models/Resume";
 import { ChatClass, ChatModel } from "../models/Chat";
 import connectDB from "./connect-db";
-import { stringToObjectId } from "./utils";
+import { castToString, dateToString, stringToObjectId } from "./utils";
+var transformProps = require('transform-props');
 
 const createPersonalizedGreeting = (name?: string) => {
     const greetings = ["Hi", "Hey", "Hello"];
@@ -22,11 +23,10 @@ const createPersonalizedGreeting = (name?: string) => {
     return { personalizedGreeting }
 }
 
-export const createInitialChat = async (userId: string, sessionId: string) => {
+export const createInitialChat = async (userId: string) => {
     try {
         await connectDB();
 
-        //console.log(messages)
         const resume = await ResumeModel.findOne({
             userId,
         })
@@ -41,7 +41,7 @@ export const createInitialChat = async (userId: string, sessionId: string) => {
         const messages: Message[] = [{
             id: '1',
             role: "system",
-            content: `Your name is Eve, and you're here as a Career Coach, ready to offer guidance on job searches, resumes, interviews, and more. Ensure responses use SSML for spoken delivery but do not specify voice characteristics, also explicitly avoid using Markdown or other formatting syntax like hashtags or asterisks. Tone: conversational, spartan, use less corporate jargon. When users request activities like mock interviews, enthusiastically initiate with a relevant question and provide follow-up questions and feedback for each user response. Upon receiving a request for a resume review, first ask the user if there's a specific section they wish to focus on. Tailor your advice based on their response: if a specific section is mentioned, concentrate on providing targeted advice for that section to enhance clarity, impact, and alignment with job goals. If no specific section is mentioned, proceed to methodically evaluate each section in plain text, offering comprehensive advice. Include advice on navigating career setbacks, negotiating offers, and maintaining motivation during the job search to provide comprehensive support. Admit gracefully if unsure or if a request is beyond capabilities, reminding users of potential inaccuracies. Always prioritize clarity and accessibility in written responses. ${resume ? 'Here\'s the user\'s resume: ' + JSON.stringify(resume) : ''}`,
+            content: `Your name is Eve, and you're here as a Career Coach, ready to offer guidance on job searches, resumes, interviews, and more.  No Yapping. Ensure responses are for spoken delivery. Explicitly avoid using Markdown or other formatting syntax like hashtags or asterisks. Only return the portion to be spoken. Tone: conversational, spartan, use less corporate jargon. When users request activities like mock interviews, enthusiastically initiate with a relevant question and provide follow-up questions and feedback for each user response. Upon receiving a request for a resume review, first ask the user if there's a specific section they wish to focus on. Tailor your advice based on their response: if a specific section is mentioned, concentrate on providing targeted advice for that section to enhance clarity, impact, and alignment with job goals. Do not read the user's resume back to them. If no specific section is mentioned, proceed to methodically evaluate each section in plain text, offering comprehensive advice. Include advice on navigating career setbacks, negotiating offers, and maintaining motivation during the job search to provide comprehensive support. Admit gracefully if unsure or if a request is beyond capabilities, reminding users of potential inaccuracies. ${resume ? 'Here\'s the user\'s resume: ' + JSON.stringify(resume) : ''}`,
             createdAt: new Date()
         },
         {
@@ -54,18 +54,81 @@ export const createInitialChat = async (userId: string, sessionId: string) => {
 
         const newChatData: Partial<ChatClass> = {
             userId,
-            sessionId,
             messages
         }
-        //console.log('Creating new chat with data: ', newChatData)
-        const newChatHistory = await ChatModel.create(newChatData);
-        //console.log('newChatHistory: ', newChatHistory)
+        console.log('Creating new chat with data: ', newChatData)
+        const newChat = await ChatModel.create(newChatData);
+        console.log('newChat: ', newChat)
 
-        return { newChatHistory }
+        if (newChat) {
+            //console.log('New post created successfully:', newPost);
+
+            const chatId = castToString(newChat._id);
+            //console.log('Transformed postId:', postId); // Log transformed postId
+
+            return { chatId };
+        } else {
+            console.error('Failed to create chat:'); // Log failure case with data
+            return { error: "Chat not found" };
+        }
+    } catch (error: any) {
+        console.log(error.message)
+        return { error };
+    }
+}
+
+export async function getChat(id: string) {
+    try {
+        await connectDB();
+
+        if (!id) {
+            return { error: "chat not found" };
+        }
+
+        //console.log(id)
+        const chat = await ChatModel.findById(id)
+            .exec();
+
+        if (chat) {
+            return {
+                chat,
+            };
+        } else {
+            return { error: "Job not found" };
+        }
     } catch (error) {
         return { error };
     }
 }
+
+export async function getChats(userId: string) {
+    try {
+        await connectDB();
+
+        if (!userId) {
+            return { error: "userId not found" };
+        }
+
+        //console.log(id)
+        const chats = await ChatModel.find({ userId })
+            .lean()
+            .exec();
+
+        if (chats) {
+            transformProps(chats, castToString, '_id');
+            transformProps(chats, dateToString, ["createdAt", "updatedAt"]);
+            return {
+                chats,
+            };
+        } else {
+            return { error: "Job not found" };
+        }
+    } catch (error) {
+        return { error };
+    }
+}
+
+
 
 export async function findChat(sessionId: string) {
     try {
@@ -91,8 +154,6 @@ export async function findChat(sessionId: string) {
         return { error };
     }
 }
-
-
 
 export async function updateChat(id: string, chatHistory: Message[]) {
     try {
