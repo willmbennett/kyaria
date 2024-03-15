@@ -30,15 +30,12 @@ export default async function ChatbotPage({ params }: { params: { id: string } }
     //console.log('At Eve, messages ', messages)
 
     return (
-        <div className="min-h-screen flex flex-col lg:flex-row w-full py-10">
-            <VideoChatContainer
-                userId={userId}
-                chatId={chatId}
-                messages={messages}
-                activeSubscription={activeSubscription}
-                admin={admin}
-            />
-        </div>
-
+        <VideoChatContainer
+            userId={userId}
+            chatId={chatId}
+            messages={messages}
+            activeSubscription={activeSubscription}
+            admin={admin}
+        />
     );
 }

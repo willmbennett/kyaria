@@ -5,6 +5,7 @@ import TimedAccessComponent from './VideoSubscriptionWrapper';
 import { ChatTranscript } from './ChatTranscript';
 import { Message } from 'ai';
 import { Button } from '../Button';
+import { SidebarToggle } from './sidebar/ToggleSidebar';
 
 interface VideoChatContainerProps {
     userId: string;
@@ -31,12 +32,9 @@ export const VideoChatContainer = ({ userId, chatId, messages, activeSubscriptio
     />
 
     return (
-        <div className="min-h-screen flex flex-col w-full py-10 justify-center text-center gap-4">
-            <div>
-                <Button size='sm' variant='ghost' href="/eve">← Back to Menu</Button>
-            </div>
-            <h1 className="text-2xl font-semibold">Career Coaching Session</h1>
-            <div className="flex-grow w-full">
+        <div className="flex h-full w-full justify-center text-center gap-4 overflow-hidden">
+            <div className='h-full w-full flex flex-col gap-4'>
+                <h1 className="text-2xl font-semibold">Career Coaching Session</h1>
                 {activeSubscription ? (
                     <div className={`${showTranscript ? 'hidden' : 'block'}`}>
                         {renderVideoChatComponent}
@@ -48,15 +46,17 @@ export const VideoChatContainer = ({ userId, chatId, messages, activeSubscriptio
                         </TimedAccessComponent>
                     </div>
                 )}
-                <div className={`w-full justify-center items-center ${showTranscript ? 'flex flex-col' : 'hidden'}`}>
+                <div className={`w-full h-3/4 justify-center items-center ${showTranscript ? 'flex flex-col gap-4' : 'hidden'}`}>
                     <Button
                         onClick={toggleTranscript}
                         size='sm'
                     >
                         Show Video
                     </Button>
-                    <div className='flex max-w-5xl'>
-                        <ChatTranscript messages={messages} />
+                    <div className='relative h-full overflow-y-scroll overscroll-none px-2'>
+                        <div className='h-full'>
+                            <ChatTranscript messages={messages} />
+                        </div>
                     </div>
                 </div>
             </div>

@@ -2,7 +2,8 @@ import { Message } from "ai";
 import { ResumeModel } from "../models/Resume";
 import { ChatClass, ChatModel } from "../models/Chat";
 import connectDB from "./connect-db";
-import { castToString, stringToObjectId } from "./utils";
+import { castToString, dateToString, stringToObjectId } from "./utils";
+var transformProps = require('transform-props');
 
 const createPersonalizedGreeting = (name?: string) => {
     const greetings = ["Hi", "Hey", "Hello"];
@@ -99,6 +100,34 @@ export async function getChat(id: string) {
         return { error };
     }
 }
+
+export async function getChats(userId: string) {
+    try {
+        await connectDB();
+
+        if (!userId) {
+            return { error: "userId not found" };
+        }
+
+        //console.log(id)
+        const chats = await ChatModel.find({ userId })
+            .lean()
+            .exec();
+
+        if (chats) {
+            transformProps(chats, castToString, '_id');
+            transformProps(chats, dateToString, ["createdAt", "updatedAt"]);
+            return {
+                chats,
+            };
+        } else {
+            return { error: "Job not found" };
+        }
+    } catch (error) {
+        return { error };
+    }
+}
+
 
 
 export async function findChat(sessionId: string) {

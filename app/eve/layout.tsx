@@ -1,4 +1,10 @@
 import { Metadata } from 'next';
+import { SidebarMobile } from '../components/chatbot/sidebar/MobileSidebar';
+import { ChatHistory } from '../components/chatbot/sidebar/ChatHistory';
+import { checkSubscription } from '../../lib/hooks/check-subscription';
+import { SidebarDesktop } from '../components/chatbot/sidebar/SidebarDesktop';
+import { Providers } from '../components/chatbot/sidebar/Providers';
+import { SidebarToggle } from '../components/chatbot/sidebar/ToggleSidebar';
 
 const title = "Eve: Kyaria.ai's Revolutionary AI Career Coach | Affordable & 24/7 Access";
 const description = "Discover Eve, the world's first virtual career coach. Get personalized, smart career advice 24/7 at just $10/month. Save on career coaching with cutting-edge AI technology. Start your journey to career success with Eve today!";
@@ -27,10 +33,23 @@ export default async function EveLayout({
 }: {
     children: React.ReactNode;
 }) {
+    const { userId } = await checkSubscription()
 
     return (
-        <div className='min-h-screen'>
-            {children}
+        <div className='md:h-screen my-10'>
+            <Providers
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+            >
+                <SidebarMobile>
+                    <ChatHistory userId={userId} />
+                </SidebarMobile>
+                <SidebarToggle />
+                <SidebarDesktop userId={userId} />
+                {children}
+            </Providers>
         </div>
     )
 }

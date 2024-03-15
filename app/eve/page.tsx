@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { checkSubscription } from "../../lib/hooks/check-subscription";
 import { ChatBotHero } from "../components/chatbot/landingpage/ChatBotHero";
 import { ChatBotMenu } from "../components/chatbot/ChatBotMenu";
+import { NewChatButton } from "../components/chatbot/sidebar/NewChatButton";
 
 const ProductDemo = dynamic(() => import('../components/chatbot/landingpage/ProductDemo'));
 const Process = dynamic(() => import('../components/chatbot/landingpage/Process'));
@@ -46,15 +47,24 @@ export default async function ChatBotHomePage() {
     }
 
     return (
-        <div className="min-h-screen flex flex-col w-full py-10">
-            <div className="w-full text-center p-4">
+        <div className="w-full text-center p-4 flex flex-col gap-4">
+            <div>
                 <h1 className="text-4xl font-bold text-gray-800 mb-2">
                     Meet Your Virtual Career Coach, Eve
                 </h1>
                 <p className="text-lg text-gray-600">
                     Get personalized career advice and grow your professional skills with our AI-powered coach.
                 </p>
-                <ChatBotMenu userId={userId} />
+            </div>
+            <div className="w-full flex justify-center items-center">
+                <div>
+                    <NewChatButton userId={userId} />
+                </div>
+            </div>
+            <div className="flex justify-center items-center w-full max-w-6xl mx-auto">
+                <div className="aspect-square w-full md:w-1/2 flex justify-center items-center relative rounded-lg shadow-lg">
+                    <video src="https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/idle-EKXH7UBRmCylHsNk0PdpKtIh8uUesV.mp4" className="absolute top-0 left-0 w-full h-full object-cover" autoPlay loop playsInline></video>
+                </div>
             </div>
         </div>
     );
