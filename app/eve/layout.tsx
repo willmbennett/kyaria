@@ -37,6 +37,7 @@ export default async function EveLayout({
     return (
         <div className='md:h-screen my-10'>
             <SidebarMobile>
+                {/* @ts-ignore */}
                 <ChatHistory userId={userId} />
             </SidebarMobile>
             <SidebarToggle />
