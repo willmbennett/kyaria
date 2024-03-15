@@ -70,8 +70,6 @@ export const createInitialChat = async (userId: string) => {
             console.error('Failed to create chat:'); // Log failure case with data
             return { error: "Chat not found" };
         }
-
-        return { newChatHistory }
     } catch (error: any) {
         console.log(error.message)
         return { error };
