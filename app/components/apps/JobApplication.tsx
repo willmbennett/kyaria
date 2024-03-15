@@ -11,6 +11,7 @@ import { ProfileClass } from '../../../models/Profile';
 import MockInterview from './pages/MockInterview';
 import Networking from './pages/Networking';
 import Resume from './pages/Resume';
+import Notes from './pages/Notes'
 import React from 'react';
 
 interface JobApplicationProps {
@@ -25,6 +26,7 @@ const MemoizedJobDescription = React.memo(JobDescription);
 const MemoizedCoverLetter = React.memo(CoverLetter);
 const MemoizedExperience = React.memo(Experience);
 const MemoizedEmails = React.memo(Emails);
+const MemoizedNotes = React.memo(Notes);
 const MemoizedStory = React.memo(Story);
 const MemoizedMockInterview = React.memo(MockInterview);
 const MemoizedNetworking = React.memo(Networking);
@@ -47,6 +49,7 @@ export function JobApplication(
   const userId = jobApp.userId
   const profileId = profile.toString()
   const jobAppId = jobApp._id.toString()
+  const notes = jobApp.notes
 
 
   // Limit the number of keywords
@@ -128,6 +131,13 @@ export function JobApplication(
           userResume={userResume}
           userId={userId}
           activeSubscription={activeSubscription}
+        />
+    }],
+    ['notes', {
+      component:
+        <MemoizedNotes
+          jobAppId={jobAppId}
+          content={notes}
         />
     }],
     ['story', {

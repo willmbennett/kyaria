@@ -57,6 +57,9 @@ class AppClass {
     @prop({ ref: () => ResumeClass, required: true })
     public userResume!: Ref<ResumeClass>;
 
+    @prop()
+    public notes?: string;
+
     _id: mongoose.Types.ObjectId | string;
     createdAt: Date | string;
     updatedAt: Date | string;

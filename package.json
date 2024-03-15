@@ -78,6 +78,7 @@
     "react-markdown": "^8.0.7",
     "react-media-recorder-2": "^1.6.23",
     "react-pdf": "^7.4.0",
+    "react-quill": "^2.0.0",
     "react-select": "^5.7.7",
     "react-speech-recognition": "^3.10.0",
     "react-syntax-highlighter": "^15.5.0",

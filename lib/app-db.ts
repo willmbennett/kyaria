@@ -1,4 +1,5 @@
 import { AppModel, AppClass } from "../models/App";
+import { getModelForClass, prop, modelOptions } from '@typegoose/typegoose';
 import { JobModel } from "../models/Job";
 import { ResumeModel } from "../models/Resume";
 import connectDB from "./connect-db";
@@ -218,8 +219,6 @@ export async function updateJobApp(id: string, data: any) {
 
         //console.log(id)
 
-        //console.log(`data to update job with: ${JSON.stringify(data)}`)
-
         const jobApp = await AppModel.findByIdAndUpdate(
             parsedId,
             data
@@ -230,7 +229,7 @@ export async function updateJobApp(id: string, data: any) {
         if (jobApp) {
             transformProps(jobApp, ObjectIdtoString, ['_id', 'profile', 'job', 'userResume']);
             transformProps(jobApp, dateToString, ["createdAt", "updatedAt"]);
-            //console.log(jobApp)
+
             return {
                 jobApp,
             };
