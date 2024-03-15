@@ -8,6 +8,7 @@ import { useDraggable } from '@dnd-kit/core';
 import { AppClass } from "../../../models/App";
 import { JobClass } from "../../../models/Job";
 import { boardItemType } from "../../board/job-helper";
+import { TooltipTrigger, TooltipContent, Tooltip } from '@radix-ui/react-tooltip';
 
 const ACTIVE_ROUTE = "bg-gray-200 hover:bg-gray-600 hover:text-white";
 const INACTIVE_ROUTE = "hover:bg-gray-600 hover:text-white";
@@ -174,17 +175,22 @@ export default function AppItem(
             View Packet
           </Button>
 
-          {/* Active/Inactive Toggle Button */}
-          <button
-            onClick={handleClose}
-            className="flex items-center justify-center h-8 w-8 rounded-full bg-gray-200 text-gray-500 hover:text-gray-600 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition ease-in-out duration-150"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-4 h-4">
-              {/* Replace with appropriate icon */}
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={app.active ? "M6 18L18 6M6 6l12 12" : "M12 4v16m8-8H4"} />
-            </svg>
-            <span className="sr-only">{app.active ? "Mark Inactive" : "Mark Active"}</span>
-          </button>
+          <Tooltip delayDuration={400}>
+            <TooltipTrigger asChild>
+              <button
+                onClick={handleClose}
+                className="flex items-center justify-center h-8 w-8 rounded-full bg-gray-200 text-gray-500 hover:text-gray-600 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition ease-in-out duration-150"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={app.active ? "M6 18L18 6M6 6l12 12" : "M12 4v16m8-8H4"} />
+                </svg>
+                <span className="sr-only">{app.active ? "Mark Inactive" : "Mark Active"}</span>
+              </button>
+            </TooltipTrigger>
+            <TooltipContent align="start" alignOffset={20} side="bottom" className="bg-stone-200 text-gray-700 text-xs px-2 py-1 rounded shadow-md z-50">
+              {app.active ? "Mark Inactive" : "Mark Active"}
+            </TooltipContent>
+          </Tooltip>
         </div>
 
         {showDetails &&
