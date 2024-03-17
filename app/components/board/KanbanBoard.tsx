@@ -1,12 +1,13 @@
 'use client'
 import { DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { useRouter } from 'next/navigation';
-import { useId, useState } from 'react';
+import { useId, useState, useCallback } from 'react';
 import { AppClass } from '../../../models/App';
 import { updateJobAppAction } from '../../board/_action';
 import AppItem from '../apps/AppItem';
 import KanbanColumn from "./KanbanColumn";
 import { boardItemType, jobStates } from '../../board/job-helper';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 
 export default function Kanban(
     {
@@ -19,6 +20,7 @@ export default function Kanban(
 
     const [activeId, setActiveId] = useState<string>();
     const [apps, setApps] = useState<boardItemType[]>(boardItems);
+    const [searchValue, setSearchValue] = useState('');
 
     const handleDragEnd = async (event: DragEndEvent) => {
         // Logic to handle item drop, updating the state of jobApps accordingly
@@ -90,11 +92,44 @@ export default function Kanban(
         touchSensor,
     );
 
+    const handleChange = useCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            const value = event.target.value;
+            setSearchValue(value);
+
+            const filteredApps = apps.filter((item) =>
+                Object.values(item).some(
+                    (prop) =>
+                        typeof prop === 'string' &&
+                        prop.toLowerCase().includes(value.toLowerCase())
+                )
+            );
+
+            setApps(filteredApps);
+        },
+        []
+    );
+
+
     const id = useId()
 
     return (
         <>
             <div className="w-full p-4">
+                <div className="flex justify-end items-center w-full mb-4">
+                    <div className="relative md:w-1/6">
+                        <div className="absolute inset-y-0 start-0 flex items-center pl-3 pointer-events-none">
+                            <MagnifyingGlassIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" />
+                        </div>
+                        <input
+                            type="search"
+                            value={searchValue}
+                            onChange={handleChange}
+                            className="block w-full pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="Find App..."
+                        />
+                    </div>
+                </div>
                 <div className="flex min-h-screen w-full gap-4 border border-slate-100 p-4 rounded-xl">
                     <DndContext sensors={sensors} onDragEnd={handleDragEnd} onDragStart={handleDragStart} onDragOver={handleDragOver} id={id}>
                         <div id='kanban-container' className='relative overflow-x-scroll w-screen h-full'>
