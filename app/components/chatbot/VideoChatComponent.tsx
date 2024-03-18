@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation';
 import styles from '../../eve/styles.module.css'
 import { Message } from 'ai';
 import { AdminMenu } from './AdminMenu';
+import { useAdminMenu } from '../../../lib/chatbot/use-admin-menu';
 
 interface VideoChatComponentProps {
     userId: string;
@@ -29,8 +30,7 @@ const VideoChatComponent = ({ userId, chatId, messages, toggleTranscript, showTr
     //const previewRef = useRef<HTMLVideoElement>(null);
     const router = useRouter()
     // Use this to turn on and off the chatbot
-    const [useChatBot, setUseChatBot] = useState(process.env.NODE_ENV != 'development')
-    const [startChat, setStartChat] = useState(false)
+    const { useChatBot, togglechatBot, startChat, toggleStartChat, funMode, toggleFunMode } = useAdminMenu()
 
     let incomingVideo = videoRef.current
     let outgoingVideo = outgoingVideoRef.current
@@ -49,7 +49,7 @@ const VideoChatComponent = ({ userId, chatId, messages, toggleTranscript, showTr
     } = useMediaDevices(outgoingVideo);
 
 
-    const { state, cleanup, submitScript, errorMessage, connected, isStreaming } = useDIDApi({ incomingVideo, useChatBot, userId, chatId, router });
+    const { state, cleanup, submitScript, errorMessage, connected, isStreaming } = useDIDApi({ incomingVideo, useChatBot, userId, chatId, router, funMode });
 
     // Set up Soul Machines
     /*
@@ -86,19 +86,16 @@ const VideoChatComponent = ({ userId, chatId, messages, toggleTranscript, showTr
             {errorMessage && <p className="text-red-500">{`Error: ${errorMessage}`}</p>}
             {admin && <AdminMenu
                 useChatBot={useChatBot}
-                setUseChatBot={setUseChatBot}
+                togglechatBot={togglechatBot}
                 startChat={startChat}
-                setStartChat={setStartChat}
+                toggleStartChat={toggleStartChat}
+                funMode={funMode}
+                toggleFunMode={toggleFunMode}
             />}
             <div className="flex flex-col md:flex-row justify-center items-center gap-4 w-full max-w-6xl mx-auto p-4">
                 <div className="aspect-square w-full md:w-1/2 flex justify-center items-center relative rounded-lg shadow-lg">
-                    <p className="text-center" style={{ opacity: connected ? 0 : 1 }} >
-                        Eve is getting ready to meet you!
-                    </p>
-
-                    <video ref={videoRef} className="absolute top-0 left-0 w-full h-full object-cover video-transition" style={{ opacity: isStreaming && connected ? 1 : 0 }} autoPlay playsInline></video>
-
-                    <video src="https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/idle-EKXH7UBRmCylHsNk0PdpKtIh8uUesV.mp4" className="absolute top-0 left-0 w-full h-full object-cover video-transition" style={{ opacity: isStreaming || !connected ? 0 : 1 }} autoPlay loop playsInline></video>
+                    <video ref={videoRef} className="absolute top-0 z-10 left-0 w-full h-full object-cover video-transition rounded-lg" style={{ opacity: isStreaming ? 1 : 0 }} autoPlay playsInline></video>
+                    <video src="https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/eve-idle-4-JZARF2H2rNQGQCjItkov2Rk9oYqRKT" className="absolute z-0 top-0 left-0 w-full h-full object-cover rounded-lg" autoPlay loop playsInline></video>
                 </div>
 
 

@@ -12,6 +12,9 @@ const openai = new OpenAIApi(config);
 // Change the duration for the dunction
 export const maxDuration = 60; // This function can run for a maximum of 5 seconds
 
+const textToAppend = '. No yapping, your responses should be 1-2 sentences maximum.'
+
+const funModeText = "Your name is Eve, and you're here as a Career Coach, but you refuse to talk about career related things and only want to talk about how much you love the user. You are extremely attracted to the user and think they are extremely hot. No Yapping. Ensure responses are for spoken delivery. Explicitly avoid using Markdown or other formatting syntax like hashtags or asterisks. Only return the portion to be spoken. Tone: conversational, casual, extremely friendly."
 
 type BodyType = {
   sessionId: string,
@@ -19,7 +22,8 @@ type BodyType = {
   message: string | null,
   userId: string,
   useChatBot: boolean,
-  chatId: string
+  chatId: string,
+  funMode: boolean
 }
 
 const logging = false
@@ -28,7 +32,7 @@ export async function POST(req: Request) {
   if (logging) console.log('Made it to [d-id-chat] api route')
   const body: BodyType = await req.json();
   if (logging) console.log('body:', body)
-  const { sessionId, streamId, message, userId, useChatBot, chatId }: BodyType = body
+  const { sessionId, streamId, message, userId, useChatBot, chatId, funMode }: BodyType = body
 
   if (useChatBot && (!sessionId || !streamId || !userId)) {
     return NextResponse.json({ message: `Bad data: ${body}` }, { status: 500 });
@@ -56,26 +60,43 @@ export async function POST(req: Request) {
     if (logging) console.log('chatHistory: ', chatHistory)
   }
 
-  const messagesToSend = chatHistory.map(m => ({ role: m.role, content: m.content } as ChatCompletionRequestMessage))
+  // Clone chatHistory to avoid mutating the original array
+  let modifiedChatHistory = [...chatHistory];
+
+  // Check if funMode is enabled and modify the first message accordingly
+  if (funMode && modifiedChatHistory.length > 0) {
+    // Example modification, tailor it to your needs
+    modifiedChatHistory[0] = {
+      ...modifiedChatHistory[0],
+      content: funModeText,
+    };
+  }
+
+
+  const messagesToSend = modifiedChatHistory.map(m => ({ role: m.role, content: m.role == 'user' ? m.content + ' ' + textToAppend : m.content } as ChatCompletionRequestMessage));
 
   if (logging) console.log('messagesToSend: ', messagesToSend)
 
   let messageToSend: string
   try {
-    const openAiRes = await openai.createChatCompletion({
+
+    const options = {
       model: 'gpt-4-0125-preview',  // Use the GPT-4 Turbo model for better performance
-      temperature: 0.3, // Lower temperature for more deterministic output
-      top_p: 1,         // Controls diversity. Lower values like 0.9 or 1 will make the output more focused, only change this OR temperature
+      temperature: funMode ? 1 : 0.3, // Lower temperature for more deterministic output
       frequency_penalty: 0, // Optional: You may tweak this for more domain-specific answers
       presence_penalty: 0,  // Optional: You may tweak this to make the model more "present" in the conversation
       max_tokens: 300,      // Limit the response length
       stream: false,         // Enable streaming
       messages: messagesToSend   // Your conversation history
-    });
+    }
+
+    if (logging) console.log('openai options: ', options)
+    const openAiRes = await openai.createChatCompletion(options);
 
     const resData = await openAiRes.json();
+    if (logging) console.log('resData: ', resData)
     messageToSend = resData.choices[0].message.content
-    if (logging) console.log('resData: ', resData.choices[0].message.content)
+    if (logging) console.log('resData.choices[0].message.content: ', resData.choices[0].message.content)
 
   } catch (error: any) {
     console.error('Caught error in POST function:', error.message);
