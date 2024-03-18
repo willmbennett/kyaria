@@ -8,11 +8,12 @@ interface UseDIDApiProps {
     userId: string;
     chatId: string;
     router: AppRouterInstance
+    funMode: boolean;
 }
 
 const logging = false
 
-export const useDIDApi = ({ incomingVideo, useChatBot, userId, chatId, router }: UseDIDApiProps) => {
+export const useDIDApi = ({ incomingVideo, useChatBot, userId, chatId, router, funMode }: UseDIDApiProps) => {
     const [state, setState] = useState<DIDApiState>({
         isConnecting: false,
         isConnected: false,
@@ -57,10 +58,11 @@ export const useDIDApi = ({ incomingVideo, useChatBot, userId, chatId, router }:
                 message,
                 userId,
                 useChatBot,
-                chatId
+                chatId,
+                funMode
             })
         router.refresh()
-    }, [state.sessionId, state.isConnected, userId, useChatBot]);
+    }, [state.sessionId, state.isConnected, userId, useChatBot, funMode]);
 
 
     const cleanup = useCallback(async ({ closePC, newSessionId, newStreamId }: { closePC: ClosePCType, newSessionId: string, newStreamId: string }) => {
