@@ -19,6 +19,8 @@ const logging = false
 
 export const useChatGPT = ({ submitScript, connected, isStreaming, useChatBot, startChat, messages }: useChatGPTProps) => {
     const [message, setMessage] = useState<string | null>(null)
+    const [recievedResult, setRecievedResult] = useState(false)
+    const [initialConnection, setInitialConnection] = useState(true)
     const submissionTimeoutRef = useRef<NodeJS.Timeout>(); // Handle figuring out when the user finishes speaking
     const sentInitialMessage = messages.length > 2
 
@@ -29,6 +31,15 @@ export const useChatGPT = ({ submitScript, connected, isStreaming, useChatBot, s
         browserSupportsSpeechRecognition
     } = useSpeechRecognition();
 
+    // First, clarify the conditions by assigning them to descriptively named variables.
+    const isConnectedAndReady = connected && (recievedResult || initialConnection) && !isStreaming;
+    const isChatbotOffButStartingChat = !useChatBot && startChat;
+    const isReadyToListen = sentInitialMessage;
+
+    // Then, combine these conditions to determine if the system should listen.
+    const shouldListen = isReadyToListen && (isConnectedAndReady || isChatbotOffButStartingChat);
+
+
     useEffect(() => {
         if (!browserSupportsSpeechRecognition) {
             throw new Error("Your browser doesn't support speech recognition")
@@ -37,30 +48,32 @@ export const useChatGPT = ({ submitScript, connected, isStreaming, useChatBot, s
 
     const submitMessages = useCallback(async () => {
         await submitScript(message);
+        setMessage(null);
     }, [message, submitScript])
 
     useEffect(() => {
         if (logging) console.log(`useEffect triggered. Conditions: { connected: ${connected}, useChatBot: ${useChatBot}, sentInitialMessage: ${sentInitialMessage}, message: ${message} }`);
 
-        if (connected || (!useChatBot && startChat)) {
-            if (logging) console.log('Condition passed: either connected or not using ChatBot.');
-
-            if (!sentInitialMessage || message) {
-                if (logging) console.log('Submitting messages because either the initial message has not been sent or there is a new message.');
-                submitMessages();
-                setMessage(null);
-            }
+        if ((connected || (!useChatBot && startChat)) && !sentInitialMessage || message) {
+            if (logging) console.log('Submitting messages because either the initial message has not been sent or there is a new message.');
+            submitMessages();
         }
     }, [message, useChatBot, startChat, connected, sentInitialMessage]);
 
 
     useEffect(() => {
-        if (logging) console.log(`Effect running: listening = ${listening}, isStreaming = ${isStreaming}`);
+        if (logging) {
+            console.log(`Effect running: listening = ${listening}`);
+            console.log(`Effect running: shouldListen = ${shouldListen}`);
+            console.log(`isConnectedAndReady (${isConnectedAndReady}): { connected: ${connected}, recievedResult: ${recievedResult}, initialConnection: ${initialConnection}, isStreaming: ${isStreaming} }`); //
+            console.log(`isChatbotOffButStartingChat (${isChatbotOffButStartingChat}): { useChatBot: ${useChatBot}, startChat: ${startChat}}`); // Logging the condition
+            console.log(`isReadyToListen: ${isReadyToListen}`); // Logging the condition
+        }
 
-        if (!listening && !isStreaming && (connected || (!useChatBot && startChat)) && sentInitialMessage) {
+        if (shouldListen && !listening) {
             if (logging) console.log('Starting speech recognition...');
             SpeechRecognition.startListening({ continuous: true });
-        } else if (isStreaming) {
+        } else if (!shouldListen && listening) {
             if (logging) console.log('Aborting speech recognition...');
             SpeechRecognition.abortListening();
         }
@@ -71,8 +84,14 @@ export const useChatGPT = ({ submitScript, connected, isStreaming, useChatBot, s
                 SpeechRecognition.abortListening();
             }
         };
-    }, [listening, isStreaming, connected, sentInitialMessage, useChatBot, startChat]); // Dependency array
 
+    }, [shouldListen, listening]); // Dependency array
+
+    useEffect(() => {
+        if (isStreaming && !recievedResult) {
+            setRecievedResult(true)
+        }
+    }, [isStreaming]);
 
     useEffect(() => {
         // If we're listening, reset the submission timeout whenever transcript changes
@@ -82,6 +101,8 @@ export const useChatGPT = ({ submitScript, connected, isStreaming, useChatBot, s
                 //console.log('Made it to submit')
                 setMessage(transcript)
                 resetTranscript()
+                setRecievedResult(false)
+                setInitialConnection(false)
             }
         }, 2000); // Adjust delay as needed
 

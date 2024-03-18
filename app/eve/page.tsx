@@ -63,7 +63,7 @@ export default async function ChatBotHomePage() {
             </div>
             <div className="flex justify-center items-center w-full max-w-6xl mx-auto">
                 <div className="aspect-square w-full md:w-1/2 flex justify-center items-center relative rounded-lg shadow-lg">
-                    <video src="https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/idle-EKXH7UBRmCylHsNk0PdpKtIh8uUesV.mp4" className="absolute top-0 left-0 w-full h-full object-cover" autoPlay loop playsInline></video>
+                    <video src="https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/eve-idle-4-JZARF2H2rNQGQCjItkov2Rk9oYqRKT" className="absolute top-0 left-0 w-full h-full object-cover" autoPlay loop playsInline></video>
                 </div>
             </div>
         </div>

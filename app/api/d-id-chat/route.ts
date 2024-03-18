@@ -12,6 +12,8 @@ const openai = new OpenAIApi(config);
 // Change the duration for the dunction
 export const maxDuration = 60; // This function can run for a maximum of 5 seconds
 
+const textToAppend = 'No yapping, your responses should be 1-2 sentences maximum.'
+
 
 type BodyType = {
   sessionId: string,
@@ -56,7 +58,20 @@ export async function POST(req: Request) {
     if (logging) console.log('chatHistory: ', chatHistory)
   }
 
-  const messagesToSend = chatHistory.map(m => ({ role: m.role, content: m.content } as ChatCompletionRequestMessage))
+  // Clone chatHistory to avoid mutating the original array
+  let modifiedChatHistory = [...chatHistory];
+
+  // Check if funMode is enabled and modify the first message accordingly
+  if (false && modifiedChatHistory.length > 0) {
+    // Example modification, tailor it to your needs
+    modifiedChatHistory[0] = {
+      ...modifiedChatHistory[0],
+      content: "🎉 Fun Mode Activated! 🎉 " + modifiedChatHistory[0].content,
+    };
+  }
+
+
+  const messagesToSend = modifiedChatHistory.map(m => ({ role: m.role, content: m.role == 'user' ? m.content + ' ' + textToAppend : m.content } as ChatCompletionRequestMessage));
 
   if (logging) console.log('messagesToSend: ', messagesToSend)
 
@@ -74,8 +89,9 @@ export async function POST(req: Request) {
     });
 
     const resData = await openAiRes.json();
+    if (logging) console.log('resData: ', resData)
     messageToSend = resData.choices[0].message.content
-    if (logging) console.log('resData: ', resData.choices[0].message.content)
+    if (logging) console.log('resData.choices[0].message.content: ', resData.choices[0].message.content)
 
   } catch (error: any) {
     console.error('Caught error in POST function:', error.message);

@@ -57,7 +57,7 @@ export const ChatBotPopup = ({ userId, userName }: { userId: string, userName: s
                         </motion.div>
                         <div className="aspect-square w-16 md:w-24 lg:w-32 relative">
                             <video
-                                src="https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/idle-EKXH7UBRmCylHsNk0PdpKtIh8uUesV.mp4"
+                                src="https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/eve-idle-4-JZARF2H2rNQGQCjItkov2Rk9oYqRKT"
                                 className="w-full h-full object-cover rounded-lg shadow-lg"
                                 autoPlay
                                 loop
