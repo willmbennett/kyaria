@@ -4,6 +4,8 @@ import { ChatHistory } from '../components/chatbot/sidebar/ChatHistory';
 import { checkSubscription } from '../../lib/hooks/check-subscription';
 import { SidebarDesktop } from '../components/chatbot/sidebar/SidebarDesktop';
 import { SidebarToggle } from '../components/chatbot/sidebar/ToggleSidebar';
+import { getResumes } from '../../lib/resume-db';
+import { DropResumeBanner } from '../components/chatbot/DropResumeBanner';
 
 const title = "Eve: Kyaria.ai's Revolutionary AI Career Coach | Affordable & 24/7 Access";
 const description = "Discover Eve, the world's first virtual career coach. Get personalized, smart career advice 24/7 at just $10/month. Save on career coaching with cutting-edge AI technology. Start your journey to career success with Eve today!";
@@ -33,15 +35,28 @@ export default async function EveLayout({
     children: React.ReactNode;
 }) {
     const { userId } = await checkSubscription()
+    const { resumes } = await getResumes(userId)
+
+    //console.log('userId, ', userId)
+    //console.log('resumes, ', resumes)
 
     return (
-        <div className='md:h-screen my-10'>
-            <SidebarMobile>
-                {/* @ts-ignore */}
-                <ChatHistory userId={userId} />
-            </SidebarMobile>
-            <SidebarToggle />
-            <SidebarDesktop userId={userId} />
+        <div className="min-h-screen">
+            {userId &&
+                <>
+                    <SidebarMobile>
+                        {/* @ts-ignore */}
+                        <ChatHistory userId={userId} />
+                    </SidebarMobile>
+                    <SidebarToggle />
+                    <SidebarDesktop userId={userId} />
+                    {(resumes && resumes.length == 0) &&
+                        <DropResumeBanner
+                            userId={userId}
+                        />
+                    }
+                </>
+            }
             {children}
         </div>
     )

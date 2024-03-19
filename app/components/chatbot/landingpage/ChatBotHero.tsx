@@ -27,11 +27,8 @@ export function ChatBotHero() {
             </motion.span>, the world's first Virtual Career Coach
           </h1>
           <p className="mt-4 flex text-md text-slate-600/90 md:justify-center xl:justify-start xl:text-base">
-            Now in beta. Included with Kyaria PRO subscription, only $10/mo.
+            Included with Kyaria PRO subscription, only $10/mo.
           </p>
-          <div className='flex w-full justify-center'>
-            <AuthButton altText='Start Chatting' />
-          </div>
         </div>
       </Container>
     </section>

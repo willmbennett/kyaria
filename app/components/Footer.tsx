@@ -30,11 +30,11 @@ const navigation = {
     /*{ name: 'Contact us', href: '/contact' },*/
   ],
   solutions: [
+    { name: 'AI Career Coach', href: '/eve' },
     { name: 'Resume Builder', href: '/resumebuilder' },
-    { name: 'AI Career Concierge', href: '/board' },
+    { name: 'Job Application Tracker', href: '/board' },
     { name: 'LinkedIn Bio', href: '/bio' },
     { name: 'Elevator Pitch', href: '/pitch' },
-    { name: 'AI Career Coaching (beta)', href: '/eve' },
     { name: 'Networking (beta)', href: '/networking' },
     { name: 'Jobs (beta)', href: '/jobs' },
   ],

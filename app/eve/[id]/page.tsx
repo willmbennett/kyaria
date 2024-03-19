@@ -8,10 +8,6 @@ export default async function ChatbotPage({ params }: { params: { id: string } }
     const { userId, activeSubscription, admin } = await checkSubscription()
     //console.log({ userId, activeSubscription, admin })
 
-    if (!userId) {
-        redirect('/eve')
-    }
-
     const chatId = params.id
 
     if (!chatId) {

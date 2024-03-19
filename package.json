@@ -90,8 +90,7 @@
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
     "transform-props": "^1.0.1",
-    "uuid": "^9.0.1",
-    "web-speech-cognitive-services": "^7.1.4-master.9e026d9"
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/formidable": "^3.4.3",
