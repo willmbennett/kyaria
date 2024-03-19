@@ -41,7 +41,7 @@ export default async function EveLayout({
     //console.log('resumes, ', resumes)
 
     return (
-        <div className="my-10 min-h-screen">
+        <div className="min-h-screen">
             {userId &&
                 <>
                     <SidebarMobile>
