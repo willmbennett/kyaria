@@ -6,7 +6,7 @@ import { VideoChatContainer } from "../../components/chatbot/VideoChatContainer"
 
 export default async function ChatbotPage({ params }: { params: { id: string } }) {
     const { userId, activeSubscription, admin } = await checkSubscription()
-    console.log({ userId, activeSubscription, admin })
+    //console.log({ userId, activeSubscription, admin })
 
     const chatId = params.id
 

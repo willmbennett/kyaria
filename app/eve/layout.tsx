@@ -37,8 +37,8 @@ export default async function EveLayout({
     const { userId } = await checkSubscription()
     const { resumes } = await getResumes(userId)
 
-    console.log('userId, ', userId)
-    console.log('resumes, ', resumes)
+    //console.log('userId, ', userId)
+    //console.log('resumes, ', resumes)
 
     return (
         <div className="my-10 min-h-screen">
