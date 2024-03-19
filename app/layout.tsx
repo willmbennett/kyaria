@@ -10,6 +10,7 @@ import { checkSubscription } from '../lib/hooks/check-subscription';
 import { Header } from './components/Header';
 import { ChatBotPopup } from './components/chatbot/landingpage/ChatPopup';
 import { Providers } from './components/chatbot/sidebar/Providers';
+import 'regenerator-runtime/runtime'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 

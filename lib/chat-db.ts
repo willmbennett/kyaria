@@ -56,9 +56,9 @@ export const createInitialChat = async (userId: string) => {
             userId,
             messages
         }
-        console.log('Creating new chat with data: ', newChatData)
+        //console.log('Creating new chat with data: ', newChatData)
         const newChat = await ChatModel.create(newChatData);
-        console.log('newChat: ', newChat)
+        //console.log('newChat: ', newChat)
 
         if (newChat) {
             //console.log('New post created successfully:', newPost);

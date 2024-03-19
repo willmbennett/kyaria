@@ -56,7 +56,6 @@ export const useDIDApi = ({ incomingVideo, useChatBot, userId, chatId, router, f
                 sessionId: state.sessionId,
                 streamId: state.streamId,
                 message,
-                userId,
                 useChatBot,
                 chatId,
                 funMode

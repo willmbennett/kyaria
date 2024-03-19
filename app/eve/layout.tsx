@@ -35,13 +35,17 @@ export default async function EveLayout({
     const { userId } = await checkSubscription()
 
     return (
-        <div className='md:h-screen my-10'>
-            <SidebarMobile>
-                {/* @ts-ignore */}
-                <ChatHistory userId={userId} />
-            </SidebarMobile>
-            <SidebarToggle />
-            <SidebarDesktop userId={userId} />
+        <div className={`my-10 ${userId ? `md:h-screen` : 'min-h-screen'}`}>
+            {userId &&
+                <>
+                    <SidebarMobile>
+                        {/* @ts-ignore */}
+                        <ChatHistory userId={userId} />
+                    </SidebarMobile>
+                    <SidebarToggle />
+                    <SidebarDesktop userId={userId} />
+                </>
+            }
             {children}
         </div>
     )

@@ -3,7 +3,6 @@ import { Message } from "ai";
 import { ResumeClass } from "../../models/Resume";
 import { useCallback, useEffect, useRef, useState } from "react";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
-import 'regenerator-runtime/runtime'
 
 interface useChatGPTProps {
     selectedResume?: ResumeClass;

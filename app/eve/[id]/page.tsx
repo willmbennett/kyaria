@@ -6,11 +6,7 @@ import { VideoChatContainer } from "../../components/chatbot/VideoChatContainer"
 
 export default async function ChatbotPage({ params }: { params: { id: string } }) {
     const { userId, activeSubscription, admin } = await checkSubscription()
-    //console.log({ userId, activeSubscription, admin })
-
-    if (!userId) {
-        redirect('/eve')
-    }
+    console.log({ userId, activeSubscription, admin })
 
     const chatId = params.id
 
@@ -35,7 +31,7 @@ export default async function ChatbotPage({ params }: { params: { id: string } }
             chatId={chatId}
             messages={messages}
             activeSubscription={activeSubscription}
-            admin={admin}
+            admin={true}
         />
     );
 }

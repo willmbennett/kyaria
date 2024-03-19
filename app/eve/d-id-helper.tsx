@@ -421,19 +421,17 @@ interface HandleScriptSubmissionProps {
     sessionId: string | null;
     streamId: string | null;
     message: string | null;
-    userId: string;
     useChatBot: boolean;
     chatId: string;
     funMode: boolean;
 }
 
-export const handleScriptSubmission = async ({ sessionId, streamId, message, userId, useChatBot, chatId, funMode }: HandleScriptSubmissionProps) => {
+export const handleScriptSubmission = async ({ sessionId, streamId, message, useChatBot, chatId, funMode }: HandleScriptSubmissionProps) => {
     if (logging) console.log('Made it to Submit Script')
     const dataToSubmit = {
         streamId,
         sessionId,
         message,
-        userId,
         useChatBot,
         chatId,
         funMode

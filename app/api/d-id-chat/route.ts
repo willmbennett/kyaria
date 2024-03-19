@@ -32,9 +32,9 @@ export async function POST(req: Request) {
   if (logging) console.log('Made it to [d-id-chat] api route')
   const body: BodyType = await req.json();
   if (logging) console.log('body:', body)
-  const { sessionId, streamId, message, userId, useChatBot, chatId, funMode }: BodyType = body
+  const { sessionId, streamId, message, useChatBot, chatId, funMode }: BodyType = body
 
-  if (useChatBot && (!sessionId || !streamId || !userId)) {
+  if (useChatBot && (!sessionId || !streamId)) {
     return NextResponse.json({ message: `Bad data: ${body}` }, { status: 500 });
   }
 
@@ -53,7 +53,8 @@ export async function POST(req: Request) {
     chatHistory.push({
       id: (chatHistory.length + 1).toString(),
       role: 'user',
-      content: message
+      content: message,
+      createdAt: new Date()
     })
 
     if (logging) console.log('Added user message')
@@ -73,7 +74,11 @@ export async function POST(req: Request) {
   }
 
 
-  const messagesToSend = modifiedChatHistory.map(m => ({ role: m.role, content: m.role == 'user' ? m.content + ' ' + textToAppend : m.content } as ChatCompletionRequestMessage));
+  const messagesToSend = modifiedChatHistory.map(m => (
+    {
+      role: m.role,
+      content: m.role == 'user' ? m.content + ' ' + textToAppend : m.content,
+    } as ChatCompletionRequestMessage));
 
   if (logging) console.log('messagesToSend: ', messagesToSend)
 
@@ -107,7 +112,8 @@ export async function POST(req: Request) {
     chatHistory.push({
       id: (chatHistory.length + 1).toString(),
       role: 'assistant',
-      content: messageToSend
+      content: messageToSend,
+      createdAt: new Date()
     })
 
     await updateChatAction(
