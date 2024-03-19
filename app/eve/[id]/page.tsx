@@ -31,7 +31,7 @@ export default async function ChatbotPage({ params }: { params: { id: string } }
             chatId={chatId}
             messages={messages}
             activeSubscription={activeSubscription}
-            admin={true}
+            admin={admin}
         />
     );
 }

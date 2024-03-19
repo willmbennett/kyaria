@@ -2,7 +2,7 @@
 import { Button } from "../../Button";
 import { FileUploader } from "./FileUploader";
 import { useForm } from 'react-hook-form';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFileHandler } from "../../../../lib/hooks/resume-test";
 import { useRouter } from "next/navigation";
 import { PDFViewer } from "../pdfviewer/PDFViewer";
@@ -27,11 +27,12 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 type PDFFile = File | null;
 
 interface ResumeUploadFormProps {
-    userId: string,
-    goToResume?: boolean
+    userId: string;
+    goToResume?: boolean;
+    autoSubmit?: boolean;
 }
 
-export const ResumeUploadForm = ({ userId, goToResume = false }: ResumeUploadFormProps) => {
+export const ResumeUploadForm = ({ userId, goToResume = false, autoSubmit = false }: ResumeUploadFormProps) => {
     const [file, setFile] = useState<PDFFile>(null);
     const [base64File, setBase64File] = useState<string | null>(null);
     const [fileInputKey, setFileInputKey] = useState(Date.now());
@@ -48,10 +49,10 @@ export const ResumeUploadForm = ({ userId, goToResume = false }: ResumeUploadFor
         onError: (error) => {
             console.error('Resume creation failed:', error);
             alert('Failed to upload resume. Please try again.');
-            // Optionally navigate to an error page or display an error message
+            handleReset()
         },
         onSuccess: async (resumeId) => {
-          //console.log('Resume successfully created with ID:', resumeId);
+            //console.log('Resume successfully created with ID:', resumeId);
             // Await the completion of the navigation
             if (goToResume) {
                 router.push(`/resumebuilder/${resumeId}`);
@@ -78,6 +79,18 @@ export const ResumeUploadForm = ({ userId, goToResume = false }: ResumeUploadFor
         setFileInputKey(Date.now()); // Reset the key to force re-render of the file input
     };
 
+    useEffect(() => {
+        // Auto-submit logic
+        const handleAutoSubmit = async () => {
+            if (base64File && userId && !errors.input && autoSubmit) {
+                await handleResumeCreation(base64File, userId);
+            }
+        };
+
+        handleAutoSubmit();
+    }, [base64File, userId, autoSubmit, errors]); // This useEffect will run every time base64File or userId changes
+
+
 
     return (
         <div className="w-full flex flex-col justify-center space-y-2">
@@ -86,7 +99,7 @@ export const ResumeUploadForm = ({ userId, goToResume = false }: ResumeUploadFor
                     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-2 md:flex-row w-full justify-center items-center">
                         {!file && <FileUploader key={fileInputKey} onFileChange={onFileChange} />}
                         {errors.input && <p>{errors.input.message}</p>}
-                        {file && (
+                        {(file && !autoSubmit) && (
                             <div className="flex flex-col gap-4 justify-center">
                                 <div className="space-x-2">
                                     <Button
