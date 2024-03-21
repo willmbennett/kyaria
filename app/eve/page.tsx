@@ -4,13 +4,14 @@ import { checkSubscription } from "../../lib/hooks/check-subscription";
 import { ChatBotHero } from "../components/chatbot/landingpage/ChatBotHero";
 import { ChatBotMenu } from "../components/chatbot/ChatBotMenu";
 import { NewChatButton } from "../components/chatbot/sidebar/NewChatButton";
-import { ProductDemo } from "../components/chatbot/landingpage/ProductDemo";
 import { Suspense, cache } from "react";
 import { createInitialChatAction } from "./_action";
 import { getChat } from "../../lib/chat-db";
 import { Message } from "ai";
 import { EVE_IDLE_VIDEO } from "./eve-helper";
 const Process = dynamic(() => import('../components/chatbot/landingpage/Process'));
+
+const EveDemo = dynamic(() => import('../components/chatbot/landingpage/ProductDemo'))
 
 const title = "Eve: Kyaria.ai's Revolutionary AI Career Coach | Affordable & 24/7 Access";
 const description = "Discover Eve, the world's first virtual career coach. Get personalized, smart career advice 24/7 at just $10/month. Save on career coaching with cutting-edge AI technology. Start your journey to career success with Eve today!";
@@ -45,7 +46,7 @@ export default async function ChatBotHomePage() {
             <>
                 <ChatBotHero />
                 <Suspense fallback={<p>Loading demo...</p>}>
-                    <ProductDemo />
+                    <EveDemo />
                 </Suspense>
                 <Process />
             </>
