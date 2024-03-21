@@ -11,14 +11,14 @@ export default function CallToAction() {
       <Container className="relative items-center md:grid md:grid-cols-12 md:gap-12">
         <div className="mx-auto max-w-lg md:col-span-6 md:mx-0 lg:pr-12">
           <h2 className="text-center text-4xl font-semibold leading-tight text-slate-900 sm:text-5xl sm:leading-tight md:text-left">
-            Launch your career today
+            Kickstart Your Career with Kyaria.ai
           </h2>
           <p className="mt-6 text-center text-[17px] leading-relaxed text-slate-700 sm:text-lg sm:leading-relaxed md:text-left ">
-            Stop spending hours writing endless cover-letters, resumes, and emails.
-            Never worry about how to answer interview questions or introduce yourself again.
+            Say goodbye to the hassle of drafting cover letters and resumes from scratch. With Kyaria.ai, our AI-powered Career Coach, Eve, guides you through creating standout resumes, preps you for interviews, and offers personalized advice. Plus, keep your job search organized and on track with our intuitive Kanban tracker. Start your journey towards landing your dream job with confidence and ease.
           </p>
+
           <div className="mt-10 flex w-full justify-center md:justify-start">
-          <AuthButton />
+            <AuthButton />
           </div>
         </div>
         <div className="col-span-6 hidden grid-cols-12 md:grid">

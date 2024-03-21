@@ -1,7 +1,7 @@
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import Image from 'next/image'
 
-import Avatar from '/public/images/avatars/avatar-will.jpg'
+//import Avatar from '/public/images/avatars/avatar-will.jpg'
 import homeHeroImg from '/public/images/stock/job-interview2.jpg'
 import { Container } from './Container'
 import AuthButton from '../AuthButton'
@@ -12,31 +12,26 @@ export function HomeHero() {
       <Container>
         <div className="mx-auto max-w-lg pb-14 md:mx-0 md:max-w-none md:pb-48 lg:pb-52 xl:max-w-xl xl:pb-14">
           <h1 className="text-5xl font-semibold leading-tighter text-slate-900 md:mx-auto md:max-w-2xl md:text-center xl:mx-0 xl:text-left xl:text-6xl xl:leading-tighter">
-            Give yourself a competitive edge this recruiting season
+            Revolutionize your job hunt with Kyaria.ai
           </h1>
           <ul className="mt-6 flex flex-col space-y-4 md:mx-auto md:mt-8 md:max-w-3xl md:flex-row md:space-x-2 md:space-y-0 lg:space-x-4 xl:mx-0 xl:flex-col xl:space-x-0 xl:space-y-4">
 
             <li className="flex items-center md:items-start xl:items-center">
               <CheckCircleIcon className="h-5 w-5 shrink-0 text-slate-800 md:h-6 md:w-6 xl:h-5 xl:w-5" />
               <p className="ml-3 text-slate-700 lg:ml-4 xl:ml-5 xl:text-lg">
-                Elevator pitch and behaviorals in {' '}
-                <span className="font-medium text-slate-900">one click.</span>
+                Introducing Eve: Your AI-Powered Career Coach, ready to guide your journey.
               </p>
             </li>
             <li className="flex items-center md:items-start xl:items-center">
               <CheckCircleIcon className="h-5 w-5 shrink-0 text-slate-800 md:h-6 md:w-6 xl:h-5 xl:w-5" />
               <p className="ml-3 text-slate-700 lg:ml-4 xl:ml-5 xl:text-lg">
-                Polished resume and cover letter{' '}
-                <span className="font-medium text-slate-900">
-                  written for you.
-                </span>
+                Create standout resumes with our AI-driven builder, optimized for ATS compatibility.
               </p>
             </li>
             <li className="flex items-center md:items-start xl:items-center">
               <CheckCircleIcon className="h-5 w-5 shrink-0 text-slate-800 md:h-6 md:w-6 xl:h-5 xl:w-5" />
               <p className="ml-3 text-slate-700 lg:ml-4 xl:ml-5 xl:text-lg">
-                <span className="font-medium text-slate-900">Stress free</span>
-                {' '} networking emails.
+                Secure your dream job with tailored application packets, crafted just for you.
               </p>
             </li>
           </ul>

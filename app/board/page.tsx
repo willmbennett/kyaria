@@ -10,11 +10,21 @@ import { JobClass } from "../../models/Job";
 import { boardItemType } from "./job-helper";
 import { BoardHero } from "../components/board/landingpage/BoardHero";
 import dynamic from "next/dynamic";
-const ProductDemo = dynamic(() => import('../components/board/landingpage/ProductDemo'));
-const Process = dynamic(() => import('../components/board/landingpage/Process'));
-const FeatureBlocks = dynamic(() => import('../components/board/landingpage/FeatureBlocks'));
-const Faqs = dynamic(() => import('../components/board/landingpage/Faqs'));
-const CallToAction = dynamic(() => import('../components/board/landingpage/CallToAction'));
+const ProductDemo = dynamic(() => import('../components/board/landingpage/ProductDemo'), {
+  ssr: false,
+});
+const Process = dynamic(() => import('../components/board/landingpage/Process'), {
+  ssr: false,
+});
+const FeatureBlocks = dynamic(() => import('../components/board/landingpage/FeatureBlocks'), {
+  ssr: false,
+});
+const Faqs = dynamic(() => import('../components/board/landingpage/Faqs'), {
+  ssr: false,
+});
+const CallToAction = dynamic(() => import('../components/board/landingpage/CallToAction'), {
+  ssr: false,
+});
 
 export default async function BoardPage() {
   const { activeSubscription, userId } = await checkSubscription()

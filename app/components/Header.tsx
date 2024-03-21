@@ -41,6 +41,7 @@ const pages = [
 const userPages = [
   { label: 'AI Career Coach', href: '/eve' },
   { label: 'Job Application Tracker ', href: '/board' },
+  { label: 'Resume Builder ', href: '/resumebuilder' },
   { label: 'Networking (beta)', href: '/networking' },
   /*{ label: 'Pricing', href: '/pricing' },*/
   /*{ label: 'Contact', href: '/contact' },*/
