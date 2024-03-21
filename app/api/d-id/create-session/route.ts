@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     if (logging) console.log('Request body:', body);
     try {
         if (logging) console.log('Attempting to fetch with retries');
-        const response = await fetchWithRetries('https://api.d-id.com/talks/streams', {
+        const response = await fetchWithRetries('https://api.d-id.com/clips/streams', {
             method: 'POST',
             headers: {
                 Authorization: `Basic ${process.env.D_ID_API_KEY}`,

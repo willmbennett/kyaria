@@ -14,7 +14,7 @@ export async function DELETE(request: Request) {
     if (logging) console.log('Request body for delete submission:', JSON.stringify({ streamId, session_id }));
 
     try {
-        const response = await fetch(`https://api.d-id.com/talks/streams/${streamId}`, {
+        const response = await fetch(`https://api.d-id.com/clips/streams/${streamId}`, {
             method: 'DELETE',
             headers: {
                 Authorization: `Basic ${process.env.D_ID_API_KEY}`, // Ensure this is correctly set in your environment

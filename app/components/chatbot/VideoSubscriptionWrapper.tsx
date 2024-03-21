@@ -9,7 +9,7 @@ interface TimedAccessComponentProps {
 
 const TimedAccessComponent: React.FC<TimedAccessComponentProps> = ({ children }) => {
     const [offerExpired, setOfferExpired] = useState(false);
-    const [countdown, setCountdown] = useState(60); // Countdown from 60 seconds
+    const [countdown, setCountdown] = useState(5 * 60); // Countdown from 60 seconds
 
     useEffect(() => {
         let timer: ReturnType<typeof setTimeout> | null = null;

@@ -127,16 +127,20 @@ export async function POST(req: Request) {
         const body = {
           script: {
             type: 'text',
-            subtitles: 'false',
+            subtitles: false,
             provider: {
               type: 'microsoft',
               voice_id: 'en-US-JennyNeural'
             },
             input: messageToSend,
-            ssml: 'false'
+            ssml: false,
           },
-          config: { fluent: 'true', pad_audio: '0.5' },
-          audio_optimization: '2',
+          config: {
+            stitch: true,
+          },
+          background: {
+            color: '#FFFFFF'
+          },
           session_id: sessionId
         }
         if (logging) {
@@ -145,7 +149,7 @@ export async function POST(req: Request) {
           console.log(body)
         }
 
-        const response = await fetchWithRetries(`https://api.d-id.com/talks/streams/${streamId}`, {
+        const response = await fetchWithRetries(`https://api.d-id.com/clips/streams/${streamId}`, {
           method: 'POST',
           headers: {
             Authorization: `Basic ${process.env.D_ID_API_KEY}`,

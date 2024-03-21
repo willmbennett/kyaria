@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { Container } from "../../landingpage/Container"
 import { NewChatButton } from "../sidebar/NewChatButton";
+import { EVE_IDLE_VIDEO } from "../../../eve/eve-helper";
 
 export const ProductDemo = () => {
 
@@ -51,7 +52,7 @@ export const ProductDemo = () => {
               </div>
               <div className="flex justify-center items-center w-full max-w-6xl mx-auto">
                 <div className="aspect-square w-full md:w-1/2 flex justify-center items-center relative rounded-lg shadow-lg">
-                  <video src="https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/eve-idle-4-JZARF2H2rNQGQCjItkov2Rk9oYqRKT" className="absolute top-0 left-0 w-full h-full object-cover rounded-lg" autoPlay loop playsInline></video>
+                  <video src={EVE_IDLE_VIDEO} className="absolute top-0 left-0 w-full h-full object-cover rounded-lg" autoPlay loop playsInline></video>
                 </div>
               </div>
             </Container>
