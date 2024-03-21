@@ -1,8 +1,10 @@
 'use client'
 
 import { motion } from "framer-motion"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { useState } from "react"
+import { EVE_IDLE_VIDEO } from "../../../eve/eve-helper"
+import { useRouter } from "next/navigation"
 
 export const ChatBotPopup = ({ userId, userName }: { userId: string, userName: string }) => {
     const path = usePathname()
@@ -57,7 +59,7 @@ export const ChatBotPopup = ({ userId, userName }: { userId: string, userName: s
                         </motion.div>
                         <div className="aspect-square w-16 md:w-24 lg:w-32 relative">
                             <video
-                                src="https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/eve-idle-4-JZARF2H2rNQGQCjItkov2Rk9oYqRKT"
+                                src={EVE_IDLE_VIDEO}
                                 className="w-full h-full object-cover rounded-lg shadow-lg"
                                 autoPlay
                                 loop
@@ -67,18 +69,14 @@ export const ChatBotPopup = ({ userId, userName }: { userId: string, userName: s
                             <button
                                 className="absolute inset-0 bg-black text-white opacity-0 hover:bg-opacity-50 hover:opacity-100 flex justify-center items-center rounded-lg transition-opacity duration-300"
                                 onClick={async () => {
-                                    if (!userId) {
-                                        const { signIn } = (await import("next-auth/react"));
-                                        const url = process.env.NODE_ENV == 'development' ? 'http://localhost:3000/eve' : 'https://www.kyaria.ai/eve'
-                                        signIn('google', {
-                                            callbackUrl: url
-                                        })
-                                    } else {
-                                        router.push('/eve')
-                                    }
+                                    const { createInitialChatAction } = (await import("../../../eve/_action"))
+                                    const idToUse = userId ? userId : 'n/a'
+                                    const chatId = await createInitialChatAction(idToUse, '/eve')
+                                    if (chatId) router.push(`/eve/${chatId}`)
+                                    else throw new Error('There was a problem creating a new chat')
                                 }}
                             >
-                                {userId ? 'Start Chatting' : 'Sign In'}
+                                Start Chatting
                             </button>
                         </div>
                     </>
