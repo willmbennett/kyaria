@@ -16,6 +16,7 @@ const tiers = [
       "The Pro package grants exclusive access to all current and beta products, empowering you with advanced resources at every step.",
     price: 10,
     features: [
+      "Access to Eve: The world's first AI-powered virtual career coach.",
       "AI-powered Resume Builder: Enjoy a user-friendly interface that simplifies creating impactful resumes.",
       "Kanban-Style Job Board: Organize and track your job search with ease for maximum efficiency.",
       "Comprehensive Application Kit: Elevate your job applications with customized resumes, cover letters, interview preparation, and professional email templates.",
@@ -117,7 +118,7 @@ export function PricingCards({ activeSubscription, userId }: { activeSubscriptio
                       key={tier.name}
                       className={clsx(
                         index == 2 ? 'bg-purple-light' : 'bg-gray-secondary-50',
-                        'p-8 sm:p-10 sm:max-w-xl md:max-w-sm lg:mx-0 lg:max-w-md border border-gray-secondary-400/60',
+                        'p-8 sm:p-10 sm:max-w-xl md:max-w-lg lg:mx-0 lg:max-w-xl border border-gray-secondary-400/60',
                       )}
                     >
                       <div className='flex flex-row space-x-3'>
