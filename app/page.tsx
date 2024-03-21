@@ -8,9 +8,13 @@ import { SignedInHero } from './components/landingpage/SignedInHero'
 //const Process = dynamic(() => import('./components/landingpage/Process'))
 //const TestimonialsSlide = dynamic(() => import('./components/landingpage/TestimonialsSlide'))
 //const Faqs = dynamic(() => import('./components/landingpage/Faqs'))
-const CallToAction = dynamic(() => import('./components/landingpage/CallToAction'))
+const CallToAction = dynamic(() => import('./components/landingpage/CallToAction'), {
+  ssr: false,
+})
 //const ProductDemo = dynamic(() => import('./components/landingpage/ProductDemo'))
-const ProductCarousel = dynamic(() => import('./components/landingpage/ProductCarousel'))
+const ProductCarousel = dynamic(() => import('./components/landingpage/ProductCarousel'), {
+  ssr: false,
+})
 
 // Data fetching
 //import { getJobApp } from '../lib/app-db'

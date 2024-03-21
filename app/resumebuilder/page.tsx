@@ -7,12 +7,22 @@ import { checkSubscription } from "../../lib/hooks/check-subscription";
 import { redirect } from "next/navigation";
 
 // Dynamically import components
-const CallToAction = dynamic(() => import("../components/resumebuilder/landingpage/CallToAction"));
+const CallToAction = dynamic(() => import("../components/resumebuilder/landingpage/CallToAction"), {
+  ssr: false,
+});
 //const FeaturesGrid = dynamic(() => import("../components/landingpage/FeaturesGrid"));
-const Process = dynamic(() => import("../components/resumebuilder/landingpage/Process"));
-const FeatureBlocks = dynamic(() => import("../components/resumebuilder/landingpage/FeatureBlocks"));
-const Faqs = dynamic(() => import("../components/resumebuilder/landingpage/Faqs"));
-const ProductDemo = dynamic(() => import("../components/resumebuilder/landingpage/ProductDemo"));
+const Process = dynamic(() => import("../components/resumebuilder/landingpage/Process"), {
+  ssr: false,
+});
+const FeatureBlocks = dynamic(() => import("../components/resumebuilder/landingpage/FeatureBlocks"), {
+  ssr: false,
+});
+const Faqs = dynamic(() => import("../components/resumebuilder/landingpage/Faqs"), {
+  ssr: false,
+});
+const ProductDemo = dynamic(() => import("../components/resumebuilder/landingpage/ProductDemo"), {
+  ssr: false,
+});
 
 
 type getResumesType = {

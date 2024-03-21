@@ -7,13 +7,27 @@ import { ResumeClass } from "../../models/Resume";
 import { Container } from '../components/landingpage/Container';
 
 // Dynamically import components
-const CallToAction = dynamic(() => import("../components/networking/CallToAction"));
-const Faqs = dynamic(() => import("../components/networking/Faqs"));
-const FeatureBlocks = dynamic(() => import("../components/networking/FeatureBlocks"));
-const NetworkingDemo = dynamic(() => import("../components/networking/NetworkingDemo"));
-const Process = dynamic(() => import("../components/networking/Process"));
-const NetworkingSearch = dynamic(() => import("../components/networking/NetworkingSearch"));
-const StatsHighlight = dynamic(() => import("../components/networking/landingpage/StatsHighlight"));
+const CallToAction = dynamic(() => import("../components/networking/CallToAction"), {
+  ssr: false,
+});
+const Faqs = dynamic(() => import("../components/networking/Faqs"), {
+  ssr: false,
+});
+const FeatureBlocks = dynamic(() => import("../components/networking/FeatureBlocks"), {
+  ssr: false,
+});
+const NetworkingDemo = dynamic(() => import("../components/networking/NetworkingDemo"), {
+  ssr: false,
+});
+const Process = dynamic(() => import("../components/networking/Process"), {
+  ssr: false,
+});
+const NetworkingSearch = dynamic(() => import("../components/networking/NetworkingSearch"), {
+  ssr: false,
+});
+const StatsHighlight = dynamic(() => import("../components/networking/landingpage/StatsHighlight"), {
+  ssr: false,
+});
 
 
 export default async function NetworkingPage() {

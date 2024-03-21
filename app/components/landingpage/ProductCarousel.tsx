@@ -2,10 +2,10 @@ import { Container } from './Container'
 import { CarouselType } from '../../helper';
 import Carousel from './Carousel';
 import dynamic from 'next/dynamic'
+import ResumeDemo from '../resumebuilder/landingpage/ProductDemoCarousel'
 
 const BoardDemo = dynamic(() => import('../board/landingpage/ProductDemoCarousel'))
 const EveDemo = dynamic(() => import('../chatbot/landingpage/ProductDemoCarousel'))
-const ResumeDemo = dynamic(() => import('../resumebuilder/landingpage/ProductDemoCarousel'))
 
 export default function ProductCarousel() {
   const items: CarouselType[] = [
@@ -22,7 +22,11 @@ export default function ProductCarousel() {
     {
       name: 'resumeBuilder',
       title: 'AI Powered Resume Builder',
-      object: <ResumeDemo />
+      object:
+        <>
+          {/* @ts-ignore */}
+          <ResumeDemo />
+        </>
     }
   ]
 
