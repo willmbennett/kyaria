@@ -14,7 +14,7 @@ interface SubmitSdpResponse {
 export async function POST(request: Request) {
     const body: SubmitSdpRequestBody = await request.json()
     try {
-        const response = await fetch(`https://api.d-id.com/talks/streams/${body.streamId}/sdp`, {
+        const response = await fetch(`https://api.d-id.com/clips/streams/${body.streamId}/sdp`, {
             method: 'POST',
             headers: {
                 Authorization: `Basic ${process.env.D_ID_API_KEY}`,

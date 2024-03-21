@@ -51,3 +51,5 @@ export const drawVideosToCanvas = (canvas: HTMLCanvasElement, incomingVideoEleme
 
     draw(); // Start the loop
 }
+
+export const EVE_IDLE_VIDEO = "https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/eve-idle-5-UpB2uZ3WFbOHyxYgtUdz1WGJsohcql"

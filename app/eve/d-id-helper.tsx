@@ -35,6 +35,13 @@ export interface DIDApiState {
     streaming: boolean;
 }
 
+const presenterInputByService = {
+    talks: { source_url: 'https://res.cloudinary.com/kyaria/image/upload/v1709423279/eve.png' },
+    clips: {
+        presenter_id: 'kayla-zxpG_93n5W'
+    }
+}
+
 const logging = false
 
 // Function to initialize the peer connection and start the stream
@@ -76,7 +83,7 @@ export const createSession = async (): Promise<SessionResponseType> => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ source_url: 'https://res.cloudinary.com/kyaria/image/upload/v1709423279/eve.png' }),
+            body: JSON.stringify(presenterInputByService['clips']),
         });
 
         // Log raw response if not OK

@@ -19,7 +19,7 @@ export async function POST(request: Request) {
     //console.log('Request body:', JSON.stringify({ streamId, sessionId, text }));
     try {
         //console.log('Attempting to fetch with retries');
-        const response = await fetchWithRetries(`https://api.d-id.com/talks/streams/${streamId}`, {
+        const response = await fetchWithRetries(`https://api.d-id.com/clips/streams/${streamId}`, {
             method: 'POST',
             headers: {
                 Authorization: `Basic ${process.env.D_ID_API_KEY}`,

@@ -18,7 +18,7 @@ export async function POST(request: Request) {
 
     try {
         if (logging) console.log(`Attempting to submit ICE candidate for stream ID: ${body.streamId}`);
-        const response = await fetch(`https://api.d-id.com/talks/streams/${body.streamId}/ice`, {
+        const response = await fetch(`https://api.d-id.com/clips/streams/${body.streamId}/ice`, {
             method: 'POST',
             headers: {
                 Authorization: `Basic ${process.env.D_ID_API_KEY}`,
