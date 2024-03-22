@@ -27,7 +27,7 @@ const CallToAction = dynamic(() => import('../components/board/landingpage/CallT
 });
 
 export default async function BoardPage() {
-  const { activeSubscription, userId } = await checkSubscription()
+  const { userId } = await checkSubscription()
   const { totalApps } = await countTotalApps()
 
   if (!userId) {
@@ -50,7 +50,6 @@ export default async function BoardPage() {
     redirect('/apps/new')
   }
 
-
   const boardItems: boardItemType[] = jobApps.map(app => {
     const job = app.job as JobClass
     return ({
@@ -72,25 +71,14 @@ export default async function BoardPage() {
         <h1 className="sm:text-lg text-xl font-bold text-slate-900">
           Your Job Board
         </h1>
-        {activeSubscription ?
-          <Button
-            variant="solid"
-            size="sm"
-            type="button"
-            href="/apps/new"
-          >
-            Add a New Job Post
-          </Button>
-          :
-          <Button
-            variant="solid"
-            size="sm"
-            type="button"
-            href="/pricing"
-          >
-            Subscribe to Add Job Posts
-          </Button>
-        }
+        <Button
+          variant="solid"
+          size="sm"
+          type="button"
+          href="/apps/new"
+        >
+          Add a New Job Post
+        </Button>
       </div>
       <Kanban
         boardItems={boardItems}

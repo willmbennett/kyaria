@@ -2,8 +2,10 @@ import { getResumes } from "../../../lib/resume-db";
 import { ResumeClass } from "../../../models/Resume";
 import { checkSubscription } from "../../../lib/hooks/check-subscription";
 import { redirect } from "next/navigation";
-import { getProfile } from "../../../lib/profile-db";
+import { createProfile, getProfile } from "../../../lib/profile-db";
 import { Pitch } from "../../components/pitch/Pitch";
+import { PitchHero } from "../../components/pitch/PitchHero";
+import ProductDemo from "../../components/pitch/ProductDemo";
 
 type getResumesType = {
     resumes: ResumeClass[]
@@ -11,21 +13,30 @@ type getResumesType = {
 
 export default async function ProfilePage() {
     const { userId, activeSubscription } = await checkSubscription()
-    //console.log('userId: ', userId)
-    const { resumes } = await getResumes(userId) as getResumesType
-    const { profile } = await getProfile(userId);
-    const profileId = profile?._id.toString()
 
-    //console.log('profile: ', profile)
-
-    // If no profile redirect to profile
-    if (!profileId) {
-        redirect(`/profile/${userId}`)
+    if (!userId) {
+        return (
+            <>
+                <PitchHero />
+                <ProductDemo />
+            </>
+        )
     }
 
-    // If no resumes redirect to resume builder
-    if (resumes.length == 0) {
-        redirect("/resumebuilder")
+    //console.log('userId: ', userId)
+    const { resumes } = await getResumes(userId) as getResumesType
+
+    let profileId
+    const { profile } = await getProfile(userId);
+    profileId = profile?._id.toString()
+    if (!profileId) {
+        await createProfile({ userId })
+        const { profile } = await getProfile(userId);
+        profileId = profile?._id.toString()
+    }
+
+    if (!profileId) {
+        redirect(`/profile/${userId}`)
     }
 
     return (
@@ -35,6 +46,7 @@ export default async function ProfilePage() {
                     Let's write you an elevator pitch
                 </h1>
                 <Pitch
+                    userId={userId}
                     resumes={resumes}
                     profileId={profileId}
                     currentPitch={profile?.story || ''}

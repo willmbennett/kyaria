@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '../Button';
 import {
@@ -18,7 +18,6 @@ const ResumeBuilder = (
         data,
         resumeId,
         userId,
-        activeSubscription = false,
         job,
         useSave = true
     }: ResumeBuilderProps) => {
@@ -45,14 +44,10 @@ const ResumeBuilder = (
                     <div className='flex w-full h-full overflow-y-scroll lg:overscroll-none p-4 border border-slate-200 shadow-inner'>
                         {/*Toggle State True == Editing*/}
                         <div className={`h-full w-full ${!toggleState ? 'relative top-0' : 'hidden '}`}>
-                            <Feedback userResume={defaultValues} job={job} activeSubscription={activeSubscription} />
+                            <Feedback userResume={defaultValues} job={job} />
                         </div>
                         <div className={`h-full w-full ${toggleState ? 'relative top-0' : 'hidden '}`}>
-                            {activeSubscription ?
-                                <ResumeForm methods={methods} job={job} />
-                                :
-                                <Button size='sm' href="/pricing">Subscribe to Edit</Button>
-                            }
+                            <ResumeForm methods={methods} job={job} />
                         </div>
                     </div>
                 </div>
@@ -62,7 +57,6 @@ const ResumeBuilder = (
                             data={useSave ? data : convertFormDataToResumeModel(watch(), data)}
                             saveStatus={saveStatus} userId={userId}
                             useSave={useSave}
-                            activeSubscription={activeSubscription}
                         />
                     }
                 </div>

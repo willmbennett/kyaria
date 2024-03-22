@@ -36,15 +36,15 @@ export function StoryWithStats() {
         <div className="mt-12 flex flex-col md:mt-8 md:flex-row md:divide-x md:divide-gray-secondary-400/60">
           <div className="md:w-1/2 md:py-8 md:pr-6 lg:pr-16">
             <p className="text-lg leading-relaxed text-slate-700">
-            Will and James, friends and roommates from their college days, have always shared a passion for technology. After a decade of friendship, their paths converged once again. Will, having played a pivotal role in scaling Doximity from 200 to 800 employees leading up to its IPO as a product manager, decided to dive deeper into the realm of AI after completing a data science bootcamp. James, with 6 years under his belt as a product manager at Amazon, had garnered invaluable industry insights.
+              Will and James, friends and roommates from their college days, have always shared a passion for technology. After a decade of friendship, their paths converged once again. Will, having played a pivotal role in scaling Doximity from 200 to 800 employees leading up to its IPO as a product manager, decided to dive deeper into the realm of AI after completing a data science bootcamp. James, with 6 years under his belt as a product manager at Amazon, had garnered invaluable industry insights.
             </p>
             <p className="mt-8 text-lg leading-relaxed text-slate-700">
-            Their shared history and professional journeys led to a powerful realization. They saw countless job seekers, especially those fresh out of college and eager to break into tech, facing hurdles in the job search process. Recognizing the potential to combine James' industry expertise with Will's passion for cutting-edge technology, they created Kyaria.ai.
+              Their shared history and professional journeys led to a powerful realization. They saw countless job seekers facing hurdles in the job search process, and not having the resources to overcome them. Recognizing the potential to combine James' industry expertise with Will's passion for cutting-edge technology, they created Kyaria.ai.
             </p>
           </div>
           <div className="mt-8 sm:mt-0 md:w-1/2 md:py-8 md:pl-6 lg:pl-16">
             <p className="text-lg leading-relaxed text-slate-700">
-            Their vision was clear: offer a holistic approach to job hunting that was unmatched in its dedication to job seekers. By leveraging advanced technology and tried-and-true industry wisdom, Kyaria.ai stands as a beacon for those aiming to navigate the complex world of tech job searches. Focused initially on assisting college graduates, Will and James are committed to ensuring that the next generation of tech enthusiasts finds their perfect role with ease.
+              Their vision was clear: offer a holistic approach to job hunting that was unmatched in its dedication to job seekers. By leveraging advanced technology and tried-and-true industry wisdom, Kyaria.ai stands as a beacon for those aiming to navigate the complex world of tech job searches. Kyaria.ai is committed to ensuring that the next generation of tech enthusiasts finds their perfect role with ease.
             </p>
           </div>
         </div>

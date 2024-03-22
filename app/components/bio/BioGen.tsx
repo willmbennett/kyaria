@@ -12,7 +12,7 @@ export const BioGen = ({
     desiredRole,
     activeSubscription
 }: {
-    selectedResume: ResumeClass,
+    selectedResume?: ResumeClass,
     profileId: string,
     currentBio?: string,
     desiredRole?: string,
@@ -91,10 +91,11 @@ export const BioGen = ({
             "role": "user",
             "content":
                 `Based on the following details, help me craft a compelling, LinkedIn Bio:
-                    ${desiredRole && `- Desired role: ${desiredRole}`}
-                    - My professional experience: ${JSON.stringify(selectedResume.professional_experience)} 
-                    - My skills: ${JSON.stringify(selectedResume.skills)} 
-                    - My education: ${JSON.stringify(selectedResume.education)}
+                ${selectedResume && `- Desired role: ${desiredRole} 
+                - My professional experience: ${JSON.stringify(selectedResume.professional_experience)} 
+                - My skills: ${JSON.stringify(selectedResume.skills)} 
+                - My education: ${JSON.stringify(selectedResume.education)}
+                Make sure to pay attention to dates and make it follow chronological order`}
                     `
         }
     ];

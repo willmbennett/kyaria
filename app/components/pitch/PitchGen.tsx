@@ -12,7 +12,7 @@ export const PitchGen = ({
     desiredRole,
     activeSubscription
 }: {
-    selectedResume: ResumeClass,
+    selectedResume?: ResumeClass,
     profileId: string,
     currentPitch?: string,
     desiredRole?: string,
@@ -56,11 +56,11 @@ export const PitchGen = ({
             "role": "user",
             "content":
                 `${currentPitch ? `Improve this elevator pitch: ${currentPitch} using the following context` : 'Based on the following details, help me craft a compelling, narrative-style story:'}
-                    - Desired role: ${desiredRole} 
+                    ${selectedResume && `- Desired role: ${desiredRole} 
                     - My professional experience: ${JSON.stringify(selectedResume.professional_experience)} 
                     - My skills: ${JSON.stringify(selectedResume.skills)} 
                     - My education: ${JSON.stringify(selectedResume.education)}
-                    Make sure to pay attention to dates and make it follow chronological order
+                    Make sure to pay attention to dates and make it follow chronological order`}
                     `
         }
     ];

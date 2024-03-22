@@ -11,6 +11,8 @@ import { useCreateJob } from '../../../../lib/hooks/use-create-job';
 import { useCopyResume } from '../../../../lib/hooks/use-copy-resume';
 import { usePathname, useRouter } from 'next/navigation';
 import { IconSpinner } from '../../ui/icons';
+import { useResumeDropDown } from '../../../../lib/hooks/use-resume-dropdown';
+import { ResumeDropAndSelect } from '../../ResumeDropAndSelect';
 
 const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'
 
@@ -32,9 +34,7 @@ export default function CreateJobApp(
     }) {
     const [loading, setLoading] = useState(false)
     const { register, handleSubmit, formState: { errors } } = useForm<FormFields>();
-    const [selectedResumeId, setSelectedResumeId] = useState<string>(resumes[0]._id.toString() || '');
-    // Find the selected resume based on the selectedResumeId
-    const selectedResume = resumes.find(resume => resume._id === selectedResumeId);
+    const { hasResumes, selectedResumeId, setSelectedResumeId, selectedResume } = useResumeDropDown({ resumes })
     const path = usePathname()
     const router = useRouter()
     const { createApp } = useCreateApp(path)
@@ -70,15 +70,16 @@ export default function CreateJobApp(
         <>
             <div className='flex-col items-center w-full space-y-10 max-w-2xl'>
                 <div className='flex flex-col gap-4 items-start'>
-                    <p>Select which resume you want to use for your campaign. We'll make a copy of it for you to use for this application.</p>
-                    <ResumeDropdownMenu
+                    <ResumeDropAndSelect
+                        userId={userId}
+                        resumes={resumes}
+                        hasResumes={hasResumes}
                         selectedResumeId={selectedResumeId}
                         setSelectedResumeId={setSelectedResumeId}
-                        resumes={resumes}
                     />
                 </div>
                 <div>
-                    {!loading && (
+                    {!loading && hasResumes && (
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <div className={BASIC_FIELD_STYLE}>
                                 <input {...register('input', { required: true })} placeholder="Link to job post" className="rounded-sm"></input>

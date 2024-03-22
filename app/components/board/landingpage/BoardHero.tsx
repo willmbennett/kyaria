@@ -41,9 +41,11 @@ export function BoardHero() {
           <div className="mt-10 flex flex-col sm:flex-row sm:space-x-5 md:mt-12 md:justify-center xl:justify-start">
             <AuthButton />
           </div>
+          {/*
           <p className="mt-4 flex text-md text-slate-600/90 md:justify-center xl:justify-start xl:text-base">
             Included with Kyaria PRO subscription, only $10/mo.
           </p>
+  */}
         </div>
       </Container>
 

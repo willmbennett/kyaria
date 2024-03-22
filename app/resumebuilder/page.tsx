@@ -34,7 +34,7 @@ type getResumeType = {
 }
 
 export default async function ProfilePage() {
-  const { activeSubscription, userId } = await checkSubscription()
+  const { userId } = await checkSubscription()
   const { totalResumes } = await countTotalResumes()
   const resumeId = '65adcbdf782ab1d399ea1aa4'
   const { resume } = await getResume(resumeId) as getResumeType
@@ -63,7 +63,6 @@ export default async function ProfilePage() {
     <ResumeBuilderHome
       userId={userId}
       resumes={resumes}
-      activeSubscription={activeSubscription}
     />
   );
 }

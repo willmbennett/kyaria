@@ -9,7 +9,7 @@ type resumeType = {
 }
 
 export default async function ResumeScanPage({ params }: { params: { id: string } }) {
-    const { activeSubscription, userId } = await checkSubscription()
+    const { userId } = await checkSubscription()
     const { resume } = await getResume(params.id) as resumeType
 
     if (!userId) {
@@ -22,7 +22,6 @@ export default async function ResumeScanPage({ params }: { params: { id: string 
                 data={resume}
                 toggleEdit={undefined}
                 userId={userId}
-                activeSubscription={activeSubscription}
                 resumeId={params.id}
             />
         </div>

@@ -5,9 +5,9 @@ import { Container } from "../../components/landingpage/Container";
 import { Button } from "../../components/Button";
 
 export default async function ResumeUploadPage() {
-    const { activeSubscription, userId } = await checkSubscription()
+    const { userId } = await checkSubscription()
 
-    if (!userId || !activeSubscription) {
+    if (!userId) {
         redirect('/');
     }
 
