@@ -11,7 +11,7 @@ export const ChatBotPopup = ({ userId, userName }: { userId: string, userName: s
     const [show, setShow] = useState(true)
     const router = useRouter()
 
-    if (path.startsWith('/eve')) return <></>;
+    if (path.startsWith('/eve') || path.startsWith('/auth')) return <></>;
 
 
     const containerVariants = {

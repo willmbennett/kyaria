@@ -12,7 +12,6 @@ interface ExperienceProps {
     jobStripped: Partial<JobClass>,
     jobKeyWords: string[],
     userId: string,
-    activeSubscription: boolean,
     userCanEdit: boolean
 }
 
@@ -22,7 +21,6 @@ export default function Experience({
     jobStripped,
     jobKeyWords,
     userId,
-    activeSubscription,
     userCanEdit
 }: ExperienceProps) {
     const router = useRouter()
@@ -107,7 +105,6 @@ export default function Experience({
                             parentIndex={items[currentIndex].expIndex}
                             childIndex={items[currentIndex].respIndex}
                             userId={userId}
-                            activeSubscription={activeSubscription}
                             userCanEdit={userCanEdit}
                         />
                     </div>

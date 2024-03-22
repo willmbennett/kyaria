@@ -16,9 +16,9 @@ import React from 'react';
 
 interface JobApplicationProps {
   jobApp: AppClass;
-  activeSubscription: boolean;
   currentUserId: string;
   currentSection: string;
+  activeSubscription: boolean
 }
 
 // Memoizing each component with React.memo
@@ -36,9 +36,9 @@ const MemoizedResume = React.memo(Resume);
 export function JobApplication(
   {
     jobApp,
-    activeSubscription,
     currentUserId,
-    currentSection
+    currentSection,
+    activeSubscription
   }: JobApplicationProps) {
   const userCanEdit = currentUserId == jobApp.userId
 
@@ -101,7 +101,7 @@ export function JobApplication(
         jobData={job}
         topWords={jobKeyWords}
         companyDiffbotId={companyDiffbotId}
-        activeSubscription={activeSubscription}
+        activeSubscription={true}
         currentUserId={userId} />
     }],
     ['mockinterview', {
@@ -122,7 +122,6 @@ export function JobApplication(
         job={job}
         userResume={userResume}
         jobKeyWords={jobKeyWords}
-        activeSubscription={activeSubscription}
       />
     }],
     ['resume', {
@@ -130,7 +129,6 @@ export function JobApplication(
         <MemoizedResume
           userResume={userResume}
           userId={userId}
-          activeSubscription={activeSubscription}
         />
     }],
     ['notes', {
@@ -148,7 +146,6 @@ export function JobApplication(
         job={job}
         profileStory={profile.story || ''}
         profileId={profileId}
-        activeSubscription={activeSubscription}
         userCanEdit={userCanEdit}
       />
     }],
@@ -168,7 +165,6 @@ export function JobApplication(
         jobStripped={jobStripped}
         jobKeyWords={jobKeyWords}
         userId={userId}
-        activeSubscription={activeSubscription}
         userCanEdit={userCanEdit}
       />
     }],
@@ -179,7 +175,6 @@ export function JobApplication(
         jobStripped={jobStripped}
         jobKeyWords={jobKeyWords}
         userResumeStripped={userResumeStripped}
-        activeSubscription={activeSubscription}
       />
     }],
     // Add other sections as needed

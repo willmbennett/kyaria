@@ -17,7 +17,6 @@ interface StoryProps {
     job: Partial<JobClass>,
     profileStory: string,
     profileId: string,
-    activeSubscription: boolean,
     userCanEdit: boolean
 }
 
@@ -28,7 +27,6 @@ export default function Story({
     job,
     profileStory,
     profileId,
-    activeSubscription,
     userCanEdit
 }: StoryProps) {
     const [savedToProfile, setSavedToProfile] = useState(false)
@@ -133,7 +131,7 @@ Job Posting Details: ${JSON.stringify(job)}`
                     currentState={currentStory}
                     saveToDatabase={updateJobAppAction}
                     temp={0.7}
-                    activeSubscription={activeSubscription}
+                    activeSubscription={true}
                 />
             </div>
         </>
