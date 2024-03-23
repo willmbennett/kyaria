@@ -35,10 +35,9 @@ const useSubmitResume = ({ onError, onSuccess }: UseSubmitResumeProps) => {
                 if (!resumeId) {
                     throw new Error("Failed to create resume");
                 }
-              //console.log('resumeId: ', resumeId);
 
                 if (onSuccess) {
-                    await onSuccess('someResumeId'); // Awaiting onSuccess callback
+                    await onSuccess(resumeId); // Awaiting onSuccess callback
                 }
             }
         } catch (error) {
