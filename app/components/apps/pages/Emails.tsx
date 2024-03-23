@@ -15,8 +15,7 @@ interface ExperienceProps {
     emails: Emails[],
     jobKeyWords: string[],
     userResumeStripped: Partial<ResumeClass>,
-    jobStripped: Partial<JobClass>,
-    activeSubscription: boolean
+    jobStripped: Partial<JobClass>
 }
 
 export default function Experience({
@@ -24,8 +23,7 @@ export default function Experience({
     emails,
     jobKeyWords,
     userResumeStripped,
-    jobStripped,
-    activeSubscription
+    jobStripped
 }: ExperienceProps) {
     const [showOptions, setShowOptions] = useState(false);
     const [selectedEmail, setSelectedEmail] = useState(emails[0]);
@@ -117,7 +115,7 @@ export default function Experience({
                                     saveToDatabase={updateJobAppAction}
                                     temp={0.9}
                                     jobKeyWords={jobKeyWords}
-                                    activeSubscription={activeSubscription}
+                                    activeSubscription={true}
                                 />
                             </div>
                         )

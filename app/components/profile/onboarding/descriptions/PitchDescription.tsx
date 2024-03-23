@@ -5,14 +5,14 @@ import { ResumeClass } from '../../../../../models/Resume';
 import { Questionnaire } from '../../../../../models/Profile';
 
 const ElevatorPitchDescription = ({
+  userId,
   story,
-  activeSubscription,
   resumes,
   profileId,
   questionnaire
 }: {
+  userId: string
   story: string | undefined;
-  activeSubscription: boolean;
   resumes: ResumeClass[] | undefined;
   profileId: string;
   questionnaire: Questionnaire | undefined;
@@ -22,14 +22,14 @@ const ElevatorPitchDescription = ({
 
   return (
     <>
-      {(story && activeSubscription) || isEditing ? (
+      {story || isEditing ? (
         (resumes && questionnaire && (
           <Pitch
+            userId={userId}
             resumes={resumes}
             profileId={profileId}
             currentPitch={story || ''}
             desiredRole={questionnaire.desiredRole}
-            activeSubscription={true}
           />
         )
         )

@@ -30,7 +30,6 @@ interface StarStoryProps {
     jobStripped: Partial<JobClass>,
     parentIndex: number,
     childIndex: number,
-    activeSubscription: boolean,
     userCanEdit: boolean
 }
 
@@ -41,7 +40,6 @@ export default function StarStory({
     jobStripped,
     parentIndex,
     childIndex,
-    activeSubscription,
     userCanEdit
 }: StarStoryProps) {
     const [savedToProfile, setSavedToProfile] = useState(false)
@@ -227,7 +225,7 @@ export default function StarStory({
                         childIndex={childIndex}
                         saveToDatabase={updateResumeAction}
                         temp={0.7}
-                        activeSubscription={activeSubscription}
+                        activeSubscription={true}
                     />
                 </>
             )}

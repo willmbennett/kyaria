@@ -17,7 +17,6 @@ interface CoverLetterProps {
     jobStripped: any,
     job: any
     jobKeyWords: string[]
-    activeSubscription: boolean
 }
 
 export default function CoverLetter({
@@ -27,8 +26,7 @@ export default function CoverLetter({
     userResumeStripped,
     jobStripped,
     job,
-    jobKeyWords,
-    activeSubscription
+    jobKeyWords
 }: CoverLetterProps) {
     const [editCoverLetter, setEditCoverLetter] = useState(false)
     const message: Message[] = [
@@ -105,7 +103,7 @@ export default function CoverLetter({
                     saveToDatabase={updateJobAppAction}
                     temp={0.5}
                     jobKeyWords={jobKeyWords}
-                    activeSubscription={activeSubscription}
+                    activeSubscription={true}
                 />
             }
             {!editCoverLetter &&

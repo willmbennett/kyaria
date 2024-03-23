@@ -7,7 +7,7 @@ import { Footer } from './components/Footer';
 import { TooltipProvider } from './components/ui/tooltip';
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { checkSubscription } from '../lib/hooks/check-subscription';
-import { Header } from './components/Header';
+import { Header } from './components/header/Header';
 import { ChatBotPopup } from './components/chatbot/landingpage/ChatPopup';
 import { Providers } from './components/chatbot/sidebar/Providers';
 import 'regenerator-runtime/runtime'

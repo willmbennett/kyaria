@@ -130,12 +130,12 @@ export default function Kanban(
                         />
                     </div>
                 </div>
-                <div className="flex min-h-screen w-full gap-4 border border-slate-100 p-4 rounded-xl">
+                <div className="flex w-full gap-4 border border-slate-100 p-4 rounded-xl">
                     <DndContext sensors={sensors} onDragEnd={handleDragEnd} onDragStart={handleDragStart} onDragOver={handleDragOver} id={id}>
-                        <div id='kanban-container' className='relative overflow-x-scroll w-screen h-full'>
-                            <div className='flex'>
+                        <div id='kanban-container' className='relative overflow-x-scroll w-screen min-h-screen'>
+                            <div className='flex h-full'>
                                 {jobStates.map((state, index) =>
-                                    <div key={index} className='flex flex-col gap-4 text-center'>
+                                    <div key={index} className='flex flex-col gap-4 text-center h-full'>
                                         <h5 className="text-xl font-medium leading-tight">{state}</h5>
                                         <div className='flex gap-2 h-full'>
                                             <KanbanColumn

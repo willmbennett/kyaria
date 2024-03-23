@@ -5,10 +5,10 @@ import "react-pdf/dist/esm/Page/TextLayer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css"
 import ResumePDF from "./ResumePDF";
 import ResumeLoadingComponent from './ResumeLoadingComponent';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { debounce, isEqual } from 'lodash';
+import { useCallback, useEffect, useState } from 'react';
+import { debounce } from 'lodash';
 import { Button } from '../../Button';
-import { useCopyResume, useGeneratePDF } from '../../../../lib/hooks/resume-test';
+import { useCopyResume } from '../../../../lib/hooks/resume-test';
 import SaveStatusIndicator from '../SaveStatusIndicator';
 import { ResumeClass } from '../../../../models/Resume';
 
@@ -18,12 +18,6 @@ interface ResumePDFProps {
     useEdit?: boolean;
     userId: string;
     useSave: boolean;
-    activeSubscription: boolean;
-}
-
-type pdfUrlTye = {
-    current: string | null;
-    previous: string | null;
 }
 
 const url = `//cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`
@@ -36,8 +30,7 @@ const CustomPDFViewer = (
         saveStatus,
         useEdit = false,
         userId,
-        useSave,
-        activeSubscription
+        useSave
     }: ResumePDFProps
 ) => {
     const [numPages, setNumPages] = useState(1);
@@ -160,7 +153,7 @@ const CustomPDFViewer = (
                         </div>
                     )
                         :
-                        <>{useSave && activeSubscription && <Button type='button' size='sm' onClick={handleCopy}>Copy</Button>}</>
+                        <>{useSave && <Button type='button' size='sm' onClick={handleCopy}>Copy</Button>}</>
                     }
                     {saveStatus && <SaveStatusIndicator saveStatus={saveStatus} />}
                 </div>

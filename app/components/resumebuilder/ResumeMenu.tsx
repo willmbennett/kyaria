@@ -1,19 +1,16 @@
 import { ResumeClass } from '../../../models/Resume';
-import { Button } from '../Button';
 import ResumeDropdownMenu from '../ResumeDropdownMenu';
 
 interface ResumeListMenuProps {
     resumeIndex: string | null;
     setResumeIndex: (resume: string | null) => void;
     resumes: ResumeClass[];
-    activeSubscription: boolean;
 }
 
 const ResumeListMenu: React.FC<ResumeListMenuProps> = ({
     resumeIndex,
     setResumeIndex,
-    resumes,
-    activeSubscription
+    resumes
 }) => {
 
     return (
@@ -26,10 +23,7 @@ const ResumeListMenu: React.FC<ResumeListMenuProps> = ({
                     resumes={resumes}
                 />
             }
-            {activeSubscription ?
-                <a className='duration-150 ease-in-out inline-flex items-center justify-center font-medium group px-2 py-1.5 text-sm bg-slate-700 text-white hover:bg-slate-900 ml-3' href='/resumebuilder/new'>New Resume</a> :
-                <Button href='/pricing' size='sm'>Subscribe to add more</Button>
-            }
+            <a className='duration-150 ease-in-out inline-flex items-center justify-center font-medium group px-2 py-1.5 text-sm bg-slate-700 text-white hover:bg-slate-900 ml-3' href='/resumebuilder/new'>New Resume</a>
         </div>
     );
 };

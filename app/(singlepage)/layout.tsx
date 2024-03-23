@@ -34,7 +34,11 @@ export default async function AppLayout({
 
     //For now just redirect the user home (no landing page)
     if (!userId) {
-        redirect('/')
+        return (
+            <div className='min-h-screen'>
+                {children}
+            </div>
+        )
     }
 
     return (

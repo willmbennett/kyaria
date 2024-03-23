@@ -2,13 +2,11 @@ import CustomPDFViewer from '../../resumebuilder/pdfviewer/CustomPDFViewer';
 
 interface ResumeProps {
     userResume: any;
-    activeSubscription: boolean;
     userId: string;
 }
 
 export default function Resume({
     userResume,
-    activeSubscription,
     userId
 }: ResumeProps) {
 
@@ -22,7 +20,6 @@ export default function Resume({
                 useEdit={true}
                 userId={userId}
                 useSave={true}
-                activeSubscription={activeSubscription}
             />
         </div>
     );

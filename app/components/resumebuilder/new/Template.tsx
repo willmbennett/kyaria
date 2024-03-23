@@ -68,7 +68,7 @@ export default function ResumeTemplates({ userId }: { userId: string }) {
                     data={selectedTemplate.template}
                     userId={userId}
                     useSave={true}
-                    activeSubscription={true} />
+                />
             </div>
         </div>
     );

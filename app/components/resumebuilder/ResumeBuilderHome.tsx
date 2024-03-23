@@ -8,15 +8,13 @@ import CustomPDFViewer from './pdfviewer/CustomPDFViewer';
 
 interface resumeTestProps {
     userId: string,
-    resumes: ResumeClass[],
-    activeSubscription: boolean
+    resumes: ResumeClass[]
 }
 
 export default function ResumeBuilderHome(
     {
         userId,
-        resumes,
-        activeSubscription
+        resumes
     }: resumeTestProps) {
 
     // Set the index of the active resume
@@ -32,7 +30,6 @@ export default function ResumeBuilderHome(
                     resumes={resumes}
                     resumeIndex={resumeIndex}
                     setResumeIndex={setResumeIndex}
-                    activeSubscription={activeSubscription}
                 />
                 {activeResume &&
                     <div className='w-full flex flex-col items-center justify-center'>
@@ -41,7 +38,6 @@ export default function ResumeBuilderHome(
                             useEdit={true}
                             userId={userId}
                             useSave={true}
-                            activeSubscription={activeSubscription}
                         />
                     </div>
                 }

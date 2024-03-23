@@ -6,6 +6,8 @@ import ResumeDemo from '../resumebuilder/landingpage/ProductDemoCarousel'
 
 const BoardDemo = dynamic(() => import('../board/landingpage/ProductDemoCarousel'))
 const EveDemo = dynamic(() => import('../chatbot/landingpage/ProductDemoCarousel'))
+const BioDemo = dynamic(() => import('../bio/ProductDemoCarousel'))
+const PitchDemo = dynamic(() => import('../pitch/ProductDemoCarousel'))
 
 export default function ProductCarousel() {
   const items: CarouselType[] = [
@@ -27,7 +29,17 @@ export default function ProductCarousel() {
           {/* @ts-ignore */}
           <ResumeDemo />
         </>
-    }
+    },
+    {
+      name: 'bio',
+      title: 'LinkedIn Bio Generator',
+      object: <BioDemo />
+    },
+    {
+      name: 'pitch',
+      title: 'Elevator Pitch Generator',
+      object: <PitchDemo />
+    },
   ]
 
   return (

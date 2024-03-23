@@ -7,10 +7,9 @@ import { ResumeUploadForm } from '../../../resumebuilder/new/ResumeUploadForm';
 interface ResumeDescriptionProps {
   resumes: ResumeClass[] | undefined;
   userId: string;
-  activeSubscription: boolean;
 }
 
-const ResumeDescription = ({ resumes, userId, activeSubscription }: ResumeDescriptionProps) => {
+const ResumeDescription = ({ resumes, userId }: ResumeDescriptionProps) => {
 
   return (
     <>
@@ -19,7 +18,6 @@ const ResumeDescription = ({ resumes, userId, activeSubscription }: ResumeDescri
           <ResumeBuilderHome
             userId={userId}
             resumes={resumes}
-            activeSubscription={activeSubscription}
           />
         </div>
       ) : (
