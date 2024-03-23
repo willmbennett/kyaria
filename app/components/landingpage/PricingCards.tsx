@@ -29,6 +29,7 @@ const tiers = [
       "The Pro package grants exclusive access to all current and beta products, empowering you with advanced resources at every step.",
     price: 10,
     features: [
+      "Everything included in the Free tier.",
       "Access to Eve: The world's first AI-powered virtual career coach.",
     ],
     betaFeatures: [
