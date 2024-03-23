@@ -13,7 +13,7 @@ type getResumesType = {
 }
 
 export default async function ProfilePage({ params }: { params: { id: string } }) {
-  const { activeSubscription, userId, userName } = await checkSubscription()
+  const { userId, userName } = await checkSubscription()
 
   // Login protection
   if (!userId) {
@@ -46,7 +46,6 @@ export default async function ProfilePage({ params }: { params: { id: string } }
           questionnaire={questionnaire}
           bio={bio}
           story={story}
-          activeSubscription={activeSubscription}
           resumes={resumes}
           apps={jobApps}
           userId={userId}

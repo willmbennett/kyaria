@@ -50,7 +50,6 @@ interface OnboardingMenuProps {
   questionnaire: Questionnaire | undefined;
   bio: string | undefined;
   story: string | undefined;
-  activeSubscription: boolean;
   resumes: ResumeClass[] | undefined;
   apps: AppClass[] | undefined;
   userId: string;
@@ -63,7 +62,6 @@ export default function OnboardingMenu({
   questionnaire,
   bio,
   story,
-  activeSubscription,
   resumes,
   apps,
   userId,
@@ -102,7 +100,6 @@ export default function OnboardingMenu({
       section: <ResumeDescription
         resumes={resumes}
         userId={userId}
-        activeSubscription={activeSubscription}
       />,
       icon: <DocumentTextIcon className='h-5 w-5"' />,
     }],
@@ -134,8 +131,8 @@ export default function OnboardingMenu({
       disabled: !hasResumes,
       show: !hasPitch,
       section: <ElevatorPitchDescription
+        userId={userId}
         story={story}
-        activeSubscription={activeSubscription}
         resumes={resumes}
         profileId={profileId}
         questionnaire={questionnaire} />,
@@ -147,8 +144,8 @@ export default function OnboardingMenu({
       disabled: !hasResumes,
       show: !hasBio,
       section: <LinkedInBioDescription
+        userId={userId}
         bio={bio}
-        activeSubscription={activeSubscription}
         resumes={resumes}
         profileId={profileId}
         questionnaire={questionnaire} />,

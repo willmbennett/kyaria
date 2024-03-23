@@ -13,14 +13,12 @@ export const Bio = ({
     profileId,
     currentBio,
     desiredRole,
-    activeSubscription
 }: {
     userId: string,
     resumes: ResumeClass[],
     profileId: string,
     currentBio?: string,
     desiredRole?: string,
-    activeSubscription: boolean
 }) => {
 
     const { hasResumes, selectedResumeId, setSelectedResumeId, selectedResume } = useResumeDropDown({ resumes })

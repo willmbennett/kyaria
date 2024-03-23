@@ -13,15 +13,13 @@ export const Pitch = ({
     resumes,
     profileId,
     currentPitch,
-    desiredRole,
-    activeSubscription
+    desiredRole
 }: {
     userId: string,
     resumes: ResumeClass[],
     profileId: string,
     currentPitch?: string,
     desiredRole?: string,
-    activeSubscription: boolean
 }) => {
 
     const { hasResumes, selectedResumeId, setSelectedResumeId, selectedResume } = useResumeDropDown({ resumes })

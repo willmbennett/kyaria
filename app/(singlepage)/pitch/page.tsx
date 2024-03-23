@@ -51,7 +51,6 @@ export default async function ProfilePage() {
                     profileId={profileId}
                     currentPitch={profile?.story || ''}
                     desiredRole={profile?.questionnaire?.desiredRole}
-                    activeSubscription={activeSubscription}
                 />
             </div>
         </div>

@@ -6,9 +6,9 @@ import { Questionnaire } from '../../../../../models/Profile';
 import { ResumeClass } from '../../../../../models/Resume';
 import { Bio } from '../../../bio/Bio';
 
-const LinkedInBioDescription = ({ bio, activeSubscription, resumes, profileId, questionnaire }: {
+const LinkedInBioDescription = ({ userId, bio, resumes, profileId, questionnaire }: {
+  userId: string;
   bio: string | undefined;
-  activeSubscription: boolean;
   resumes: ResumeClass[] | undefined;
   profileId: string;
   questionnaire: Questionnaire | undefined;
@@ -18,13 +18,13 @@ const LinkedInBioDescription = ({ bio, activeSubscription, resumes, profileId, q
 
   return (
     <>
-      {(bio && activeSubscription) || isEditing ? (resumes && questionnaire && (
+      {bio || isEditing ? (resumes && questionnaire && (
         <Bio
+          userId={userId}
           resumes={resumes}
           profileId={profileId}
           currentBio={bio}
           desiredRole={questionnaire.desiredRole}
-          activeSubscription={true}
         />
       )
       ) : (

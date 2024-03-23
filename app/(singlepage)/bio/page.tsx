@@ -51,7 +51,6 @@ export default async function ProfilePage() {
                     profileId={profileId}
                     currentBio={profile?.bio}
                     desiredRole={profile?.questionnaire?.desiredRole}
-                    activeSubscription={activeSubscription}
                 />
             </div>
         </div>
