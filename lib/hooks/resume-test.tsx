@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import { createResumeScanAction } from '../../app/resumebuilder/_action';
 import { convertFormDataToResumeModel, demoResume, ResumeBuilderFormData, sectionOptions, testResumeData, transformParsedResume } from '../../app/resumebuilder/resumetest-helper';
-import { createResumeAction, updateResumeAction } from '../../app/board/_action';
+import { createResumeAction, updateResumeAction } from '../../app/resumebuilder/_action';
 import { ResumeClass } from '../../models/Resume';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form';

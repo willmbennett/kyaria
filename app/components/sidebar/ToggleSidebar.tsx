@@ -1,8 +1,8 @@
 'use client'
 
-import { useSidebar } from "../../../../lib/chatbot/use-sidebar"
-import { Button } from "../../ui/button"
-import { IconSidebar } from "../../ui/icons"
+import { useSidebar } from "../../../lib/chatbot/use-sidebar"
+import { Button } from "../ui/button"
+import { IconSidebar } from "../ui/icons"
 import { Cross2Icon } from "@radix-ui/react-icons"
 
 export function SidebarToggle() {

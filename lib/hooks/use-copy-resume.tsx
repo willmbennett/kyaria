@@ -1,4 +1,4 @@
-import { createResumeAction } from "../../app/board/_action";
+import { createResumeAction } from "../../app/resumebuilder/_action";
 import { ResumeClass } from "../../models/Resume";
 
 export const useCopyResume = () => {

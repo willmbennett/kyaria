@@ -3,7 +3,7 @@ import { DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, M
 import { useRouter } from 'next/navigation';
 import { useId, useState, useCallback } from 'react';
 import { AppClass } from '../../../models/App';
-import { updateJobAppAction } from '../../board/_action';
+import { updateJobAppAction } from '../../apps/_action';
 import AppItem from '../apps/AppItem';
 import KanbanColumn from "./KanbanColumn";
 import { boardItemType, jobStates } from '../../board/job-helper';

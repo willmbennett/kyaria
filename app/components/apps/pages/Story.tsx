@@ -1,6 +1,6 @@
 'use client'
 
-import { updateJobAppAction } from '../../../board/_action';
+import { updateJobAppAction } from '../../../apps/_action';
 import ChatWithGPT from '../../chat/ChatWithGPT';
 import { updateProfileAction } from '../../../profile/_action';
 import { useSession } from "next-auth/react";

@@ -1,22 +1,15 @@
 
-import { cache } from 'react'
-import { getChats } from '../../../../lib/chat-db'
 import { SidebarItems } from './SidebarItems'
-import { ChatClass } from '../../../../models/Chat'
+import { SideBarItem } from '../../helper'
 
 interface SidebarListProps {
-    userId: string
-    children?: React.ReactNode
+    items: SideBarItem[]
+    children?: React.ReactNode;
 }
 
-const loadChats = cache(async (userId: string) => {
-    return await getChats(userId)
-})
+export const SidebarList = ({ items }: SidebarListProps) => {
 
-export async function SidebarList({ userId }: SidebarListProps) {
-    const { chats } = await loadChats(userId) as { chats: any }
-
-    if (!chats) {
+    if (!items) {
         <div className="flex flex-1 flex-col overflow-hidden">
             <div className="flex-1 overflow-auto overscroll-none">
                 <div className="p-8 text-center">
@@ -34,7 +27,7 @@ export async function SidebarList({ userId }: SidebarListProps) {
         <div className="flex flex-1 flex-col overflow-hidden">
             <div className="flex-1 overflow-auto overscroll-none">
                 <div className="space-y-2 px-2">
-                    <SidebarItems chats={chats as ChatClass[]} />
+                    <SidebarItems items={items} />
                 </div>
             </div>
             <div className="flex items-center justify-between p-4">

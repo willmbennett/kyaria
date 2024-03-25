@@ -1,7 +1,7 @@
 'use client'
 
 import ChatWithGPT from '../../chat/ChatWithGPT';
-import { updateJobAppAction } from '../../../board/_action';
+import { updateJobAppAction } from '../../../apps/_action';
 import { Message } from 'ai';
 import { CoverLetterViewer } from '../../coverletter/CoverLetterViewer';
 import { useCallback, useState } from 'react';

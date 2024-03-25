@@ -1,6 +1,6 @@
 import { usePathname, useRouter } from "next/navigation";
 import { AppClass, Emails } from "../../../models/App";
-import { createAppAction } from "../../board/_action";
+import { createAppAction } from "../../apps/_action";
 import { jobStateType } from "../../board/job-helper";
 
 // Define the ApplicationState type based on the keys you have provided

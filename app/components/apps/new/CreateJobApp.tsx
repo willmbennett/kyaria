@@ -9,7 +9,7 @@ import { ResumeClass } from '../../../../models/Resume';
 import { useCreateApp } from '../../../../lib/hooks/use-create-app';
 import { useCreateJob } from '../../../../lib/hooks/use-create-job';
 import { useCopyResume } from '../../../../lib/hooks/use-copy-resume';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { IconSpinner } from '../../ui/icons';
 import { useResumeDropDown } from '../../../../lib/hooks/use-resume-dropdown';
 import { ResumeDropAndSelect } from '../../ResumeDropAndSelect';
@@ -37,13 +37,15 @@ export default function CreateJobApp(
     const { hasResumes, selectedResumeId, setSelectedResumeId, selectedResume } = useResumeDropDown({ resumes })
     const path = usePathname()
     const router = useRouter()
+    const sp = useSearchParams()
+    const board = sp.get('board')
     const { createApp } = useCreateApp(path)
     const { findOrCreateJob } = useCreateJob(path)
     const { handleCopyResume } = useCopyResume()
 
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
-        if (selectedResume) {
+        if (selectedResume && board) {
             try {
                 setLoading(true);
                 const jobId = await findOrCreateJob(data.input, userId, selectedResume)
@@ -53,7 +55,7 @@ export default function CreateJobApp(
                     //console.log('newResumeId: ', newResumeId)
 
                     if (newResumeId) {
-                        const { appId } = await createApp(jobId, userId, emails, story, profileId, newResumeId)
+                        const { appId } = await createApp(jobId, userId, emails, story, profileId, newResumeId, board)
                         if (appId) router.push(`/apps/${appId}`)
                     }
                 }

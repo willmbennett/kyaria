@@ -1,6 +1,6 @@
 'use client'
 import { SubmitHandler, useForm } from "react-hook-form";
-import { createJobApplicationAction } from "../../../board/_action";
+import { createJobApplicationAction } from "../../../apps/_action";
 import { emails } from "../../../board/job-helper";
 import { useRouter } from 'next/navigation'
 import { Button } from "../../Button";

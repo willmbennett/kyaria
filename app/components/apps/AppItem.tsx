@@ -2,7 +2,7 @@ import Link from "next/link";
 import { parseISO, format } from 'date-fns';
 import { Dispatch, MouseEventHandler, SetStateAction, useState } from "react";
 import { useRouter } from "next/navigation";
-import { updateJobAppAction } from "../../board/_action";
+import { updateJobAppAction } from "../../apps/_action";
 import { Button } from "../Button";
 import { useDraggable } from '@dnd-kit/core';
 import { AppClass } from "../../../models/App";

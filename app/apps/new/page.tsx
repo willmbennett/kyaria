@@ -4,7 +4,6 @@ import { Container } from "../../components/landingpage/Container";
 import { Button } from "../../components/Button";
 import CreateJobApp from "../../components/apps/new/CreateJobApp";
 import { createProfile, getProfile } from "../../../lib/profile-db";
-import { ProfileClass } from "../../../models/Profile";
 import { ResumeClass } from "../../../models/Resume";
 import { getResumes } from "../../../lib/resume-db";
 

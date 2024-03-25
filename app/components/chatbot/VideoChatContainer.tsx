@@ -5,7 +5,7 @@ import TimedAccessComponent from './VideoSubscriptionWrapper';
 import { ChatTranscript } from './ChatTranscript';
 import { Message } from 'ai';
 import { Button } from '../Button';
-import { SidebarToggle } from './sidebar/ToggleSidebar';
+import { SidebarToggle } from '../sidebar/ToggleSidebar';
 
 interface VideoChatContainerProps {
     userId: string;

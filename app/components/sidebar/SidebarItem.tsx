@@ -3,25 +3,25 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 import { motion } from 'framer-motion'
-import { ChatClass } from '../../../../models/Chat'
-import { cn } from '../../../../lib/utils'
-import { buttonVariants } from '../../ui/button'
+import { cn } from '../../../lib/utils'
+import { buttonVariants } from '../ui/button'
 import { useState } from 'react'
+import { SideBarItem } from '../../helper'
 
 interface SidebarItemProps {
     index: number
-    chat: ChatClass
+    item: SideBarItem
     children: React.ReactNode
 }
 
-export function SidebarItem({ index, chat, children }: SidebarItemProps) {
+export function SidebarItem({ index, item, children }: SidebarItemProps) {
     const pathname = usePathname()
     const [animated, setAnimated] = useState(false)
 
-    const isActive = pathname === `chat/${chat._id}`
-    const shouldAnimate = index === 0 && isActive && !animated
+    const { id, href, title } = item
 
-    const title = chat.messages.length > 3 ? chat.messages.slice(3)[0].content.split(' ').slice(3).join(' ') : 'Session ' + index
+    const isActive = pathname === href
+    const shouldAnimate = index === 0 && isActive && !animated
 
     return (
         <motion.div
@@ -44,7 +44,7 @@ export function SidebarItem({ index, chat, children }: SidebarItemProps) {
             }}
         >
             <Link
-                href={`/eve/${chat._id}`}
+                href={href}
                 className={cn(
                     buttonVariants({ variant: 'ghost' }),
                     'group w-full px-8 transition-colors hover:bg-zinc-200/40 dark:hover:bg-zinc-300/10',

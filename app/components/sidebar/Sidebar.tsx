@@ -1,7 +1,7 @@
 'use client'
 
-import { cn } from '../../../../lib/utils'
-import { useSidebar } from '../../../../lib/chatbot/use-sidebar'
+import { cn } from '../../../lib/utils'
+import { useSidebar } from '../../../lib/chatbot/use-sidebar'
 
 export interface SidebarProps extends React.ComponentProps<'div'> { }
 

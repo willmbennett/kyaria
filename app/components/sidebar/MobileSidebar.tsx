@@ -1,7 +1,7 @@
 'use client'
 
-import { Button } from "../../ui/button"
-import { IconSidebar } from "../../ui/icons"
+import { Button } from "../ui/button"
+import { IconSidebar } from "../ui/icons"
 import { Sheet, SheetContent, SheetTrigger } from "./Sheet"
 import { Sidebar } from "./Sidebar"
 

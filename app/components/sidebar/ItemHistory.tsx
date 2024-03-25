@@ -1,21 +1,25 @@
 import * as React from 'react'
 import { SidebarList } from './SidebarList'
-import { NewChatButton } from './NewChatButton'
+import { NewItemButton } from './NewItemButton'
 import { SidebarToggle } from './ToggleSidebar'
+import { SideBarItem } from '../../helper'
 
-interface ChatHistoryProps {
-    userId: string
+interface ItemHistoryProps {
+    items: SideBarItem[];
+    newTitle: string
+    createNew: () => Promise<any>;
+    sideBarTitle: string;
 }
 
-export async function ChatHistory({ userId }: ChatHistoryProps) {
+export const ItemHistory = ({ createNew, items, newTitle, sideBarTitle }: ItemHistoryProps) => {
     return (
         <div className="flex flex-col h-full">
             <div className="flex items-center justify-between p-4">
-                <h4 className="text-sm font-medium">Session History</h4>
+                <h4 className="text-sm font-medium">{sideBarTitle}</h4>
                 <SidebarToggle />
             </div>
             <div className="mb-2 px-2">
-                <NewChatButton userId={userId} />
+                <NewItemButton createNew={createNew} newTitle={newTitle} />
             </div>
             <React.Suspense
                 fallback={
@@ -29,8 +33,7 @@ export async function ChatHistory({ userId }: ChatHistoryProps) {
                     </div>
                 }
             >
-                {/* @ts-ignore */}
-                <SidebarList userId={userId} />
+                <SidebarList items={items} />
             </React.Suspense>
         </div>
     )
