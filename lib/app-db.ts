@@ -183,7 +183,7 @@ export async function getJobApp(id: string) {
         if (app) {
             transformProps(app, castToString, '_id');
             transformProps(app, dateToString, ["createdAt", "updatedAt"]);
-            console.log(app)
+            //console.log(app)
             return {
                 app,
             };
