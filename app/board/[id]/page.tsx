@@ -62,8 +62,7 @@ export default async function BoardPage({ params }: { params: { id: string } }) 
           value={board?.name || 'New Board'}
           onUpdate={updateBoardTitle}
           titleStyle="sm:text-lg text-xl font-bold text-slate-900"
-        >
-        </SingleEdit>
+        />
         <Button
           variant="solid"
           size="sm"
