@@ -21,12 +21,7 @@ export async function countTotalApps() {
 
 interface AppFilter {
     userId: string;
-    boardId: string;
-}
-
-interface QueryCondition {
-    userId?: string;
-    boardId?: { $exists?: boolean; $eq?: string };
+    boardId?: string;
 }
 
 export async function getUserJobApps(filter: AppFilter) {
@@ -38,14 +33,15 @@ export async function getUserJobApps(filter: AppFilter) {
 
         let queryConditions = [];
 
-        if (boardId === 'default') {
+        if (!boardId) {
+            queryConditions.push({ userId: userId });
+        } else if (boardId === 'default') {
             // If boardId is 'default', look for job applications that either don't have a boardId
             // or have a boardId set to 'default'.
             queryConditions.push(
                 { userId: userId, boardId: { $exists: false } }
             );
         } else {
-            // If a specific boardId is provided, look for job applications that match the boardId.
             queryConditions.push({ userId: userId, boardId: boardId });
         }
         //console.log('queryConditions: ', queryConditions)
