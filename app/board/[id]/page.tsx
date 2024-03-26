@@ -5,7 +5,7 @@ import { getUserJobApps } from "../../../lib/app-db";
 import { AppClass } from "../../../models/App";
 import { redirect } from "next/navigation";
 import { Button } from "../../components/Button";
-import Kanban from "../../components/board/KanbanBoard";
+import Kanban from "../../components/board/KanbanPage";
 import { SingleEdit } from "../../components/forms/SingleEdit";
 import { getBoard, getBoards } from "../../../lib/board-db";
 import { updateBoardAction } from "../_action";
@@ -22,14 +22,15 @@ export default async function BoardPage({ params }: { params: { id: string } }) 
 
   const filter = {
     userId,
-    boardId: boardId
+    boardId
   }
 
   const { jobApps } = await getUserJobApps(filter) as { jobApps: AppClass[] }
+  //console.log('jobApps: ', jobApps)
 
   const { board } = await getBoard(boardId)
 
-  const boardItems: boardItemType[] = jobApps.map(app => {
+  const boardItems: boardItemType[] = jobApps?.map(app => {
     const job = app.job as JobClass
     return ({
       id: app._id.toString(),
@@ -48,6 +49,16 @@ export default async function BoardPage({ params }: { params: { id: string } }) 
 
   const { boards } = await getBoards(userId) as { boards: BoardClass[] }
 
+  const defaultItem: BoardClass = {
+    _id: 'default',
+    name: "Default Board",
+    userId,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  }
+
+  const itemsWithDefault: BoardClass[] = [defaultItem, ...boards]
+
   const updateBoardTitle = async (title: string) => {
     'use server'
     const path = `/board/${boardId}`
@@ -57,24 +68,25 @@ export default async function BoardPage({ params }: { params: { id: string } }) 
 
   return (
     <div className="flex w-full mx-auto flex-col gap-4 py-10 items-center min-h-screen">
-      <div className="flex gap-4 items-center">
+      <div className="flex flex-col gap-4 items-center">
         <SingleEdit
-          value={board?.name || 'New Board'}
+          value={board?.name || 'Default Board'}
           onUpdate={updateBoardTitle}
           titleStyle="sm:text-lg text-xl font-bold text-slate-900"
+          editable={boardId != 'default'}
         />
         <Button
           variant="solid"
           size="sm"
           type="button"
-          href="/apps/new"
+          href={`/apps/new${boardId != 'default' ? `?board=${boardId}` : ''}`}
         >
           Add a New Job Post
         </Button>
       </div>
       <Kanban
         boardItems={boardItems}
-        boards={boards}
+        boards={itemsWithDefault}
         boardId={boardId}
       />
     </div >

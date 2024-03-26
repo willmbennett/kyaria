@@ -58,7 +58,7 @@ class AppClass {
     @prop({ ref: () => ResumeClass, required: true })
     public userResume!: Ref<ResumeClass>;
 
-    @prop({ ref: () => BoardClass, required: true })
+    @prop({ ref: () => BoardClass })
     public boardId?: Ref<BoardClass>;
 
     @prop()

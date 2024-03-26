@@ -26,6 +26,11 @@ export type boardItemType = {
   boardId?: string;
 }
 
+export type DropDownItemType = {
+  name: string;
+  id: string
+}
+
 export type jobStateType = 'WISHLIST' | 'APPLIED' | 'PHONE SCREEN' | 'FIRST ROUND' | 'SECOND ROUND' | 'THIRD ROUND' | 'FINAL ROUND' | 'JOB OFFER' | 'ACCEPTED'
 
 export const jobStates = ['WISHLIST', 'APPLIED', 'PHONE SCREEN', 'FIRST ROUND', 'SECOND ROUND', 'THIRD ROUND', 'FINAL ROUND', 'JOB OFFER', 'ACCEPTED']

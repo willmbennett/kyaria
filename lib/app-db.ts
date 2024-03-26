@@ -1,5 +1,4 @@
 import { AppModel, AppClass } from "../models/App";
-import { getModelForClass, prop, modelOptions } from '@typegoose/typegoose';
 import { JobModel } from "../models/Job";
 import { ResumeModel } from "../models/Resume";
 import connectDB from "./connect-db";
@@ -29,12 +28,31 @@ export async function getUserJobApps(filter: AppFilter) {
     try {
         await connectDB();
 
-        //console.log("getting job apps")
-        const jobApps = await AppModel.find(filter)
+        const { userId, boardId } = filter
+        //console.log('filter: ', filter)
+
+        let queryConditions = [];
+
+        if (!boardId) {
+            queryConditions.push({ userId: userId });
+        } else if (boardId === 'default') {
+            // If boardId is 'default', look for job applications that either don't have a boardId
+            // or have a boardId set to 'default'.
+            queryConditions.push(
+                { userId: userId, boardId: { $exists: false } }
+            );
+        } else {
+            queryConditions.push({ userId: userId, boardId: boardId });
+        }
+        //console.log('queryConditions: ', queryConditions)
+
+        // Use MongoDB's $or to combine conditions
+        const jobApps = await AppModel.find({ $or: queryConditions })
             .sort('-createdAt')
             .populate("job")
             .lean()
             .exec();
+        //console.log(jobApps)
 
         if (jobApps) {
             transformProps(jobApps, castToString, ['_id', "profile", "userResume", 'boardId']);
@@ -47,6 +65,7 @@ export async function getUserJobApps(filter: AppFilter) {
             return { error: "Job applications not found" };
         }
     } catch (error) {
+        console.log('error', error)
         return { error };
     }
 }
@@ -195,21 +214,49 @@ export async function getJobApp(id: string) {
     }
 }
 
+interface UpdateQuery {
+    $set?: { [key: string]: any };
+    $unset?: { [key: string]: any };
+}
+
 export async function updateJobApp(id: string, data: any) {
     try {
         await connectDB();
 
         const parsedId = stringToObjectId(id);
 
-        //console.log(id)
+        //console.log('Made it to updating the job app with id: ', id)
+        //console.log('Data to update a job app with: ', data)
+
+
+        //console.log('Made it to updating the job app with id: ', id);
+        //console.log('Data to update a job app with: ', data);
+
+        const update: UpdateQuery = {};
+
+        // Dynamically construct $set and $unset based on data
+        Object.keys(data).forEach(key => {
+            const value = data[key];
+            if (value === 'default' && key === 'boardId') {
+                // Special case for boardId with 'default' value
+                update.$unset = { ...update.$unset, [key]: "" };
+            } else if (value !== undefined) {
+                // General case for setting values
+                update.$set = { ...update.$set, [key]: value };
+            }
+            // Extend this logic as needed for other special cases
+        });
+
+        //console.log('Updated data update: ', update);
 
         const jobApp = await AppModel.findByIdAndUpdate(
             parsedId,
-            data
+            update
         )
             .lean()
             .exec();
 
+        //console.log('UpdatedJobApp board : ', jobApp?.boardId)
         if (jobApp) {
             transformProps(jobApp, ObjectIdtoString, ['_id', 'profile', 'job', 'userResume', 'boardId']);
             transformProps(jobApp, dateToString, ["createdAt", "updatedAt"]);
