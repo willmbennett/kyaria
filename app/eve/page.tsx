@@ -49,7 +49,7 @@ export default async function ChatBotHomePage() {
             <>
                 <ChatBotHero />
                 <Suspense fallback={<p>Loading demo...</p>}>
-                    <EveDemo />
+                    <EveDemo createNew={handleChatCreation} />
                 </Suspense>
                 <Process />
             </>
