@@ -38,9 +38,12 @@ export default async function ChatBotHomePage() {
 
     const handleChatCreation = async () => {
         "use server"
-        const chatId = await createInitialChatAction(userId, '/eve')
-        if (chatId) redirect(`/eve/${chatId}`)
-        else throw new Error('There was a problem creating a new chat')
+        const user = userId ? userId : 'n/a'
+        const chatId = await createInitialChatAction(user, '/eve')
+        const url = `/eve/${chatId}`
+        if (chatId) return { url }
+        const error = 'There was a problem creating a new chat'
+        return { error }
     }
 
 

@@ -40,6 +40,14 @@ export default async function EveLayout({
     children: React.ReactNode;
 }) {
     const { userId } = await checkSubscription()
+
+    if (!userId) {
+        return (
+            <>
+                {children}
+            </>
+        )
+    }
     const { resumes } = await getResumes(userId)
     const loadChats = cache(async (userId: string) => {
         return await getChats(userId)
@@ -52,7 +60,7 @@ export default async function EveLayout({
         title: chat.messages.length > 3 ? chat.messages.slice(3)[0].content.split(' ').slice(3).join(' ') : 'Session ' + index
     }))
 
-    console.log('foundChats', chats)
+    //console.log('foundChats', chats)
 
     const handleChatCreation = async () => {
         "use server"
