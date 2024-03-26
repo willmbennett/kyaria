@@ -181,9 +181,9 @@ export async function getJobApp(id: string) {
             .exec() as AppClass;
 
         if (app) {
-            transformProps(app, castToString, ['_id', 'profile', 'job', 'userResume', 'boardId']);
+            transformProps(app, castToString, '_id');
             transformProps(app, dateToString, ["createdAt", "updatedAt"]);
-            //console.log(app)
+            console.log(app)
             return {
                 app,
             };
