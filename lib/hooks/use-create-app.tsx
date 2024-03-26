@@ -9,7 +9,7 @@ export const useCreateApp = (path: string) => {
         userStory = '',
         profile: string,
         userResume: string,
-        boardId: string
+        boardId?: string
     ) => {
 
         // Initial log to confirm the function was called and with which parameters (sensitive information should be omitted or sanitized)

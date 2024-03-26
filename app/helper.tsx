@@ -80,4 +80,5 @@ export type SideBarItem = {
     id: string;
     title: string;
     href: string;
+    editable: boolean;
 }

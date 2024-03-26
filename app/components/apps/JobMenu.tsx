@@ -4,19 +4,18 @@ import { usePathname } from "next/navigation";
 
 import { useRouter } from "next/navigation";
 import useAppNavigation from "../../../lib/hooks/use-app-section";
+import { Button } from "../Button";
 const ACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-1 my-1 rounded text-xl lg:text-lg text-gray-600 bg-gray-200 font-bold items-center justify-center hover:bg-gray-600 hover:text-white";
 const INACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-1 my-1 rounded text-xl lg:text-lg text-gray-600 font-bold items-center justify-center hover:bg-gray-600 hover:text-white";
 
 
 export default function JobMenu(
-  { companyDiffbotUri,
-    state,
+  { boardId,
     currentSection,
     filteredPages,
     activeProgressSection
   }: {
-    companyDiffbotUri?: string
-    state: string
+    boardId?: string
     currentSection: string,
     filteredPages: {
       label: string;
@@ -29,9 +28,10 @@ export default function JobMenu(
 
   return (
     <div className="bg-white border w-full md:sticky md:top-60 p-4 lg:rounded-lg h-auto my-2 flex flex-col">
+      <Button size='sm' variant='ghost' href={`/board${boardId ? `/${boardId}` : '/default'}`} className="mb-3">← Back to Board</Button>
       {filteredPages.map((l, i) => {
         const handleClick = () => {
-          router.push(`${path}?section=${l.section}${activeProgressSection? `&progress=${activeProgressSection}`: ''}`, { scroll: false })
+          router.push(`${path}?section=${l.section}${activeProgressSection ? `&progress=${activeProgressSection}` : ''}`, { scroll: false })
         };
         return (
           <div key={i}>

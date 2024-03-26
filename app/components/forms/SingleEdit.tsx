@@ -12,11 +12,18 @@ interface FormValues {
 interface AutoResizeTextareaProps {
     value: string;
     onUpdate: (newValue: string) => Promise<void>;
-    titleStyle: string
+    titleStyle: string;
+    editable: boolean;
 }
 
 
-export const SingleEdit = ({ value, onUpdate, titleStyle }: AutoResizeTextareaProps) => {
+export const SingleEdit = ({ value, onUpdate, titleStyle, editable = false }: AutoResizeTextareaProps) => {
+    if (!editable) {
+        return (
+            <span className={titleStyle}>{value}</span>
+        )
+    }
+
     const [edit, setEdit] = useState(false);
     const [currentValue, setCurrentValue] = useState(value)
     const router = useRouter()
@@ -37,6 +44,8 @@ export const SingleEdit = ({ value, onUpdate, titleStyle }: AutoResizeTextareaPr
         }
         toggleEdit()
     };
+
+
 
     if (!edit) return (
         <div className='flex gap-2 items-center'>

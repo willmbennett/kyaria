@@ -16,7 +16,7 @@ export const ResumeDropAndSelect = ({ userId, resumes, hasResumes, selectedResum
     return (
         <div className='pt-3'>
             {hasResumes ?
-                <>
+                <div className='flex flex-col gap-2'>
                     <h2 className="text-2xl font-semibold leading-tight text-slate-900">Select which resume to use</h2>
                     <p>This resume will be used personalize your experience.</p>
                     <ResumeDropdownMenu
@@ -24,7 +24,7 @@ export const ResumeDropAndSelect = ({ userId, resumes, hasResumes, selectedResum
                         setSelectedResumeId={setSelectedResumeId}
                         resumes={resumes}
                     />
-                </>
+                </div>
                 :
                 <DropResumeBanner
                     userId={userId}

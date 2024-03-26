@@ -8,6 +8,7 @@ import { SidebarMobile } from "../components/sidebar/MobileSidebar";
 import { ItemHistory } from "../components/sidebar/ItemHistory";
 import { SidebarToggle } from "../components/sidebar/ToggleSidebar";
 import { SidebarDesktop } from "../components/sidebar/SidebarDesktop";
+import { SideBarItem } from "../helper";
 
 const title = "Streamline Your Job Search with Kyaria PRO Kanban Tracker";
 const description = "Elevate your job search with Kyaria PRO's Kanban Tracker. Simplify application management with a drag-and-drop interface, keep all your resumes and cover letters in one place, and optimize your search with our intuitive funnel approach. Start your strategic job search campaign for only $10/mo.";
@@ -46,8 +47,18 @@ export default async function BoardLayout({
   const items = boards.map((board: BoardClass, index: number) => ({
     id: board._id.toString(),
     href: `/board/${board._id.toString()}`,
-    title: board.name
+    title: board.name,
+    editable: true
   }))
+
+  const defaultItem: SideBarItem = {
+    id: 'default',
+    href: "/board/default",
+    title: "Default Board",
+    editable: false
+  }
+
+  const itemsWithDefault: SideBarItem[] = [defaultItem, ...items]
 
   //console.log('foundBoards', boards)
 
@@ -74,7 +85,7 @@ export default async function BoardLayout({
           <SidebarMobile>
             <ItemHistory
               sideBarTitle={'Boards'}
-              items={items}
+              items={itemsWithDefault}
               createNew={handleBoardCreation}
               newTitle={'New Board'}
             />
@@ -82,7 +93,7 @@ export default async function BoardLayout({
           <SidebarToggle />
           <SidebarDesktop
             sideBarTitle={'Boards'}
-            items={items}
+            items={itemsWithDefault}
             createNew={handleBoardCreation}
             newTitle={'New Board'}
           />

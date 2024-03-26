@@ -33,19 +33,20 @@ export default function CreateJobApp(
         resumes: ResumeClass[],
     }) {
     const [loading, setLoading] = useState(false)
-    const { register, handleSubmit, formState: { errors } } = useForm<FormFields>();
+    const { register, handleSubmit, formState: { errors }, watch } = useForm<FormFields>();
     const { hasResumes, selectedResumeId, setSelectedResumeId, selectedResume } = useResumeDropDown({ resumes })
     const path = usePathname()
     const router = useRouter()
     const sp = useSearchParams()
-    const board = sp.get('board')
+    const boardId = sp.get('board')
     const { createApp } = useCreateApp(path)
     const { findOrCreateJob } = useCreateJob(path)
     const { handleCopyResume } = useCopyResume()
+    const currentUrl = watch('input')
 
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
-        if (selectedResume && board) {
+        if (selectedResume) {
             try {
                 setLoading(true);
                 const jobId = await findOrCreateJob(data.input, userId, selectedResume)
@@ -55,8 +56,14 @@ export default function CreateJobApp(
                     //console.log('newResumeId: ', newResumeId)
 
                     if (newResumeId) {
-                        const { appId } = await createApp(jobId, userId, emails, story, profileId, newResumeId, board)
-                        if (appId) router.push(`/apps/${appId}`)
+                        if (boardId) {
+                            const { appId } = await createApp(jobId, userId, emails, story, profileId, newResumeId, boardId)
+                            if (appId) router.push(`/apps/${appId}`)
+                        } else {
+                            const { appId } = await createApp(jobId, userId, emails, story, profileId, newResumeId)
+                            if (appId) router.push(`/apps/${appId}`)
+                        }
+
                     }
                 }
             } catch (error) {
@@ -70,6 +77,12 @@ export default function CreateJobApp(
 
     return (
         <>
+            <div className='flex pb-3'>
+                <Button size='sm' variant='ghost' href={`/board${boardId ? `/${boardId}` : '/default'}`}>← Back to Board</Button>
+            </div>
+            <h1 className="pb-10 text-5xl font-semibold leading-tighter text-slate-900 md:mx-auto md:max-w-2xl md:text-center xl:mx-0 xl:text-6xl xl:leading-tighter">
+                Add a new Job Application
+            </h1>
             <div className='flex-col items-center w-full space-y-10 max-w-2xl'>
                 <div className='flex flex-col gap-4 items-start'>
                     <ResumeDropAndSelect
@@ -81,23 +94,24 @@ export default function CreateJobApp(
                     />
                 </div>
                 <div>
-                    {!loading && hasResumes && (
+                    {!loading && selectedResume && (
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <div className={BASIC_FIELD_STYLE}>
                                 <input {...register('input', { required: true })} placeholder="Link to job post" className="rounded-sm"></input>
                                 {errors.input && <p>Paste a link to the job post.</p>}
                             </div>
-
-                            <div className={BASIC_FIELD_STYLE}>
-                                <Button
-                                    variant="solid"
-                                    size="md"
-                                    type="submit"
-                                    className="mt-10 sm:mt-12"
-                                >
-                                    Submit
-                                </Button>
-                            </div>
+                            {(selectedResume && currentUrl) &&
+                                <div className={BASIC_FIELD_STYLE}>
+                                    <Button
+                                        variant="solid"
+                                        size="md"
+                                        type="submit"
+                                        className="mt-10 sm:mt-12"
+                                    >
+                                        Submit
+                                    </Button>
+                                </div>
+                            }
                         </form>
                     )}
                 </div>
