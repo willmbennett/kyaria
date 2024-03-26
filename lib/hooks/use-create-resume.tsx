@@ -38,7 +38,7 @@ const useSubmitResume = ({ onError, onSuccess }: UseSubmitResumeProps) => {
                 //console.log('resumeId: ', resumeId);
 
                 if (onSuccess) {
-                    await onSuccess('someResumeId'); // Awaiting onSuccess callback
+                    await onSuccess(resumeId); // Awaiting onSuccess callback
                 }
             }
         } catch (error) {
