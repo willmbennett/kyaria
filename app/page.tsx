@@ -21,11 +21,24 @@ const ProductCarousel = dynamic(() => import('./components/landingpage/ProductCa
 //import { countTotalResumes } from '../lib/resume-db'
 import { checkSubscription } from '../lib/hooks/check-subscription'
 import { redirect } from 'next/navigation'
+import { createInitialChatAction } from './eve/_action';
 
 export default async function HomePage() {
   const { activeSubscription, userId } = await checkSubscription()
   //const { app } = await getJobApp("651c2c45705785cff67bb3c9");
   //const { totalResumes } = await countTotalResumes()
+
+  const handleChatCreation = async () => {
+    "use server"
+    const chatId = await createInitialChatAction(userId, '/eve')
+    if (chatId) {
+      const url = `/eve/${chatId}`
+      return { url }
+    } else {
+      const error = 'There was a problem creating a new chat'
+      return { error }
+    }
+  }
 
   if (!userId) {
     return (
@@ -34,7 +47,7 @@ export default async function HomePage() {
         {/*<LogosRow />*/}
         {/*<ProductDemo jobApp={app} userId={userId} />*/}
         {/*totalResumes && <FeatureBlocks totalResumes={totalResumes} />*/}
-        <ProductCarousel />
+        <ProductCarousel createNew={handleChatCreation} />
         {/*<FeaturesGrid /> */}
         {/*<Process /> */}
         {/*<TestimonialsSlide />*/}

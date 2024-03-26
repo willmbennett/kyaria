@@ -75,3 +75,9 @@ export const linkData = {
         { label: 'Manage Subscription', href: 'https://billing.stripe.com/p/login/fZedQQbuK5Ke2Q06oo' },
     ]
 };
+
+export type SideBarItem = {
+    id: string;
+    title: string;
+    href: string;
+}

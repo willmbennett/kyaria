@@ -2,13 +2,11 @@ import dynamic from "next/dynamic";
 import { Metadata } from "next";
 import { checkSubscription } from "../../lib/hooks/check-subscription";
 import { ChatBotHero } from "../components/chatbot/landingpage/ChatBotHero";
-import { ChatBotMenu } from "../components/chatbot/ChatBotMenu";
-import { NewChatButton } from "../components/chatbot/sidebar/NewChatButton";
-import { Suspense, cache } from "react";
-import { createInitialChatAction } from "./_action";
-import { getChat } from "../../lib/chat-db";
-import { Message } from "ai";
+import { NewItemButton } from "../components/sidebar/NewItemButton";
+import { Suspense } from "react";
 import { EVE_IDLE_VIDEO } from "./eve-helper";
+import { createInitialChatAction } from "./_action";
+import { redirect } from "next/navigation";
 const Process = dynamic(() => import('../components/chatbot/landingpage/Process'));
 
 const EveDemo = dynamic(() => import('../components/chatbot/landingpage/ProductDemo'))
@@ -35,10 +33,18 @@ export const metadata: Metadata = {
     },
 };
 
-//import { list } from '@vercel/blob'
-
 export default async function ChatBotHomePage() {
     const { userId } = await checkSubscription()
+
+    const handleChatCreation = async () => {
+        "use server"
+        const user = userId ? userId : 'n/a'
+        const chatId = await createInitialChatAction(user, '/eve')
+        const url = `/eve/${chatId}`
+        if (chatId) return { url }
+        const error = 'There was a problem creating a new chat'
+        return { error }
+    }
 
 
     if (!userId) {
@@ -46,7 +52,7 @@ export default async function ChatBotHomePage() {
             <>
                 <ChatBotHero />
                 <Suspense fallback={<p>Loading demo...</p>}>
-                    <EveDemo />
+                    <EveDemo createNew={handleChatCreation} />
                 </Suspense>
                 <Process />
             </>
@@ -65,7 +71,7 @@ export default async function ChatBotHomePage() {
             </div>
             <div className="w-full flex justify-center items-center">
                 <div>
-                    <NewChatButton userId={userId} />
+                    <NewItemButton createNew={handleChatCreation} newTitle="New Chat" />
                 </div>
             </div>
             <div className="flex justify-center items-center w-full max-w-6xl mx-auto">

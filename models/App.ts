@@ -9,6 +9,7 @@ import type { Ref } from "@typegoose/typegoose";
 import { JobClass } from "./Job";
 import { ProfileClass } from "./Profile";
 import { ResumeClass } from "./Resume";
+import { BoardClass } from "./Board";
 
 class Emails {
     @prop()
@@ -56,6 +57,9 @@ class AppClass {
 
     @prop({ ref: () => ResumeClass, required: true })
     public userResume!: Ref<ResumeClass>;
+
+    @prop({ ref: () => BoardClass, required: true })
+    public boardId?: Ref<BoardClass>;
 
     @prop()
     public notes?: string;

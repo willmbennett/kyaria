@@ -2,26 +2,26 @@
 
 import { AnimatePresence, motion } from 'framer-motion'
 import { SidebarItem } from './SidebarItem'
-import { ChatClass } from '../../../../models/Chat'
+import { SideBarItem } from '../../helper'
 interface SidebarItemsProps {
-    chats: ChatClass[]
+    items: SideBarItem[]
 }
 
-export function SidebarItems({ chats }: SidebarItemsProps) {
+export function SidebarItems({ items }: SidebarItemsProps) {
 
     return (
         <AnimatePresence>
-            {chats.map(
-                (chat, index) =>
-                    chat && (
+            {items.map(
+                (item, index) =>
+                    item && (
                         <motion.div
-                            key={chat._id.toString()}
+                            key={item.id}
                             exit={{
                                 opacity: 0,
                                 height: 0
                             }}
                         >
-                            <SidebarItem index={index} chat={chat}>
+                            <SidebarItem index={index} item={item}>
                                 {/*
                                 <SidebarActions
                                     chat={chat}

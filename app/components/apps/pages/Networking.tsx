@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { JobClass } from "../../../../models/Job";
 import { ResumeClass } from "../../../../models/Resume";
-import { updateJobAppAction } from "../../../board/_action";
+import { updateJobAppAction } from "../../../apps/_action";
 import { Employee } from "../../../companies/[id]/employees/employee-helper";
 import ChatWithGPT from "../../chat/ChatWithGPT";
 import EmployeeItem from "../../companies/EmployeeItem";

@@ -2,7 +2,7 @@
 
 import ChatWithGPT from '../../chat/ChatWithGPT';
 import { useState } from 'react';
-import { updateResumeAction } from '../../../board/_action';
+import { updateResumeAction } from '../../../resumebuilder/_action';
 import { JobClass } from '../../../../models/Job';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button } from '../../Button';

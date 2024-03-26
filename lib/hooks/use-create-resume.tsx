@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { transformParsedResume } from '../../app/resumebuilder/resumetest-helper';
-import { createResumeAction } from '../../app/board/_action';
+import { createResumeAction } from '../../app/resumebuilder/_action';
 
 interface UseSubmitResumeProps {
     onError?: (error: Error) => void;
@@ -35,6 +35,7 @@ const useSubmitResume = ({ onError, onSuccess }: UseSubmitResumeProps) => {
                 if (!resumeId) {
                     throw new Error("Failed to create resume");
                 }
+                //console.log('resumeId: ', resumeId);
 
                 if (onSuccess) {
                     await onSuccess(resumeId); // Awaiting onSuccess callback

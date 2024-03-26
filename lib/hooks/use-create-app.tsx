@@ -1,5 +1,5 @@
 import { AppClass, Emails } from "../../models/App"
-import { createAppAction } from "../../app/board/_action"
+import { createAppAction } from "../../app/apps/_action"
 
 export const useCreateApp = (path: string) => {
     const createApp = async (
@@ -8,7 +8,8 @@ export const useCreateApp = (path: string) => {
         emails: Emails[],
         userStory = '',
         profile: string,
-        userResume: string
+        userResume: string,
+        boardId: string
     ) => {
 
         // Initial log to confirm the function was called and with which parameters (sensitive information should be omitted or sanitized)
@@ -20,7 +21,8 @@ export const useCreateApp = (path: string) => {
             emails,
             userStory,
             profile,
-            userResume
+            userResume,
+            boardId
         }
 
         // Logging the constructed userApp object can be helpful, but consider privacy/security for sensitive data

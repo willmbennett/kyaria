@@ -21,43 +21,27 @@ export async function countTotalApps() {
 }
 
 interface AppFilter {
-    userId: string
+    userId: string;
+    boardId?: string;
 }
 
 export async function getUserJobApps(filter: AppFilter) {
     try {
         await connectDB();
 
-        //const page = filter.page ?? 1;
-        //const limit = filter.limit ?? 10;
-        //const skip = (page - 1) * limit;
-
-        //console.log(filter)
-
         //console.log("getting job apps")
-
-        //const jobs = await Job.find(filter).skip(skip).limit(limit).lean().exec();
-        const jobApps = await AppModel.find({ userId: filter.userId })
+        const jobApps = await AppModel.find(filter)
             .sort('-createdAt')
             .populate("job")
             .lean()
             .exec();
 
-        const results = jobApps.length;
-
-        //console.log(jobApps, results)
-
         if (jobApps) {
-            transformProps(jobApps, castToString, ['_id', "profile", "userResume"]);
-            //console.log(jobApps)
-
+            transformProps(jobApps, castToString, ['_id', "profile", "userResume", 'boardId']);
             transformProps(jobApps, dateToString, ["createdAt", "updatedAt"]);
             //console.log(jobApps)
             return {
                 jobApps,
-                //page,
-                //limit,
-                results,
             };
         } else {
             return { error: "Job applications not found" };
@@ -190,14 +174,14 @@ export async function getJobApp(id: string) {
             return { error: "Job Application not found" };
         }
 
-      //console.log(id)
+        //console.log(id)
         const app = await AppModel.findById(id)
             .populate(["job", "userResume", "profile"])
             .lean()
             .exec() as AppClass;
 
         if (app) {
-            transformProps(app, castToString, '_id');
+            transformProps(app, castToString, ['_id', 'profile', 'job', 'userResume', 'boardId']);
             transformProps(app, dateToString, ["createdAt", "updatedAt"]);
             //console.log(app)
             return {
@@ -227,7 +211,7 @@ export async function updateJobApp(id: string, data: any) {
             .exec();
 
         if (jobApp) {
-            transformProps(jobApp, ObjectIdtoString, ['_id', 'profile', 'job', 'userResume']);
+            transformProps(jobApp, ObjectIdtoString, ['_id', 'profile', 'job', 'userResume', 'boardId']);
             transformProps(jobApp, dateToString, ["createdAt", "updatedAt"]);
 
             return {

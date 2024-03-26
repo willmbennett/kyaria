@@ -1,10 +1,10 @@
 'use client'
 import { motion } from "framer-motion";
 import { Container } from "../../landingpage/Container"
-import { NewChatButton } from "../sidebar/NewChatButton";
+import { NewItemButton } from "../../sidebar/NewItemButton";
 import { EVE_IDLE_VIDEO } from "../../../eve/eve-helper";
 
-const ProductDemoCarousel = () => {
+const ProductDemoCarousel = ({ createNew }: { createNew: () => Promise<any> }) => {
 
     const text = "Instead of selling you on Eve, we'll let her do the talking."
     const letters = Array.from(text);
@@ -45,7 +45,7 @@ const ProductDemoCarousel = () => {
                 <Container className='flex flex-col gap-4 w-full justify-center'>
                     <div className="w-full flex justify-center items-center">
                         <div>
-                            <NewChatButton userId={'n/a'} />
+                            <NewItemButton createNew={createNew} newTitle="New Chat" />
                         </div>
                     </div>
                     <div className="flex justify-center items-center w-full max-w-6xl mx-auto">

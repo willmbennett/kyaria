@@ -22,6 +22,8 @@ export type boardItemType = {
   location: string;
   employmentType?: string;
   salaryRange?: string;
+  userId: string;
+  boardId?: string;
 }
 
 export type jobStateType = 'WISHLIST' | 'APPLIED' | 'PHONE SCREEN' | 'FIRST ROUND' | 'SECOND ROUND' | 'THIRD ROUND' | 'FINAL ROUND' | 'JOB OFFER' | 'ACCEPTED'

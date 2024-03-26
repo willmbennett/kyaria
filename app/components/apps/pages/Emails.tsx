@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Emails } from '../../../../models/App';
 import { JobClass } from '../../../../models/Job';
 import { ResumeClass } from '../../../../models/Resume';
-import { updateJobAppAction } from '../../../board/_action';
+import { updateJobAppAction } from '../../../apps/_action';
 import ChatWithGPT from '../../chat/ChatWithGPT';
 import { Message } from 'ai';
 
