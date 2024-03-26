@@ -49,7 +49,7 @@ export default async function BoardLayout({
     title: board.name
   }))
 
-  console.log('foundBoards', boards)
+  //console.log('foundBoards', boards)
 
   const handleBoardCreation = async () => {
     "use server"
@@ -59,7 +59,7 @@ export default async function BoardLayout({
     }
     const boardId = await createBoardAction(boardData, '/board')
     if (boardId) {
-      const url = `/apps/new?board=${boardId}`
+      const url = `/board/${boardId}`
       return { url }
     } else {
       const error = 'There was a problem creating a new chat'

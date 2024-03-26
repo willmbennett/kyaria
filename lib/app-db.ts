@@ -181,7 +181,7 @@ export async function getJobApp(id: string) {
             .exec() as AppClass;
 
         if (app) {
-            transformProps(app, castToString, '_id');
+            transformProps(app, castToString, ['_id', 'profile', 'job', 'userResume', 'boardId']);
             transformProps(app, dateToString, ["createdAt", "updatedAt"]);
             //console.log(app)
             return {
@@ -211,7 +211,7 @@ export async function updateJobApp(id: string, data: any) {
             .exec();
 
         if (jobApp) {
-            transformProps(jobApp, ObjectIdtoString, ['_id', 'profile', 'job', 'userResume']);
+            transformProps(jobApp, ObjectIdtoString, ['_id', 'profile', 'job', 'userResume', 'boardId']);
             transformProps(jobApp, dateToString, ["createdAt", "updatedAt"]);
 
             return {

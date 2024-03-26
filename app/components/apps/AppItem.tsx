@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import { updateJobAppAction } from "../../apps/_action";
 import { Button } from "../Button";
 import { useDraggable } from '@dnd-kit/core';
-import { AppClass } from "../../../models/App";
-import { JobClass } from "../../../models/Job";
 import { boardItemType } from "../../board/job-helper";
 import { TooltipTrigger, TooltipContent, Tooltip } from '@radix-ui/react-tooltip';
+import { BoardDropDown } from "./BoardDropdown";
+import { BoardClass } from "../../../models/Board";
 
 const ACTIVE_ROUTE = "bg-gray-200 hover:bg-gray-600 hover:text-white";
 const INACTIVE_ROUTE = "hover:bg-gray-600 hover:text-white";
@@ -17,21 +17,25 @@ interface AppItemProps {
   app: boardItemType;
   apps: boardItemType[];
   updateAppState: (appId: string, newState: string) => void;
+  updateAppBoard: (appId: string, newBoard: string) => void;
   setApps: Dispatch<SetStateAction<boardItemType[]>>
   jobStates: string[];
   state: string;
+  boards: BoardClass[]
 }
 
 export default function AppItem(
   { app,
     apps,
     updateAppState,
+    updateAppBoard,
     jobStates,
     setApps,
-    state
+    state,
+    boards
   }: AppItemProps) {
   const router = useRouter()
-  let { id, createdAt, jobTitle, company, location, employmentType, salaryRange } = app
+  let { id, createdAt, jobTitle, company, location, employmentType, salaryRange, userId, boardId } = app
   const date = parseISO(createdAt?.toString() || '');
   const [showOptions, setShowOptions] = useState(false);
   const [showDetails, setShowDetails] = useState(false); // State to toggle visibility
@@ -89,7 +93,7 @@ export default function AppItem(
             className="inline-flex items-center justify-center w-full gap-x-2 rounded-md px-4 py-2 text-sm font-medium text-slate-700 shadow-sm bg-slate-50 hover:text-slate-900 hover:bg-slate-200 hover:ring-1 hover:ring-slate-400"
             id="menu-button" aria-expanded="true" aria-haspopup="true"
           >
-            {state}
+            State
             <svg className={`h-5 w-5 text-gray-400 duration-300 ${showOptions && 'rotate-180'}`} viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
             </svg>
@@ -216,7 +220,10 @@ export default function AppItem(
 
         }
       </div>
-      {optionsMenu()}
+      <div className="flex w-full gap-2">
+        {optionsMenu()}
+        <BoardDropDown appId={id} userId={userId} boardId={boardId} boards={boards} updateAppBoard={updateAppBoard} />
+      </div>
     </div >
 
 

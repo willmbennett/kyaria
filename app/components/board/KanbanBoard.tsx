@@ -2,18 +2,22 @@
 import { DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { useRouter } from 'next/navigation';
 import { useId, useState, useCallback } from 'react';
-import { AppClass } from '../../../models/App';
 import { updateJobAppAction } from '../../apps/_action';
 import AppItem from '../apps/AppItem';
 import KanbanColumn from "./KanbanColumn";
 import { boardItemType, jobStates } from '../../board/job-helper';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
+import { BoardClass } from '../../../models/Board';
 
 export default function Kanban(
     {
         boardItems,
+        boards,
+        boardId
     }: {
         boardItems: boardItemType[]
+        boards: BoardClass[]
+        boardId?: string
     }) {
 
     const router = useRouter()
@@ -110,6 +114,13 @@ export default function Kanban(
         []
     );
 
+    const updateAppBoard = (appId: string, newBoard: string) => {
+        const updatedApps = apps.map(app =>
+            app.id === appId ? { ...app, boardId: newBoard } : app
+        );
+        setApps(updatedApps)
+    }
+
 
     const id = useId()
 
@@ -140,10 +151,12 @@ export default function Kanban(
                                         <div className='flex gap-2 h-full'>
                                             <KanbanColumn
                                                 state={state}
-                                                apps={apps}
+                                                apps={apps.filter(app => app.boardId == boardId)}
                                                 updateAppState={updateAppState}
+                                                updateAppBoard={updateAppBoard}
                                                 setApps={setApps}
                                                 jobStates={jobStates}
+                                                boards={boards}
                                             />
                                             {index < jobStates.length - 1 && <div className="h-full w-1 bg-slate-300 mx-2 shadow-xl"></div>}
                                         </div>
@@ -160,6 +173,8 @@ export default function Kanban(
                                     jobStates={jobStates}
                                     setApps={setApps}
                                     state={apps.find(job => job.id === activeId)?.state || 'WISHLIST'}
+                                    boards={boards}
+                                    updateAppBoard={updateAppBoard}
                                 />
                             ) : null}
                         </DragOverlay>

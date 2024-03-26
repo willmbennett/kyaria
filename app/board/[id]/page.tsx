@@ -7,8 +7,9 @@ import { redirect } from "next/navigation";
 import { Button } from "../../components/Button";
 import Kanban from "../../components/board/KanbanBoard";
 import { SingleEdit } from "../../components/forms/SingleEdit";
-import { getBoard } from "../../../lib/board-db";
+import { getBoard, getBoards } from "../../../lib/board-db";
 import { updateBoardAction } from "../_action";
+import { BoardClass } from "../../../models/Board";
 
 export default async function BoardPage({ params }: { params: { id: string } }) {
   const { userId } = await checkSubscription()
@@ -25,9 +26,6 @@ export default async function BoardPage({ params }: { params: { id: string } }) 
   }
 
   const { jobApps } = await getUserJobApps(filter) as { jobApps: AppClass[] }
-  if (jobApps.length == 0) {
-    redirect(`/apps/new?board=${boardId}`)
-  }
 
   const { board } = await getBoard(boardId)
 
@@ -42,11 +40,16 @@ export default async function BoardPage({ params }: { params: { id: string } }) 
       company: job.company,
       location: job.location,
       employmentType: job.employmentType,
-      salaryRange: job.salaryRange
+      salaryRange: job.salaryRange,
+      userId: app.userId,
+      boardId: boardId
     })
   })
 
-  const upDateBoardTitle = async (title: string) => {
+  const { boards } = await getBoards(userId) as { boards: BoardClass[] }
+
+  const updateBoardTitle = async (title: string) => {
+    'use server'
     const path = `/board/${boardId}`
     const updateData = { name: title }
     await updateBoardAction(boardId, updateData, path)
@@ -57,7 +60,7 @@ export default async function BoardPage({ params }: { params: { id: string } }) 
       <div className="flex gap-4 items-center">
         <SingleEdit
           value={board?.name || 'New Board'}
-          onUpdate={upDateBoardTitle}
+          onUpdate={updateBoardTitle}
           titleStyle="sm:text-lg text-xl font-bold text-slate-900"
         >
         </SingleEdit>
@@ -72,6 +75,8 @@ export default async function BoardPage({ params }: { params: { id: string } }) 
       </div>
       <Kanban
         boardItems={boardItems}
+        boards={boards}
+        boardId={boardId}
       />
     </div >
   );

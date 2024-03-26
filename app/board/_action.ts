@@ -1,11 +1,17 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import { createBoard, deleteBoard, updateBoard } from "../../lib/board-db";
+import { createBoard, deleteBoard, getBoards, updateBoard } from "../../lib/board-db";
 
 export async function createBoardAction(data: any, path: string) {
   const { boardId } = await createBoard(data);
   revalidatePath(path);
   return boardId
+}
+
+export async function getBoardsAction(userId: string, path: string) {
+  const { boards } = await getBoards(userId);
+  revalidatePath(path);
+  return { boards }
 }
 
 export async function updateBoardAction(

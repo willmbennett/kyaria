@@ -10,6 +10,8 @@ import { JobClass } from "../../models/Job";
 import { boardItemType } from "./job-helper";
 import { BoardHero } from "../components/board/landingpage/BoardHero";
 import dynamic from "next/dynamic";
+import { getBoards } from "../../lib/board-db";
+import { BoardClass } from "../../models/Board";
 const ProductDemo = dynamic(() => import('../components/board/landingpage/ProductDemo'), {
   ssr: false,
 });
@@ -45,6 +47,7 @@ export default async function BoardPage() {
   }
 
   const { jobApps } = await getUserJobApps({ userId: userId }) as { jobApps: AppClass[] }
+  const { boards } = await getBoards(userId) as { boards: BoardClass[] }
 
   if (jobApps.length == 0) {
     redirect('/apps/new')
@@ -61,7 +64,8 @@ export default async function BoardPage() {
       company: job.company,
       location: job.location,
       employmentType: job.employmentType,
-      salaryRange: job.salaryRange
+      salaryRange: job.salaryRange,
+      userId: app.userId
     })
   })
 
@@ -82,6 +86,7 @@ export default async function BoardPage() {
       </div>
       <Kanban
         boardItems={boardItems}
+        boards={boards}
       />
     </div>
   );

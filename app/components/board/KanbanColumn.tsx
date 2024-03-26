@@ -3,16 +3,19 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { AppClass } from '../../../models/App';
 import AppItem from "../apps/AppItem";
 import { boardItemType } from '../../board/job-helper';
+import { BoardClass } from '../../../models/Board';
 
 interface KanbanColumnProps {
     state: string;
     apps: boardItemType[];
     jobStates: string[];
     updateAppState: (appId: string, newState: string) => void;
+    updateAppBoard: (appId: string, newBoard: string) => void;
     setApps: Dispatch<SetStateAction<boardItemType[]>>
+    boards: BoardClass[]
 }
 
-export default function KanbanColumn({ state, apps, updateAppState, jobStates, setApps }: KanbanColumnProps) {
+export default function KanbanColumn({ state, apps, updateAppState, jobStates, setApps, boards, updateAppBoard }: KanbanColumnProps) {
     const { setNodeRef, isOver } = useDroppable({ id: state });
 
     const jobApps = apps.filter(job => job.state === state)
@@ -37,9 +40,11 @@ export default function KanbanColumn({ state, apps, updateAppState, jobStates, s
                             app={app}
                             apps={apps}
                             updateAppState={updateAppState}
+                            updateAppBoard={updateAppBoard}
                             jobStates={jobStates}
                             setApps={setApps}
                             state={state}
+                            boards={boards}
                         />
                     )
                     )}
@@ -63,9 +68,11 @@ export default function KanbanColumn({ state, apps, updateAppState, jobStates, s
                                 app={app}
                                 apps={apps}
                                 updateAppState={updateAppState}
+                                updateAppBoard={updateAppBoard}
                                 jobStates={jobStates}
                                 setApps={setApps}
                                 state={state}
+                                boards={boards}
                             />
                         ))}
                     </div>

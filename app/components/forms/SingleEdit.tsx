@@ -3,6 +3,11 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { Button } from '../Button';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+
+interface FormValues {
+    textAreaValue: string;
+}
 
 interface AutoResizeTextareaProps {
     value: string;
@@ -13,24 +18,29 @@ interface AutoResizeTextareaProps {
 
 export const SingleEdit = ({ value, onUpdate, titleStyle }: AutoResizeTextareaProps) => {
     const [edit, setEdit] = useState(false);
+    const [currentValue, setCurrentValue] = useState(value)
     const router = useRouter()
 
     const toggleEdit = () => {
         setEdit(!edit)
     }
 
-    const handleSubmit = async (event: React.FormEvent) => {
-        await onUpdate(value);
-        router.refresh()
-    };
+    const { register, handleSubmit, reset } = useForm<FormValues>({
+        defaultValues: { textAreaValue: value }
+    });
 
-    const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        onUpdate(event.target.value);
+    const onSubmit = async (data: FormValues) => {
+        if (data.textAreaValue != currentValue) {
+            await onUpdate(data.textAreaValue);
+            setCurrentValue(data.textAreaValue)
+            router.refresh()
+        }
+        toggleEdit()
     };
 
     if (!edit) return (
-        <div className='fex gap-2 items-center'>
-            <span className={titleStyle}>{value}</span>
+        <div className='flex gap-2 items-center'>
+            <span className={titleStyle}>{currentValue}</span>
             <Button
                 type="button"
                 className="border-none text-slate-300"
@@ -44,10 +54,9 @@ export const SingleEdit = ({ value, onUpdate, titleStyle }: AutoResizeTextareaPr
     )
 
     return (
-        <form onSubmit={handleSubmit} className='flex gap-2'>
+        <form onSubmit={handleSubmit(onSubmit)} className='flex gap-2'>
             <TextareaAutosize
-                value={value}
-                onChange={handleChange}
+                {...register('textAreaValue')}
                 placeholder="Type something..."
                 style={{ width: '100%' }}
             />

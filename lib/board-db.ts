@@ -1,10 +1,9 @@
-import { ObjectId } from "mongodb";
 import connectDB from "./connect-db";
 import { stringToObjectId, castToString, dateToString } from "./utils";
 import { BoardClass, BoardModel } from "../models/Board";
 var transformProps = require('transform-props');
 
-const logging = true
+const logging = false
 
 export async function getBoards(userId: string) {
     try {
