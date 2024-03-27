@@ -1,6 +1,6 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import { createInitialChat, findChat, getChat, updateChat } from "../../lib/chat-db";
+import { createInitialChat, deleteChat, findChat, getChat, updateChat } from "../../lib/chat-db";
 import { getFirstResume } from "../../lib/resume-db";
 import { Message } from "ai";
 
@@ -34,4 +34,16 @@ export async function updateChatAction(
 ) {
     await updateChat(id, chatHistory);
     revalidatePath(path);
+}
+
+export async function deleteChatAction({
+    id,
+    path,
+}: {
+    id: string;
+    path: string;
+}) {
+    const { error } = await deleteChat(id);
+    revalidatePath(path);
+    return { error }
 }

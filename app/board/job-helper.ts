@@ -12,6 +12,11 @@ export const emails = [
   { "type": "Reference Request", "content": "" }
 ]
 
+export type ActionItemType = (id: string, path: string) => Promise<{
+  error?: string;
+  url?: string;
+}>
+
 export type boardItemType = {
   id: string;
   createdAt: string;

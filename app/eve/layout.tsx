@@ -8,10 +8,12 @@ import { getResumes } from '../../lib/resume-db';
 import { DropResumeBanner } from '../components/chatbot/DropResumeBanner';
 import { getChats } from '../../lib/chat-db';
 import { cache } from 'react';
-import { createInitialChatAction } from './_action';
+import { createInitialChatAction, deleteChatAction } from './_action';
 import { redirect } from 'next/navigation';
 import { ChatClass } from '../../models/Chat';
 import { DesktopOpenSideBar } from '../components/sidebar/DesktopOpenSideBar';
+import { ActionItemType } from '../board/job-helper';
+import { SideBarItem } from '../helper';
 
 const title = "Eve: Kyaria.ai's Revolutionary AI Career Coach | Affordable & 24/7 Access";
 const description = "Discover Eve, the world's first virtual career coach. Get personalized, smart career advice 24/7 at just $10/month. Save on career coaching with cutting-edge AI technology. Start your journey to career success with Eve today!";
@@ -55,10 +57,12 @@ export default async function EveLayout({
     })
     const { chats } = await loadChats(userId) as { chats: any }
 
-    const items = chats.map((chat: ChatClass, index: number) => ({
+    const items: SideBarItem[] = chats.map((chat: ChatClass, index: number) => ({
         id: chat._id.toString(),
         href: `/eve/${chat._id.toString()}`,
-        title: chat.messages.length > 3 ? chat.messages.slice(3)[0].content.split(' ').slice(3).join(' ') : 'Session ' + index
+        title: chat.messages.length > 3 ? chat.messages.slice(3)[0].content.split(' ').slice(3).join(' ') : 'Session ' + index,
+        editable: true,
+        category: 'Chat'
     }))
 
     //console.log('foundChats', chats)
@@ -75,6 +79,17 @@ export default async function EveLayout({
         }
     }
 
+    const handleChatDeletion: ActionItemType = async (chatId: string, path: string) => {
+        "use server"
+        const { error } = await deleteChatAction({ id: chatId, path })
+        if (error) {
+            return { error }
+        } else {
+            const url = "/eve"
+            return { url }
+        }
+    }
+
     return (
         <div className="min-h-screen">
             {userId &&
@@ -85,6 +100,7 @@ export default async function EveLayout({
                             items={items}
                             createNew={handleChatCreation}
                             newTitle={'New Chat'}
+                            deleteItemAction={handleChatDeletion}
                         />
                     </SidebarMobile>
                     <DesktopOpenSideBar />
@@ -93,6 +109,7 @@ export default async function EveLayout({
                         items={items}
                         createNew={handleChatCreation}
                         newTitle={'New Chat'}
+                        deleteItemAction={handleChatDeletion}
                     />
                     {(resumes && resumes.length == 0) &&
                         <DropResumeBanner

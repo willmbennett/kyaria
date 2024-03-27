@@ -96,7 +96,7 @@ export function SidebarItem({ index, item, children }: SidebarItemProps) {
                     </span>
                 </div>
             </Link>
-            {isActive && <div className="absolute right-2 top-1">{children}</div>}
+            {(isActive && item.editable) && <div className="absolute right-2 top-0">{children}</div>}
         </motion.div>
     )
 }

@@ -31,6 +31,7 @@ export async function deleteBoardAction({
   id: string;
   path: string;
 }) {
-  await deleteBoard(id);
+  const { error } = await deleteBoard(id);
   revalidatePath(path);
+  return { error }
 }

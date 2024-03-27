@@ -3,7 +3,10 @@ import { ResumeModel, ResumeClass } from "../models/Resume";
 import { ResumeScanDataModel } from "../models/ResumeScan";
 import connectDB from "./connect-db";
 import { castToString, dateToString, ObjectIdtoString, stringToObjectId } from "./utils";
+import { AppModel } from "../models/App";
 var transformProps = require('transform-props');
+
+const logging = false
 
 export async function countTotalResumes() {
     try {
@@ -26,8 +29,12 @@ export async function getResumes(userId: string) {
         if (!userId) {
             return { error: "resumes not found" };
         }
+        const apps = await AppModel.find({ userId }).lean().exec()
+        const resumeToExclude = apps.map(app => (app.userResume))
+        //console.log('resumeToExclude', resumeToExclude)
         const resumes = await ResumeModel.find({
             userId: userId,
+            _id: { $nin: resumeToExclude }
         })
             .sort({ createdAt: -1, _id: -1 }) // Sorting by createdAt in descending order, then by _id in descending order
             .lean()
@@ -44,12 +51,12 @@ export async function getResumes(userId: string) {
             };
 
         } else {
-          //console.log({ error: "Error pulling resumes" })
+            //console.log({ error: "Error pulling resumes" })
             return { error: "Error pulling resumes" };
         }
     } catch (error) {
         console.log(error)
-        return { error };
+        return { error: error as string };
     }
 }
 
@@ -67,18 +74,18 @@ export async function getFirstResume(userId: string) {
             .lean()
             .exec();
 
-      //console.log('prior to transforming resume: ')
+        //console.log('prior to transforming resume: ')
         if (resume) {
             transformProps(resume, castToString, '_id');
             transformProps(resume, dateToString, ["createdAt", "updatedAt"]);
             transformProps(resume, ObjectIdtoString, "resumeScan");
-          //console.log('post transforming resume')
+            //console.log('post transforming resume')
             return {
                 resume
             };
 
         } else {
-          //console.log({ error: "Error pulling resumes" })
+            //console.log({ error: "Error pulling resumes" })
             return { error: "Error pulling resumes" };
         }
     } catch (error) {
@@ -125,16 +132,16 @@ export async function createResume(data: ResumeClass) {
     try {
         await connectDB();
 
-      //console.log(`Resume to create: ${JSON.stringify(data)}`)
+        //console.log(`Resume to create: ${JSON.stringify(data)}`)
 
         const resume = await ResumeModel.create(data);
 
-      //console.log(`Created resume: ${JSON.stringify(resume)}`)
+        //console.log(`Created resume: ${JSON.stringify(resume)}`)
 
         if (resume) {
-          //console.log('about to transform props')
+            //console.log('about to transform props')
             const resumeId = castToString(resume._id)
-          //console.log(resumeId)
+            //console.log(resumeId)
             return {
                 resumeId
             };
@@ -157,7 +164,7 @@ export async function updateResume(id: string, data: any) {
 
         //console.log(id)
 
-      //console.log(`data to update resume with: ${JSON.stringify(data)}`)
+        //console.log(`data to update resume with: ${JSON.stringify(data)}`)
 
         const resume = await ResumeModel.findByIdAndUpdate(
             parsedId,
@@ -167,7 +174,7 @@ export async function updateResume(id: string, data: any) {
             .exec();
 
         if (resume) {
-          //console.log(`updated resume: ${JSON.stringify(resume)}`)
+            //console.log(`updated resume: ${JSON.stringify(resume)}`)
             return {
                 resume,
             };
@@ -178,6 +185,27 @@ export async function updateResume(id: string, data: any) {
         }
     } catch (error) {
         console.log(error)
+        return { error };
+    }
+}
+
+export async function deleteResume(id: string) {
+    try {
+        await connectDB();
+
+        if (logging) console.log(id)
+
+        const parsedId = stringToObjectId(id);
+
+        if (logging) console.log(parsedId)
+
+        if (!parsedId) {
+            return { error: "Chat not found" };
+        }
+        await ResumeModel.findByIdAndDelete(parsedId).exec();
+
+        return {}
+    } catch (error: any) {
         return { error };
     }
 }

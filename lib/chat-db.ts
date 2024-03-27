@@ -23,6 +23,8 @@ const createPersonalizedGreeting = (name?: string) => {
     return { personalizedGreeting }
 }
 
+const logging = false
+
 export const createInitialChat = async (userId: string) => {
     try {
         await connectDB();
@@ -181,6 +183,27 @@ export async function updateChat(id: string, chatHistory: Message[]) {
             return { error: "Chat application not found" };
         }
     } catch (error) {
+        return { error };
+    }
+}
+
+export async function deleteChat(id: string) {
+    try {
+        await connectDB();
+
+        if (logging) console.log(id)
+
+        const parsedId = stringToObjectId(id);
+
+        if (logging) console.log(parsedId)
+
+        if (!parsedId) {
+            return { error: "Chat not found" };
+        }
+        await ChatModel.findByIdAndDelete(parsedId).exec();
+
+        return {}
+    } catch (error: any) {
         return { error };
     }
 }

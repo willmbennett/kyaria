@@ -1,13 +1,15 @@
 
 import { SidebarItems } from './SidebarItems'
 import { SideBarItem } from '../../helper'
+import { ActionItemType } from '../../board/job-helper';
 
 interface SidebarListProps {
     items?: SideBarItem[]
     children?: React.ReactNode;
+    deleteItemAction: ActionItemType
 }
 
-export const SidebarList = ({ items }: SidebarListProps) => {
+export const SidebarList = ({ items, deleteItemAction }: SidebarListProps) => {
 
     if (!items) {
         return (
@@ -29,7 +31,7 @@ export const SidebarList = ({ items }: SidebarListProps) => {
         <div className="flex flex-1 flex-col overflow-hidden">
             <div className="flex-1 overflow-auto overscroll-none">
                 <div className="space-y-2 px-2">
-                    <SidebarItems items={items} />
+                    <SidebarItems items={items} deleteItemAction={deleteItemAction} />
                 </div>
             </div>
             <div className="flex items-center justify-between p-4">
