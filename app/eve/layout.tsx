@@ -11,6 +11,7 @@ import { cache } from 'react';
 import { createInitialChatAction } from './_action';
 import { redirect } from 'next/navigation';
 import { ChatClass } from '../../models/Chat';
+import { DesktopOpenSideBar } from '../components/sidebar/DesktopOpenSideBar';
 
 const title = "Eve: Kyaria.ai's Revolutionary AI Career Coach | Affordable & 24/7 Access";
 const description = "Discover Eve, the world's first virtual career coach. Get personalized, smart career advice 24/7 at just $10/month. Save on career coaching with cutting-edge AI technology. Start your journey to career success with Eve today!";
@@ -86,7 +87,7 @@ export default async function EveLayout({
                             newTitle={'New Chat'}
                         />
                     </SidebarMobile>
-                    <SidebarToggle />
+                    <DesktopOpenSideBar />
                     <SidebarDesktop
                         sideBarTitle={'Session History'}
                         items={items}

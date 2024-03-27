@@ -10,7 +10,7 @@ interface KanbanItemListProps {
 }
 
 export const KanbanItemList = ({ apps, state, boards, updateAppState }: KanbanItemListProps) => (
-    <div className='flex flex-col gap-2'>
+    <div className='flex flex-col gap-2 w-full'>
         {apps.map(app => (
             <AppItem
                 key={app.id}

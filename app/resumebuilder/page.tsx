@@ -59,6 +59,8 @@ export default async function ProfilePage() {
     redirect('/resumebuilder/new')
   }
 
+  redirect('/resumebuilder/' + resumes[0]._id.toString())
+
   return (
     <ResumeBuilderHome
       userId={userId}

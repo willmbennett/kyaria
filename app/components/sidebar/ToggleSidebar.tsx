@@ -17,9 +17,9 @@ export function SidebarToggle() {
             }}
         >
             {isSidebarOpen ?
-                <IconSidebar className="size-6" />
-                :
                 <Cross2Icon className="size-4" />
+                :
+                <IconSidebar className="size-6" />
             }
 
             <span className="sr-only">Toggle Sidebar</span>

@@ -67,27 +67,33 @@ function SortableResumeSection({ id, name, control, register, setValue, watch, j
     };
 
     return (
-        <div className='flex flex-row items-top justify-center w-full shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-lg transition-shadow duration-200'>
-            <div className='w-full bg-white rounded-xl'>
-                <div ref={setNodeRef} style={style} {...attributes} {...listeners} className='flex p-3 rounded-xl justify-between items-center hover:cursor-grab '>
-                    <h2 className='text-lg font-semibold'>{name.replace('_', ' ').toLocaleUpperCase()}</h2>
-                    <Button
-                        type='button'
-                        variant='ghost'
-                        size='sm'
-                        onClick={() => setShowComponent(!showComponent)}
-                    >
-                        {showComponent ? 'Hide' : 'Edit'}
-                    </Button>
-                </div>
-
-                {showComponent && !isDragging &&
-                    <div className={`mb-6 p-4 transition-all ease-in-out duration-300 ${showComponent ? '' : 'max-h-0 overflow-hidden'}`}>
-                        {renderField({ id, name, control, register, setValue, watch, job })}
-                    </div>
-                }
+        <div className="rounded-xl w-full hover:shadow-lg hover:bg-slate-100 transition-all duration-200 ease-in-out">
+            <div
+                ref={setNodeRef}
+                style={style}
+                {...attributes}
+                {...listeners}
+                className="flex p-3 rounded-xl justify-between items-center cursor-grab"
+            >
+                <h2 className="text-lg font-semibold">
+                    {name.replace('_', ' ').toLocaleUpperCase()}
+                </h2>
+                <button
+                    type="button"
+                    className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-200 bg-transparent rounded-md p-2 transition-colors duration-150 ease-in-out"
+                    onClick={() => setShowComponent(!showComponent)}
+                >
+                    {showComponent ? 'Hide' : 'Edit'}
+                </button>
             </div>
-        </div >
+
+            {showComponent && !isDragging && (
+                <div className="mb-6 p-4 transition-all ease-in-out duration-300">
+                    {renderField({ id, name, control, register, setValue, watch, job })}
+                </div>
+            )}
+        </div>
+
     );
 }
 

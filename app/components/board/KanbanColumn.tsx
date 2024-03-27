@@ -3,6 +3,8 @@ import { boardItemType, jobStates } from '../../board/job-helper';
 import { BoardClass } from '../../../models/Board';
 import { KanbanItemList } from './KanbanItemList';
 import { useState } from 'react';
+import { Divider } from 'semantic-ui-react'
+
 
 interface KanbanColumnProps {
     index: number;
@@ -35,10 +37,15 @@ export default function KanbanColumn(
     const transitionItems = isOver ? 'hidden' : 'flex flex-col'
 
     return (
-        <div key={index} className='flex text-center h-full'>
-            <div ref={setNodeRef} className={`flex w-80 p-2 rounded-lg flex-col gap-4 h-full ${columnStyle}`}>
-                <h5 className="text-xl font-medium leading-tight">{state}</h5>
-                <div ref={setNodeRef} className={`w-full h-full items-center ${transitionItems}`}>
+        <div key={index} id={`kanban-column-${index}`} className='flex h-full'>
+            <div
+                ref={setNodeRef}
+                className={`relative h-full w-80 overflow-y-scroll ${columnStyle}`}
+            >
+                <div className='w-full bg-white pb-2 sticky top-0 text-center pt-16 z-10 shadow-md'>
+                    <h5 className="text-xl font-medium leading-tight">{state}</h5>
+                </div>
+                <div className={`flex w-full flex-col gap-4 p-1 items-center ${transitionItems}`}>
                     <KanbanItemList
                         apps={activeApps}
                         updateAppState={updateAppState}
@@ -46,7 +53,7 @@ export default function KanbanColumn(
                         boards={boards}
                     />
                     {inActiveApps.length > 0 &&
-                        <>
+                        <div className='text-center w-full'>
                             <h5 className="text-xl font-medium leading-tight py-2">
                                 Inactive Apps
                             </h5>
@@ -58,20 +65,18 @@ export default function KanbanColumn(
                                     <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
                                 </svg>
                             </button>
-                            <div className='flex flex-col gap-2'>
-                                {showInactive &&
-                                    <KanbanItemList
-                                        apps={inActiveApps}
-                                        updateAppState={updateAppState}
-                                        state={state}
-                                        boards={boards}
-                                    />}
-                            </div>
-                        </>
+                            {showInactive &&
+                                <KanbanItemList
+                                    apps={inActiveApps}
+                                    updateAppState={updateAppState}
+                                    state={state}
+                                    boards={boards}
+                                />}
+                        </div>
                     }
                 </div>
             </div>
-            {index < jobStates.length - 1 && <div className="h-full w-1 bg-slate-300 mx-4 shadow-xl"></div>}
+            {index < jobStates.length - 1 && <div className="mt-24 h-full w-1 bg-slate-100 mx-4 shadow-xl"></div>}
         </div>
     );
 }

@@ -5,7 +5,7 @@ import { SidebarToggle } from './ToggleSidebar'
 import { SideBarItem } from '../../helper'
 
 interface ItemHistoryProps {
-    items: SideBarItem[];
+    items?: SideBarItem[];
     newTitle: string
     createNew: () => Promise<any>;
     sideBarTitle: string;

@@ -9,6 +9,7 @@ import { ItemHistory } from "../components/sidebar/ItemHistory";
 import { SidebarToggle } from "../components/sidebar/ToggleSidebar";
 import { SidebarDesktop } from "../components/sidebar/SidebarDesktop";
 import { SideBarItem } from "../helper";
+import { DesktopOpenSideBar } from "../components/sidebar/DesktopOpenSideBar";
 
 const title = "Streamline Your Job Search with Kyaria PRO Kanban Tracker";
 const description = "Elevate your job search with Kyaria PRO's Kanban Tracker. Simplify application management with a drag-and-drop interface, keep all your resumes and cover letters in one place, and optimize your search with our intuitive funnel approach. Start your strategic job search campaign for only $10/mo.";
@@ -90,7 +91,7 @@ export default async function BoardLayout({
               newTitle={'New Board'}
             />
           </SidebarMobile>
-          <SidebarToggle />
+          <DesktopOpenSideBar />
           <SidebarDesktop
             sideBarTitle={'Boards'}
             items={itemsWithDefault}

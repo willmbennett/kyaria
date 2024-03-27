@@ -11,7 +11,7 @@ const Section: React.FC<SectionProps> = ({ title, children, isDragging = false }
   const [showComponent, setShowComponent] = useState(false);
 
   return (
-    <div className='w-full bg-white rounded-xl'>
+    <div className={`rounded-xl w-full ${isDragging && 'shadow-lg border active:border bg-white dark:bg-slate-800'}`}>
       <div className='flex p-3 rounded-xl justify-between items-center'>
         <h2 className='text-lg font-semibold'>{title}</h2>
         <Button

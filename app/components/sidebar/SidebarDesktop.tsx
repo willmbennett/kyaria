@@ -3,7 +3,7 @@ import { ItemHistory } from "./ItemHistory";
 import { Sidebar } from "./Sidebar";
 
 interface SidebarDesktopProps {
-    items: SideBarItem[];
+    items?: SideBarItem[];
     createNew: () => Promise<any>;
     newTitle: string;
     sideBarTitle: string;

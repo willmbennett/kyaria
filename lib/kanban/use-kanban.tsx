@@ -4,6 +4,7 @@ import { DragEndEvent, DragOverEvent, DragStartEvent, MouseSensor, TouchSensor, 
 import { updateJobAppAction } from "../../app/apps/_action";
 import { useRouter } from "next/navigation";
 import { AppClass } from "../../models/App";
+import { updateBoardAction } from "../../app/board/_action";
 
 interface UseKanbanProps {
     boardItems: boardItemType[];
@@ -108,5 +109,13 @@ export const useKanban = ({ boardItems, boardId }: UseKanbanProps) => {
 
     const boardApps = boardId ? apps.filter(app => app.boardId == boardId) : apps
 
-    return { activeId, boardApps, searchValue, id, handleDragEnd, handleDragOver, updateAppState, handleDragStart, sensors, handleChange }
+    const updateBoardTitle = async (title: string) => {
+        if (boardId) {
+            const path = `/board/${boardId}`
+            const updateData = { name: title }
+            await updateBoardAction(boardId, updateData, path)
+        }
+    }
+
+    return { activeId, boardApps, searchValue, id, handleDragEnd, handleDragOver, updateAppState, handleDragStart, sensors, handleChange, updateBoardTitle }
 }

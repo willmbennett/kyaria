@@ -39,7 +39,7 @@ export default function AppItem(
 
 
   return (
-    <div className={`text-left w-80 border p-4 flex flex-col gap-2 border-gray-200 rounded-lg block transition-shadow duration-300 ease-in-out ${app.active ? "bg-white" : "bg-gray-100"} shadow-sm hover:shadow-md`}>
+    <div className={`text-left w-full border p-4 flex flex-col gap-2 border-gray-200 rounded-lg block transition-shadow duration-300 ease-in-out ${app.active ? "bg-white" : "bg-gray-100"} shadow-sm hover:shadow-md`}>
       <ItemMainSection
         app={app}
         handleMouseOver={handleMouseOver}

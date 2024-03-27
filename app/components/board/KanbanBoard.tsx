@@ -32,8 +32,8 @@ export const KanbanBoard = ({
     activeId
 }: KanbanBoardProps) => (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd} onDragStart={handleDragStart} onDragOver={handleDragOver} id={id}>
-        <div id='kanban-container' className='relative overflow-x-scroll w-screen min-h-screen'>
-            <div className='flex h-full'>
+        <div id='kanban-container' className='relative overflow-x-scroll overflow-y-hidden w-screen h-screen lg:pl-10 bg-white z-5 lg:p-4'>
+            <div className='flex h-full md:px-2 lg:px-4'>
                 {jobStates.map((state, index) =>
                     <KanbanColumn
                         key={index}
@@ -56,6 +56,5 @@ export const KanbanBoard = ({
                 />
             ) : null}
         </DragOverlay>
-
     </DndContext>
 );

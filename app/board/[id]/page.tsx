@@ -59,36 +59,12 @@ export default async function BoardPage({ params }: { params: { id: string } }) 
 
   const itemsWithDefault: BoardClass[] = [defaultItem, ...boards]
 
-  const updateBoardTitle = async (title: string) => {
-    'use server'
-    const path = `/board/${boardId}`
-    const updateData = { name: title }
-    await updateBoardAction(boardId, updateData, path)
-  }
-
   return (
-    <div className="flex w-full mx-auto flex-col gap-4 py-10 items-center min-h-screen">
-      <div className="flex flex-col gap-4 items-center">
-        <SingleEdit
-          value={board?.name || 'Default Board'}
-          onUpdate={updateBoardTitle}
-          titleStyle="sm:text-lg text-xl font-bold text-slate-900"
-          editable={boardId != 'default'}
-        />
-        <Button
-          variant="solid"
-          size="sm"
-          type="button"
-          href={`/apps/new${boardId != 'default' ? `?board=${boardId}` : ''}`}
-        >
-          Add a New Job Post
-        </Button>
-      </div>
-      <Kanban
-        boardItems={boardItems}
-        boards={itemsWithDefault}
-        boardId={boardId}
-      />
-    </div >
+    <Kanban
+      boardItems={boardItems}
+      boards={itemsWithDefault}
+      boardId={boardId}
+      name={board?.name || 'Default Board'}
+    />
   );
 }

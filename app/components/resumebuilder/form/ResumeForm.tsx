@@ -54,35 +54,33 @@ const ResumeForm: React.FC<ResumeFormProps> = ({ methods, job }) => {
 
     return (
         <FormProvider {...methods}>
-            <form>
-                <div className='w-full space-y-3 flex flex-col justify-center '>
-                    <Section title={"Header".toUpperCase()}>
-                        <ContactInformation job={job} />
-                        <SocialLinksSection />
-                    </Section>
+            <form className='w-full space-y-3 flex flex-col'>
+                <Section title={"Header".toUpperCase()}>
+                    <ContactInformation job={job} />
+                    <SocialLinksSection />
+                </Section>
 
-                    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} onDragStart={handleDragStart} id={id}>
-                        <SortableContext items={sections} strategy={verticalListSortingStrategy}>
-                            {sections.map((section: sectionOptions, idx: number) =>
-                                <SortableResumeSection
-                                    key={section}
-                                    id={section}
-                                    name={section}
-                                    control={control}
-                                    register={register}
-                                    setValue={setValue}
-                                    watch={watch}
-                                    job={job}
-                                />)}
-                        </SortableContext>
-                        <DragOverlay>
-                            {sections && overlaySection ? (
-                                <Section title={overlaySection.replace('_', ' ').toUpperCase()}>
-                                </Section>
-                            ) : null}
-                        </DragOverlay>
-                    </DndContext>
-                </div>
+                <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} onDragStart={handleDragStart} id={id}>
+                    <SortableContext items={sections} strategy={verticalListSortingStrategy}>
+                        {sections.map((section: sectionOptions, idx: number) =>
+                            <SortableResumeSection
+                                key={section}
+                                id={section}
+                                name={section}
+                                control={control}
+                                register={register}
+                                setValue={setValue}
+                                watch={watch}
+                                job={job}
+                            />)}
+                    </SortableContext>
+                    <DragOverlay>
+                        {sections && overlaySection ? (
+                            <Section title={overlaySection.replace('_', ' ').toUpperCase()} isDragging={true}>
+                            </Section>
+                        ) : null}
+                    </DragOverlay>
+                </DndContext>
             </form>
         </FormProvider>
     );

@@ -17,7 +17,7 @@ export default async function ResumeScanPage({ params }: { params: { id: string 
     }
 
     return (
-        <div className="flex justify-center pb-14">
+        <div className="flex justify-center">
             <ResumeBuilder
                 data={resume}
                 toggleEdit={undefined}

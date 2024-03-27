@@ -95,6 +95,11 @@ const VideoChatComponent = ({ userId, chatId, messages, toggleTranscript, showTr
             />}
             <div className="flex flex-col md:flex-row justify-center items-center gap-4 w-full max-w-7xl mx-auto p-4">
                 <div className="aspect-square w-full md:w-1/2 flex justify-center items-center relative rounded-lg shadow-lg">
+                    {!connected && (
+                        <div className="absolute z-20 flex justify-center items-center top-0 left-0 w-full h-full bg-black bg-opacity-50 rounded-lg">
+                            <span className="text-white text-xl">Eve is waking up...</span>
+                        </div>
+                    )}
                     <video ref={videoRef} className="absolute top-0 z-10 left-0 w-full h-full object-cover video-transition rounded-lg" style={{ opacity: isStreaming ? 1 : 0 }} autoPlay playsInline></video>
                     <video src={EVE_IDLE_VIDEO} className="absolute z-0 top-0 left-0 w-full h-full object-cover rounded-lg" autoPlay loop playsInline></video>
                 </div>
