@@ -30,9 +30,9 @@ export const useKanban = ({ boardItems, boardId }: UseKanbanProps) => {
         if (newState && jobStates.includes(newState) && appId) {
             const dataUpdate = { state: newState }
             //console.log('dataUpdate: ', dataUpdate)
-            const { jobApp } = await updateJobAppAction(appId, dataUpdate, "/")
+            const { jobApp } = await updateJobAppAction(appId, dataUpdate)
             //console.log(jobApp)
-            router.refresh()
+            //router.refresh()
         }
     };
 
@@ -50,7 +50,7 @@ export const useKanban = ({ boardItems, boardId }: UseKanbanProps) => {
             const stateUpdate = { state: newState }
             updateAppState(appId, stateUpdate)
             //console.log(jobApp)
-            router.refresh()
+            //router.refresh()
         }
     };
 

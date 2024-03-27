@@ -59,12 +59,12 @@ export const useBoardItem = ({
     }))
 
     const handleBoardOptionClick = async (boardId: string) => {
-        console.log('made it to click with boardId: ', boardId)
+        //console.log('made it to click with boardId: ', boardId)
         const stateUpdate = { boardId }
         //console.log('stateUpdate: ', stateUpdate)
         updateAppState(id, stateUpdate)
-        await updateJobAppAction(id, stateUpdate, path)
-        router.refresh()
+        await updateJobAppAction(id, stateUpdate)
+        //router.refresh()
     };
 
     // Handle board item state updates
