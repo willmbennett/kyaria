@@ -3,7 +3,6 @@ import { boardItemType, jobStates } from '../../board/job-helper';
 import { BoardClass } from '../../../models/Board';
 import { KanbanItemList } from './KanbanItemList';
 import { useState } from 'react';
-import { Divider } from 'semantic-ui-react'
 
 
 interface KanbanColumnProps {
