@@ -10,7 +10,7 @@ type resumeType = {
 }
 
 const loadResume = cache(async (resumeId: string) => {
-    console.log('made it to [loadResume]')
+    //console.log('made it to [loadResume]')
     return await getResume(resumeId)
 })
 
