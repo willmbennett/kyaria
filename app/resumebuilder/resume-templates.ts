@@ -387,7 +387,7 @@ export const resumeTemplates: resumeTemplateType[] = [
             "location": "Seattle, WA",
             "social_links": [
                 { "_id": "1", "name": 'Github', 'url': 'https://Github.example.com' },
-                { "_id": "2", "name": 'LinkedIn', 'url': 'https://linkedIn.example.com' }, ƒ
+                { "_id": "2", "name": 'LinkedIn', 'url': 'https://linkedIn.example.com' },
             ],
             "summary": "Seasoned Senior Software Engineer with over 10 years of experience in software development, specializing in scalable cloud solutions and microservices architecture. Expertise in leading development teams, architecting robust software, and driving projects from conception to deployment. Proven track record in enhancing system efficiency and performance, with a strong focus on continuous integration and deployment (CI/CD) processes.",
             "professional_experience": [
