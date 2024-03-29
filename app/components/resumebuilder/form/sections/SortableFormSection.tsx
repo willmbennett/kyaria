@@ -26,14 +26,13 @@ export const SortableFormSection = ({ id, sortable = true, children }: ListInput
     };
 
     return (
-        <div className="rounded-xl px-3 w-full hover:shadow-lg hover:bg-slate-100 transition-all duration-200 ease-in-out">
-            <div
-                ref={setNodeRef}
-                style={style}
-                {...attributes}
-                {...listeners}
-                className={`flex py-3 rounded-xl justify-between items-center ${sortable ? "cursor-grab" : ''}`}
-            >
+        <div
+            ref={setNodeRef}
+            style={style}
+            className={`rounded-xl px-3 w-full hover:shadow-lg hover:bg-slate-100 transition-all duration-200 ease-in-out ${isDragging ? 'shadow-lg bg-slate-100' : ''}`}
+            {...attributes} {...listeners}
+        >
+            <div className={`flex py-3 rounded-xl justify-between items-center ${sortable ? "cursor-grab" : ''}`}>
                 <h2 className="text-lg font-semibold">
                     {id.replace('_', ' ').toLocaleUpperCase()}
                 </h2>

@@ -1,4 +1,4 @@
-import { DragEndEvent, DragStartEvent, MouseSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { DragEndEvent, DragOverEvent, DragStartEvent, MouseSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { useDragAndDrop } from "../hooks/resume-test";
 import { UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { ResumeBuilderFormData, sectionOptions } from "../../app/resumebuilder/resumetest-helper";
@@ -7,6 +7,7 @@ import { ResumeClass } from "../../models/Resume";
 import { arrayMove } from "@dnd-kit/sortable";
 import { saveResumeToDatabase } from "../../app/resumebuilder/[id]/resumebuilder-helper";
 import { usePathname } from "next/navigation";
+import { debounce } from "lodash";
 
 interface UseResumeFormProps {
     resume: ResumeClass
@@ -42,14 +43,30 @@ export const useResumeForm = ({ resume, setSaveStatus }: UseResumeFormProps) => 
             };
 
             const newSectionOrder = updateSections(sections);
+            setSections(newSectionOrder)
+        }
+        await saveResumeToDatabase({
+            resumeId,
+            setKey: 'sectionOrder',
+            value: sections,
+            path,
+            setSaveStatus
+        })
+    }
 
-            await saveResumeToDatabase({
-                resumeId,
-                setKey: 'sectionOrder',
-                value: newSectionOrder,
-                path,
-                setSaveStatus
-            })
+    const handleDragOver = async (event: DragOverEvent) => {
+        const { active, over } = event;
+
+        if (!active || !over) return;
+
+        if (over && active.id !== over.id) {
+            const updateSections = (sections: sectionOptions[]): sectionOptions[] => {
+                const oldIndex = sections.indexOf(active.id as sectionOptions);
+                const newIndex = sections.indexOf(over.id as sectionOptions);
+                return arrayMove(sections, oldIndex, newIndex);
+            };
+
+            const newSectionOrder = updateSections(sections);
 
             setSections(newSectionOrder)
         }
@@ -86,5 +103,5 @@ export const useResumeForm = ({ resume, setSaveStatus }: UseResumeFormProps) => 
 
     const id = useId()
 
-    return { id, handleDragStart, handleDragEnd, sensors, overlaySection, sections }
+    return { id, handleDragStart, handleDragOver, handleDragEnd, sensors, overlaySection, sections }
 }

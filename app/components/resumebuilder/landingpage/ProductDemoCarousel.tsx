@@ -1,7 +1,7 @@
 import { cache } from "react"
 import { getResume } from "../../../../lib/resume-db"
 import { ResumeClass } from "../../../../models/Resume"
-import ResumeBuilder from "../ResumeBuilder"
+import { ResumeBuilder } from "../ResumeBuilder"
 
 type getResumeType = {
     resume: ResumeClass
@@ -46,10 +46,8 @@ export default async function ProductDemoCarousel() {
 
             </div>
             <ResumeBuilder
-                data={resume}
-                toggleEdit={undefined}
+                resume={resume}
                 userId={''}
-                activeSubscription={true}
                 resumeId={resumeId}
                 useSave={false}
             />

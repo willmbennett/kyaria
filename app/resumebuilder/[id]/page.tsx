@@ -26,7 +26,6 @@ export default async function ResumeScanPage({ params }: { params: { id: string 
         <div className="flex justify-center">
             <ResumeBuilder
                 resume={resume}
-                toggleEdit={undefined}
                 userId={userId}
                 resumeId={params.id}
             />
