@@ -3,7 +3,12 @@ import { ResumeModel, ResumeClass } from "../models/Resume";
 import { ResumeScanDataModel } from "../models/ResumeScan";
 import connectDB from "./connect-db";
 import { castToString, dateToString, ObjectIdtoString, stringToObjectId } from "./utils";
+import { AppModel } from "../models/App";
 var transformProps = require('transform-props');
+import _ from 'lodash'; // or import * as _ from 'lodash';
+import { ObjectId } from "mongodb";
+
+const logging = false
 
 export async function countTotalResumes() {
     try {
@@ -26,8 +31,12 @@ export async function getResumes(userId: string) {
         if (!userId) {
             return { error: "resumes not found" };
         }
+        const apps = await AppModel.find({ userId }).lean().exec()
+        const resumeToExclude = apps.map(app => (app.userResume))
+        //console.log('resumeToExclude', resumeToExclude)
         const resumes = await ResumeModel.find({
             userId: userId,
+            _id: { $nin: resumeToExclude }
         })
             .sort({ createdAt: -1, _id: -1 }) // Sorting by createdAt in descending order, then by _id in descending order
             .lean()
@@ -44,12 +53,12 @@ export async function getResumes(userId: string) {
             };
 
         } else {
-          //console.log({ error: "Error pulling resumes" })
+            //console.log({ error: "Error pulling resumes" })
             return { error: "Error pulling resumes" };
         }
     } catch (error) {
         console.log(error)
-        return { error };
+        return { error: error as string };
     }
 }
 
@@ -67,18 +76,18 @@ export async function getFirstResume(userId: string) {
             .lean()
             .exec();
 
-      //console.log('prior to transforming resume: ')
+        //console.log('prior to transforming resume: ')
         if (resume) {
             transformProps(resume, castToString, '_id');
             transformProps(resume, dateToString, ["createdAt", "updatedAt"]);
             transformProps(resume, ObjectIdtoString, "resumeScan");
-          //console.log('post transforming resume')
+            //console.log('post transforming resume')
             return {
                 resume
             };
 
         } else {
-          //console.log({ error: "Error pulling resumes" })
+            //console.log({ error: "Error pulling resumes" })
             return { error: "Error pulling resumes" };
         }
     } catch (error) {
@@ -125,16 +134,16 @@ export async function createResume(data: ResumeClass) {
     try {
         await connectDB();
 
-      //console.log(`Resume to create: ${JSON.stringify(data)}`)
+        //console.log(`Resume to create: ${JSON.stringify(data)}`)
 
         const resume = await ResumeModel.create(data);
 
-      //console.log(`Created resume: ${JSON.stringify(resume)}`)
+        //console.log(`Created resume: ${JSON.stringify(resume)}`)
 
         if (resume) {
-          //console.log('about to transform props')
+            //console.log('about to transform props')
             const resumeId = castToString(resume._id)
-          //console.log(resumeId)
+            //console.log(resumeId)
             return {
                 resumeId
             };
@@ -149,35 +158,69 @@ export async function createResume(data: ResumeClass) {
     }
 }
 
+
 export async function updateResume(id: string, data: any) {
     try {
         await connectDB();
 
         const parsedId = stringToObjectId(id);
+        const resume = await ResumeModel.findById(parsedId);
 
-        //console.log(id)
-
-      //console.log(`data to update resume with: ${JSON.stringify(data)}`)
-
-        const resume = await ResumeModel.findByIdAndUpdate(
-            parsedId,
-            data
-        )
-            .lean()
-            .exec();
-
-        if (resume) {
-          //console.log(`updated resume: ${JSON.stringify(resume)}`)
-            return {
-                resume,
-            };
-        } else {
-            const error = { error: "Resume not found" }
-            console.log(error)
-            return error;
+        if (!resume) {
+            return { error: "Resume not found" }
         }
-    } catch (error) {
-        console.log(error)
+
+        if (logging) console.log(`Data to update resume with: ${JSON.stringify(data)}`);
+
+        // Iterate through each key in data to determine if we're adding or removing
+        Object.keys(data).forEach(key => {
+            const value = data[key];
+            if (logging) console.log('Processing [key]: ', key, ' [value]: ', value);
+
+            if (value.remove && typeof value.remove === 'string') {
+                // $pull to remove by _id
+                const pullCriteria = { _id: value.remove };
+                if (logging) console.log(`pullCriteria: ${JSON.stringify(pullCriteria)}`);
+                _.get(resume, key).pull(pullCriteria);
+            } else if (value.add) {
+                // Push new item to array
+                if (logging) console.log(`value.add: ${JSON.stringify(value.add)}`);
+                _.get(resume, key).push({ _id: new ObjectId(), ...value.add });
+            } else {
+                // $set to update other fields
+                _.set(resume, key, value);
+            }
+        });
+
+        const updatedResume = await resume.save();
+
+        //if (logging) console.log(`Updated resume: ${JSON.stringify(updatedResume)}`);
+
+        return {};
+    } catch (error: any) {
+        console.error("Failed to update resume:", error);
+        return { error: error.message };
+    }
+}
+
+
+export async function deleteResume(id: string) {
+    try {
+        await connectDB();
+
+        if (logging) console.log(id)
+
+        const parsedId = stringToObjectId(id);
+
+        if (logging) console.log(parsedId)
+
+        if (!parsedId) {
+            return { error: "Chat not found" };
+        }
+        await ResumeModel.findByIdAndDelete(parsedId).exec();
+
+        return {}
+    } catch (error: any) {
         return { error };
     }
 }

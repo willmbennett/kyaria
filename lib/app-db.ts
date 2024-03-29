@@ -197,7 +197,7 @@ export async function getJobApp(id: string) {
         const app = await AppModel.findById(id)
             .populate(["job", "userResume", "profile"])
             .lean()
-            .exec() as AppClass;
+            .exec()
 
         if (app) {
             transformProps(app, castToString, '_id');

@@ -1,5 +1,5 @@
 "use server";
-import { createResume, updateResume } from "../../lib/resume-db";
+import { createResume, deleteResume, updateResume } from "../../lib/resume-db";
 import { createResumeScan } from "../../lib/resumescan-db";
 import { revalidatePath } from "next/cache";
 
@@ -23,8 +23,23 @@ export async function createResumeAction(data: any, path: string) {
 export async function updateResumeAction(
   id: string,
   data: any,
-  path: string
+  path?: string
 ) {
-  await updateResume(id, data);
+  const { error } = await updateResume(id, data);
+  if (path) {
+    revalidatePath(path);
+  }
+  return { error }
+}
+
+export async function deleteResumeAction({
+  id,
+  path,
+}: {
+  id: string;
+  path: string;
+}) {
+  const { error } = await deleteResume(id);
   revalidatePath(path);
+  return { error }
 }

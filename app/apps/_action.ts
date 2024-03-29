@@ -24,10 +24,12 @@ export async function createAppAction(data: any, path: string) {
 export async function updateJobAppAction(
     id: string,
     data: any,
-    path: string
+    path?: string
 ) {
     const res = await updateJobApp(id, data);
-    revalidatePath(path);
+    if (path) {
+        revalidatePath(path);
+    }
     return res;
 }
 

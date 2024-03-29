@@ -32,7 +32,7 @@ export const VideoChatContainer = ({ userId, chatId, messages, activeSubscriptio
     />
 
     return (
-        <div className="flex h-full md:h-screen w-full justify-center text-center gap-4 overflow-hidden">
+        <div className="flex h-full py-5 lg:py-10 md:h-screen w-full justify-center text-center gap-4 overflow-hidden">
             <div className='h-full w-full flex flex-col gap-4'>
                 <h1 className="text-2xl font-semibold">Career Coaching Session</h1>
                 {activeSubscription ? (

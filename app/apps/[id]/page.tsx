@@ -10,6 +10,7 @@ import FeedbackAside from "../../components/landingpage/FeedbackAside";
 import useAppNavigation from "../../../lib/hooks/use-app-section";
 import { jobStateType } from "../../board/job-helper";
 import { Button } from "../../components/Button";
+import { cache } from "react";
 
 interface getJobAppInterface {
   app: AppClass
@@ -20,8 +21,12 @@ interface JobAppPageProps {
   searchParams: { section: string, progress: string }
 }
 
+const loadBoards = cache(async (id: string) => {
+  return await getJobApp(id)
+})
+
 export default async function JobAppPage({ params, searchParams }: JobAppPageProps) {
-  const { app } = await getJobApp(params.id) as getJobAppInterface
+  const { app } = await loadBoards(params.id) as getJobAppInterface
   const { activeSubscription, userId } = await checkSubscription()
   const job = app.job as JobClass
   const appState = app.state as jobStateType

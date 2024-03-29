@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useState, useCallback} from 'react';
+import React, { useState, useCallback } from 'react';
 import ReactQuill from 'react-quill';
 import { updateJobAppAction } from '../../../apps/_action';
 import debounce from 'lodash/debounce';
@@ -21,7 +21,7 @@ export default function Notes({ jobAppId, content }: NotesProps): JSX.Element {
     const data = JSON.parse(`{"${setKey}":""}`);
     data[setKey] = value;
 
-    const update = updateJobAppAction(jobAppId, data, '/');
+    const update = updateJobAppAction(jobAppId, data);
     setIsSaved(true);
   }, 1000), []);
 

@@ -3,15 +3,17 @@ import { SidebarList } from './SidebarList'
 import { NewItemButton } from './NewItemButton'
 import { SidebarToggle } from './ToggleSidebar'
 import { SideBarItem } from '../../helper'
+import { ActionItemType } from '../../board/job-helper'
 
 interface ItemHistoryProps {
-    items: SideBarItem[];
+    items?: SideBarItem[];
     newTitle: string
     createNew: () => Promise<any>;
     sideBarTitle: string;
+    deleteItemAction: ActionItemType
 }
 
-export const ItemHistory = ({ createNew, items, newTitle, sideBarTitle }: ItemHistoryProps) => {
+export const ItemHistory = ({ createNew, items, newTitle, sideBarTitle, deleteItemAction }: ItemHistoryProps) => {
     return (
         <div className="flex flex-col h-full">
             <div className="flex items-center justify-between p-4">
@@ -33,7 +35,7 @@ export const ItemHistory = ({ createNew, items, newTitle, sideBarTitle }: ItemHi
                     </div>
                 }
             >
-                <SidebarList items={items} />
+                <SidebarList items={items} deleteItemAction={deleteItemAction} />
             </React.Suspense>
         </div>
     )

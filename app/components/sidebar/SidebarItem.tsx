@@ -7,6 +7,7 @@ import { cn } from '../../../lib/utils'
 import { buttonVariants } from '../ui/button'
 import { useState } from 'react'
 import { SideBarItem } from '../../helper'
+import { useSidebar } from '../../../lib/chatbot/use-sidebar'
 
 interface SidebarItemProps {
     index: number
@@ -15,6 +16,7 @@ interface SidebarItemProps {
 }
 
 export function SidebarItem({ index, item, children }: SidebarItemProps) {
+    const { toggleSidebar } = useSidebar()
     const pathname = usePathname()
     const [animated, setAnimated] = useState(false)
 
@@ -45,6 +47,7 @@ export function SidebarItem({ index, item, children }: SidebarItemProps) {
         >
             <Link
                 href={href}
+                onClick={toggleSidebar}
                 className={cn(
                     buttonVariants({ variant: 'ghost' }),
                     'group w-full px-8 transition-colors hover:bg-zinc-200/40 dark:hover:bg-zinc-300/10',
@@ -93,7 +96,7 @@ export function SidebarItem({ index, item, children }: SidebarItemProps) {
                     </span>
                 </div>
             </Link>
-            {isActive && <div className="absolute right-2 top-1">{children}</div>}
+            {(isActive && item.editable) && <div className="absolute right-2 top-0">{children}</div>}
         </motion.div>
     )
 }

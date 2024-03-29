@@ -23,7 +23,7 @@ class Emails {
     schemaOptions: {
         timestamps: true,
         versionKey: false,
-        collection: "apps",
+        collection: "apps"
     },
     options: {
         disableLowerIndexes: true,

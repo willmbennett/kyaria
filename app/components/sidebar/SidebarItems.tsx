@@ -3,11 +3,14 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { SidebarItem } from './SidebarItem'
 import { SideBarItem } from '../../helper'
+import { SidebarActions } from './sidebar-actions'
+import { ActionItemType } from '../../board/job-helper'
 interface SidebarItemsProps {
     items: SideBarItem[]
+    deleteItemAction: ActionItemType
 }
 
-export function SidebarItems({ items }: SidebarItemsProps) {
+export function SidebarItems({ items, deleteItemAction }: SidebarItemsProps) {
 
     return (
         <AnimatePresence>
@@ -22,14 +25,10 @@ export function SidebarItems({ items }: SidebarItemsProps) {
                             }}
                         >
                             <SidebarItem index={index} item={item}>
-                                {/*
                                 <SidebarActions
-                                    chat={chat}
-                                    removeChat={removeChat}
-                                    shareChat={shareChat}
+                                    item={item}
+                                    removeItem={deleteItemAction}
                                 />
-                        */}
-                                <p></p>
                             </SidebarItem>
                         </motion.div>
                     )

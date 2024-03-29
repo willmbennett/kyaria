@@ -1,16 +1,12 @@
 import { Dispatch, SetStateAction } from 'react';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import { createResumeScanAction } from '../../app/resumebuilder/_action';
-import { convertFormDataToResumeModel, demoResume, ResumeBuilderFormData, sectionOptions, testResumeData, transformParsedResume } from '../../app/resumebuilder/resumetest-helper';
-import { createResumeAction, updateResumeAction } from '../../app/resumebuilder/_action';
+import { transformParsedResume } from '../../app/resumebuilder/resumetest-helper';
+import { createResumeAction } from '../../app/resumebuilder/_action';
 import { ResumeClass } from '../../models/Resume';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { UseFormSetValue, UseFormWatch } from 'react-hook-form';
-import { useCallback, useEffect, useState } from 'react';
-import { debounce, isEqual } from 'lodash';
+import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { DragEndEvent } from '@dnd-kit/core';
-import { arrayMove } from '@dnd-kit/sortable';
 import ReactPDF from '@react-pdf/renderer';
 import ResumePDF from '../../app/components/resumebuilder/pdfviewer/ResumePDF';
 
@@ -113,7 +109,7 @@ export async function handleFormSubmit(
         //console.log(userId)
 
         if (userId) {
-          //console.log('1)  Made it to Resume Scan creation')
+            //console.log('1)  Made it to Resume Scan creation')
             const path = '/'
             const dataToSave = { ...parsedResume, userId }
             const resumeScanId = await createResumeScanAction(dataToSave, path)
@@ -136,116 +132,6 @@ export async function handleFormSubmit(
         }
     }
 }
-
-type UseSaveResumeProps = {
-    userId: string;
-    resumeId: string;
-    data: Partial<ResumeClass>;
-    watch: UseFormWatch<ResumeBuilderFormData>;
-    useSave: boolean;
-};
-
-interface UpdateDataType {
-    [key: string]: any;
-}
-
-export const useSaveResume = ({ userId, resumeId, data, watch, useSave }: UseSaveResumeProps) => {
-    const [saveStatus, setSaveStatus] = useState<'saving' | 'up to date' | 'error'>('up to date');
-    const router = useRouter();
-    const newResume = watch();
-
-    const saveToDatabase = useCallback(async () => {
-        if (!useSave) return; // Exit early if useSave is false
-
-        try {
-            setSaveStatus('saving');
-            const resumeToSave = convertFormDataToResumeModel(newResume, data);
-            const differences = findDifferences(resumeToSave, data);
-            //console.log("Differences found:", differences);
-            // Construct update data
-            const updateData: UpdateDataType = {};
-            for (const key in differences) {
-                const setKey = `${key}`;
-                updateData[setKey] = differences[key].new;
-            }
-            //console.log('updateData: ', updateData)
-            if (Object.keys(updateData).length > 0) {
-                await updateResumeAction(resumeId, { ...updateData }, '/');
-            }
-            router.refresh();
-            setTimeout(() => setSaveStatus('up to date'), 1000);
-        } catch (error) {
-            setSaveStatus('error');
-        }
-    }, [userId, resumeId, newResume, router]);
-
-    const debouncedSaveToDatabase = useCallback(debounce(saveToDatabase, 500), [saveToDatabase]);
-
-    useEffect(() => {
-        if (useSave) {
-            const resumeToSave = convertFormDataToResumeModel(newResume, data) as ResumeClass
-            //const differences = findDifferences(resumeToSave, data);
-            //console.log("newResume:", newResume);
-            //console.log("Data after conversion:", resumeToSave);
-            //console.log("Original Data:", data);
-            //console.log("Differences found:", differences);
-            // Fallbacks for name and email
-            resumeToSave.name = newResume.name || '';
-            resumeToSave.email = newResume.email || '';
-            if (!isEqual(data, resumeToSave)) {
-                debouncedSaveToDatabase();
-            }
-        }
-        return () => {
-            debouncedSaveToDatabase.cancel();
-        };
-    }, [newResume, debouncedSaveToDatabase, data]);
-
-    return { saveStatus, saveToDatabase };
-};
-
-function findDifferences(newResume: Partial<ResumeClass>, originalData: Partial<ResumeClass>) {
-    const differences: Record<string, { original: any; new: any }> = {};
-
-    Object.keys(newResume).forEach(key => {
-        const newValue = newResume[key as keyof ResumeClass];
-        const originalValue = originalData[key as keyof ResumeClass];
-
-        if (!isEqual(newValue, originalValue)) {
-            differences[key] = { original: originalValue, new: newValue };
-        }
-    });
-
-    return differences;
-}
-
-
-type UseDragAndDropProps = {
-    watch: UseFormWatch<ResumeBuilderFormData>
-    setValue: UseFormSetValue<ResumeBuilderFormData>
-};
-
-export const useDragAndDrop = ({ watch, setValue }: UseDragAndDropProps) => {
-    const handleDragEnd = useCallback((event: DragEndEvent) => {
-        const { active, over } = event;
-
-        if (!active || !over) return;
-
-        if (over && active.id !== over.id) {
-            const currentSectionOrder = watch('sectionOrder');
-            const updateSections = (sections: sectionOptions[]): sectionOptions[] => {
-                const oldIndex = sections.indexOf(active.id as sectionOptions);
-                const newIndex = sections.indexOf(over.id as sectionOptions);
-                return arrayMove(sections, oldIndex, newIndex);
-            };
-
-            const newSectionOrder = updateSections(currentSectionOrder);
-            setValue('sectionOrder', newSectionOrder);
-        }
-    }, [watch, setValue]);
-
-    return handleDragEnd;
-};
 
 export const useGeneratePDF = ({ data }: { data: ResumeClass }) => {
     const generatePDF = useCallback(async () => {

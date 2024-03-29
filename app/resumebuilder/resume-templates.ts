@@ -19,10 +19,10 @@ export const resumeTemplates: resumeTemplateType[] = [
             "email": "alex.johnson@email.com",
             "phone": "123-456-7890",
             "location": "San Francisco, CA",
-            "social_links": {
-                "Github": "https://Github.example.com",
-                "LinkedIn": "https://linkedIn.example.com",
-            },
+            "social_links": [
+                { "_id": "1", "name": 'Github', 'url': 'https://Github.example.com' },
+                { "_id": "2", "name": 'LinkedIn', 'url': 'https://linkedIn.example.com' }
+            ],
             "summary": "Dynamic and results-oriented Senior Product Manager with over 5 years of experience in the tech industry, Alex has led the development and launch of innovative products, achieving significant increases in customer engagement and market share. He excels in strategic planning, Agile methodologies, and cross-functional team collaboration, adept at translating customer needs into profitable solutions. His data-driven approach and expertise in product lifecycle management uniquely position him to drive continuous improvement and innovation, consistently exceeding business objectives.",
             "professional_experience": [
                 {
@@ -206,11 +206,11 @@ export const resumeTemplates: resumeTemplateType[] = [
             "name": "Jordan Smith",
             "title": "Software Engineer",
             "email": "jordan.smith@email.com",
-            "social_links": {
-                "Github": "https://Github.example.com",
-                "LinkedIn": "https://linkedIn.example.com",
-                "Website": "https://mywebsite.example.com",
-            },
+            "social_links": [
+                { "_id": "1", "name": 'Github', 'url': 'https://Github.example.com' },
+                { "_id": "2", "name": 'LinkedIn', 'url': 'https://linkedIn.example.com' },
+                { "_id": "2", "name": 'Website', 'url': 'https://mywebsite.example.com' }
+            ],
             "phone": "987-654-3210",
             "location": "Austin, TX",
             "summary": "Software Engineer with a unique background in writing and intensive full-stack development training from a Computer Science Bootcamp. Jordan has developed key skills in web technologies, evidenced by achievements like a user-engaging social media dashboard and a responsive online marketplace platform. Proficient in JavaScript, React.js, Node.js, and responsive web design, he combines creative problem-solving with technical expertise to create intuitive, efficient software solutions.",
@@ -385,10 +385,10 @@ export const resumeTemplates: resumeTemplateType[] = [
             "email": "morgan.bailey@email.com",
             "phone": "321-654-0987",
             "location": "Seattle, WA",
-            "social_links": {
-                "Github": "https://github.com/morganbailey",
-                "LinkedIn": "https://linkedin.com/in/morganbailey"
-            },
+            "social_links": [
+                { "_id": "1", "name": 'Github', 'url': 'https://Github.example.com' },
+                { "_id": "2", "name": 'LinkedIn', 'url': 'https://linkedIn.example.com' },
+            ],
             "summary": "Seasoned Senior Software Engineer with over 10 years of experience in software development, specializing in scalable cloud solutions and microservices architecture. Expertise in leading development teams, architecting robust software, and driving projects from conception to deployment. Proven track record in enhancing system efficiency and performance, with a strong focus on continuous integration and deployment (CI/CD) processes.",
             "professional_experience": [
                 {
