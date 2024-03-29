@@ -1,13 +1,10 @@
 import { DragEndEvent, DragOverEvent, DragStartEvent, MouseSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core";
-import { useDragAndDrop } from "../hooks/resume-test";
-import { UseFormSetValue, UseFormWatch } from "react-hook-form";
-import { ResumeBuilderFormData, sectionOptions } from "../../app/resumebuilder/resumetest-helper";
-import { Dispatch, SetStateAction, useCallback, useId, useState } from "react";
+import { sectionOptions } from "../../app/resumebuilder/resumetest-helper";
+import { Dispatch, SetStateAction, useId, useState } from "react";
 import { ResumeClass } from "../../models/Resume";
 import { arrayMove } from "@dnd-kit/sortable";
 import { saveResumeToDatabase } from "../../app/resumebuilder/[id]/resumebuilder-helper";
 import { usePathname } from "next/navigation";
-import { debounce } from "lodash";
 
 interface UseResumeFormProps {
     resume: ResumeClass

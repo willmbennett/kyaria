@@ -1,16 +1,12 @@
 import { Dispatch, SetStateAction } from 'react';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import { createResumeScanAction } from '../../app/resumebuilder/_action';
-import { convertFormDataToResumeModel, demoResume, ResumeBuilderFormData, sectionOptions, testResumeData, transformParsedResume } from '../../app/resumebuilder/resumetest-helper';
-import { createResumeAction, updateResumeAction } from '../../app/resumebuilder/_action';
+import { transformParsedResume } from '../../app/resumebuilder/resumetest-helper';
+import { createResumeAction } from '../../app/resumebuilder/_action';
 import { ResumeClass } from '../../models/Resume';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { UseFormSetValue, UseFormWatch } from 'react-hook-form';
-import { useCallback, useEffect, useState } from 'react';
-import { debounce, isEqual } from 'lodash';
+import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { DragEndEvent } from '@dnd-kit/core';
-import { arrayMove } from '@dnd-kit/sortable';
 import ReactPDF from '@react-pdf/renderer';
 import ResumePDF from '../../app/components/resumebuilder/pdfviewer/ResumePDF';
 
@@ -136,34 +132,6 @@ export async function handleFormSubmit(
         }
     }
 }
-
-
-type UseDragAndDropProps = {
-    watch: UseFormWatch<ResumeBuilderFormData>
-    setValue: UseFormSetValue<ResumeBuilderFormData>
-};
-
-export const useDragAndDrop = ({ watch, setValue }: UseDragAndDropProps) => {
-    const handleDragEnd = useCallback((event: DragEndEvent) => {
-        const { active, over } = event;
-
-        if (!active || !over) return;
-
-        if (over && active.id !== over.id) {
-            const currentSectionOrder = watch('sectionOrder');
-            const updateSections = (sections: sectionOptions[]): sectionOptions[] => {
-                const oldIndex = sections.indexOf(active.id as sectionOptions);
-                const newIndex = sections.indexOf(over.id as sectionOptions);
-                return arrayMove(sections, oldIndex, newIndex);
-            };
-
-            const newSectionOrder = updateSections(currentSectionOrder);
-            setValue('sectionOrder', newSectionOrder);
-        }
-    }, [watch, setValue]);
-
-    return handleDragEnd;
-};
 
 export const useGeneratePDF = ({ data }: { data: ResumeClass }) => {
     const generatePDF = useCallback(async () => {

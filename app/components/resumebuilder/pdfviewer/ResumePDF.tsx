@@ -1,6 +1,6 @@
 import React from 'react';
 import { Page, Text, View, Document, Link } from '@react-pdf/renderer';
-import { GeneralSectionConfig, ResumeBuilderFormData, sectionConfigs } from '../../../resumebuilder/resumetest-helper';
+import { GeneralSectionConfig, sectionConfigs } from '../../../resumebuilder/resumetest-helper';
 import { Award, Certification, Education, ProfessionalExperience, Project, Publication, ResumeClass, Volunteering } from '../../../../models/Resume';
 import { pdfstyles } from './styles';
 import { ListSection } from './ListSection';
