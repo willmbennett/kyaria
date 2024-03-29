@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Message, useChat } from 'ai/react';
 import { Button } from '../Button';
 import { JobClass } from '../../../models/Job';
-import { ResumeBuilderFormData } from '../../resumebuilder/resumetest-helper';
 import { ChatMessage } from '../chat/ChatMessage';
+import { ResumeClass } from '../../../models/Resume';
 
 interface FeedbackProps {
-    userResume: ResumeBuilderFormData;
+    userResume: ResumeClass;
     job?: Partial<JobClass>;
 };
 

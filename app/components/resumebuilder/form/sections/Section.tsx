@@ -1,5 +1,5 @@
 import React, { useState, ReactNode } from 'react';
-import { Button } from '../../Button';
+import { Button } from '../../../Button';
 
 interface SectionProps {
   title: string; // Add this line to include a title in the props

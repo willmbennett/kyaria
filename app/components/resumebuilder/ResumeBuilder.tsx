@@ -1,31 +1,31 @@
 'use client'
-import React, { useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useState } from 'react';
 import { Button } from '../Button';
-import {
-    convertFormDataToResumeModel,
-    ResumeBuilderFormData,
-    ResumeBuilderProps,
-    transformDataToFormValues
-} from '../../resumebuilder/resumetest-helper';
 import ResumeForm from './form/ResumeForm';
-import { useSaveResume } from '../../../lib/hooks/resume-test';
 import CustomPDFViewer from './pdfviewer/CustomPDFViewer';
 import Feedback from './Feedback';
+import { ResumeClass } from '../../../models/Resume';
+import { JobClass } from '../../../models/Job';
 
-const ResumeBuilder = (
+interface ResumeBuilderProps {
+    resume: ResumeClass;
+    resumeId: string;
+    userId: string;
+    job?: Partial<JobClass>;
+    useSave?: boolean
+}
+
+export const ResumeBuilder = (
     {
-        data,
+        resume,
         resumeId,
         userId,
         job,
         useSave = true
     }: ResumeBuilderProps) => {
     const [toggleState, setToggleState] = useState(true)
-    const defaultValues = useMemo(() => transformDataToFormValues(data), [data]);
-    const methods = useForm<ResumeBuilderFormData>({ defaultValues });
-    const { watch } = methods
-    const { saveStatus } = useSaveResume({ userId, resumeId, data, watch, useSave })
+
+    const [saveStatus, setSaveStatus] = useState<'saving' | 'up to date' | 'error'>('up to date');
 
     return (
         <div className='w-full lg:h-screen p-2 md:p-4 lg:p-6'>
@@ -38,25 +38,21 @@ const ResumeBuilder = (
                     <div className='flex w-full h-full overflow-y-scroll lg:overscroll-none p-4'>
                         {/*Toggle State True == Editing*/}
                         <div className={`h-full w-full ${!toggleState ? 'flex' : 'hidden '}`}>
-                            <Feedback userResume={defaultValues} job={job} />
+                            <Feedback userResume={resume} job={job} />
                         </div>
                         <div className={`h-full w-full ${toggleState ? 'flex' : 'hidden '}`}>
-                            <ResumeForm methods={methods} job={job} />
+                            <ResumeForm setSaveStatus={setSaveStatus} job={job} resume={resume} />
                         </div>
                     </div>
                 </div>
                 <div className='flex w-full justify-center'>
-                    {defaultValues &&
-                        <CustomPDFViewer
-                            data={useSave ? data : convertFormDataToResumeModel(watch(), data)}
-                            saveStatus={saveStatus} userId={userId}
-                            useSave={useSave}
-                        />
-                    }
+                    <CustomPDFViewer
+                        data={resume}
+                        saveStatus={saveStatus} userId={userId}
+                        useSave={useSave}
+                    />
                 </div>
             </div>
         </div>
     );
 };
-
-export default ResumeBuilder;

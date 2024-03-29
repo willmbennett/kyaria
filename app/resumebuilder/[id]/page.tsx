@@ -1,4 +1,4 @@
-import ResumeBuilder from "../../components/resumebuilder/ResumeBuilder";
+import { ResumeBuilder } from "../../components/resumebuilder/ResumeBuilder";
 import { redirect } from "next/navigation";
 import { getResume } from "../../../lib/resume-db";
 import { ResumeClass } from "../../../models/Resume";
@@ -25,7 +25,7 @@ export default async function ResumeScanPage({ params }: { params: { id: string 
     return (
         <div className="flex justify-center">
             <ResumeBuilder
-                data={resume}
+                resume={resume}
                 toggleEdit={undefined}
                 userId={userId}
                 resumeId={params.id}

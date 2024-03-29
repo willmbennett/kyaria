@@ -2,27 +2,28 @@ import React, { useEffect, useState } from 'react';
 import { Message, useChat } from 'ai/react';
 import { useFormContext, UseFormRegister } from 'react-hook-form';
 import TextareaAutosize from 'react-textarea-autosize';
-import { Button } from '../../Button';
-import { JobClass } from '../../../../models/Job';
+import { Button } from '../../../Button';
+import { JobClass } from '../../../../../models/Job';
+import { ResumeClass } from '../../../../../models/Resume';
 
 type SingleInputProps = {
     sectionName: string
     register: UseFormRegister<any>;
     optimize?: boolean
     job?: Partial<JobClass>
+    resume: ResumeClass
 };
 
-const SingleInput: React.FC<SingleInputProps> = ({ sectionName, register, optimize, job }) => {
+const SingleInput: React.FC<SingleInputProps> = ({ sectionName, register, optimize, job, resume }) => {
     const [finishedLoading, setFinishedLoading] = useState(false)
     const [loading, setLoading] = useState(false)
     const { watch, setValue } = useFormContext();
     const section: string = watch(sectionName);
     const [response, setResponse] = useState(section);
-    const userResume = watch();
 
     const initialMessages: Message[] = [
         {
-            id: "1", role: "system", content: `You are an advanced career coach specialized in writing resume professional resume summaries. Here is the user's resume ${JSON.stringify(userResume)}. Use this resume as context when writing summaries. Use the following format as an outline for the response: Professional Title (if relevant) + Key Experiences (with the total number of years worked) + Top Achievements (preferably measurable results) + Top Skills/Expertise/Unique Values (relevant to the job and industry). Keep the length around 100 words`
+            id: "1", role: "system", content: `You are an advanced career coach specialized in writing resume professional resume summaries. Here is the user's resume ${JSON.stringify(resume)}. Use this resume as context when writing summaries. Use the following format as an outline for the response: Professional Title (if relevant) + Key Experiences (with the total number of years worked) + Top Achievements (preferably measurable results) + Top Skills/Expertise/Unique Values (relevant to the job and industry). Keep the length around 100 words`
         },
         {
             id: "2", role: "user", content: `${section ?
@@ -101,9 +102,6 @@ const SingleInput: React.FC<SingleInputProps> = ({ sectionName, register, optimi
 
     return (
         <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-                {sectionName.replace(/([A-Z])/g, ' $1').trim().toUpperCase()}
-            </label>
             {optimize ?
                 <TextareaAutosize
                     {...register(sectionName)}

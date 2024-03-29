@@ -23,10 +23,13 @@ export async function createResumeAction(data: any, path: string) {
 export async function updateResumeAction(
   id: string,
   data: any,
-  path: string
+  path?: string
 ) {
-  await updateResume(id, data);
-  revalidatePath(path);
+  const { error } = await updateResume(id, data);
+  if (path) {
+    revalidatePath(path);
+  }
+  return { error }
 }
 
 export async function deleteResumeAction({

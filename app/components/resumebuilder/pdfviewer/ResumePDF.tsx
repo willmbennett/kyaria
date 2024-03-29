@@ -97,14 +97,13 @@ const ResumePDF = ({ data }: { data: ResumeClass }) => {
     contactElements.push({ type: 'text', value: location || '' });
   }
 
-  if (social_links) {
-    // Iterate over the keys of the social_links object
-    for (const name in social_links) {
-      // Check if the key is actually a property of the object and not inherited
-      if (social_links.hasOwnProperty(name)) {
-        contactElements.push({ type: 'link', value: name, url: social_links[name] });
+  if (social_links && social_links.length) {
+    social_links.forEach(link => {
+      // Assuming each link has 'name' and 'url'
+      if (link.name && link.url) {
+        contactElements.push({ type: 'link', value: link.name, url: link.url });
       }
-    }
+    });
   }
 
 

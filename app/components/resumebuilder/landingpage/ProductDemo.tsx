@@ -1,6 +1,6 @@
 import { ResumeClass } from "../../../../models/Resume"
 import { Container } from "../../landingpage/Container"
-import ResumeBuilder from "../ResumeBuilder"
+import { ResumeBuilder } from "../ResumeBuilder"
 
 export default function ProductDemo({ resume, resumeId }: { resume: ResumeClass, resumeId: string }) {
 
@@ -35,10 +35,8 @@ export default function ProductDemo({ resume, resumeId }: { resume: ResumeClass,
 
           </div>
           <ResumeBuilder
-            data={resume}
-            toggleEdit={undefined}
+            resume={resume}
             userId={''}
-            activeSubscription={true}
             resumeId={resumeId}
             useSave={false}
           />

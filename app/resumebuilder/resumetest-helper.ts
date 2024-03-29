@@ -2,16 +2,6 @@ import { Award, Certification, Education, ProfessionalExperience, Project, Publi
 import { ResumeScanDataClass } from "../../models/ResumeScan";
 import { format, parse, isValid, isToday, startOfToday } from 'date-fns';
 
-export interface ResumeBuilderProps {
-    data: ResumeClass;
-    toggleEdit: any;
-    resumeId: string;
-    userId: string;
-    activeSubscription?: boolean;
-    job?: Partial<JobClass>;
-    useSave?: boolean
-}
-
 interface SocialLinksMap {
     [key: string]: string;
 }
@@ -28,7 +18,7 @@ const handleResumeImport = <T extends sectionType>(id: string, section?: section
 
     const updatedSection = (section || []).map(item => {
         const updatedItem = _.cloneDeep(item);
-    
+
         // Handle GPA for education section
         if (isEducation && 'gpa' in updatedItem) {
             updatedItem.gpa = {
@@ -36,12 +26,12 @@ const handleResumeImport = <T extends sectionType>(id: string, section?: section
                 scoringSystem: updatedItem.gpa?.scoringSystem || '4.0' // Default scoringSystem to '4.0' if undefined
             };
         }
-    
+
         //console.log('updatedItem: ', updatedItem)
-    
+
         return updatedItem;
     });
-    
+
 
     //const sortedResumeSection = sortDataBasedOnConfig(updatedSection, config) || [];
 
@@ -377,8 +367,8 @@ export const sortDataBasedOnConfig = (data: sectionType[]
             return returnedValue
         }
 
-        const parsedDateA = dateA? parseDate(dateA) : null;
-        const parsedDateB = dateB? parseDate(dateB) : null;
+        const parsedDateA = dateA ? parseDate(dateA) : null;
+        const parsedDateB = dateB ? parseDate(dateB) : null;
 
         if (!parsedDateA && !parsedDateB) returnedValue = 0;
         if (!parsedDateA) {

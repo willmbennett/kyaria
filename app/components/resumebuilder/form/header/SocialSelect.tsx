@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ControllerRenderProps } from 'react-hook-form';
 
 import CreatableSelect from 'react-select/creatable';
-import { ResumeBuilderFormData } from '../../../resumebuilder/resumetest-helper';
+import { ResumeBuilderFormData } from '../../../../resumebuilder/resumetest-helper';
 
 const createOption = (label: string) => ({
     label,

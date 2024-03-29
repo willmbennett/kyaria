@@ -5,8 +5,6 @@ import {
     Severity,
     mongoose
 } from "@typegoose/typegoose";
-import type { Ref } from "@typegoose/typegoose";
-import { ResumeScanDataClass } from "./ResumeScan";
 
 class Responsibilities {
     @prop()
@@ -76,9 +74,6 @@ class Details {
 
 class GPA {
     @prop()
-    public _id?: string;
-
-    @prop()
     public score?: string;
 
     @prop({ default: 4.0 })
@@ -88,7 +83,7 @@ class GPA {
 class Education {
     @prop()
     public _id?: string;
-    
+
     @prop()
     public degree?: string;
 
@@ -120,7 +115,7 @@ class Education {
 class Certification {
     @prop()
     public _id?: string;
-    
+
     @prop()
     public certification?: string;
 
@@ -143,7 +138,7 @@ class Certification {
 class Award {
     @prop()
     public _id?: string;
-    
+
     @prop()
     public award?: string;
 
@@ -160,7 +155,7 @@ class Award {
 class Publication {
     @prop()
     public _id?: string;
-    
+
     @prop()
     public publication?: string;
 
@@ -177,7 +172,7 @@ class Publication {
 class Project {
     @prop()
     public _id?: string;
-    
+
     @prop()
     public name: string;
 
@@ -215,7 +210,7 @@ class Project {
 class Volunteering {
     @prop()
     public _id?: string;
-    
+
     @prop()
     public involvement: string;
 
@@ -244,6 +239,17 @@ class Volunteering {
     public details?: Details[];
 }
 
+class SocialLinkClass {
+    @prop()
+    public _id?: string;
+
+    @prop()
+    public name: string;
+
+    @prop()
+    public url: string;
+}
+
 @ModelOptions({
     schemaOptions: {
         timestamps: true,
@@ -263,9 +269,6 @@ class ResumeClass {
     @prop()
     public fromTemplate?: boolean;
 
-    @prop({ ref: () => ResumeScanDataClass})
-    public resumeScan?: Ref<ResumeScanDataClass>;
-
     @prop()
     public title?: string;
 
@@ -278,8 +281,8 @@ class ResumeClass {
     @prop()
     public sectionOrder?: string[];
 
-    @prop({ default: {} })
-    public social_links?: { [key: string]: string } = {};
+    @prop({ type: () => [SocialLinkClass] })
+    public social_links?: SocialLinkClass[];
 
     @prop()
     public location?: string;
@@ -317,11 +320,11 @@ class ResumeClass {
     @prop({ type: () => [Award] })
     public awards?: Award[];
 
-    @prop({ required: true})
+    @prop({ required: true })
     public userId!: string;
 
     _id: mongoose.Types.ObjectId | string;
 }
 
 const ResumeModel = getModelForClass(ResumeClass);
-export { ResumeModel, ResumeClass, ProfessionalExperience, Responsibilities, Education, Project, Publication, Award, Certification, Volunteering, Details, GPA };
+export { ResumeModel, ResumeClass, ProfessionalExperience, Responsibilities, Education, Project, Publication, Award, Certification, Volunteering, Details, GPA, SocialLinkClass };
