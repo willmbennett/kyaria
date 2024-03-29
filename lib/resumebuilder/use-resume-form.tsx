@@ -14,7 +14,7 @@ interface UseResumeFormProps {
 export const useResumeForm = ({ resume, setSaveStatus }: UseResumeFormProps) => {
     const path = usePathname()
     const resumeId = resume._id.toString()
-    const currentSections: sectionOptions[] = resume.sectionOrder as sectionOptions[] || [
+    const currentSections: sectionOptions[] = resume.sectionOrder && resume.sectionOrder.length > 0 ? resume.sectionOrder as sectionOptions[] : [
         'skills',
         'professional_experience',
         'education',
