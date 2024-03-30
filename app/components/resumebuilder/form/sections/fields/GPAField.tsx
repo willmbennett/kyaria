@@ -25,10 +25,10 @@ const GPAField = ({ fieldName, resumeId, fieldConfig, setKey, setSaveStatus }: P
                 fieldName={GPAfieldName}
                 setKey={GPASetKey}
                 setSaveStatus={setSaveStatus}
-                placeholder={fieldConfig.placeholder}
+                placeholder={field == 'score' ? "GPA" : "SCORING SYSTEM"}
             >
-                <input type="number"  {...register(GPAfieldName, { valueAsNumber: true })} placeholder="GPA Score" />
-            </FieldWrapper>
+                <input type="text"  {...register(GPAfieldName)} />
+            </FieldWrapper >
         )
     }
 
