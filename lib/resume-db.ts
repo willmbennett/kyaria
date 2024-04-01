@@ -1,12 +1,11 @@
-import Error from "next/error";
 import { ResumeModel, ResumeClass } from "../models/Resume";
-import { ResumeScanDataModel } from "../models/ResumeScan";
 import connectDB from "./connect-db";
 import { castToString, dateToString, ObjectIdtoString, stringToObjectId } from "./utils";
 import { AppModel } from "../models/App";
 var transformProps = require('transform-props');
 import _ from 'lodash'; // or import * as _ from 'lodash';
 import { ObjectId } from "mongodb";
+import mongoose from "mongoose";
 
 const logging = false
 
@@ -179,7 +178,14 @@ export async function updateResume(id: string, data: any) {
 
             if (value.remove && typeof value.remove === 'string') {
                 // $pull to remove by _id
-                const pullCriteria = { _id: value.remove };
+                let pullCriteria = { _id: value.remove };
+                if (value.remove == 'n/a') {
+                    if (logging) console.log('_id does not exist, creating new _id')
+                    const newId = new mongoose.Types.ObjectId();
+                    if (logging) console.log('created new id', newId)
+                    _.set(resume, value.itemSetKey, newId);
+                    pullCriteria._id = newId
+                }
                 if (logging) console.log(`pullCriteria: ${JSON.stringify(pullCriteria)}`);
                 _.get(resume, key).pull(pullCriteria);
             } else if (value.add) {
