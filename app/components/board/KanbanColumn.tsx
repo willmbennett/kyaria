@@ -11,6 +11,7 @@ interface KanbanColumnProps {
     apps: boardItemType[];
     updateAppState: (appId: string, newState: { [key: string]: any }) => void
     boards: BoardClass[]
+    removeApp: (id: string) => Promise<void>;
 }
 
 export default function KanbanColumn(
@@ -19,6 +20,7 @@ export default function KanbanColumn(
         apps,
         updateAppState,
         boards,
+        removeApp
     }: KanbanColumnProps) {
     const { setNodeRef, isOver } = useDroppable({ id: state });
 
@@ -50,6 +52,7 @@ export default function KanbanColumn(
                         updateAppState={updateAppState}
                         state={state}
                         boards={boards}
+                        removeApp={removeApp}
                     />
                     {inActiveApps.length > 0 &&
                         <div className='text-center w-full'>
@@ -70,6 +73,7 @@ export default function KanbanColumn(
                                     updateAppState={updateAppState}
                                     state={state}
                                     boards={boards}
+                                    removeApp={removeApp}
                                 />}
                         </div>
                     }

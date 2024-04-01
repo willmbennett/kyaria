@@ -1,9 +1,8 @@
 import { useCallback, useId, useState } from "react";
 import { boardItemType, jobStates } from "../../app/board/job-helper";
 import { DragEndEvent, DragOverEvent, DragStartEvent, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
-import { updateJobAppAction } from "../../app/apps/_action";
-import { useRouter } from "next/navigation";
-import { AppClass } from "../../models/App";
+import { deleteJobAppAction, updateJobAppAction } from "../../app/apps/_action";
+import { usePathname } from "next/navigation";
 import { updateBoardAction } from "../../app/board/_action";
 
 interface UseKanbanProps {
@@ -11,8 +10,10 @@ interface UseKanbanProps {
     boardId?: string;
 }
 
+const logging = true
+
 export const useKanban = ({ boardItems, boardId }: UseKanbanProps) => {
-    const router = useRouter()
+    const path = usePathname()
     const [activeId, setActiveId] = useState<string>();
     const [apps, setApps] = useState<boardItemType[]>(boardItems);
     const [searchValue, setSearchValue] = useState('');
@@ -117,5 +118,16 @@ export const useKanban = ({ boardItems, boardId }: UseKanbanProps) => {
         }
     }
 
-    return { activeId, boardApps, searchValue, id, handleDragEnd, handleDragOver, updateAppState, handleDragStart, sensors, handleChange, updateBoardTitle }
+    const removeApp = async (id: string) => {
+        if (logging) console.log('Made it to [removeApp] with id: ', id)
+        const filteredApps = apps.filter((item) =>
+            item.id != id
+        );
+
+        setApps(filteredApps);
+
+        await deleteJobAppAction({ id, path })
+    }
+
+    return { activeId, boardApps, searchValue, id, handleDragEnd, handleDragOver, updateAppState, handleDragStart, sensors, handleChange, updateBoardTitle, removeApp }
 }

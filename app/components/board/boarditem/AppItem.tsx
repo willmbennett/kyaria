@@ -3,19 +3,22 @@ import { BoardClass } from "../../../../models/Board";
 import { useBoardItem } from "../../../../lib/kanban/use-board-item";
 import { DropdownMenu } from "./DropdownMenu";
 import { ItemMainSection } from "./ItemMainSection";
+import { ItemMenu } from "./ItemMenu";
 
 interface AppItemProps {
   app: boardItemType;
   updateAppState: (appId: string, newState: { [key: string]: any }) => void
   state: string;
   boards: BoardClass[]
+  removeApp: (id: string) => Promise<void>;
 }
 
 export default function AppItem(
   { app,
     updateAppState,
     state,
-    boards
+    boards,
+    removeApp
   }: AppItemProps) {
   let { id, boardId } = app
   const {
@@ -37,6 +40,8 @@ export default function AppItem(
     updateAppState
   })
 
+  const handleRemove = async () => await removeApp(app.id)
+
 
   return (
     <div className={`text-left w-full border p-4 flex flex-col gap-2 border-gray-200 rounded-lg block transition-shadow duration-300 ease-in-out ${app.active ? "bg-white" : "bg-gray-100"} shadow-sm hover:shadow-md`}>
@@ -47,6 +52,7 @@ export default function AppItem(
         toggleDetails={toggleDetails}
         handleViewPacketClick={handleViewPacketClick}
         handleClose={handleClose}
+        removeApp={handleRemove}
       />
       <div className="flex w-full gap-2">
         <DropdownMenu

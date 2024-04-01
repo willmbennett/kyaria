@@ -272,14 +272,16 @@ export async function updateJobApp(id: string, data: any) {
     }
 }
 
-export async function deleteJobApp(id: string, resumeId: string) {
+export async function deleteJobApp(id: string) {
     try {
         await connectDB();
 
         //console.log(id)
 
+        const { app } = await getJobApp(id)
+
         const parsedId = stringToObjectId(id);
-        const parsedResumeId = stringToObjectId(resumeId);
+        const resumeId = app?.userResume
 
         //console.log(parsedId)
 
@@ -288,14 +290,11 @@ export async function deleteJobApp(id: string, resumeId: string) {
         }
 
         //console.log("Made it to Deletion")
-        const jobApp = await AppModel.findByIdAndDelete(parsedId).exec();
+        await AppModel.findByIdAndDelete(parsedId).exec();
         //console.log("Post job app deletion")
+        await ResumeModel.findByIdAndDelete(resumeId).exec();
 
-        if (jobApp) {
-            return {};
-        } else {
-            return { error: "Job application not found" };
-        }
+        return {};
     } catch (error) {
         return { error };
     }

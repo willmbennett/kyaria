@@ -17,6 +17,7 @@ interface KanbanBoardProps {
     activeId?: string; // Assuming activeId could be optional
     updateAppState: (appId: string, newState: { [key: string]: any }) => void;
     boards: BoardClass[];
+    removeApp: (id: string) => Promise<void>;
 }
 
 export const KanbanBoard = ({
@@ -29,7 +30,8 @@ export const KanbanBoard = ({
     boardId,
     updateAppState,
     boards,
-    activeId
+    activeId,
+    removeApp
 }: KanbanBoardProps) => (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd} onDragStart={handleDragStart} onDragOver={handleDragOver} id={id}>
         <div id='kanban-container' className='relative overflow-x-scroll overflow-y-hidden w-screen h-screen lg:pl-10 bg-white z-5 lg:p-4'>
@@ -42,6 +44,7 @@ export const KanbanBoard = ({
                         apps={apps.filter(app => app.boardId == boardId)}
                         updateAppState={updateAppState}
                         boards={boards}
+                        removeApp={removeApp}
                     />
                 )}
             </div>
@@ -53,6 +56,7 @@ export const KanbanBoard = ({
                     updateAppState={updateAppState}
                     state={apps.find(job => job.id === activeId)?.state || 'WISHLIST'}
                     boards={boards}
+                    removeApp={removeApp}
                 />
             ) : null}
         </DragOverlay>

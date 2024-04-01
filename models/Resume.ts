@@ -270,6 +270,9 @@ class ResumeClass {
     public fromTemplate?: boolean;
 
     @prop()
+    public originalResumeId?: string;
+
+    @prop()
     public title?: string;
 
     @prop()

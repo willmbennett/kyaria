@@ -108,6 +108,7 @@ export const useResumeList = ({ setKey, inputList, job, resume, setSaveStatus }:
         if (newSkills) {
             const newSkillList: ListFieldType[] = newSkills.map(item => ({ id: item, label: item, value: item }))
             setValue('formList', newSkillList)
+            await handleSkillsSave(newSkills)
         }
     }
 

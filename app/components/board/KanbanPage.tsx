@@ -34,7 +34,8 @@ export default function KanbanPage(
         sensors,
         handleChange,
         updateAppState,
-        updateBoardTitle
+        updateBoardTitle,
+        removeApp
     } = useKanban({ boardItems, boardId })
 
     return (
@@ -69,6 +70,7 @@ export default function KanbanPage(
                 updateAppState={updateAppState}
                 boards={boards}
                 activeId={activeId}
+                removeApp={removeApp}
             />
         </div>
     );

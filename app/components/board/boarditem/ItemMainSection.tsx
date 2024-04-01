@@ -6,6 +6,7 @@ import { useDraggable } from '@dnd-kit/core';
 import { MouseEventHandler } from 'react';
 import { OptionsMenu } from './OptionsMenu';
 import { Details } from './Details';
+import { ItemMenu } from './ItemMenu';
 
 interface ItemMainSectionProps {
     app: boardItemType;
@@ -14,6 +15,7 @@ interface ItemMainSectionProps {
     toggleDetails: () => void
     handleViewPacketClick: () => void
     handleClose: MouseEventHandler<HTMLButtonElement>
+    removeApp: () => Promise<void>;
 
 }
 
@@ -23,7 +25,8 @@ export const ItemMainSection = ({
     showDetails,
     toggleDetails,
     handleViewPacketClick,
-    handleClose
+    handleClose,
+    removeApp
 }: ItemMainSectionProps) => {
     let { id, createdAt, jobTitle, company, location, employmentType, salaryRange, active } = app
     const date = parseISO(createdAt?.toString() || '');
@@ -42,13 +45,15 @@ export const ItemMainSection = ({
             {...attributes}
             className={`cursor-grab flex flex-col gap-2 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
         >
-            <div className="flex justify-between text-sm text-gray-600">
-                <p className="text-sm sm:text-base">
-                    {company}
+            <div className="flex justify-between items-center text-sm text-gray-600">
+                <p>
+                    <span className="text-sm sm:text-base">{company}</span>
+                    {' - '}
+                    <time dateTime={new Date(createdAt).toISOString()} className="text-xs sm:text-sm text-gray-500">
+                        {format(date, 'PP')}
+                    </time>
                 </p>
-                <time dateTime={new Date(createdAt).toISOString()} className="text-xs sm:text-sm">
-                    {format(date, 'PP')}
-                </time>
+                <ItemMenu onDelete={removeApp} />
             </div>
 
             <h5 className="text-base sm:text-lg md:text-xl font-semibold truncate leading-tight">
