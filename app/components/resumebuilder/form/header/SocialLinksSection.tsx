@@ -29,24 +29,16 @@ export const SocialLinksSection = ({ social_links, resumeId, setSaveStatus }: So
 
     const valueToAdd = { name: socialPlatforms[0], url: '' };
 
-    const { addArrayItem, removeArrayItem } = useFormArray({ resumeId, setKey: 'social_links', setSaveStatus, valueToAdd });
-
-    const handleAppend = async () => {
-        append(valueToAdd);
-        await addArrayItem();
-    };
-
-    const handleRemove = async (index: number, fieldId: string) => {
-        remove(index);
-        await removeArrayItem(fieldId);
-    };
+    const { addArrayItem, removeArrayItem } = useFormArray({ resumeId, setKey: 'social_links', setSaveStatus, valueToAdd, append, remove });
 
     return (
         <FormProvider {...methods}>
             <form>
                 <h2 className="text-lg font-semibold mb-4">{'Social Links'.toUpperCase()}</h2>
                 {fields.map((field, index) => {
-                    const fieldId = social_links && social_links[index]._id
+                    const fieldId = social_links && social_links[index] ? social_links[index]._id : undefined;
+                    const itemSetKey = 'social_links.' + index
+                    const removeItem = () => removeArrayItem(index, itemSetKey, fieldId)
                     return (
                         <div key={field.id} className="flex items-center gap-2">
                             <FieldWrapper
@@ -87,12 +79,12 @@ export const SocialLinksSection = ({ social_links, resumeId, setSaveStatus }: So
                                     )}
                                 />
                             </FieldWrapper>
-                            <button type="button" onClick={() => fieldId && handleRemove(index, fieldId)} className="ml-2 text-red-500">Remove</button>
+                            <button type="button" onClick={removeItem} className="ml-2 text-red-500">Remove</button>
                         </div>
                     )
                 }
                 )}
-                <Button size='md' type="button" onClick={handleAppend} >Add Social</Button>
+                <Button size='md' type="button" onClick={addArrayItem} >Add Social</Button>
             </form>
         </FormProvider>
     );

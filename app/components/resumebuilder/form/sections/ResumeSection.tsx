@@ -48,17 +48,7 @@ const ResumeSection = ({ resumeId, items, sectionName, fieldsConfig, setSaveStat
         acc[field.name] = initialValue;
         return acc;
     }, {});
-    const { addArrayItem, removeArrayItem } = useFormArray({ resumeId, setKey: sectionName, setSaveStatus, valueToAdd })
-
-    const handleAppend = async () => {
-        append(valueToAdd as ResumeSectionType)
-        await addArrayItem()
-    }
-
-    const handleRemove = (index: number, fieldId: string) => {
-        remove(index)
-        removeArrayItem(fieldId)
-    }
+    const { addArrayItem, removeArrayItem } = useFormArray({ resumeId, setKey: sectionName, setSaveStatus, valueToAdd, append, remove })
 
     return (
         <FormProvider {...methods}>
@@ -66,7 +56,8 @@ const ResumeSection = ({ resumeId, items, sectionName, fieldsConfig, setSaveStat
                 <div className='flex flex-col w-full'>
                     {fields.map((field: SectionItemType, index) => {
                         const fieldId = (items as { _id?: string }[])[index]?._id
-                        const removeItem = () => fieldId ? handleRemove(index, fieldId) : console.log('Id not found')
+                        const itemSetKey = sectionName + '.' + index
+                        const removeItem = () => removeArrayItem(index, itemSetKey, fieldId)
                         return (
                             <SectionItem
                                 key={field.id}
@@ -83,7 +74,7 @@ const ResumeSection = ({ resumeId, items, sectionName, fieldsConfig, setSaveStat
                         )
                     }
                     )}
-                    <Button size='md' type="button" onClick={handleAppend} >Add {sectionName}</Button>
+                    <Button size='md' type="button" onClick={addArrayItem} >Add {sectionName}</Button>
                 </div>
             </form>
         </FormProvider>
