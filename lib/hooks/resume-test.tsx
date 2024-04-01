@@ -149,35 +149,3 @@ export const useGeneratePDF = ({ data }: { data: ResumeClass }) => {
 
     return generatePDF;
 };
-
-export const useCopyResume = (data: ResumeClass, userId: string) => {
-    const [isLoading, setLoading] = useState(false);
-    const router = useRouter();
-
-    const handleCopy = useCallback(async () => {
-        setLoading(true); // Start loading
-
-        try {
-            const resumeCopy: Partial<ResumeClass> = { ...data };
-
-            delete resumeCopy._id;
-            delete resumeCopy.createdAt;
-            delete resumeCopy.updatedAt;
-            delete resumeCopy.userId;
-
-            const userResumeWithIds = { fromTemplate: true, ...resumeCopy, userId };
-            const resumeId = await createResumeAction(userResumeWithIds, '/');
-
-            if (resumeId) {
-                router.push(`/resumebuilder/${resumeId}`);
-            }
-        } catch (error) {
-            console.error('Error during resume copy:', error);
-        } finally {
-            setLoading(false); // End loading
-        }
-    }, [data, userId, router]);
-
-    return { handleCopy, isLoading };
-};
-

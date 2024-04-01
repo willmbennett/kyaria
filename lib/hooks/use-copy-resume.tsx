@@ -2,7 +2,7 @@ import { createResumeAction } from "../../app/resumebuilder/_action";
 import { ResumeClass } from "../../models/Resume";
 
 export const useCopyResume = () => {
-    const handleCopyResume = async (userId: string, data: ResumeClass) => {
+    const handleCopyResume = async (userId: string, data: ResumeClass, fromTemplate = false) => {
         try {
             const resumeCopy: Partial<ResumeClass> = { ...data };
 
@@ -11,7 +11,7 @@ export const useCopyResume = () => {
             delete resumeCopy.updatedAt;
             delete resumeCopy.userId;
 
-            const userResumeWithIds = { fromTemplate: true, ...resumeCopy, userId };
+            const userResumeWithIds = { fromTemplate: fromTemplate, ...resumeCopy, userId, originalResumeId: data._id };
             const resumeId = await createResumeAction(userResumeWithIds, '/');
 
             if (resumeId) {

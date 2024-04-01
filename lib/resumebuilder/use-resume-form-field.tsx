@@ -17,7 +17,7 @@ export const useResumeField = ({ resumeId, fieldName, setKey, setSaveStatus }: U
     const value = watch(fieldName)
     const [currentValue, setValue] = useState(value)
     const handleResumeItemSave = useCallback(async (input: string | boolean) => {
-        console.log('Made it to [handleResumeItemSave] with input: ', input)
+        //console.log('Made it to [handleResumeItemSave] with input: ', input)
         await saveResumeToDatabase({
             resumeId,
             setKey,

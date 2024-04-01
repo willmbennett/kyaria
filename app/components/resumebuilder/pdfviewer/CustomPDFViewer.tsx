@@ -8,9 +8,10 @@ import ResumeLoadingComponent from './ResumeLoadingComponent';
 import { useCallback, useEffect, useState } from 'react';
 import { debounce } from 'lodash';
 import { Button } from '../../Button';
-import { useCopyResume } from '../../../../lib/hooks/resume-test';
 import SaveStatusIndicator from '../SaveStatusIndicator';
 import { ResumeClass } from '../../../../models/Resume';
+import { useCopyResume } from '../../../../lib/hooks/use-copy-resume';
+import { useRouter } from 'next/navigation';
 
 interface ResumePDFProps {
     data: ResumeClass;
@@ -33,6 +34,7 @@ const CustomPDFViewer = (
         useSave
     }: ResumePDFProps
 ) => {
+    const router = useRouter()
     const [numPages, setNumPages] = useState(1);
     const [pageNumber, setPageNumber] = useState(1);
     const [currentPdfUrl, setCurrentPdfUrl] = useState<string | null>(null);
@@ -119,7 +121,14 @@ const CustomPDFViewer = (
         changePage(1);
     }
 
-    const { handleCopy, isLoading } = useCopyResume(data, userId)
+    const { handleCopyResume } = useCopyResume()
+
+    const handleCopy = async () => {
+        const resumeId = await handleCopyResume(userId, data, true)
+        if (resumeId) {
+            router.push(`/resumebuilder/` + resumeId)
+        }
+    }
 
     return (
         <div className='flex h-full flex-col justify-center w-full lg:w-[62vh]'>
@@ -136,25 +145,7 @@ const CustomPDFViewer = (
                     <p>Page {pageNumber || (numPages ? 1 : "--")} of {numPages || "--"}</p>
                     {useEdit && <Button type='button' size='sm' href={`/resumebuilder/${data._id}`}>Edit</Button>}
                     <Button type='button' size='sm' onClick={downloadPDF}>Download</Button>
-                    {isLoading ? (
-                        <div className='text-slate-500 flex flex-row items-center justify-center space-x-2'>
-                            <style jsx>{`
-          .saving {
-            animation: spin 1s linear infinite;
-          }
-  
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-      `}</style>
-                            <svg className="saving" xmlns="http://www.w3.org/2000/svg" height="16" width="16" fill='rgb(100 116 139)' viewBox="0 0 512 512"><path d="M304 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm0 416a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM48 304a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm464-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM142.9 437A48 48 0 1 0 75 369.1 48 48 0 1 0 142.9 437zm0-294.2A48 48 0 1 0 75 75a48 48 0 1 0 67.9 67.9zM369.1 437A48 48 0 1 0 437 369.1 48 48 0 1 0 369.1 437z" /></svg>
-                            <p>Copying</p>
-                        </div>
-                    )
-                        :
-                        <>{useSave && <Button type='button' size='sm' onClick={handleCopy}>Copy</Button>}</>
-                    }
+                    <Button type='button' size='sm' onClick={handleCopy}>Copy</Button>
                     {saveStatus && <SaveStatusIndicator saveStatus={saveStatus} />}
                 </div>
                 {numPages > 1 && <Button

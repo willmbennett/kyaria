@@ -35,13 +35,11 @@ export async function updateJobAppAction(
 
 export async function deleteJobAppAction({
     id,
-    resumeId,
     path,
 }: {
     id: string;
-    resumeId: string;
     path: string;
 }) {
-    await deleteJobApp(id, resumeId);
+    await deleteJobApp(id);
     revalidatePath(path);
 }

@@ -1,10 +1,7 @@
 import { Menu } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { useState } from 'react';
-import { useCopyResume } from '../../../../lib/hooks/resume-test';
-import { ResumeClass } from "../../../../models/Resume";
 import { resumeTemplates } from "../../../resumebuilder/resume-templates";
-import { Button } from "../../Button";
 import CustomPDFViewer from "../pdfviewer/CustomPDFViewer";
 
 
