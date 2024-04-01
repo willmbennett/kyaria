@@ -19,10 +19,10 @@ type ResumeFormProps = {
 
 const ResumeForm: React.FC<ResumeFormProps> = ({ setSaveStatus, job, resume }) => {
 
-    const { id, handleDragStart, handleDragOver, handleDragEnd, sensors, overlaySection, sections } = useResumeForm({ setSaveStatus, resume })
+    const { id, handleDragEnd, sensors, sections } = useResumeForm({ setSaveStatus, resume })
 
     return (
-        <div className='w-full space-y-3 flex flex-col'>
+        <div className='w-full'>
             <SortableFormSection
                 id={'Header'}
                 sortable={false}
@@ -33,7 +33,7 @@ const ResumeForm: React.FC<ResumeFormProps> = ({ setSaveStatus, job, resume }) =
                 </>
             </SortableFormSection>
 
-            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragOver={handleDragOver} onDragEnd={handleDragEnd} onDragStart={handleDragStart} id={id}>
+            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} id={id}>
                 <SortableContext items={sections} strategy={verticalListSortingStrategy}>
                     {sections.map((section: sectionOptions, idx: number) => {
                         return (

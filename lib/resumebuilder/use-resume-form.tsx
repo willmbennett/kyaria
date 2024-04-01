@@ -41,35 +41,16 @@ export const useResumeForm = ({ resume, setSaveStatus }: UseResumeFormProps) => 
 
             const newSectionOrder = updateSections(sections);
             setSections(newSectionOrder)
-        }
-        await saveResumeToDatabase({
-            resumeId,
-            setKey: 'sectionOrder',
-            value: sections,
-            path,
-            setSaveStatus
-        })
-    }
 
-    const handleDragOver = async (event: DragOverEvent) => {
-        const { active, over } = event;
-
-        if (!active || !over) return;
-
-        if (over && active.id !== over.id) {
-            const updateSections = (sections: sectionOptions[]): sectionOptions[] => {
-                const oldIndex = sections.indexOf(active.id as sectionOptions);
-                const newIndex = sections.indexOf(over.id as sectionOptions);
-                return arrayMove(sections, oldIndex, newIndex);
-            };
-
-            const newSectionOrder = updateSections(sections);
-
-            setSections(newSectionOrder)
+            await saveResumeToDatabase({
+                resumeId,
+                setKey: 'sectionOrder',
+                value: newSectionOrder,
+                path,
+                setSaveStatus
+            })
         }
     }
-
-    const [activeSection, setActiveSection] = useState<string | null>()
 
     const mouseSensor = useSensor(MouseSensor, {
         // Require the mouse to move by 10 pixels before activating
@@ -90,15 +71,7 @@ export const useResumeForm = ({ resume, setSaveStatus }: UseResumeFormProps) => 
         touchSensor,
     );
 
-    const handleDragStart = (event: DragStartEvent) => {
-        // Logic to handle item drop, updating the state of jobApps accordingly
-        //console.log(event.active.id.toString())
-        setActiveSection(event.active.id.toString());
-    };
-
-    const overlaySection = sections.find(section => section === activeSection) || ''
-
     const id = useId()
 
-    return { id, handleDragStart, handleDragOver, handleDragEnd, sensors, overlaySection, sections }
+    return { id, handleDragEnd, sensors, sections }
 }
