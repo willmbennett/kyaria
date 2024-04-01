@@ -40,6 +40,7 @@ export const useResumeForm = ({ resume, setSaveStatus }: UseResumeFormProps) => 
             };
 
             const newSectionOrder = updateSections(sections);
+            setSections(newSectionOrder)
 
             await saveResumeToDatabase({
                 resumeId,
