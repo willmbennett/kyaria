@@ -99,18 +99,7 @@ const BulletPointsField = ({ name, fieldData, setKey, resumeId, setSaveStatus }:
     const { fields, append, remove } = useFieldArray({ control, name });
 
     const valueToAdd = { content: '', show: true }
-    const { addArrayItem, removeArrayItem } = useFormArray({ resumeId, setKey, setSaveStatus, valueToAdd })
-
-    const handleAppend = async () => {
-        append(valueToAdd)
-        await addArrayItem()
-    }
-
-    const handleRemove = (index: number, fieldId: string) => {
-        remove(index)
-        removeArrayItem(fieldId)
-    }
-
+    const { addArrayItem, removeArrayItem } = useFormArray({ resumeId, setKey, setSaveStatus, valueToAdd, append, remove })
     return (
         <div className='w-full text-left flex flex-col'>
             {fields.length > 0 &&
@@ -118,7 +107,8 @@ const BulletPointsField = ({ name, fieldData, setKey, resumeId, setSaveStatus }:
                     <label className="text-gray-600 text-sm mb-1">Bullets</label>
                     {fields.map((field, index) => {
                         const fieldId = (fieldData as { _id?: string }[])[index]?._id
-                        const removeItem = () => fieldId ? handleRemove(index, fieldId) : console.log('Id not found')
+                        const itemSetKey = setKey + '.' + index
+                        const removeItem = () => removeArrayItem(index, itemSetKey, fieldId)
                         return (
                             <BulletPointItem
                                 key={field.id}
@@ -136,7 +126,7 @@ const BulletPointsField = ({ name, fieldData, setKey, resumeId, setSaveStatus }:
                 </>
             }
             <div>
-                <Button size='md' type="button" onClick={handleAppend}>Add Bullet Point</Button>
+                <Button size='md' type="button" onClick={addArrayItem}>Add Bullet Point</Button>
             </div>
         </div>
     );
