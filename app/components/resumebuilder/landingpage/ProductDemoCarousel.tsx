@@ -48,7 +48,6 @@ export default async function ProductDemoCarousel() {
             <ResumeBuilder
                 resume={resume}
                 userId={''}
-                resumeId={resumeId}
                 useSave={false}
             />
         </div>
