@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Message, useChat } from 'ai/react';
-import { useFormContext, UseFormRegister } from 'react-hook-form';
+import { UseFormRegister } from 'react-hook-form';
 import TextareaAutosize from 'react-textarea-autosize';
 import { Button } from '../../../Button';
 import { JobClass } from '../../../../../models/Job';
 import { ResumeClass } from '../../../../../models/Resume';
+import { useOptimise } from '../../../../../lib/resumebuilder/use-optimize';
 
 type SingleInputProps = {
     sectionName: string
@@ -15,122 +14,40 @@ type SingleInputProps = {
 };
 
 const SingleInput: React.FC<SingleInputProps> = ({ sectionName, register, optimize, job, resume }) => {
-    const [finishedLoading, setFinishedLoading] = useState(false)
-    const [loading, setLoading] = useState(false)
-    const { watch, setValue } = useFormContext();
-    const section: string = watch(sectionName);
-    const [response, setResponse] = useState(section);
 
-    const initialMessages: Message[] = [
-        {
-            id: "1", role: "system", content: `You are an advanced career coach specialized in writing resume professional resume summaries. Here is the user's resume ${JSON.stringify(resume)}. Use this resume as context when writing summaries. Use the following format as an outline for the response: Professional Title (if relevant) + Key Experiences (with the total number of years worked) + Top Achievements (preferably measurable results) + Top Skills/Expertise/Unique Values (relevant to the job and industry). Keep the length around 100 words`
-        },
-        {
-            id: "2", role: "user", content: `${section ?
-                `Please refine this summary for clarity and impact: ${section}${job ? `and tailor it for this job post ${JSON.stringify(job)}` : ''}. Your response should just be the refined text.`
-                :
-                `Help me write a summary ${job ? `and tailor it for this job post ${JSON.stringify(job)}` : ''}. Your response should just be the summary text.  Keep the length around 100 words`
-                }`
-        }
-    ]
+    const { canUndo, undo, canRedo, redo, loading, currentState, handleModifyResponse, handleStop, optimizeClick, history } = useOptimise({ sectionName, job, resume, optimize })
 
-    const { messages, setMessages, reload, append, stop } = useChat({
-        body: {
-            temp: 0.3
-        },
-        initialMessages: [...initialMessages,
-        { id: '3', role: 'assistant', content: section }],
-        onFinish() {
-            setFinishedLoading(true)
-            setLoading(false);
-        }
-    });
 
-    const lastmessage = messages[messages.length - 1]
-
-    // Save the final message to context
-    useEffect(() => {
-        if (lastmessage && lastmessage.role == 'assistant') {
-            setResponse(lastmessage.content);
-        }
-    }, [lastmessage]);
-
-    async function optimizeClick() {
-        setFinishedLoading(false)
-        setLoading(true)
-        reload()
-    }
-
-    async function handleStop() {
-        setFinishedLoading(true)
-        setLoading(false)
-        stop()
-    }
-
-    // Save the final message to context
-    useEffect(() => {
-        if (finishedLoading) {
-            setValue(sectionName, lastmessage.content)
-        }
-    }, [finishedLoading]);
-
-    // Update the state when user edits the textarea
-    const handleTextareaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setValue(sectionName, event.target.value)
-        setResponse(event.target.value);
-    };
-
-    const handleModifyResponse = (action: 'shorten' | 'lengthen') => {
-        setFinishedLoading(false)
-        setLoading(true);
-
-        const prompt = action === 'shorten' ?
-            `Please shorten this summary: ${response}` :
-            `Please lengthen this summary: ${response}`;
-
-        const newMessages: Message[] = [...initialMessages, {
-            id: '3', // You may want to generate a unique ID for each new message
-            role: 'user',
-            content: prompt
-        },
-        { id: '3', role: 'assistant', content: section }]
-
-        setMessages(newMessages);
-
-        reload();
-    };
 
     return (
         <div className="mb-4">
-            {optimize ?
-                <TextareaAutosize
-                    {...register(sectionName)}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    value={response}
-                    onChange={handleTextareaChange}
-                />
-                :
-                <TextareaAutosize
-                    {...register(sectionName)}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                />
-            }
-            {optimize && !loading &&
-                <>
-                    {section.length > 0 &&
+            <TextareaAutosize
+                {...register(sectionName)}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+            {
+                optimize && !loading &&
+                <div className='flex flex-wrap gap-2'>
+                    {currentState.length > 0 &&
                         <>
-                            <Button size='md' type="button" onClick={() => handleModifyResponse('shorten')} className="ml-2" disabled={loading}>
+                            <Button size='md' type="button" onClick={() => handleModifyResponse('shorten')} disabled={loading}>
                                 Shorten
                             </Button>
-                            <Button size='md' type="button" onClick={() => handleModifyResponse('lengthen')} className="ml-2" disabled={loading}>
+                            <Button size='md' type="button" onClick={() => handleModifyResponse('lengthen')} disabled={loading}>
                                 Lengthen
                             </Button>
                         </>}
-                    <Button size='md' type="button" onClick={optimizeClick} className="ml-2" disabled={loading}>{section ? 'Optimize' : 'Generate Summary'}</Button>
-                </>
+                    <Button size='md' type="button" onClick={optimizeClick} disabled={loading}>{currentState ? 'Optimize' : 'Generate Summary'}</Button>
+                    {history.length > 0 &&
+                        <>
+                            <Button size='md' type="button" variant={canUndo ? 'solid' : 'ghost'} onClick={undo} disabled={!canUndo}>Undo</Button>
+                            <Button size='md' type="button" onClick={redo} variant={canRedo ? 'solid' : 'ghost'} disabled={!canRedo}>Redo</Button>
+                        </>
+                    }
+                </div>
             }
             {loading && <Button variant='secondary' size='md' type="button" onClick={handleStop} className="ml-2" >Stop</Button>}
-        </div>
+        </div >
     );
 };
 

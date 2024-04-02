@@ -9,16 +9,14 @@ import { JobClass } from '../../../models/Job';
 
 interface ResumeBuilderProps {
     resume: ResumeClass;
-    resumeId: string;
     userId: string;
-    job?: Partial<JobClass>;
+    job?: JobClass;
     useSave?: boolean
 }
 
 export const ResumeBuilder = (
     {
         resume,
-        resumeId,
         userId,
         job,
         useSave = true
