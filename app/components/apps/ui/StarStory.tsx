@@ -1,7 +1,7 @@
 'use client'
 
 import ChatWithGPT from '../../chat/ChatWithGPT';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { updateResumeAction } from '../../../resumebuilder/_action';
 import { JobClass } from '../../../../models/Job';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -144,6 +144,20 @@ export default function StarStory({
         }
         setShowDetails(false)
     };
+
+    // Keep track of changes to the star story and update the original
+
+    const updateStarStory = useCallback(async () => {
+        if (starStory && originalResumeId) {
+            const savedData: { [key: string]: any } = {};
+            savedData[`${setKey}.starStory`] = starStory; // Set the detail property to the details provided.
+            const updateResume = await updateResumeAction(originalResumeId, savedData, "/")
+        }
+    }, [starStory, originalResumeId])
+
+    useEffect(() => {
+        updateStarStory()
+    }, [updateStarStory])
 
     const defaultMessage = `To make the best story possible add details such as: 
 - What the business impact of the project was.
