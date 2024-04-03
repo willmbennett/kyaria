@@ -7,7 +7,7 @@ import _ from 'lodash'; // or import * as _ from 'lodash';
 import { ObjectId } from "mongodb";
 import mongoose from "mongoose";
 
-const logging = true
+const logging = false
 
 export async function countTotalResumes() {
     try {
