@@ -117,7 +117,7 @@ export const usePDFViwerer = ({
         }
     }
 
-    const editUrl = `/resumebuilder/${data._id}` + (jobId ? `?job=${jobId}` : '')
+    const editUrl = `/resumebuilder/${data._id}`
 
     return { numPages, pageNumber, previousPage, editUrl, downloadPDF, handleCopy, nextPage, loading, currentPdfUrl, firstLoad, newPdfUrl, handleDocumentLoad, handleLoadSuccess }
 }
