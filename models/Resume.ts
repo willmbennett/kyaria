@@ -273,6 +273,9 @@ class ResumeClass {
     public originalResumeId?: string;
 
     @prop()
+    public appId?: string;
+
+    @prop()
     public title?: string;
 
     @prop()

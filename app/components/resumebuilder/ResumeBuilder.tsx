@@ -22,6 +22,7 @@ export const ResumeBuilder = (
         useSave = true
     }: ResumeBuilderProps) => {
     const [toggleState, setToggleState] = useState(true)
+    const appId = resume.appId
 
     const [saveStatus, setSaveStatus] = useState<'saving' | 'up to date' | 'error'>('up to date');
 
@@ -29,6 +30,11 @@ export const ResumeBuilder = (
         <div className='w-full lg:h-screen p-2 md:p-4 lg:p-6'>
             <div className='w-full h-full flex flex-col md:flex-row gap-2'>
                 <div className='flex flex-col w-full h-full'>
+                    {appId &&
+                        <div className='pb-3'>
+                            <Button size='sm' variant='ghost' href={`/apps/${appId}`}>← Back to Job App</Button>
+                        </div>
+                    }
                     <div className='flex flex-row w-full justify-between'>
                         <Button disabled={toggleState} size='sm' className='w-full' variant={toggleState ? 'solid' : 'ghost'} type='button' onClick={() => setToggleState(true)}>Edit</Button>
                         <Button disabled={!toggleState} size='sm' className='w-full' variant={!toggleState ? 'solid' : 'ghost'} type='button' onClick={() => setToggleState(false)}>Feedback</Button>

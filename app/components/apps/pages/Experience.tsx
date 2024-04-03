@@ -7,17 +7,19 @@ import StarStory from '../ui/StarStory';
 import { useRouter } from "next/navigation";
 
 interface ExperienceProps {
-    professionalExperience: ProfessionalExperience[],
-    resumeId: string,
-    jobStripped: Partial<JobClass>,
-    jobKeyWords: string[],
-    userId: string,
-    userCanEdit: boolean
+    professionalExperience: ProfessionalExperience[];
+    resumeId: string;
+    originalResumeId?: string;
+    jobStripped: Partial<JobClass>;
+    jobKeyWords: string[];
+    userId: string;
+    userCanEdit: boolean;
 }
 
 export default function Experience({
     professionalExperience,
     resumeId,
+    originalResumeId,
     jobStripped,
     jobKeyWords,
     userId,
@@ -100,6 +102,7 @@ export default function Experience({
                     <div key={`${items[currentIndex].expIndex}-${items[currentIndex].respIndex}`}>
                         <StarStory
                             resumeId={resumeId}
+                            originalResumeId={originalResumeId}
                             item={items[currentIndex].responsibility}
                             jobStripped={jobStripped}
                             parentIndex={items[currentIndex].expIndex}

@@ -164,6 +164,7 @@ export function JobApplication(
       component: <MemoizedExperience
         professionalExperience={userResume.professional_experience || []}
         resumeId={resumeId}
+        originalResumeId={userResume.originalResumeId}
         jobStripped={jobStripped}
         jobKeyWords={jobKeyWords}
         userId={userId}

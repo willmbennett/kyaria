@@ -6,35 +6,32 @@ import { updateResumeAction } from '../../../resumebuilder/_action';
 import { JobClass } from '../../../../models/Job';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button } from '../../Button';
-import { updateProfileAction } from '../../../profile/_action';
-import { useSession } from "next-auth/react";
 import DropdownMenu from './DropdownMenu';
 import { Message } from 'ai';
-
-const ACTIVE_ROUTE = "bg-gray-200 hover:bg-gray-600 hover:text-white";
-const INACTIVE_ROUTE = "hover:bg-gray-600 hover:text-white";
 
 type QuestionFormFields = {
     details: string
 };
 
 interface StarStoryProps {
-    resumeId: string,
+    resumeId: string;
+    originalResumeId?: string;
     userId: string,
     item: {
         _id?: string;
         content?: string;
         detail?: string;
         starStory?: string;
-    },
-    jobStripped: Partial<JobClass>,
-    parentIndex: number,
-    childIndex: number,
-    userCanEdit: boolean
+    };
+    jobStripped: Partial<JobClass>;
+    parentIndex: number;
+    childIndex: number;
+    userCanEdit: boolean;
 }
 
 export default function StarStory({
     resumeId,
+    originalResumeId,
     userId,
     item,
     jobStripped,
@@ -42,7 +39,6 @@ export default function StarStory({
     childIndex,
     userCanEdit
 }: StarStoryProps) {
-    const [savedToProfile, setSavedToProfile] = useState(false)
     const [showOptions, setShowOptions] = useState(false);
     const { _id, content, detail, starStory } = item
     const themes = [
@@ -62,10 +58,6 @@ export default function StarStory({
     const [selectedTheme, setSelectedTheme] = useState(themes[0]);
     const [showDetails, setShowDetails] = useState(detail == '' ? true : false);
     const setKey = `professional_experience.${parentIndex}.responsibilities.${childIndex}`
-
-    const optionsClick = () => {
-        setShowOptions(!showOptions);
-    };
 
     const toggleDetails = () => {
         setShowDetails(!showDetails);
@@ -147,10 +139,9 @@ export default function StarStory({
         const updateResume = await updateResumeAction(resumeId, savedData, "/")
         //console.log("Updated Resume:", updateResume);
 
-        // Also update the user's profile
-        //console.log(profileId, savedData)
-        //const updateProfile = await updateProfileAction(profileId, savedData, "/")
-        //console.log("Updated Profile:", updateProfile);
+        if (originalResumeId) {
+            const updateResume = await updateResumeAction(originalResumeId, savedData, "/")
+        }
         setShowDetails(false)
     };
 
@@ -163,7 +154,7 @@ export default function StarStory({
 `
 
     return (
-        <div className="rounded-xl">
+        <div className="rounded-xl flex flex-col gap-3">
             <h3 className="mb-2 text-left font-bold">Accomplishment</h3>
             <p className="mb-4 text-slate-400">{content}</p>
 
@@ -212,9 +203,6 @@ export default function StarStory({
                             setShowOptions={setShowOptions}
                             themes={themes}
                         />
-                    </div>
-                    <div className="flex justify-center w-full bg-slate-100">
-                        <p>{savedToProfile && 'Updated your profile with the new story'}</p>
                     </div>
                     <ChatWithGPT
                         documentID={resumeId}
