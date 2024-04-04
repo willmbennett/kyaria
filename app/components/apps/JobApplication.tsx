@@ -1,3 +1,4 @@
+'use server'
 import JobDescription from './pages/JobDescription'
 import CoverLetter from './pages/CoverLetter';
 import Experience from './pages/Experience';
@@ -8,37 +9,30 @@ import { AppClass } from '../../../models/App';
 import { ResumeClass } from '../../../models/Resume';
 import { JobClass } from '../../../models/Job';
 import { ProfileClass } from '../../../models/Profile';
-import MockInterview from './pages/MockInterview';
 import Networking from './pages/Networking';
 import Resume from './pages/Resume';
 import Notes from './pages/Notes'
 import React from 'react';
+import Eve from './pages/Eve';
 
 interface JobApplicationProps {
   jobApp: AppClass;
   currentUserId: string;
   currentSection: string;
-  activeSubscription: boolean
+  activeSubscription: boolean;
+  admin: boolean;
 }
 
 // Memoizing each component with React.memo
-const MemoizedJobDescription = React.memo(JobDescription);
-const MemoizedCoverLetter = React.memo(CoverLetter);
-const MemoizedExperience = React.memo(Experience);
-const MemoizedEmails = React.memo(Emails);
-const MemoizedNotes = React.memo(Notes);
-const MemoizedStory = React.memo(Story);
-const MemoizedMockInterview = React.memo(MockInterview);
-const MemoizedNetworking = React.memo(Networking);
-const MemoizedResume = React.memo(Resume);
 
 
-export function JobApplication(
+export async function JobApplication(
   {
     jobApp,
     currentUserId,
     currentSection,
-    activeSubscription
+    activeSubscription,
+    admin
   }: JobApplicationProps) {
   const userCanEdit = currentUserId == jobApp.userId
 
@@ -46,6 +40,7 @@ export function JobApplication(
   const userResume = jobApp.userResume as ResumeClass
   const job = jobApp.job as JobClass
   const jobId = job._id.toString()
+  const chatId = jobApp.chatId?.toString()
   const profile = jobApp.profile as ProfileClass
   const userId = jobApp.userId
   const profileId = profile.toString()
@@ -98,24 +93,15 @@ export function JobApplication(
     component: React.JSX.Element,
   }> = new Map([
     ['jobdescription', {
-      component: <MemoizedJobDescription
+      component: <JobDescription
         jobData={job}
         topWords={jobKeyWords}
         companyDiffbotId={companyDiffbotId}
         activeSubscription={true}
         currentUserId={userId} />
     }],
-    ['mockinterview', {
-      component: <MemoizedMockInterview
-        userName={userResume.name}
-        jobStripped={jobStripped}
-        jobTitle={job.jobTitle}
-        company={job.company}
-        activeSubscription={activeSubscription}
-      />
-    }],
     ['coverletter', {
-      component: <MemoizedCoverLetter
+      component: <CoverLetter
         jobAppId={jobAppId}
         currentCoverLetter={jobApp.userCoverLetter || ''}
         userResumeStripped={userResumeStripped}
@@ -127,7 +113,7 @@ export function JobApplication(
     }],
     ['resume', {
       component:
-        <MemoizedResume
+        <Resume
           userResume={userResume}
           userId={userId}
           jobId={jobId}
@@ -135,13 +121,13 @@ export function JobApplication(
     }],
     ['notes', {
       component:
-        <MemoizedNotes
+        <Notes
           jobAppId={jobAppId}
           content={notes}
         />
     }],
     ['story', {
-      component: <MemoizedStory
+      component: <Story
         jobAppId={jobAppId}
         currentStory={jobApp.userStory || ''}
         userResumeStripped={userResumeStripped}
@@ -152,7 +138,7 @@ export function JobApplication(
       />
     }],
     ['networking', {
-      component: <MemoizedNetworking
+      component: <Networking
         companyDiffbotUri={companyDiffbotId || ''}
         userResumeStripped={userResumeStripped}
         jobStripped={jobStripped}
@@ -161,7 +147,7 @@ export function JobApplication(
       />
     }],
     ['experience', {
-      component: <MemoizedExperience
+      component: <Experience
         professionalExperience={userResume.professional_experience || []}
         resumeId={resumeId}
         originalResumeId={userResume.originalResumeId}
@@ -172,13 +158,23 @@ export function JobApplication(
       />
     }],
     ['emails', {
-      component: <MemoizedEmails
+      component: <Emails
         jobAppId={jobAppId}
         emails={jobApp.emails}
         jobStripped={jobStripped}
         jobKeyWords={jobKeyWords}
         userResumeStripped={userResumeStripped}
       />
+    }],
+    ['mockinterview', {
+      component: <Eve
+        jobAppId={jobAppId}
+        jobId={jobId}
+        resumeId={resumeId}
+        userId={userId}
+        chatId={chatId}
+        activeSubscription={activeSubscription}
+        admin={admin} />
     }],
     // Add other sections as needed
   ]);

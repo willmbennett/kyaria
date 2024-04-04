@@ -18,6 +18,7 @@ const logging = false
 
 export const useChatGPT = ({ submitScript, connected, isStreaming, useChatBot, startChat, messages }: useChatGPTProps) => {
     const [message, setMessage] = useState<string | null>(null)
+    const [longResponse, setLongResponse] = useState(false)
     const [recievedResult, setRecievedResult] = useState(false)
     const [initialConnection, setInitialConnection] = useState(true)
     const submissionTimeoutRef = useRef<NodeJS.Timeout>(); // Handle figuring out when the user finishes speaking
@@ -94,20 +95,32 @@ export const useChatGPT = ({ submitScript, connected, isStreaming, useChatBot, s
 
     useEffect(() => {
         // If we're listening, reset the submission timeout whenever transcript changes
-        clearTimeout(submissionTimeoutRef.current);
-        submissionTimeoutRef.current = setTimeout(() => {
-            if (transcript) {
+        if (transcript && !longResponse) {
+            const handleSubmission = () => {
                 //console.log('Made it to submit')
                 setMessage(transcript)
                 resetTranscript()
                 setRecievedResult(false)
                 setInitialConnection(false)
             }
-        }, 2000); // Adjust delay as needed
+            clearTimeout(submissionTimeoutRef.current);
+            submissionTimeoutRef.current = setTimeout(() => {
+                handleSubmission()
+            }, 2000); // Adjust delay as needed
+        }
+
+        if (longResponse) {
+            clearTimeout(submissionTimeoutRef.current);
+        }
+
 
         // Cleanup timeout on component unmount
         return () => clearTimeout(submissionTimeoutRef.current);
-    }, [transcript]);
+    }, [transcript, longResponse]);
 
-    return { transcript, listening }
+    const toggleLongResponse = () => {
+        setLongResponse(!longResponse)
+    }
+
+    return { transcript, listening, longResponse, toggleLongResponse }
 }

@@ -5,7 +5,6 @@ import TimedAccessComponent from './VideoSubscriptionWrapper';
 import { ChatTranscript } from './ChatTranscript';
 import { Message } from 'ai';
 import { Button } from '../Button';
-import { SidebarToggle } from '../sidebar/ToggleSidebar';
 
 interface VideoChatContainerProps {
     userId: string;
@@ -13,9 +12,10 @@ interface VideoChatContainerProps {
     messages: Message[];
     activeSubscription: boolean;
     admin: boolean
+    jobId?: string
 }
 
-export const VideoChatContainer = ({ userId, chatId, messages, activeSubscription, admin }: VideoChatContainerProps) => {
+export const VideoChatContainer = ({ userId, chatId, messages, activeSubscription, admin, jobId }: VideoChatContainerProps) => {
     const [showTranscript, setShowTranscript] = useState(false);
 
     const toggleTranscript = () => {
@@ -32,9 +32,9 @@ export const VideoChatContainer = ({ userId, chatId, messages, activeSubscriptio
     />
 
     return (
-        <div className="flex h-full py-5 lg:py-10 md:h-screen w-full justify-center text-center gap-4 overflow-hidden">
+        <div className={`flex h-full ${jobId ? '' : "py-5 lg:py-10 md:h-screen"}  w-full justify-center text-center gap-4 overflow-hidden`}>
             <div className='h-full w-full flex flex-col gap-4'>
-                <h1 className="text-2xl font-semibold">Career Coaching Session</h1>
+                {!jobId && <h1 className="text-2xl font-semibold">Career Coaching Session</h1>}
                 {activeSubscription ? (
                     <div className={`${showTranscript ? 'hidden' : 'block'}`}>
                         {renderVideoChatComponent}

@@ -21,8 +21,8 @@ export async function getChatAction(id: string, path: string) {
     return chat
 }
 
-export async function createInitialChatAction(userId: string, path: string) {
-    const { chatId } = await createInitialChat(userId);
+export async function createInitialChatAction(userId: string, path: string, jobId?: string, resumeId?: string) {
+    const { chatId } = await createInitialChat(userId, jobId, resumeId);
     revalidatePath(path);
     return chatId
 }
