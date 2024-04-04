@@ -15,6 +15,8 @@ interface ControlMenuProps {
     listening: boolean;
     toggleTranscript: () => void;
     showTranscript: boolean;
+    longResponse: boolean;
+    toggleLongResponse: () => void;
 }
 
 export const ControlMenu = ({
@@ -28,7 +30,9 @@ export const ControlMenu = ({
     connected,
     listening,
     toggleTranscript,
-    showTranscript
+    showTranscript,
+    longResponse,
+    toggleLongResponse
 }: ControlMenuProps) => (
     <div className='flex gap-2 items-center'>
         <div className="relative flex items-center justify-center">
@@ -59,6 +63,13 @@ export const ControlMenu = ({
             size='sm'
         >
             {showTranscript ? 'Show Video' : 'Show Transcript'}
+        </Button>
+        <Button
+            onClick={toggleLongResponse}
+            size='sm'
+            variant={longResponse ? 'ghost' : 'solid'}
+        >
+            {longResponse ? 'End Long Response' : 'Long Response'}
         </Button>
         {/*
         {recordingStatus == 'recording' && <p>Recording...</p>}

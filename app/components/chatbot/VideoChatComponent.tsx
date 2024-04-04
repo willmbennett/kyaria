@@ -1,5 +1,5 @@
 'use client';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { Button } from '../Button';
 import useMediaDevices from '../../../lib/chatbot/use-media-devices';
 //import { useRecording } from '../../../lib/chatbot/use-media-recording';
@@ -80,7 +80,7 @@ const VideoChatComponent = ({ userId, chatId, messages, toggleTranscript, showTr
     })
     */
 
-    const { transcript, listening } = useChatGPT({ submitScript, connected, isStreaming, useChatBot, startChat, messages })
+    const { transcript, listening, longResponse, toggleLongResponse } = useChatGPT({ submitScript, connected, isStreaming, useChatBot, startChat, messages })
 
     return (
         <div className="flex flex-col gap-4 justify-center items-center w-full md:p-4 my-10">
@@ -122,6 +122,8 @@ const VideoChatComponent = ({ userId, chatId, messages, toggleTranscript, showTr
                     listening={listening}
                     toggleTranscript={toggleTranscript}
                     showTranscript={showTranscript}
+                    longResponse={longResponse}
+                    toggleLongResponse={toggleLongResponse}
                 />
                 :
                 <div className='flex gap-2 items-center justify-center'>

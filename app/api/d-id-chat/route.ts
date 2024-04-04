@@ -130,7 +130,7 @@ export async function POST(req: Request) {
             subtitles: false,
             provider: {
               type: 'microsoft',
-              voice_id: 'en-US-JennyNeural'
+              voice_id: 'en-US-EmmaMultilingualNeural'
             },
             input: messageToSend,
             ssml: false,

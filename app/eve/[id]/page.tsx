@@ -1,7 +1,6 @@
 import { checkSubscription } from "../../../lib/hooks/check-subscription";
 import { getChat } from "../../../lib/chat-db";
 import { Message } from "ai";
-import { redirect } from "next/navigation";
 import { VideoChatContainer } from "../../components/chatbot/VideoChatContainer";
 
 export default async function ChatbotPage({ params }: { params: { id: string } }) {
