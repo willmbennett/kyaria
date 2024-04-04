@@ -126,6 +126,43 @@ export async function getChat(id: string) {
     }
 }
 
+const userIdList = [
+    "650f813286f63a9d8c0080ee",
+    "6510aadf255eb1d64f9cc272",
+    "651146ab26d83e7a6daac978",
+    "6513c2cd8063290ee8e8515e",
+    "65145be92f9b5cae6bf71f09",
+    "6517481adbbff5b2580b0783",
+    "659c57bbbcaf1a18cdc1bcab",
+    "65cd21c5e03b4c037573216d",
+    "6538286f7d90de2a9a045b95"
+]
+
+export async function getChatCounts() {
+    try {
+        await connectDB();
+
+        //console.log(id)
+        const chats = await ChatModel.find({
+            userId: { $nin: userIdList }
+        })
+            .exec();
+
+        const numChats = chats.length
+        const numChatUsers = new Set(chats.map(chat => chat.userId)).size
+        if (chats) {
+            return {
+                numChats,
+                numChatUsers
+            };
+        } else {
+            return { error: "Chats not found" };
+        }
+    } catch (error) {
+        return { error };
+    }
+}
+
 export async function getChats(userId: string) {
     try {
         await connectDB();

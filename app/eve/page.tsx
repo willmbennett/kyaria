@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import { EVE_IDLE_VIDEO } from "./eve-helper";
 import { createInitialChatAction } from "./_action";
 import { redirect } from "next/navigation";
+import { getChatCounts } from "../../lib/chat-db";
 const Process = dynamic(() => import('../components/chatbot/landingpage/Process'));
 
 const EveDemo = dynamic(() => import('../components/chatbot/landingpage/ProductDemo'))
@@ -36,6 +37,7 @@ export const metadata: Metadata = {
 export default async function ChatBotHomePage() {
     const { userId } = await checkSubscription()
 
+
     const handleChatCreation = async () => {
         "use server"
         const user = userId ? userId : 'n/a'
@@ -48,9 +50,13 @@ export default async function ChatBotHomePage() {
 
 
     if (!userId) {
+        const {
+            numChats,
+            numChatUsers
+        } = await getChatCounts()
         return (
             <>
-                <ChatBotHero />
+                <ChatBotHero numChats={numChats} numChatUsers={numChatUsers} />
                 <Suspense fallback={<p>Loading demo...</p>}>
                     <EveDemo createNew={handleChatCreation} />
                 </Suspense>
