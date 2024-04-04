@@ -3,6 +3,8 @@
 import ResumeBuilderHome from '../../../resumebuilder/ResumeBuilderHome';
 import { ResumeClass } from '../../../../../models/Resume';
 import { ResumeUploadForm } from '../../../resumebuilder/new/ResumeUploadForm';
+import { deleteResumeAction } from '../../../../resumebuilder/_action';
+import { Types } from 'mongoose';
 
 interface ResumeDescriptionProps {
   resumes: ResumeClass[] | undefined;
@@ -11,14 +13,27 @@ interface ResumeDescriptionProps {
 
 const ResumeDescription = ({ resumes, userId }: ResumeDescriptionProps) => {
 
+  const delResume = () => {
+    if (resumes) {
+      resumes.forEach(resume => {
+        const resumeId = resume._id instanceof Types.ObjectId ? resume._id.toString() : resume._id;
+        deleteResumeAction({ id: resumeId, path: '/' });
+      });
+    }
+  }
+
   return (
     <>
       {(resumes && resumes.length > 0) ? (
+      // {(resumes && resumes.length < 0) ? (
         <div className="bg-white shadow-sm p-6 rounded-lg">
           <ResumeBuilderHome
             userId={userId}
             resumes={resumes}
           />
+          <button onClick={() => delResume()}>
+          Del Resume
+        </button>
         </div>
       ) : (
         <>

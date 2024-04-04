@@ -4,6 +4,7 @@ import { Button } from "../../../Button";
 import { Questionnaire } from '../../../../../models/Profile';
 import { useEffect, useState } from 'react';
 import UserQuestionnaire from '../../../questionaire/Questionnaire';
+import { deleteProfileAction } from "../../../../profile/_action";
 
 const QuestionnaireDescription = ({ questionnaire, userId, profileId }: { questionnaire: Questionnaire | undefined, userId: string, profileId: string }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -11,6 +12,12 @@ const QuestionnaireDescription = ({ questionnaire, userId, profileId }: { questi
   const updateDisplay = (data: Questionnaire) => {
     setIsEditing(false);
   }
+
+  const deleteProfile = () => {
+    console.log("clicked")
+    deleteProfileAction({id: profileId, path: "/"}); // Corrected line with semicolon
+  }
+  
 
   const displayUserData = () => {
     return (
@@ -34,6 +41,9 @@ const QuestionnaireDescription = ({ questionnaire, userId, profileId }: { questi
 
             </ul>
             <Button size="md" onClick={() => setIsEditing(true)}>
+              Edit Questionnaire
+            </Button>
+            <Button size="md" onClick={() => deleteProfile()}>
               Edit Questionnaire
             </Button>
           </div>
