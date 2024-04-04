@@ -167,14 +167,17 @@ export async function JobApplication(
       />
     }],
     ['mockinterview', {
-      component: <Eve
-        jobAppId={jobAppId}
-        jobId={jobId}
-        resumeId={resumeId}
-        userId={userId}
-        chatId={chatId}
-        activeSubscription={activeSubscription}
-        admin={admin} />
+      component:
+        <>{/* @ts-ignore */}
+          <Eve
+            jobAppId={jobAppId}
+            jobId={jobId}
+            resumeId={resumeId}
+            userId={userId}
+            chatId={chatId}
+            activeSubscription={activeSubscription}
+            admin={admin} />
+        </>
     }],
     // Add other sections as needed
   ]);

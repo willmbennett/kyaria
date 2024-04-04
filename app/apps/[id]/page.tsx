@@ -54,6 +54,7 @@ export default async function JobAppPage({ params, searchParams }: JobAppPagePro
           />
         </div>
         <div className="flex w-full lg:w-1/2 xl:w-3/5 flex-col justify-center items-center">
+          {/* @ts-ignore */}
           <JobApplication
             jobApp={app}
             activeSubscription={activeSubscription}
