@@ -13,6 +13,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { IconSpinner } from '../../ui/icons';
 import { useResumeDropDown } from '../../../../lib/hooks/use-resume-dropdown';
 import { ResumeDropAndSelect } from '../../ResumeDropAndSelect';
+import { updateResumeAction } from '../../../resumebuilder/_action';
 
 const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'
 
@@ -56,12 +57,17 @@ export default function CreateJobApp(
                     //console.log('newResumeId: ', newResumeId)
 
                     if (newResumeId) {
+                        let newAppId
                         if (boardId) {
                             const { appId } = await createApp(jobId, userId, emails, story, profileId, newResumeId, boardId)
-                            if (appId) router.push(`/apps/${appId}`)
+                            newAppId = appId
                         } else {
                             const { appId } = await createApp(jobId, userId, emails, story, profileId, newResumeId)
-                            if (appId) router.push(`/apps/${appId}`)
+                            newAppId = appId
+                        }
+                        if (newAppId) {
+                            await updateResumeAction(newResumeId, { appId: newAppId })
+                            router.push(`/apps/${newAppId}`)
                         }
 
                     }

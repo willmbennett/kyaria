@@ -4,11 +4,13 @@ import ResumeUploadPage from './ResumeUpload';
 interface ResumeProps {
     userResume: any;
     userId: string;
+    jobId: string;
 }
 
 export default function Resume({
     userResume,
-    userId
+    userId,
+    jobId
 }: ResumeProps) {
 
     return (
@@ -26,6 +28,7 @@ export default function Resume({
                 useEdit={true}
                 userId={userId}
                 useSave={true}
+                jobId={jobId}
             />
         </div>
     );

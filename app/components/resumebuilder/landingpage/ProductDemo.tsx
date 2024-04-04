@@ -37,7 +37,6 @@ export default function ProductDemo({ resume, resumeId }: { resume: ResumeClass,
           <ResumeBuilder
             resume={resume}
             userId={''}
-            resumeId={resumeId}
             useSave={false}
           />
         </div>

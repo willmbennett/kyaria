@@ -45,6 +45,7 @@ export function JobApplication(
   // Extract the high level objects
   const userResume = jobApp.userResume as ResumeClass
   const job = jobApp.job as JobClass
+  const jobId = job._id.toString()
   const profile = jobApp.profile as ProfileClass
   const userId = jobApp.userId
   const profileId = profile.toString()
@@ -129,6 +130,7 @@ export function JobApplication(
         <MemoizedResume
           userResume={userResume}
           userId={userId}
+          jobId={jobId}
         />
     }],
     ['notes', {
@@ -162,6 +164,7 @@ export function JobApplication(
       component: <MemoizedExperience
         professionalExperience={userResume.professional_experience || []}
         resumeId={resumeId}
+        originalResumeId={userResume.originalResumeId}
         jobStripped={jobStripped}
         jobKeyWords={jobKeyWords}
         userId={userId}

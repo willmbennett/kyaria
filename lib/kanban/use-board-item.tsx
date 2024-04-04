@@ -63,7 +63,7 @@ export const useBoardItem = ({
         const stateUpdate = { boardId }
         //console.log('stateUpdate: ', stateUpdate)
         updateAppState(id, stateUpdate)
-        await updateJobAppAction(id, stateUpdate)
+        await updateJobAppAction(id, stateUpdate, `/board`)
         //router.refresh()
     };
 
