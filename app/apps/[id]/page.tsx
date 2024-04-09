@@ -26,16 +26,16 @@ const loadBoards = cache(async (id: string) => {
 })
 
 export default async function JobAppPage({ params, searchParams }: JobAppPageProps) {
+  const { activeSubscription, userId, admin } = await checkSubscription()
+  if (!userId) {
+    redirect('/auth/signin')
+  }
+
   const { app } = await loadBoards(params.id) as getJobAppInterface
-  const { activeSubscription, userId } = await checkSubscription()
   const job = app.job as JobClass
   const appState = app.state as jobStateType
 
   const { currentSection, filteredPages, activeProgressSection } = useAppNavigation(appState, searchParams, job.companyDiffbotUri);
-
-  if (!userId) {
-    redirect('/auth/signin')
-  }
 
   if (!app) return <p>Job app not found</p>
 
@@ -54,11 +54,13 @@ export default async function JobAppPage({ params, searchParams }: JobAppPagePro
           />
         </div>
         <div className="flex w-full lg:w-1/2 xl:w-3/5 flex-col justify-center items-center">
+          {/* @ts-ignore */}
           <JobApplication
             jobApp={app}
             activeSubscription={activeSubscription}
             currentUserId={userId}
             currentSection={currentSection}
+            admin={admin}
           />
         </div>
         <div className="w-full lg:w-1/4 xl:w-1/5">
@@ -66,6 +68,5 @@ export default async function JobAppPage({ params, searchParams }: JobAppPagePro
         </div>
       </div>
     </div>
-
   );
 }

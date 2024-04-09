@@ -10,6 +10,7 @@ import { JobClass } from "./Job";
 import { ProfileClass } from "./Profile";
 import { ResumeClass } from "./Resume";
 import { BoardClass } from "./Board";
+import { ChatClass } from "./Chat";
 
 class Emails {
     @prop()
@@ -60,6 +61,9 @@ class AppClass {
 
     @prop({ ref: () => BoardClass })
     public boardId?: Ref<BoardClass>;
+
+    @prop({ ref: () => ChatClass })
+    public chatId?: Ref<ChatClass>;
 
     @prop()
     public notes?: string;

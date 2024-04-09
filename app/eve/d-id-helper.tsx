@@ -38,7 +38,7 @@ export interface DIDApiState {
 const presenterInputByService = {
     talks: { source_url: 'https://res.cloudinary.com/kyaria/image/upload/v1709423279/eve.png' },
     clips: {
-        presenter_id: 'kayla-zxpG_93n5W'
+        presenter_id: 'alyssa-Kpjhh2J_rm'
     }
 }
 
