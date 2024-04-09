@@ -42,11 +42,13 @@ export async function deleteResumeAction({
 }: {
   id: string;
   path: string;
-  fileUrl: string;
+  fileUrl?: string;
 }) {
   const { error } = await deleteResume(id);
   
-  await del(fileUrl);
+  if (fileUrl) {
+    await del(fileUrl);
+  }
 
   revalidatePath(path);
   return { error }
