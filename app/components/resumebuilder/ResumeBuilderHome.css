@@ -1,0 +1,7 @@
+.thumbnail {
+  --scale: 0.3;
+
+  transform: scale(var(--scale));
+  transform-origin: top left;
+  height: 250px;
+}

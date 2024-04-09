@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { transformParsedResume } from '../../app/resumebuilder/resumetest-helper';
 import { createResumeAction } from '../../app/resumebuilder/_action';
+import type { PutBlobResult } from '@vercel/blob';
 
 interface UseSubmitResumeProps {
     onError?: (error: Error) => void;
@@ -10,7 +11,7 @@ interface UseSubmitResumeProps {
 const useSubmitResume = ({ onError, onSuccess }: UseSubmitResumeProps) => {
     const [isLoading, setLoading] = useState(false);
 
-    const handleResumeCreation = useCallback(async (base64File: string, userId: string) => {
+    const handleResumeCreation = useCallback(async (base64File: string, userId: string, file?: File | null, userUploaded: boolean = false) => {
         setLoading(true);
 
         try {
@@ -26,11 +27,33 @@ const useSubmitResume = ({ onError, onSuccess }: UseSubmitResumeProps) => {
 
             const { parsedResume } = await response.json();
 
+            // upload file to Vercel
+            let vercelLink = null;
+
+            if (file) {
+                try {
+                    const fileUploadResponse = await fetch(`/api/files?filename=${file.name}`, {
+                        method: 'POST',
+                        body: file,
+                    });
+            
+                    if (!fileUploadResponse.ok) {
+                        throw new Error(`File upload failed with status: ${fileUploadResponse.status}`);
+                    }
+            
+                    const newBlob = await fileUploadResponse.json() as PutBlobResult;
+                    vercelLink = newBlob.url;
+                } catch (error) {
+                    console.error('Error occurred during file upload:', error);
+                    // Handle error appropriately (e.g., display error message to user)
+                }
+            }
+
             if (userId) {
 
                 const resumeToCreate = transformParsedResume(parsedResume);
-                const userResumeWithIds = { ...resumeToCreate, userId };
-
+                const userResumeWithIds = { ...resumeToCreate, userId, vercelLink, userUploaded };
+                
                 const resumeId = await createResumeAction(userResumeWithIds, '/');
                 if (!resumeId) {
                     throw new Error("Failed to create resume");

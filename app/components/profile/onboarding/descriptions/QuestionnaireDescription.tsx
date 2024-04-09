@@ -13,12 +13,6 @@ const QuestionnaireDescription = ({ questionnaire, userId, profileId }: { questi
     setIsEditing(false);
   }
 
-  const deleteProfile = () => {
-    console.log("clicked")
-    deleteProfileAction({id: profileId, path: "/"}); // Corrected line with semicolon
-  }
-  
-
   const displayUserData = () => {
     return (
       <>
@@ -41,9 +35,6 @@ const QuestionnaireDescription = ({ questionnaire, userId, profileId }: { questi
 
             </ul>
             <Button size="md" onClick={() => setIsEditing(true)}>
-              Edit Questionnaire
-            </Button>
-            <Button size="md" onClick={() => deleteProfile()}>
               Edit Questionnaire
             </Button>
           </div>

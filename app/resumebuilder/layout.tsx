@@ -64,13 +64,18 @@ export default async function AppLayout({
             title: resumeTitle,
             editable: true,
             category: 'Resume',
+            itemUrl: resume.vercelLink
         }
     })
 
-    const handleResumeDeletion: ActionItemType = async (resumeId: string, path: string) => {
+    const handleResumeDeletion: ActionItemType = async (resumeId: string, path: string, vercelLink?: string) => {
         "use server"
         //console.log('Made it to resume deletion with id: ', resumeId)
-        const { error } = await deleteResumeAction({ id: resumeId, path })
+        let error;
+        if (vercelLink) {
+            const { error } = await deleteResumeAction({ id: resumeId, path, fileUrl: vercelLink })
+        }
+
         if (error) {
             return { error }
         } else {

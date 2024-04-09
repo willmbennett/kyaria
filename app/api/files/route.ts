@@ -1,4 +1,4 @@
-import { put } from '@vercel/blob';
+import { put, del } from '@vercel/blob';
 import { NextResponse } from 'next/server';
  
 export async function POST(request: Request): Promise<NextResponse> {
@@ -14,4 +14,14 @@ export async function POST(request: Request): Promise<NextResponse> {
   } else {
     return NextResponse.json({message: "No filename detected"});
   }
+}
+ 
+export const runtime = 'edge';
+ 
+export async function DELETE(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const urlToDelete = searchParams.get('url') as string;
+  await del(urlToDelete);
+ 
+  return new Response();
 }

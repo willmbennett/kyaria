@@ -68,7 +68,7 @@ export const ResumeUploadForm = ({ userId, goToResume = false, autoSubmit = fals
             alert('Please select a file and ensure user ID is set.');
             return;
         }
-        await handleResumeCreation(base64File, userId);
+        await handleResumeCreation(base64File, userId, file, true);
     };
 
 
@@ -83,7 +83,7 @@ export const ResumeUploadForm = ({ userId, goToResume = false, autoSubmit = fals
         // Auto-submit logic
         const handleAutoSubmit = async () => {
             if (base64File && userId && !errors.input && autoSubmit) {
-                await handleResumeCreation(base64File, userId);
+                await handleResumeCreation(base64File, userId, file, true);
             }
         };
 
