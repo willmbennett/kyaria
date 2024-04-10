@@ -329,6 +329,12 @@ class ResumeClass {
     @prop({ required: true })
     public userId!: string;
 
+    @prop()
+    public vercelLink?: string;
+
+    @prop()
+    public userUploaded?: boolean;
+
     _id: mongoose.Types.ObjectId | string;
 }
 

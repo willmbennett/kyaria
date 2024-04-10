@@ -1,4 +1,5 @@
 import CustomPDFViewer from '../../resumebuilder/pdfviewer/CustomPDFViewer';
+import ResumeUploadPage from './ResumeUpload';
 
 interface ResumeProps {
     userResume: any;
@@ -14,7 +15,12 @@ export default function Resume({
 
     return (
         <div className='w-full flex flex-col items-center gap-4'>
-            <h1 className="text-center sm:text-6xl text-4xl font-bold mb-8">
+
+            <ResumeUploadPage />
+
+            OR
+
+            <h1 className="text-center sm:text-4xl text-4xl font-bold mb-8">
                 Stand out with a Tailored Resume
             </h1>
             <CustomPDFViewer

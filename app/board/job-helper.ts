@@ -12,7 +12,7 @@ export const emails = [
   { "type": "Reference Request", "content": "" }
 ]
 
-export type ActionItemType = (id: string, path: string) => Promise<{
+export type ActionItemType = (id: string, path: string, itemUrl?: string) => Promise<{
   error?: string;
   url?: string;
 }>

@@ -97,7 +97,14 @@ export function SidebarActions({
                                 event.preventDefault()
                                 // @ts-ignore
                                 startRemoveTransition(async () => {
-                                    const { url, error } = await removeItem(item.id, item.href)
+                                    let url;
+                                    let error;
+                                
+                                    if ('itemUrl' in item && item.itemUrl !== undefined) {
+                                        ({ url, error } = await removeItem(item.id, item.href, item.itemUrl));
+                                    } else {
+                                        ({ url, error } = await removeItem(item.id, item.href));
+                                    }
                                     setDeleteDialogOpen(false)
 
                                     //console.log('Made it to Deleation with: ', { url, error })
