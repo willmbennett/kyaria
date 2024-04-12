@@ -58,12 +58,14 @@ export const ControlMenu = ({
             <VideoCameraIcon className={`h-6 w-6`} />
         </button>
         <CameraSelectMenu videoDevices={videoDevices} selectVideoDevice={selectVideoDevice} selectedVideoDeviceId={selectedVideoDeviceId} />
-        <Button
-            onClick={toggleTranscript}
-            size='sm'
-        >
-            {showTranscript ? 'Show Video' : 'Show Transcript'}
-        </Button>
+        {false &&
+            <Button
+                onClick={toggleTranscript}
+                size='sm'
+            >
+                {showTranscript ? 'Show Video' : 'Show Transcript'}
+            </Button>
+        }
         <Button
             onClick={toggleLongResponse}
             size='sm'
