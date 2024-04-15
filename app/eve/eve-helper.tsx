@@ -53,3 +53,16 @@ export const drawVideosToCanvas = (canvas: HTMLCanvasElement, incomingVideoEleme
 }
 
 export const EVE_IDLE_VIDEO = "https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/alyssa-idle-1-AOv1fQqbLoq84hUxR1BGVBnGyEnUdn"
+
+const eveFillerVideos = [
+    'https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/eve-filler-1-6zVe8SevwqK2AUClnn8L22xYVXpVSr',
+    'https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/eve-filler-2-7Pp5doDFpct5u6G3PC5trlpoYyNjpv',
+    'https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/eve-filler-2-YloS0RXa3oORaBOYMBb85hytR9IzbH',
+    'https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/eve-filler-3-72pDNypbCr0zH5vepUGdYyIGxyubB6',
+    'https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/eve-filler-4-uZ4Hvg7EXruNVJWxvbDQjsKkVksg0q'
+]
+
+export const getFillerVideo = () => {
+    const randomIndex = Math.floor(Math.random() * eveFillerVideos.length);
+    return eveFillerVideos[randomIndex];
+}
