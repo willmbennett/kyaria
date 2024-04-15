@@ -28,7 +28,7 @@ export const CameraSelectMenu = ({ videoDevices, selectedVideoDeviceId, selectVi
                         />
                     </Menu.Button>
 
-                    <Menu.Items className="absolute right-0 z-20 mt-3 w-52 space-y-1 bg-gray-secondary-50 p-2.5 outline-none drop-shadow filter focus:outline-none">
+                    <Menu.Items className="absolute right-0 z-50 mt-3 w-52 space-y-1 bg-gray-secondary-50 p-2.5 outline-none drop-shadow filter focus:outline-none">
                         {videoDevices.map(device => (
                             <Menu.Item key={`${device.deviceId}-dropdown-camera`}>
                                 <button

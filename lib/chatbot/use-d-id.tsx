@@ -51,15 +51,16 @@ export const useDIDApi = ({ incomingVideo, useChatBot, userId, chatId, router, f
 
 
     const submitScript = useCallback(async (message?: string) => {
-        if (state.isConnected && state.sessionId && state.streamId)
+        if ((state.isConnected && state.sessionId && state.streamId) || !useChatBot)
             handleScriptSubmission({
                 sessionId: state.sessionId,
                 streamId: state.streamId,
                 message,
+                useChatBot,
                 chatId,
                 funMode
             })
-    }, [state.sessionId, state.isConnected, userId, funMode]);
+    }, [state.sessionId, state.isConnected, userId, funMode, useChatBot]);
 
 
     const cleanup = useCallback(async ({ closePC, newSessionId, newStreamId }: { closePC: ClosePCType, newSessionId: string, newStreamId: string }) => {

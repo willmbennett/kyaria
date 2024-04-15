@@ -15,6 +15,8 @@ interface ControlMenuProps {
     toggleVideo: () => void;
     connected: boolean;
     listening: boolean;
+    toggleTranscript: () => void;
+    showTranscript: boolean;
     handleSubmission: () => void;
     canSubmit: boolean
 }
@@ -29,6 +31,8 @@ export const ControlMenu = ({
     toggleVideo,
     connected,
     listening,
+    toggleTranscript,
+    showTranscript,
     handleSubmission,
     canSubmit
 }: ControlMenuProps) => (
@@ -56,6 +60,12 @@ export const ControlMenu = ({
             <VideoCameraIcon className={`h-6 w-6`} />
         </button>
         <CameraSelectMenu videoDevices={videoDevices} selectVideoDevice={selectVideoDevice} selectedVideoDeviceId={selectedVideoDeviceId} />
+        <Button
+            onClick={toggleTranscript}
+            size='sm'
+        >
+            {showTranscript ? 'Show Video' : 'Show Transcript'}
+        </Button>
         <SendButton type="button" onClick={handleSubmission} size="icon" disabled={!canSubmit}>
             <IconArrowElbow />
             <span className="sr-only">Send message</span>

@@ -80,7 +80,7 @@ const VideoChatComponent = ({ userId, chatId, messages, toggleTranscript, showTr
     })
     */
 
-    const { transcript, listening, handleSubmission, canSubmit } = useChatGPT({ submitScript, connected, isStreaming, useChatBot, startChat, messages })
+    const { transcript, listening, handleSubmission, canSubmit, playFiller, fillerVideo } = useChatGPT({ submitScript, connected, isStreaming, messages })
 
     return (
         <div className="flex flex-col gap-4 justify-center items-center w-full md:p-4 my-10">
@@ -88,8 +88,6 @@ const VideoChatComponent = ({ userId, chatId, messages, toggleTranscript, showTr
             {admin && <AdminMenu
                 useChatBot={useChatBot}
                 togglechatBot={togglechatBot}
-                startChat={startChat}
-                toggleStartChat={toggleStartChat}
                 funMode={funMode}
                 toggleFunMode={toggleFunMode}
             />}
@@ -100,6 +98,7 @@ const VideoChatComponent = ({ userId, chatId, messages, toggleTranscript, showTr
                             <span className="text-white text-xl">Eve is waking up...</span>
                         </div>
                     )}
+                    {playFiller && <video src={fillerVideo} className="absolute z-10 top-0 left-0 w-full video-transition h-full object-cover rounded-lg" style={{ opacity: playFiller ? 1 : 0 }} autoPlay playsInline></video>}
                     <video ref={videoRef} className="absolute top-0 z-10 left-0 w-full h-full object-cover video-transition rounded-lg" style={{ opacity: isStreaming ? 1 : 0 }} autoPlay playsInline></video>
                     <video src={EVE_IDLE_VIDEO} className="absolute z-0 top-0 left-0 w-full h-full object-cover rounded-lg" autoPlay loop playsInline></video>
                 </div>
@@ -120,6 +119,8 @@ const VideoChatComponent = ({ userId, chatId, messages, toggleTranscript, showTr
                     toggleVideo={toggleVideo}
                     connected={connected}
                     listening={listening}
+                    toggleTranscript={toggleTranscript}
+                    showTranscript={showTranscript}
                     handleSubmission={handleSubmission}
                     canSubmit={canSubmit}
                 />

@@ -4,12 +4,10 @@ import { Button } from "../Button"
 interface AdminMenuProps {
     useChatBot: boolean;
     togglechatBot: () => void;
-    startChat: boolean;
-    toggleStartChat: () => void;
     funMode: boolean;
     toggleFunMode: () => void;
 }
-export const AdminMenu = ({ useChatBot, togglechatBot, startChat, toggleStartChat, funMode, toggleFunMode }: AdminMenuProps) => {
+export const AdminMenu = ({ useChatBot, togglechatBot, funMode, toggleFunMode }: AdminMenuProps) => {
 
     return (
         <div className='flex gap-2 items-center'>
@@ -19,12 +17,6 @@ export const AdminMenu = ({ useChatBot, togglechatBot, startChat, toggleStartCha
                 size='sm'
             >
                 {useChatBot ? 'Make Eve Sleep' : 'Wake Eve Up'}
-            </Button>
-            <Button
-                onClick={toggleStartChat}
-                size='sm'
-            >
-                {startChat ? 'Stop chatting' : 'Start Chatting'}
             </Button>
             <button
                 onClick={toggleFunMode}

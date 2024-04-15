@@ -425,18 +425,20 @@ export const handleDisconnect = async ({ closePC, incomingVideo, newSessionId, n
 }
 
 interface HandleScriptSubmissionProps {
-    sessionId: string;
-    streamId: string;
+    sessionId: string | null;
+    streamId: string | null;
     message?: string;
+    useChatBot: boolean;
     chatId: string;
     funMode: boolean;
 }
 
-export const handleScriptSubmission = async ({ sessionId, streamId, message, chatId, funMode }: HandleScriptSubmissionProps) => {
+export const handleScriptSubmission = async ({ sessionId, streamId, message, chatId, useChatBot, funMode }: HandleScriptSubmissionProps) => {
     if (logging) console.log('Made it to Submit Script')
     const dataToSubmit = {
         streamId,
         sessionId,
+        useChatBot,
         message,
         chatId,
         funMode
