@@ -157,6 +157,13 @@ export const useChatGPT = ({ submitScript, connected, isStreaming, useChatBot, s
         resetTranscript()
     }
 
+    // Submit the initial message
+    useEffect(() => {
+        if (isStreaming) {
+            setRecievedResult(true)
+        }
+    }, [isStreaming]);
+
     const canSubmit = transcript != '' && !isStreaming && (recievedResult || initialConnection)
 
     return { transcript, listening, longResponse, toggleLongResponse, handleSubmission, canSubmit }
