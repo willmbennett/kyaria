@@ -27,25 +27,24 @@ type BodyType = {
   streamId: string,
   message: string | null,
   userId: string,
-  useChatBot: boolean,
   chatId: string,
   funMode: boolean
 }
 
-const logging = true
+const logging = false
 
 export async function POST(req: Request) {
   if (logging) console.log('Made it to [d-id-chat] api route')
   const body: BodyType = await req.json();
   if (logging) console.log('body:', body)
-  const { sessionId, streamId, message, useChatBot, chatId, funMode }: BodyType = body
+  const { sessionId, streamId, message, chatId, funMode }: BodyType = body
 
-  if (useChatBot && (!sessionId || !streamId)) {
+  if (!sessionId || !streamId) {
     return NextResponse.json({ message: `Bad data: ${body}` }, { status: 500 });
   }
 
   const chat = await getChatAction(chatId, '/eve')
-  if (logging) console.log('found chat: ', chat)
+  //if (logging) console.log('found chat: ', chat)
   if (!chat) {
     return NextResponse.json({ message: `Could not create or find chat` }, { status: 500 });
 
@@ -53,7 +52,7 @@ export async function POST(req: Request) {
 
   const chatHistory: Message[] = chat.messages
 
-  if (logging) console.log('chatHistory: ', chatHistory)
+  //if (logging) console.log('chatHistory: ', chatHistory)
 
   if (message) {
     chatHistory.push({
@@ -63,8 +62,8 @@ export async function POST(req: Request) {
       createdAt: new Date()
     })
 
-    if (logging) console.log('Added user message')
-    if (logging) console.log('chatHistory: ', chatHistory)
+    if (logging) console.log('Added user message: ', message)
+    //if (logging) console.log('chatHistory: ', chatHistory)
   }
 
   // Clone chatHistory to avoid mutating the original array
@@ -87,101 +86,98 @@ export async function POST(req: Request) {
       created_at: (m.createdAt || new Date()).toString()
     }));
 
-  if (logging) console.log('messagesToSend: ', messagesToSend)
+  //if (logging) console.log('messagesToSend: ', messagesToSend)
 
-  if (useChatBot) {
-    try {
-      const body = {
-        script: {
-          type: 'llm',
-          subtitles: false,
-          provider: {
-            type: 'microsoft',
-            voice_id: 'en-US-EmmaMultilingualNeural'
-          },
-          ssml: false,
-          llm: {
-            provider: 'openai',
-            messages: messagesToSend
-          }
+  try {
+    if (logging) console.log('About to send to D-ID')
+    const body = {
+      script: {
+        type: 'llm',
+        subtitles: false,
+        provider: {
+          type: 'microsoft',
+          voice_id: 'en-US-EmmaMultilingualNeural'
         },
-        config: {
-          stitch: true,
-        },
-        background: {
-          color: '#FFFFFF'
-        },
-        session_id: sessionId
-      }
-      if (logging) {
-        console.log('Attempting to fetch with retries');
-        console.log('Body to send to D-ID')
-        console.log(body)
-      }
-
-      const response = await fetchWithRetries(`https://api.d-id.com/clips/streams/${streamId}`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Basic ${process.env.D_ID_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      });
-
-      if (logging) console.log('Fetch successful, parsing response: , ', response);
-      const data = await response.json();
-
-      if (logging) console.log('Fetch successful, parsed response data: , ', data);
-
-      if (!response.ok) {
-        console.error('Response not OK:', data);
-        return NextResponse.json({ message: 'Faled to create Chat Stream' }, { status: 500 });
-      }
-
-      const openAIMessages: ChatCompletionRequestMessage[] = messagesToSend.map(m => (
-        {
-          role: m.role as ChatCompletionRequestMessageRoleEnum,
-          content: m.role == 'user' ? m.content + ' ' + textToAppend : m.content,
-        }));
-
-      const options = {
-        model: 'gpt-3.5-turbo',  // Use the GPT-4 Turbo model for better performance
-        max_tokens: 300,      // Limit the response length
-        stream: false,         // Enable streaming
-        messages: openAIMessages   // Your conversation history
-      }
-
-      if (logging) console.log('openai options: ', options)
-      const openAiRes = await openai.createChatCompletion(options);
-
-      const resData = await openAiRes.json();
-      if (logging) console.log('resData: ', resData)
-      const messageToSave = resData.choices[0].message.content
-      if (logging) console.log('resData.choices[0].message.content: ', resData.choices[0].message.content)
-
-      if (messageToSave) {
-        chatHistory.push({
-          id: (chatHistory.length + 1).toString(),
-          role: 'assistant',
-          content: messageToSave,
-          createdAt: new Date()
-        })
-      }
-
-      await updateChatAction(
-        chatId.toString(),
-        chatHistory,
-        '/eve'
-      )
-
-      if (logging) console.log('Successfully created session:', JSON.stringify(data));
-      return NextResponse.json({ session: data }, { status: 200 });
-    } catch (error: any) {
-      console.error('Caught error in POST function:', error.message);
-      return NextResponse.json({ message: error.message }, { status: 500 });
+        ssml: false,
+        llm: {
+          provider: 'openai',
+          messages: messagesToSend
+        }
+      },
+      config: {
+        stitch: true,
+      },
+      background: {
+        color: '#FFFFFF'
+      },
+      session_id: sessionId
     }
-  } else {
-    return NextResponse.json({ message: `Updated chat history without chatbot successfully` }, { status: 200 });
+    if (logging) {
+      console.log('Attempting to fetch with retries');
+      console.log('Body to send to D-ID')
+      console.log(body)
+    }
+
+    const response = await fetchWithRetries(`https://api.d-id.com/clips/streams/${streamId}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Basic ${process.env.D_ID_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (logging) console.log('Fetch successful, parsing response: , ', response);
+    const data = await response.json();
+
+    if (logging) console.log('Fetch successful, parsed response data: , ', data);
+
+    if (!response.ok) {
+      console.error('Response not OK:', data);
+      return NextResponse.json({ message: 'Faled to create Chat Stream' }, { status: 500 });
+    }
+
+    const openAIMessages: ChatCompletionRequestMessage[] = messagesToSend.map(m => (
+      {
+        role: m.role as ChatCompletionRequestMessageRoleEnum,
+        content: m.role == 'user' ? m.content + ' ' + textToAppend : m.content,
+      }));
+
+    const options = {
+      model: 'gpt-3.5-turbo',  // Use the GPT-4 Turbo model for better performance
+      max_tokens: 300,      // Limit the response length
+      stream: false,         // Enable streaming
+      messages: openAIMessages   // Your conversation history
+    }
+
+    //if (logging) console.log('openai options: ', options)
+    const openAiRes = await openai.createChatCompletion(options);
+
+    const resData = await openAiRes.json();
+    if (logging) console.log('resData: ', resData)
+    const messageToSave = resData.choices[0].message.content
+    if (logging) console.log('resData.choices[0].message.content: ', resData.choices[0].message.content)
+
+    if (messageToSave) {
+      chatHistory.push({
+        id: (chatHistory.length + 1).toString(),
+        role: 'assistant',
+        content: messageToSave,
+        createdAt: new Date()
+      })
+    }
+
+    await updateChatAction(
+      chatId.toString(),
+      chatHistory,
+      '/eve'
+    )
+
+    if (logging) console.log('Successfully created session:', JSON.stringify(data));
+    return NextResponse.json({ session: data }, { status: 200 });
+  } catch (error: any) {
+    console.error('Caught error in POST function:', error.message);
+    return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }
 

@@ -6,7 +6,7 @@ import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognitio
 
 interface useChatGPTProps {
     selectedResume?: ResumeClass;
-    submitScript: (message: string | null) => Promise<void>
+    submitScript: (message?: string) => Promise<void>
     connected: boolean;
     isStreaming: boolean;
     useChatBot: boolean;
@@ -22,7 +22,7 @@ export const useChatGPT = ({ submitScript, connected, isStreaming, useChatBot, s
     const [recievedResult, setRecievedResult] = useState(false)
     const [initialConnection, setInitialConnection] = useState(true)
     const submissionTimeoutRef = useRef<NodeJS.Timeout>(); // Handle figuring out when the user finishes speaking
-    const sentInitialMessage = messages.length > 2
+    const [sentInitialMessage, setSentInitialMessage] = useState(messages.length > 2)
 
     const {
         transcript,
@@ -46,81 +46,118 @@ export const useChatGPT = ({ submitScript, connected, isStreaming, useChatBot, s
         }
     }, [browserSupportsSpeechRecognition]);
 
-    const submitMessages = useCallback(async () => {
-        await submitScript(message);
-        setMessage(null);
-    }, [message, submitScript])
-
-    useEffect(() => {
-        if (logging) console.log(`useEffect triggered. Conditions: { connected: ${connected}, useChatBot: ${useChatBot}, sentInitialMessage: ${sentInitialMessage}, message: ${message} }`);
-
-        if ((connected || (!useChatBot && startChat)) && !sentInitialMessage || message) {
-            if (logging) console.log('Submitting messages because either the initial message has not been sent or there is a new message.');
-            submitMessages();
-        }
-    }, [message, useChatBot, startChat, connected, sentInitialMessage]);
-
-
-    useEffect(() => {
-        if (logging) {
-            console.log(`Effect running: listening = ${listening}`);
-            console.log(`Effect running: shouldListen = ${shouldListen}`);
-            console.log(`isConnectedAndReady (${isConnectedAndReady}): { connected: ${connected}, recievedResult: ${recievedResult}, initialConnection: ${initialConnection}, isStreaming: ${isStreaming} }`); //
-            console.log(`isChatbotOffButStartingChat (${isChatbotOffButStartingChat}): { useChatBot: ${useChatBot}, startChat: ${startChat}}`); // Logging the condition
-            console.log(`isReadyToListen: ${isReadyToListen}`); // Logging the condition
-        }
-
-        if (shouldListen && !listening) {
-            if (logging) console.log('Starting speech recognition...');
-            SpeechRecognition.startListening({ continuous: true });
-        } else if (!shouldListen && listening) {
-            if (logging) console.log('Aborting speech recognition...');
-            SpeechRecognition.abortListening();
-        }
-
-        return () => {
-            if (listening) {
-                if (logging) console.log('Cleaning up: aborting speech recognition...');
-                SpeechRecognition.abortListening();
+    /*
+        const submitMessages = useCallback(async () => {
+            await submitScript(message);
+            setMessage(null);
+        }, [message, submitScript])
+    
+    
+        useEffect(() => {
+            if (logging) console.log(`useEffect triggered. Conditions: { connected: ${connected}, useChatBot: ${useChatBot}, sentInitialMessage: ${sentInitialMessage}, message: ${message} }`);
+    
+            if ((connected || (!useChatBot && startChat)) && !sentInitialMessage || message) {
+                if (logging) console.log('Submitting messages because either the initial message has not been sent or there is a new message.');
+                submitMessages();
             }
-        };
-
-    }, [shouldListen, listening]); // Dependency array
-
-    useEffect(() => {
-        if (isStreaming && !recievedResult) {
-            setRecievedResult(true)
-        }
-    }, [isStreaming]);
-
-    useEffect(() => {
-        // If we're listening, reset the submission timeout whenever transcript changes
-        if (transcript && !longResponse) {
-            const handleSubmission = () => {
-                //console.log('Made it to submit')
-                setMessage(transcript)
-                resetTranscript()
-                setRecievedResult(false)
-                setInitialConnection(false)
-            }
-            clearTimeout(submissionTimeoutRef.current);
-            submissionTimeoutRef.current = setTimeout(() => {
-                handleSubmission()
-            }, 2000); // Adjust delay as needed
-        }
-
-        if (longResponse) {
-            clearTimeout(submissionTimeoutRef.current);
-        }
-
-
-        // Cleanup timeout on component unmount
-        return () => clearTimeout(submissionTimeoutRef.current);
-    }, [transcript, longResponse]);
+        }, [message, useChatBot, startChat, connected, sentInitialMessage]);
+    
+        
+            useEffect(() => {
+                if (logging) {
+                    console.log(`Effect running: listening = ${listening}`);
+                    console.log(`Effect running: shouldListen = ${shouldListen}`);
+                    console.log(`isConnectedAndReady (${isConnectedAndReady}): { connected: ${connected}, recievedResult: ${recievedResult}, initialConnection: ${initialConnection}, isStreaming: ${isStreaming} }`); //
+                    console.log(`isChatbotOffButStartingChat (${isChatbotOffButStartingChat}): { useChatBot: ${useChatBot}, startChat: ${startChat}}`); // Logging the condition
+                    console.log(`isReadyToListen: ${isReadyToListen}`); // Logging the condition
+                }
+        
+                if (shouldListen && !listening) {
+                    if (logging) console.log('Starting speech recognition...');
+                    SpeechRecognition.startListening({ continuous: true });
+                } else if (!shouldListen && listening) {
+                    if (logging) console.log('Aborting speech recognition...');
+                    SpeechRecognition.abortListening();
+                }
+        
+                return () => {
+                    if (listening) {
+                        if (logging) console.log('Cleaning up: aborting speech recognition...');
+                        SpeechRecognition.abortListening();
+                    }
+                };
+        
+            }, [shouldListen, listening]); // Dependency array
+        
+            
+            useEffect(() => {
+                if (isStreaming && !recievedResult) {
+                    setRecievedResult(true)
+                }
+            }, [isStreaming]);
+        
+            useEffect(() => {
+                // If we're listening, reset the submission timeout whenever transcript changes
+                if (transcript && !longResponse) {
+                    const handleSubmission = () => {
+                        //console.log('Made it to submit')
+                        setMessage(transcript)
+                        resetTranscript()
+                        setRecievedResult(false)
+                        setInitialConnection(false)
+                    }
+                    clearTimeout(submissionTimeoutRef.current);
+                    submissionTimeoutRef.current = setTimeout(() => {
+                        handleSubmission()
+                    }, 2000); // Adjust delay as needed
+                }
+        
+                if (longResponse) {
+                    clearTimeout(submissionTimeoutRef.current);
+                }
+        
+        
+                // Cleanup timeout on component unmount
+                return () => clearTimeout(submissionTimeoutRef.current);
+            }, [transcript, longResponse]);
+            */
 
     const toggleLongResponse = () => {
         setLongResponse(!longResponse)
     }
 
-    return { transcript, listening, longResponse, toggleLongResponse }
+    // Simplify the listening and submission
+
+    const submitMessages = async (message?: string) => {
+        await submitScript(message);
+    }
+
+    // Submit the initial message
+    useEffect(() => {
+        if (connected && !sentInitialMessage) {
+            if (logging) console.log('Submitting the initial message.');
+            submitMessages();
+            setSentInitialMessage(true)
+            setInitialConnection(false)
+        }
+    }, [connected, sentInitialMessage]);
+
+    useEffect(() => {
+        SpeechRecognition.startListening({ continuous: true });
+        return () => {
+            if (logging) console.log('Cleaning up: aborting speech recognition...');
+            SpeechRecognition.abortListening();
+        };
+
+    }, []); // Dependency array
+
+    const handleSubmission = () => {
+        //console.log('Made it to submit')
+        submitMessages(transcript)
+        resetTranscript()
+    }
+
+    const canSubmit = transcript != '' && !isStreaming && (recievedResult || initialConnection)
+
+    return { transcript, listening, longResponse, toggleLongResponse, handleSubmission, canSubmit }
 }

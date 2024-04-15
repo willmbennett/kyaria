@@ -80,7 +80,7 @@ const VideoChatComponent = ({ userId, chatId, messages, toggleTranscript, showTr
     })
     */
 
-    const { transcript, listening, longResponse, toggleLongResponse } = useChatGPT({ submitScript, connected, isStreaming, useChatBot, startChat, messages })
+    const { transcript, listening, handleSubmission, canSubmit } = useChatGPT({ submitScript, connected, isStreaming, useChatBot, startChat, messages })
 
     return (
         <div className="flex flex-col gap-4 justify-center items-center w-full md:p-4 my-10">
@@ -120,10 +120,8 @@ const VideoChatComponent = ({ userId, chatId, messages, toggleTranscript, showTr
                     toggleVideo={toggleVideo}
                     connected={connected}
                     listening={listening}
-                    toggleTranscript={toggleTranscript}
-                    showTranscript={showTranscript}
-                    longResponse={longResponse}
-                    toggleLongResponse={toggleLongResponse}
+                    handleSubmission={handleSubmission}
+                    canSubmit={canSubmit}
                 />
                 :
                 <div className='flex gap-2 items-center justify-center'>

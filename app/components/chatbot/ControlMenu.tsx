@@ -2,6 +2,8 @@ import { Button } from '../Button';
 import { CameraSelectMenu } from './CameraSelectMenu';
 import { MicrophoneIcon, VideoCameraIcon } from '@heroicons/react/24/solid';
 import { TooltipTrigger, TooltipContent, Tooltip } from '@radix-ui/react-tooltip';
+import { Button as SendButton } from '../ui/button'
+import { IconArrowElbow } from '../ui/icons';
 
 interface ControlMenuProps {
     videoDevices: MediaDeviceInfo[];
@@ -13,10 +15,8 @@ interface ControlMenuProps {
     toggleVideo: () => void;
     connected: boolean;
     listening: boolean;
-    toggleTranscript: () => void;
-    showTranscript: boolean;
-    longResponse: boolean;
-    toggleLongResponse: () => void;
+    handleSubmission: () => void;
+    canSubmit: boolean
 }
 
 export const ControlMenu = ({
@@ -29,10 +29,8 @@ export const ControlMenu = ({
     toggleVideo,
     connected,
     listening,
-    toggleTranscript,
-    showTranscript,
-    longResponse,
-    toggleLongResponse
+    handleSubmission,
+    canSubmit
 }: ControlMenuProps) => (
     <div className='flex gap-2 items-center'>
         <div className="relative flex items-center justify-center">
@@ -58,53 +56,9 @@ export const ControlMenu = ({
             <VideoCameraIcon className={`h-6 w-6`} />
         </button>
         <CameraSelectMenu videoDevices={videoDevices} selectVideoDevice={selectVideoDevice} selectedVideoDeviceId={selectedVideoDeviceId} />
-        {false &&
-            <Button
-                onClick={toggleTranscript}
-                size='sm'
-            >
-                {showTranscript ? 'Show Video' : 'Show Transcript'}
-            </Button>
-        }
-        <Button
-            onClick={toggleLongResponse}
-            size='sm'
-            variant={longResponse ? 'ghost' : 'solid'}
-        >
-            {longResponse ? 'End Long Response' : 'Long Response'}
-        </Button>
-        {/*
-        {recordingStatus == 'recording' && <p>Recording...</p>}
-        {recordingStatus != 'recording' ?
-            <button
-                onClick={startRecording}
-                className="flex items-center justify-center px-4 py-2 gap-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed animate__animated animate__fadeIn"
-            >
-                <VideoCameraIcon className={`h-6 w-6`} />
-                Start Recording
-            </button>
-            :
-            <button
-                onClick={stopRecording}
-                className="flex items-center justify-center px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 disabled:bg-gray-300 disabled:cursor-not-allowed animate__animated animate__fadeIn"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 9v6m4-6v6m5-3a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                Stop Recording
-            </button>
-        }
-        {recordingStatus == 'stopped' &&
-            <button
-                onClick={downloadRecording}
-                className="flex items-center justify-center px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 disabled:bg-gray-300 disabled:cursor-not-allowed animate__animated animate__fadeIn"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-                Download Recording
-            </button>
-        }
-        */}
-    </div>
+        <SendButton type="button" onClick={handleSubmission} size="icon" disabled={!canSubmit}>
+            <IconArrowElbow />
+            <span className="sr-only">Send message</span>
+        </SendButton>
+    </div >
 );

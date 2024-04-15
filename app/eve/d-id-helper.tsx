@@ -425,38 +425,29 @@ export const handleDisconnect = async ({ closePC, incomingVideo, newSessionId, n
 }
 
 interface HandleScriptSubmissionProps {
-    sessionId: string | null;
-    streamId: string | null;
-    message: string | null;
-    useChatBot: boolean;
+    sessionId: string;
+    streamId: string;
+    message?: string;
     chatId: string;
     funMode: boolean;
 }
 
-export const handleScriptSubmission = async ({ sessionId, streamId, message, useChatBot, chatId, funMode }: HandleScriptSubmissionProps) => {
+export const handleScriptSubmission = async ({ sessionId, streamId, message, chatId, funMode }: HandleScriptSubmissionProps) => {
     if (logging) console.log('Made it to Submit Script')
     const dataToSubmit = {
         streamId,
         sessionId,
         message,
-        useChatBot,
         chatId,
         funMode
     }
 
     if (logging) console.log('dataToSubmit: ', dataToSubmit)
-    const response = await fetch('/api/d-id-chat', {
+    fetch('/api/d-id-chat', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(dataToSubmit),
     });
-
-    if (!response.ok) {
-        throw new Error('Failed to submit script');
-    }
-
-    const data = await response.json();
-    if (logging) console.log('Script submitted successfully:', data);
 }
