@@ -20,6 +20,23 @@ class Emails {
     public content?: string;
 }
 
+class File {
+    @prop()
+    public _id!: string;
+
+    @prop()
+    public fileUrl!: string;
+
+    @prop()
+    public fileName!: string;
+
+    @prop()
+    public tags?: string[];
+
+    @prop()
+    public DateCreated?: Date;
+}
+
 @ModelOptions({
     schemaOptions: {
         timestamps: true,
@@ -68,10 +85,13 @@ class AppClass {
     @prop()
     public notes?: string;
 
+    @prop({ type: () => [File] })
+    public files?: File[];
+
     _id: mongoose.Types.ObjectId | string;
     createdAt: Date | string;
     updatedAt: Date | string;
 }
 
 const AppModel = getModelForClass(AppClass);
-export { AppModel, AppClass, Emails };
+export { AppModel, AppClass, Emails, File };
