@@ -86,7 +86,7 @@ export async function POST(req: Request) {
   try {
 
     const options = {
-      model: 'gpt-4-0125-preview',  // Use the GPT-4 Turbo model for better performance
+      model: 'gpt-4-turbo',  // Use the GPT-4 Turbo model for better performance
       temperature: funMode ? 1 : 0.3, // Lower temperature for more deterministic output
       frequency_penalty: 0, // Optional: You may tweak this for more domain-specific answers
       presence_penalty: 0,  // Optional: You may tweak this to make the model more "present" in the conversation
