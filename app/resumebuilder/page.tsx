@@ -36,7 +36,7 @@ type getResumeType = {
 export default async function ProfilePage() {
   const { userId } = await checkSubscription()
   const { totalResumes } = await countTotalResumes()
-  const resumeId = '65adcbdf782ab1d399ea1aa4'
+  const resumeId = '6616bdc0c61a8de62179aaff'
   const { resume } = await getResume(resumeId) as getResumeType
 
   if (!userId) {

@@ -83,4 +83,5 @@ export type SideBarItem = {
     editable: boolean;
     category: string;
     itemUrl?: string;
+    date?: string;
 }
