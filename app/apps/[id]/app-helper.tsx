@@ -64,4 +64,5 @@ export const pageList = [
   { label: "Mock Interview", section: 'mockinterview' },
   { label: "Emails", section: 'emails' },
   { label: "Notes", section: 'notes' },
+  { label: "Files", section: 'files' }
 ]

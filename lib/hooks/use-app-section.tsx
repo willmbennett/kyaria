@@ -23,10 +23,10 @@ const useAppNavigation = (
 
     // Map the states to the corresponding pages
     const statePagesMap: { [key in ApplicationState]: string[] } = {
-        'Research': ['jobdescription', 'coverletter', 'resume', 'emails', 'notes'],
-        'Phone Screen': ['story', 'mockinterview', 'emails', 'experience', 'notes'],
-        'Interviewing': ['story', 'mockinterview', 'experience', 'emails', 'notes'],
-        'Post-Offer': ['emails', 'notes'],
+        'Research': ['jobdescription', 'coverletter', 'resume', 'emails', 'notes', 'files'],
+        'Phone Screen': ['story', 'mockinterview', 'emails', 'experience', 'notes', 'files'],
+        'Interviewing': ['story', 'mockinterview', 'experience', 'emails', 'notes', 'files'],
+        'Post-Offer': ['emails', 'notes', 'files'],
     };
 
     // Filter the pages based on the current state

@@ -14,6 +14,7 @@ import Resume from './pages/Resume';
 import Notes from './pages/Notes'
 import React from 'react';
 import Eve from './pages/Eve';
+import Files from './pages/Files';
 
 interface JobApplicationProps {
   jobApp: AppClass;
@@ -46,6 +47,7 @@ export async function JobApplication(
   const profileId = profile.toString()
   const jobAppId = jobApp._id.toString()
   const notes = jobApp.notes
+  const files = jobApp.files
 
 
   // Limit the number of keywords
@@ -125,6 +127,10 @@ export async function JobApplication(
           jobAppId={jobAppId}
           content={notes}
         />
+    }],
+    ['files', {
+      component:
+        <Files files={files} jobAppId={jobAppId}/>
     }],
     ['story', {
       component: <Story
