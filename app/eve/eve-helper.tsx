@@ -66,3 +66,5 @@ export const getFillerVideo = () => {
     const randomIndex = Math.floor(Math.random() * eveFillerVideos.length);
     return eveFillerVideos[randomIndex];
 }
+
+export const EVE_GENERIC_INTRO = 'https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/eve-intro-1-47ZRGEQhe50ZUWTeWFDOL4Ixl7LwvT'

@@ -4,9 +4,11 @@ import { ResumeClass } from "../../models/Resume";
 import { useCallback, useEffect, useRef, useState } from "react";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { useRouter } from "next/navigation";
-import { getFillerVideo } from "../../app/eve/eve-helper";
+import { EVE_GENERIC_INTRO, getFillerVideo } from "../../app/eve/eve-helper";
 
 interface useChatGPTProps {
+    userId: string;
+    fillerVideo: HTMLVideoElement | null;
     selectedResume?: ResumeClass;
     submitScript: (message?: string) => Promise<void>
     connected: boolean;
@@ -16,12 +18,12 @@ interface useChatGPTProps {
 
 const logging = false
 
-export const useChatGPT = ({ submitScript, connected, isStreaming, messages }: useChatGPTProps) => {
+export const useChatGPT = ({ userId, fillerVideo, submitScript, connected, isStreaming, messages }: useChatGPTProps) => {
     const [recievedResult, setRecievedResult] = useState(false)
     const sentInitialMessage = messages.length > 2
     const [initialConnection, setInitialConnection] = useState(true)
+    const [playIntroVideo, setPlayIntroVideo] = useState(true)
     const [playFiller, setPlayFiller] = useState(false)
-    const [fillerVideo, setFillerVideo] = useState(getFillerVideo())
     const router = useRouter()
 
     const {
@@ -59,38 +61,64 @@ export const useChatGPT = ({ submitScript, connected, isStreaming, messages }: u
 
     // Submit the initial message
     useEffect(() => {
-        if (connected && !sentInitialMessage && initialConnection) {
-            if (logging) console.log('Submitting the initial message.');
-            submitMessages();
-            setInitialConnection(false)
+        if ((!sentInitialMessage || !userId) && initialConnection) {
+            if (userId) {
+                if (connected) {
+                    if (logging) console.log('Submitting the initial message.');
+                    submitMessages();
+                }
+            } else {
+                if (fillerVideo && playIntroVideo) {
+                    if (logging) console.log('Playing the intro video.');
+                    fillerVideo.src = EVE_GENERIC_INTRO
+                    setPlayFiller(true)
+                    setPlayIntroVideo(false)
+                }
+            }
         }
-    }, [connected, sentInitialMessage, initialConnection]);
+    }, [userId, fillerVideo, connected, sentInitialMessage, initialConnection, playIntroVideo]);
 
     const handleSubmission = useCallback(() => {
         //console.log('Made it to submit')
         if (transcript) {
-            setFillerVideo(getFillerVideo())
-            setRecievedResult(false)
-            setPlayFiller(true)
+            if (fillerVideo) {
+                fillerVideo.src = getFillerVideo()
+                setRecievedResult(false)
+                setPlayFiller(true)
+            }
             submitMessages(transcript)
             resetTranscript()
             if (initialConnection) {
                 setInitialConnection(false)
             }
         }
-    }, [initialConnection, transcript])
+    }, [initialConnection, transcript, fillerVideo])
 
     // Submit the initial message
     useEffect(() => {
         if (isStreaming) {
             if (logging) console.log('Stream has started.');
-            setPlayFiller(false)
             setRecievedResult(true)
             router.refresh()
         }
     }, [isStreaming]);
 
-    const canSubmit = transcript != '' && !isStreaming && (recievedResult || initialConnection) && sentInitialMessage
+    useEffect(() => {
+        if (fillerVideo) {
+            const handleFillerEnd = () => {
+                setPlayFiller(false);  // Hide filler video
+            };
+            fillerVideo.addEventListener('ended', handleFillerEnd);
 
-    return { transcript, listening, handleSubmission, canSubmit, playFiller, fillerVideo }
+            return () => {
+                if (fillerVideo) {
+                    fillerVideo.removeEventListener('ended', handleFillerEnd);
+                }
+            };
+        }
+    }, [fillerVideo]);
+
+    const canSubmit = transcript != '' && !isStreaming && !playFiller && (recievedResult || initialConnection) && sentInitialMessage
+
+    return { transcript, listening, handleSubmission, canSubmit, playFiller }
 }

@@ -10,7 +10,7 @@ interface UseKanbanProps {
     boardId?: string;
 }
 
-const logging = true
+const logging = false
 
 export const useKanban = ({ boardItems, boardId }: UseKanbanProps) => {
     const path = usePathname()

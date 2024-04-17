@@ -24,11 +24,13 @@ const createPersonalizedGreeting = (name?: string) => {
     return { personalizedGreeting }
 }
 
-const logging = false
+const logging = false;
 
 export const createInitialChat = async (userId: string, jobId?: string, resumeId?: string) => {
     try {
         await connectDB();
+
+        if (logging) console.log(JSON.stringify({ userId, jobId, resumeId }))
 
         let foundJob
 
@@ -76,6 +78,17 @@ export const createInitialChat = async (userId: string, jobId?: string, resumeId
             createdAt: new Date()
         },
         ]
+
+        if (userId == 'n/a') {
+            messages.push({
+                id: '3',
+                role: 'assistant',
+                content: "Hello there, welcome to your career coaching session. If you have any questions or need advice, don't hesitate to ask. I'm here to assist and inspire you! What are we achieving today?",
+                createdAt: new Date()
+            })
+        }
+
+        if (logging) console.log('Messages To create: ', messages)
 
         const newChatData: Partial<ChatClass> = {
             userId,
