@@ -22,6 +22,7 @@ export const useChatGPT = ({ userId, fillerVideo, submitScript, connected, isStr
     const [recievedResult, setRecievedResult] = useState(false)
     const sentInitialMessage = messages.length > 2
     const [initialConnection, setInitialConnection] = useState(true)
+    const [playIntroVideo, setPlayIntroVideo] = useState(true)
     const [playFiller, setPlayFiller] = useState(false)
     const router = useRouter()
 
@@ -67,14 +68,15 @@ export const useChatGPT = ({ userId, fillerVideo, submitScript, connected, isStr
                     submitMessages();
                 }
             } else {
-                if (fillerVideo && !playFiller) {
+                if (fillerVideo && playIntroVideo) {
                     if (logging) console.log('Playing the intro video.');
                     fillerVideo.src = EVE_GENERIC_INTRO
                     setPlayFiller(true)
+                    setPlayIntroVideo(false)
                 }
             }
         }
-    }, [userId, fillerVideo, connected, sentInitialMessage, initialConnection, playFiller]);
+    }, [userId, fillerVideo, connected, sentInitialMessage, initialConnection, playIntroVideo]);
 
     const handleSubmission = useCallback(() => {
         //console.log('Made it to submit')
