@@ -65,14 +65,12 @@ export const useChatGPT = ({ userId, fillerVideo, submitScript, connected, isStr
                 if (connected) {
                     if (logging) console.log('Submitting the initial message.');
                     submitMessages();
-                    setInitialConnection(false)
                 }
             } else {
                 if (fillerVideo) {
                     if (logging) console.log('Playing the intro video.');
                     fillerVideo.src = EVE_GENERIC_INTRO
                     setPlayFiller(true)
-                    setInitialConnection(false)
                 }
             }
         }
@@ -118,7 +116,7 @@ export const useChatGPT = ({ userId, fillerVideo, submitScript, connected, isStr
         }
     }, [fillerVideo]);
 
-    const canSubmit = transcript != '' && !isStreaming && (recievedResult || initialConnection) && sentInitialMessage
+    const canSubmit = transcript != '' && !isStreaming && !playFiller && (recievedResult || initialConnection) && sentInitialMessage
 
     return { transcript, listening, handleSubmission, canSubmit, playFiller }
 }
