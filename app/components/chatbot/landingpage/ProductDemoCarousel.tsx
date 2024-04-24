@@ -1,12 +1,10 @@
 'use client'
 import { motion } from "framer-motion";
 import { Container } from "../../landingpage/Container"
-import { NewItemButton } from "../../sidebar/NewItemButton";
-import { EVE_IDLE_VIDEO } from "../../../eve/eve-helper";
 
 const ProductDemoCarousel = ({ createNew }: { createNew: () => Promise<any> }) => {
 
-    const text = "Instead of selling you on Eve, we'll let her do the talking."
+    const text = "Product Demo"
     const letters = Array.from(text);
     return (
         <div className="lg:px-4 lg:mt-6 w-full justify-center">
@@ -43,15 +41,8 @@ const ProductDemoCarousel = ({ createNew }: { createNew: () => Promise<any> }) =
                     </span>
                 </p>
                 <Container className='flex flex-col gap-4 w-full justify-center'>
-                    <div className="w-full flex justify-center items-center">
-                        <div>
-                            <NewItemButton createNew={createNew} newTitle="New Chat" />
-                        </div>
-                    </div>
                     <div className="flex justify-center items-center w-full max-w-6xl mx-auto">
-                        <div className="aspect-square w-full md:w-1/2 flex justify-center items-center relative rounded-lg shadow-lg">
-                            <video src={EVE_IDLE_VIDEO} className="absolute top-0 left-0 w-full h-full object-cover rounded-lg" autoPlay loop playsInline></video>
-                        </div>
+                        <iframe width="1120" height="630" src="https://www.youtube.com/embed/tli4XnO2D6o?si=n81kSdknnb1_iuPB" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
                     </div>
                 </Container>
             </div>
