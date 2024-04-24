@@ -68,13 +68,7 @@ export const ChatBotPopup = ({ userId, userName }: { userId: string, userName: s
                             ></video>
                             <button
                                 className="absolute inset-0 bg-black text-white opacity-0 hover:bg-opacity-50 hover:opacity-100 flex justify-center items-center rounded-lg transition-opacity duration-300"
-                                onClick={async () => {
-                                    const { createInitialChatAction } = (await import("../../../eve/_action"))
-                                    const idToUse = userId ? userId : 'n/a'
-                                    const chatId = await createInitialChatAction(idToUse, '/eve')
-                                    if (chatId) router.push(`/eve/${chatId}`)
-                                    else throw new Error('There was a problem creating a new chat')
-                                }}
+                                onClick={() => router.push("/eve")}
                             >
                                 Start Chatting
                             </button>
