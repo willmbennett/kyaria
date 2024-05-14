@@ -4,7 +4,7 @@ import { createInitialChat, deleteChat, findChat, getChat, updateChat } from "..
 import { getFirstResume } from "../../lib/resume-db";
 import { Message } from "ai";
 import { ActionItemType } from "../board/job-helper";
-import OpenAI from "openai";
+import { openai } from "../openai";
 
 const logging = true
 
@@ -80,8 +80,6 @@ export const handleChatCreation = async ({ userId }: { userId: string }) => {
     if (logging) console.log('Initiating chat creation...');
 
     try {
-
-        const openai = new OpenAI();
         const emptyThread = await openai.beta.threads.create();
         const threadId = emptyThread.id;
 
@@ -100,7 +98,7 @@ export const handleChatCreation = async ({ userId }: { userId: string }) => {
             // Log the successful creation of chat
             if (logging) console.log(`Chat created successfully with chatId: ${chatId}`);
             const url = `/eve/${chatId}`;
-            return { url };
+            return { chatId, url };
         } else {
             // Log an error if chat creation failed
             if (logging) console.error('Failed to create initial chat action');

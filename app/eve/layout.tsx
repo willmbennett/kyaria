@@ -42,7 +42,7 @@ export default async function EveLayout({
 }: {
     children: React.ReactNode;
 }) {
-    const { userId, activeSubscription } = await checkSubscription()
+    const { userId } = await checkSubscription()
 
     if (!userId) {
         return (
@@ -50,10 +50,6 @@ export default async function EveLayout({
                 {children}
             </>
         )
-    }
-
-    if (!activeSubscription) {
-        redirect('/pricing')
     }
 
     const { resumes } = await getResumes(userId)
