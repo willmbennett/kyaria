@@ -9,12 +9,12 @@ const EveDemo = dynamic(() => import('../chatbot/landingpage/ProductDemoCarousel
 const BioDemo = dynamic(() => import('../bio/ProductDemoCarousel'))
 const PitchDemo = dynamic(() => import('../pitch/ProductDemoCarousel'))
 
-export default function ProductCarousel({ createNew }: { createNew: () => Promise<any> }) {
+export default function ProductCarousel() {
   const items: CarouselType[] = [
     {
       name: 'eve',
       title: "Meet Eve: The World's First AI-Powered Career Coach",
-      object: <EveDemo createNew={createNew} />
+      object: <EveDemo />
     },
     {
       name: 'board',
