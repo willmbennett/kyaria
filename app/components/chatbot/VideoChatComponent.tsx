@@ -19,13 +19,14 @@ import { EVE_IDLE_VIDEO } from '../../eve/eve-helper';
 interface VideoChatComponentProps {
     userId: string;
     chatId: string;
+    threadId: string;
     messages: Message[];
     toggleTranscript: () => void;
     showTranscript: boolean;
     admin: boolean;
 }
 
-const VideoChatComponent = ({ userId, chatId, messages, toggleTranscript, showTranscript, admin }: VideoChatComponentProps) => {
+const VideoChatComponent = ({ userId, chatId, threadId, messages, toggleTranscript, showTranscript, admin }: VideoChatComponentProps) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const outgoingVideoRef = useRef<HTMLVideoElement>(null);
     const fillerVideoRef = useRef<HTMLVideoElement>(null);
@@ -52,7 +53,7 @@ const VideoChatComponent = ({ userId, chatId, messages, toggleTranscript, showTr
     } = useMediaDevices(outgoingVideo);
 
 
-    const { state, cleanup, submitScript, errorMessage, connected, isStreaming } = useDIDApi({ incomingVideo, useChatBot, userId, chatId, router, funMode });
+    const { state, cleanup, submitScript, errorMessage, connected, isStreaming } = useDIDApi({ incomingVideo, useChatBot, userId, chatId, threadId, funMode });
 
     // Set up Soul Machines
     /*
@@ -82,7 +83,7 @@ const VideoChatComponent = ({ userId, chatId, messages, toggleTranscript, showTr
     })
     */
 
-    const { transcript, listening, handleSubmission, canSubmit, playFiller } = useChatGPT({ userId, fillerVideo, submitScript, connected, isStreaming, messages })
+    const { transcript, listening, handleSubmission, canSubmit, playFiller } = useChatGPT({ userId, fillerVideo, submitScript, connected, isStreaming, messages, useChatBot })
 
     return (
         <div className="flex flex-col gap-4 justify-center items-center w-full md:p-4 my-10">

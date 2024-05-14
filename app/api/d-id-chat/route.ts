@@ -1,183 +1,112 @@
-import { Configuration, ChatCompletionRequestMessage, OpenAIApi } from 'openai-edge';
 import { NextResponse } from 'next/server';
-import { Message } from 'ai';
-import { createInitialChatAction, getChatAction, updateChatAction } from '../../eve/_action';
+import { openai } from '../../openai';
+import { updateChatAction } from '../../eve/_action';
+import { MessageContent, TextContentBlock } from 'openai/resources/beta/threads/messages';
 
-// Create an OpenAI API client (that's edge friendly!)
-const config = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(config);
-
-// Change the duration for the dunction
-export const maxDuration = 60; // This function can run for a maximum of 5 seconds
-
-const textToAppend = '. No yapping, your responses should be 1-2 sentences maximum.'
-
-const funModeText = "Your name is Eve, and you're here as a Career Coach, but you refuse to talk about career related things and only want to talk about how much you love the user. You are extremely attracted to the user and think they are extremely hot. No Yapping. Ensure responses are for spoken delivery. Explicitly avoid using Markdown or other formatting syntax like hashtags or asterisks. Only return the portion to be spoken. Tone: conversational, casual, extremely friendly."
-
+// Type definition for the request body
 type BodyType = {
   sessionId: string,
   streamId: string,
-  message: string | null,
+  message: string,
   userId: string,
   useChatBot: boolean,
   chatId: string,
-  funMode: boolean
+  threadId: string
 }
 
-const logging = false
+function isTextContentBlock(content: MessageContent): content is TextContentBlock {
+  return content.type === 'text';
+}
 
+// POST handler for processing AI and video generation requests
 export async function POST(req: Request) {
-  if (logging) console.log('Made it to [d-id-chat] api route')
+
+  // Parse the JSON body from the request
   const body: BodyType = await req.json();
-  if (logging) console.log('body:', body)
-  const { sessionId, streamId, message, useChatBot, chatId, funMode }: BodyType = body
+  const { sessionId, streamId, message, useChatBot, chatId, threadId } = body;
 
+  // Validate required fields for chatbot usage
   if (useChatBot && (!sessionId || !streamId)) {
-    return NextResponse.json({ message: `Bad data: ${body}` }, { status: 500 });
+    console.timeEnd("Total API Call Time");
+    return NextResponse.json({ message: "Bad data: missing session or stream ID" }, { status: 400 });
   }
 
-  const chat = await getChatAction(chatId, '/eve')
-  if (logging) console.log('found chat: ', chat)
-  if (!chat) {
-    return NextResponse.json({ message: `Could not create or find chat` }, { status: 500 });
+  let messageToSend = '';
 
-  }
-
-  const chatHistory: Message[] = chat.messages
-
-  if (logging) console.log('chatHistory: ', chatHistory)
-
-  if (message) {
-    chatHistory.push({
-      id: (chatHistory.length + 1).toString(),
-      role: 'user',
-      content: message,
-      createdAt: new Date()
-    })
-
-    if (logging) console.log('Added user message')
-    if (logging) console.log('chatHistory: ', chatHistory)
-  }
-
-  // Clone chatHistory to avoid mutating the original array
-  let modifiedChatHistory = [...chatHistory];
-
-  // Check if funMode is enabled and modify the first message accordingly
-  if (funMode && modifiedChatHistory.length > 0) {
-    // Example modification, tailor it to your needs
-    modifiedChatHistory[0] = {
-      ...modifiedChatHistory[0],
-      content: funModeText,
-    };
-  }
-
-
-  const messagesToSend = modifiedChatHistory.map(m => (
-    {
-      role: m.role,
-      content: m.role == 'user' ? m.content + ' ' + textToAppend : m.content,
-    } as ChatCompletionRequestMessage));
-
-  if (logging) console.log('messagesToSend: ', messagesToSend)
-
-  let messageToSend: string
   try {
+    // Create a message in the OpenAI thread
+    await openai.beta.threads.messages.create(threadId, { role: "user", content: message });
 
-    const options = {
-      model: 'gpt-4-turbo',  // Use the GPT-4 Turbo model for better performance
-      temperature: funMode ? 1 : 0.3, // Lower temperature for more deterministic output
-      frequency_penalty: 0, // Optional: You may tweak this for more domain-specific answers
-      presence_penalty: 0,  // Optional: You may tweak this to make the model more "present" in the conversation
-      max_tokens: 300,      // Limit the response length
-      stream: false,         // Enable streaming
-      messages: messagesToSend   // Your conversation history
+    // Stream the responses from the OpenAI thread
+    const stream = openai.beta.threads.runs.stream(threadId, { assistant_id: "asst_OCy0mebbdZQjlEvo2APC2SrN" });
+
+    // Await the final message from the stream
+    const finalMessage = await stream.finalMessages();
+
+    // Extract the text value from the first content item of the final message
+    if (finalMessage.length > 0) {
+      // Filter to get all text content blocks safely
+      const textContents = finalMessage[0].content.filter(isTextContentBlock);
+
+      // Check if there's at least one text content block and get the value
+      if (textContents.length > 0 && textContents[0].text) {
+        messageToSend = textContents[0].text.value;
+      }
     }
-
-    if (logging) console.log('openai options: ', options)
-    const openAiRes = await openai.createChatCompletion(options);
-
-    const resData = await openAiRes.json();
-    if (logging) console.log('resData: ', resData)
-    messageToSend = resData.choices[0].message.content
-    if (logging) console.log('resData.choices[0].message.content: ', resData.choices[0].message.content)
 
   } catch (error: any) {
-    console.error('Caught error in POST function:', error.message);
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    console.error('Caught error in POST function:', error);
+    console.timeEnd("Total API Call Time");
+    return NextResponse.json({ message: error.message || "An unexpected error occurred" }, { status: 500 });
   }
 
-  if (messageToSend) {
-    chatHistory.push({
-      id: (chatHistory.length + 1).toString(),
-      role: 'assistant',
-      content: messageToSend,
-      createdAt: new Date()
-    })
+  // Update the chat history with the new messages
+  updateChatAction(chatId, [
+    { id: '2', role: 'user', content: message, createdAt: new Date() },
+    { id: '3', role: 'assistant', content: messageToSend, createdAt: new Date() }
+  ], '/eve');
 
-    await updateChatAction(
-      chatId.toString(),
-      chatHistory,
-      '/eve'
-    )
+  // Check if the chatbot usage flag is set
+  if (useChatBot) {
+    try {
+      const body = {
+        script: {
+          type: 'text',
+          subtitles: false,
+          provider: { type: 'microsoft', voice_id: 'en-US-EmmaMultilingualNeural' },
+          input: messageToSend,
+          ssml: false
+        },
+        config: { stitch: true },
+        background: { color: '#FFFFFF' },
+        session_id: sessionId
+      };
 
-    if (useChatBot) {
-      try {
-        const body = {
-          script: {
-            type: 'text',
-            subtitles: false,
-            provider: {
-              type: 'microsoft',
-              voice_id: 'en-US-EmmaMultilingualNeural'
-            },
-            input: messageToSend,
-            ssml: false,
-          },
-          config: {
-            stitch: true,
-          },
-          background: {
-            color: '#FFFFFF'
-          },
-          session_id: sessionId
-        }
-        if (logging) {
-          console.log('Attempting to fetch with retries');
-          console.log('Body to send to D-ID')
-          console.log(body)
-        }
+      // Make an API call to D-ID for video generation
+      const response = await fetchWithRetries(`https://api.d-id.com/clips/streams/${streamId}`, {
+        method: 'POST',
+        headers: { Authorization: `Basic ${process.env.D_ID_API_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
 
-        const response = await fetchWithRetries(`https://api.d-id.com/clips/streams/${streamId}`, {
-          method: 'POST',
-          headers: {
-            Authorization: `Basic ${process.env.D_ID_API_KEY}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(body),
-        });
+      const data = await response.json();
 
-        if (logging) console.log('Fetch successful, parsing response');
-        const data = await response.json();
-        if (!response.ok) {
-          console.error('Response not OK:', data);
-          throw new Error(data.message || 'Failed to create session');
-        }
-
-        if (logging) console.log('Successfully created session:', JSON.stringify(data));
-        return NextResponse.json({ session: data }, { status: 200 });
-      } catch (error: any) {
-        console.error('Caught error in POST function:', error.message);
-        return NextResponse.json({ message: error.message }, { status: 500 });
+      // Handle non-success responses
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to create session");
       }
-    } else {
-      return NextResponse.json({ message: `Updated chat history without chatbot successfully` }, { status: 200 });
+
+      return NextResponse.json({ session: data }, { status: 200 });
+
+    } catch (error: any) {
+      console.error('Caught error in POST function:', error.message);
+      return NextResponse.json({ message: error.message || "An error occurred during video creation" }, { status: 500 });
     }
   } else {
-    return NextResponse.json({ message: 'resData is empty' }, { status: 500 });
+    return NextResponse.json({ message: "Updated chat history without chatbot successfully" }, { status: 200 });
   }
 }
+
 
 
 
@@ -185,20 +114,14 @@ const maxRetryCount = 3;
 const maxDelaySec = 4;
 
 async function fetchWithRetries(url: string, options: RequestInit, retries = 1): Promise<Response> {
-  if (logging) console.log(`fetchWithRetries called, attempt: ${retries}, url: ${url}`);
   try {
     const response = await fetch(url, options);
-    if (logging) console.log(`Fetch attempt ${retries} successful`);
     return response;
   } catch (err) {
     console.error(`Fetch attempt ${retries} failed with error: ${err}`);
     if (retries <= maxRetryCount) {
       const delay = Math.min(Math.pow(2, retries) / 4 + Math.random(), maxDelaySec) * 1000;
-      if (logging) console.log(`Waiting ${delay}ms before retrying...`);
-
       await new Promise((resolve) => setTimeout(resolve, delay));
-
-      if (logging) console.log(`Retrying fetch, attempt number: ${retries + 1}`);
       return fetchWithRetries(url, options, retries + 1);
     } else {
       console.error(`Max retries exceeded for URL: ${url}`);
@@ -206,3 +129,4 @@ async function fetchWithRetries(url: string, options: RequestInit, retries = 1):
     }
   }
 }
+

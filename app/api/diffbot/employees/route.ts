@@ -2,8 +2,11 @@ import { NextResponse } from 'next/server'
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../../../lib/auth";
+import { checkDiffbotIdAction, createPersonAction } from '../../../admin/_action';
+import { extractPersonTextForEmbedding } from '../../../networking/networking-helper';
+import { PersonClass } from '../../../../models/Person';
 
-const logging = false
+const logging = true
 
 export async function POST(request: Request) {
     const { limit, importance } = await request.json()
@@ -48,8 +51,57 @@ export async function POST(request: Request) {
         //console.log('======= Fetrched Data (=======')
         //console.log(data)
 
+
+        const people = data.map((data: any) => data.entity)
+
+        let savedIds = []; // To store IDs or some identifier of saved persons
+
+        //const people = PersonDummyData.data.map(data => data.entity)
+
+        // Track progress
+        let processedCount = 0;
+        const totalToProcess = people.length
+
+        // Assuming data is an array of person entities
+        for (let person of people) {
+            if (logging) console.log(`Processing ${processedCount} out of ${totalToProcess}`)
+            if (logging) console.log(`Processing person ${person.name || person.id} with importance ${person.importance}...`);
+
+            const diffbotId = person.id
+
+            const existingPerson = await checkDiffbotIdAction(diffbotId, '/admin')
+
+            if (existingPerson) {
+                if (logging) console.log(`Person ${person.name || diffbotId} already exists. Skipping.`);
+                continue; // Skip this person and continue with the next one
+            }
+
+            // Start by extracting text for embeddings
+            const embeddingsText = extractPersonTextForEmbedding(person);
+            //console.log(`Extracted embeddings text for person ${person.name || person.id}.`);
+
+            const newPerson: Partial<PersonClass> = {
+                ...person,
+                diffbotId: diffbotId, // Assuming the custom ID is coming in person.id
+                embeddingsText,
+            };
+            delete (newPerson as any).id;
+
+            // Assuming createPersonAction takes a single person object and returns an ID or some identifier
+            if (logging) console.log(`Creating person ${person.name || diffbotId} in the database...`);
+            const personId = await createPersonAction(newPerson, '/admin');
+            savedIds.push(personId);
+
+            if (logging) console.log(`Successfully saved person ${person.name || diffbotId} with ID: ${personId}`);
+
+
+            // Update processed count
+            processedCount++;
+        }
+
         //const data = ''
-        return NextResponse.json(data, { status: 200 });
+        if (logging) console.log(`Successfully processed ${processedCount} people`);
+        return NextResponse.json(processedCount, { status: 200 });
     } catch (error) {
         console.error(error);
         return NextResponse.json({ error: 'An error occurred while processing your request.' }, { status: 500 });

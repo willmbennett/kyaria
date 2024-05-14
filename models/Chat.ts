@@ -19,10 +19,13 @@ import { Message } from "ai";
         allowMixed: Severity.ALLOW
     }
 })
-@index({ userId: 1 }, { unique: true })
+@index({ userId: 1, threadId: 1 }, { unique: true })
 class ChatClass {
     @prop({ required: true })
     public userId: string;
+
+    @prop({ required: true })
+    public threadId: string;
 
     _id: mongoose.Types.ObjectId | string;
     createdAt: Date | string;

@@ -28,6 +28,7 @@ export default async function ChatbotPage({ params }: { params: { id: string } }
         <VideoChatContainer
             userId={userId}
             chatId={chatId}
+            threadId={chat.threadId}
             messages={messages}
             activeSubscription={activeSubscription}
             admin={admin}

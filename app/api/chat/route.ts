@@ -16,7 +16,7 @@ export async function POST(req: Request) {
 
   // Ask OpenAI for a streaming completion given the prompt
   const response = await openai.createChatCompletion({
-    model: 'gpt-4-turbo',  // Use the GPT-4 Turbo model for better performance
+    model: 'gpt-4o',  // Use the GPT-4 Turbo model for better performance
     temperature: temp, // Lower temperature for more deterministic output
     top_p: 1,         // Controls diversity. Lower values like 0.9 or 1 will make the output more focused, only change this OR temperature
     frequency_penalty: 0, // Optional: You may tweak this for more domain-specific answers

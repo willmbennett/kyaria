@@ -9,13 +9,14 @@ import { Button } from '../Button';
 interface VideoChatContainerProps {
     userId: string;
     chatId: string;
+    threadId: string;
     messages: Message[];
     activeSubscription: boolean;
     admin: boolean
     jobId?: string
 }
 
-export const VideoChatContainer = ({ userId, chatId, messages, activeSubscription, admin, jobId }: VideoChatContainerProps) => {
+export const VideoChatContainer = ({ userId, chatId, threadId, messages, activeSubscription, admin, jobId }: VideoChatContainerProps) => {
     const [showTranscript, setShowTranscript] = useState(false);
 
     const toggleTranscript = () => {
@@ -25,6 +26,7 @@ export const VideoChatContainer = ({ userId, chatId, messages, activeSubscriptio
     const renderVideoChatComponent = <VideoChatComponent
         userId={userId}
         chatId={chatId}
+        threadId={threadId}
         messages={messages}
         toggleTranscript={toggleTranscript}
         showTranscript={showTranscript}

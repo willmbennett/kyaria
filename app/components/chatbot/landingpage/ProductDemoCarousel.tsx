@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { Container } from "../../landingpage/Container"
 
-const ProductDemoCarousel = ({ createNew }: { createNew: () => Promise<any> }) => {
+const ProductDemoCarousel = () => {
 
     const text = "Product Demo"
     const letters = Array.from(text);

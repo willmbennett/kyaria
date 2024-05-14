@@ -8,7 +8,7 @@ import { getResumes } from '../../lib/resume-db';
 import { DropResumeBanner } from '../components/chatbot/DropResumeBanner';
 import { getChats } from '../../lib/chat-db';
 import { cache } from 'react';
-import { createInitialChatAction, deleteChatAction } from './_action';
+import { createInitialChatAction, deleteChatAction, handleChatCreation, handleChatDeletion } from './_action';
 import { redirect } from 'next/navigation';
 import { ChatClass } from '../../models/Chat';
 import { DesktopOpenSideBar } from '../components/sidebar/DesktopOpenSideBar';
@@ -70,30 +70,11 @@ export default async function EveLayout({
         category: 'Chat'
     }))
 
-    //console.log('foundChats', chats)
-
-    const handleChatCreation = async () => {
+    const createChat = async () => {
         "use server"
-        const chatId = await createInitialChatAction(userId, '/eve')
-        if (chatId) {
-            const url = `/eve/${chatId}`
-            return { url }
-        } else {
-            const error = 'There was a problem creating a new chat'
-            return { error }
-        }
+        return handleChatCreation({ userId })
     }
 
-    const handleChatDeletion: ActionItemType = async (chatId: string, path: string) => {
-        "use server"
-        const { error } = await deleteChatAction({ id: chatId, path })
-        if (error) {
-            return { error }
-        } else {
-            const url = "/eve"
-            return { url }
-        }
-    }
 
     return (
         <div className="min-h-screen">
@@ -103,7 +84,7 @@ export default async function EveLayout({
                         <ItemHistory
                             sideBarTitle={'Session History'}
                             items={items}
-                            createNew={handleChatCreation}
+                            createNew={createChat}
                             newTitle={'New Chat'}
                             deleteItemAction={handleChatDeletion}
                         />
@@ -112,7 +93,7 @@ export default async function EveLayout({
                     <SidebarDesktop
                         sideBarTitle={'Session History'}
                         items={items}
-                        createNew={handleChatCreation}
+                        createNew={createChat}
                         newTitle={'New Chat'}
                         deleteItemAction={handleChatDeletion}
                     />
