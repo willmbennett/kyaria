@@ -72,18 +72,14 @@ export const useChatGPT = ({ userId, fillerVideo, submitScript, connected, isStr
     const handleSubmission = useCallback(() => {
         //console.log('Made it to submit')
         if (transcript) {
-            if (fillerVideo) {
-                fillerVideo.src = getFillerVideo()
-                setRecievedResult(false)
-                setPlayFiller(true)
-            }
+            setRecievedResult(false)
             submitMessages(transcript)
             resetTranscript()
             if (initialConnection) {
                 setInitialConnection(false)
             }
         }
-    }, [transcript, fillerVideo, initialConnection])
+    }, [transcript, initialConnection])
 
     // Handle the incoming stream
     useEffect(() => {

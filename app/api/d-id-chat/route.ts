@@ -14,6 +14,8 @@ type BodyType = {
   threadId: string
 }
 
+const addInstructions = '. No yapping, your responses should be 1-2 sentences maximum. Your response should be as if it were meant to be spoken. No special characters.'
+
 function isTextContentBlock(content: MessageContent): content is TextContentBlock {
   return content.type === 'text';
 }
@@ -38,7 +40,7 @@ export async function POST(req: Request) {
     await openai.beta.threads.messages.create(threadId, { role: "user", content: message });
 
     // Stream the responses from the OpenAI thread
-    const stream = openai.beta.threads.runs.stream(threadId, { assistant_id: "asst_OCy0mebbdZQjlEvo2APC2SrN" });
+    const stream = openai.beta.threads.runs.stream(threadId, { assistant_id: "asst_OCy0mebbdZQjlEvo2APC2SrN", additional_instructions: addInstructions });
 
     // Await the final message from the stream
     const finalMessage = await stream.finalMessages();

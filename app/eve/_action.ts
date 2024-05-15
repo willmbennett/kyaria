@@ -5,6 +5,7 @@ import { getFirstResume } from "../../lib/resume-db";
 import { Message } from "ai";
 import { ActionItemType } from "../board/job-helper";
 import { openai } from "../openai";
+import { JobClass } from "../../models/Job";
 
 const logging = true
 
@@ -73,14 +74,27 @@ export const handleChatDeletion: ActionItemType = async (chatId: string, path: s
     }
 }
 
-export const handleChatCreation = async ({ userId }: { userId: string }) => {
+export const handleChatCreation = async ({ userId, jobStripped }: {
+    userId: string,
+    jobStripped?: Partial<JobClass>;
+}) => {
     "use server";
 
     // Log the beginning of the chat creation process
     if (logging) console.log('Initiating chat creation...');
 
     try {
-        const emptyThread = await openai.beta.threads.create();
+        const messages: any[] = [] // OpenAI is really funky with their types and definitions not aligning with the api
+        if (jobStripped) {
+            const newMessage = {
+                role: 'user',
+                content: `I'm looking to do a mock interview for this position: ${JSON.stringify(jobStripped)}`,
+            }
+            messages.push(newMessage)
+        }
+        console.log(messages)
+        const emptyThread = await openai.beta.threads.create({ messages });
+        console.log(emptyThread)
         const threadId = emptyThread.id;
 
         if (!threadId) {

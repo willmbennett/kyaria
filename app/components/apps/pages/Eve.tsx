@@ -3,10 +3,12 @@ import { getChat } from "../../../../lib/chat-db";
 import { handleChatCreation } from "../../../eve/_action";
 import { VideoChatContainer } from "../../chatbot/VideoChatContainer";
 import { updateJobAppAction } from "../../../apps/_action";
+import { JobClass } from "../../../../models/Job";
 
 interface EveProps {
     jobAppId: string
     jobId: string;
+    jobStripped: Partial<JobClass>;
     resumeId: string;
     userId: string;
     chatId?: string;
@@ -14,7 +16,7 @@ interface EveProps {
     admin: boolean;
 }
 
-export default async function Eve({ jobAppId, jobId, resumeId, userId, chatId, activeSubscription, admin }: EveProps) {
+export default async function Eve({ jobAppId, jobId, jobStripped, resumeId, userId, chatId, activeSubscription, admin }: EveProps) {
     //console.log({ resumeId, jobId, chatId })
 
     let currentChatId: string
@@ -22,7 +24,7 @@ export default async function Eve({ jobAppId, jobId, resumeId, userId, chatId, a
     if (chatId) {
         currentChatId = chatId
     } else {
-        const { chatId } = await handleChatCreation({ userId })
+        const { chatId } = await handleChatCreation({ userId, jobStripped })
         if (chatId) {
             const stateUpdate = { chatId }
             await updateJobAppAction(jobAppId, stateUpdate, '/apps/' + jobAppId)
