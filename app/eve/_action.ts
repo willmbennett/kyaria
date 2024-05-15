@@ -7,7 +7,7 @@ import { ActionItemType } from "../board/job-helper";
 import { openai } from "../openai";
 import { JobClass } from "../../models/Job";
 
-const logging = true
+const logging = false
 
 export async function getResumeAction(userId: string) {
     const { resume } = await getFirstResume(userId)
@@ -92,9 +92,9 @@ export const handleChatCreation = async ({ userId, jobStripped }: {
             }
             messages.push(newMessage)
         }
-        console.log(messages)
+        if (logging) console.log(messages)
         const emptyThread = await openai.beta.threads.create({ messages });
-        console.log(emptyThread)
+        if (logging) console.log(emptyThread)
         const threadId = emptyThread.id;
 
         if (!threadId) {

@@ -24,7 +24,7 @@ const createPersonalizedGreeting = (name?: string) => {
     return { personalizedGreeting }
 }
 
-const logging = true;
+const logging = false;
 
 export const createInitialChat = async (userId: string, threadId: string) => {
     try {
