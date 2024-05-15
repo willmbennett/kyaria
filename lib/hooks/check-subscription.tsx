@@ -17,7 +17,8 @@ export const checkSubscription = async () => {
         "65145be92f9b5cae6bf71f09",
         "6517481adbbff5b2580b0783",
         "659c57bbbcaf1a18cdc1bcab",
-        "65cd21c5e03b4c037573216d"
+        "65cd21c5e03b4c037573216d",
+        "664540d616acaa824217903f"
     ]
 
     const admin = userIdList.includes(userId)
