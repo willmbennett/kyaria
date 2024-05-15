@@ -1,11 +1,11 @@
 import { Container } from "../../landingpage/Container"
 import ProductDemoCarousel from "./ProductDemoCarousel";
 
-const ProductDemo = ({ createNew }: { createNew: () => Promise<any> }) => {
+const ProductDemo = () => {
   return (
     <section className="relative pb-16 my:pb-20 xl:pb-32">
       <Container>
-        <ProductDemoCarousel createNew={createNew} />
+        <ProductDemoCarousel />
       </Container>
     </section>
   )

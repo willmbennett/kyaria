@@ -5,8 +5,7 @@ import { ChatBotHero } from "../components/chatbot/landingpage/ChatBotHero";
 import { NewItemButton } from "../components/sidebar/NewItemButton";
 import { Suspense } from "react";
 import { EVE_IDLE_VIDEO } from "./eve-helper";
-import { createInitialChatAction } from "./_action";
-import { redirect } from "next/navigation";
+import { handleChatCreation } from "./_action";
 import { getChatCounts } from "../../lib/chat-db";
 const Process = dynamic(() => import('../components/chatbot/landingpage/Process'));
 
@@ -38,17 +37,6 @@ export default async function ChatBotHomePage() {
     const { userId } = await checkSubscription()
 
 
-    const handleChatCreation = async () => {
-        "use server"
-        const user = userId ? userId : 'n/a'
-        const chatId = await createInitialChatAction(user, '/eve')
-        const url = `/eve/${chatId}`
-        if (chatId) return { url }
-        const error = 'There was a problem creating a new chat'
-        return { error }
-    }
-
-
     if (!userId) {
         const {
             numChats,
@@ -58,11 +46,16 @@ export default async function ChatBotHomePage() {
             <>
                 <ChatBotHero numChats={numChats} numChatUsers={numChatUsers} />
                 <Suspense fallback={<p>Loading demo...</p>}>
-                    <EveDemo createNew={handleChatCreation} />
+                    <EveDemo />
                 </Suspense>
                 <Process />
             </>
         );
+    }
+
+    const createChat = async () => {
+        "use server"
+        return handleChatCreation({ userId })
     }
 
     return (
@@ -77,7 +70,7 @@ export default async function ChatBotHomePage() {
             </div>
             <div className="w-full flex justify-center items-center">
                 <div>
-                    <NewItemButton createNew={handleChatCreation} newTitle="New Chat" />
+                    <NewItemButton createNew={createChat} newTitle="New Chat" />
                 </div>
             </div>
             <div className="flex justify-center items-center w-full max-w-6xl mx-auto">

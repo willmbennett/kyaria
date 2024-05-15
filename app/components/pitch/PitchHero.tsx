@@ -18,7 +18,7 @@ export function PitchHero() {
             <li className="flex items-center md:items-start xl:items-center">
               <CheckCircleIcon className="h-5 w-5 shrink-0 text-slate-800 md:h-6 md:w-6 xl:h-5 xl:w-5" />
               <p className="ml-3 text-slate-700 lg:ml-4 xl:ml-5 xl:text-lg">
-                Leverage GPT-4-Turbo to sell yourself
+                Leverage gpt-4o to sell yourself
               </p>
             </li>
             <li className="flex items-center md:items-start xl:items-center">

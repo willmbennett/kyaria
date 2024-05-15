@@ -178,6 +178,7 @@ export async function JobApplication(
           <Eve
             jobAppId={jobAppId}
             jobId={jobId}
+            jobStripped={jobStripped}
             resumeId={resumeId}
             userId={userId}
             chatId={chatId}

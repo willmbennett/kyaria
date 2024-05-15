@@ -1,11 +1,8 @@
 'use client'
 import { useState } from 'react';
-import PersonDummyData from '../../networking/person.json';
-import { PersonClass } from '../../../models/Person';
-import { checkDiffbotIdAction, checkEmployerDiffbotIdAction, checkInstitutionDiffbotIdAction, createEmployerAction, createInstitutionAction, createPersonAction, getEmployerAction, getPeopleAction, updatePersonAction } from '../../admin/_action';
-import { extractPersonTextForEmbedding } from '../../networking/networking-helper';
+import { checkEmployerDiffbotIdAction, checkInstitutionDiffbotIdAction, createEmployerAction, createInstitutionAction, getPeopleAction } from '../../admin/_action';
 
-const logging = false
+const logging = true
 
 export const PersonPage = () => {
   const [loading, setLoading] = useState<string | null>(null);
@@ -15,7 +12,7 @@ export const PersonPage = () => {
     setLoading('Fetching employees');
     try {
 
-      const filter = { limit: 4000, importance: 89.17294311523438 }
+      const filter = { limit: 5000, importance: 86.8268814086914 }
       if (logging) console.log(filter)
       const response = await fetch('/api/diffbot/employees', {
         method: 'POST',
@@ -24,57 +21,11 @@ export const PersonPage = () => {
 
 
       if (!response.ok) {
-        throw new Error('Failed to scrape jobs');
+        throw new Error('Failed to scrape people');
       }
 
-      const data = await response.json();
+      const { processedCount } = await response.json();
 
-      const people = data.map((data: any) => data.entity)
-
-      let savedIds = []; // To store IDs or some identifier of saved persons
-
-      //const people = PersonDummyData.data.map(data => data.entity)
-
-      // Track progress
-      let processedCount = 0;
-      const totalToProcess = people.length
-
-      // Assuming data is an array of person entities
-      for (let person of people) {
-        if (logging) console.log(`Processing ${processedCount} out of ${totalToProcess}`)
-        if (logging) console.log(`Processing person ${person.name || person.id} with importance ${person.importance}...`);
-
-        const diffbotId = person.id
-
-        const existingPerson = await checkDiffbotIdAction(diffbotId, '/admin')
-
-        if (existingPerson) {
-          if (logging) console.log(`Person ${person.name || diffbotId} already exists. Skipping.`);
-          continue; // Skip this person and continue with the next one
-        }
-
-        // Start by extracting text for embeddings
-        const embeddingsText = extractPersonTextForEmbedding(person);
-        //console.log(`Extracted embeddings text for person ${person.name || person.id}.`);
-
-        const newPerson: Partial<PersonClass> = {
-          ...person,
-          diffbotId: diffbotId, // Assuming the custom ID is coming in person.id
-          embeddingsText,
-        };
-        delete (newPerson as any).id;
-
-        // Assuming createPersonAction takes a single person object and returns an ID or some identifier
-        if (logging) console.log(`Creating person ${person.name || diffbotId} in the database...`);
-        const personId = await createPersonAction(newPerson, '/admin');
-        savedIds.push(personId);
-
-        if (logging) console.log(`Successfully saved person ${person.name || diffbotId} with ID: ${personId}`);
-
-
-        // Update processed count
-        processedCount++;
-      }
 
       setResponse(`Employees Fetched: ${processedCount}`);
     } catch (error) {

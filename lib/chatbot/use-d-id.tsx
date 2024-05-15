@@ -5,15 +5,15 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 interface UseDIDApiProps {
     incomingVideo: HTMLVideoElement | null;
     useChatBot: boolean;
+    threadId: string;
     userId: string;
     chatId: string;
-    router: AppRouterInstance
     funMode: boolean;
 }
 
 const logging = false
 
-export const useDIDApi = ({ incomingVideo, useChatBot, userId, chatId, router, funMode }: UseDIDApiProps) => {
+export const useDIDApi = ({ incomingVideo, useChatBot, userId, chatId, threadId, funMode }: UseDIDApiProps) => {
     const [state, setState] = useState<DIDApiState>({
         isConnecting: false,
         isConnected: false,
@@ -58,6 +58,7 @@ export const useDIDApi = ({ incomingVideo, useChatBot, userId, chatId, router, f
                 message,
                 useChatBot,
                 chatId,
+                threadId,
                 funMode
             })
     }, [state.sessionId, state.isConnected, userId, funMode, useChatBot]);

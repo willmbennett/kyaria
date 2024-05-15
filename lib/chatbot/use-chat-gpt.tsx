@@ -14,13 +14,13 @@ interface useChatGPTProps {
     connected: boolean;
     isStreaming: boolean;
     messages: Message[];
+    useChatBot: boolean
 }
 
 const logging = false
 
-export const useChatGPT = ({ userId, fillerVideo, submitScript, connected, isStreaming, messages }: useChatGPTProps) => {
+export const useChatGPT = ({ userId, fillerVideo, submitScript, connected, isStreaming, messages, useChatBot }: useChatGPTProps) => {
     const [recievedResult, setRecievedResult] = useState(false)
-    const sentInitialMessage = messages.length > 2
     const [initialConnection, setInitialConnection] = useState(true)
     const [playIntroVideo, setPlayIntroVideo] = useState(true)
     const [playFiller, setPlayFiller] = useState(false)
@@ -61,40 +61,27 @@ export const useChatGPT = ({ userId, fillerVideo, submitScript, connected, isStr
 
     // Submit the initial message
     useEffect(() => {
-        if ((!sentInitialMessage || !userId) && initialConnection) {
-            if (userId) {
-                if (connected) {
-                    if (logging) console.log('Submitting the initial message.');
-                    submitMessages();
-                }
-            } else {
-                if (fillerVideo && playIntroVideo) {
-                    if (logging) console.log('Playing the intro video.');
-                    fillerVideo.src = EVE_GENERIC_INTRO
-                    setPlayFiller(true)
-                    setPlayIntroVideo(false)
-                }
-            }
+        if (initialConnection && fillerVideo && playIntroVideo) {
+            if (logging) console.log('Playing the intro video.');
+            fillerVideo.src = EVE_GENERIC_INTRO
+            setPlayFiller(true)
+            setPlayIntroVideo(false)
         }
-    }, [userId, fillerVideo, connected, sentInitialMessage, initialConnection, playIntroVideo]);
+    }, [fillerVideo, initialConnection, playIntroVideo]);
 
     const handleSubmission = useCallback(() => {
         //console.log('Made it to submit')
         if (transcript) {
-            if (fillerVideo) {
-                fillerVideo.src = getFillerVideo()
-                setRecievedResult(false)
-                setPlayFiller(true)
-            }
+            setRecievedResult(false)
             submitMessages(transcript)
             resetTranscript()
             if (initialConnection) {
                 setInitialConnection(false)
             }
         }
-    }, [initialConnection, transcript, fillerVideo])
+    }, [transcript, initialConnection])
 
-    // Submit the initial message
+    // Handle the incoming stream
     useEffect(() => {
         if (isStreaming) {
             if (logging) console.log('Stream has started.');
@@ -118,7 +105,7 @@ export const useChatGPT = ({ userId, fillerVideo, submitScript, connected, isStr
         }
     }, [fillerVideo]);
 
-    const canSubmit = transcript != '' && !isStreaming && !playFiller && (recievedResult || initialConnection) && sentInitialMessage
+    const canSubmit = transcript != '' && !isStreaming && !playFiller && (recievedResult || initialConnection || !useChatBot)
 
     return { transcript, listening, handleSubmission, canSubmit, playFiller }
 }

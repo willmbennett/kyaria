@@ -1,7 +1,6 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import VideoChatComponent from './VideoChatComponent';
-import TimedAccessComponent from './VideoSubscriptionWrapper';
 import { ChatTranscript } from './ChatTranscript';
 import { Message } from 'ai';
 import { Button } from '../Button';
@@ -9,13 +8,14 @@ import { Button } from '../Button';
 interface VideoChatContainerProps {
     userId: string;
     chatId: string;
+    threadId: string;
     messages: Message[];
     activeSubscription: boolean;
     admin: boolean
     jobId?: string
 }
 
-export const VideoChatContainer = ({ userId, chatId, messages, activeSubscription, admin, jobId }: VideoChatContainerProps) => {
+export const VideoChatContainer = ({ userId, chatId, threadId, messages, activeSubscription, admin, jobId }: VideoChatContainerProps) => {
     const [showTranscript, setShowTranscript] = useState(false);
 
     const toggleTranscript = () => {
@@ -25,11 +25,32 @@ export const VideoChatContainer = ({ userId, chatId, messages, activeSubscriptio
     const renderVideoChatComponent = <VideoChatComponent
         userId={userId}
         chatId={chatId}
+        threadId={threadId}
         messages={messages}
         toggleTranscript={toggleTranscript}
         showTranscript={showTranscript}
         admin={admin}
     />
+
+    // Use useMemo to efficiently calculate the number of assistant messages
+    const assistantMessageCount = useMemo(() => {
+        return messages.filter(message => message.role === 'assistant').length;
+    }, [messages]);
+
+    // Conditionally render components based on the number of assistant messages
+    const handleSubscription = assistantMessageCount < 10 ? (
+        <>
+            <p>{10 - assistantMessageCount} messages left on free plan</p>
+            {renderVideoChatComponent}
+        </>
+    ) : (
+        <div>
+            <p>Message limit reached.</p>
+            <Button href="/pricing" size="sm">
+                Subscribe to chat more
+            </Button>
+        </div>
+    );
 
     return (
         <div className={`flex h-full ${jobId ? '' : "py-5 lg:py-10 md:h-screen"}  w-full justify-center text-center gap-4 overflow-hidden`}>
@@ -41,9 +62,7 @@ export const VideoChatContainer = ({ userId, chatId, messages, activeSubscriptio
                     </div>
                 ) : (
                     <div className={`${showTranscript ? 'hidden' : 'block'}`}>
-                        <TimedAccessComponent>
-                            {renderVideoChatComponent}
-                        </TimedAccessComponent>
+                        {handleSubscription}
                     </div>
                 )}
                 <div className={`w-full h-3/4 justify-center items-center ${showTranscript ? 'flex flex-col gap-4' : 'hidden'}`}>
