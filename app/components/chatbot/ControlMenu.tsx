@@ -64,7 +64,7 @@ export const ControlMenu = ({
             onClick={toggleTranscript}
             size='sm'
         >
-            {showTranscript ? 'Show Video' : 'Show Transcript'}
+            {showTranscript ? 'Hide Transcript' : 'Show Transcript'}
         </Button>
         <SendButton type="button" onClick={handleSubmission} size="icon" disabled={!canSubmit}>
             <IconArrowElbow />

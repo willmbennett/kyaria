@@ -55,34 +55,6 @@ const VideoChatComponent = ({ userId, chatId, threadId, messages, toggleTranscri
 
     const { state, cleanup, submitScript, errorMessage, connected, isStreaming } = useDIDApi({ incomingVideo, useChatBot, userId, chatId, threadId, funMode });
 
-    // Set up Soul Machines
-    /*
-        const { errorMessage: SceneError } = useSceneManagement({
-            incomingVideo,
-            useChatBot
-        });
-        */
-
-    // Set up the canvas
-    /*
-    useCanvas({
-        canvas,
-        canvasContainer,
-        incomingVideo,
-        outgoingVideo
-    })
-    */
-
-    // Set up recording
-    /*
-    const { status, startRecording, stopRecording, downloadRecording, mediaBlobUrl } = useRecording({
-        incomingVideo,
-        outgoingStream: stream,
-        outgoingAudioTracks: audioTracks,
-        preview
-    })
-    */
-
     const { transcript, listening, handleSubmission, canSubmit, playFiller } = useChatGPT({ userId, fillerVideo, submitScript, connected, isStreaming, messages, useChatBot })
 
     return (
