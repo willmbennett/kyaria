@@ -14,10 +14,10 @@ export function ChatList({ messages }: ChatList) {
     return (
         <>
             {messages.map((message, index) => (
-                <div key={index} className='relative'>
+                <div key={index} className='relative text-left'>
                     {message.role === 'user' ? <UserMessage>{message.content}</UserMessage> : <BotMessage content={message.content} />}
                     {index < messages.length - 1 && (
-                        <Separator className="my-4" />
+                        <Separator className="my-4 border-b" />
                     )}
                 </div>))}
         </>

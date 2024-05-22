@@ -55,7 +55,7 @@ export const VideoChatContainer = ({ userId, chatId, threadId, messages, activeS
     const handleVideoComponent = activeSubscription ? renderVideoChatComponent : handleSubscription
 
     return (
-        <div className={`flex ${jobId ? '' : "md:h-screen"}  w-full justify-center text-center gap-4 px-1 md:px-4 lg:px-10 xl:px-20 overflow-hidden`}>
+        <div className={`flex flex-col md:flex-row ${jobId ? '' : "md:h-screen"}  w-full justify-center text-center gap-4 px-1 md:px-4 lg:px-10 xl:px-20 overflow-hidden`}>
             {handleVideoComponent}
             <Chat messages={messages} showTranscript={showTranscript} />
         </div>
