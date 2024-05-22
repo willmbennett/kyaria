@@ -55,7 +55,7 @@ const VideoChatComponent = ({ userId, chatId, threadId, messages, toggleTranscri
     return (
         <div className="flex flex-col gap-4 justify-center items-center w-full md:p-4 my-10">
             {errorMessage && <p className="text-red-500">{`Error: ${errorMessage}`}</p>}
-            {(admin || process.env.NODE_ENV == 'development') && <AdminMenu
+            {(admin && process.env.NODE_ENV == 'development') && <AdminMenu
                 useChatBot={useChatBot}
                 togglechatBot={togglechatBot}
                 funMode={funMode}
