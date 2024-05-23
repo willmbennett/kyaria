@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { blobToBase64, createMediaStream } from "../../app/eve/eve-helper";
 
-const useMediaDevices = (outgoingVideo: HTMLVideoElement | null) => {
+const useMediaAndRecording = (submitUserMessage: (input: string) => Promise<void>) => {
+    const outgoingVideoRef = useRef<HTMLVideoElement>(null);
     const [hasMediaAccess, setHasMediaAccess] = useState<boolean>(false);
     const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([]);
     const [selectedVideoDeviceId, setSelectedVideoDeviceId] = useState('');
@@ -10,12 +12,18 @@ const useMediaDevices = (outgoingVideo: HTMLVideoElement | null) => {
     const [isMuted, setIsMuted] = useState(false);
     const [isVideoEnabled, setIsVideoEnabled] = useState(true);
 
+    const [text, setText] = useState("");
+    const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+    const [peakLevel, setPeakLevel] = useState<number>(0);
+    const [recording, setRecording] = useState(false);
+    const isRecording = useRef(false);
+    const chunks = useRef<Blob[]>([]);
+
     // Initial request for media access
     useEffect(() => {
         const requestMediaAccess = async () => {
             try {
                 await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                //console.log("Media access granted");
                 setHasMediaAccess(true);
             } catch (error: any) {
                 console.error("Error requesting media access:", error);
@@ -34,7 +42,6 @@ const useMediaDevices = (outgoingVideo: HTMLVideoElement | null) => {
         const fetchAndSetDevices = async () => {
             const devices = await navigator.mediaDevices.enumerateDevices();
             const videoInputs = devices.filter(device => device.kind === "videoinput");
-            //console.log("Video devices found:", videoInputs);
             setVideoDevices(videoInputs);
 
             if (videoInputs.length > 0) {
@@ -58,8 +65,7 @@ const useMediaDevices = (outgoingVideo: HTMLVideoElement | null) => {
 
                 setStream(mediaStream);
                 const audioTracks = mediaStream.getAudioTracks();
-                setAudioTracks(audioTracks)
-                //console.log("Media stream set with device ID:", selectedVideoDeviceId);
+                setAudioTracks(audioTracks);
             } catch (error: any) {
                 console.error("Error accessing specific media device:", error);
                 setErrorMessage(error.message);
@@ -67,14 +73,13 @@ const useMediaDevices = (outgoingVideo: HTMLVideoElement | null) => {
         };
 
         getMediaStream();
-    }, [selectedVideoDeviceId, hasMediaAccess, outgoingVideo]);
-
+    }, [selectedVideoDeviceId, hasMediaAccess]);
 
     useEffect(() => {
-        if (stream && outgoingVideo) {
-            outgoingVideo.srcObject = stream
+        if (stream && outgoingVideoRef.current) {
+            outgoingVideoRef.current.srcObject = stream;
         }
-    }, [stream, outgoingVideo]);
+    }, [stream, outgoingVideoRef.current]);
 
     // Cleanup: Stop all media tracks when the component unmounts
     useEffect(() => {
@@ -83,21 +88,78 @@ const useMediaDevices = (outgoingVideo: HTMLVideoElement | null) => {
         };
     }, [stream]);
 
-    // Toggle mute for all audio tracks
-    const toggleMute = () => {
-        stream?.getAudioTracks().forEach(track => (track.enabled = !track.enabled));
-        setIsMuted(!isMuted);
-        //console.log("Toggling mute:", !isMuted);
+    // Function to start the recording
+    const startRecording = () => {
+        if (mediaRecorder) {
+            isRecording.current = true;
+            mediaRecorder.start();
+            setRecording(true);
+        }
     };
 
-    // Toggle video for all video tracks
-    const toggleVideo = () => {
-        stream?.getVideoTracks().forEach(track => (track.enabled = !track.enabled));
-        setIsVideoEnabled(!isVideoEnabled);
-        //console.log("Toggling video:", !isVideoEnabled);
+    // Function to stop the recording
+    const stopRecording = () => {
+        if (mediaRecorder) {
+            isRecording.current = false;
+            mediaRecorder.stop();
+            setRecording(false);
+        }
     };
+
+    const getText = async (base64data: string) => {
+        try {
+            const response = await fetch("/api/speechToText", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    audio: base64data,
+                }),
+            });
+
+            const { text } = await response.json();
+            submitUserMessage(text);
+            setText(text);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    // Function to initialize the media recorder with the provided stream
+    const initialMediaRecorder = (stream: MediaStream) => {
+        const mediaRecorder = new MediaRecorder(stream);
+
+        // Event handler when recording starts
+        mediaRecorder.onstart = () => {
+            createMediaStream(stream, isRecording.current, (peak: number) => {
+                setPeakLevel(peak);
+            });
+            chunks.current = [];
+        };
+
+        // Event handler when data becomes available during recording
+        mediaRecorder.ondataavailable = (ev) => {
+            chunks.current.push(ev.data); // Storing data chunks
+        };
+
+        // Event handler when recording stops
+        mediaRecorder.onstop = () => {
+            const audioBlob = new Blob(chunks.current, { type: "audio/wav" });
+            blobToBase64(audioBlob, getText);
+        };
+
+        setMediaRecorder(mediaRecorder);
+    };
+
+    useEffect(() => {
+        if (stream) {
+            initialMediaRecorder(stream);
+        }
+    }, [stream]);
 
     return {
+        outgoingVideoRef,
         hasMediaAccess,
         videoDevices,
         audioTracks,
@@ -105,11 +167,13 @@ const useMediaDevices = (outgoingVideo: HTMLVideoElement | null) => {
         setSelectedVideoDeviceId,
         stream,
         errorMessage,
-        isMuted,
-        toggleMute,
         isVideoEnabled,
-        toggleVideo
+        recording,
+        startRecording,
+        stopRecording,
+        text,
+        peakLevel,
     };
 };
 
-export default useMediaDevices;
+export default useMediaAndRecording;

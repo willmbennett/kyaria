@@ -1,66 +1,67 @@
 'use client';
-import { useRef } from 'react';
 import { Button } from '../Button';
 import useMediaDevices from '../../../lib/chatbot/use-media-devices';
 import { ControlMenu } from './ControlMenu';
 import { useDIDApi } from '../../../lib/chatbot/use-d-id';
-import { useChatGPT } from '../../../lib/chatbot/use-chat-gpt';
+import { useFillerVideo } from '../../../lib/chatbot/use-filler-video';
 import { useRouter } from 'next/navigation';
-import { Message } from 'ai';
 import { AdminMenu } from './AdminMenu';
 import { useAdminMenu } from '../../../lib/chatbot/use-admin-menu';
 import { VideoDisplay } from './VideoDisplay';
+import { useCallback } from 'react';
 
 interface VideoChatComponentProps {
     userId: string;
     chatId: string;
     threadId: string;
-    messages: Message[];
     toggleTranscript: () => void;
     showTranscript: boolean;
     admin: boolean;
+    submitUserMessage: (input: string) => Promise<void>
 }
 
-const VideoChatComponent = ({ userId, chatId, threadId, messages, toggleTranscript, showTranscript, admin }: VideoChatComponentProps) => {
-    const videoRef = useRef<HTMLVideoElement>(null);
-    const outgoingVideoRef = useRef<HTMLVideoElement>(null);
-    const fillerVideoRef = useRef<HTMLVideoElement>(null);
-    //const previewRef = useRef<HTMLVideoElement>(null);
+const VideoChatComponent = ({ userId, chatId, threadId, toggleTranscript, showTranscript, admin, submitUserMessage }: VideoChatComponentProps) => {
     const router = useRouter()
-    // Use this to turn on and off the chatbot
-    const { useChatBot, togglechatBot, startChat, toggleStartChat, funMode, toggleFunMode } = useAdminMenu()
 
-    let incomingVideo = videoRef.current
-    let outgoingVideo = outgoingVideoRef.current
-    let fillerVideo = fillerVideoRef.current
+    const {
+        videoRef,
+        state,
+        cleanup,
+        submitScript,
+        errorMessage,
+        connected,
+        isStreaming
+    } = useDIDApi(
+        {
+            userId,
+            chatId,
+            threadId,
+            submitUserMessage
+        });
 
     // Set up the user's media
     const {
+        outgoingVideoRef,
+        hasMediaAccess,
         videoDevices,
+        audioTracks,
         selectedVideoDeviceId,
         setSelectedVideoDeviceId,
         stream,
-        errorMessage: MediaError,
-        isMuted,
-        toggleMute,
+        errorMessage: MediaErrorMessage,
         isVideoEnabled,
-        toggleVideo
-    } = useMediaDevices(outgoingVideo);
+        recording,
+        startRecording,
+        stopRecording,
+        text,
+        peakLevel,
+    } = useMediaDevices(submitUserMessage);
 
-
-    const { state, cleanup, submitScript, errorMessage, connected, isStreaming } = useDIDApi({ incomingVideo, useChatBot, userId, chatId, threadId, funMode });
-
-    const { transcript, listening, handleSubmission, canSubmit, playFiller } = useChatGPT({ userId, fillerVideo, submitScript, connected, isStreaming, messages, useChatBot })
+    const { fillerVideoRef, playFiller } = useFillerVideo()
 
     return (
         <div className="flex flex-col gap-4 justify-center items-center w-full md:p-4 my-10">
             {errorMessage && <p className="text-red-500">{`Error: ${errorMessage}`}</p>}
-            {(admin && process.env.NODE_ENV == 'development') && <AdminMenu
-                useChatBot={useChatBot}
-                togglechatBot={togglechatBot}
-                funMode={funMode}
-                toggleFunMode={toggleFunMode}
-            />}
             <VideoDisplay
                 videoRef={videoRef}
                 fillerVideoRef={fillerVideoRef}
@@ -74,16 +75,12 @@ const VideoChatComponent = ({ userId, chatId, threadId, messages, toggleTranscri
                     videoDevices={videoDevices}
                     selectedVideoDeviceId={selectedVideoDeviceId}
                     selectVideoDevice={setSelectedVideoDeviceId}
-                    isMuted={isMuted}
-                    toggleMute={toggleMute}
-                    isVideoEnabled={isVideoEnabled}
-                    toggleVideo={toggleVideo}
                     connected={connected}
-                    listening={listening}
+                    recording={recording}
                     toggleTranscript={toggleTranscript}
                     showTranscript={showTranscript}
-                    handleSubmission={handleSubmission}
-                    canSubmit={canSubmit}
+                    startRecording={startRecording}
+                    stopRecording={stopRecording}
                 />
                 :
                 <div className='flex gap-2 items-center justify-center'>

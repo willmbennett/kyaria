@@ -25,6 +25,7 @@ export async function POST(req: Request) {
 
   // Parse the JSON body from the request
   const body: BodyType = await req.json();
+  console.log('Made it here with body: ', body)
   const { sessionId, streamId, message, useChatBot, chatId, threadId } = body;
 
   // Validate required fields for chatbot usage

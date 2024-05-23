@@ -1,70 +1,68 @@
-export const drawVideosToCanvas = (canvas: HTMLCanvasElement, incomingVideoElement: HTMLVideoElement, outgoingVideoElement: HTMLVideoElement) => {
-    const context = canvas.getContext('2d');
-    const width = canvas.width;
-    const height = canvas.height;
-
-    const draw = () => {
-        if (context) {
-            context.clearRect(0, 0, width, height); // Clear the canvas
-
-            // Determine layout orientation based on canvas aspect ratio
-            const isVerticalLayout = width < height;
-
-            // Define destination dimensions based on layout
-            const dstWidth = isVerticalLayout ? width : width / 2;
-            const dstHeight = isVerticalLayout ? height / 2 : height;
-
-            const drawVideo = (video: HTMLVideoElement, dstX: number, dstY: number) => {
-                const videoAspectRatio = video.videoWidth / video.videoHeight;
-                const dstAspectRatio = dstWidth / dstHeight;
-                let srcX = 0, srcY = 0, srcWidth = video.videoWidth, srcHeight = video.videoHeight;
-
-                if (videoAspectRatio > dstAspectRatio) {
-                    // Video is wider than destination aspect ratio: letterbox
-                    srcWidth = video.videoHeight * dstAspectRatio;
-                    srcX = (video.videoWidth - srcWidth) / 2;
-                } else if (videoAspectRatio < dstAspectRatio) {
-                    // Video is taller than destination aspect ratio: pillarbox
-                    srcHeight = video.videoWidth / dstAspectRatio;
-                    srcY = (video.videoHeight - srcHeight) / 2;
-                }
-
-                // Draw the video onto the canvas
-                context.drawImage(video, srcX, srcY, srcWidth, srcHeight, dstX, dstY, dstWidth, dstHeight);
-            };
-
-            // Draw the videos based on the layout
-            if (isVerticalLayout) {
-                // Vertical layout: Draw videos top and bottom
-                drawVideo(incomingVideoElement, 0, 0); // Top half
-                drawVideo(outgoingVideoElement, 0, dstHeight); // Bottom half
-            } else {
-                // Horizontal layout: Draw videos side by side
-                drawVideo(incomingVideoElement, 0, 0); // Left half
-                drawVideo(outgoingVideoElement, dstWidth, 0); // Right half
-            }
-        }
-
-        requestAnimationFrame(draw); // Continue the loop
-    };
-
-
-    draw(); // Start the loop
-}
-
 export const EVE_IDLE_VIDEO = "https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/alyssa-idle-1-AOv1fQqbLoq84hUxR1BGVBnGyEnUdn"
 
-const eveFillerVideos = [
-    'https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/eve-filler-1-6zVe8SevwqK2AUClnn8L22xYVXpVSr',
-    'https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/eve-filler-2-7Pp5doDFpct5u6G3PC5trlpoYyNjpv',
-    'https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/eve-filler-2-YloS0RXa3oORaBOYMBb85hytR9IzbH',
-    'https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/eve-filler-3-72pDNypbCr0zH5vepUGdYyIGxyubB6',
-    'https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/eve-filler-4-uZ4Hvg7EXruNVJWxvbDQjsKkVksg0q'
-]
-
-export const getFillerVideo = () => {
-    const randomIndex = Math.floor(Math.random() * eveFillerVideos.length);
-    return eveFillerVideos[randomIndex];
-}
-
 export const EVE_GENERIC_INTRO = 'https://ridlhxlqmhjlvpjy.public.blob.vercel-storage.com/eve-intro-1-47ZRGEQhe50ZUWTeWFDOL4Ixl7LwvT'
+
+const blobToBase64 = (blob: Blob, callback: (base64data: string) => Promise<void>) => {
+    const reader = new FileReader();
+
+    reader.onload = function () {
+        if (typeof reader.result === 'string') {
+            const base64data = reader.result.split(",")[1];
+            callback(base64data);
+        } else {
+            //console.log('Not a string')
+        }
+    };
+
+    reader.readAsDataURL(blob);
+};
+
+
+export { blobToBase64 };
+
+// Function to calculate the peak level from the analyzer data
+const getPeakLevel = (analyzer: AnalyserNode) => {
+    // Create a Uint8Array to store the audio data
+    const array = new Uint8Array(analyzer.fftSize);
+
+    // Get the time domain data from the analyzer and store it in the array
+    analyzer.getByteTimeDomainData(array);
+
+    // Calculate the peak level by finding the maximum absolute deviation from 127
+    return (
+        array.reduce((max, current) => Math.max(max, Math.abs(current - 127)), 0) /
+        128
+    );
+};
+
+const createMediaStream = (stream: MediaStream, isRecording: boolean, callback: any) => {
+    // Create a new AudioContext
+    const context = new AudioContext();
+
+    // Create a media stream source node from the input stream
+    const source = context.createMediaStreamSource(stream);
+
+    // Create an analyzer node for audio analysis
+    const analyzer = context.createAnalyser();
+
+    // Connect the source node to the analyzer node
+    source.connect(analyzer);
+
+    // Function to continuously analyze audio data and invoke the callback
+    const tick = () => {
+        // Calculate the peak level using the getPeakLevel function
+        const peak = getPeakLevel(analyzer);
+
+        if (isRecording) {
+            callback(peak);
+
+            // Request the next animation frame for continuous analysis
+            requestAnimationFrame(tick);
+        }
+    };
+
+    // Start the continuous analysis loop
+    tick();
+};
+
+export { createMediaStream };

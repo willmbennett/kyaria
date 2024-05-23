@@ -42,7 +42,7 @@ const presenterInputByService = {
     }
 }
 
-const logging = false
+const logging = true
 
 // Function to initialize the peer connection and start the stream
 export const connect = async (incomingVideo: HTMLVideoElement, setState: Dispatch<SetStateAction<DIDApiState>>) => {
@@ -428,18 +428,15 @@ interface HandleScriptSubmissionProps {
     sessionId: string | null;
     streamId: string | null;
     message?: string;
-    useChatBot: boolean;
     chatId: string;
     threadId: string;
-    funMode: boolean;
 }
 
-export const handleScriptSubmission = async ({ sessionId, streamId, message, chatId, threadId, useChatBot, funMode }: HandleScriptSubmissionProps) => {
+export const handleScriptSubmission = async ({ sessionId, streamId, message, chatId, threadId }: HandleScriptSubmissionProps) => {
     if (logging) console.log('Made it to Submit Script')
     const dataToSubmit = {
         streamId,
         sessionId,
-        useChatBot,
         message,
         chatId,
         threadId

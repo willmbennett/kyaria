@@ -1,9 +1,10 @@
 'use client'
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import VideoChatComponent from './VideoChatComponent';
 import { Chat } from './Chat';
 import { Message } from 'ai';
 import { Button } from '../Button';
+import { nanoid } from 'nanoid'
 
 interface VideoChatContainerProps {
     userId: string;
@@ -17,17 +18,32 @@ interface VideoChatContainerProps {
 
 export const VideoChatContainer = ({ userId, chatId, threadId, messages, activeSubscription, admin, jobId }: VideoChatContainerProps) => {
     const [showTranscript, setShowTranscript] = useState(true);
+    const [chatMessages, setChatMessages] = useState(messages)
+
+    // Whenever messages update update the state
+    useEffect(() => {
+        setChatMessages(messages)
+    }, [messages])
 
     const toggleTranscript = () => {
         setShowTranscript(!showTranscript);
     };
 
+    const submitUserMessage = async (input: string) => {
+        // Optimistically add user message UI
+        console.log('Made it here with text: ', input)
+        if (input) {
+            const newMessage: Message = { id: nanoid(), role: 'user', content: input, createdAt: new Date() }
+            setChatMessages([...chatMessages, newMessage])
+        }
+    }
+
     const renderVideoChatComponent = <VideoChatComponent
         userId={userId}
         chatId={chatId}
         threadId={threadId}
-        messages={messages}
         toggleTranscript={toggleTranscript}
+        submitUserMessage={submitUserMessage}
         showTranscript={showTranscript}
         admin={admin}
     />
@@ -57,7 +73,7 @@ export const VideoChatContainer = ({ userId, chatId, threadId, messages, activeS
     return (
         <div className={`flex flex-col md:flex-row ${jobId ? '' : "md:h-screen"}  w-full justify-center text-center gap-4 px-1 md:px-4 lg:px-10 xl:px-20 overflow-hidden`}>
             {handleVideoComponent}
-            <Chat messages={messages} showTranscript={showTranscript} />
+            <Chat messages={chatMessages} showTranscript={showTranscript} />
         </div>
     );
 };
