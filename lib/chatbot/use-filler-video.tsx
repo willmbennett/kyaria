@@ -1,22 +1,31 @@
-'use client'
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState, useEffect } from 'react';
 import { EVE_GENERIC_INTRO } from "../../app/eve/eve-helper";
 
-const logging = false
-
-export const useFillerVideo = () => {
+export const useFillerVideo = (numMessages: number) => {
     const fillerVideoRef = useRef<HTMLVideoElement>(null);
-    let fillerVideo = fillerVideoRef.current
-    const [playFiller, setPlayFiller] = useState(true)
+    const [playFiller, setPlayFiller] = useState(true);
 
     // Submit the initial message
     useEffect(() => {
-        if (fillerVideo && playFiller) {
-            if (logging) console.log('Playing the intro video.');
-            fillerVideo.src = EVE_GENERIC_INTRO
-            setPlayFiller(false)
-        }
-    }, [fillerVideo, playFiller])
+        const fillerVideo = fillerVideoRef.current;
 
-    return { fillerVideoRef, playFiller }
-}
+        if (fillerVideo && playFiller && numMessages == 0) {
+            //console.log('Playing the intro video.');
+            fillerVideo.src = EVE_GENERIC_INTRO;
+
+            // Add an event listener to set playFiller to false when the video ends
+            const handleVideoEnd = () => {
+                setPlayFiller(false);
+            };
+
+            fillerVideo.addEventListener('ended', handleVideoEnd);
+
+            // Cleanup the event listener on component unmount or when playFiller changes
+            return () => {
+                fillerVideo.removeEventListener('ended', handleVideoEnd);
+            };
+        }
+    }, [playFiller, numMessages]);
+
+    return { fillerVideoRef, playFiller };
+};

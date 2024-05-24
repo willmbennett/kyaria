@@ -6,7 +6,7 @@ import { checkDiffbotIdAction, createPersonAction } from '../../../admin/_action
 import { extractPersonTextForEmbedding } from '../../../networking/networking-helper';
 import { PersonClass } from '../../../../models/Person';
 
-const logging = true
+const logging = false
 
 export async function POST(request: Request) {
     const { limit, importance } = await request.json()

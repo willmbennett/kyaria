@@ -19,6 +19,7 @@ interface VideoChatContainerProps {
 export const VideoChatContainer = ({ userId, chatId, threadId, messages, activeSubscription, admin, jobId }: VideoChatContainerProps) => {
     const [showTranscript, setShowTranscript] = useState(true);
     const [chatMessages, setChatMessages] = useState(messages)
+    const numMessages = messages.length
 
     // Whenever messages update update the state
     useEffect(() => {
@@ -45,7 +46,7 @@ export const VideoChatContainer = ({ userId, chatId, threadId, messages, activeS
         toggleTranscript={toggleTranscript}
         submitUserMessage={submitUserMessage}
         showTranscript={showTranscript}
-        admin={admin}
+        numMessages={numMessages}
     />
 
     // Use useMemo to efficiently calculate the number of assistant messages

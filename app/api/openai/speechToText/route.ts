@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import OpenAI from "openai";
+import { openai } from "../../../openai";
 
 export const runtime = 'edge';
-
-const openai = new OpenAI();
 
 export async function POST(req: NextRequest) {
     const body = await req.json();
@@ -24,8 +22,8 @@ export async function POST(req: NextRequest) {
 
         //console.log("Returning transcription result");
         return NextResponse.json(data);
-    } catch (error) {
-        console.error("Error processing audio:", error);
+    } catch (error: any) {
+        console.error("Error processing audio:", error.message);
         return NextResponse.error();
     }
 }

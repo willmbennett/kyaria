@@ -1,5 +1,6 @@
 'use client'
 import { Dispatch, SetStateAction } from "react"
+import { updateChatAction } from "./_action"
 
 type IceServerType = {
     "urls": string | string[]
@@ -42,7 +43,7 @@ const presenterInputByService = {
     }
 }
 
-const logging = true
+const logging = false
 
 // Function to initialize the peer connection and start the stream
 export const connect = async (incomingVideo: HTMLVideoElement, setState: Dispatch<SetStateAction<DIDApiState>>) => {
@@ -427,23 +428,42 @@ export const handleDisconnect = async ({ closePC, incomingVideo, newSessionId, n
 interface HandleScriptSubmissionProps {
     sessionId: string | null;
     streamId: string | null;
-    message?: string;
+    message: string;
     chatId: string;
     threadId: string;
 }
 
 export const handleScriptSubmission = async ({ sessionId, streamId, message, chatId, threadId }: HandleScriptSubmissionProps) => {
     if (logging) console.log('Made it to Submit Script')
+
+    // Get the response from OpenAI
+    const res = await fetch("/api/openai/assistant", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            message,
+            threadId,
+        }),
+    });
+
+    const { response } = await res.json();
+    // Update the chat history with the new messages
+    updateChatAction(chatId, [
+        { id: '2', role: 'user', content: message, createdAt: new Date() },
+        { id: '3', role: 'assistant', content: response, createdAt: new Date() }
+    ], '/eve');
+
+
     const dataToSubmit = {
         streamId,
         sessionId,
-        message,
-        chatId,
-        threadId
+        message: response,
     }
 
     if (logging) console.log('dataToSubmit: ', dataToSubmit)
-    fetch('/api/d-id-chat', {
+    fetch('/api/d-id/submit-script', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

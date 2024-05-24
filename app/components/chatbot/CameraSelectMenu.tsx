@@ -5,9 +5,18 @@ interface CameraSelectMenuProps {
     videoDevices: MediaDeviceInfo[];
     selectedVideoDeviceId: string;
     selectVideoDevice: (deviceId: string) => void;
+    type: string;
 }
 
-export const CameraSelectMenu = ({ videoDevices, selectedVideoDeviceId, selectVideoDevice }: CameraSelectMenuProps) => {
+const cleanDeviceLabel = (label: string) => {
+    const builtIn = label.match(/\(Built-in\)/);
+    const cleanedLabel = label.replace(/\s*\(.*?\)\s*/g, '').trim();
+    return builtIn ? `${cleanedLabel} (Built-in)` : cleanedLabel;
+};
+
+
+
+export const CameraSelectMenu = ({ videoDevices, selectedVideoDeviceId, selectVideoDevice, type }: CameraSelectMenuProps) => {
     return (
         <Menu as="div" className="relative">
             {({ open }) => (
@@ -18,7 +27,7 @@ export const CameraSelectMenu = ({ videoDevices, selectedVideoDeviceId, selectVi
                             : 'text-slate-700 hover:bg-slate-100  hover:text-slate-900'
                             }`}
                     >
-                        <span>Select Camera</span>
+                        <span>{`Select ${type}`}</span>
                         <ChevronDownIcon
                             className={`ml-2 h-5 w-5 duration-300 ${open
                                 ? 'rotate-180 text-slate-900'
@@ -34,12 +43,12 @@ export const CameraSelectMenu = ({ videoDevices, selectedVideoDeviceId, selectVi
                                 <button
                                     key={device.deviceId}
                                     onClick={() => selectVideoDevice(device.deviceId)}
-                                    className={`block px-5 py-3.5 font-medium ${device.deviceId == selectedVideoDeviceId
+                                    className={`block px-5 py-3.5 font-medium w-full ${device.deviceId == selectedVideoDeviceId
                                         ? 'bg-gray-secondary-100/60 text-slate-900'
                                         : 'text-slate-700 transition duration-300 ease-in-out hover:bg-gray-secondary-100/60 hover:text-slate-900'
                                         }`}
                                 >
-                                    {device.label || `Camera ${device.deviceId}`}
+                                    {cleanDeviceLabel(device.label) || `Camera ${device.deviceId}`}
                                 </button>
                             </Menu.Item>
                         ))}

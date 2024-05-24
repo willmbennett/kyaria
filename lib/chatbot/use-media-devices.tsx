@@ -5,12 +5,12 @@ const useMediaAndRecording = (submitUserMessage: (input: string) => Promise<void
     const outgoingVideoRef = useRef<HTMLVideoElement>(null);
     const [hasMediaAccess, setHasMediaAccess] = useState<boolean>(false);
     const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([]);
+    const [audioDevices, setAudioDevices] = useState<MediaDeviceInfo[]>([]);
     const [selectedVideoDeviceId, setSelectedVideoDeviceId] = useState('');
+    const [selectedAudioDeviceId, setSelectedAudioDeviceId] = useState('');
     const [stream, setStream] = useState<MediaStream | null>(null);
     const [audioTracks, setAudioTracks] = useState<MediaStreamTrack[] | null>(null);
     const [errorMessage, setErrorMessage] = useState<string>();
-    const [isMuted, setIsMuted] = useState(false);
-    const [isVideoEnabled, setIsVideoEnabled] = useState(true);
 
     const [text, setText] = useState("");
     const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
@@ -19,61 +19,69 @@ const useMediaAndRecording = (submitUserMessage: (input: string) => Promise<void
     const isRecording = useRef(false);
     const chunks = useRef<Blob[]>([]);
 
-    // Initial request for media access
-    useEffect(() => {
-        const requestMediaAccess = async () => {
-            try {
-                await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                setHasMediaAccess(true);
-            } catch (error: any) {
-                console.error("Error requesting media access:", error);
-                setErrorMessage(error.message);
-                setHasMediaAccess(false);
-            }
-        };
+    const requestMediaAccess = async () => {
+        try {
+            const initialStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            setStream(initialStream);
+            setHasMediaAccess(true);
 
-        requestMediaAccess();
-    }, []);
-
-    // Handle media access granted: Enumerate devices and set initial device
-    useEffect(() => {
-        if (!hasMediaAccess) return;
-
-        const fetchAndSetDevices = async () => {
             const devices = await navigator.mediaDevices.enumerateDevices();
             const videoInputs = devices.filter(device => device.kind === "videoinput");
+            const audioInputs = devices.filter(device => device.kind === "audioinput");
             setVideoDevices(videoInputs);
+            setAudioDevices(audioInputs);
 
             if (videoInputs.length > 0) {
                 setSelectedVideoDeviceId(videoInputs[0].deviceId);
             }
-        };
-
-        fetchAndSetDevices();
-    }, [hasMediaAccess]);
-
-    // Whenever the selected device ID changes, request access with that device
-    useEffect(() => {
-        if (!selectedVideoDeviceId || !hasMediaAccess) return;
-
-        const getMediaStream = async () => {
-            try {
-                const mediaStream = await navigator.mediaDevices.getUserMedia({
-                    video: { deviceId: { exact: selectedVideoDeviceId } },
-                    audio: true,
-                });
-
-                setStream(mediaStream);
-                const audioTracks = mediaStream.getAudioTracks();
-                setAudioTracks(audioTracks);
-            } catch (error: any) {
-                console.error("Error accessing specific media device:", error);
-                setErrorMessage(error.message);
+            if (audioInputs.length > 0) {
+                setSelectedAudioDeviceId(audioInputs[0].deviceId);
             }
-        };
+        } catch (error: any) {
+            console.error("Error requesting media access:", error);
+            setErrorMessage(error.message);
+            setHasMediaAccess(false);
+        }
+    };
 
-        getMediaStream();
-    }, [selectedVideoDeviceId, hasMediaAccess]);
+    const updateStream = async (videoDeviceId?: string, audioDeviceId?: string) => {
+        try {
+            const videoConstraints = videoDeviceId ? { deviceId: { exact: videoDeviceId } } : undefined;
+            const audioConstraints = audioDeviceId ? { deviceId: { exact: audioDeviceId } } : undefined;
+
+            const videoStream = videoDeviceId
+                ? await navigator.mediaDevices.getUserMedia({ video: videoConstraints, audio: false })
+                : null;
+
+            const audioStream = audioDeviceId
+                ? await navigator.mediaDevices.getUserMedia({ video: false, audio: audioConstraints })
+                : null;
+
+            const videoTracks = videoStream ? videoStream.getVideoTracks() : stream?.getVideoTracks() || [];
+            const audioTracks = audioStream ? audioStream.getAudioTracks() : stream?.getAudioTracks() || [];
+
+            const combinedStream = new MediaStream([...videoTracks, ...audioTracks]);
+            setStream(combinedStream);
+            if (audioStream) {
+                setAudioTracks(audioStream.getAudioTracks());
+            }
+        } catch (error: any) {
+            console.error("Error updating media stream:", error);
+            setErrorMessage(error.message);
+        }
+    };
+
+    // Initial request for media access
+    useEffect(() => {
+        requestMediaAccess();
+    }, []);
+
+    // Whenever the selected video or audio device ID changes, update the stream
+    useEffect(() => {
+        if (hasMediaAccess) {
+            updateStream(selectedVideoDeviceId, selectedAudioDeviceId);
+        }
+    }, [selectedVideoDeviceId, selectedAudioDeviceId, hasMediaAccess]);
 
     useEffect(() => {
         if (stream && outgoingVideoRef.current) {
@@ -108,7 +116,7 @@ const useMediaAndRecording = (submitUserMessage: (input: string) => Promise<void
 
     const getText = async (base64data: string) => {
         try {
-            const response = await fetch("/api/speechToText", {
+            const response = await fetch("/api/openai/speechToText", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -128,7 +136,10 @@ const useMediaAndRecording = (submitUserMessage: (input: string) => Promise<void
 
     // Function to initialize the media recorder with the provided stream
     const initialMediaRecorder = (stream: MediaStream) => {
-        const mediaRecorder = new MediaRecorder(stream);
+        // Create a stream with only the audio tracks
+        const audioStream = new MediaStream(stream.getAudioTracks());
+
+        const mediaRecorder = new MediaRecorder(audioStream);
 
         // Event handler when recording starts
         mediaRecorder.onstart = () => {
@@ -162,12 +173,14 @@ const useMediaAndRecording = (submitUserMessage: (input: string) => Promise<void
         outgoingVideoRef,
         hasMediaAccess,
         videoDevices,
+        audioDevices,
         audioTracks,
         selectedVideoDeviceId,
         setSelectedVideoDeviceId,
+        selectedAudioDeviceId,
+        setSelectedAudioDeviceId,
         stream,
         errorMessage,
-        isVideoEnabled,
         recording,
         startRecording,
         stopRecording,

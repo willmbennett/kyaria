@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 interface BodyInterface {
     streamId: string,
     sessionId: string,
-    text: string,
+    message: string,
 }
 
 // Assuming IceServerType is defined somewhere in your project
@@ -15,32 +15,28 @@ interface IceServerType {
 
 export async function POST(request: Request) {
     //console.log('Starting POST function');
-    const { streamId, sessionId, text }: BodyInterface = await request.json()
-    //console.log('Request body:', JSON.stringify({ streamId, sessionId, text }));
+    const { streamId, sessionId, message }: BodyInterface = await request.json()
+    //console.log('Request body:', JSON.stringify({ streamId, sessionId, message }));
     try {
         //console.log('Attempting to fetch with retries');
+        const body = {
+            script: {
+                type: 'text',
+                subtitles: false,
+                provider: { type: 'microsoft', voice_id: 'en-US-EmmaMultilingualNeural' },
+                input: message,
+                ssml: false
+            },
+            config: { stitch: true },
+            background: { color: '#FFFFFF' },
+            session_id: sessionId
+        };
+
+        // Make an API call to D-ID for video generation
         const response = await fetchWithRetries(`https://api.d-id.com/clips/streams/${streamId}`, {
             method: 'POST',
-            headers: {
-                Authorization: `Basic ${process.env.D_ID_API_KEY}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                script: {
-                    type: 'text',
-                    subtitles: 'false',
-                    provider: {
-                        type: 'microsoft',
-                        voice_id: 'en-US-JennyNeural'
-                    },
-                    config: { fluent: true, pad_audio: 0.5 },
-                    input: text,
-                    ssml: 'true'
-                },
-                config: { fluent: 'false', pad_audio: '0.0' },
-                audio_optimization: '2',
-                session_id: sessionId
-            }),
+            headers: { Authorization: `Basic ${process.env.D_ID_API_KEY}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
         });
 
         //console.log('Fetch successful, parsing response');

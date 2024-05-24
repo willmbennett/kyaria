@@ -8,7 +8,7 @@ interface UseDIDApiProps {
     submitUserMessage: (input: string) => Promise<void>
 }
 
-const logging = true
+const logging = false
 
 export const useDIDApi = ({ userId, chatId, threadId, submitUserMessage }: UseDIDApiProps) => {
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -23,6 +23,8 @@ export const useDIDApi = ({ userId, chatId, threadId, submitUserMessage }: UseDI
         closePC: null,
         streaming: false
     });
+
+    const [textToSubmit, setTextToSubmit] = useState('')
 
     // Monitor peerConnection state changes and update the state
     useEffect(() => {
@@ -48,22 +50,38 @@ export const useDIDApi = ({ userId, chatId, threadId, submitUserMessage }: UseDI
 
     const logging = false
 
+    const submitScript = async (message?: string) => {
+        if (message && !textToSubmit) {
+            setTextToSubmit(message)
+        }
+    }
 
-    const submitScript = useCallback(async (message?: string) => {
-        console.log('Made it here with text to submit: ', message)
-        console.log({ isConnected: state.isConnected, sessionId: state.sessionId, streamId: state.streamId })
-        if (state.isConnected && state.sessionId && state.streamId)
-            if (message) {
-                submitUserMessage(message)
+    useEffect(() => {
+        if (logging) console.log('Made it here with text to submit: ', textToSubmit)
+        if (logging) {
+            console.log({
+                isConnected: state.isConnected,
+                sessionId: state.sessionId,
+                streamId: state.streamId,
+                textToSubmit
+            })
+        }
+        if (state.isConnected && state.sessionId && state.streamId && textToSubmit) {
+            if (textToSubmit) {
+                submitUserMessage(textToSubmit)
             }
-        handleScriptSubmission({
-            sessionId: state.sessionId,
-            streamId: state.streamId,
-            message,
-            chatId,
-            threadId
-        })
-    }, [state.sessionId, state.isConnected, userId]);
+            handleScriptSubmission({
+                sessionId: state.sessionId,
+                streamId: state.streamId,
+                message: textToSubmit,
+                chatId,
+                threadId
+            })
+
+        }
+        // Clear the text to submit
+        setTextToSubmit('')
+    }, [textToSubmit, state.isConnected, state.sessionId, state.streamId])
 
 
     const cleanup = useCallback(async ({ closePC, newSessionId, newStreamId }: { closePC: ClosePCType, newSessionId: string, newStreamId: string }) => {

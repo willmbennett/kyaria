@@ -5,10 +5,7 @@ import { ControlMenu } from './ControlMenu';
 import { useDIDApi } from '../../../lib/chatbot/use-d-id';
 import { useFillerVideo } from '../../../lib/chatbot/use-filler-video';
 import { useRouter } from 'next/navigation';
-import { AdminMenu } from './AdminMenu';
-import { useAdminMenu } from '../../../lib/chatbot/use-admin-menu';
 import { VideoDisplay } from './VideoDisplay';
-import { useCallback } from 'react';
 
 interface VideoChatComponentProps {
     userId: string;
@@ -16,11 +13,11 @@ interface VideoChatComponentProps {
     threadId: string;
     toggleTranscript: () => void;
     showTranscript: boolean;
-    admin: boolean;
+    numMessages: number;
     submitUserMessage: (input: string) => Promise<void>
 }
 
-const VideoChatComponent = ({ userId, chatId, threadId, toggleTranscript, showTranscript, admin, submitUserMessage }: VideoChatComponentProps) => {
+const VideoChatComponent = ({ userId, chatId, threadId, toggleTranscript, showTranscript, numMessages, submitUserMessage }: VideoChatComponentProps) => {
     const router = useRouter()
 
     const {
@@ -44,24 +41,25 @@ const VideoChatComponent = ({ userId, chatId, threadId, toggleTranscript, showTr
         outgoingVideoRef,
         hasMediaAccess,
         videoDevices,
+        audioDevices,
         audioTracks,
         selectedVideoDeviceId,
         setSelectedVideoDeviceId,
+        selectedAudioDeviceId,
+        setSelectedAudioDeviceId,
         stream,
         errorMessage: MediaErrorMessage,
-        isVideoEnabled,
         recording,
         startRecording,
         stopRecording,
         text,
         peakLevel,
-    } = useMediaDevices(submitUserMessage);
+    } = useMediaDevices(submitScript);
 
-    const { fillerVideoRef, playFiller } = useFillerVideo()
+    const { fillerVideoRef, playFiller } = useFillerVideo(numMessages)
 
     return (
         <div className="flex flex-col gap-4 justify-center items-center w-full md:p-4 my-10">
-            {errorMessage && <p className="text-red-500">{`Error: ${errorMessage}`}</p>}
             <VideoDisplay
                 videoRef={videoRef}
                 fillerVideoRef={fillerVideoRef}
@@ -75,6 +73,9 @@ const VideoChatComponent = ({ userId, chatId, threadId, toggleTranscript, showTr
                     videoDevices={videoDevices}
                     selectedVideoDeviceId={selectedVideoDeviceId}
                     selectVideoDevice={setSelectedVideoDeviceId}
+                    audioDevices={audioDevices}
+                    selectedAudioDeviceId={selectedAudioDeviceId}
+                    setSelectedAudioDeviceId={setSelectedAudioDeviceId}
                     connected={connected}
                     recording={recording}
                     toggleTranscript={toggleTranscript}
@@ -86,7 +87,7 @@ const VideoChatComponent = ({ userId, chatId, threadId, toggleTranscript, showTr
                 <div className='flex gap-2 items-center justify-center'>
                     <p>Please allow access to your camera and microphone to proceed.</p>
                     <div className='flex flex-col justify-center items-center gap-2'>
-                        {MediaError && <p className="text-red-500">{`Error: ${MediaError}`}</p>}
+                        {MediaErrorMessage && <p className="text-red-500">{`Error: ${MediaErrorMessage}`}</p>}
                         <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => router.refresh()}>Start Video</Button>
                     </div>
                 </div>
