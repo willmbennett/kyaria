@@ -40,19 +40,17 @@ export default async function ProfilePage() {
     }
 
     return (
-        <div className='flex flex-col space-y-10'>
-            <div className='flex flex-col space-y-2'>
-                <h1 className="text-center sm:text-6xl text-4xl font-bold text-slate-900 mb-8">
-                    Let's update your LinkedIn Bio
-                </h1>
-                <Bio
-                    userId={userId}
-                    resumes={resumes}
-                    profileId={profileId}
-                    currentBio={profile?.bio}
-                    desiredRole={profile?.questionnaire?.desiredRole}
-                />
-            </div>
+        <div className='max-w-3xl p-4 w-full h-full overflow-auto'>
+            <h1 className="text-center sm:text-4xl text-4xl font-bold mb-8">
+                Let's update your LinkedIn Bio
+            </h1>
+            <Bio
+                userId={userId}
+                resumes={resumes}
+                profileId={profileId}
+                currentBio={profile?.bio}
+                desiredRole={profile?.questionnaire?.desiredRole}
+            />
         </div>
     );
 }

@@ -86,11 +86,11 @@ export default function CoverLetter({
 
 
     return (
-        <div className='w-full flex flex-col items-center gap-4'>
-            <h1 className="text-center sm:text-6xl text-4xl font-bold mb-8">
+        <div className='w-full h-full over relative items-center gap-4 max-w-xl'>
+            <h1 className="text-center sm:text-4xl text-4xl font-bold mb-8">
                 Stand out with a cover letter
             </h1>
-            <div className='flex gap-2'>
+            <div className='flex gap-2 w-full justify-center'>
                 <Button size='sm' onClick={toggleEdit}>{editCoverLetter ? 'Done' : 'Edit'}</Button>
                 <Button type='button' size='sm' onClick={downloadPDF}>Download</Button>
             </div>

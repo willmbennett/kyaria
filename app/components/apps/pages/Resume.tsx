@@ -14,12 +14,7 @@ export default function Resume({
 }: ResumeProps) {
 
     return (
-        <div className='w-full flex flex-col items-center gap-4'>
-
-            <ResumeUploadPage />
-
-            OR
-
+        <div className='w-full h-full over relative items-center gap-4 max-w-xl'>
             <h1 className="text-center sm:text-4xl text-4xl font-bold mb-8">
                 Stand out with a Tailored Resume
             </h1>

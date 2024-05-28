@@ -103,7 +103,7 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           {userId ? <LoggedInSideBar userId={userId} userName={userName} /> : <Header userId={userId} />}
-          {userId ? <div className='flex overflow-hidden'>{children}</div> : children}
+          {userId ? <div className='flex overflow-hidden w-full md:h-full'>{children}</div> : children}
           <ChatBotPopup userId={userId} userName={userName} />
           {!userId && <Footer userId={userId} userName={userName} email={email} />}
         </Providers>

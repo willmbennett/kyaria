@@ -101,16 +101,14 @@ export const BioGen = ({
     ];
 
     return (
-        <div className="lg:p-6 w-full">
-            <ChatWithGPT
-                documentID={profileId}
-                message={message}
-                setKey='bio'
-                currentState={currentBio || ''}
-                saveToDatabase={updateProfileAction}
-                temp={0.7}
-                activeSubscription={activeSubscription}
-            />
-        </div>
+        <ChatWithGPT
+            documentID={profileId}
+            message={message}
+            setKey='bio'
+            currentState={currentBio || ''}
+            saveToDatabase={updateProfileAction}
+            temp={0.7}
+            activeSubscription={activeSubscription}
+        />
     );
 }

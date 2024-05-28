@@ -20,7 +20,7 @@ export function Chat({ messages, showTranscript }: ChatProps) {
         <AnimatePresence>
             {showTranscript && (
                 <motion.div
-                    className="group h-full py-32 w-96"
+                    className="group h-full w-96"
                     ref={scrollRef}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}

@@ -73,7 +73,7 @@ export default async function EveLayout({
 
 
     return (
-        <div className="min-h-screen">
+        <>
             {userId &&
                 <>
                     <SidebarMobile>
@@ -101,6 +101,6 @@ export default async function EveLayout({
                 </>
             }
             {children}
-        </div>
+        </>
     )
 }

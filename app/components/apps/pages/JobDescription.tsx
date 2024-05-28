@@ -80,7 +80,7 @@ export default function JobDescription({
 
     return (
 
-        <div className="w-full">
+        <div className="w-full max-w-3xl">
             <h1 className="text-center text-3xl sm:text-5xl font-bold text-slate-900 my-8">
                 <EditJobDescription
                     jobId={jobId}

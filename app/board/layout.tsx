@@ -135,29 +135,25 @@ export default async function BoardLayout({
   }
 
   return (
-    <div className={cn("w-full", userId && 'flex')}>
-      {userId &&
-        <>
-          <SidebarMobile>
-            <ItemHistory
-              sideBarTitle={'Boards'}
-              items={itemsWithDefault}
-              createNew={handleBoardCreation}
-              newTitle={'New Board'}
-              deleteItemAction={handleBoardDeletion}
-            />
-          </SidebarMobile>
-          <DesktopOpenSideBar />
-          <SidebarDesktop
-            sideBarTitle={'Boards'}
-            items={itemsWithDefault}
-            createNew={handleBoardCreation}
-            newTitle={'New Board'}
-            deleteItemAction={handleBoardDeletion}
-          />
-        </>
-      }
+    <>
+      <SidebarMobile>
+        <ItemHistory
+          sideBarTitle={'Boards'}
+          items={itemsWithDefault}
+          createNew={handleBoardCreation}
+          newTitle={'New Board'}
+          deleteItemAction={handleBoardDeletion}
+        />
+      </SidebarMobile>
+      <DesktopOpenSideBar />
+      <SidebarDesktop
+        sideBarTitle={'Boards'}
+        items={itemsWithDefault}
+        createNew={handleBoardCreation}
+        newTitle={'New Board'}
+        deleteItemAction={handleBoardDeletion}
+      />
       {children}
-    </ div>
+    </>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { signIn, signOut } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import clsx from 'clsx'
@@ -9,10 +9,10 @@ import { Button } from '../Button'
 import { MobileNav } from "./MobileNav";
 import { AcademicCapIcon, BriefcaseIcon, UserGroupIcon, ClipboardDocumentListIcon, ChartBarIcon, HomeIcon } from "@heroicons/react/24/outline";
 import { Menu } from "@headlessui/react";
-import { ChevronDownIcon, CheckBadgeIcon, CheckIcon } from '@heroicons/react/20/solid';
 import { pageListType } from "../../helper";
 import { MenuIcon } from "./MenuIcon";
 import { Separator } from "../ui/separator";
+import FeedbackAside from "../landingpage/FeedbackAside";
 
 const linkData = {
   publicLinks: [
@@ -23,17 +23,17 @@ const linkData = {
   ],
   signedInLinks: [
     {
-      label: 'AI Career Coach',
-      href: '/eve',
-      pricingTier: 'PRO',
-      icon: AcademicCapIcon
-    },
-    {
       label: 'Job Application Tracker',
       href: '/board',
       pricingTier: 'free',
       icon: ClipboardDocumentListIcon
     },
+    {
+      label: 'AI Career Coach',
+      href: '/eve',
+      pricingTier: 'PRO',
+      icon: AcademicCapIcon
+    }
   ],
   productLinks: [
     {
@@ -54,6 +54,7 @@ const linkData = {
       icon: ChartBarIcon,
       pricingTier: 'free'
     },
+    /*
     {
       label: 'Networking (beta)',
       href: '/networking',
@@ -66,6 +67,7 @@ const linkData = {
       pricingTier: 'PRO',
       icon: BriefcaseIcon
     },
+    */
   ],
   signedInMenuLinks: [
     { label: 'Profile', href: '/profile' },
@@ -154,6 +156,7 @@ export function LoggedInSideBar({ userId, userName }: { userId: string, userName
               ))}
             </div>
           </div>
+          <FeedbackAside />
           <DiscordButton />
           {DesktopMenu(linkData.signedInMenuLinks, pathname, userName)}
         </nav>

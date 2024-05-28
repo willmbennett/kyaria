@@ -185,7 +185,7 @@ export async function JobApplication(
 
 
   return (
-    <div className='w-full'>
+    <div className='w-full h-full overflow-auto p-4'>
       {jobApplicationComponents.get(currentSection)?.component}
     </div>
   );

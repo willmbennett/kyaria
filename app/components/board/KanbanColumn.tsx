@@ -43,8 +43,8 @@ export default function KanbanColumn(
                 ref={setNodeRef}
                 className={`relative h-full w-80 overflow-y-scroll ${columnStyle}`}
             >
-                <div className='w-full bg-white pb-2 sticky top-0 text-center pt-16 z-10 shadow-md'>
-                    <h5 className="text-xl font-medium leading-tight">{state}</h5>
+                <div className='w-full bg-white pb-2 sticky top-0 text-center pt-4 z-10 shadow-md'>
+                    <h5 className="font-small leading-tight">{state}</h5>
                 </div>
                 <div className={`flex w-full flex-col gap-4 p-1 items-center ${transitionItems}`}>
                     <KanbanItemList
