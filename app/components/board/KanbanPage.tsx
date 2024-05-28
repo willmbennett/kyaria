@@ -39,8 +39,8 @@ export default function KanbanPage(
     } = useKanban({ boardItems, boardId })
 
     return (
-        <div className="relative w-full h-screen">
-            <div id="kanban-board-menu" className='absolute top-0 z-20 py-2 bg-white w-full'>
+        <div className="relative w-full sm:m-1 md:m-2 lg:m-3 xl:m-4">
+            <div id="kanban-board-menu" className='absolute top-0 z-20 bg-white w-full'>
                 <div className="flex gap-4 items-center justify-center">
                     <SingleEdit
                         value={name}

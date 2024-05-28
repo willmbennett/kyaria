@@ -15,7 +15,7 @@ interface ItemHistoryProps {
 
 export const ItemHistory = ({ createNew, items, newTitle, sideBarTitle, deleteItemAction }: ItemHistoryProps) => {
     return (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full w-full">
             <div className="flex items-center justify-between p-4">
                 <h4 className="text-sm font-medium">{sideBarTitle}</h4>
                 <SidebarToggle />

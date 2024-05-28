@@ -11,6 +11,7 @@ import { Header } from './components/header/Header';
 import { ChatBotPopup } from './components/chatbot/landingpage/ChatPopup';
 import { Providers } from './components/sidebar/Providers';
 import 'regenerator-runtime/runtime'
+import { LoggedInSideBar } from './components/header/LoggedInSideBar';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
@@ -44,7 +45,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className='bg-white' suppressHydrationWarning>
-      <body className={clsx('min-h-screen font-sans', inter.variable)}>
+      <body className={clsx('min-h-screen font-sans', inter.variable, userId && 'h-screen w-screen flex overflow-hidden')}>
         {/*<Script
           id="ze-snippet"
           src="https://static.zdassets.com/ekr/snippet.js?key=135d1136-b2c1-4d54-8610-58a0b79632da"
@@ -101,10 +102,10 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Header userId={userId} />
-          {children}
+          {userId ? <LoggedInSideBar userId={userId} userName={userName} /> : <Header userId={userId} />}
+          {userId ? <div className='flex overflow-hidden'>{children}</div> : children}
           <ChatBotPopup userId={userId} userName={userName} />
-          <Footer userId={userId} userName={userName} email={email} />
+          {!userId && <Footer userId={userId} userName={userName} email={email} />}
         </Providers>
         <SpeedInsights />
       </body>

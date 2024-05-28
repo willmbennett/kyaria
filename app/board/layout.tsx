@@ -13,6 +13,7 @@ import { DesktopOpenSideBar } from "../components/sidebar/DesktopOpenSideBar";
 import { ActionItemType } from "./job-helper";
 import { updateJobAppAction } from "../apps/_action";
 import { getUserJobApps } from "../../lib/app-db";
+import { cn } from "../../lib/utils";
 
 const title = "Streamline Your Job Search with Kyaria PRO Kanban Tracker";
 const description = "Elevate your job search with Kyaria PRO's Kanban Tracker. Simplify application management with a drag-and-drop interface, keep all your resumes and cover letters in one place, and optimize your search with our intuitive funnel approach. Start your strategic job search campaign for only $10/mo.";
@@ -134,7 +135,7 @@ export default async function BoardLayout({
   }
 
   return (
-    <div className="w-full">
+    <div className={cn("w-full", userId && 'flex')}>
       {userId &&
         <>
           <SidebarMobile>

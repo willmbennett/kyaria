@@ -9,7 +9,7 @@ export const DiscordButton = () => {
         <Button
             variant='ghost'
             size='md'
-            className='w-1/3 md:w-40 bg-white border-none rounded-xl'
+            className='bg-white border-none rounded-xl'
         >
             <Link
                 href='https://discord.gg/RjVfFSDSXz'
@@ -20,6 +20,7 @@ export const DiscordButton = () => {
                         className="object-cover"
                         alt="Discord"
                         priority
+                        width={100}
                     />
                 </div>
             </Link>
