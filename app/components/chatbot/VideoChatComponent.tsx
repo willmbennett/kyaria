@@ -6,34 +6,28 @@ import { useDIDApi } from '../../../lib/chatbot/use-d-id';
 import { useFillerVideo } from '../../../lib/chatbot/use-filler-video';
 import { useRouter } from 'next/navigation';
 import { VideoDisplay } from './VideoDisplay';
+import { Dispatch, SetStateAction } from 'react';
 
 interface VideoChatComponentProps {
-    userId: string;
-    chatId: string;
-    threadId: string;
     toggleTranscript: () => void;
     showTranscript: boolean;
     numMessages: number;
     submitUserMessage: (input: string) => Promise<void>
+    textToSubmit: string;
+    setTextToSubmit: Dispatch<SetStateAction<string>>
 }
 
-const VideoChatComponent = ({ userId, chatId, threadId, toggleTranscript, showTranscript, numMessages, submitUserMessage }: VideoChatComponentProps) => {
+const VideoChatComponent = ({ textToSubmit, toggleTranscript, showTranscript, numMessages, submitUserMessage, setTextToSubmit }: VideoChatComponentProps) => {
     const router = useRouter()
 
     const {
         videoRef,
-        state,
-        cleanup,
-        submitScript,
-        errorMessage,
         connected,
         isStreaming
     } = useDIDApi(
         {
-            userId,
-            chatId,
-            threadId,
-            submitUserMessage
+            textToSubmit,
+            setTextToSubmit
         });
 
     // Set up the user's media
@@ -54,7 +48,7 @@ const VideoChatComponent = ({ userId, chatId, threadId, toggleTranscript, showTr
         stopRecording,
         text,
         peakLevel,
-    } = useMediaDevices(submitScript);
+    } = useMediaDevices(submitUserMessage);
 
     const { fillerVideoRef, playFiller } = useFillerVideo(numMessages)
 

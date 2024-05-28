@@ -5,6 +5,7 @@ import { Chat } from './Chat';
 import { Message } from 'ai';
 import { Button } from '../Button';
 import { nanoid } from 'nanoid'
+import { useAssistant } from '../../../lib/chatbot/use-assistant';
 
 interface VideoChatContainerProps {
     userId: string;
@@ -18,33 +19,19 @@ interface VideoChatContainerProps {
 
 export const VideoChatContainer = ({ userId, chatId, threadId, messages, activeSubscription, admin, jobId }: VideoChatContainerProps) => {
     const [showTranscript, setShowTranscript] = useState(true);
-    const [chatMessages, setChatMessages] = useState(messages)
     const numMessages = messages.length
-
-    // Whenever messages update update the state
-    useEffect(() => {
-        setChatMessages(messages)
-    }, [messages])
 
     const toggleTranscript = () => {
         setShowTranscript(!showTranscript);
     };
 
-    const submitUserMessage = async (input: string) => {
-        // Optimistically add user message UI
-        console.log('Made it here with text: ', input)
-        if (input) {
-            const newMessage: Message = { id: nanoid(), role: 'user', content: input, createdAt: new Date() }
-            setChatMessages([...chatMessages, newMessage])
-        }
-    }
+    const { submitUserMessage, chatMessages, textToSubmit, setTextToSubmit } = useAssistant({ chatId, threadId, messages })
 
     const renderVideoChatComponent = <VideoChatComponent
-        userId={userId}
-        chatId={chatId}
-        threadId={threadId}
         toggleTranscript={toggleTranscript}
         submitUserMessage={submitUserMessage}
+        textToSubmit={textToSubmit}
+        setTextToSubmit={setTextToSubmit}
         showTranscript={showTranscript}
         numMessages={numMessages}
     />

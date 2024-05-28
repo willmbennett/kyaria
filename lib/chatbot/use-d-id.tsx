@@ -1,16 +1,14 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, Dispatch, SetStateAction } from 'react';
 import { ClosePCType, DIDApiState, connect, handleDisconnect, handleScriptSubmission } from '../../app/eve/d-id-helper';
 
 interface UseDIDApiProps {
-    threadId: string;
-    userId: string;
-    chatId: string;
-    submitUserMessage: (input: string) => Promise<void>
+    textToSubmit: string
+    setTextToSubmit: Dispatch<SetStateAction<string>>
 }
 
 const logging = false
 
-export const useDIDApi = ({ userId, chatId, threadId, submitUserMessage }: UseDIDApiProps) => {
+export const useDIDApi = ({ textToSubmit, setTextToSubmit }: UseDIDApiProps) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     let incomingVideo = videoRef.current
     const [state, setState] = useState<DIDApiState>({
@@ -23,8 +21,6 @@ export const useDIDApi = ({ userId, chatId, threadId, submitUserMessage }: UseDI
         closePC: null,
         streaming: false
     });
-
-    const [textToSubmit, setTextToSubmit] = useState('')
 
     // Monitor peerConnection state changes and update the state
     useEffect(() => {
@@ -50,12 +46,6 @@ export const useDIDApi = ({ userId, chatId, threadId, submitUserMessage }: UseDI
 
     const logging = false
 
-    const submitScript = async (message?: string) => {
-        if (message && !textToSubmit) {
-            setTextToSubmit(message)
-        }
-    }
-
     useEffect(() => {
         if (logging) console.log('Made it here with text to submit: ', textToSubmit)
         if (logging) {
@@ -67,15 +57,10 @@ export const useDIDApi = ({ userId, chatId, threadId, submitUserMessage }: UseDI
             })
         }
         if (state.isConnected && state.sessionId && state.streamId && textToSubmit) {
-            if (textToSubmit) {
-                submitUserMessage(textToSubmit)
-            }
             handleScriptSubmission({
                 sessionId: state.sessionId,
                 streamId: state.streamId,
                 message: textToSubmit,
-                chatId,
-                threadId
             })
 
         }
@@ -156,6 +141,6 @@ export const useDIDApi = ({ userId, chatId, threadId, submitUserMessage }: UseDI
         };
     }, [incomingVideo]);
 
-    return { videoRef, state, connect, cleanup, errorMessage: state.errorMessage, submitScript, connected: state.isConnected, isStreaming: state.streaming };
+    return { videoRef, state, connect, cleanup, errorMessage: state.errorMessage, connected: state.isConnected, isStreaming: state.streaming };
 }
 

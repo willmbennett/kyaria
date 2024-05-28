@@ -429,37 +429,14 @@ interface HandleScriptSubmissionProps {
     sessionId: string | null;
     streamId: string | null;
     message: string;
-    chatId: string;
-    threadId: string;
 }
 
-export const handleScriptSubmission = async ({ sessionId, streamId, message, chatId, threadId }: HandleScriptSubmissionProps) => {
-    if (logging) console.log('Made it to Submit Script')
-
-    // Get the response from OpenAI
-    const res = await fetch("/api/openai/assistant", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            message,
-            threadId,
-        }),
-    });
-
-    const { response } = await res.json();
-    // Update the chat history with the new messages
-    updateChatAction(chatId, [
-        { id: '2', role: 'user', content: message, createdAt: new Date() },
-        { id: '3', role: 'assistant', content: response, createdAt: new Date() }
-    ], '/eve');
-
+export const handleScriptSubmission = async ({ sessionId, streamId, message }: HandleScriptSubmissionProps) => {
 
     const dataToSubmit = {
         streamId,
         sessionId,
-        message: response,
+        message,
     }
 
     if (logging) console.log('dataToSubmit: ', dataToSubmit)

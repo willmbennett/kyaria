@@ -1,0 +1,299 @@
+{
+    "interviewQuestions": {
+      "SoftwareEngineering": {
+        "Behavioral": [
+          {
+            "question": "Can you tell me about a time when you faced a significant challenge at work? How did you handle it?"
+          },
+          {
+            "question": "Describe a situation where you had to work closely with a team. What was your role and how did you contribute?"
+          },
+          {
+            "question": "Tell me about a time when you had to learn a new technology or tool quickly. How did you approach it?"
+          },
+          {
+            "question": "Have you ever had to deal with a difficult colleague or team member? How did you manage the situation?"
+          },
+          {
+            "question": "Describe a time when you received constructive criticism. How did you respond and what did you learn from it?"
+          },
+          {
+            "question": "Can you give an example of a project you managed from start to finish? What steps did you take to ensure its success?"
+          },
+          {
+            "question": "Tell me about a time when you had to balance multiple priorities. How did you manage your time and ensure everything was completed?"
+          },
+          {
+            "question": "Have you ever encountered a project that did not go as planned? How did you handle the setbacks and what was the outcome?"
+          },
+          {
+            "question": "Describe a time when you had to explain a complex technical concept to a non-technical person. How did you ensure they understood?"
+          },
+          {
+            "question": "Can you discuss an instance where you took the initiative to improve a process or system at work? What was the impact?"
+          }
+        ],
+        "Technical": [
+          {
+            "question": "Explain the differences between Object-Oriented Programming and Functional Programming."
+          },
+          {
+            "question": "How do you manage version control in your projects?"
+          },
+          {
+            "question": "What are some common design patterns and when would you use them?"
+          },
+          {
+            "question": "Describe the software development lifecycle and your experience with it."
+          },
+          {
+            "question": "How do you ensure the quality of your code?"
+          },
+          {
+            "question": "What is the importance of continuous integration and continuous deployment (CI/CD)?"
+          },
+          {
+            "question": "Can you explain the concept of test-driven development (TDD)?"
+          },
+          {
+            "question": "Describe a time when you optimized a piece of code. What improvements did you make?"
+          },
+          {
+            "question": "How do you approach debugging in your projects?"
+          },
+          {
+            "question": "What are microservices and what are their advantages?"
+          }
+        ],
+        "Situational": [
+          {
+            "question": "If you were assigned a project with an unrealistic deadline, how would you handle it?"
+          },
+          {
+            "question": "How would you approach resolving a production issue that affects the company's main product?"
+          },
+          {
+            "question": "Imagine you disagree with a team member on the best way to implement a feature. How would you handle the situation?"
+          },
+          {
+            "question": "What would you do if you discovered a significant bug just before a project deadline?"
+          },
+          {
+            "question": "How would you prioritize tasks if you had multiple high-priority projects due at the same time?"
+          },
+          {
+            "question": "How would you handle a situation where a client's requirements change midway through a project?"
+          },
+          {
+            "question": "If you were asked to work on a technology you were not familiar with, how would you approach the task?"
+          },
+          {
+            "question": "Describe how you would handle a situation where your team is consistently missing deadlines."
+          },
+          {
+            "question": "How would you manage a situation where you receive conflicting instructions from different stakeholders?"
+          },
+          {
+            "question": "What steps would you take if you realized a project's scope was beyond the team's current capabilities?"
+          }
+        ]
+      },
+      "CyberSecurity": {
+        "Behavioral": [
+          {
+            "question": "Can you describe a time when you had to handle a security breach? How did you manage the situation?"
+          },
+          {
+            "question": "Tell me about a project where you had to collaborate with different departments to improve security."
+          },
+          {
+            "question": "Describe a situation where you had to stay updated with the latest security trends and apply them to your work."
+          },
+          {
+            "question": "Have you ever had to explain a complex security issue to a non-technical stakeholder? How did you approach it?"
+          },
+          {
+            "question": "Tell me about a time when you had to deal with resistance to a security policy you were implementing."
+          },
+          {
+            "question": "Can you give an example of when you had to respond to an urgent security threat? What was the outcome?"
+          },
+          {
+            "question": "Describe a time when you had to balance security needs with business requirements."
+          },
+          {
+            "question": "Have you ever identified a potential security risk in a project? How did you address it?"
+          },
+          {
+            "question": "Tell me about a time when you had to train or mentor a colleague on security practices."
+          },
+          {
+            "question": "Describe a situation where you had to manage multiple security tasks or projects simultaneously. How did you prioritize?"
+          }
+        ],
+        "Technical": [
+          {
+            "question": "Explain the difference between symmetric and asymmetric encryption."
+          },
+          {
+            "question": "What steps would you take to secure a network?"
+          },
+          {
+            "question": "Can you explain the concept of a firewall and its importance?"
+          },
+          {
+            "question": "What are the main types of malware and how do they differ?"
+          },
+          {
+            "question": "Describe the process of conducting a penetration test."
+          },
+          {
+            "question": "How do you stay current with the latest cybersecurity threats?"
+          },
+          {
+            "question": "What is a zero-day vulnerability and how would you protect against it?"
+          },
+          {
+            "question": "Explain the role of intrusion detection systems (IDS) and intrusion prevention systems (IPS)."
+          },
+          {
+            "question": "How would you implement multi-factor authentication (MFA) in an organization?"
+          },
+          {
+            "question": "What are some common security protocols used to protect data in transit?"
+          }
+        ],
+        "Situational": [
+          {
+            "question": "If you discovered a vulnerability in a system, what steps would you take to address it?"
+          },
+          {
+            "question": "How would you handle a situation where a non-technical employee accidentally exposes sensitive data?"
+          },
+          {
+            "question": "What would you do if you found out that a colleague was violating security policies?"
+          },
+          {
+            "question": "How would you approach securing a legacy system that is critical to business operations?"
+          },
+          {
+            "question": "Describe how you would respond to a ransomware attack on your company's network."
+          },
+          {
+            "question": "If you were tasked with improving the security posture of an organization, where would you start?"
+          },
+          {
+            "question": "How would you handle a situation where an important security update causes system instability?"
+          },
+          {
+            "question": "What steps would you take if a client reported a data breach?"
+          },
+          {
+            "question": "How would you prioritize your response to multiple simultaneous security incidents?"
+          },
+          {
+            "question": "What would you do if you discovered that an employee was using unauthorized software that poses a security risk?"
+          }
+        ]
+      },
+      "DataScience": {
+        "Behavioral": [
+          {
+            "question": "Describe a challenging data analysis project you worked on. What was the outcome?"
+          },
+          {
+            "question": "Tell me about a time when you had to present your findings to a non-technical audience. How did you ensure they understood?"
+          },
+          {
+            "question": "Can you describe a situation where you had to work with a large, complex dataset? How did you manage it?"
+          },
+          {
+            "question": "Have you ever had to correct a significant error in your analysis? How did you handle it?"
+          },
+          {
+            "question": "Tell me about a time when your insights from data analysis led to a significant business impact."
+          },
+          {
+            "question": "Describe a situation where you had to collaborate with colleagues from different departments on a data project."
+          },
+          {
+            "question": "How do you handle situations where your analysis contradicts the expectations of stakeholders?"
+          },
+          {
+            "question": "Can you give an example of when you had to learn a new data tool or technology quickly?"
+          },
+          {
+            "question": "Tell me about a time when you had to balance multiple data projects with tight deadlines. How did you manage?"
+          },
+          {
+            "question": "Describe a situation where you had to ensure the quality and integrity of your data."
+          }
+        ],
+        "Technical": [
+          {
+            "question": "Explain the difference between supervised and unsupervised learning."
+          },
+          {
+            "question": "What techniques do you use for feature selection in a dataset?"
+          },
+          {
+            "question": "Describe the process of building a machine learning model from start to finish."
+          },
+          {
+            "question": "How do you handle missing data in a dataset?"
+          },
+          {
+            "question": "What is cross-validation and why is it important?"
+          },
+          {
+            "question": "Can you explain the difference between precision and recall?"
+          },
+          {
+            "question": "Describe how you would approach a problem where the data is imbalanced."
+          },
+          {
+            "question": "What is the importance of data preprocessing and how do you do it?"
+          },
+          {
+            "question": "Explain the concept of overfitting and how you can prevent it."
+          },
+          {
+            "question": "How do you ensure your data visualizations effectively communicate your findings?"
+          }
+        ],
+        "Situational": [
+          {
+            "question": "How would you handle missing data in a dataset?"
+          },
+          {
+            "question": "If you had to analyze a large dataset with limited computational resources, how would you approach the problem?"
+          },
+          {
+            "question": "Describe how you would deal with a dataset that has a lot of noise."
+          },
+          {
+            "question": "What steps would you take if your model's performance suddenly drops?"
+          },
+          {
+            "question": "How would you prioritize tasks if you have multiple projects with tight deadlines?"
+          },
+          {
+            "question": "If you were asked to improve the accuracy of an existing model, what steps would you take?"
+          },
+          {
+            "question": "What would you do if you discovered that your data collection process was flawed?"
+          },
+          {
+            "question": "How would you explain a complex statistical concept to a non-technical stakeholder?"
+          },
+          {
+            "question": "Describe how you would handle a situation where your data analysis contradicts a widely accepted assumption."
+          },
+          {
+            "question": "How would you approach creating a predictive model for a new business problem with limited historical data?"
+          }
+        ]
+      }
+    }
+  }
+  
