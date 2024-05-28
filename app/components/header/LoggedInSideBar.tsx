@@ -105,7 +105,7 @@ export const DesktopMenu = (pageList: pageListType[], pathname: string, userName
             <p className="font-medium">{userName}</p>
             <MenuIcon open={open} />
           </Menu.Button>
-          <Menu.Items className="absolute right-0 bottom-full z-50 mb-3 w-full space-y-1 outline-none drop-shadow filter focus:outline-none">
+          <Menu.Items className="absolute right-0 bottom-full z-50 mb-3 w-full space-y-1 outline-none drop-shadow filter focus:outline-none bg-white">
             {pageList.map((link: pageListType, i) => (
               MenuItem(link, pathname)
             ))}
