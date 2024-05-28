@@ -1,19 +1,16 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef, Dispatch, SetStateAction } from 'react';
 import { ClosePCType, DIDApiState, connect, handleDisconnect, handleScriptSubmission } from '../../app/eve/d-id-helper';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 interface UseDIDApiProps {
-    incomingVideo: HTMLVideoElement | null;
-    useChatBot: boolean;
-    threadId: string;
-    userId: string;
-    chatId: string;
-    funMode: boolean;
+    textToSubmit: string
+    setTextToSubmit: Dispatch<SetStateAction<string>>
 }
 
 const logging = false
 
-export const useDIDApi = ({ incomingVideo, useChatBot, userId, chatId, threadId, funMode }: UseDIDApiProps) => {
+export const useDIDApi = ({ textToSubmit, setTextToSubmit }: UseDIDApiProps) => {
+    const videoRef = useRef<HTMLVideoElement>(null);
+    let incomingVideo = videoRef.current
     const [state, setState] = useState<DIDApiState>({
         isConnecting: false,
         isConnected: false,
@@ -49,19 +46,27 @@ export const useDIDApi = ({ incomingVideo, useChatBot, userId, chatId, threadId,
 
     const logging = false
 
-
-    const submitScript = useCallback(async (message?: string) => {
-        if ((state.isConnected && state.sessionId && state.streamId) || !useChatBot)
+    useEffect(() => {
+        if (logging) console.log('Made it here with text to submit: ', textToSubmit)
+        if (logging) {
+            console.log({
+                isConnected: state.isConnected,
+                sessionId: state.sessionId,
+                streamId: state.streamId,
+                textToSubmit
+            })
+        }
+        if (state.isConnected && state.sessionId && state.streamId && textToSubmit) {
             handleScriptSubmission({
                 sessionId: state.sessionId,
                 streamId: state.streamId,
-                message,
-                useChatBot,
-                chatId,
-                threadId,
-                funMode
+                message: textToSubmit,
             })
-    }, [state.sessionId, state.isConnected, userId, funMode, useChatBot]);
+
+        }
+        // Clear the text to submit
+        setTextToSubmit('')
+    }, [textToSubmit, state.isConnected, state.sessionId, state.streamId])
 
 
     const cleanup = useCallback(async ({ closePC, newSessionId, newStreamId }: { closePC: ClosePCType, newSessionId: string, newStreamId: string }) => {
@@ -82,7 +87,7 @@ export const useDIDApi = ({ incomingVideo, useChatBot, userId, chatId, threadId,
         let newStreamId: string
 
         // Only call connect if videoElement is updated and we are neither connecting nor connected.
-        if (incomingVideo && useChatBot && !state.isConnected && !state.isConnecting) {
+        if (incomingVideo && !state.isConnected && !state.isConnecting) {
 
             if (logging) console.log('Conditions met. Calling connect...');
 
@@ -134,8 +139,8 @@ export const useDIDApi = ({ incomingVideo, useChatBot, userId, chatId, threadId,
                 })();
             }
         };
-    }, [incomingVideo, useChatBot]);
+    }, [incomingVideo]);
 
-    return { state, connect, cleanup, errorMessage: state.errorMessage, submitScript, connected: state.isConnected, isStreaming: state.streaming };
+    return { videoRef, state, connect, cleanup, errorMessage: state.errorMessage, connected: state.isConnected, isStreaming: state.streaming };
 }
 

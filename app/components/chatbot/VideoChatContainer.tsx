@@ -1,9 +1,11 @@
 'use client'
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import VideoChatComponent from './VideoChatComponent';
-import { ChatTranscript } from './ChatTranscript';
+import { Chat } from './Chat';
 import { Message } from 'ai';
 import { Button } from '../Button';
+import { nanoid } from 'nanoid'
+import { useAssistant } from '../../../lib/chatbot/use-assistant';
 
 interface VideoChatContainerProps {
     userId: string;
@@ -16,20 +18,22 @@ interface VideoChatContainerProps {
 }
 
 export const VideoChatContainer = ({ userId, chatId, threadId, messages, activeSubscription, admin, jobId }: VideoChatContainerProps) => {
-    const [showTranscript, setShowTranscript] = useState(false);
+    const [showTranscript, setShowTranscript] = useState(true);
+    const numMessages = messages.length
 
     const toggleTranscript = () => {
         setShowTranscript(!showTranscript);
     };
 
+    const { submitUserMessage, chatMessages, textToSubmit, setTextToSubmit } = useAssistant({ chatId, threadId, messages })
+
     const renderVideoChatComponent = <VideoChatComponent
-        userId={userId}
-        chatId={chatId}
-        threadId={threadId}
-        messages={messages}
         toggleTranscript={toggleTranscript}
+        submitUserMessage={submitUserMessage}
+        textToSubmit={textToSubmit}
+        setTextToSubmit={setTextToSubmit}
         showTranscript={showTranscript}
-        admin={admin}
+        numMessages={numMessages}
     />
 
     // Use useMemo to efficiently calculate the number of assistant messages
@@ -52,33 +56,12 @@ export const VideoChatContainer = ({ userId, chatId, threadId, messages, activeS
         </div>
     );
 
+    const handleVideoComponent = activeSubscription ? renderVideoChatComponent : handleSubscription
+
     return (
-        <div className={`flex h-full ${jobId ? '' : "py-5 lg:py-10 md:h-screen"}  w-full justify-center text-center gap-4 overflow-hidden`}>
-            <div className='h-full w-full flex flex-col gap-4'>
-                {!jobId && <h1 className="text-2xl font-semibold">Career Coaching Session</h1>}
-                {activeSubscription ? (
-                    <div className={`${showTranscript ? 'hidden' : 'block'}`}>
-                        {renderVideoChatComponent}
-                    </div>
-                ) : (
-                    <div className={`${showTranscript ? 'hidden' : 'block'}`}>
-                        {handleSubscription}
-                    </div>
-                )}
-                <div className={`w-full h-3/4 justify-center items-center ${showTranscript ? 'flex flex-col gap-4' : 'hidden'}`}>
-                    <Button
-                        onClick={toggleTranscript}
-                        size='sm'
-                    >
-                        Show Video
-                    </Button>
-                    <div className='relative h-full overflow-y-scroll overscroll-none px-2'>
-                        <div className='h-full'>
-                            <ChatTranscript messages={messages} />
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div className={`flex flex-col md:flex-row ${jobId ? '' : "md:h-screen"}  w-full justify-center text-center gap-4 px-1 md:px-4 lg:px-10 xl:px-20 overflow-hidden`}>
+            {handleVideoComponent}
+            <Chat messages={chatMessages} showTranscript={showTranscript} />
         </div>
     );
 };

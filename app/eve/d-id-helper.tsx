@@ -1,5 +1,6 @@
 'use client'
 import { Dispatch, SetStateAction } from "react"
+import { updateChatAction } from "./_action"
 
 type IceServerType = {
     "urls": string | string[]
@@ -427,26 +428,19 @@ export const handleDisconnect = async ({ closePC, incomingVideo, newSessionId, n
 interface HandleScriptSubmissionProps {
     sessionId: string | null;
     streamId: string | null;
-    message?: string;
-    useChatBot: boolean;
-    chatId: string;
-    threadId: string;
-    funMode: boolean;
+    message: string;
 }
 
-export const handleScriptSubmission = async ({ sessionId, streamId, message, chatId, threadId, useChatBot, funMode }: HandleScriptSubmissionProps) => {
-    if (logging) console.log('Made it to Submit Script')
+export const handleScriptSubmission = async ({ sessionId, streamId, message }: HandleScriptSubmissionProps) => {
+
     const dataToSubmit = {
         streamId,
         sessionId,
-        useChatBot,
         message,
-        chatId,
-        threadId
     }
 
     if (logging) console.log('dataToSubmit: ', dataToSubmit)
-    fetch('/api/d-id-chat', {
+    fetch('/api/d-id/submit-script', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
