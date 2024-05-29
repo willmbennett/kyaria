@@ -39,8 +39,8 @@ export default function KanbanPage(
     } = useKanban({ boardItems, boardId })
 
     return (
-        <div className="relative w-full h-full sm:p-1 md:p-2 lg:p-3 xl:p-4">
-            <div className="flex gap-4 items-center justify-center">
+        <div className="relative w-full h-full">
+            <div className="flex gap-4 items-center justify-center border-b py-2">
                 <SingleEdit
                     value={name}
                     onUpdate={updateBoardTitle}

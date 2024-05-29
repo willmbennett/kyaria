@@ -1,20 +1,16 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { Button } from '../Button'
 import discord from '/public/discord-logo-blue.png'
 
 export const DiscordButton = () => {
     return (
-        <Button
-            variant='ghost'
-            size='md'
-            className='bg-white border-none rounded-xl'
-        >
+        <div className='w-full flex flex-col text-center gap-2'>
+            <p className='text-sm text-slate-500'>Come join our</p>
             <Link
                 href='https://discord.gg/RjVfFSDSXz'
                 target="_blank">
-                <div className="object-cover">
+                <div className="object-cover hover:bg-slate-700 hover:text-white w-full px-4 py-2 flex justify-center">
                     <Image
                         src={discord}
                         className="object-cover"
@@ -24,6 +20,6 @@ export const DiscordButton = () => {
                     />
                 </div>
             </Link>
-        </Button>
+        </div>
     )
 }

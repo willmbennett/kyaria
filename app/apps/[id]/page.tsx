@@ -8,7 +8,7 @@ import JobMenu from "../../components/apps/JobMenu";
 import ProgressBar from "../../components/apps/ui/ProgressBar";
 import FeedbackAside from "../../components/landingpage/FeedbackAside";
 import useAppNavigation from "../../../lib/hooks/use-app-section";
-import { jobStateType } from "../../board/job-helper";
+import { JobStateType } from "../../board/job-helper";
 import { Button } from "../../components/Button";
 import { cache } from "react";
 
@@ -33,7 +33,7 @@ export default async function JobAppPage({ params, searchParams }: JobAppPagePro
 
   const { app } = await loadBoards(params.id) as getJobAppInterface
   const job = app.job as JobClass
-  const appState = app.state as jobStateType
+  const appState = app.state as JobStateType
 
   const { currentSection, filteredPages, activeProgressSection } = useAppNavigation(appState, searchParams, job.companyDiffbotUri);
 

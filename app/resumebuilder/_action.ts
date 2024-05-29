@@ -1,18 +1,11 @@
 "use server";
-import { createResume, deleteResume, updateResume } from "../../lib/resume-db";
-import { createResumeScan } from "../../lib/resumescan-db";
+import { createResume, deleteResume, getDefaultResumeId, updateResume } from "../../lib/resume-db";
 import { revalidatePath } from "next/cache";
-import { getModelForClass } from "@typegoose/typegoose";
-import { ResumeClass } from "../../models/Resume";
 import { del } from '@vercel/blob';
 
-export async function createResumeScanAction(data: any, path: string) {
-  //console.log('Resume Scan Action start')
-  const { resumeScanId } = await createResumeScan(data);
-  //console.log('Resume Scan ACtion resumeScanId: ', resumeScanId)
-  revalidatePath(path);
-  //console.log('Post revalidation page: ')
-  return resumeScanId
+export async function getDefaultResumeIdAction(userId: string) {
+  const { defaultResumeId } = await getDefaultResumeId(userId)
+  return defaultResumeId
 }
 
 export async function createResumeAction(data: any, path: string) {
@@ -45,7 +38,7 @@ export async function deleteResumeAction({
   fileUrl?: string;
 }) {
   const { error } = await deleteResume(id);
-  
+
   if (fileUrl) {
     await del(fileUrl);
   }

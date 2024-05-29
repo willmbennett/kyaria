@@ -32,7 +32,7 @@ class Emails {
     }
 })
 class AppClass {
-    @prop({ default: 'WISHLIST', required: true })
+    @prop({ default: 'Wishlist', required: true })
     public state!: string;
 
     @prop({ default: true, required: true })

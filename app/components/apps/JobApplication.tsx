@@ -113,11 +113,15 @@ export async function JobApplication(
     }],
     ['resume', {
       component:
-        <Resume
-          userResume={userResume}
-          userId={userId}
-          jobId={jobId}
-        />
+        <>
+          {/* @ts-ignore */}
+          <Resume
+            userResume={userResume}
+            userId={userId}
+            jobId={jobId}
+            jobAppId={jobAppId}
+          />
+        </>
     }],
     ['notes', {
       component:

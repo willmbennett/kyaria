@@ -6,6 +6,7 @@ import CreateJobApp from "../../components/apps/new/CreateJobApp";
 import { createProfile, getProfile } from "../../../lib/profile-db";
 import { ResumeClass } from "../../../models/Resume";
 import { getResumes } from "../../../lib/resume-db";
+import { getDefaultResumeIdAction } from "../../resumebuilder/_action";
 
 type getResumesType = {
     resumes: ResumeClass[]
@@ -19,7 +20,6 @@ export default async function NewAppPage() {
     }
 
     //console.log('userId: ', userId)
-    const { resumes } = await getResumes(userId) as getResumesType
     let profileId
     let profile
     const { profile: newProfile } = await getProfile(userId);
@@ -36,6 +36,8 @@ export default async function NewAppPage() {
         redirect(`/profile/${userId}`)
     }
 
+    const userResume = await getDefaultResumeIdAction(userId)
+
     return (
         <section className="flex flex-col lg:flex-row overflow-hidden pt-5 w-full pb-14 lg: px-4">
             <Container>
@@ -44,7 +46,7 @@ export default async function NewAppPage() {
                         userId={userId}
                         profileId={profileId}
                         story={profile.story}
-                        resumes={resumes}
+                        userResume={userResume}
                     />
                 </div>
             </Container>

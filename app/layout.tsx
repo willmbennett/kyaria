@@ -45,7 +45,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className='bg-white' suppressHydrationWarning>
-      <body className={clsx('min-h-screen font-sans', inter.variable, userId && 'h-screen w-screen flex overflow-hidden')}>
+      <body className={clsx('min-h-screen font-sans', inter.variable, userId && 'h-screen w-screen relative md:flex md:overflow-hidden')}>
         {/*<Script
           id="ze-snippet"
           src="https://static.zdassets.com/ekr/snippet.js?key=135d1136-b2c1-4d54-8610-58a0b79632da"
@@ -103,7 +103,7 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           {userId ? <LoggedInSideBar userId={userId} userName={userName} /> : <Header userId={userId} />}
-          {userId ? <div className='flex overflow-hidden w-full md:h-full'>{children}</div> : children}
+          {userId ? <div className='md:flex overflow-hidden w-full h-full'>{children}</div> : children}
           <ChatBotPopup userId={userId} userName={userName} />
           {!userId && <Footer userId={userId} userName={userName} email={email} />}
         </Providers>

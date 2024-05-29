@@ -14,6 +14,7 @@ import { IconSpinner } from '../../ui/icons';
 import { useResumeDropDown } from '../../../../lib/hooks/use-resume-dropdown';
 import { ResumeDropAndSelect } from '../../ResumeDropAndSelect';
 import { updateResumeAction } from '../../../resumebuilder/_action';
+import { DropResumeBanner } from '../../chatbot/DropResumeBanner';
 
 const BASIC_FIELD_STYLE = 'text-left font-medium text-lg mb-4 flex flex-col w-full'
 
@@ -26,16 +27,15 @@ export default function CreateJobApp(
         userId,
         profileId,
         story = '',
-        resumes
+        userResume
     }: {
         userId: string,
         profileId: string,
         story?: string;
-        resumes: ResumeClass[],
+        userResume?: string;
     }) {
     const [loading, setLoading] = useState(false)
     const { register, handleSubmit, formState: { errors }, watch } = useForm<FormFields>();
-    const { hasResumes, selectedResumeId, setSelectedResumeId, selectedResume } = useResumeDropDown({ resumes })
     const path = usePathname()
     const router = useRouter()
     const sp = useSearchParams()
@@ -47,26 +47,22 @@ export default function CreateJobApp(
 
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
-        if (selectedResume) {
+        if (userResume) {
             try {
                 setLoading(true);
-                const jobId = await findOrCreateJob(data.input, userId, selectedResume)
+                const jobId = await findOrCreateJob(data.input, userId)
                 if (jobId) {
-                    //console.log('Made it to resume creation')
-                    const newResumeId = await handleCopyResume(userId, selectedResume)
-                    //console.log('newResumeId: ', newResumeId)
-
-                    if (newResumeId) {
+                    if (userResume) {
                         let newAppId
                         if (boardId) {
-                            const { appId } = await createApp(jobId, userId, emails, story, profileId, newResumeId, boardId)
+                            const { appId } = await createApp(jobId, userId, emails, story, profileId, userResume, boardId)
                             newAppId = appId
                         } else {
-                            const { appId } = await createApp(jobId, userId, emails, story, profileId, newResumeId)
+                            const { appId } = await createApp(jobId, userId, emails, story, profileId, userResume)
                             newAppId = appId
                         }
                         if (newAppId) {
-                            await updateResumeAction(newResumeId, { appId: newAppId })
+                            await updateResumeAction(userResume, { appId: newAppId })
                             router.push(`/apps/${newAppId}`)
                         }
 
@@ -82,51 +78,48 @@ export default function CreateJobApp(
     };
 
     return (
-        <>
-            <div className='flex pb-3'>
-                <Button size='sm' variant='ghost' href={`/board${boardId ? `/${boardId}` : '/default'}`}>← Back to Board</Button>
-            </div>
+        <> <div className='flex pb-3'>
+            <Button size='sm' variant='ghost' href={`/board${boardId ? `/${boardId}` : '/default'}`}>← Back to Board</Button>
+        </div>
             <h1 className="pb-10 text-5xl font-semibold leading-tighter text-slate-900 md:mx-auto md:max-w-2xl md:text-center xl:mx-0 xl:text-6xl xl:leading-tighter">
                 Add a new Job Application
             </h1>
             <div className='flex-col items-center w-full space-y-10 max-w-2xl'>
-                <div className='flex flex-col gap-4 items-start'>
-                    <ResumeDropAndSelect
-                        userId={userId}
-                        resumes={resumes}
-                        hasResumes={hasResumes}
-                        selectedResumeId={selectedResumeId}
-                        setSelectedResumeId={setSelectedResumeId}
-                    />
-                </div>
-                <div>
-                    {!loading && selectedResume && (
-                        <form onSubmit={handleSubmit(onSubmit)}>
-                            <div className={BASIC_FIELD_STYLE}>
-                                <input {...register('input', { required: true })} placeholder="Link to job post" className="rounded-sm"></input>
-                                {errors.input && <p>Paste a link to the job post.</p>}
-                            </div>
-                            {(selectedResume && currentUrl) &&
+                {!userResume ?
+                    <div className='flex flex-col gap-4 items-start'>
+                        {!userResume && <DropResumeBanner userId={userId} />}
+                    </div>
+                    :
+                    <div>
+                        {!loading && (
+                            <form onSubmit={handleSubmit(onSubmit)}>
                                 <div className={BASIC_FIELD_STYLE}>
-                                    <Button
-                                        variant="solid"
-                                        size="md"
-                                        type="submit"
-                                        className="mt-10 sm:mt-12"
-                                    >
-                                        Submit
-                                    </Button>
+                                    <input {...register('input', { required: true })} placeholder="Link to job post" className="rounded-sm"></input>
+                                    {errors.input && <p>Paste a link to the job post.</p>}
                                 </div>
-                            }
-                        </form>
-                    )}
-                </div>
+                                {(currentUrl) &&
+                                    <div className={BASIC_FIELD_STYLE}>
+                                        <Button
+                                            variant="solid"
+                                            size="md"
+                                            type="submit"
+                                            className="mt-10 sm:mt-12"
+                                        >
+                                            Submit
+                                        </Button>
+                                    </div>
+                                }
+                            </form>
+                        )}
+                    </div>
+                }
                 {loading && (
                     <div className="flex gap-2 items-center">
                         <p>Fetching the job post</p>
                         <IconSpinner />
                     </div>
                 )}
+
             </div>
         </>
     );

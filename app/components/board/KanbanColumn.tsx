@@ -24,7 +24,7 @@ export default function KanbanColumn(
     }: KanbanColumnProps) {
     const { setNodeRef, isOver } = useDroppable({ id: state });
 
-    const jobApps = apps.filter(job => job.state === state)
+    const jobApps = apps.filter(job => job.state.toLowerCase() === state.toLowerCase());
 
     const activeApps = jobApps.filter(app => app.active);
     const inActiveApps = jobApps.filter(app => !app.active);
@@ -43,7 +43,7 @@ export default function KanbanColumn(
                 ref={setNodeRef}
                 className={`relative h-full w-80 overflow-y-scroll ${columnStyle}`}
             >
-                <div className='w-full bg-white pb-2 sticky top-0 text-center pt-4 z-10 shadow-md'>
+                <div className='w-full bg-white pb-2 sticky top-0 text-center pt-4 z-10 shadow-sm'>
                     <h5 className="font-small leading-tight">{state}</h5>
                 </div>
                 <div className={`flex w-full flex-col gap-4 p-1 items-center ${transitionItems}`}>

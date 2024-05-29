@@ -4,11 +4,7 @@ import { useSidebar } from "../../../lib/chatbot/use-sidebar"
 import { ChevronRightIcon } from "@radix-ui/react-icons"
 
 export function DesktopOpenSideBar() {
-    const { toggleSidebar, isSidebarOpen, isLoading } = useSidebar()
-
-    if (isSidebarOpen || isLoading) {
-        return <></>
-    }
+    const { toggleSidebar } = useSidebar()
 
     return (
         <button

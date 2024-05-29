@@ -19,11 +19,11 @@ export const SidebarDesktop = ({ items, createNew, newTitle, sideBarTitle, delet
         <AnimatePresence>
             {(isSidebarOpen && !isLoading) && (
                 <motion.div
-                    initial={{ opacity: 0 }}
+                    initial={{ opacity: 0, }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3, ease: "easeInOut" }}
-                    className="peer hidden md:flex border-r bg-muted lg:w-[250px] xl:w-[300px] z-10"
+                    className="hidden md:block md:absolute left-60 top-0 h-screen border-r bg-muted lg:w-[250px] xl:w-[300px] z-40 bg-white"
                 >
                     <ItemHistory
                         sideBarTitle={sideBarTitle}
@@ -35,5 +35,6 @@ export const SidebarDesktop = ({ items, createNew, newTitle, sideBarTitle, delet
                 </motion.div>
             )}
         </AnimatePresence>
+
     );
 };

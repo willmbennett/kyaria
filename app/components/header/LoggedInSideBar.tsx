@@ -83,7 +83,7 @@ const MenuItem = (link: pageListType, pathname: string) => (
       (pathname.startsWith(link.href) && link.href != '/')
         ? 'bg-slate-100'
         : 'text-slate-800 hover:bg-slate-700 hover:text-white',
-      'block px-4 py-2 font-medium',
+      'block px-4 py-2 text-sm',
     )}
   >
     <p className='flex gap-2 items-center'>
@@ -105,7 +105,7 @@ export const DesktopMenu = (pageList: pageListType[], pathname: string, userName
             <p className="font-medium">{userName}</p>
             <MenuIcon open={open} />
           </Menu.Button>
-          <Menu.Items className="absolute right-0 bottom-full z-50 mb-3 w-full space-y-1 outline-none drop-shadow filter focus:outline-none bg-white">
+          <Menu.Items className="absolute right-0 bottom-full gap-2 z-50 w-full space-y-1 outline-none drop-shadow filter focus:outline-none bg-white border shadow-xl">
             {pageList.map((link: pageListType, i) => (
               MenuItem(link, pathname)
             ))}
@@ -139,8 +139,8 @@ export function LoggedInSideBar({ userId, userName }: { userId: string, userName
 
   return (
     <>
-      <aside className="hidden md:flex md:flex-none flex-col h-screen w-max border-r z-50 p-2">
-        <nav className="h-full py-5 px-2 flex flex-col justify-between gap-4">
+      <aside className="hidden md:flex md:flex-none flex-col h-screen w-60 py-5 border-r z-50">
+        <nav className="h-full flex flex-col justify-between gap-4">
           {MenuItem(linkData.publicLinks.filter(l => l.href == '/')[0], pathname)}
           <Separator className="border-b" />
           <div className="flex flex-col h-full gap-4 justify-start" >
@@ -156,12 +156,14 @@ export function LoggedInSideBar({ userId, userName }: { userId: string, userName
               ))}
             </div>
           </div>
-          <FeedbackAside />
+          {/*<FeedbackAside />*/}
           <DiscordButton />
-          {DesktopMenu(linkData.signedInMenuLinks, pathname, userName)}
+          <div className="flex px-2">
+            {DesktopMenu(linkData.signedInMenuLinks, pathname, userName)}
+          </div>
         </nav>
       </aside>
-      <div className="ml-4 md:hidden">
+      <div className="md:hidden">
         <MobileNav
           userId={userId}
           mobileLinks={mobileLinks}

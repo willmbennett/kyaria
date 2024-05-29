@@ -1,16 +1,20 @@
+"use server"
+import { ResumeClass } from '../../../../models/Resume';
 import CustomPDFViewer from '../../resumebuilder/pdfviewer/CustomPDFViewer';
-import ResumeUploadPage from './ResumeUpload';
+import { ResumeSelection } from './Resume/ResumeSelect';
 
 interface ResumeProps {
-    userResume: any;
+    userResume: ResumeClass;
     userId: string;
     jobId: string;
+    jobAppId: string;
 }
 
-export default function Resume({
+export default async function Resume({
     userResume,
     userId,
-    jobId
+    jobId,
+    jobAppId
 }: ResumeProps) {
 
     return (
@@ -18,6 +22,8 @@ export default function Resume({
             <h1 className="text-center sm:text-4xl text-4xl font-bold mb-8">
                 Stand out with a Tailored Resume
             </h1>
+            {/* @ts-ignore */}
+            <ResumeSelection userId={userId} jobAppId={jobAppId} currentResume={userResume._id.toString()} />
             <CustomPDFViewer
                 data={userResume}
                 useEdit={true}

@@ -1,9 +1,8 @@
 import { transformDiffBotApiResponse } from "../../app/board/job-helper"
 import { createJobAction, findJobByLinkAction } from "../../app/jobs/_action"
-import { ResumeClass } from "../../models/Resume"
 
 export const useCreateJob = (path: string) => {
-    const findOrCreateJob = async (link: string, userId: string, selectedResume: ResumeClass) => {
+    const findOrCreateJob = async (link: string, userId: string) => {
         let jobId
 
         // Job Handling

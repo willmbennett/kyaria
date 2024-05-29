@@ -30,12 +30,9 @@ export async function getResumes(userId: string) {
         if (!userId) {
             return { error: "resumes not found" };
         }
-        const apps = await AppModel.find({ userId }).lean().exec()
-        const resumeToExclude = apps.map(app => (app.userResume))
         //console.log('resumeToExclude', resumeToExclude)
         const resumes = await ResumeModel.find({
             userId: userId,
-            _id: { $nin: resumeToExclude }
         })
             .sort({ createdAt: -1, _id: -1 }) // Sorting by createdAt in descending order, then by _id in descending order
             .lean()
@@ -60,6 +57,44 @@ export async function getResumes(userId: string) {
         return { error: error as string };
     }
 }
+
+export async function getDefaultResumeId(userId: string) {
+    try {
+        await connectDB();
+
+        if (!userId) {
+            return { error: "UserId not found" };
+        }
+
+        const defaultResume = await ResumeModel.findOne({
+            userId: userId, default: true
+        })
+            .lean()
+            .exec();
+
+        if (defaultResume) {
+            const defaultResumeId = defaultResume._id.toString();
+            return { defaultResumeId };
+        } else {
+            // If no default resume, find the earliest created one
+            const earliestResume = await ResumeModel.findOne({ userId: userId })
+                .sort({ createdAt: 1 }) // Sort by creation date, ascending
+                .lean()
+                .exec();
+
+            if (earliestResume) {
+                const earliestResumeId = earliestResume._id.toString();
+                return { defaultResumeId: earliestResumeId };
+            } else {
+                return { error: "No resumes found for the user" };
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        return { error };
+    }
+}
+
 
 export async function getFirstResume(userId: string) {
     try {
