@@ -2,9 +2,8 @@
 
 import { Button } from "../../../Button";
 import { Questionnaire } from '../../../../../models/Profile';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import UserQuestionnaire from '../../../questionaire/Questionnaire';
-import { deleteProfileAction } from "../../../../profile/_action";
 
 const QuestionnaireDescription = ({ questionnaire, userId, profileId }: { questionnaire: Questionnaire | undefined, userId: string, profileId: string }) => {
   const [isEditing, setIsEditing] = useState(false);

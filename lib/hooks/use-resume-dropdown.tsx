@@ -33,7 +33,7 @@ export const useResumeDropDown = ({ userId, userResume }: UseResumeDropProps) =>
     }, [userId])
 
     const resumeLength = resumes.length
-    const hasResumes = resumeLength > 0
+    const hasResumes = (userResume || resume) ? true : false
 
     useEffect(() => {
         if (resumeLength == 1 && !selectedResumeId) setSelectedResumeId(resumes[0]._id.toString())
