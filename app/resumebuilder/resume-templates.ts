@@ -12,6 +12,7 @@ export const resumeTemplates: resumeTemplateType[] = [
         {
             "_id": '',
             "userId": '',
+            "default": false,
             "createdAt": '',
             "updatedAt": '',
             "name": "Alex Johnson",
@@ -190,6 +191,7 @@ export const resumeTemplates: resumeTemplateType[] = [
         {
             "_id": '',
             "userId": '',
+            "default": false,
             "createdAt": '',
             "updatedAt": '',
             "sectionOrder": [
@@ -367,6 +369,7 @@ export const resumeTemplates: resumeTemplateType[] = [
         "template": {
             "_id": '',
             "userId": '',
+            "default": false,
             "createdAt": '',
             "updatedAt": '',
             "sectionOrder": [
