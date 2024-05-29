@@ -37,7 +37,8 @@ export async function JobApplication(
   const userCanEdit = currentUserId == jobApp.userId
 
   // Extract the high level objects
-  const userResume = jobApp.userResume as ResumeClass
+  const userResume = jobApp.userResume as ResumeClass | undefined
+  console.log(userResume)
   const job = jobApp.job as JobClass
   const jobId = job._id.toString()
   const chatId = jobApp.chatId?.toString()
@@ -83,10 +84,10 @@ export async function JobApplication(
     'company',
     'institution'
   ];
-  const userResumeStripped: Partial<ResumeClass> = stripObject(userResume, profileKeys)
+  const userResumeStripped: Partial<ResumeClass> = userResume ? stripObject(userResume, profileKeys) : {}
   const jobKeys = ["jobTitle", 'company', "aboutCompany", "jobDescription", "qualifications", "responsibilities"];
   const jobStripped: Partial<JobClass> = stripObject(job, jobKeys)
-  const resumeId = userResume._id.toString()
+  const resumeId = userResume?._id.toString()
   const companyDiffbotId = job.companyDiffbotUri ? job.companyDiffbotUri.split('/').pop() : null;
 
   const jobApplicationComponents: Map<string, {
@@ -152,9 +153,9 @@ export async function JobApplication(
     }],
     ['experience', {
       component: <Experience
-        professionalExperience={userResume.professional_experience || []}
-        resumeId={resumeId}
-        originalResumeId={userResume.originalResumeId}
+        professionalExperience={userResume?.professional_experience || []}
+        resumeId={resumeId || ''}
+        originalResumeId={userResume?.originalResumeId}
         jobStripped={jobStripped}
         jobKeyWords={jobKeyWords}
         userId={userId}
@@ -177,7 +178,6 @@ export async function JobApplication(
             jobAppId={jobAppId}
             jobId={jobId}
             jobStripped={jobStripped}
-            resumeId={resumeId}
             userId={userId}
             chatId={chatId}
             activeSubscription={activeSubscription}

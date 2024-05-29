@@ -1,8 +1,8 @@
 import { ApplicationState, getProgress, pageList, progressStates } from '../../app/apps/[id]/app-helper';
-import { jobStateType } from '../../app/board/job-helper';
+import { JobStateType } from '../../app/board/job-helper';
 
 const useAppNavigation = (
-    state: jobStateType,
+    state: JobStateType,
     searchParams: { section: string, progress: string },
     companyDiffbotUri?: string,
 ) => {

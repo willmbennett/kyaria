@@ -1,7 +1,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { AppClass, Emails } from "../../../models/App";
 import { createAppAction } from "../../apps/_action";
-import { jobStateType } from "../../board/job-helper";
+import { JobStateType } from "../../board/job-helper";
 import { JobClass } from "../../../models/Job";
 
 // Define the ApplicationState type based on the keys you have provided
@@ -36,19 +36,19 @@ export const progressStates = [
   { label: "Post-Offer", section: `postoffer` },
 ]
 
-export const getProgress = (state: jobStateType) => {
+export const getProgress = (state: JobStateType) => {
   switch (state) {
-    case 'WISHLIST':
+    case 'Wishlist':
       return 'Research';
-    case 'PHONE SCREEN':
+    case 'Phone Screen':
       return 'Phone Screen';
-    case 'FIRST ROUND':
-    case 'SECOND ROUND':
-    case 'THIRD ROUND':
-    case 'FINAL ROUND':
+    case 'First Round':
+    case 'Second Round':
+    case 'Third Round':
+    case 'Final Round':
       return 'Interviewing';
-    case 'JOB OFFER':
-    case 'ACCEPTED':
+    case 'Job Offer':
+    case 'Accepted':
       return 'Post-Offer';
     default:
       return 'Research';

@@ -4,7 +4,7 @@ import CustomPDFViewer from '../../resumebuilder/pdfviewer/CustomPDFViewer';
 import { ResumeSelection } from './Resume/ResumeSelect';
 
 interface ResumeProps {
-    userResume: ResumeClass;
+    userResume?: ResumeClass;
     userId: string;
     jobId: string;
     jobAppId: string;
@@ -16,6 +16,7 @@ export default async function Resume({
     jobId,
     jobAppId
 }: ResumeProps) {
+    const resumeId = userResume?._id.toString()
 
     return (
         <div className='w-full h-full over relative items-center gap-4 max-w-xl'>
@@ -23,14 +24,16 @@ export default async function Resume({
                 Stand out with a Tailored Resume
             </h1>
             {/* @ts-ignore */}
-            <ResumeSelection userId={userId} jobAppId={jobAppId} currentResume={userResume._id.toString()} />
-            <CustomPDFViewer
-                data={userResume}
-                useEdit={true}
-                userId={userId}
-                useSave={true}
-                jobId={jobId}
-            />
+            <ResumeSelection userId={userId} jobAppId={jobAppId} currentResume={resumeId} />
+            {userResume &&
+                <CustomPDFViewer
+                    data={userResume}
+                    useEdit={true}
+                    userId={userId}
+                    useSave={true}
+                    jobId={jobId}
+                />
+            }
         </div>
     );
 }
