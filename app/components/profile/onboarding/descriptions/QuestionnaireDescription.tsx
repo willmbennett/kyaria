@@ -18,7 +18,6 @@ const QuestionnaireDescription = ({ questionnaire, userId, profileId }: { questi
       <>
         {questionnaire &&
           <div className="bg-white shadow-sm p-6 rounded-lg space-y-6">
-            <h3 className="text-2xl font-bold text-slate-900">Your Questionnaire Answers</h3>
             <ul className="list-disc pl-5 space-y-2">
               {questionnaire.desiredRole && (
                 <li><strong>Desired Role:</strong> {questionnaire.desiredRole}</li>
@@ -35,7 +34,7 @@ const QuestionnaireDescription = ({ questionnaire, userId, profileId }: { questi
 
             </ul>
             <Button size="md" onClick={() => setIsEditing(true)}>
-              Edit Questionnaire
+              Edit Goals
             </Button>
           </div>
         }
@@ -48,11 +47,11 @@ const QuestionnaireDescription = ({ questionnaire, userId, profileId }: { questi
       <div>
         <ul className="list-disc pl-5 text-left">
           <li>Answer a series of questions to provide detailed information about your skills and experience.</li>
-          <li>Receive personalized recommendations based on your questionnaire responses.</li>
+          <li>Receive personalized recommendations based on your response.</li>
           <li>Get insights into areas where you can improve your profile for better job opportunities.</li>
         </ul>
         <Button size="md" className="mt-10" onClick={() => setIsEditing(true)}>
-          Start Questionnaire
+          Start
         </Button>
       </div>
     )
