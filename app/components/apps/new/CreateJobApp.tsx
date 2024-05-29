@@ -3,16 +3,10 @@ import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button } from '../../Button';
 import { emails } from '../../../board/job-helper';
-import { ProfileClass } from '../../../../models/Profile';
-import ResumeDropdownMenu from '../../ResumeDropdownMenu';
-import { ResumeClass } from '../../../../models/Resume';
 import { useCreateApp } from '../../../../lib/hooks/use-create-app';
 import { useCreateJob } from '../../../../lib/hooks/use-create-job';
-import { useCopyResume } from '../../../../lib/hooks/use-copy-resume';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { IconSpinner } from '../../ui/icons';
-import { useResumeDropDown } from '../../../../lib/hooks/use-resume-dropdown';
-import { ResumeDropAndSelect } from '../../ResumeDropAndSelect';
 import { updateResumeAction } from '../../../resumebuilder/_action';
 import { DropResumeBanner } from '../../chatbot/DropResumeBanner';
 
@@ -42,7 +36,6 @@ export default function CreateJobApp(
     const boardId = sp.get('board')
     const { createApp } = useCreateApp(path)
     const { findOrCreateJob } = useCreateJob(path)
-    const { handleCopyResume } = useCopyResume()
     const currentUrl = watch('input')
 
 

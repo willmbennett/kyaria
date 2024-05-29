@@ -1,18 +1,14 @@
-import { getResumes } from "../../../lib/resume-db";
-import { ResumeClass } from "../../../models/Resume";
+import { getDefaultResumeId } from "../../../lib/resume-db";
 import { checkSubscription } from "../../../lib/hooks/check-subscription";
 import { redirect } from "next/navigation";
 import { Bio } from "../../components/bio/Bio";
-import { createProfile, getProfile } from "../../../lib/profile-db";
 import { BioHero } from "../../components/bio/BioHero";
 import ProductDemo from "../../components/bio/ProductDemo";
-
-type getResumesType = {
-    resumes: ResumeClass[]
-}
+import { useGetOrCreateProfile } from "../../../lib/hooks/use-create-profile";
+import LinkedInBioDescription from "../../components/profile/onboarding/descriptions/BioDescription";
 
 export default async function ProfilePage() {
-    const { userId, activeSubscription } = await checkSubscription()
+    const { userId } = await checkSubscription()
 
     if (!userId) {
         return (
@@ -25,18 +21,12 @@ export default async function ProfilePage() {
 
 
     //console.log('userId: ', userId)
-    const { resumes } = await getResumes(userId) as getResumesType
-    let profileId
-    const { profile } = await getProfile(userId);
-    profileId = profile?._id.toString()
-    if (!profileId) {
-        await createProfile({ userId })
-        const { profile } = await getProfile(userId);
-        profileId = profile?._id.toString()
-    }
+    const { defaultResumeId } = await getDefaultResumeId(userId)
+    const { profile } = await useGetOrCreateProfile(userId);
+    const profileId = profile?._id.toString()
 
     if (!profileId) {
-        redirect(`/profile/${userId}`)
+        redirect(`/`)
     }
 
     return (
@@ -44,13 +34,12 @@ export default async function ProfilePage() {
             <h1 className="text-center sm:text-4xl text-4xl font-bold mb-8">
                 Let's update your LinkedIn Bio
             </h1>
-            <Bio
+            <LinkedInBioDescription
                 userId={userId}
-                resumes={resumes}
+                bio={profile?.bio || ''}
+                userResume={defaultResumeId}
                 profileId={profileId}
-                currentBio={profile?.bio}
-                desiredRole={profile?.questionnaire?.desiredRole}
-            />
+                questionnaire={profile?.questionnaire} />
         </div>
     );
 }

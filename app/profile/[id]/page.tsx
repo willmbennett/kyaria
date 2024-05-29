@@ -7,6 +7,7 @@ import { ResumeClass } from '../../../models/Resume';
 import OnboardingMenu from '../../components/profile/onboarding/OnboardingMenu';
 import { getUserJobApps } from "../../../lib/app-db";
 import { AppClass } from "../../../models/App";
+import { getDefaultResumeIdAction } from "../../resumebuilder/_action";
 
 type getResumesType = {
   resumes: ResumeClass[]
@@ -32,7 +33,7 @@ export default async function ProfilePage({ params }: { params: { id: string } }
   }
   const profileId = profile._id.toString()
 
-  const { resumes } = await getResumes(userId) as getResumesType
+  const userResume = await getDefaultResumeIdAction(userId)
   const { jobApps } = await getUserJobApps({ userId: userId }) as { jobApps: AppClass[] }
   const { bio, story, questionnaire } = profile
 
@@ -46,7 +47,7 @@ export default async function ProfilePage({ params }: { params: { id: string } }
           questionnaire={questionnaire}
           bio={bio}
           story={story}
-          resumes={resumes}
+          userResume={userResume}
           apps={jobApps}
           userId={userId}
           profileId={profileId}

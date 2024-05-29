@@ -3,6 +3,7 @@ import { Container } from '../components/landingpage/Container';
 import { checkSubscription } from '../../lib/hooks/check-subscription';
 import { Button } from '../components/Button';
 import { redirect } from 'next/navigation';
+import { createProfile, getProfile } from '../../lib/profile-db';
 
 const title = "Kyaria.ai's AI-Powered Bio Generator";
 const description = "Leverage cutting edge AI to generate power";
@@ -42,8 +43,8 @@ export default async function AppLayout({
     }
 
     return (
-        <>
+        <div className='flex w-full h-full justify-center sm:p-1 md:p-2 lg:p-3 xl:p-4'>
             {children}
-        </>
+        </div>
     )
 }

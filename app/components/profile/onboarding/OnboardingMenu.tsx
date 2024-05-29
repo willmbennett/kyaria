@@ -16,7 +16,6 @@ import { BuildingOfficeIcon } from "@heroicons/react/24/outline";
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import { OnboardingStage } from './Enum';
 import { Questionnaire } from '../../../../models/Profile';
-import { ResumeClass } from '../../../../models/Resume';
 import { WelcomeIntro } from './instructions/WelcomeIntro';
 import { AppClass } from '../../../../models/App';
 import { AddAJobApplication } from './instructions/AddAJobApplication';
@@ -50,7 +49,7 @@ interface OnboardingMenuProps {
   questionnaire: Questionnaire | undefined;
   bio: string | undefined;
   story: string | undefined;
-  resumes: ResumeClass[] | undefined;
+  userResume?: string;
   apps: AppClass[] | undefined;
   userId: string;
   profileId: string;
@@ -62,13 +61,13 @@ export default function OnboardingMenu({
   questionnaire,
   bio,
   story,
-  resumes,
+  userResume,
   apps,
   userId,
   profileId
 }: OnboardingMenuProps) {
 
-  const hasResumes = resumes && resumes.length > 0 ? true : false
+  const hasResumes = userResume ? true : false
   const hasQuestionnaire = questionnaire ? true : false
   const hasApps = apps && apps.length > 0 ? true : false
   const hasPitch = story ? true : false
@@ -96,9 +95,8 @@ export default function OnboardingMenu({
       label: "Resumes",
       instruction: <WelcomeIntro />,
       disabled: false,
-      show: true,
+      show: !hasResumes,
       section: <ResumeDescription
-        resumes={resumes}
         userId={userId}
       />,
       icon: <DocumentTextIcon className='h-5 w-5"' />,
@@ -122,7 +120,7 @@ export default function OnboardingMenu({
       section: <AppsDescription
         userId={userId}
         profileId={profileId}
-        resumes={resumes} />,
+        userResume={userResume} />,
       icon: <BuildingOfficeIcon className="h-5 w-5" />,
     }],
     [OnboardingStage.ElevatorPitch, {
@@ -133,7 +131,7 @@ export default function OnboardingMenu({
       section: <ElevatorPitchDescription
         userId={userId}
         story={story}
-        resumes={resumes}
+        userResume={userResume}
         profileId={profileId}
         questionnaire={questionnaire} />,
       icon: <BoltIcon className="h-5 w-5" />,
@@ -146,7 +144,7 @@ export default function OnboardingMenu({
       section: <LinkedInBioDescription
         userId={userId}
         bio={bio}
-        resumes={resumes}
+        userResume={userResume}
         profileId={profileId}
         questionnaire={questionnaire} />,
       icon: <UserCircleIcon className="h-5 w-5" />,

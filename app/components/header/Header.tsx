@@ -5,7 +5,6 @@ import { signIn } from "next-auth/react";
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import clsx from 'clsx'
-import { DiscordButton } from "../ui/DiscordButton";
 import { Container } from '../landingpage/Container'
 import { Button } from '../Button'
 import { desktopMenu } from "./DesktopMenu";
@@ -76,9 +75,6 @@ export function Header({ userId }: { userId: string }) {
 
           <div>
             <div className="hidden items-center space-x-4 md:flex">
-              <div className="hidden lg:block">
-                < DiscordButton />
-              </div>
               <div className="hidden lg:block">
                 {!userId &&
                   <Button

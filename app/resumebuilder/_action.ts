@@ -1,7 +1,18 @@
 "use server";
-import { createResume, deleteResume, getDefaultResumeId, updateResume } from "../../lib/resume-db";
+import { createResume, deleteResume, getDefaultResumeId, getResume, getResumes, updateResume } from "../../lib/resume-db";
 import { revalidatePath } from "next/cache";
 import { del } from '@vercel/blob';
+
+export async function getResumeAction(resumeId: string) {
+  const { resume } = await getResume(resumeId)
+  return resume
+}
+
+export async function getResumesAction(userId: string) {
+  const { resumes } = await getResumes(userId)
+  return resumes
+}
+
 
 export async function getDefaultResumeIdAction(userId: string) {
   const { defaultResumeId } = await getDefaultResumeId(userId)

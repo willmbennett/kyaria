@@ -54,6 +54,12 @@ const linkData = {
       icon: ChartBarIcon,
       pricingTier: 'free'
     },
+    {
+      label: 'Goals',
+      href: '/goals',
+      icon: ClipboardDocumentListIcon,
+      pricingTier: 'free'
+    },
     /*
     {
       label: 'Networking (beta)',
@@ -70,7 +76,6 @@ const linkData = {
     */
   ],
   signedInMenuLinks: [
-    { label: 'Profile', href: '/profile' },
     { label: 'Manage Subscription', href: 'https://billing.stripe.com/p/login/fZedQQbuK5Ke2Q06oo' },
   ]
 };

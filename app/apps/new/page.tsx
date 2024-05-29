@@ -39,7 +39,7 @@ export default async function NewAppPage() {
     const userResume = await getDefaultResumeIdAction(userId)
 
     return (
-        <section className="flex flex-col lg:flex-row overflow-hidden pt-5 w-full pb-14 lg: px-4">
+        <section className="flex justify-center pt-5 w-full pb-14 lg: px-4">
             <Container>
                 <div className="mx-auto max-w-lg pb-14 md:mx-0 md:max-w-none md:pb-48 lg:pb-52 xl:max-w-5xl xl:pb-14">
                     <CreateJobApp

@@ -1,18 +1,13 @@
-import { getResumes } from "../../../lib/resume-db";
-import { ResumeClass } from "../../../models/Resume";
 import { checkSubscription } from "../../../lib/hooks/check-subscription";
 import { redirect } from "next/navigation";
-import { createProfile, getProfile } from "../../../lib/profile-db";
-import { Pitch } from "../../components/pitch/Pitch";
 import { PitchHero } from "../../components/pitch/PitchHero";
 import ProductDemo from "../../components/pitch/ProductDemo";
-
-type getResumesType = {
-    resumes: ResumeClass[]
-}
+import { getDefaultResumeId } from "../../../lib/resume-db";
+import { useGetOrCreateProfile } from "../../../lib/hooks/use-create-profile";
+import ElevatorPitchDescription from "../../components/profile/onboarding/descriptions/PitchDescription";
 
 export default async function ProfilePage() {
-    const { userId, activeSubscription } = await checkSubscription()
+    const { userId } = await checkSubscription()
 
     if (!userId) {
         return (
@@ -24,19 +19,14 @@ export default async function ProfilePage() {
     }
 
     //console.log('userId: ', userId)
-    const { resumes } = await getResumes(userId) as getResumesType
+    const { defaultResumeId } = await getDefaultResumeId(userId)
 
-    let profileId
-    const { profile } = await getProfile(userId);
-    profileId = profile?._id.toString()
-    if (!profileId) {
-        await createProfile({ userId })
-        const { profile } = await getProfile(userId);
-        profileId = profile?._id.toString()
-    }
+
+    const { profile } = await useGetOrCreateProfile(userId);
+    const profileId = profile?._id.toString()
 
     if (!profileId) {
-        redirect(`/profile/${userId}`)
+        redirect('/')
     }
 
     return (
@@ -44,13 +34,12 @@ export default async function ProfilePage() {
             <h1 className="text-center sm:text-4xl text-4xl font-bold mb-8">
                 Let's write you an elevator pitch
             </h1>
-            <Pitch
+            <ElevatorPitchDescription
                 userId={userId}
-                resumes={resumes}
+                story={profile?.story}
+                userResume={defaultResumeId}
                 profileId={profileId}
-                currentPitch={profile?.story || ''}
-                desiredRole={profile?.questionnaire?.desiredRole}
-            />
+                questionnaire={profile?.questionnaire} />
         </div>
     );
 }
