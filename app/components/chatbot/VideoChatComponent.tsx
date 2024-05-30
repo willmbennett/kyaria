@@ -53,7 +53,7 @@ const VideoChatComponent = ({ textToSubmit, toggleTranscript, showTranscript, nu
     const { fillerVideoRef, playFiller } = useFillerVideo(numMessages)
 
     return (
-        <div className="flex flex-col gap-4 justify-center items-center w-full md:p-4 my-10">
+        <div className="flex flex-col gap-4 items-center w-full">
             <VideoDisplay
                 videoRef={videoRef}
                 fillerVideoRef={fillerVideoRef}

@@ -7,7 +7,7 @@ import { RequiredActionFunctionToolCall } from "openai/resources/beta/threads/ru
 import { ToolCall } from "openai/resources/beta/threads/runs/steps";
 import { useEffect, useState } from "react";
 import { updateChatAction } from "../../app/eve/_action";
-import { getInterviewQuesions } from "../../app/eve/function-helper";
+import { getInterviewQuestions, parseInterviewArgs } from "../../app/eve/function-helper";
 
 interface UseDIDApiProps {
     chatId: string;
@@ -18,7 +18,8 @@ interface UseDIDApiProps {
 export const useAssistant = ({ chatId, threadId, messages }: UseDIDApiProps) => {
     const [chatMessages, setChatMessages] = useState(messages)
     const [textToSubmit, setTextToSubmit] = useState('')
-    const [incomingMessage, setIncomingMessasge] = useState('')
+    const [interviewing, setInterviewing] = useState(false)
+    const [interviewName, setInterviewName] = useState('')
 
     // Whenever messages update update the state
     useEffect(() => {
@@ -93,15 +94,32 @@ export const useAssistant = ({ chatId, threadId, messages }: UseDIDApiProps) => 
 
     const functionCallHandler = async (call: RequiredActionFunctionToolCall) => {
         //console.log('Made it to [functionCallHandler] with function:', call?.function?.name);
-
-        if (call?.function?.name !== "startMockInterview") return;
-
+        const functionName = call?.function?.name
         const args = JSON.parse(call.function.arguments);
+
+        //Don't call any other functions than the ones created
+        if (!["startMockInterview", "endMockInterview"].includes(functionName)) return;
+
+        switch (functionName) {
+            case 'startMockInterview':
+                const questions = getInterviewQuestions(args.discipline, args.interviewType);
+                setInterviewName(parseInterviewArgs(args.discipline, args.interviewType))
+                setInterviewing(true)
+                return JSON.stringify(questions)
+            case 'endMockInterview':
+                setInterviewing(false)
+                setInterviewName('')
+                return JSON.stringify({})
+            default:
+                return
+        }
+
+
         //console.log('Function arguments:', args);
 
-        const questions = getInterviewQuesions(args.discipline, args.interviewType);
+        if (call?.function?.name == "startMockInterview") {
 
-        return JSON.stringify(questions)
+        }
     };
 
 
@@ -183,5 +201,5 @@ export const useAssistant = ({ chatId, threadId, messages }: UseDIDApiProps) => 
         setChatMessages((prevMessages) => [...prevMessages, { id: nanoid(), role, content: text }]);
     };
 
-    return { submitUserMessage, chatMessages, textToSubmit, setTextToSubmit }
+    return { interviewing, interviewName, submitUserMessage, chatMessages, textToSubmit, setTextToSubmit }
 }

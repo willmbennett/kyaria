@@ -13,7 +13,7 @@ export const ChatBotVideo = (props: ChatBotVideoProps) => {
     const { videoRef, fillerVideoRef, isStreaming, playFiller, connected, } = props;
 
     return (
-        <div className="relative w-full h-92 mb-2 md:mb-0 md:h-auto aspect-square md:aspect-video flex justify-center items-center rounded-lg shadow-lg">
+        <div className="relative w-full h-92 mb-2 md:mb-0 md:h-auto aspect-square md:aspect-video flex justify-center items-center rounded-lg shadow-lg bg-white">
             {!connected && !playFiller && (
                 <div className="absolute z-20 flex justify-center items-center top-0 left-0 w-full h-full bg-black bg-opacity-50 rounded-lg">
                     <span className="text-white text-xl">Eve is waking up...</span>

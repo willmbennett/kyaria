@@ -6,6 +6,7 @@ import { Message } from 'ai';
 import { Button } from '../Button';
 import { nanoid } from 'nanoid'
 import { useAssistant } from '../../../lib/chatbot/use-assistant';
+import { cn } from '../../../lib/utils';
 
 interface VideoChatContainerProps {
     userId: string;
@@ -25,7 +26,14 @@ export const VideoChatContainer = ({ userId, chatId, threadId, messages, activeS
         setShowTranscript(!showTranscript);
     };
 
-    const { submitUserMessage, chatMessages, textToSubmit, setTextToSubmit } = useAssistant({ chatId, threadId, messages })
+    const {
+        interviewing,
+        interviewName,
+        submitUserMessage,
+        chatMessages,
+        textToSubmit,
+        setTextToSubmit
+    } = useAssistant({ chatId, threadId, messages })
 
     const renderVideoChatComponent = <VideoChatComponent
         toggleTranscript={toggleTranscript}
@@ -59,8 +67,11 @@ export const VideoChatContainer = ({ userId, chatId, threadId, messages, activeS
     const handleVideoComponent = activeSubscription ? renderVideoChatComponent : handleSubscription
 
     return (
-        <div className={`flex flex-col md:flex-row h-full  w-full justify-center text-center gap-4 sm:p-1 md:p-2 lg:p-3 xl:p-4 overflow-hidden`}>
-            {handleVideoComponent}
+        <div className={cn(`flex flex-col md:flex-row h-full  w-full justify-center text-center gap-4 sm:p-1 md:p-2 lg:p-3 xl:p-4 overflow-hidden`, interviewing && 'bg-slate-100')}>
+            <div className='flex flex-col w-full justify-end h-full gap-2'>
+                {(interviewName && interviewing) && <h3 className="text-left font-bold text-lg font-slate-800">{interviewName}</h3>}
+                {handleVideoComponent}
+            </div>
             <Chat messages={chatMessages} showTranscript={showTranscript} />
         </div>
     );

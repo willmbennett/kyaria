@@ -1,299 +1,824 @@
 {
-    "interviewQuestions": {
-      "SoftwareEngineering": {
-        "Behavioral": [
-          {
-            "question": "Can you tell me about a time when you faced a significant challenge at work? How did you handle it?"
-          },
-          {
-            "question": "Describe a situation where you had to work closely with a team. What was your role and how did you contribute?"
-          },
-          {
-            "question": "Tell me about a time when you had to learn a new technology or tool quickly. How did you approach it?"
-          },
-          {
-            "question": "Have you ever had to deal with a difficult colleague or team member? How did you manage the situation?"
-          },
-          {
-            "question": "Describe a time when you received constructive criticism. How did you respond and what did you learn from it?"
-          },
-          {
-            "question": "Can you give an example of a project you managed from start to finish? What steps did you take to ensure its success?"
-          },
-          {
-            "question": "Tell me about a time when you had to balance multiple priorities. How did you manage your time and ensure everything was completed?"
-          },
-          {
-            "question": "Have you ever encountered a project that did not go as planned? How did you handle the setbacks and what was the outcome?"
-          },
-          {
-            "question": "Describe a time when you had to explain a complex technical concept to a non-technical person. How did you ensure they understood?"
-          },
-          {
-            "question": "Can you discuss an instance where you took the initiative to improve a process or system at work? What was the impact?"
-          }
-        ],
-        "Technical": [
-          {
-            "question": "Explain the differences between Object-Oriented Programming and Functional Programming."
-          },
-          {
-            "question": "How do you manage version control in your projects?"
-          },
-          {
-            "question": "What are some common design patterns and when would you use them?"
-          },
-          {
-            "question": "Describe the software development lifecycle and your experience with it."
-          },
-          {
-            "question": "How do you ensure the quality of your code?"
-          },
-          {
-            "question": "What is the importance of continuous integration and continuous deployment (CI/CD)?"
-          },
-          {
-            "question": "Can you explain the concept of test-driven development (TDD)?"
-          },
-          {
-            "question": "Describe a time when you optimized a piece of code. What improvements did you make?"
-          },
-          {
-            "question": "How do you approach debugging in your projects?"
-          },
-          {
-            "question": "What are microservices and what are their advantages?"
-          }
-        ],
-        "Situational": [
-          {
-            "question": "If you were assigned a project with an unrealistic deadline, how would you handle it?"
-          },
-          {
-            "question": "How would you approach resolving a production issue that affects the company's main product?"
-          },
-          {
-            "question": "Imagine you disagree with a team member on the best way to implement a feature. How would you handle the situation?"
-          },
-          {
-            "question": "What would you do if you discovered a significant bug just before a project deadline?"
-          },
-          {
-            "question": "How would you prioritize tasks if you had multiple high-priority projects due at the same time?"
-          },
-          {
-            "question": "How would you handle a situation where a client's requirements change midway through a project?"
-          },
-          {
-            "question": "If you were asked to work on a technology you were not familiar with, how would you approach the task?"
-          },
-          {
-            "question": "Describe how you would handle a situation where your team is consistently missing deadlines."
-          },
-          {
-            "question": "How would you manage a situation where you receive conflicting instructions from different stakeholders?"
-          },
-          {
-            "question": "What steps would you take if you realized a project's scope was beyond the team's current capabilities?"
-          }
-        ]
-      },
-      "CyberSecurity": {
-        "Behavioral": [
-          {
-            "question": "Can you describe a time when you had to handle a security breach? How did you manage the situation?"
-          },
-          {
-            "question": "Tell me about a project where you had to collaborate with different departments to improve security."
-          },
-          {
-            "question": "Describe a situation where you had to stay updated with the latest security trends and apply them to your work."
-          },
-          {
-            "question": "Have you ever had to explain a complex security issue to a non-technical stakeholder? How did you approach it?"
-          },
-          {
-            "question": "Tell me about a time when you had to deal with resistance to a security policy you were implementing."
-          },
-          {
-            "question": "Can you give an example of when you had to respond to an urgent security threat? What was the outcome?"
-          },
-          {
-            "question": "Describe a time when you had to balance security needs with business requirements."
-          },
-          {
-            "question": "Have you ever identified a potential security risk in a project? How did you address it?"
-          },
-          {
-            "question": "Tell me about a time when you had to train or mentor a colleague on security practices."
-          },
-          {
-            "question": "Describe a situation where you had to manage multiple security tasks or projects simultaneously. How did you prioritize?"
-          }
-        ],
-        "Technical": [
-          {
-            "question": "Explain the difference between symmetric and asymmetric encryption."
-          },
-          {
-            "question": "What steps would you take to secure a network?"
-          },
-          {
-            "question": "Can you explain the concept of a firewall and its importance?"
-          },
-          {
-            "question": "What are the main types of malware and how do they differ?"
-          },
-          {
-            "question": "Describe the process of conducting a penetration test."
-          },
-          {
-            "question": "How do you stay current with the latest cybersecurity threats?"
-          },
-          {
-            "question": "What is a zero-day vulnerability and how would you protect against it?"
-          },
-          {
-            "question": "Explain the role of intrusion detection systems (IDS) and intrusion prevention systems (IPS)."
-          },
-          {
-            "question": "How would you implement multi-factor authentication (MFA) in an organization?"
-          },
-          {
-            "question": "What are some common security protocols used to protect data in transit?"
-          }
-        ],
-        "Situational": [
-          {
-            "question": "If you discovered a vulnerability in a system, what steps would you take to address it?"
-          },
-          {
-            "question": "How would you handle a situation where a non-technical employee accidentally exposes sensitive data?"
-          },
-          {
-            "question": "What would you do if you found out that a colleague was violating security policies?"
-          },
-          {
-            "question": "How would you approach securing a legacy system that is critical to business operations?"
-          },
-          {
-            "question": "Describe how you would respond to a ransomware attack on your company's network."
-          },
-          {
-            "question": "If you were tasked with improving the security posture of an organization, where would you start?"
-          },
-          {
-            "question": "How would you handle a situation where an important security update causes system instability?"
-          },
-          {
-            "question": "What steps would you take if a client reported a data breach?"
-          },
-          {
-            "question": "How would you prioritize your response to multiple simultaneous security incidents?"
-          },
-          {
-            "question": "What would you do if you discovered that an employee was using unauthorized software that poses a security risk?"
-          }
-        ]
-      },
-      "DataScience": {
-        "Behavioral": [
-          {
-            "question": "Describe a challenging data analysis project you worked on. What was the outcome?"
-          },
-          {
-            "question": "Tell me about a time when you had to present your findings to a non-technical audience. How did you ensure they understood?"
-          },
-          {
-            "question": "Can you describe a situation where you had to work with a large, complex dataset? How did you manage it?"
-          },
-          {
-            "question": "Have you ever had to correct a significant error in your analysis? How did you handle it?"
-          },
-          {
-            "question": "Tell me about a time when your insights from data analysis led to a significant business impact."
-          },
-          {
-            "question": "Describe a situation where you had to collaborate with colleagues from different departments on a data project."
-          },
-          {
-            "question": "How do you handle situations where your analysis contradicts the expectations of stakeholders?"
-          },
-          {
-            "question": "Can you give an example of when you had to learn a new data tool or technology quickly?"
-          },
-          {
-            "question": "Tell me about a time when you had to balance multiple data projects with tight deadlines. How did you manage?"
-          },
-          {
-            "question": "Describe a situation where you had to ensure the quality and integrity of your data."
-          }
-        ],
-        "Technical": [
-          {
-            "question": "Explain the difference between supervised and unsupervised learning."
-          },
-          {
-            "question": "What techniques do you use for feature selection in a dataset?"
-          },
-          {
-            "question": "Describe the process of building a machine learning model from start to finish."
-          },
-          {
-            "question": "How do you handle missing data in a dataset?"
-          },
-          {
-            "question": "What is cross-validation and why is it important?"
-          },
-          {
-            "question": "Can you explain the difference between precision and recall?"
-          },
-          {
-            "question": "Describe how you would approach a problem where the data is imbalanced."
-          },
-          {
-            "question": "What is the importance of data preprocessing and how do you do it?"
-          },
-          {
-            "question": "Explain the concept of overfitting and how you can prevent it."
-          },
-          {
-            "question": "How do you ensure your data visualizations effectively communicate your findings?"
-          }
-        ],
-        "Situational": [
-          {
-            "question": "How would you handle missing data in a dataset?"
-          },
-          {
-            "question": "If you had to analyze a large dataset with limited computational resources, how would you approach the problem?"
-          },
-          {
-            "question": "Describe how you would deal with a dataset that has a lot of noise."
-          },
-          {
-            "question": "What steps would you take if your model's performance suddenly drops?"
-          },
-          {
-            "question": "How would you prioritize tasks if you have multiple projects with tight deadlines?"
-          },
-          {
-            "question": "If you were asked to improve the accuracy of an existing model, what steps would you take?"
-          },
-          {
-            "question": "What would you do if you discovered that your data collection process was flawed?"
-          },
-          {
-            "question": "How would you explain a complex statistical concept to a non-technical stakeholder?"
-          },
-          {
-            "question": "Describe how you would handle a situation where your data analysis contradicts a widely accepted assumption."
-          },
-          {
-            "question": "How would you approach creating a predictive model for a new business problem with limited historical data?"
-          }
-        ]
-      }
+  "SoftwareEngineering": {
+    "PhoneScreen": {
+      "intro": [
+        {
+          "question": "Can you briefly describe your experience with software engineering?"
+        },
+        {
+          "question": "What programming languages are you most comfortable with?"
+        },
+        {
+          "question": "What kind of projects have you worked on recently?"
+        },
+        {
+          "question": "Why are you interested in this role?"
+        },
+        {
+          "question": "What do you know about our company?"
+        }
+      ],
+      "main": [
+        {
+          "question": "Can you explain the difference between an abstract class and an interface?"
+        },
+        {
+          "question": "What are your favorite tools or environments for software development?"
+        },
+        {
+          "question": "How do you manage version control in your projects?"
+        },
+        {
+          "question": "Describe your process for debugging a complex issue."
+        },
+        {
+          "question": "What is your experience with test-driven development?"
+        },
+        {
+          "question": "How do you ensure the performance and scalability of your applications?"
+        },
+        {
+          "question": "Can you explain the concept of RESTful APIs?"
+        },
+        {
+          "question": "What is the SOLID principle in software engineering?"
+        },
+        {
+          "question": "How do you handle code reviews and feedback?"
+        },
+        {
+          "question": "What is your approach to continuous integration and deployment?"
+        }
+      ],
+      "closing": [
+        {
+          "question": "What are your career goals?"
+        },
+        {
+          "question": "How do you stay updated with new technologies?"
+        },
+        {
+          "question": "What do you consider your greatest achievement in software engineering?"
+        },
+        {
+          "question": "What do you think sets you apart from other candidates?"
+        },
+        {
+          "question": "Do you have any questions for us?"
+        }
+      ]
+    },
+    "Behavioral": {
+      "intro": [
+        {
+          "question": "Can you tell me a little about yourself and your background in software engineering?"
+        },
+        {
+          "question": "Why are you interested in this role and our company?"
+        },
+        {
+          "question": "What motivated you to pursue a career in software engineering?"
+        },
+        {
+          "question": "What are your main strengths and weaknesses as a software engineer?"
+        },
+        {
+          "question": "How do you stay updated with the latest trends and technologies in software engineering?"
+        }
+      ],
+      "main": [
+        {
+          "question": "Can you tell me about a time when you faced a significant challenge at work? How did you handle it?"
+        },
+        {
+          "question": "Describe a situation where you had to work closely with a team. What was your role and how did you contribute?"
+        },
+        {
+          "question": "Tell me about a time when you had to learn a new technology or tool quickly. How did you approach it?"
+        },
+        {
+          "question": "Have you ever had a disagreement with a coworker? How did you resolve it?"
+        },
+        {
+          "question": "Can you describe a project where you had to manage multiple tasks and deadlines? How did you prioritize?"
+        },
+        {
+          "question": "Tell me about a time when you had to debug a difficult issue in your code. What was your process?"
+        },
+        {
+          "question": "Describe a time when you went above and beyond your regular responsibilities to complete a project or task."
+        },
+        {
+          "question": "Have you ever had to handle a situation where a project was not going as planned? What did you do?"
+        },
+        {
+          "question": "Can you give an example of a time when you had to mentor a junior colleague or intern? How did you ensure their success?"
+        },
+        {
+          "question": "Tell me about a time when you had to adapt to significant changes in a project or work environment. How did you manage it?"
+        }
+      ],
+      "closing": [
+        {
+          "question": "What are your career goals and how does this role fit into them?"
+        },
+        {
+          "question": "What do you consider to be your most significant achievement in your career so far?"
+        },
+        {
+          "question": "How do you handle feedback and criticism in your work?"
+        },
+        {
+          "question": "What do you think sets you apart from other candidates for this position?"
+        },
+        {
+          "question": "Do you have any questions for us about the role or company?"
+        }
+      ]
+    },
+    "Case": {
+      "intro": [
+        {
+          "question": "Can you briefly describe your experience with case studies in software engineering?"
+        },
+        {
+          "question": "What methodologies do you use when approaching a case study?"
+        },
+        {
+          "question": "Can you give an example of a case study you have worked on?"
+        },
+        {
+          "question": "What tools and techniques do you use for analyzing case studies?"
+        },
+        {
+          "question": "How do you stay updated with best practices for case studies?"
+        }
+      ],
+      "main": [
+        {
+          "question": "How would you approach a case study where you need to improve the performance of an existing application?"
+        },
+        {
+          "question": "Describe the steps you would take to analyze a case study involving a security breach in a software system."
+        },
+        {
+          "question": "How would you handle a case study where you need to redesign an application for better user experience?"
+        },
+        {
+          "question": "What factors do you consider when conducting a cost-benefit analysis for a software project?"
+        },
+        {
+          "question": "How do you ensure the accuracy and reliability of your findings in a case study?"
+        },
+        {
+          "question": "Can you describe a situation where you had to present your case study findings to stakeholders? How did you handle it?"
+        },
+        {
+          "question": "How do you prioritize different aspects of a case study when resources are limited?"
+        },
+        {
+          "question": "What is your process for validating the results of a case study?"
+        },
+        {
+          "question": "How do you integrate feedback from team members or stakeholders into your case study analysis?"
+        },
+        {
+          "question": "Can you give an example of a challenging case study you worked on and how you overcame the challenges?"
+        }
+      ],
+      "closing": [
+        {
+          "question": "What have you learned from conducting case studies in your career?"
+        },
+        {
+          "question": "How do you handle criticism or differing opinions on your case study findings?"
+        },
+        {
+          "question": "What do you consider your most successful case study and why?"
+        },
+        {
+          "question": "What are your career goals and how does this role fit into them?"
+        },
+        {
+          "question": "Do you have any questions for us about the role or the team?"
+        }
+      ]
+    },
+    "Technical": {
+      "intro": [
+        {
+          "question": "Can you briefly describe your experience with software engineering?"
+        },
+        {
+          "question": "What programming languages are you most comfortable with?"
+        },
+        {
+          "question": "Can you tell me about a recent project you worked on? What technologies did you use?"
+        },
+        {
+          "question": "What is your favorite software development methodology and why?"
+        },
+        {
+          "question": "How do you stay updated with new programming languages and frameworks?"
+        }
+      ],
+      "main": [
+        {
+          "question": "Can you explain the difference between synchronous and asynchronous programming?"
+        },
+        {
+          "question": "How do you approach debugging a complex issue in your code?"
+        },
+        {
+          "question": "What is the SOLID principle in software engineering, and can you explain each part?"
+        },
+        {
+          "question": "Describe how you would design a scalable system for a web application that handles millions of users."
+        },
+        {
+          "question": "Can you walk me through how you would optimize a slow-performing SQL query?"
+        },
+        {
+          "question": "How do you ensure your code is secure from vulnerabilities?"
+        },
+        {
+          "question": "What is the difference between RESTful APIs and GraphQL? When would you use each?"
+        },
+        {
+          "question": "Can you explain what a microservices architecture is and its advantages and disadvantages?"
+        },
+        {
+          "question": "How do you handle version control in your projects? Can you describe your workflow?"
+        },
+        {
+          "question": "Describe a situation where you had to refactor a large codebase. What was your approach?"
+        }
+      ],
+      "closing": [
+        {
+          "question": "What kind of projects are you most passionate about?"
+        },
+        {
+          "question": "What do you consider your greatest technical achievement?"
+        },
+        {
+          "question": "How do you continue to improve your skills and knowledge in software engineering?"
+        },
+        {
+          "question": "What are your career goals and how does this role fit into them?"
+        },
+        {
+          "question": "Do you have any questions for us about the role or the team?"
+        }
+      ]
+    }
+  },
+  "CyberSecurity": {
+    "PhoneScreen": {
+      "intro": [
+        {
+          "question": "Can you briefly describe your experience with cybersecurity?"
+        },
+        {
+          "question": "What security frameworks are you most familiar with?"
+        },
+        {
+          "question": "What kind of projects have you worked on recently?"
+        },
+        {
+          "question": "Why are you interested in this role?"
+        },
+        {
+          "question": "What do you know about our company?"
+        }
+      ],
+      "main": [
+        {
+          "question": "Can you explain the difference between symmetric and asymmetric encryption?"
+        },
+        {
+          "question": "What are your favorite tools or environments for cybersecurity?"
+        },
+        {
+          "question": "How do you manage security updates and patches in your projects?"
+        },
+        {
+          "question": "Describe your process for investigating a security breach."
+        },
+        {
+          "question": "What is your experience with incident response?"
+        },
+        {
+          "question": "How do you ensure the security and compliance of your systems?"
+        },
+        {
+          "question": "Can you explain the concept of zero trust security?"
+        },
+        {
+          "question": "What are the key components of a secure network architecture?"
+        },
+        {
+          "question": "How do you handle security reviews and audits?"
+        },
+        {
+          "question": "What is your approach to security automation and orchestration?"
+        }
+      ],
+      "closing": [
+        {
+          "question": "What are your career goals?"
+        },
+        {
+          "question": "How do you stay updated with new security threats and technologies?"
+        },
+        {
+          "question": "What do you consider your greatest achievement in cybersecurity?"
+        },
+        {
+          "question": "What do you think sets you apart from other candidates?"
+        },
+        {
+          "question": "Do you have any questions for us?"
+        }
+      ]
+    },
+    "Behavioral": {
+      "intro": [
+        {
+          "question": "Can you tell me a little about yourself and your background in cybersecurity?"
+        },
+        {
+          "question": "Why are you interested in this role and our company?"
+        },
+        {
+          "question": "What motivated you to pursue a career in cybersecurity?"
+        },
+        {
+          "question": "What are your main strengths and weaknesses as a cybersecurity professional?"
+        },
+        {
+          "question": "How do you stay updated with the latest trends and technologies in cybersecurity?"
+        }
+      ],
+      "main": [
+        {
+          "question": "Can you tell me about a time when you faced a significant security threat at work? How did you handle it?"
+        },
+        {
+          "question": "Describe a situation where you had to work closely with a team to manage a cybersecurity incident. What was your role and how did you contribute?"
+        },
+        {
+          "question": "Tell me about a time when you had to quickly learn and implement a new security tool or protocol. How did you approach it?"
+        },
+        {
+          "question": "Have you ever had a disagreement with a colleague regarding security policies? How did you resolve it?"
+        },
+        {
+          "question": "Can you describe a project where you had to manage multiple security tasks and deadlines? How did you prioritize?"
+        },
+        {
+          "question": "Tell me about a time when you had to investigate and resolve a complex security issue. What was your process?"
+        },
+        {
+          "question": "Describe a time when you went above and beyond your regular responsibilities to enhance security."
+        },
+        {
+          "question": "Have you ever had to handle a situation where a security project was not going as planned? What did you do?"
+        },
+        {
+          "question": "Can you give an example of a time when you had to train a team or colleague on security best practices? How did you ensure their success?"
+        },
+        {
+          "question": "Tell me about a time when you had to adapt to significant changes in security policies or regulations. How did you manage it?"
+        }
+      ],
+      "closing": [
+        {
+          "question": "What are your career goals and how does this role fit into them?"
+        },
+        {
+          "question": "What do you consider your most significant achievement in your career so far?"
+        },
+        {
+          "question": "How do you handle feedback and criticism in your work?"
+        },
+        {
+          "question": "What do you think sets you apart from other candidates for this position?"
+        },
+        {
+          "question": "Do you have any questions for us about the role or company?"
+        }
+      ]
+    },
+    "Case": {
+      "intro": [
+        {
+          "question": "Can you briefly describe your experience with case studies in cybersecurity?"
+        },
+        {
+          "question": "What methodologies do you use when approaching a case study?"
+        },
+        {
+          "question": "Can you give an example of a case study you have worked on?"
+        },
+        {
+          "question": "What tools and techniques do you use for analyzing case studies?"
+        },
+        {
+          "question": "How do you stay updated with best practices for case studies?"
+        }
+      ],
+      "main": [
+        {
+          "question": "How would you approach a case study where you need to improve the security of an existing system?"
+        },
+        {
+          "question": "Describe the steps you would take to analyze a case study involving a data breach."
+        },
+        {
+          "question": "How would you handle a case study where you need to implement a new security protocol?"
+        },
+        {
+          "question": "What factors do you consider when conducting a risk assessment for a cybersecurity project?"
+        },
+        {
+          "question": "How do you ensure the accuracy and reliability of your findings in a case study?"
+        },
+        {
+          "question": "Can you describe a situation where you had to present your case study findings to stakeholders? How did you handle it?"
+        },
+        {
+          "question": "How do you prioritize different aspects of a case study when resources are limited?"
+        },
+        {
+          "question": "What is your process for validating the results of a case study?"
+        },
+        {
+          "question": "How do you integrate feedback from team members or stakeholders into your case study analysis?"
+        },
+        {
+          "question": "Can you give an example of a challenging case study you worked on and how you overcame the challenges?"
+        }
+      ],
+      "closing": [
+        {
+          "question": "What have you learned from conducting case studies in your career?"
+        },
+        {
+          "question": "How do you handle criticism or differing opinions on your case study findings?"
+        },
+        {
+          "question": "What do you consider your most successful case study and why?"
+        },
+        {
+          "question": "What are your career goals and how does this role fit into them?"
+        },
+        {
+          "question": "Do you have any questions for us about the role or the team?"
+        }
+      ]
+    },
+    "Technical": {
+      "intro": [
+        {
+          "question": "Can you briefly describe your experience with cybersecurity?"
+        },
+        {
+          "question": "What security frameworks are you most familiar with?"
+        },
+        {
+          "question": "Can you tell me about a recent cybersecurity project you worked on? What technologies did you use?"
+        },
+        {
+          "question": "What is your favorite aspect of cybersecurity and why?"
+        },
+        {
+          "question": "How do you stay updated with new security threats and technologies?"
+        }
+      ],
+      "main": [
+        {
+          "question": "Can you explain the difference between symmetric and asymmetric encryption?"
+        },
+        {
+          "question": "How do you approach investigating and mitigating a security breach?"
+        },
+        {
+          "question": "What are the key components of a secure network architecture?"
+        },
+        {
+          "question": "Describe how you would conduct a penetration test on a web application."
+        },
+        {
+          "question": "Can you walk me through the steps you take to secure a new system?"
+        },
+        {
+          "question": "How do you ensure compliance with industry security standards and regulations?"
+        },
+        {
+          "question": "What is the role of a firewall in network security? How do you configure it?"
+        },
+        {
+          "question": "Can you explain what a zero-day vulnerability is and how you would respond to it?"
+        },
+        {
+          "question": "How do you handle security for cloud-based applications?"
+        },
+        {
+          "question": "Describe a situation where you had to educate non-technical staff about security best practices."
+        }
+      ],
+      "closing": [
+        {
+          "question": "What kind of security projects are you most passionate about?"
+        },
+        {
+          "question": "What do you consider your greatest achievement in cybersecurity?"
+        },
+        {
+          "question": "How do you continue to improve your skills and knowledge in cybersecurity?"
+        },
+        {
+          "question": "What are your career goals and how does this role fit into them?"
+        },
+        {
+          "question": "Do you have any questions for us about the role or the team?"
+        }
+      ]
+    }
+  },
+  "DataScience": {
+    "PhoneScreen": {
+      "intro": [
+        {
+          "question": "Can you briefly describe your experience with data science?"
+        },
+        {
+          "question": "What data analysis tools are you most familiar with?"
+        },
+        {
+          "question": "What kind of projects have you worked on recently?"
+        },
+        {
+          "question": "Why are you interested in this role?"
+        },
+        {
+          "question": "What do you know about our company?"
+        }
+      ],
+      "main": [
+        {
+          "question": "Can you explain the difference between supervised and unsupervised learning?"
+        },
+        {
+          "question": "What are your favorite tools or environments for data analysis?"
+        },
+        {
+          "question": "How do you handle missing data in your datasets?"
+        },
+        {
+          "question": "Describe your process for building a machine learning model."
+        },
+        {
+          "question": "What is your experience with big data technologies?"
+        },
+        {
+          "question": "How do you ensure the accuracy and reliability of your data analysis?"
+        },
+        {
+          "question": "Can you explain the concept of data normalization?"
+        },
+        {
+          "question": "What are the key components of a data pipeline?"
+        },
+        {
+          "question": "How do you handle version control in your data science projects?"
+        },
+        {
+          "question": "What is your approach to data visualization?"
+        }
+      ],
+      "closing": [
+        {
+          "question": "What are your career goals?"
+        },
+        {
+          "question": "How do you stay updated with new data science technologies and methods?"
+        },
+        {
+          "question": "What do you consider your greatest achievement in data science?"
+        },
+        {
+          "question": "What do you think sets you apart from other candidates?"
+        },
+        {
+          "question": "Do you have any questions for us?"
+        }
+      ]
+    },
+    "Behavioral": {
+      "intro": [
+        {
+          "question": "Can you tell me a little about yourself and your background in data science?"
+        },
+        {
+          "question": "Why are you interested in this role and our company?"
+        },
+        {
+          "question": "What motivated you to pursue a career in data science?"
+        },
+        {
+          "question": "What are your main strengths and weaknesses as a data scientist?"
+        },
+        {
+          "question": "How do you stay updated with the latest trends and technologies in data science?"
+        }
+      ],
+      "main": [
+        {
+          "question": "Can you tell me about a time when you faced a significant data-related challenge at work? How did you handle it?"
+        },
+        {
+          "question": "Describe a situation where you had to work closely with a team to complete a data project. What was your role and how did you contribute?"
+        },
+        {
+          "question": "Tell me about a time when you had to learn and apply a new data science technique or tool quickly. How did you approach it?"
+        },
+        {
+          "question": "Have you ever had a disagreement with a colleague regarding data analysis or interpretation? How did you resolve it?"
+        },
+        {
+          "question": "Can you describe a project where you had to manage multiple data tasks and deadlines? How did you prioritize?"
+        },
+        {
+          "question": "Tell me about a time when you had to analyze and interpret complex data sets. What was your process?"
+        },
+        {
+          "question": "Describe a time when you went above and beyond your regular responsibilities to complete a data project."
+        },
+        {
+          "question": "Have you ever had to handle a situation where a data project was not going as planned? What did you do?"
+        },
+        {
+          "question": "Can you give an example of a time when you had to mentor a junior colleague or intern in data science? How did you ensure their success?"
+        },
+        {
+          "question": "Tell me about a time when you had to adapt to significant changes in a data project or work environment. How did you manage it?"
+        }
+      ],
+      "closing": [
+        {
+          "question": "What are your career goals and how does this role fit into them?"
+        },
+        {
+          "question": "What do you consider your most significant achievement in your career so far?"
+        },
+        {
+          "question": "How do you handle feedback and criticism in your work?"
+        },
+        {
+          "question": "What do you think sets you apart from other candidates for this position?"
+        },
+        {
+          "question": "Do you have any questions for us about the role or company?"
+        }
+      ]
+    },
+    "Case": {
+      "intro": [
+        {
+          "question": "Can you briefly describe your experience with case studies in data science?"
+        },
+        {
+          "question": "What methodologies do you use when approaching a case study?"
+        },
+        {
+          "question": "Can you give an example of a case study you have worked on?"
+        },
+        {
+          "question": "What tools and techniques do you use for analyzing case studies?"
+        },
+        {
+          "question": "How do you stay updated with best practices for case studies?"
+        }
+      ],
+      "main": [
+        {
+          "question": "How would you approach a case study where you need to improve the accuracy of a predictive model?"
+        },
+        {
+          "question": "Describe the steps you would take to analyze a case study involving a large and complex dataset."
+        },
+        {
+          "question": "How would you handle a case study where you need to identify key trends in a dataset?"
+        },
+        {
+          "question": "What factors do you consider when conducting a data quality assessment for a case study?"
+        },
+        {
+          "question": "How do you ensure the accuracy and reliability of your findings in a case study?"
+        },
+        {
+          "question": "Can you describe a situation where you had to present your case study findings to stakeholders? How did you handle it?"
+        },
+        {
+          "question": "How do you prioritize different aspects of a case study when resources are limited?"
+        },
+        {
+          "question": "What is your process for validating the results of a case study?"
+        },
+        {
+          "question": "How do you integrate feedback from team members or stakeholders into your case study analysis?"
+        },
+        {
+          "question": "Can you give an example of a challenging case study you worked on and how you overcame the challenges?"
+        }
+      ],
+      "closing": [
+        {
+          "question": "What have you learned from conducting case studies in your career?"
+        },
+        {
+          "question": "How do you handle criticism or differing opinions on your case study findings?"
+        },
+        {
+          "question": "What do you consider your most successful case study and why?"
+        },
+        {
+          "question": "What are your career goals and how does this role fit into them?"
+        },
+        {
+          "question": "Do you have any questions for us about the role or the team?"
+        }
+      ]
+    },
+    "Technical": {
+      "intro": [
+        {
+          "question": "Can you briefly describe your experience with data science?"
+        },
+        {
+          "question": "What data analysis tools are you most familiar with?"
+        },
+        {
+          "question": "Can you tell me about a recent data science project you worked on? What technologies did you use?"
+        },
+        {
+          "question": "What is your favorite aspect of data science and why?"
+        },
+        {
+          "question": "How do you stay updated with new data science technologies and methods?"
+        }
+      ],
+      "main": [
+        {
+          "question": "Can you explain the difference between supervised and unsupervised learning?"
+        },
+        {
+          "question": "How do you approach cleaning and preparing a dataset for analysis?"
+        },
+        {
+          "question": "What is your process for selecting the right machine learning algorithm for a problem?"
+        },
+        {
+          "question": "Describe how you would handle an imbalanced dataset."
+        },
+        {
+          "question": "How do you ensure your models are not overfitting or underfitting?"
+        },
+        {
+          "question": "What is the role of cross-validation in model evaluation?"
+        },
+        {
+          "question": "Can you explain the concept of feature engineering and its importance?"
+        },
+        {
+          "question": "How do you handle big data technologies in your projects?"
+        },
+        {
+          "question": "Describe a situation where you had to optimize a machine learning model."
+        },
+        {
+          "question": "What is your approach to deploying machine learning models into production?"
+        }
+      ],
+      "closing": [
+        {
+          "question": "What kind of data science projects are you most passionate about?"
+        },
+        {
+          "question": "What do you consider your greatest achievement in data science?"
+        },
+        {
+          "question": "How do you continue to improve your skills and knowledge in data science?"
+        },
+        {
+          "question": "What are your career goals and how does this role fit into them?"
+        },
+        {
+          "question": "Do you have any questions for us about the role or the team?"
+        }
+      ]
     }
   }
-  
+}
