@@ -9,19 +9,19 @@ import { ResumeDropAndSelect } from '../ResumeDropAndSelect';
 
 export const Bio = ({
     userId,
-    resumes,
+    userResume,
     profileId,
     currentBio,
     desiredRole,
 }: {
     userId: string,
-    resumes: ResumeClass[],
+    userResume?: string,
     profileId: string,
     currentBio?: string,
     desiredRole?: string,
 }) => {
 
-    const { hasResumes, selectedResumeId, setSelectedResumeId, selectedResume } = useResumeDropDown({ resumes })
+    const { hasResumes, selectedResumeId, setSelectedResumeId, resumes, resume } = useResumeDropDown({ userId, userResume })
 
     return (
         <>
@@ -34,16 +34,18 @@ export const Bio = ({
                     setSelectedResumeId={setSelectedResumeId}
                 />
             </div>
-            <div className='pt-5'>
-                <h2 className="text-2xl font-semibold leading-tight text-slate-900">Generate your bio</h2>
-                <BioGen
-                    selectedResume={selectedResume}
-                    profileId={profileId}
-                    currentBio={currentBio}
-                    desiredRole={desiredRole}
-                    activeSubscription={true}
-                />
-            </div>
+            {resume &&
+                <div className='pt-5'>
+                    <h2 className="text-2xl font-semibold leading-tight text-slate-900">Generate your bio</h2>
+                    <BioGen
+                        selectedResume={resume}
+                        profileId={profileId}
+                        currentBio={currentBio}
+                        desiredRole={desiredRole}
+                        activeSubscription={true}
+                    />
+                </div>
+            }
         </>
     );
 }

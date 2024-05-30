@@ -3,16 +3,11 @@ import { SidebarMobile } from '../components/sidebar/MobileSidebar';
 import { ItemHistory } from '../components/sidebar/ItemHistory';
 import { checkSubscription } from '../../lib/hooks/check-subscription';
 import { SidebarDesktop } from '../components/sidebar/SidebarDesktop';
-import { SidebarToggle } from '../components/sidebar/ToggleSidebar';
-import { getResumes } from '../../lib/resume-db';
-import { DropResumeBanner } from '../components/chatbot/DropResumeBanner';
 import { getChats } from '../../lib/chat-db';
 import { cache } from 'react';
-import { createInitialChatAction, deleteChatAction, handleChatCreation, handleChatDeletion } from './_action';
-import { redirect } from 'next/navigation';
+import { handleChatCreation, handleChatDeletion } from './_action';
 import { ChatClass } from '../../models/Chat';
 import { DesktopOpenSideBar } from '../components/sidebar/DesktopOpenSideBar';
-import { ActionItemType } from '../board/job-helper';
 import { SideBarItem } from '../helper';
 
 const title = "Eve: Kyaria.ai's Revolutionary AI Career Coach | Affordable & 24/7 Access";
@@ -52,7 +47,6 @@ export default async function EveLayout({
         )
     }
 
-    const { resumes } = await getResumes(userId)
     const loadChats = cache(async (userId: string) => {
         return await getChats(userId)
     })
@@ -71,9 +65,8 @@ export default async function EveLayout({
         return handleChatCreation({ userId })
     }
 
-
     return (
-        <div className="min-h-screen">
+        <>
             {userId &&
                 <>
                     <SidebarMobile>
@@ -93,14 +86,9 @@ export default async function EveLayout({
                         newTitle={'New Chat'}
                         deleteItemAction={handleChatDeletion}
                     />
-                    {(resumes && resumes.length == 0) &&
-                        <DropResumeBanner
-                            userId={userId}
-                        />
-                    }
                 </>
             }
             {children}
-        </div>
+        </>
     )
 }

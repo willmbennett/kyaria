@@ -8,7 +8,7 @@ import JobMenu from "../../components/apps/JobMenu";
 import ProgressBar from "../../components/apps/ui/ProgressBar";
 import FeedbackAside from "../../components/landingpage/FeedbackAside";
 import useAppNavigation from "../../../lib/hooks/use-app-section";
-import { jobStateType } from "../../board/job-helper";
+import { JobStateType } from "../../board/job-helper";
 import { Button } from "../../components/Button";
 import { cache } from "react";
 
@@ -33,39 +33,32 @@ export default async function JobAppPage({ params, searchParams }: JobAppPagePro
 
   const { app } = await loadBoards(params.id) as getJobAppInterface
   const job = app.job as JobClass
-  const appState = app.state as jobStateType
+  const appState = app.state as JobStateType
 
   const { currentSection, filteredPages, activeProgressSection } = useAppNavigation(appState, searchParams, job.companyDiffbotUri);
 
   if (!app) return <p>Job app not found</p>
 
   return (
-    <div className="flex flex-col w-full lg:w-5/6 xl:w-4/5 2xl:w-3/4 gap-4 p-4">
+    <div className="flex flex-col w-full md:h-full sm:p-1 md:p-2 lg:p-3 xl:p-4">
       <ProgressBar
         activeProgressSection={activeProgressSection}
       />
-      <div className="flex flex-col w-full items-stretch justify-center gap-8 lg:flex-row lg:items-start lg:gap-6">
-        <div className="w-full lg:w-1/4 xl:w-1/5">
-          <JobMenu
-            boardId={app.boardId?.toString()}
-            currentSection={currentSection}
-            filteredPages={filteredPages}
-            activeProgressSection={activeProgressSection}
-          />
-        </div>
-        <div className="flex w-full lg:w-1/2 xl:w-3/5 flex-col justify-center items-center">
-          {/* @ts-ignore */}
-          <JobApplication
-            jobApp={app}
-            activeSubscription={activeSubscription}
-            currentUserId={userId}
-            currentSection={currentSection}
-            admin={admin}
-          />
-        </div>
-        <div className="w-full lg:w-1/4 xl:w-1/5">
-          <FeedbackAside />
-        </div>
+      <div className="flex flex-col w-full md:h-full justify-center md:flex-row md:justify-start md:gap-4">
+        <JobMenu
+          boardId={app.boardId?.toString()}
+          currentSection={currentSection}
+          filteredPages={filteredPages}
+          activeProgressSection={activeProgressSection}
+        />
+        {/* @ts-ignore */}
+        <JobApplication
+          jobApp={app}
+          activeSubscription={activeSubscription}
+          currentUserId={userId}
+          currentSection={currentSection}
+          admin={admin}
+        />
       </div>
     </div>
   );

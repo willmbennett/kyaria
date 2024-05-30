@@ -70,8 +70,8 @@ export default function Experience({
     };
 
     return (
-        <div className="p-6">
-            <h1 className="text-4xl sm:text-6xl font-bold text-slate-900 mb-8">
+        <div className="max-w-3xl">
+            <h1 className="text-center sm:text-4xl text-4xl font-bold mb-8">
                 Interview Stories
             </h1>
             <p className="my-4 text-left">

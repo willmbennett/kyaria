@@ -82,7 +82,7 @@ export default async function AppLayout({
     }
 
     return (
-        <div className="w-screen min-h-screen">
+        <>
             <SidebarMobile>
                 <ItemHistory
                     sideBarTitle={'Session History'}
@@ -100,8 +100,6 @@ export default async function AppLayout({
                 newTitle={'New Resume'}
                 deleteItemAction={handleResumeDeletion}
             />
-            <div className='lg:ml-10'>
-                {children}
-            </div>
-        </div>);
+            {children}
+        </>);
 }

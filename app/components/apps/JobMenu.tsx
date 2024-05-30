@@ -27,7 +27,7 @@ export default function JobMenu(
   const path = usePathname()
 
   return (
-    <div className="bg-white border w-full md:sticky md:top-60 p-4 lg:rounded-lg h-auto my-2 flex flex-col">
+    <div className="bg-white my-2 flex flex-col w-64">
       <Button size='sm' variant='ghost' href={`/board${boardId ? `/${boardId}` : '/default'}`} className="mb-3">← Back to Board</Button>
       {filteredPages.map((l, i) => {
         const handleClick = () => {

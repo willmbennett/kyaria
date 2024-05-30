@@ -56,7 +56,7 @@ export default function UserQuestionnaire(
     const formattedStatusOptions = statusOptions.map(status => ({ value: status, label: status }));
 
     return (
-        <div>
+        <div className='max-w-2xl'>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className={BASIC_FIELD_STYLE}>
                     <label htmlFor="desiredRole">What job role are you seeking?</label>

@@ -266,6 +266,9 @@ class ResumeClass {
     createdAt: Date | string;
     updatedAt: Date | string;
 
+    @prop({ default: false, required: true })
+    public default!: boolean;
+
     @prop()
     public fromTemplate?: boolean;
 

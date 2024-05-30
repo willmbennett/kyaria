@@ -39,25 +39,23 @@ export default function KanbanPage(
     } = useKanban({ boardItems, boardId })
 
     return (
-        <div className="relative w-full h-screen">
-            <div id="kanban-board-menu" className='absolute top-0 z-20 py-2 bg-white w-full'>
-                <div className="flex gap-4 items-center justify-center">
-                    <SingleEdit
-                        value={name}
-                        onUpdate={updateBoardTitle}
-                        titleStyle="sm:text-lg text-xl font-bold text-slate-900"
-                        editable={boardId != 'default'}
-                    />
-                    <Button
-                        variant="solid"
-                        size="sm"
-                        type="button"
-                        href={`/apps/new${boardId != 'default' ? `?board=${boardId}` : ''}`}
-                    >
-                        Add a New Job Post
-                    </Button>
-                    <SearchInput searchValue={searchValue} handleChange={handleChange} />
-                </div>
+        <div className="relative w-full h-full">
+            <div className="flex gap-4 items-center justify-center border-b py-2">
+                <SingleEdit
+                    value={name}
+                    onUpdate={updateBoardTitle}
+                    titleStyle="sm:text-lg text-xl font-bold text-slate-900"
+                    editable={boardId != 'default'}
+                />
+                <Button
+                    variant="solid"
+                    size="sm"
+                    type="button"
+                    href={`/apps/new${boardId != 'default' ? `?board=${boardId}` : ''}`}
+                >
+                    Add a New Job Post
+                </Button>
+                <SearchInput searchValue={searchValue} handleChange={handleChange} />
             </div>
             <KanbanBoard
                 sensors={sensors}

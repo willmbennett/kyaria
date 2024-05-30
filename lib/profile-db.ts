@@ -40,7 +40,7 @@ export async function createProfile(data: Partial<ProfileClass>) {
         const profile = await ProfileModel.create(data);
         //console.log(`Created Profile: ${JSON.stringify(profile)}`);
 
-        //return { profile };
+        return { newProfileId: profile._id.toString() };
     } catch (error) {
         console.error("Error creating profile:", error); // Log the error for debugging purposes
         return { error: 'Failed to create profile' }; // Generic error message to user
@@ -98,6 +98,33 @@ export async function getProfile(userId: string, filter = false,) {
                     profile
                 };
             }
+
+        } else {
+            return { error: "Profile not found" };
+        }
+    } catch (error) {
+        return { error };
+    }
+}
+
+
+export async function getProfileById(id: string) {
+    try {
+        await connectDB();
+
+        if (!id) {
+            return { error: "Profile not found" };
+        }
+
+        //console.log(userId)
+        const profile = await ProfileModel.findById(id).lean().exec();
+
+        //console.log(profile)
+        if (profile) {
+            //console.log('about to transform props')
+            return {
+                profile
+            };
 
         } else {
             return { error: "Profile not found" };

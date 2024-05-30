@@ -21,7 +21,6 @@ const ProductCarousel = dynamic(() => import('./components/landingpage/ProductCa
 //import { countTotalResumes } from '../lib/resume-db'
 import { checkSubscription } from '../lib/hooks/check-subscription'
 import { redirect } from 'next/navigation'
-import { createInitialChatAction } from './eve/_action';
 
 export default async function HomePage() {
   const { activeSubscription, userId } = await checkSubscription()
@@ -45,12 +44,8 @@ export default async function HomePage() {
     )
   }
 
-  if (!activeSubscription) {
-    redirect(`/profile/${userId}`);
-  }
-
   if (userId) {
-    redirect(`/profile/${userId}`);
+    redirect("/board");
   }
 
   return (

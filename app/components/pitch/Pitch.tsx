@@ -10,19 +10,19 @@ import { SetStateAction } from 'react';
 
 export const Pitch = ({
     userId,
-    resumes,
+    userResume,
     profileId,
     currentPitch,
     desiredRole
 }: {
     userId: string,
-    resumes: ResumeClass[],
+    userResume?: string,
     profileId: string,
     currentPitch?: string,
     desiredRole?: string,
 }) => {
 
-    const { hasResumes, selectedResumeId, setSelectedResumeId, selectedResume } = useResumeDropDown({ resumes })
+    const { hasResumes, selectedResumeId, setSelectedResumeId, resumes, resume } = useResumeDropDown({ userId, userResume })
 
     return (
         <>
@@ -35,16 +35,18 @@ export const Pitch = ({
                     setSelectedResumeId={setSelectedResumeId}
                 />
             </div>
-            <div className='pt-5'>
-                <h2 className="text-2xl font-semibold leading-tight text-slate-900">Generate your pitch</h2>
-                <PitchGen
-                    selectedResume={selectedResume}
-                    profileId={profileId}
-                    currentPitch={currentPitch}
-                    desiredRole={desiredRole}
-                    activeSubscription={true}
-                />
-            </div>
+            {resume &&
+                <div className='pt-5'>
+                    <h2 className="text-2xl font-semibold leading-tight text-slate-900">Generate your pitch</h2>
+                    <PitchGen
+                        selectedResume={resume}
+                        profileId={profileId}
+                        currentPitch={currentPitch}
+                        desiredRole={desiredRole}
+                        activeSubscription={true}
+                    />
+                </div>
+            }
         </>
     );
 }

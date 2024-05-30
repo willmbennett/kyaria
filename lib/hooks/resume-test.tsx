@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
-import { createResumeScanAction } from '../../app/resumebuilder/_action';
 import { transformParsedResume } from '../../app/resumebuilder/resumetest-helper';
 import { createResumeAction } from '../../app/resumebuilder/_action';
 import { ResumeClass } from '../../models/Resume';
@@ -59,9 +58,6 @@ export const useFileHandler = (
     return onFileChange;
 };
 
-
-
-
 export const useDocumentLoadSuccess = (setNumPages: Dispatch<SetStateAction<number | null>>): ((pdf: PDFDocumentProxy) => void) => {
     const onDocumentLoadSuccess = ({ numPages: nextNumPages }: PDFDocumentProxy): void => {
 
@@ -70,68 +66,6 @@ export const useDocumentLoadSuccess = (setNumPages: Dispatch<SetStateAction<numb
 
     return onDocumentLoadSuccess;
 };
-
-export async function handleFormSubmit(
-    {
-        setLoading,
-        setFormHidden,
-        setFile,
-        setUseResume,
-        setResumeIndex,
-        resumeUploadText,
-        userId,
-        router
-    }: FormSubmitParams
-): Promise<void> {
-    setLoading(true);
-    //console.log('Resume Text')
-    //console.log(resumeUploadText)
-
-    const response = await fetch('/api/sovren', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ content: resumeUploadText })
-    });
-
-
-    if (!response.ok) {
-        // If the response is not ok, print the status and throw an error
-        //console.error('Server responded with status:', response.status);
-        throw new Error(`HTTP error! status: ${response.status}`);
-    } else {
-        const { parsedResume } = await response.json();
-
-        //const parsedResume: Partial<ResumeScanDataClass> = testResumeData
-        //console.log('Parsed Resume');
-        //console.log(parsedResume);
-        //console.log(userId)
-
-        if (userId) {
-            //console.log('1)  Made it to Resume Scan creation')
-            const path = '/'
-            const dataToSave = { ...parsedResume, userId }
-            const resumeScanId = await createResumeScanAction(dataToSave, path)
-            //console.log('Created resume scan', resumeScanId)
-            if (resumeScanId) {
-                //console.log('2)  Made it to Resume creation')
-                const resumeToCreate = transformParsedResume(parsedResume)
-                delete resumeToCreate._id
-                const userResumeWithIds = { resumeScan: resumeScanId, ...resumeToCreate, userId: userId }
-                const resumeId = await createResumeAction(userResumeWithIds, '/')
-                if (resumeId) {
-                    router.refresh()
-                    setUseResume(true)
-                    setResumeIndex(resumeId)
-                    setFile(null);
-                    setLoading(false)
-                    setFormHidden(true);
-                }
-            }
-        }
-    }
-}
 
 export const useGeneratePDF = ({ data }: { data: ResumeClass }) => {
     const generatePDF = useCallback(async () => {

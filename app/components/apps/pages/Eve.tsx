@@ -9,14 +9,13 @@ interface EveProps {
     jobAppId: string
     jobId: string;
     jobStripped: Partial<JobClass>;
-    resumeId: string;
     userId: string;
     chatId?: string;
     activeSubscription: boolean;
     admin: boolean;
 }
 
-export default async function Eve({ jobAppId, jobId, jobStripped, resumeId, userId, chatId, activeSubscription, admin }: EveProps) {
+export default async function Eve({ jobAppId, jobId, jobStripped, userId, chatId, activeSubscription, admin }: EveProps) {
     //console.log({ resumeId, jobId, chatId })
 
     let currentChatId: string

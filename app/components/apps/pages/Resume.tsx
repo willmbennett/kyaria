@@ -1,35 +1,39 @@
+"use server"
+import { ResumeClass } from '../../../../models/Resume';
 import CustomPDFViewer from '../../resumebuilder/pdfviewer/CustomPDFViewer';
-import ResumeUploadPage from './ResumeUpload';
+import { ResumeSelection } from './Resume/ResumeSelect';
 
 interface ResumeProps {
-    userResume: any;
+    userResume?: ResumeClass;
     userId: string;
     jobId: string;
+    jobAppId: string;
 }
 
-export default function Resume({
+export default async function Resume({
     userResume,
     userId,
-    jobId
+    jobId,
+    jobAppId
 }: ResumeProps) {
+    const resumeId = userResume?._id.toString()
 
     return (
-        <div className='w-full flex flex-col items-center gap-4'>
-
-            <ResumeUploadPage />
-
-            OR
-
+        <div className='w-full h-full over relative items-center gap-4 max-w-xl'>
             <h1 className="text-center sm:text-4xl text-4xl font-bold mb-8">
                 Stand out with a Tailored Resume
             </h1>
-            <CustomPDFViewer
-                data={userResume}
-                useEdit={true}
-                userId={userId}
-                useSave={true}
-                jobId={jobId}
-            />
+            {/* @ts-ignore */}
+            <ResumeSelection userId={userId} jobAppId={jobAppId} currentResume={resumeId} />
+            {userResume &&
+                <CustomPDFViewer
+                    data={userResume}
+                    useEdit={true}
+                    userId={userId}
+                    useSave={true}
+                    jobId={jobId}
+                />
+            }
         </div>
     );
 }

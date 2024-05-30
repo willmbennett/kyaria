@@ -2,7 +2,6 @@ import { redirect } from "next/navigation";
 import { checkSubscription } from "../../../lib/hooks/check-subscription";
 import NewResumeForm from "../../components/resumebuilder/new/NewResumeForm";
 import { Container } from "../../components/landingpage/Container";
-import { Button } from "../../components/Button";
 
 export default async function ResumeUploadPage() {
     const { userId } = await checkSubscription()
@@ -12,12 +11,9 @@ export default async function ResumeUploadPage() {
     }
 
     return (
-        <section className="flex justify-center py-5 md:py-8 lg:py-10">
+        <section className="flex w-full justify-center py-5 md:py-8 lg:py-10">
             <Container>
                 <div className="flex flex-col gap-10 text-center">
-                    <div className="flex w-full">
-                        <Button size='sm' variant='ghost' href="/resumebuilder">← Back to Resumes</Button>
-                    </div>
                     <h1 className="text-5xl font-semibold leading-tighter text-slate-900 md:mx-auto md:max-w-2xl md:text-center xl:mx-0 xl:text-left xl:text-6xl xl:leading-tighter">
                         Create a new resume
                     </h1>

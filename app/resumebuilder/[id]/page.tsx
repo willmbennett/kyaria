@@ -36,12 +36,10 @@ export default async function ResumeScanPage({ params }: ResumeScanPageProps) {
     }
 
     return (
-        <div className="flex justify-center">
-            <ResumeBuilder
-                resume={resume}
-                userId={userId}
-                job={job}
-            />
-        </div>
+        <ResumeBuilder
+            resume={resume}
+            userId={userId}
+            job={job}
+        />
     );
 }

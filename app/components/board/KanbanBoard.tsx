@@ -3,7 +3,6 @@ import { DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, S
 import { boardItemType, jobStates } from '../../board/job-helper';
 import KanbanColumn from './KanbanColumn';
 import AppItem from './boarditem/AppItem';
-import { SideBarItem } from '../../helper';
 import { BoardClass } from '../../../models/Board';
 
 interface KanbanBoardProps {
@@ -34,7 +33,7 @@ export const KanbanBoard = ({
     removeApp
 }: KanbanBoardProps) => (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd} onDragStart={handleDragStart} onDragOver={handleDragOver} id={id}>
-        <div id='kanban-container' className='relative overflow-x-scroll overflow-y-hidden w-screen h-screen lg:pl-10 bg-white z-5 lg:p-4'>
+        <div id='kanban-container' className='relative overflow-x-scroll overflow-y-hidden w-full h-full'>
             <div className='flex h-full md:px-2 lg:px-4'>
                 {jobStates.map((state, index) =>
                     <KanbanColumn
@@ -54,7 +53,7 @@ export const KanbanBoard = ({
                 <AppItem
                     app={apps.find(job => job.id === activeId) as boardItemType}
                     updateAppState={updateAppState}
-                    state={apps.find(job => job.id === activeId)?.state || 'WISHLIST'}
+                    state={apps.find(job => job.id === activeId)?.state || 'Wishlist'}
                     boards={boards}
                     removeApp={removeApp}
                 />

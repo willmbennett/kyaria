@@ -55,7 +55,7 @@ export default async function BoardPage() {
 
 
   return (
-    <div className="flex w-full mx-auto flex-col gap-4 py-10 items-center min-h-screen">
+    <div className="flex w-full h-full mx-auto flex-col gap-4 py-10 items-center">
       <div className="flex gap-4 items-center">
         <h1 className="sm:text-lg text-xl font-bold text-slate-900">
           Your Job Board

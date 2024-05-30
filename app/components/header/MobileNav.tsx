@@ -23,7 +23,7 @@ export const MobileNav = ({
     return (
         <Popover>
             <Popover.Button
-                className="group relative z-50 flex cursor-pointer items-center justify-center border border-gray-secondary-400/75 bg-gray-secondary-50 p-3 transition duration-300 ease-in-out focus:outline-none md:hidden"
+                className="group relative mt-2 ml-2 z-50 flex cursor-pointer items-center justify-center border border-gray-secondary-400/75 bg-gray-secondary-50 p-3 transition duration-300 ease-in-out focus:outline-none md:hidden"
                 aria-label="Toggle Navigation"
             >
                 {({ open }) => <MenuIcon open={open} />}

@@ -1,23 +1,22 @@
 'use client'
 import React, { FC, useState } from 'react';
-import { ResumeClass } from '../../models/Resume';
 
 interface IResumeDropdownMenuProps {
     selectedResumeId: string;
-    setSelectedResumeId: (id: string) => void;
-    resumes: ResumeClass[];
+    selectResume: (id: string) => void;
+    resumes: { name: string, id: string }[];
 }
 
 const ResumeDropdownMenu: FC<IResumeDropdownMenuProps> = ({
     selectedResumeId,
-    setSelectedResumeId,
+    selectResume,
     resumes,
 }) => {
     const [showOptions, setShowOptions] = useState(false);
     const optionsClick = () => setShowOptions(!showOptions);
 
     // Find the selected resume by its ID to display its name
-    const selectedResume = resumes.find(resume => resume._id === selectedResumeId);
+    const selectedResume = resumes.find(resume => resume.id === selectedResumeId);
 
     return (
         <div className="relative inline-block text-left">
@@ -29,7 +28,7 @@ const ResumeDropdownMenu: FC<IResumeDropdownMenuProps> = ({
                 aria-haspopup="true"
                 aria-expanded={showOptions ? 'true' : 'false'}
             >
-                {selectedResume ? selectedResume.title || selectedResume.name : "Select a resume"}
+                {selectedResume ? selectedResume.name : "Select a resume"}
                 <svg
                     className="-mr-1 ml-2 h-5 w-5"
                     xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +45,7 @@ const ResumeDropdownMenu: FC<IResumeDropdownMenuProps> = ({
             </button>
             {showOptions && (
                 <div
-                    className="absolute left-0 z-10 mt-2 w-56 origin-top-right max-h-96 overflow-y-auto rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    className="absolute right-0 z-10 mt-2 w-full origin-top-right max-h-96 overflow-y-auto rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                     role="menu"
                     aria-orientation="vertical"
                     aria-labelledby="options-menu"
@@ -55,16 +54,16 @@ const ResumeDropdownMenu: FC<IResumeDropdownMenuProps> = ({
                     <div className="py-1" role="none">
                         {resumes.map((resume, index) => (
                             <button
-                                key={resume._id.toString()}
+                                key={resume.id.toString()}
                                 onClick={() => {
-                                    setSelectedResumeId(resume._id.toString());
+                                    selectResume(resume.id.toString());
                                     setShowOptions(false);
                                 }}
-                                className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left ${selectedResumeId === resume._id.toString() ? 'bg-gray-100' : ''
+                                className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left ${selectedResumeId === resume.id.toString() ? 'bg-gray-100' : ''
                                     }`}
                                 role="menuitem"
                             >
-                                {index+1} - {resume.title || resume.name}
+                                {resume.name}
                             </button>
                         ))}
                     </div>

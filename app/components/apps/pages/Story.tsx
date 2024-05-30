@@ -102,8 +102,8 @@ Job Posting Details: ${JSON.stringify(job)}`
 
 
     return (
-        <>
-            <h1 className="text-center sm:text-6xl text-4xl font-bold text-slate-900 mb-8">
+        <div className='max-w-3xl'>
+            <h1 className="text-center sm:text-4xl text-4xl font-bold mb-8">
                 Tailor your Elevator Pitch
             </h1>
             {userCanEdit && currentStory != '' && profileStory != currentStory &&
@@ -134,6 +134,6 @@ Job Posting Details: ${JSON.stringify(job)}`
                     activeSubscription={true}
                 />
             </div>
-        </>
+        </div>
     );
 }
