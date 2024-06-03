@@ -1,8 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { blobToBase64, createMediaStream } from "../../app/eve/eve-helper";
+import { addMockInterviewMessageAction, addMockInterviewRecordingActions, uploadFile } from "../../app/mockinterviews/[id]/_action";
+import { Recording } from "../../models/MockInterview";
+import { usePathname } from "next/navigation";
+import { Message, nanoid } from "ai";
 
-const useMediaAndRecording = (submitUserMessage: (input: string) => Promise<void>) => {
+const useMediaAndRecording = (submitUserMessage: (input: string) => Promise<void>, mockInterviewId?: string) => {
     const outgoingVideoRef = useRef<HTMLVideoElement>(null);
+    const path = usePathname()
     const [hasMediaAccess, setHasMediaAccess] = useState<boolean>(false);
     const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([]);
     const [audioDevices, setAudioDevices] = useState<MediaDeviceInfo[]>([]);
@@ -11,13 +16,16 @@ const useMediaAndRecording = (submitUserMessage: (input: string) => Promise<void
     const [stream, setStream] = useState<MediaStream | null>(null);
     const [audioTracks, setAudioTracks] = useState<MediaStreamTrack[] | null>(null);
     const [errorMessage, setErrorMessage] = useState<string>();
+    const [uploadVideo, setUploadVideo] = useState(false);
 
     const [text, setText] = useState("");
     const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+    const [audioRecorder, setAudioRecorder] = useState<MediaRecorder | null>(null);
     const [peakLevel, setPeakLevel] = useState<number>(0);
     const [recording, setRecording] = useState(false);
     const isRecording = useRef(false);
     const chunks = useRef<Blob[]>([]);
+    const audioChunks = useRef<Blob[]>([]);
 
     const requestMediaAccess = async () => {
         try {
@@ -83,6 +91,40 @@ const useMediaAndRecording = (submitUserMessage: (input: string) => Promise<void
         }
     }, [selectedVideoDeviceId, selectedAudioDeviceId, hasMediaAccess]);
 
+    // Handling Video url
+    const handleVideoUrl = async () => {
+        if (mockInterviewId && uploadVideo && chunks.current) {
+            console.log('About to upload video for mock interview: ', mockInterviewId)
+            const videoBlob = new Blob(chunks.current, { type: 'video/webm' });
+            const videoFile = new File([videoBlob], 'recording.webm', { type: 'video/webm' });
+            console.log('Video file created:', videoFile);
+
+            // Upload the video to Vercel
+            const formData = new FormData();
+            formData.append('recording', videoFile);
+            const videoLink = await uploadFile(formData);
+            console.log('Video uploaded to Vercel, link:', videoLink);
+            const newRecording: Partial<Recording> = { vercelLink: videoLink.url, createdAt: new Date().toISOString() };
+            await addMockInterviewRecordingActions(mockInterviewId, newRecording, path);
+            setUploadVideo(false)
+            console.log('New recording added to mock interview');
+        }
+    }
+
+    useEffect(() => {
+        // Add the recording to the mock interview
+        handleVideoUrl()
+    }, [uploadVideo, mockInterviewId]);
+
+    useEffect(() => {
+        if (mockInterviewId && text) {
+            console.log('Made it to appending interview message with text: ', text)
+            const newMessage: Message = { id: nanoid(), role: 'user', content: text, createdAt: new Date() }
+            addMockInterviewMessageAction(mockInterviewId, newMessage, path);
+            setText('')
+        }
+    }, [text, mockInterviewId]);
+
     useEffect(() => {
         if (stream && outgoingVideoRef.current) {
             outgoingVideoRef.current.srcObject = stream;
@@ -98,18 +140,20 @@ const useMediaAndRecording = (submitUserMessage: (input: string) => Promise<void
 
     // Function to start the recording
     const startRecording = () => {
-        if (mediaRecorder) {
+        if (mediaRecorder && audioRecorder) {
             isRecording.current = true;
-            mediaRecorder.start();
+            audioRecorder.start();
+            if (mockInterviewId) mediaRecorder.start();
             setRecording(true);
         }
     };
 
     // Function to stop the recording
     const stopRecording = () => {
-        if (mediaRecorder) {
+        if (mediaRecorder && audioRecorder) {
             isRecording.current = false;
-            mediaRecorder.stop();
+            audioRecorder.stop();
+            if (mockInterviewId) mediaRecorder.stop();
             setRecording(false);
         }
     };
@@ -136,31 +180,65 @@ const useMediaAndRecording = (submitUserMessage: (input: string) => Promise<void
 
     // Function to initialize the media recorder with the provided stream
     const initialMediaRecorder = (stream: MediaStream) => {
-        // Create a stream with only the audio tracks
-        const audioStream = new MediaStream(stream.getAudioTracks());
+        try {
+            //console.log('Initializing MediaRecorder with stream:', stream);
+            const mediaRecorder = new MediaRecorder(stream);
+            const audioStream = new MediaStream(stream.getAudioTracks());
+            const audioRecorder = new MediaRecorder(audioStream);
 
-        const mediaRecorder = new MediaRecorder(audioStream);
+            // Event handler when recording starts
+            audioRecorder.onstart = () => {
+                //console.log('Recording started');
+                createMediaStream(audioStream, isRecording.current, (peak: number) => {
+                    setPeakLevel(peak);
+                });
+                audioChunks.current = [];
+            };
 
-        // Event handler when recording starts
-        mediaRecorder.onstart = () => {
-            createMediaStream(stream, isRecording.current, (peak: number) => {
-                setPeakLevel(peak);
-            });
-            chunks.current = [];
-        };
+            // Event handler when data becomes available during recording
+            audioRecorder.ondataavailable = (ev) => {
+                //console.log('Audio data available:', ev.data);
+                audioChunks.current = [];
+                audioChunks.current.push(ev.data); // Storing data chunks
+            };
 
-        // Event handler when data becomes available during recording
-        mediaRecorder.ondataavailable = (ev) => {
-            chunks.current.push(ev.data); // Storing data chunks
-        };
+            // Event handler when audio recording stops
+            audioRecorder.onstop = async () => {
+                try {
+                    //console.log('Audio recording stopped');
+                    const audioBlob = new Blob(audioChunks.current, { type: 'audio/wav' });
+                    //console.log('Audio blob created:', audioBlob);
+                    blobToBase64(audioBlob, getText);
+                } catch (error) {
+                    console.error('Error during audio processing:', error);
+                }
+            };
 
-        // Event handler when recording stops
-        mediaRecorder.onstop = () => {
-            const audioBlob = new Blob(chunks.current, { type: "audio/wav" });
-            blobToBase64(audioBlob, getText);
-        };
+            // Event handler when video recording starts
+            mediaRecorder.onstart = () => {
+                //console.log('Video recording started');
+                chunks.current = [];
+            };
 
-        setMediaRecorder(mediaRecorder);
+            // Event handler when video data becomes available
+            mediaRecorder.ondataavailable = (ev) => {
+                //console.log('Video data available:', ev.data);
+                chunks.current = [];
+                chunks.current.push(ev.data); // Storing data chunks
+            };
+
+            // Event handler when video recording stops
+            mediaRecorder.onstop = async () => {
+                //console.log('Video recording stopped');
+                setUploadVideo(true)
+            };
+
+            setAudioRecorder(audioRecorder);
+            setMediaRecorder(mediaRecorder);
+            console.log('MediaRecorder set');
+        } catch (error) {
+            console.error('Error initializing MediaRecorder:', error);
+        }
     };
 
     useEffect(() => {

@@ -15,6 +15,7 @@ export type pageListType = {
         title?: string | undefined;
         titleId?: string | undefined;
     } & RefAttributes<SVGSVGElement>>;
+    subLink?: pageListType
 }
 
 export const linkData = {

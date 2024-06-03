@@ -14,10 +14,12 @@ interface VideoChatComponentProps {
     numMessages: number;
     submitUserMessage: (input: string) => Promise<void>
     textToSubmit: string;
-    setTextToSubmit: Dispatch<SetStateAction<string>>
+    setTextToSubmit: Dispatch<SetStateAction<string>>;
+    mockInterviewId?: string;
 }
 
-const VideoChatComponent = ({ textToSubmit, toggleTranscript, showTranscript, numMessages, submitUserMessage, setTextToSubmit }: VideoChatComponentProps) => {
+const VideoChatComponent = (props: VideoChatComponentProps) => {
+    const { textToSubmit, toggleTranscript, showTranscript, numMessages, submitUserMessage, setTextToSubmit, mockInterviewId } = props
     const router = useRouter()
 
     const {
@@ -48,7 +50,7 @@ const VideoChatComponent = ({ textToSubmit, toggleTranscript, showTranscript, nu
         stopRecording,
         text,
         peakLevel,
-    } = useMediaDevices(submitUserMessage);
+    } = useMediaDevices(submitUserMessage, mockInterviewId);
 
     const { fillerVideoRef, playFiller } = useFillerVideo(numMessages)
 

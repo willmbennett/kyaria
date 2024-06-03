@@ -17,6 +17,18 @@ export const useScrollAnchor = () => {
     }
   }, []);
 
+  const scrollToMessage = useCallback((messageId: string) => {
+    if (messagesRef.current) {
+      const messageElement = document.getElementById(messageId);
+      if (messageElement) {
+        messagesRef.current.scrollTo({
+          top: messageElement.offsetTop,
+          behavior: 'smooth',
+        });
+      }
+    }
+  }, []);
+
   useEffect(() => {
     if (messagesRef.current) {
       if (isAtBottom && !isVisible) {
@@ -80,6 +92,7 @@ export const useScrollAnchor = () => {
     scrollRef,
     visibilityRef,
     scrollToBottom,
+    scrollToMessage,  // Add this line
     isAtBottom,
     isVisible,
   };

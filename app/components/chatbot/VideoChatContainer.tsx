@@ -7,6 +7,7 @@ import { Button } from '../Button';
 import { nanoid } from 'nanoid'
 import { useAssistant } from '../../../lib/chatbot/use-assistant';
 import { cn } from '../../../lib/utils';
+import Link from 'next/link';
 
 interface VideoChatContainerProps {
     userId: string;
@@ -32,8 +33,9 @@ export const VideoChatContainer = ({ userId, chatId, threadId, messages, activeS
         submitUserMessage,
         chatMessages,
         textToSubmit,
-        setTextToSubmit
-    } = useAssistant({ chatId, threadId, messages })
+        setTextToSubmit,
+        mockInterviewId
+    } = useAssistant({ userId, chatId, threadId, messages })
 
     const renderVideoChatComponent = <VideoChatComponent
         toggleTranscript={toggleTranscript}
@@ -42,6 +44,7 @@ export const VideoChatContainer = ({ userId, chatId, threadId, messages, activeS
         setTextToSubmit={setTextToSubmit}
         showTranscript={showTranscript}
         numMessages={numMessages}
+        mockInterviewId={mockInterviewId}
     />
 
     // Use useMemo to efficiently calculate the number of assistant messages
@@ -69,7 +72,7 @@ export const VideoChatContainer = ({ userId, chatId, threadId, messages, activeS
     return (
         <div className={cn(`flex flex-col md:flex-row h-full  w-full justify-center text-center gap-4 sm:p-1 md:p-2 lg:p-3 xl:p-4 overflow-hidden`, interviewing && 'bg-slate-100')}>
             <div className='flex flex-col w-full justify-end h-full gap-2'>
-                {(interviewName && interviewing) && <h3 className="text-left font-bold text-lg font-slate-800">{interviewName}</h3>}
+                {(interviewName && mockInterviewId) && <Link className="text-left font-bold text-lg font-slate-800" href={`/mockinterviews/${mockInterviewId}`}>{interviewName}</Link>}
                 {handleVideoComponent}
             </div>
             <Chat messages={chatMessages} showTranscript={showTranscript} />

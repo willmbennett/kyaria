@@ -44,7 +44,7 @@ export async function createInitialChatAction({
 
 export async function updateChatAction(
     id: string,
-    newMessages: Message[],
+    newMessages: Message,
     path: string
 ) {
     await updateChat(id, newMessages);

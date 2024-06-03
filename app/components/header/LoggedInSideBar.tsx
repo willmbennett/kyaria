@@ -7,12 +7,11 @@ import clsx from 'clsx'
 import { DiscordButton } from "../ui/DiscordButton";
 import { Button } from '../Button'
 import { MobileNav } from "./MobileNav";
-import { AcademicCapIcon, BriefcaseIcon, UserGroupIcon, ClipboardDocumentListIcon, ChartBarIcon, HomeIcon } from "@heroicons/react/24/outline";
+import { AcademicCapIcon, BriefcaseIcon, UserGroupIcon, ClipboardDocumentListIcon, ChartBarIcon, HomeIcon, ComputerDesktopIcon } from "@heroicons/react/24/outline";
 import { Menu } from "@headlessui/react";
 import { pageListType } from "../../helper";
 import { MenuIcon } from "./MenuIcon";
 import { Separator } from "../ui/separator";
-import FeedbackAside from "../landingpage/FeedbackAside";
 
 const linkData = {
   publicLinks: [
@@ -32,7 +31,13 @@ const linkData = {
       label: 'AI Career Coach',
       href: '/eve',
       pricingTier: 'PRO',
-      icon: AcademicCapIcon
+      icon: AcademicCapIcon,
+      subLink: {
+        label: 'Mock Interviews',
+        href: '/mockinterviews',
+        pricingTier: 'PRO',
+        icon: ComputerDesktopIcon
+      }
     }
   ],
   productLinks: [
@@ -80,7 +85,7 @@ const linkData = {
   ]
 };
 
-const MenuItem = (link: pageListType, pathname: string) => (
+const MenuItem = (link: pageListType, pathname: string, sublink?: boolean) => (
   <Link
     key={`${link.label}-desktop`}
     href={link.href}
@@ -89,6 +94,7 @@ const MenuItem = (link: pageListType, pathname: string) => (
         ? 'bg-slate-100'
         : 'text-slate-800 hover:bg-slate-700 hover:text-white',
       'block px-4 py-2 text-sm',
+      sublink && 'pl-10'
     )}
   >
     <p className='flex gap-2 items-center'>
@@ -134,8 +140,8 @@ export const DesktopMenu = (pageList: pageListType[], pathname: string, userName
 export function LoggedInSideBar({ userId, userName }: { userId: string, userName: string }) {
   const pathname = usePathname()
 
-  const desktopMenuLinks = userId ? linkData.signedInLinks : linkData.publicLinks;
-  const mobileLinks = userId ? [...linkData.signedInLinks, ...linkData.signedInMenuLinks] : linkData.publicLinks;
+  const desktopMenuLinks: pageListType[] = userId ? linkData.signedInLinks : linkData.publicLinks;
+  const mobileLinks: pageListType[] = userId ? [...linkData.signedInLinks, ...linkData.signedInMenuLinks] : linkData.publicLinks;
 
   if (userId) {
     const linkToUpdate = linkData.signedInMenuLinks.find(link => link.label === 'Profile')
@@ -150,9 +156,15 @@ export function LoggedInSideBar({ userId, userName }: { userId: string, userName
           <Separator className="border-b" />
           <div className="flex flex-col h-full gap-4 justify-start" >
             <div className="flexflex-col gap-2">
-              {desktopMenuLinks.map((link) => (
-                MenuItem(link, pathname)
-              ))}
+              {desktopMenuLinks.map((link) => {
+                const showSublink = pathname.startsWith(link.href) || (link.subLink?.href && pathname.startsWith(link.subLink.href))
+                return (
+                  <div key={link.href}>
+                    {MenuItem(link, pathname)}
+                    {link.subLink && showSublink && MenuItem(link.subLink, pathname, true)}
+                  </div>
+                )
+              })}
             </div>
             <Separator className="border-b" />
             <div className="flexflex-col gap-2">
