@@ -6,11 +6,11 @@ import { redirect } from "next/navigation";
 import { MockInterviews } from "../../components/mockinterviews/MockInterviews";
 
 export default async function MockInterviewPage({ params }: { params: { id: string } }) {
-    const { userId, activeSubscription, admin } = await checkSubscription()
+    const { userId } = await checkSubscription()
     //console.log({ userId, activeSubscription, admin })
 
-    if (!admin) {
-        redirect('/')
+    if (!userId) {
+        redirect('/eve')
     }
 
     const MockInterviewId = params.id
