@@ -18,6 +18,20 @@ class Recording {
     createdAt?: string;
 }
 
+class InterviewScore {
+    @prop()
+    public _id?: string;
+
+    @prop()
+    public question: string;
+
+    @prop()
+    public explanation: string;
+
+    @prop()
+    public score: 0 | 1 | 2 | 3 | 4 | 5;
+}
+
 @ModelOptions({
     schemaOptions: {
         timestamps: true,
@@ -45,6 +59,9 @@ class MockInterviewClass {
     @prop({ type: () => [Recording] })
     public recordings?: Recording[];
 
+    @prop({ type: () => [InterviewScore] })
+    public interviewScores?: InterviewScore[];
+
     @prop()
     public messages?: Message[];
 
@@ -54,4 +71,4 @@ class MockInterviewClass {
 }
 
 const MockInterviewModel = getModelForClass(MockInterviewClass);
-export { MockInterviewClass, MockInterviewModel, Recording };
+export { MockInterviewClass, MockInterviewModel, Recording, InterviewScore };

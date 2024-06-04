@@ -1,7 +1,7 @@
 import { checkSubscription } from "../../../lib/hooks/check-subscription";
 import { Message } from "ai";
 import { getMockInterview } from "../../../lib/mockinterview-db";
-import { Recording } from "../../../models/MockInterview";
+import { InterviewScore, Recording } from "../../../models/MockInterview";
 import { redirect } from "next/navigation";
 import { MockInterviews } from "../../components/mockinterviews/MockInterviews";
 
@@ -32,6 +32,8 @@ export default async function MockInterviewPage({ params }: { params: { id: stri
 
     const questions: string[] = MockInterview.questions || []
 
+    const interviewScores: InterviewScore[] = MockInterview.interviewScores || []
+
 
     //console.log('At Eve, messages ', messages)
 
@@ -43,6 +45,13 @@ export default async function MockInterviewPage({ params }: { params: { id: stri
                 questions={questions}
                 messages={messages}
                 recordings={recordings.map(r => ({ link: r.vercelLink, createdTimeStamp: r.createdAt }))}
+                interviewScores={interviewScores.map(v =>
+                ({
+                    question: v.question,
+                    score: v.score,
+                    explanation: v.explanation
+                })
+                )}
             />
         </div>
 

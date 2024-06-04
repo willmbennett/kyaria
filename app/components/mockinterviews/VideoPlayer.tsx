@@ -13,7 +13,7 @@ interface VideoPlayerProps {
 export const VideoPlayer = ({ currentVideo, goToNext }: VideoPlayerProps) => {
     const playerRef = useRef<ReactPlayer>(null);
     const [videoState, setVideoState] = useState({
-        playing: true,
+        playing: false,
         muted: false,
         volume: 0.8,
         played: 0.0,
