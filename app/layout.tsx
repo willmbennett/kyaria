@@ -104,7 +104,6 @@ export default async function RootLayout({
         >
           {userId ? <LoggedInSideBar userId={userId} userName={userName} /> : <Header userId={userId} />}
           {userId ? <div className='md:flex overflow-hidden w-full h-full'>{children}</div> : children}
-          <ChatBotPopup userId={userId} userName={userName} />
           {!userId && <Footer userId={userId} userName={userName} email={email} />}
         </Providers>
         <SpeedInsights />

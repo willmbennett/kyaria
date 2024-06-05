@@ -27,14 +27,11 @@ const tiers = [
     href: '#',
     description:
       "The Pro package grants exclusive access to all current and beta products, empowering you with advanced resources at every step.",
-    price: 10,
+    price: 29.99,
     features: [
       "Everything included in the Free tier.",
-      "Access to Eve: The world's first AI-powered virtual career coach.",
-    ],
-    betaFeatures: [
-      "Next-Gen AI Networking: Leverage AI to build and expand your professional network effectively.",
-      "Personalized Job Recommendations: Receive job suggestions tailored to your skills, experience, and preferences."
+      "Eve: The world's first AI-powered virtual career coach.",
+      "Mock interviews with instant feedback.",
     ],
   },
   /*{
@@ -207,21 +204,6 @@ export function PricingCards({ activeSubscription, userId }: { activeSubscriptio
                         </li>
                       ))}
                     </ul>
-                    {tier.betaFeatures &&
-                      <>
-                        <hr className="my-10 border-gray-secondary-400/30" />
-                        <p className="font-medium text-slate-900">
-                          Beta features included:
-                        </p>
-                        <ul className="mt-6 space-y-4">
-                          {tier.betaFeatures.map((betaFeature) => (
-                            <li key={betaFeature} className="flex items-center space-x-6">
-                              <CheckCircleIcon className="h-5 w-5 shrink-0 text-slate-800" />
-                              <p className="text-slate-600">{betaFeature}</p>
-                            </li>
-                          ))}
-                        </ul>
-                      </>}
                   </div>
                 ))}
               </div>

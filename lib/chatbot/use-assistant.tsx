@@ -7,23 +7,37 @@ import { RequiredActionFunctionToolCall } from "openai/resources/beta/threads/ru
 import { ToolCall } from "openai/resources/beta/threads/runs/steps";
 import { useEffect, useState } from "react";
 import { updateChatAction } from "../../app/eve/_action";
-import { getInterviewQuesions } from "../../app/eve/function-helper";
+import { getInterviewQuestions, parseInterviewArgs } from "../../app/eve/function-helper";
+import { addMockInterviewMessageAction, createMockInterviewAction, updateMockInterviewAction } from "../../app/mockinterviews/[id]/_action";
+import { usePathname } from "next/navigation";
 
 interface UseDIDApiProps {
+    userId: string;
     chatId: string;
     threadId: string;
     messages: Message[]
 }
 
-export const useAssistant = ({ chatId, threadId, messages }: UseDIDApiProps) => {
+export const useAssistant = ({ userId, chatId, threadId, messages }: UseDIDApiProps) => {
+    const path = usePathname()
     const [chatMessages, setChatMessages] = useState(messages)
     const [textToSubmit, setTextToSubmit] = useState('')
-    const [incomingMessage, setIncomingMessasge] = useState('')
+    const [interviewing, setInterviewing] = useState(false)
+    const [interviewName, setInterviewName] = useState('')
+    const [mockInterviewId, setMockInterviewId] = useState('')
 
     // Whenever messages update update the state
     useEffect(() => {
         setChatMessages(messages)
     }, [messages])
+
+    useEffect(() => {
+        if (mockInterviewId && textToSubmit) {
+            console.log('Made it to appending assistant message with text: ', textToSubmit)
+            const newMessage: Message = { id: nanoid(), role: 'assistant', content: textToSubmit, createdAt: new Date() }
+            addMockInterviewMessageAction(mockInterviewId, newMessage, path);
+        }
+    }, [textToSubmit, mockInterviewId]);
 
     const sendMessage = async (text: string) => {
         const response = await fetch(
@@ -66,9 +80,6 @@ export const useAssistant = ({ chatId, threadId, messages }: UseDIDApiProps) => 
     const submitUserMessage = async (input: string) => {
         sendMessage(input);
         appendMessage("user", input)
-        updateChatAction(chatId, [
-            { id: nanoid(), role: 'user', content: input, createdAt: new Date() },
-        ], '/eve');
     };
 
     /* Stream Event Handlers */
@@ -93,15 +104,33 @@ export const useAssistant = ({ chatId, threadId, messages }: UseDIDApiProps) => 
 
     const functionCallHandler = async (call: RequiredActionFunctionToolCall) => {
         //console.log('Made it to [functionCallHandler] with function:', call?.function?.name);
-
-        if (call?.function?.name !== "startMockInterview") return;
-
+        const functionName = call?.function?.name
         const args = JSON.parse(call.function.arguments);
-        //console.log('Function arguments:', args);
 
-        const questions = getInterviewQuesions(args.discipline, args.interviewType);
+        //Don't call any other functions than the ones created
+        if (!["startMockInterview", "endMockInterview"].includes(functionName)) return;
 
-        return JSON.stringify(questions)
+        switch (functionName) {
+            case 'startMockInterview':
+                const questions = getInterviewQuestions(args.discipline, args.interviewType);
+                setInterviewName(parseInterviewArgs(args.discipline, args.interviewType))
+                const interviewName = parseInterviewArgs(args.discipline, args.interviewType)
+                const newMockInterviewId = await createMockInterviewAction({ chatId, userId, name: interviewName, path })
+                console.log('Created Mock Interview with ID: ', newMockInterviewId)
+                if (newMockInterviewId) {
+                    setMockInterviewId(newMockInterviewId)
+                    setInterviewing(true)
+                    updateMockInterviewAction(newMockInterviewId, { questions: questions.map(q => q.question) }, path)
+
+                }
+                return JSON.stringify(questions)
+            case 'endMockInterview':
+                setInterviewing(false)
+                setInterviewName('')
+                return JSON.stringify({})
+            default:
+                return
+        }
     };
 
 
@@ -135,9 +164,6 @@ export const useAssistant = ({ chatId, threadId, messages }: UseDIDApiProps) => 
         //console.log('Text finished', content)
         appendMessage("assistant", content.value);
         setTextToSubmit(content.value)
-        updateChatAction(chatId, [
-            { id: nanoid(), role: 'assistant', content: content.value, createdAt: new Date() },
-        ], '/eve');
     };
 
     const handleReadableStream = (stream: AssistantStream) => {
@@ -181,7 +207,9 @@ export const useAssistant = ({ chatId, threadId, messages }: UseDIDApiProps) => 
 
     const appendMessage = (role: any, text: string) => {
         setChatMessages((prevMessages) => [...prevMessages, { id: nanoid(), role, content: text }]);
+        const newMessage: Message = { id: nanoid(), role, content: text, createdAt: new Date() }
+        updateChatAction(chatId, newMessage, path);
     };
 
-    return { submitUserMessage, chatMessages, textToSubmit, setTextToSubmit }
+    return { interviewing, interviewName, submitUserMessage, chatMessages, textToSubmit, setTextToSubmit, mockInterviewId }
 }

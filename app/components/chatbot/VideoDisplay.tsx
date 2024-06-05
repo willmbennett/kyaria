@@ -1,4 +1,3 @@
-import { EVE_IDLE_VIDEO } from '../../eve/eve-helper';
 import styles from '../../eve/styles.module.css'
 import { ChatBotVideo } from './ChatBotVideo';
 import { UserVideo } from './UserVideo';
@@ -15,8 +14,10 @@ interface VideoDisplayProps {
 export const VideoDisplay = (props: VideoDisplayProps) => {
     const { videoRef, fillerVideoRef, outgoingVideoRef, isStreaming, playFiller, connected, } = props;
 
+
+
     return (
-        <div className="relative w-full h-auto max-w-7xl p-3">
+        <div className="relative w-full h-auto max-w-7xl">
             <ChatBotVideo
                 videoRef={videoRef}
                 fillerVideoRef={fillerVideoRef}

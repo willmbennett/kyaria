@@ -36,7 +36,7 @@ export async function POST(): Promise<NextResponse<any>> {
       line_items: [
         {
           // Provide the exact Price ID (for example, pr_1234) of the product you want to sell 
-          price: process.env.NODE_ENV === 'development' ? 'price_1OOlMMIvuOCAdHq0shmeD8Kq' : 'price_1OOrJPIvuOCAdHq0C0cdrfTO',
+          price: process.env.NODE_ENV === 'development' ? 'price_1PO1wSIvuOCAdHq0toGpR8uR' : 'price_1PO1tfIvuOCAdHq0gtAhzAti',
           quantity: 1,
         },
       ],

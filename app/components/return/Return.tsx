@@ -14,7 +14,7 @@ export function Return({ customerEmail }: { customerEmail: string }) {
             Welcome to your Kyaria PRO plan!
           </h2>
           <p className="mt-6 text-center text-[17px] leading-relaxed text-slate-700 sm:text-lg sm:leading-relaxed md:text-left ">
-            Enjoy access to our AI-powered virtual career coach Eve and all beta features.
+            Enjoy access to our AI-powered virtual career coach Eve, instant mock interview feedback, and our suite of AI-powered job search software.
             If you have any questions, please email <a href="mailto:contact@kyaria.ai">contact@kyaria.ai</a>.
           </p>
           <div className="mt-10 flex w-full justify-center md:justify-start">

@@ -1,58 +1,17 @@
-import dynamic from "next/dynamic";
-import { Metadata } from "next";
 import { checkSubscription } from "../../lib/hooks/check-subscription";
-import { ChatBotHero } from "../components/chatbot/landingpage/ChatBotHero";
-import { NewItemButton } from "../components/sidebar/NewItemButton";
-import { Suspense } from "react";
-import { EVE_IDLE_VIDEO } from "./eve-helper";
-import { handleChatCreation } from "./_action";
-import { getChatCounts } from "../../lib/chat-db";
-import { Container } from "../components/landingpage/Container";
+import { redirect } from "next/navigation";
+import { handleChatCreation } from "../eve/_action";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
-const Process = dynamic(() => import('../components/chatbot/landingpage/Process'));
+import { NewItemButton } from "../components/sidebar/NewItemButton";
+import { EVE_IDLE_VIDEO } from "../eve/eve-helper";
+import { Container } from "../components/landingpage/Container";
 
-const EveDemo = dynamic(() => import('../components/chatbot/landingpage/ProductDemo'))
-
-const title = "Eve: Kyaria.ai's Revolutionary AI Career Coach | Affordable & 24/7 Access";
-const description = "Discover Eve, the world's first virtual career coach. Get personalized, smart career advice 24/7 at just $10/month. Save on career coaching with cutting-edge AI technology. Start your journey to career success with Eve today!";
-
-export const metadata: Metadata = {
-    metadataBase: new URL('https://www.kyaria.ai'),
-    title,
-    description,
-    referrer: 'strict-origin-when-cross-origin',
-    openGraph: {
-        title,
-        description,
-        locale: 'en_US',
-        type: 'website',
-        url: 'https://www.kyaria.ai/eve'
-    },
-    twitter: {
-        card: 'summary_large_image',
-        title,
-        description,
-    },
-};
-
-export default async function ChatBotHomePage() {
+export default async function MockInterviewPage() {
     const { userId } = await checkSubscription()
-
+    //console.log({ userId, activeSubscription, admin })
 
     if (!userId) {
-        const {
-            numChats,
-            numChatUsers
-        } = await getChatCounts()
-        return (
-            <>
-                <ChatBotHero numChats={numChats} numChatUsers={numChatUsers} />
-                <Suspense fallback={<p>Loading demo...</p>}>
-                    <EveDemo />
-                </Suspense>
-                <Process />
-            </>
-        );
+        redirect('/eve')
     }
 
     const createChat = async () => {
@@ -66,10 +25,10 @@ export default async function ChatBotHomePage() {
                 <div className="w-full text-center p-4 flex flex-col gap-4">
                     <div>
                         <h1 className="text-4xl font-bold text-gray-800 mb-2">
-                            Meet your virtual career coach Eve!
+                            Ask Eve to do a mock interview!
                         </h1>
-                        <p className="text-lg text-gray-600 ">
-                            <span className="font-bold text-slate-800">New! </span> Ask Eve to do a mock interview. We'll provide instant feedback upon completion based on a robust rubric.
+                        <p className="text-lg text-gray-600">
+                            We'll provide instant feedback upon completion based on a robust rubric.
                         </p>
                         <p className="text-sm text-gray-400 italic">
                             Note: Video responses will be recorded for the purpose of providing the review.

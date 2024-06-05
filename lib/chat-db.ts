@@ -173,7 +173,7 @@ export async function findChat(sessionId: string) {
     }
 }
 
-export async function updateChat(id: string, newMessages: Message[]) {
+export async function updateChat(id: string, newMessages: Message) {
     try {
         await connectDB();
 
@@ -189,7 +189,7 @@ export async function updateChat(id: string, newMessages: Message[]) {
 
         if (!chat) return { error: "Chat application not found" };
 
-        const updatedMessages = chat?.messages ? [...chat?.messages, ...newMessages] : [...newMessages]
+        const updatedMessages = chat?.messages ? [...chat?.messages, newMessages] : [newMessages]
         chat.messages = updatedMessages
         chat.save()
 
