@@ -68,8 +68,11 @@ export default async function ChatBotHomePage() {
                         <h1 className="text-4xl font-bold text-gray-800 mb-2">
                             Meet your virtual career coach Eve!
                         </h1>
-                        <p className="text-lg text-gray-600">
+                        <p className="text-lg text-gray-600 ">
                             <span className="font-bold text-slate-800">New! </span> Ask Eve to do a mock interview. We'll provide instant feedback upon completion based on a robust rubric.
+                        </p>
+                        <p className="text-sm text-gray-400 italic">
+                            Note: Video responses will be recorded for the purpose of providing the review.
                         </p>
                         <ul className="mt-6 flex flex-col space-y-4 md:mx-auto md:mt-8 md:max-w-3xl md:flex-row md:space-x-2 md:space-y-0 lg:space-x-4 xl:mx-0 xl:flex-col xl:space-x-0 xl:space-y-4">
 

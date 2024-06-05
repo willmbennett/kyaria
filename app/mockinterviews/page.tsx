@@ -1,6 +1,5 @@
 import { checkSubscription } from "../../lib/hooks/check-subscription";
 import { redirect } from "next/navigation";
-import { getMockInterviews } from "../../lib/mockinterview-db";
 import { handleChatCreation } from "../eve/_action";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { NewItemButton } from "../components/sidebar/NewItemButton";
@@ -8,18 +7,11 @@ import { EVE_IDLE_VIDEO } from "../eve/eve-helper";
 import { Container } from "../components/landingpage/Container";
 
 export default async function MockInterviewPage() {
-    const { userId, activeSubscription, admin } = await checkSubscription()
+    const { userId } = await checkSubscription()
     //console.log({ userId, activeSubscription, admin })
 
-    if (!admin) {
-        redirect('/')
-    }
-
-    const { MockInterviews } = await getMockInterviews(userId)
-
-
-    if (!MockInterviews || MockInterviews.length == 0) {
-        return <p>No mock interviews, go ask Eve to do a mock interview!</p>
+    if (!userId) {
+        redirect('/eve')
     }
 
     const createChat = async () => {
@@ -37,6 +29,9 @@ export default async function MockInterviewPage() {
                         </h1>
                         <p className="text-lg text-gray-600">
                             We'll provide instant feedback upon completion based on a robust rubric.
+                        </p>
+                        <p className="text-sm text-gray-400 italic">
+                            Note: Video responses will be recorded for the purpose of providing the review.
                         </p>
                         <ul className="mt-6 flex flex-col space-y-4 md:mx-auto md:mt-8 md:max-w-3xl md:flex-row md:space-x-2 md:space-y-0 lg:space-x-4 xl:mx-0 xl:flex-col xl:space-x-0 xl:space-y-4">
 
