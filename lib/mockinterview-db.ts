@@ -119,7 +119,7 @@ export async function updateMockInterview(id: string, data: Partial<MockIntervie
 export async function addMockInterviewMessage(id: string, newMessages: Message) {
     try {
         await connectDB();
-        console.log('newMessages ', newMessages)
+        //console.log('newMessages ', newMessages)
 
         //console.log(id)
 
@@ -129,13 +129,13 @@ export async function addMockInterviewMessage(id: string, newMessages: Message) 
             id,
         )
 
-        console.log('Found Mock interview ', MockInterview)
+        //console.log('Found Mock interview ', MockInterview)
 
         if (!MockInterview) return { error: "MockInterview not found" };
 
         const updatedMessages = MockInterview.messages ? [...MockInterview?.messages, newMessages] : [newMessages]
         MockInterview.messages = updatedMessages
-        console.log('Updated mock interview with messages:', MockInterview.messages)
+        //console.log('Updated mock interview with messages:', MockInterview.messages)
         MockInterview.save()
 
         return {};

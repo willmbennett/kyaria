@@ -94,20 +94,20 @@ const useMediaAndRecording = (submitUserMessage: (input: string) => Promise<void
     // Handling Video url
     const handleVideoUrl = async () => {
         if (mockInterviewId && uploadVideo && chunks.current) {
-            console.log('About to upload video for mock interview: ', mockInterviewId)
+            //console.log('About to upload video for mock interview: ', mockInterviewId)
             const videoBlob = new Blob(chunks.current, { type: 'video/webm' });
             const videoFile = new File([videoBlob], 'recording.webm', { type: 'video/webm' });
-            console.log('Video file created:', videoFile);
+            //console.log('Video file created:', videoFile);
 
             // Upload the video to Vercel
             const formData = new FormData();
             formData.append('recording', videoFile);
             const videoLink = await uploadFile(formData);
-            console.log('Video uploaded to Vercel, link:', videoLink);
+            //console.log('Video uploaded to Vercel, link:', videoLink);
             const newRecording: Partial<Recording> = { vercelLink: videoLink.url, createdAt: new Date().toISOString() };
             await addMockInterviewRecordingActions(mockInterviewId, newRecording, path);
             setUploadVideo(false)
-            console.log('New recording added to mock interview');
+            //console.log('New recording added to mock interview');
         }
     }
 
@@ -118,7 +118,7 @@ const useMediaAndRecording = (submitUserMessage: (input: string) => Promise<void
 
     useEffect(() => {
         if (mockInterviewId && text) {
-            console.log('Made it to appending interview message with text: ', text)
+            //console.log('Made it to appending interview message with text: ', text)
             const newMessage: Message = { id: nanoid(), role: 'user', content: text, createdAt: new Date() }
             addMockInterviewMessageAction(mockInterviewId, newMessage, path);
             setText('')
@@ -235,7 +235,7 @@ const useMediaAndRecording = (submitUserMessage: (input: string) => Promise<void
 
             setAudioRecorder(audioRecorder);
             setMediaRecorder(mediaRecorder);
-            console.log('MediaRecorder set');
+            //console.log('MediaRecorder set');
         } catch (error) {
             console.error('Error initializing MediaRecorder:', error);
         }

@@ -56,7 +56,7 @@ export const useDIDApi = ({ textToSubmit, setTextToSubmit }: UseDIDApiProps) => 
                 textToSubmit
             })
         }
-        if (state.isConnected && state.sessionId && state.streamId && textToSubmit) {
+        if (state.isConnected && state.sessionId && state.streamId && textToSubmit && false) {
             handleScriptSubmission({
                 sessionId: state.sessionId,
                 streamId: state.streamId,
