@@ -78,7 +78,7 @@ export const handleMockInterviewDeletion: ActionItemType = async (chatId: string
     if (error) {
         return { error }
     } else {
-        const url = "/mockinterview"
+        const url = "/mockinterviews"
         return { url }
     }
 }
