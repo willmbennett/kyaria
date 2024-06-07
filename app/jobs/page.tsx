@@ -35,6 +35,7 @@ export default async function JobsPage({
                         </h5>
                     </div>
                     <Suspense fallback={<Skeleton />}>
+                        {/* @ts-ignore */}
                         <Await promise={promise}>
                             {({ jobs }) => (
                                 <>
