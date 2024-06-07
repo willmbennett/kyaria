@@ -7,7 +7,10 @@ export async function getUserQuestions(userId: string) {
     try {
         await connectDB();
 
-        const questions = await QuestionModel.find({ userId: userId, appId: { $exists: false } }).lean().exec();
+        const questions = await QuestionModel.find({ userId: userId, appId: { $exists: false } })
+            .sort({ createdAt: -1 })
+            .lean()
+            .exec();
 
         return {
             questions
@@ -19,10 +22,8 @@ export async function getUserQuestions(userId: string) {
 
 export async function createQuestion(data: Partial<QuestionClass>) {
     try {
-        console.log(`Question to create: ${JSON.stringify(data)}`);
 
         const question = await QuestionModel.create(data);
-        //console.log(`Created Profile: ${JSON.stringify(profile)}`);
 
         return { newQuestionId: question._id.toString() };
     } catch (error) {
@@ -39,14 +40,9 @@ export async function getQuestion(id: string) {
             return { error: "Question not found" };
         }
 
-        //console.log(userId)
         const question = await QuestionModel.findById(id).lean().exec();
-
-        //console.log(profile)
         if (question) {
-            //console.log('about to transform props')
             transformProps(question, castToString, '_id');
-            //console.log(profile)
             return {
                 question
             };
@@ -65,10 +61,6 @@ export async function updateQuestion(id: string, data: Partial<QuestionClass>) {
         await connectDB();
 
         const parsedId = stringToObjectId(id);
-
-        //console.log(id)
-
-        console.log(`data to update question with: ${JSON.stringify(data)}`)
 
         const question = await QuestionModel.findByIdAndUpdate(
             parsedId,
@@ -92,8 +84,6 @@ export async function updateQuestion(id: string, data: Partial<QuestionClass>) {
 export async function deleteQuestion(id: string) {
     try {
         await connectDB();
-
-        //console.log(id)
 
         if (!id) {
             return { error: "Question not found" };

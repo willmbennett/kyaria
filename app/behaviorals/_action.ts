@@ -46,10 +46,29 @@ export async function suggestOptions(id: string, question: string, resume: Resum
 
     const chatMessages: ChatCompletionMessageParam[] = [
         {
-            role: 'system', content: "You are an expert interviewer. I'll provide a question and my resume. Please use my resume to suggest a few options for stories I could discuss. Please return the in an array scores in JSON format. Use this format{options: string[])"
+            role: 'system',
+            content: `You are an expert interviewer. I'll provide an interview question and my resume. Please use my resume to suggest a few stories I could discuss to answer the interview question. 
+            For each suggested story, provide the accomplishment and an explanation as to why it is a good option to use for the given question. 
+            Return the options in an array with each element containing the accomplishment and explanation in JSON format. 
+            Use this format: 
+            {
+                "options": [
+                    {
+                        "accomplishment": "Your accomplishment here",
+                        "explanation": "Your explanation here"
+                    },
+                    {
+                        "accomplishment": "Your accomplishment here",
+                        "explanation": "Your explanation here"
+                    }
+                ]
+            }`
         },
-        { role: 'user', content: `Here is the interview question I am trying to answer: ${JSON.stringify(question)}. Here is my interview: ${JSON.stringify(resume)}` }
-    ]
+        {
+            role: 'user',
+            content: `Here is the interview question I am trying to answer: ${JSON.stringify(question)}. Here is my resume: ${JSON.stringify(resume)}. Suggest a few options for situations I could use to answer the question.`
+        }
+    ];
 
     //console.log('About to grade this interview: ', chatMessages)
     const completion = await openai.chat.completions.create({

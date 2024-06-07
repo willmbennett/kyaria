@@ -7,13 +7,12 @@ import { Button } from '../Button';
 
 interface DropdownInputProps {
     options: string[];
-    label: string;
-    questionId: string;
     selected?: string
-    handleUpdatQuestion: (input: string) => void
+    handleUpdatQuestion: (input: string) => void;
+    toggleCancel: () => void;
 }
 
-export function DropdownInput({ options, label, questionId, selected, handleUpdatQuestion }: DropdownInputProps) {
+export function DropdownInput({ options, selected, handleUpdatQuestion, toggleCancel }: DropdownInputProps) {
     const router = useRouter()
     const [selectedOption, setSelectedOption] = useState(selected || '');
     const [inputValue, setInputValue] = useState('');
@@ -48,7 +47,6 @@ export function DropdownInput({ options, label, questionId, selected, handleUpda
 
     return (
         <div className="flex flex-col gap-4">
-            <label className="text-lg font-medium text-slate-700">{label}</label>
             <Menu as="div" className="relative w-3xl">
                 {({ open }) => (
                     <>
@@ -93,11 +91,15 @@ export function DropdownInput({ options, label, questionId, selected, handleUpda
                     onChange={handleInputChange}
                 />
             )}
-            <Button
-                onClick={handleSubmit}
-            >
-                Select
-            </Button>
+            <div className='flex w-full'>
+                <Button
+                    onClick={handleSubmit}
+                    className='w-2/3'
+                >
+                    Select
+                </Button>
+                <Button type='button' size='sm' variant='ghost' className='border-none w-1/3 hover:bg-slate-200 hover:text-slate-600' onClick={toggleCancel}>Cancel</Button>
+            </div>
         </div>
     );
 }

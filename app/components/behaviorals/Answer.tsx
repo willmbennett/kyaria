@@ -80,7 +80,7 @@ export const Answer = ({
     ]
 
     return (
-        <div className="rounded-xl flex flex-col gap-3">
+        <div className="w-full flex flex-col gap-3">
             <ChatWithGPT
                 documentID={questionId}
                 message={message}
