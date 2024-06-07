@@ -1,17 +1,10 @@
-import dynamic from "next/dynamic";
 import { Metadata } from "next";
 import { checkSubscription } from "../../lib/hooks/check-subscription";
-import { ChatBotHero } from "../components/chatbot/landingpage/ChatBotHero";
 import { NewItemButton } from "../components/sidebar/NewItemButton";
-import { Suspense } from "react";
 import { EVE_IDLE_VIDEO } from "./eve-helper";
 import { handleChatCreation } from "./_action";
-import { getChatCounts } from "../../lib/chat-db";
 import { Container } from "../components/landingpage/Container";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
-const Process = dynamic(() => import('../components/chatbot/landingpage/Process'));
-
-const EveDemo = dynamic(() => import('../components/chatbot/landingpage/ProductDemo'))
 
 const title = "Eve: Kyaria.ai's Revolutionary AI Career Coach | Affordable & 24/7 Access";
 const description = "Discover Eve, the world's first virtual career coach. Get personalized, smart career advice 24/7 at just $10/month. Save on career coaching with cutting-edge AI technology. Start your journey to career success with Eve today!";
@@ -36,24 +29,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ChatBotHomePage() {
-    const { userId } = await checkSubscription()
-
-
-    if (!userId) {
-        const {
-            numChats,
-            numChatUsers
-        } = await getChatCounts()
-        return (
-            <>
-                <ChatBotHero numChats={numChats} numChatUsers={numChatUsers} />
-                <Suspense fallback={<p>Loading demo...</p>}>
-                    <EveDemo />
-                </Suspense>
-                <Process />
-            </>
-        );
-    }
+    const { userId } = await checkSubscription(true)
 
     const createChat = async () => {
         "use server"

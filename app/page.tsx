@@ -11,10 +11,6 @@ import { SignedInHero } from './components/landingpage/SignedInHero'
 const CallToAction = dynamic(() => import('./components/landingpage/CallToAction'), {
   ssr: false,
 })
-//const ProductDemo = dynamic(() => import('./components/landingpage/ProductDemo'))
-const ProductCarousel = dynamic(() => import('./components/landingpage/ProductCarousel'), {
-  ssr: false,
-})
 
 // Data fetching
 //import { getJobApp } from '../lib/app-db'
@@ -32,9 +28,7 @@ export default async function HomePage() {
       <>
         <HomeHero />
         {/*<LogosRow />*/}
-        {/*<ProductDemo jobApp={app} userId={userId} />*/}
         {/*totalResumes && <FeatureBlocks totalResumes={totalResumes} />*/}
-        <ProductCarousel />
         {/*<FeaturesGrid /> */}
         {/*<Process /> */}
         {/*<TestimonialsSlide />*/}

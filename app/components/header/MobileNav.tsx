@@ -8,7 +8,7 @@ import { Button } from "../Button"
 import { signIn, signOut } from "next-auth/react"
 
 interface MobileNavProps {
-    userId: string;
+    userId?: string;
     mobileLinks: pageListType[];
     loggedInMenuLinks: pageListType[],
     allProductLinks: pageListType[]

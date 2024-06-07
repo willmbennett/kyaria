@@ -8,7 +8,6 @@ import { TooltipProvider } from './components/ui/tooltip';
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { checkSubscription } from '../lib/hooks/check-subscription';
 import { Header } from './components/header/Header';
-import { ChatBotPopup } from './components/chatbot/landingpage/ChatPopup';
 import { Providers } from './components/sidebar/Providers';
 import 'regenerator-runtime/runtime'
 import { LoggedInSideBar } from './components/header/LoggedInSideBar';
@@ -102,7 +101,7 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {userId ? <LoggedInSideBar userId={userId} userName={userName} /> : <Header userId={userId} />}
+          {userId ? <LoggedInSideBar userId={userId} userName={userName} /> : <Header />}
           {userId ? <div className='md:flex overflow-hidden w-full h-full'>{children}</div> : children}
           {!userId && <Footer userId={userId} userName={userName} email={email} />}
         </Providers>

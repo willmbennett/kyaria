@@ -4,7 +4,7 @@ import QuestionnaireDescription from "../../components/profile/onboarding/descri
 import { useGetOrCreateProfile } from "../../../lib/hooks/use-create-profile";
 
 export default async function GoalsPage() {
-    const { userId } = await checkSubscription()
+    const { userId } = await checkSubscription(true)
 
     const { profile } = await useGetOrCreateProfile(userId);
 

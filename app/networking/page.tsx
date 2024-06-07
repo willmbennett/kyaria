@@ -1,54 +1,13 @@
-import dynamic from 'next/dynamic';
-import { NetworkingHero } from "../components/networking/NetworkingHero";
 import { redirect } from "next/navigation";
 import { checkSubscription } from "../../lib/hooks/check-subscription";
 import { getResumes } from "../../lib/resume-db";
 import { ResumeClass } from "../../models/Resume";
 import { Container } from '../components/landingpage/Container';
-
-// Dynamically import components
-const CallToAction = dynamic(() => import("../components/networking/CallToAction"), {
-  ssr: false,
-});
-const Faqs = dynamic(() => import("../components/networking/Faqs"), {
-  ssr: false,
-});
-const FeatureBlocks = dynamic(() => import("../components/networking/FeatureBlocks"), {
-  ssr: false,
-});
-const NetworkingDemo = dynamic(() => import("../components/networking/NetworkingDemo"), {
-  ssr: false,
-});
-const Process = dynamic(() => import("../components/networking/Process"), {
-  ssr: false,
-});
-const NetworkingSearch = dynamic(() => import("../components/networking/NetworkingSearch"), {
-  ssr: false,
-});
-const StatsHighlight = dynamic(() => import("../components/networking/landingpage/StatsHighlight"), {
-  ssr: false,
-});
+import NetworkingSearch from '../components/networking/NetworkingSearch';
 
 
 export default async function NetworkingPage() {
-  const { activeSubscription, userId } = await checkSubscription()
-
-  //await getTest()
-
-  if (!userId) {
-    return (
-      <>
-        <NetworkingHero />
-        <NetworkingDemo />
-        <StatsHighlight />
-        <FeatureBlocks />
-        <Process />
-        {/*<TestimonialsSlide />*/}
-        {/*<Faqs />*/}
-        <CallToAction />
-      </>
-    );
-  }
+  const { activeSubscription, userId } = await checkSubscription(true)
 
   if (!activeSubscription) {
     redirect('/pricing')

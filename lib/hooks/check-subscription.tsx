@@ -1,8 +1,10 @@
+import { redirect } from "next/navigation"
 import { auth } from "../../auth"
 import { getSubscription } from "../sub-db"
 
-export const checkSubscription = async () => {
+export const checkSubscription = async (handleRedirect?: boolean) => {
     const session = await auth()
+    if (!session && handleRedirect) redirect('/auth/signin')
     const userId = session?.user?.id as string || ''
     const userName = session?.user?.name as string || ''
     const email = session?.user?.email as string || ''

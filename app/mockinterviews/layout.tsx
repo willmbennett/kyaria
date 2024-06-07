@@ -38,15 +38,7 @@ export default async function MockInterviews({
 }: {
     children: React.ReactNode;
 }) {
-    const { userId } = await checkSubscription()
-
-    if (!userId) {
-        return (
-            <>
-                {children}
-            </>
-        )
-    }
+    const { userId } = await checkSubscription(true)
 
     const loadMockInterviews = cache(async (userId: string) => {
         return await getMockInterviews(userId)

@@ -9,7 +9,7 @@ type getResumesType = {
 }
 
 export default async function ProfilePage() {
-  const { userId } = await checkSubscription()
+  const { userId } = await checkSubscription(true)
 
   const { resumes } = await getResumes(userId) as getResumesType
 

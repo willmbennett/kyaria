@@ -9,6 +9,7 @@ import { format } from 'date-fns';
 import { DesktopOpenSideBar } from '../components/sidebar/DesktopOpenSideBar';
 import { ActionItemType } from '../board/job-helper';
 import { deleteResumeAction } from './_action';
+import { redirect } from 'next/navigation';
 
 const title = "Kyaria.ai - Advanced AI Resume Builder for ATS Optimization";
 const description = "Revolutionize your job hunt with Kyaria.ai's AI-powered Resume Builder. Craft ATS-optimized resumes easily and elevate your career prospects.";
@@ -36,7 +37,7 @@ export default async function AppLayout({
 }: {
     children: React.ReactNode;
 }) {
-    const { userId } = await checkSubscription()
+    const { userId } = await checkSubscription(true)
 
     const { resumes } = await getResumes(userId) as { resumes: ResumeClass[] }
 

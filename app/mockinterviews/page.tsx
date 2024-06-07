@@ -1,5 +1,4 @@
 import { checkSubscription } from "../../lib/hooks/check-subscription";
-import { redirect } from "next/navigation";
 import { handleChatCreation } from "../eve/_action";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { NewItemButton } from "../components/sidebar/NewItemButton";
@@ -7,12 +6,8 @@ import { EVE_IDLE_VIDEO } from "../eve/eve-helper";
 import { Container } from "../components/landingpage/Container";
 
 export default async function MockInterviewPage() {
-    const { userId } = await checkSubscription()
+    const { userId } = await checkSubscription(true)
     //console.log({ userId, activeSubscription, admin })
-
-    if (!userId) {
-        redirect('/eve')
-    }
 
     const createChat = async () => {
         "use server"

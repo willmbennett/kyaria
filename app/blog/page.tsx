@@ -5,7 +5,6 @@ import Await from '../jobs/await';
 import Skeleton from './skeleton';
 import PostList from '../components/blog/PostList';
 import { checkSubscription } from '../../lib/hooks/check-subscription';
-import { redirect } from "next/navigation";
 import { Button } from '../components/Button';
 
 const userIdList = [
