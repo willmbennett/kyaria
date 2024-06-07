@@ -1,8 +1,4 @@
-import { usePathname, useRouter } from "next/navigation";
-import { AppClass, Emails } from "../../../models/App";
-import { createAppAction } from "../../apps/_action";
 import { JobStateType } from "../../board/job-helper";
-import { JobClass } from "../../../models/Job";
 
 // Define the ApplicationState type based on the keys you have provided
 export type ApplicationState = 'Research' | 'Phone Screen' | 'Interviewing' | 'Post-Offer';
