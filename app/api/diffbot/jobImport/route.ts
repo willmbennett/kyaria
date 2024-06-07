@@ -1,9 +1,8 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../../../lib/auth";
 import { Job } from '../../../board/job-helper';
 import { createJob } from '../../../../lib/job-db';
+import { auth } from '../../../../auth';
 
 function transformDiffBotApiResponse(apiResponse: any): Job {
     const jobData = apiResponse;
@@ -47,7 +46,7 @@ export async function GET(
     request: NextRequest
 ) {
 
-    const session = await getServerSession(authOptions);
+    const session = await auth()
     const searchParams = request.nextUrl.searchParams
     const url = searchParams.get('url')
 

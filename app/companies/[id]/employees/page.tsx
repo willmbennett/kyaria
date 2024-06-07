@@ -1,6 +1,4 @@
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../../../lib/auth";
 import Await from "../../../jobs/await";
 import { Suspense } from 'react'
 import Trigger from "../../../components/companies/trigger";
@@ -8,12 +6,13 @@ import EmployeeList from "../../../components/companies/EmployeeList";
 import EmployeeDropdown from "../../../components/companies/EmployeeDropdown";
 import EmployeesSkeleton from "../../../components/companies/EmployeesSkeleton";
 import { Employee, employeeProps, getData } from "./employee-helper";
+import { auth } from "../../../../auth";
 
 export default async function Page({ params, searchParams }: employeeProps) {
     //console.log('Server-side Page rendering with searchParams:', searchParams);
 
     // Ensure the session handling is correct and redirect is working as intended
-    const session = await getServerSession(authOptions);
+    const session = await auth()
     if (!session) {
         // Make sure to log if the session is not found
         console.error('Session not found, redirecting to signin');

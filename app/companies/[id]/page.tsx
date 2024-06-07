@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../../lib/auth";
+import { auth } from "../../../auth";
 import CompanyProfile from "../../components/companies/Company";
 import Await from "../../jobs/await";
 
@@ -34,7 +33,7 @@ async function getData(orgId: string) {
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
-    const session = await getServerSession(authOptions);
+    const session = await auth()
 
     //console.log(session)
 

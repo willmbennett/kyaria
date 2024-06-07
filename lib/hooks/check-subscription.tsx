@@ -1,9 +1,8 @@
+import { auth } from "../../auth"
 import { getSubscription } from "../sub-db"
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../lib/auth";
 
 export const checkSubscription = async () => {
-    const session = await getServerSession(authOptions);
+    const session = await auth()
     const userId = session?.user?.id as string || ''
     const userName = session?.user?.name as string || ''
     const email = session?.user?.email as string || ''

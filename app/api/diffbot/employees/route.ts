@@ -1,17 +1,15 @@
 import { NextResponse } from 'next/server'
-import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../../../lib/auth";
 import { checkDiffbotIdAction, createPersonAction } from '../../../admin/_action';
 import { extractPersonTextForEmbedding } from '../../../networking/networking-helper';
 import { PersonClass } from '../../../../models/Person';
+import { auth } from '../../../../auth';
 
 const logging = false
 
 export async function POST(request: Request) {
     const { limit, importance } = await request.json()
 
-    const session = await getServerSession(authOptions);
+    const session = await auth()
 
     const sizeLimit = limit || 1
 

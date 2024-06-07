@@ -1,12 +1,11 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../../../lib/auth";
 import puppeteer from 'puppeteer';
 import { XMLParser } from 'fast-xml-parser';
 import { transformDiffBotApiResponse } from '../../../board/job-helper';
 import { createJobAction } from '../../../jobs/_action';
 import { roleOptions } from '../../../profile/profile-helper';
+import { auth } from '../../../../auth';
 
 
 const rssFeedList = roleOptions.map(role => (
@@ -82,7 +81,7 @@ async function fetchFeedWithPuppeteer(feed: string) {
 export async function POST() {
   //console.log('Starting the POST request processing');
 
-    const session = await getServerSession(authOptions);
+    const session = await auth()
 
     if (!session) {
         console.warn('No session found, redirecting to signin');

@@ -1,0 +1,31 @@
+import { MongoDBAdapter } from "@auth/mongodb-adapter"
+import clientPromise from "./lib/mongodb"
+import type { Adapter } from 'next-auth/adapters';
+import NextAuth from "next-auth";
+import authConfig from './auth.config';
+
+export const { auth, handlers, signIn, signOut } = NextAuth({
+  adapter: MongoDBAdapter(clientPromise) as Adapter,
+  secret: process.env.NEXTAUTH_SECRET,
+  ...authConfig,
+  pages: {
+    signIn: '/auth/signin'
+  },
+  session: {
+    // Choose how you want to save the user session.
+    // The default is `"jwt"`, an encrypted JWT (JWE) stored in the session cookie.
+    // If you use an `adapter` however, we default it to `"database"` instead.
+    // You can still force a JWT session by explicitly defining `"jwt"`.
+    // When using `"database"`, the session cookie will only contain a `sessionToken` value,
+    // which is used to look up the session in the database.
+    strategy: "jwt",
+
+    // Seconds - How long until an idle session expires and is no longer valid.
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+
+    // Seconds - Throttle how frequently to write to database to extend a session.
+    // Use it to limit write operations. Set to 0 to always update the database.
+    // Note: This option is ignored if using JSON Web Tokens
+    updateAge: 24 * 60 * 60, // 24 hours
+  }
+})

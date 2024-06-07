@@ -7,7 +7,6 @@ import { checkSubscription } from '../../lib/hooks/check-subscription';
 import { ResumeClass } from '../../models/Resume';
 import { format } from 'date-fns';
 import { DesktopOpenSideBar } from '../components/sidebar/DesktopOpenSideBar';
-import { SideBarItem } from '../helper';
 import { ActionItemType } from '../board/job-helper';
 import { deleteResumeAction } from './_action';
 
@@ -38,14 +37,6 @@ export default async function AppLayout({
     children: React.ReactNode;
 }) {
     const { userId } = await checkSubscription()
-
-    if (!userId) {
-        return (
-            <>
-                {children}
-            </>
-        )
-    }
 
     const { resumes } = await getResumes(userId) as { resumes: ResumeClass[] }
 

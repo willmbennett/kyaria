@@ -4,8 +4,7 @@ import { Suspense } from 'react'
 import Skeleton from './skeleton'
 import Await from './await'
 import Trigger from "./trigger";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../lib/auth";
+import { auth } from "../../auth";
 
 export default async function JobsPage({
     searchParams
@@ -13,7 +12,7 @@ export default async function JobsPage({
     searchParams: { [key: string]: string | string[] | undefined }
 }) {
 
-    const session = await getServerSession(authOptions);
+    const session = await auth()
     const page =
         typeof searchParams.page === 'string' ? Number(searchParams.page) : 1
     const limit =
