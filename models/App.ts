@@ -20,6 +20,11 @@ class Emails {
     public content?: string;
 }
 
+@ModelOptions({
+    options: {
+        allowMixed: Severity.ALLOW
+    }
+})
 class File {
     @prop()
     public _id!: string;
