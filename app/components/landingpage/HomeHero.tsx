@@ -80,7 +80,7 @@ export function HomeHero() {
                   />
                 </div>
                 <div className="ml-5">
-                  <p className="font-medium text-slate-900">Jessica Fan</p>
+                  <p className="font-medium text-slate-900">Jessica</p>
 
                   <p className="font-medium text-slate-500">
                     Senior Software Engineer at Google
