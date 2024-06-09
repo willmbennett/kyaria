@@ -11,6 +11,8 @@ import useAppNavigation from "../../../lib/hooks/use-app-section";
 import { JobStateType } from "../../board/job-helper";
 import { Button } from "../../components/Button";
 import { cache } from "react";
+import { useGetOrCreateProfile } from "../../../lib/hooks/use-create-profile";
+import { updateJobAppAction } from "../_action";
 
 interface getJobAppInterface {
   app: AppClass
@@ -21,23 +23,38 @@ interface JobAppPageProps {
   searchParams: { section: string, progress: string }
 }
 
-const loadBoards = cache(async (id: string) => {
-  return await getJobApp(id)
-})
-
 export default async function JobAppPage({ params, searchParams }: JobAppPageProps) {
   const { activeSubscription, userId, admin } = await checkSubscription()
   if (!userId) {
     redirect('/auth/signin')
   }
 
-  const { app } = await loadBoards(params.id) as getJobAppInterface
+  let app
+
+  const { app: foundApp } = await getJobApp(params.id) as getJobAppInterface
+  app = foundApp
+  if (!app) return <p>Job app not found</p>
+  const appId = app._id.toString()
+
+  const profileId = app.profile
+  let onboardingProfileId
+
+  if (!profileId) {
+    const { profile } = await useGetOrCreateProfile(userId);
+    onboardingProfileId = profile?._id.toString()
+  }
+
+  if (app.userId == 'n/a' && onboardingProfileId) {
+    console.log('Set the userId')
+    await updateJobAppAction(app._id.toString(), { userId, profile: onboardingProfileId }, `/apps/${appId}`) as { jobApp: AppClass }
+    const { app: foundApp } = await getJobApp(params.id) as getJobAppInterface
+    app = foundApp
+  }
+
   const job = app.job as JobClass
   const appState = app.state as JobStateType
 
   const { currentSection, filteredPages, activeProgressSection } = useAppNavigation(appState, searchParams, job.companyDiffbotUri);
-
-  if (!app) return <p>Job app not found</p>
 
   return (
     <div className="flex flex-col w-full md:h-full sm:p-1 md:p-2 lg:p-3 xl:p-4">

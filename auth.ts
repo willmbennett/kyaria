@@ -42,5 +42,19 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       }
       return session
     },
+    async redirect({ url, baseUrl }) {
+      // If callbackUrl exists and is valid
+      if (url) {
+        // First handle relative urls
+        let callbackUrl = url
+        if (callbackUrl.startsWith("/")) {
+          callbackUrl = `${baseUrl}${url}`
+        }
+        // Only allow callbacks from the same origin
+        if (new URL(callbackUrl).origin === baseUrl) return callbackUrl
+      }
+
+      return baseUrl
+    }
   }
 })

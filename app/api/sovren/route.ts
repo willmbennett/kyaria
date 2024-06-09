@@ -1,17 +1,9 @@
 import https from 'https';
 import { NextResponse } from 'next/server'
-import { redirect } from "next/navigation";
-import { auth } from '../../../auth';
 
 export async function POST(request: Request) {
     try {
         const { content } = await request.json();
-        const session = await auth();
-        if (!session) {
-            redirect('/auth/signin')
-        }
-
-        //console.log(content);
 
         if (!content || typeof content !== 'string') {
             return new NextResponse(JSON.stringify({ error: 'Please provide resume content in the request body under "content" key.' }), { status: 400 });

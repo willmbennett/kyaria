@@ -1,21 +1,11 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { redirect } from "next/navigation";
 import { fetchWithRetry } from '../../db/indeedscraper/route';
-import { auth } from '../../../../auth';
 
 export async function GET(
     request: NextRequest
 ) {
-
-    const session = await auth()
     const searchParams = request.nextUrl.searchParams
     const url = searchParams.get('url')
-
-    //console.log(session)
-
-    if (!session) {
-        redirect('/auth/signin')
-    }
 
     //console.log(url)
 

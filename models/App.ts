@@ -72,8 +72,8 @@ class AppClass {
     @prop({ required: true })
     public userId!: string;
 
-    @prop({ ref: () => ProfileClass, required: true })
-    public profile!: Ref<ProfileClass>;
+    @prop({ ref: () => ProfileClass })
+    public profile?: Ref<ProfileClass>;
 
     @prop({ ref: () => JobClass, required: true })
     public job!: Ref<JobClass>;

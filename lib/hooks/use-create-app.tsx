@@ -1,16 +1,26 @@
 import { AppClass, Emails } from "../../models/App"
 import { createAppAction } from "../../app/apps/_action"
+import { usePathname } from "next/navigation"
 
-export const useCreateApp = (path: string) => {
-    const createApp = async (
-        job: string,
-        userId: string,
-        emails: Emails[],
-        userStory = '',
-        profile: string,
-        userResume: string,
-        boardId?: string
-    ) => {
+interface CreateAppProps {
+    userId: string,
+    emails: Emails[],
+    userStory: '',
+    userResume: string,
+    boardId?: string,
+    profile?: string
+}
+
+export const useCreateApp = ({
+    userId,
+    emails,
+    userStory = '',
+    userResume,
+    boardId,
+    profile
+}: CreateAppProps) => {
+    const path = usePathname()
+    const createApp = async (job: string) => {
 
         // Initial log to confirm the function was called and with which parameters (sensitive information should be omitted or sanitized)
         //console.log(`[useCreateApp] Attempting to create app for userId: ${userId} at path: ${path}`)

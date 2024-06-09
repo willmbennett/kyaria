@@ -3,6 +3,8 @@ import { transformParsedResume } from '../../app/resumebuilder/resumetest-helper
 import { createResumeAction } from '../../app/resumebuilder/_action';
 import type { PutBlobResult } from '@vercel/blob';
 
+const LOCAL_STORAGE_KEY = 'onboardingResume'
+
 interface UseSubmitResumeProps {
     onError?: (error: Error) => void;
     onSuccess?: (resumeId: string) => Promise<void>; // Now clearly async
@@ -10,6 +12,8 @@ interface UseSubmitResumeProps {
 
 const useSubmitResume = ({ onError, onSuccess }: UseSubmitResumeProps) => {
     const [isLoading, setLoading] = useState(false);
+
+    const fetchOnboardingResume = localStorage.getItem(LOCAL_STORAGE_KEY)
 
     const handleResumeCreation = useCallback(async (base64File: string, userId: string, file?: File | null, userUploaded: boolean = false) => {
         setLoading(true);
@@ -36,11 +40,11 @@ const useSubmitResume = ({ onError, onSuccess }: UseSubmitResumeProps) => {
                         method: 'POST',
                         body: file,
                     });
-            
+
                     if (!fileUploadResponse.ok) {
                         throw new Error(`File upload failed with status: ${fileUploadResponse.status}`);
                     }
-            
+
                     const newBlob = await fileUploadResponse.json() as PutBlobResult;
                     vercelLink = newBlob.url;
                 } catch (error) {
@@ -53,12 +57,16 @@ const useSubmitResume = ({ onError, onSuccess }: UseSubmitResumeProps) => {
 
                 const resumeToCreate = transformParsedResume(parsedResume);
                 const userResumeWithIds = { ...resumeToCreate, userId, vercelLink, userUploaded };
-                
+
                 const resumeId = await createResumeAction(userResumeWithIds, '/');
                 if (!resumeId) {
                     throw new Error("Failed to create resume");
                 }
-                //console.log('resumeId: ', resumeId);
+
+                // If the user isn't logged in (for onboarding flow) store the resumeId in localstorage so we can access it
+                if (userId == 'n/a') {
+                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(resumeId))
+                }
 
                 if (onSuccess) {
                     await onSuccess(resumeId); // Awaiting onSuccess callback
@@ -72,7 +80,7 @@ const useSubmitResume = ({ onError, onSuccess }: UseSubmitResumeProps) => {
         }
     }, [onError, onSuccess]);
 
-    return { isLoading, handleResumeCreation };
+    return { isLoading, handleResumeCreation, fetchOnboardingResume };
 };
 
 export default useSubmitResume;
