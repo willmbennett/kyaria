@@ -281,7 +281,6 @@ export async function deleteJobApp(id: string) {
         const { app } = await getJobApp(id)
 
         const parsedId = stringToObjectId(id);
-        const resumeId = app?.userResume
 
         //console.log(parsedId)
 
@@ -289,10 +288,7 @@ export async function deleteJobApp(id: string) {
             return { error: "Job application not found" };
         }
 
-        //console.log("Made it to Deletion")
         await AppModel.findByIdAndDelete(parsedId).exec();
-        //console.log("Post job app deletion")
-        await ResumeModel.findByIdAndDelete(resumeId).exec();
 
         return {};
     } catch (error) {
