@@ -276,19 +276,11 @@ export async function deleteJobApp(id: string) {
     try {
         await connectDB();
 
-        //console.log(id)
-
-        const { app } = await getJobApp(id)
-
-        const parsedId = stringToObjectId(id);
-
-        //console.log(parsedId)
-
-        if (!parsedId) {
+        if (!id) {
             return { error: "Job application not found" };
         }
 
-        await AppModel.findByIdAndDelete(parsedId).exec();
+        await AppModel.findByIdAndDelete(id).exec();
 
         return {};
     } catch (error) {
