@@ -13,6 +13,8 @@ import { Button } from "../../components/Button";
 import { cache } from "react";
 import { useGetOrCreateProfile } from "../../../lib/hooks/use-create-profile";
 import { updateJobAppAction } from "../_action";
+import { updateResumeAction } from "../../resumebuilder/_action";
+import { ResumeClass } from "../../../models/Resume";
 
 interface getJobAppInterface {
   app: AppClass
@@ -45,7 +47,10 @@ export default async function JobAppPage({ params, searchParams }: JobAppPagePro
   }
 
   if (app.userId == 'n/a' && onboardingProfileId) {
-    console.log('Set the userId')
+    const resumeId = (app.userResume as ResumeClass)._id.toString()
+    if (resumeId) {
+      updateResumeAction(resumeId, { userId })
+    }
     await updateJobAppAction(app._id.toString(), { userId, profile: onboardingProfileId }, `/apps/${appId}`) as { jobApp: AppClass }
     const { app: foundApp } = await getJobApp(params.id) as getJobAppInterface
     app = foundApp
