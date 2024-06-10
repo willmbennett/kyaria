@@ -33,17 +33,16 @@ export default function Notes({ jobAppId, content }: NotesProps): JSX.Element {
   }, []);
 
   return (
-    <>
-      <div>
-        <ReactQuill
-          value={text}
-          onChange={handleChange}
-          placeholder="Enter your note..."
-        />
-      </div>
+    <div className='w-full max-w-3xl flex gap-2'>
+      <ReactQuill
+        className='w-full'
+        value={text}
+        onChange={handleChange}
+        placeholder="Enter your note..."
+      />
       <div className="flex justify-end text-sm">
         {isSaved && <span style={{ color: 'green' }}>Saved</span>}
       </div>
-    </>
+    </div>
   );
 }

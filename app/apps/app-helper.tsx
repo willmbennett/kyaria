@@ -1,4 +1,7 @@
 import { AppClass } from "../../models/App";
+import { JobClass } from "../../models/Job";
+import { ProfileClass } from "../../models/Profile";
+import { ResumeClass } from "../../models/Resume";
 import { JobStateType } from "../board/job-helper";
 
 export interface getJobAppInterface {
@@ -73,3 +76,46 @@ export const pageList = [
   { label: "Notes", section: 'notes' },
   { label: "Files", section: 'files' }
 ]
+
+const profileKeys = [
+  "name",
+  "title",
+  "summary",
+  "areas_of_expertise",
+  "skills",
+  "education",
+  "professional_experience",
+  'details',
+  'responsibilities',
+  'content',
+  'start_date',
+  'end_date',
+  'degree',
+  'company',
+  'institution'
+];
+
+const jobKeys = ["jobTitle", 'company', "aboutCompany", "jobDescription", "qualifications", "responsibilities"];
+
+export const stripObojects = (resume: ResumeClass, job: JobClass) => {
+  const userResumeStripped: Partial<ResumeClass> = resume ? stripObject(resume, profileKeys) : {}
+  const jobStripped: Partial<JobClass> = stripObject(job, jobKeys)
+
+  return { userResumeStripped, jobStripped }
+}
+
+export const extractAppObjects = (app: AppClass) => {
+  const jobAppId = app._id.toString()
+
+  const resume = app.userResume as ResumeClass
+  const resumeId = resume._id.toString()
+
+  const job = (app.job as JobClass)
+  const jobId = (app.job as JobClass)._id.toString()
+
+  const profile = (app.profile as ProfileClass)
+  const profileId = profile._id.toString()
+
+  const chatId = app.chatId?.toString()
+  return { jobAppId, resumeId, resume, jobId, job, profileId, profile, chatId }
+}

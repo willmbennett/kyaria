@@ -35,7 +35,7 @@ export default function Experience({
 
 
     return (
-        <div className='max-w-3xl'>
+        <div className='max-w-3xl w-full'>
             <h1 className="text-center sm:text-4xl text-4xl font-bold mb-8">
                 Let's write emails
             </h1>

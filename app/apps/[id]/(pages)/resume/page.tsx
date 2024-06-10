@@ -1,15 +1,7 @@
-import { redirect } from "next/navigation";
-import JobDescription from "../../../../components/apps/pages/JobDescription";
 import { checkSubscription } from "../../../../../lib/hooks/check-subscription";
 import { getJobApp } from "../../../../../lib/app-db";
-import { useGetOrCreateProfile } from "../../../../../lib/hooks/use-create-profile";
-import { ResumeClass } from "../../../../../models/Resume";
-import { updateResumeAction } from "../../../../resumebuilder/_action";
-import { JobClass } from "../../../../../models/Job";
-import { AppClass } from "../../../../../models/App";
 import { cache } from "react";
-import { JobAppPageProps, getJobAppInterface } from "../../../app-helper";
-import { updateJobAppAction } from "../../../_action";
+import { JobAppPageProps, extractAppObjects, getJobAppInterface } from "../../../app-helper";
 import CustomPDFViewer from "../../../../components/resumebuilder/pdfviewer/CustomPDFViewer";
 import { ResumeSelection } from "../../../../components/apps/pages/Resume/ResumeSelect";
 
@@ -18,16 +10,9 @@ const loadJob = cache((id: string) => {
 })
 
 export default async function JobAppPage({ params }: JobAppPageProps) {
-  const { userId } = await checkSubscription()
-  if (!userId) {
-    redirect('/auth/signin')
-  }
+  const { userId } = await checkSubscription(true)
   const { app } = await loadJob(params.id) as getJobAppInterface
-
-  const resume = app.userResume as ResumeClass
-  const resumeId = resume._id.toString()
-  const jobId = (app.job as JobClass)._id.toString()
-  const jobAppId = app._id.toString()
+  const { resume, resumeId, jobId, jobAppId } = extractAppObjects(app)
 
   return (
     <div className='w-full h-full over relative items-center gap-4 max-w-xl'>

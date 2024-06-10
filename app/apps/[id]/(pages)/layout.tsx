@@ -1,12 +1,9 @@
 import { cache } from "react";
 import { AppClass } from "../../../../models/App";
 import { getJobApp } from "../../../../lib/app-db";
-import { JobClass } from "../../../../models/Job";
 import { JobStateType } from "../../../board/job-helper";
-import useAppNavigation from "../../../../lib/hooks/use-app-section";
-import ProgressBar from "../../../components/apps/ui/ProgressBar";
-import JobMenu from "../../../components/apps/JobMenu";
 import { JobAppLayoutWrapper } from "../../components/JobAppWrapper";
+import { checkSubscription } from "../../../../lib/hooks/check-subscription";
 
 
 interface getJobAppInterface {
@@ -24,6 +21,7 @@ export default async function AppLayout({
     children: React.ReactNode;
     params: { id: string };
 }) {
+    await checkSubscription(true)
 
     const { app } = await loadJob(params.id) as getJobAppInterface
     return (

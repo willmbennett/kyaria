@@ -30,8 +30,10 @@ export const JobAppLayoutWrapper = ({
                         activeProgressSection={activeProgressSection}
                     />
                 </div>
-                <div className="flex flex-grow w-full h-full overflow-y-scroll justify-center pt-10">
-                    {children}
+                <div className="flex-grow w-full h-full overflow-y-scroll">
+                    <div className="py-10 w-full flex justify-center">
+                        {children}
+                    </div>
                 </div>
             </div >
         </div>

@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import JobDescription from "../../../../components/apps/pages/JobDescription";
 import { checkSubscription } from "../../../../../lib/hooks/check-subscription";
 import { getJobApp } from "../../../../../lib/app-db";
@@ -19,11 +18,7 @@ interface JobAppPageProps {
 }
 
 export default async function JobAppPage({ params }: JobAppPageProps) {
-  const { userId } = await checkSubscription()
-  if (!userId) {
-    redirect('/auth/signin')
-  }
-
+  const { userId } = await checkSubscription(true)
   let app
 
   const { app: foundApp } = await getJobApp(params.id) as getJobAppInterface
