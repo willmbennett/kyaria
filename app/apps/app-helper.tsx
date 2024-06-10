@@ -1,4 +1,14 @@
-import { JobStateType } from "../../board/job-helper";
+import { AppClass } from "../../models/App";
+import { JobStateType } from "../board/job-helper";
+
+export interface getJobAppInterface {
+  app: AppClass
+}
+
+export interface JobAppPageProps {
+  params: { id: string }
+  searchParams: { section: string, progress: string }
+}
 
 // Define the ApplicationState type based on the keys you have provided
 export type ApplicationState = 'Research' | 'Phone Screen' | 'Interviewing' | 'Post-Offer';

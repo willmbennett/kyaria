@@ -10,32 +10,34 @@ const INACTIVE_ROUTE = "inline-flex w-auto w-full px-3 py-1 my-1 rounded text-xl
 
 
 export default function JobMenu(
-  { boardId,
-    currentSection,
+  { appId,
+    boardId,
     filteredPages,
     activeProgressSection
   }: {
-    boardId?: string
-    currentSection: string,
+    appId: string;
+    boardId?: string;
     filteredPages: {
       label: string;
       section: string;
-    }[],
-    activeProgressSection: string
+    }[];
+    activeProgressSection: string;
   }) {
   const router = useRouter()
   const path = usePathname()
 
+  const baseRoute = `/apps/${appId}`
+
   return (
-    <div className="bg-white my-2 flex flex-col w-64">
+    <div className="bg-white flex flex-col w-64">
       <Button size='sm' variant='ghost' href={`/board${boardId ? `/${boardId}` : '/default'}`} className="mb-3">← Back to Board</Button>
       {filteredPages.map((l, i) => {
         const handleClick = () => {
-          router.push(`${path}?section=${l.section}${activeProgressSection ? `&progress=${activeProgressSection}` : ''}`, { scroll: false })
+          router.push(`${baseRoute}/${l.section}${activeProgressSection ? `?progress=${activeProgressSection}` : ''}`, { scroll: false })
         };
         return (
           <div key={i}>
-            <div className={l.section === currentSection ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
+            <div className={path.includes(l.section) ? ACTIVE_ROUTE : INACTIVE_ROUTE}>
               <button
                 onClick={handleClick}
                 className="inline"

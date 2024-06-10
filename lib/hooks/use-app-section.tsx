@@ -1,25 +1,20 @@
-import { ApplicationState, getProgress, pageList, progressStates } from '../../app/apps/[id]/app-helper';
+'use client'
+import { ApplicationState, getProgress, pageList, progressStates } from '../../app/apps/app-helper';
 import { JobStateType } from '../../app/board/job-helper';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 const useAppNavigation = (
+    appId: string,
     state: JobStateType,
-    searchParams: { section: string, progress: string },
-    companyDiffbotUri?: string,
 ) => {
+    const searchParams = useSearchParams()
+    const progress = searchParams.get('progress')
     const currentProgress = progressStates.find(p => getProgress(state) == p.label)?.section || 'Research'
-    //console.log('currentProgress: ', currentProgress)
-    const activeProgressSection = searchParams['progress'] || currentProgress || 'research'
-    //console.log('activeProgressSection: ', activeProgressSection)
+    const activeProgressSection = progress || currentProgress || 'research'
     const activeProgress: ApplicationState = progressStates.find(p => activeProgressSection == p.section)?.label as ApplicationState || 'Research'
-    //console.log('activeProgress: ', activeProgress)
 
-    // Dynamically create the 'Research' state pages based on the existence of companyDiffbotUri
-    /*
-    const researchPages = ['jobdescription', 'elevatorpitch', 'coverletter', 'resume'];
-    if (companyDiffbotUri) {
-        researchPages.push('networking');
-    }
-    */
+    const path = usePathname()
+    const router = useRouter()
 
     // Map the states to the corresponding pages
     const statePagesMap: { [key in ApplicationState]: string[] } = {
@@ -33,12 +28,15 @@ const useAppNavigation = (
     const filteredPages = pageList.filter(page =>
         statePagesMap[activeProgress].includes(page.section)
     );
-    //console.log('filteredPages: ', filteredPages)
+    // If we're not currently on a section in filtered pages
+    const baseRoute = `/apps/${appId}`
+    const currentSection = path.split('/')[-1]
+    const newRoute = `${baseRoute}/${filteredPages[0].section}${activeProgressSection ? `?progress=${activeProgressSection}` : ''}`
 
-    const currentSection = searchParams['section'] || filteredPages[0].section
-    //console.log('currentSection: ', currentSection)
+    const allowedPages = filteredPages.map(p => p.label)
+    if (!allowedPages.includes(currentSection)) router.push(newRoute, { scroll: false })
 
-    return { currentSection, filteredPages, activeProgressSection }
+    return { filteredPages, activeProgressSection }
 };
 
 export default useAppNavigation;

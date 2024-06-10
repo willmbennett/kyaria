@@ -2,7 +2,7 @@
 import React from 'react';
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { progressStates } from '../../../apps/[id]/app-helper';
+import { progressStates } from '../../../apps/app-helper';
 
 interface ProgressBarProps {
     activeProgressSection: string
@@ -12,7 +12,7 @@ const ProgressBar = ({ activeProgressSection }: ProgressBarProps) => {
     const path = usePathname()
 
     return (
-        <div className="text-center p-2">
+        <div className="absolute top-0 right-0 w-full py-3 border-b bg-white z-30">
             <ul className='flex flex-row justify-center gap-4'>
                 {progressStates.map((p, index) => {
                     const updateProgress = () => {

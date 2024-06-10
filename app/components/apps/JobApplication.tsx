@@ -4,7 +4,7 @@ import CoverLetter from './pages/CoverLetter';
 import Experience from './pages/Experience';
 import Emails from './pages/Emails';
 import Story from './pages/Story';
-import { stripObject } from '../../apps/[id]/app-helper';
+import { stripObject } from '../../apps/app-helper';
 import { AppClass } from '../../../models/App';
 import { ResumeClass } from '../../../models/Resume';
 import { JobClass } from '../../../models/Job';
