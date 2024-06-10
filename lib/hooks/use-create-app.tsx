@@ -21,10 +21,6 @@ export const useCreateApp = ({
 }: CreateAppProps) => {
     const path = usePathname()
     const createApp = async (job: string) => {
-
-        // Initial log to confirm the function was called and with which parameters (sensitive information should be omitted or sanitized)
-        //console.log(`[useCreateApp] Attempting to create app for userId: ${userId} at path: ${path}`)
-
         const userApp: Partial<AppClass> = {
             job,
             userId,
@@ -35,14 +31,10 @@ export const useCreateApp = ({
             boardId
         }
 
-        // Logging the constructed userApp object can be helpful, but consider privacy/security for sensitive data
-        //console.log('[useCreateApp] userApp object:', userApp)
-
         try {
             const appId = await createAppAction(userApp, path);
 
             // This log confirms the app was created and returns the appId
-            //console.log('[useCreateApp] App created Successfully, appId:', appId)
             return { appId }
         } catch (error) {
             // Log any errors that occur during the app creation or navigation process
