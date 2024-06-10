@@ -1,4 +1,4 @@
-import JobDescription from "../../../../components/apps/pages/JobDescription";
+import JobDescription from "./components/JobDescription";
 import { checkSubscription } from "../../../../../lib/hooks/check-subscription";
 import { getJobApp } from "../../../../../lib/app-db";
 import { useGetOrCreateProfile } from "../../../../../lib/hooks/use-create-profile";

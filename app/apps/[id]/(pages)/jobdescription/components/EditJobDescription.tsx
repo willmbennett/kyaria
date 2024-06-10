@@ -2,10 +2,10 @@
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm, useFieldArray, Controller, SubmitHandler } from 'react-hook-form';
-import { Button } from '../Button';
+import { Button } from '../../../../../components/Button';
 import TextareaAutosize from 'react-textarea-autosize';
 import ReactMarkdown from 'react-markdown'; // Import ReactMarkdown
-import { updateJobAction } from '../../jobs/_action';
+import { updateJobAction } from '../../../../../jobs/_action';
 
 interface Props {
   label?: string;

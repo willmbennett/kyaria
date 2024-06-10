@@ -1,7 +1,7 @@
 import { getJobApp } from "../../../../../lib/app-db";
 import { cache } from "react";
 import { JobAppPageProps, getJobAppInterface } from "../../../app-helper";
-import Notes from "../../../../components/apps/pages/Notes";
+import Notes from "./components/Notes";
 
 const loadJob = cache((id: string) => {
   return getJobApp(id)

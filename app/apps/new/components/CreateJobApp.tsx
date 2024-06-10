@@ -1,5 +1,5 @@
 'use client'
-import { Button } from '../../Button';
+import { Button } from '../../../components/Button';
 import { useSearchParams } from 'next/navigation';
 import JobAppUploader from './JobAppUploader';
 

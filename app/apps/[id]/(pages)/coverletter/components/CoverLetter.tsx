@@ -1,12 +1,12 @@
 'use client'
 
-import ChatWithGPT from '../../chat/ChatWithGPT';
-import { updateJobAppAction } from '../../../apps/_action';
+import ChatWithGPT from '../../../../../components/chat/ChatWithGPT';
+import { updateJobAppAction } from '../../../../_action';
 import { Message } from 'ai';
-import { CoverLetterViewer } from '../../coverletter/CoverLetterViewer';
+import { CoverLetterViewer } from './CoverLetterViewer';
 import { useCallback, useState } from 'react';
-import { Button } from '../../Button';
-import { CoverLetterPDF } from '../CoverLetterPDF';
+import { Button } from '../../../../../components/Button';
+import { CoverLetterPDF } from './CoverLetterPDF';
 import ReactPDF from '@react-pdf/renderer';
 
 interface CoverLetterProps {

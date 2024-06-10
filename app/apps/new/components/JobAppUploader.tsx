@@ -1,14 +1,14 @@
 'use client';
 import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Button } from '../../Button';
+import { Button } from '../../../components/Button';
 import { emails } from '../../../board/job-helper';
 import { useCreateApp } from '../../../../lib/hooks/use-create-app';
 import { useCreateJob } from '../../../../lib/hooks/use-create-job';
 import { usePathname, useRouter } from 'next/navigation';
-import { IconSpinner } from '../../ui/icons';
+import { IconSpinner } from '../../../components/ui/icons';
 import { updateResumeAction } from '../../../resumebuilder/_action';
-import { DropResumeBanner } from '../../chatbot/DropResumeBanner';
+import { DropResumeBanner } from '../../../components/chatbot/DropResumeBanner';
 
 const LOCAL_STORAGE_KEY = 'onboardingApplication';
 

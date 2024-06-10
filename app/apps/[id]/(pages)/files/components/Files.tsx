@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import FileUploadForm from './FileUploadForm';
 import FileDisplay from './FileDisplay';
-import { File } from '../../../../models/App';
+import { File } from '../../../../../../models/App';
 
 interface FilesProps {
   files?: File[];

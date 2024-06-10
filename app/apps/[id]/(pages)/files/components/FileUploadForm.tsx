@@ -2,9 +2,9 @@ import React from 'react';
 import { type PutBlobResult } from '@vercel/blob';
 import { useState, useRef, useEffect } from 'react';
 import { Cross1Icon } from '@radix-ui/react-icons';
-import { updateJobAppAction } from '../../../apps/_action';
+import { updateJobAppAction } from '../../../../_action';
 
-import { File } from '../../../../models/App';
+import { File } from '../../../../../../models/App';
 
 interface FileUploadProps {
   jobAppId: string;

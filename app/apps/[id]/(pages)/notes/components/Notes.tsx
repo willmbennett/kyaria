@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import ReactQuill from 'react-quill';
-import { updateJobAppAction } from '../../../apps/_action';
+import { updateJobAppAction } from '../../../../_action';
 import debounce from 'lodash/debounce';
 import 'react-quill/dist/quill.snow.css';
 import "./styles.css";

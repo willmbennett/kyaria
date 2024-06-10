@@ -79,19 +79,14 @@ export const CoverLetterPDF: React.FC<CoverLetterPDFProps> = ({
                     {phone && <Text style={styles.contactItem}>{phone}</Text>}
                     {email && <Text style={styles.contactItem}>{email}</Text>}
                 </View>
-
                 <Text style={styles.date}>{currentDate}</Text>
-
                 <View style={styles.contactInfo}>
                     {company && <Text style={styles.contactItem}>Hiring Manager</Text>}
                     {company && <Text style={styles.contactItem}>{company}</Text>}
                     {companyLocation && <Text style={styles.contactItem}>{companyLocation}</Text>}
                 </View>
-
                 <Text style={styles.salutation}>Dear Hiring Manager,</Text>
-
                 {bodyText && <Text style={styles.bodyText}>{bodyText}</Text>}
-
                 <Text style={styles.signOff}>Sincerely,</Text>
                 {name && <Text style={[styles.contactInfo, styles.accentText]}>{name}</Text>}
             </Page>

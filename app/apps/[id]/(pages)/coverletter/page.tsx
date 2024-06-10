@@ -1,7 +1,7 @@
 import { getJobApp } from "../../../../../lib/app-db";
 import { cache } from "react";
 import { JobAppPageProps, extractAppObjects, getJobAppInterface, stripObojects } from "../../../app-helper";
-import CoverLetter from "../../../../components/apps/pages/CoverLetter";
+import CoverLetter from "./components/CoverLetter";
 
 const loadJob = cache((id: string) => {
   return getJobApp(id)

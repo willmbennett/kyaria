@@ -5,11 +5,11 @@ import "react-pdf/dist/esm/Page/TextLayer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css"
 import { useCallback, useEffect, useState } from 'react';
 import { debounce } from 'lodash';
-import { ResumeClass } from '../../../models/Resume';
-import { Button } from '../Button';
-import ResumeLoadingComponent from '../resumebuilder/pdfviewer/ResumeLoadingComponent';
-import { JobClass } from '../../../models/Job';
-import { CoverLetterPDF } from '../apps/CoverLetterPDF';
+import { ResumeClass } from '../../../../../../models/Resume';
+import { Button } from '../../../../../components/Button';
+import ResumeLoadingComponent from '../../../../../components/resumebuilder/pdfviewer/ResumeLoadingComponent';
+import { JobClass } from '../../../../../../models/Job';
+import { CoverLetterPDF } from './CoverLetterPDF';
 
 interface ResumePDFProps {
     userResume: Partial<ResumeClass>;
