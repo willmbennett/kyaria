@@ -6,7 +6,7 @@ import discord from '/public/discord-logo-blue.png'
 export const DiscordButton = () => {
     return (
         <div className='w-full flex flex-col text-center gap-2'>
-            <p className='text-sm text-slate-500'>Come join our</p>
+            <p className='text-sm text-slate-500'>Join our</p>
             <Link
                 href='https://discord.gg/RjVfFSDSXz'
                 target="_blank">

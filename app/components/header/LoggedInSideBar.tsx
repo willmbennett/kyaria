@@ -7,11 +7,12 @@ import clsx from 'clsx'
 import { DiscordButton } from "../ui/DiscordButton";
 import { Button } from '../Button'
 import { MobileNav } from "./MobileNav";
-import { AcademicCapIcon, BriefcaseIcon, UserGroupIcon, ClipboardDocumentListIcon, ChartBarIcon, HomeIcon, ComputerDesktopIcon } from "@heroicons/react/24/outline";
+import { AcademicCapIcon, BriefcaseIcon, UserGroupIcon, ClipboardDocumentListIcon, ChartBarIcon, HomeIcon, ComputerDesktopIcon, UserIcon } from "@heroicons/react/24/outline";
 import { Menu } from "@headlessui/react";
 import { pageListType } from "../../helper";
 import { MenuIcon } from "./MenuIcon";
 import { Separator } from "../ui/separator";
+import { TargetIcon } from "@radix-ui/react-icons";
 
 const linkData = {
   publicLinks: [
@@ -42,6 +43,12 @@ const linkData = {
   ],
   productLinks: [
     {
+      label: 'Behaviorals',
+      href: '/behaviorals',
+      icon: UserIcon,
+      pricingTier: 'free'
+    },
+    {
       label: 'Resume Builder',
       href: '/resumebuilder',
       icon: BriefcaseIcon,
@@ -62,7 +69,7 @@ const linkData = {
     {
       label: 'Goals',
       href: '/goals',
-      icon: ClipboardDocumentListIcon,
+      icon: TargetIcon,
       pricingTier: 'free'
     },
     /*

@@ -1,4 +1,5 @@
 import { AcademicCapIcon, BriefcaseIcon, UserGroupIcon, ClipboardDocumentListIcon, ChartBarIcon } from "@heroicons/react/24/outline";
+import { IconProps } from "@radix-ui/react-icons/dist/types";
 import { ForwardRefExoticComponent, RefAttributes, SVGProps } from "react";
 
 export type CarouselType = {
@@ -14,7 +15,7 @@ export type pageListType = {
     icon?: ForwardRefExoticComponent<Omit<SVGProps<SVGSVGElement>, "ref"> & {
         title?: string | undefined;
         titleId?: string | undefined;
-    } & RefAttributes<SVGSVGElement>>;
+    } & RefAttributes<SVGSVGElement>> | React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>>;
     subLink?: pageListType
 }
 
