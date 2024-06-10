@@ -1,8 +1,6 @@
-import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../../lib/auth";
 import CompanyProfile from "../../components/companies/Company";
 import Await from "../../jobs/await";
+import { checkSubscription } from "../../../lib/hooks/check-subscription";
 
 async function getData(orgId: string) {
     try {
@@ -34,14 +32,7 @@ async function getData(orgId: string) {
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
-    const session = await getServerSession(authOptions);
-
-    //console.log(session)
-
-    if (!session) {
-        redirect('/auth/signin')
-    }
-
+    const session = await checkSubscription(true)
     //console.log(org)
 
 

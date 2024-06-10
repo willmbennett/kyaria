@@ -1,22 +1,11 @@
 import { checkSubscription } from "../../../lib/hooks/check-subscription";
 import { redirect } from "next/navigation";
-import { PitchHero } from "../../components/pitch/PitchHero";
-import ProductDemo from "../../components/pitch/ProductDemo";
 import { getDefaultResumeId } from "../../../lib/resume-db";
 import { useGetOrCreateProfile } from "../../../lib/hooks/use-create-profile";
 import ElevatorPitchDescription from "../../components/profile/onboarding/descriptions/PitchDescription";
 
 export default async function ProfilePage() {
-    const { userId } = await checkSubscription()
-
-    if (!userId) {
-        return (
-            <>
-                <PitchHero />
-                <ProductDemo />
-            </>
-        )
-    }
+    const { userId } = await checkSubscription(true)
 
     //console.log('userId: ', userId)
     const { defaultResumeId } = await getDefaultResumeId(userId)

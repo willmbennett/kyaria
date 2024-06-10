@@ -1,7 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from '../../../../../lib/auth';
+import { auth } from '../../../../../auth';
 
 // Node.js environments require a polyfill or an import for fetch. Uncomment the line below if you're using Node.js 18 or newer.
 // import fetch from 'node-fetch';
@@ -37,7 +36,7 @@ export async function POST(
     const requestBody = await request.text();
     const { query } = JSON.parse(requestBody);
 
-    const session = await getServerSession(authOptions);
+    const session = await auth()
 
     if (!session) {
         redirect('/auth/signin')

@@ -1,11 +1,10 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../../../lib/auth";
 import { updateJobSimilarities } from '../../../../lib/job-db';
+import { auth } from '../../../../auth';
 
 export async function POST(req: NextRequest) {
-    const session = await getServerSession(authOptions);
+    const session = await auth()
     //const searchParams = req.nextUrl.searchParams
     //const userId = searchParams.get('userId')
 

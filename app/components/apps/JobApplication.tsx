@@ -39,7 +39,6 @@ export async function JobApplication(
 
   // Extract the high level objects
   const userResume = jobApp.userResume as ResumeClass | undefined
-  console.log(userResume)
   const job = jobApp.job as JobClass
   const jobId = job._id.toString()
   const chatId = jobApp.chatId?.toString()
@@ -135,7 +134,7 @@ export async function JobApplication(
     }],
     ['files', {
       component:
-        <Files files={files} jobAppId={jobAppId}/>
+        <Files files={files} jobAppId={jobAppId} />
     }],
     ['story', {
       component: <Story

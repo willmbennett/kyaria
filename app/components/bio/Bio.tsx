@@ -1,8 +1,4 @@
 'use client'
-
-import { useState } from 'react';
-import { ResumeClass } from '../../../models/Resume';
-import ResumeDropdownMenu from '../ResumeDropdownMenu';
 import { BioGen } from './BioGen';
 import { useResumeDropDown } from '../../../lib/hooks/use-resume-dropdown';
 import { ResumeDropAndSelect } from '../ResumeDropAndSelect';

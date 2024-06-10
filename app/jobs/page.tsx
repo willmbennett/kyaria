@@ -4,8 +4,7 @@ import { Suspense } from 'react'
 import Skeleton from './skeleton'
 import Await from './await'
 import Trigger from "./trigger";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../lib/auth";
+import { checkSubscription } from "../../lib/hooks/check-subscription";
 
 export default async function JobsPage({
     searchParams
@@ -13,14 +12,14 @@ export default async function JobsPage({
     searchParams: { [key: string]: string | string[] | undefined }
 }) {
 
-    const session = await getServerSession(authOptions);
+    const session = await checkSubscription()
     const page =
         typeof searchParams.page === 'string' ? Number(searchParams.page) : 1
     const limit =
         typeof searchParams.limit === 'string' ? Number(searchParams.limit) : 10
 
     const filter = {
-        userId: session?.user?.id || '',
+        userId: session.userId,
         page,
         limit
     }
@@ -36,7 +35,7 @@ export default async function JobsPage({
                         </h5>
                     </div>
                     <Suspense fallback={<Skeleton />}>
-                        {/* @ts-expect-error Server Component */}
+                        {/* @ts-ignore */}
                         <Await promise={promise}>
                             {({ jobs }) => (
                                 <>

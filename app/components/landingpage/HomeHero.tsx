@@ -39,7 +39,7 @@ export function HomeHero() {
             <AuthButton altText="Get Started" />
           </div>
           <p className="mt-4 flex text-md text-slate-600/90 md:justify-center xl:justify-start xl:text-base">
-            Eve is included with Kyaria.ai Pro, only $10 per month.
+            Eve is included with Kyaria.ai Pro, only $29.99 per month.
           </p>
         </div>
       </Container>
@@ -80,7 +80,7 @@ export function HomeHero() {
                   />
                 </div>
                 <div className="ml-5">
-                  <p className="font-medium text-slate-900">Jessica Fan</p>
+                  <p className="font-medium text-slate-900">Jessica</p>
 
                   <p className="font-medium text-slate-500">
                     Senior Software Engineer at Google

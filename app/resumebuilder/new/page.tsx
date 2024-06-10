@@ -1,14 +1,9 @@
-import { redirect } from "next/navigation";
 import { checkSubscription } from "../../../lib/hooks/check-subscription";
 import NewResumeForm from "../../components/resumebuilder/new/NewResumeForm";
 import { Container } from "../../components/landingpage/Container";
 
 export default async function ResumeUploadPage() {
-    const { userId } = await checkSubscription()
-
-    if (!userId) {
-        redirect('/');
-    }
+    const { userId } = await checkSubscription(true)
 
     return (
         <section className="flex w-full justify-center py-5 md:py-8 lg:py-10">

@@ -1,11 +1,10 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../lib/auth";
 import { redirect } from "next/navigation";
 import { JobPage } from "../components/admin/JobPage";
 import { PersonPage } from "../components/admin/PersonPage";
+import { auth } from "../../auth";
 
 export default async function BoarPage() {
-  const session = await getServerSession(authOptions)
+  const session = await auth()
   if (session?.user?.id !== '650f813286f63a9d8c0080ee') {
     redirect('/');
   }

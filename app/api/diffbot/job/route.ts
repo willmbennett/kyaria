@@ -1,22 +1,11 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../../../lib/auth";
 import { fetchWithRetry } from '../../db/indeedscraper/route';
 
 export async function GET(
     request: NextRequest
 ) {
-
-    const session = await getServerSession(authOptions);
     const searchParams = request.nextUrl.searchParams
     const url = searchParams.get('url')
-
-    //console.log(session)
-
-    if (!session) {
-        redirect('/auth/signin')
-    }
 
     //console.log(url)
 
@@ -33,7 +22,7 @@ export async function GET(
         };
 
         const fetchResponse = await fetchWithRetry(apiUrl, options);
-      //console.log('Data fetched successfully:', fetchResponse);
+        //console.log('Data fetched successfully:', fetchResponse);
 
         return NextResponse.json(fetchResponse, { status: 200 });
     } catch (error) {

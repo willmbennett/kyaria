@@ -1,6 +1,3 @@
-import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../../../lib/auth";
 import Await from "../../../jobs/await";
 import { Suspense } from 'react'
 import Trigger from "../../../components/companies/trigger";
@@ -8,19 +5,13 @@ import EmployeeList from "../../../components/companies/EmployeeList";
 import EmployeeDropdown from "../../../components/companies/EmployeeDropdown";
 import EmployeesSkeleton from "../../../components/companies/EmployeesSkeleton";
 import { Employee, employeeProps, getData } from "./employee-helper";
+import { checkSubscription } from "../../../../lib/hooks/check-subscription";
 
 export default async function Page({ params, searchParams }: employeeProps) {
     //console.log('Server-side Page rendering with searchParams:', searchParams);
 
     // Ensure the session handling is correct and redirect is working as intended
-    const session = await getServerSession(authOptions);
-    if (!session) {
-        // Make sure to log if the session is not found
-        console.error('Session not found, redirecting to signin');
-        redirect('/auth/signin');
-        return; // Don't forget to return after a redirect
-    }
-
+    const session = await checkSubscription(true)
     const limit = typeof searchParams.limit === 'string' ? parseInt(searchParams.limit, 10) : 30;
     const roleFilter = typeof searchParams.roleFilter === 'string' ? decodeURIComponent(searchParams.roleFilter.replace(/\+/g, ' ')) : 'All';
 

@@ -1,22 +1,17 @@
-import { NextAuthOptions } from "next-auth"
-import GoogleProvider from "next-auth/providers/google";
 import { MongoDBAdapter } from "@auth/mongodb-adapter"
-import clientPromise from "./mongodb"
+import clientPromise from "./lib/mongodb"
 import { randomUUID, randomBytes } from "crypto";
 import type { Adapter } from 'next-auth/adapters';
+import NextAuth from "next-auth";
+import Google from 'next-auth/providers/google';
 
-export const authOptions: NextAuthOptions = {
+export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter: MongoDBAdapter(clientPromise) as Adapter,
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: '/auth/signin'
   },
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_ID ?? "",
-      clientSecret: process.env.GOOGLE_SECRET ?? "",
-    }),
-  ],
+  providers: [Google],
   session: {
     // Choose how you want to save the user session.
     // The default is `"jwt"`, an encrypted JWT (JWE) stored in the session cookie.
@@ -48,21 +43,18 @@ export const authOptions: NextAuthOptions = {
       return session
     },
     async redirect({ url, baseUrl }) {
-      // Extract callbackUrl from the URL
-      const urlObj = new URL(url);
-      const callbackUrl = urlObj.searchParams.get('callbackUrl');
-
       // If callbackUrl exists and is valid
-      if (callbackUrl) {
-        if (callbackUrl.startsWith("/")) return `${baseUrl}${callbackUrl}`;
-        else if (new URL(callbackUrl).origin === baseUrl) return callbackUrl;
+      if (url) {
+        // First handle relative urls
+        let callbackUrl = url
+        if (callbackUrl.startsWith("/")) {
+          callbackUrl = `${baseUrl}${url}`
+        }
+        // Only allow callbacks from the same origin
+        if (new URL(callbackUrl).origin === baseUrl) return callbackUrl
       }
 
-      // Original logic
-      if (url.startsWith("/")) return `${baseUrl}${url}`;
-      else if (urlObj.origin === baseUrl) return url;
-      return baseUrl;
+      return baseUrl
     }
-
   }
-}
+})

@@ -14,19 +14,13 @@ import { desktopDropDownMenu } from "./DesktopDropdownMenu";
 //import logo from '/public/images/logo-dark.png'
 //import logoIcon from '/public/images/logo-icon.png'
 
-export function Header({ userId }: { userId: string }) {
+export function Header() {
   const pathname = usePathname()
 
   // Determine which links to show based on the user's state
   const allProductLinks = [...linkData.signedInLinks, ...linkData.productLinks]
-  const desktopMenuLinks = userId ? linkData.signedInLinks : linkData.publicLinks;
-  const mobileLinks = userId ? [...linkData.signedInLinks, ...linkData.signedInMenuLinks] : linkData.publicLinks;
-
-  // Adjust Profile link dynamically based on userId
-  if (userId) {
-    const linkToUpdate = linkData.signedInMenuLinks.find(link => link.label === 'Profile')
-    if (linkToUpdate) linkToUpdate.href = `/profile/${userId}`;
-  }
+  const desktopMenuLinks = linkData.publicLinks;
+  const mobileLinks = linkData.publicLinks;
 
   return (
     <header className="h-24">
@@ -65,35 +59,26 @@ export function Header({ userId }: { userId: string }) {
                   {link.label}
                 </Link>
               ))}
-              {userId ?
-                desktopDropDownMenu('More', linkData.productLinks)
-                :
-                desktopDropDownMenu('For Job Seekers', allProductLinks)
-              }
             </div>
           </div>
 
           <div>
             <div className="hidden items-center space-x-4 md:flex">
               <div className="hidden lg:block">
-                {!userId &&
-                  <Button
-                    size="md"
-                    variant="solid"
-                    className="w-full"
-                    onClick={() => signIn()}
-                  >
-                    Sign In
-                  </Button>
-                }
+                <Button
+                  size="md"
+                  variant="solid"
+                  className="w-full"
+                  onClick={() => signIn()}
+                >
+                  Sign In
+                </Button>
               </div>
-              {userId && desktopMenu(linkData.signedInMenuLinks)}
             </div>
           </div>
         </nav>
         <div className="ml-4 md:hidden">
           <MobileNav
-            userId={userId}
             mobileLinks={mobileLinks}
             loggedInMenuLinks={linkData.productLinks}
             allProductLinks={allProductLinks} />

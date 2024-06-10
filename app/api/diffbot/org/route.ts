@@ -1,13 +1,12 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../../../lib/auth";
+import { auth } from '../../../../auth';
 
 export async function GET(
     request: NextRequest
 ) {
 
-    const session = await getServerSession(authOptions);
+    const session = await auth()
     const searchParams = request.nextUrl.searchParams
     const org = searchParams.get('org')
     const entity = searchParams.get('entity')
@@ -34,7 +33,7 @@ export async function GET(
             apiUrl = `https://kg.diffbot.com/kg/v3/dql?type=query&token=${process.env.DIFFBOT_API_KEY}&query=type%3AOrganization+strict%3Aname%3A"${encodeURIComponent(org)}"&size=1`;
         }
 
-      //console.log(apiUrl)
+        //console.log(apiUrl)
 
         const options = {
             method: 'GET',
