@@ -9,7 +9,7 @@ import { EditJobDescription } from "../EditJobDescription";
 import Link from "next/link";
 import { EditList } from "../EditList";
 import { JobClass } from "../../../../models/Job";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export type FormFields = {
     board: string;
@@ -54,6 +54,15 @@ export default function JobDescription({
             router.push(`/board`)
         }
     };
+
+    // This will clear the data from local storage from the onboarding flow
+    useEffect(() => {
+        const resume = localStorage.getItem('onboardingResume')
+        const application = localStorage.getItem('onboardingApplication')
+
+        if (resume) localStorage.removeItem('onboardingResume')
+        if (application) localStorage.removeItem('onboardingApplication')
+    }, [])
 
     const { register, handleSubmit } = useForm<FormFields>();
 
