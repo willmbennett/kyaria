@@ -42,7 +42,7 @@ export default function JobAppUploader({
         story,
         userResume,
     };
-    if (profileId) appParams.profileId = profileId;
+    if (profileId) appParams.profile = profileId;
     if (boardId) appParams.boardId = boardId;
 
     const { createApp } = useCreateApp(appParams);
