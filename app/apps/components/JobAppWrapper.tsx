@@ -1,8 +1,8 @@
 'use client'
 import useAppNavigation from "../../../lib/hooks/use-app-section";
-import ProgressBar from "../../components/apps/ui/ProgressBar";
-import JobMenu from "../../components/apps/JobMenu";
+import ProgressBar from "./ProgressBar";
 import { JobStateType } from "../../board/job-helper";
+import JobMenu from "./JobMenu";
 
 export const JobAppLayoutWrapper = ({
     appState,

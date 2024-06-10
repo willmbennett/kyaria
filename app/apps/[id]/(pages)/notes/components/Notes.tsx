@@ -5,7 +5,7 @@ import ReactQuill from 'react-quill';
 import { updateJobAppAction } from '../../../../_action';
 import debounce from 'lodash/debounce';
 import 'react-quill/dist/quill.snow.css';
-import "./styles.css";
+import './style.css'
 
 interface NotesProps {
   jobAppId: string;
@@ -33,16 +33,16 @@ export default function Notes({ jobAppId, content }: NotesProps): JSX.Element {
   }, []);
 
   return (
-    <div className='w-full max-w-3xl flex gap-2'>
+    <div className='w-full h-full min-h-96 max-w-3xl flex gap-2 flex flex-col'>
+      <div className="flex justify-end text-sm">
+        {isSaved ? <span className='text-green-800'>Saved</span> : <span>Saving...</span>}
+      </div>
       <ReactQuill
-        className='w-full'
+        className='flex flex-col w-full h-full'
         value={text}
         onChange={handleChange}
         placeholder="Enter your note..."
       />
-      <div className="flex justify-end text-sm">
-        {isSaved && <span style={{ color: 'green' }}>Saved</span>}
-      </div>
     </div>
   );
 }
