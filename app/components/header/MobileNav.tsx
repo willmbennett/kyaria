@@ -68,7 +68,6 @@ export const MobileNav = ({
                                         {link.label}
                                     </Popover.Button>
                                 ))}
-                                {mobileDropDownMenu(userId ? 'More' : 'For Job Seekers', userId ? loggedInMenuLinks : allProductLinks)}
                             </div>
                             <div className="mt-6">
                                 <Button
