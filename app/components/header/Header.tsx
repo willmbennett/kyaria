@@ -11,6 +11,7 @@ import { desktopMenu } from "./DesktopMenu";
 import { MobileNav } from "./MobileNav";
 import { linkData } from "../../helper";
 import { desktopDropDownMenu } from "./DesktopDropdownMenu";
+import AuthButton from "../AuthButton";
 //import logo from '/public/images/logo-dark.png'
 //import logoIcon from '/public/images/logo-icon.png'
 
@@ -65,14 +66,13 @@ export function Header() {
           <div>
             <div className="hidden items-center space-x-4 md:flex">
               <div className="hidden lg:block">
-                <Button
+                <AuthButton
                   size="md"
                   variant="solid"
                   className="w-full"
-                  onClick={() => signIn()}
                 >
                   Sign In
-                </Button>
+                </AuthButton>
               </div>
             </div>
           </div>

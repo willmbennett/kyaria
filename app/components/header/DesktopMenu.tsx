@@ -38,7 +38,7 @@ export const desktopMenu = (pageList: pageListType[]) => {
                             size="md"
                             variant="solid"
                             className="w-full"
-                            onClick={() => signOut()}
+                            onClick={() => signOut({ callbackUrl: '/' })}
                         >
                             Sign Out
                         </Button>

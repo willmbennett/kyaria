@@ -75,7 +75,7 @@ export const MobileNav = ({
                                     size="md"
                                     variant="ghost"
                                     className="w-full"
-                                    onClick={!userId ? () => signIn() : () => signOut()}
+                                    onClick={!userId ? () => signIn("google", { callbackUrl: "/board" }) : () => signOut({ callbackUrl: '/' })}
                                 >
                                     {!userId ? 'Sign In' : 'Sign Out'}
                                 </Button>
