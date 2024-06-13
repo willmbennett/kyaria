@@ -92,20 +92,13 @@ export const OrganizationsHeader = () => {
           <div className="w-full flex-1 bg-vanilla" />
           <div className="flex-1 bg-vanilla" />
         </div>
-        <Container className='flex w-full justify-center min-h-screen'>
-          <div
-            className="relative border border-gray-secondary-400/60 bg-white p-8 lg:px-12 lg:py-10 w-full max-w-3xl"
-          >
-            <div className="embedsocial-forms-iframe" data-ref="32bb37e7cb580f2d3785928ab27fc46373e838e8" data-widget="true" data-height="auto"></div>
-            <Script
-              dangerouslySetInnerHTML={{
-                __html: `(function(d, s, id){var js; if (d.getElementById(id)) {return;} js = d.createElement(s); js.id = id; js.src = "https://embedsocial.com/cdn/ef.js"; d.getElementsByTagName("head")[0].appendChild(js);}(document, "script", "EmbedSocialFormsScript"));`
-              }}
-            >
-            </Script>
-          </div>
+        <Container className='flex w-full justify-center'>
+          <div className="calendly-inline-widget w-full h-[700px] min-h-screen" data-url="https://calendly.com/d/cp5t-w34-rcm/kyaria-ai-product-demo?primary_color=064155"></div>
+          <Script
+            src="https://assets.calendly.com/assets/external/widget.js"
+          ></Script>
         </Container>
-      </div>
+      </div >
 
       <div className="h-16 bg-vanilla sm:h-24"></div>
     </section >
