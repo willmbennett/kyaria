@@ -1,10 +1,10 @@
 'use client'
 import { useState } from 'react';
 import { DropdownInput } from './QuestionSelection';
-import { Button } from '../Button';
-import { updateQuestionAction } from '../../behaviorals/_action';
+import { Button } from '../../../components/Button';
+import { updateQuestionAction } from '../../_action';
 import { usePathname } from 'next/navigation';
-import { questionOptions } from '../../behaviorals/helper';
+import { questionOptions } from '../../helper';
 
 export const Question = ({
     questionId,

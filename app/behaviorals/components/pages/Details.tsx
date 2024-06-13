@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { updateQuestionAction } from '../../behaviorals/_action';
-import { Button } from '../Button';
+import { updateQuestionAction } from '../../_action';
+import { Button } from '../../../components/Button';
 
 type QuestionFormFields = {
     details: string;
