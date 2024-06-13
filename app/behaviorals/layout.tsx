@@ -93,8 +93,10 @@ export default async function QuestionLayout({
                     />
                 </>
             }
-            <div className='flex justify-center w-full h-full p-1 md:p-2 lg:p-3 xl:p-4'>
-                {children}
+            <div className='relative w-full h-full'>
+                <div className='flex justify-center w-full h-full p-1 md:p-2 lg:p-3 xl:p-4'>
+                    {children}
+                </div>
             </div>
         </>
     )

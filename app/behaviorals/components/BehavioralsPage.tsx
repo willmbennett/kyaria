@@ -1,13 +1,13 @@
 'use client'
 import { useState, useEffect } from 'react';
 import { useResumeDropDown } from '../../../lib/hooks/use-resume-dropdown';
-import { ResumeDropAndSelect } from '../ResumeDropAndSelect';
-import { Answer } from './Answer';
-import { Question } from './Question';
-import { Situation } from './Situation';
+import { ResumeDropAndSelect } from '../../components/ResumeDropAndSelect';
+import { Question } from './pages/Question';
+import { Situation } from './pages/Situation';
 import BehavioralsMenu from './BehavioralsMenu';
-import { Sections } from '../../behaviorals/helper';
-import { Details } from './Details';
+import { Sections } from '../helper';
+import { Details } from './pages/Details';
+import { Answer } from './pages/Answer';
 
 const resumeMessage = "We'll use this resume to help you choose which accomplishment best fits this question."
 
@@ -78,14 +78,16 @@ export const BehavioralsPage = ({
 
     return (
         <>
-            <div className='w-1/5 h-full flex justify-center items-center'>
-                <BehavioralsMenu
-                    sections={sections}
-                    currentSection={currentSection}
-                    setCurrentSection={handleSectionChange}
-                />
+            <div className='absolute top-0 left-0 w-full'>
+                <div className='flex w-full justify-center items-center border-b z-0'>
+                    <BehavioralsMenu
+                        sections={sections}
+                        currentSection={currentSection}
+                        setCurrentSection={handleSectionChange}
+                    />
+                </div>
             </div>
-            <div className='flex w-4/5 h-full justify-center overflow-y-scroll'>
+            <div className='flex w-full h-full justify-center overflow-y-scroll pt-12'>
                 <div className={`w-full max-w-3xl min-h-full justify-center ${[Sections.Question, Sections.Resume, Sections.Situation, Sections.Details].includes(currentSection) && 'flex items-center'}`}>
                     {<SectionComponent
                         questionId={questionId}

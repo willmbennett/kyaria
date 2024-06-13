@@ -2,7 +2,7 @@ import { checkSubscription } from "../../../lib/hooks/check-subscription";
 import { getQuestion } from "../../../lib/question-db";
 import { getDefaultResumeId } from "../../../lib/resume-db";
 import { QuestionClass } from "../../../models/Question";
-import { BehavioralsPage } from "../../components/behaviorals/BehavioralsPage";
+import { BehavioralsPage } from "../components/BehavioralsPage";
 
 export default async function ChatbotPage({ params }: { params: { id: string } }) {
     const { userId } = await checkSubscription()

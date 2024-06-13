@@ -28,8 +28,8 @@ export function ChatMessage({ message, jobKeyWords, ...props }: ChatMessageProps
   }
 
   let highlightedContent = message.content
-  if(jobKeyWords){
-    if(jobKeyWords.length != 1 && jobKeyWords[0] != '') {
+  if (jobKeyWords) {
+    if (jobKeyWords.length != 1 && jobKeyWords[0] != '') {
       highlightedContent = highlightKeywords(message.content, jobKeyWords)
     }
   }
@@ -39,7 +39,7 @@ export function ChatMessage({ message, jobKeyWords, ...props }: ChatMessageProps
       className={cn('w-full')}
       {...props}
     >
-      <div className={`w-full ${message.role == 'assistant'? "text-left": "text-right"}`}>
+      <div className={`flex w-full text-left justify-center`}>
         <MemoizedReactMarkdown
           className="prose break-words dark:prose-invert prose-p:leading-relaxed prose-pre:p-0"
           remarkPlugins={[remarkGfm, remarkMath]}

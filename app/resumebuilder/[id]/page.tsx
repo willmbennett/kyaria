@@ -25,6 +25,8 @@ interface ResumeScanPageProps {
 export default async function ResumeScanPage({ params }: ResumeScanPageProps) {
     const { userId } = await checkSubscription(true)
     const { resume } = await loadResume(params.id) as resumeType
+
+    if (!resume) redirect('/resumebuilder')
     let job: JobClass | undefined
     if (resume.appId) {
         const { app } = await getJobApp(resume.appId)

@@ -1,7 +1,7 @@
 'use client'
 import { Message } from 'ai';
-import { updateQuestionAction } from '../../behaviorals/_action';
-import ChatWithGPT from '../chat/ChatWithGPT';
+import ChatWithGPT from '../../../components/chat/ChatWithGPT';
+import { updateQuestionAction } from '../../_action';
 
 interface QuestionProps {
     questionId: string;
@@ -80,7 +80,8 @@ export const Answer = ({
     ]
 
     return (
-        <div className="w-full flex flex-col gap-3">
+        <div className="w-full flex flex-col gap-3 text-center justify-center">
+            <h2 className="text-2xl font-semibold leading-tight text-slate-900">Generate Your Answer</h2>
             <ChatWithGPT
                 documentID={questionId}
                 message={message}

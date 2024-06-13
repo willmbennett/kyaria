@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { getUserQuestions } from "../../lib/question-db";
 import { questionOptions } from "./helper";
 import { QuestionClass } from "../../models/Question";
-import { BehavioralsHomePage } from "../components/behaviorals/BehavioralsHomePage";
+import { BehavioralsHomePage } from "./components/BehavioralsHomePage";
 
 export default async function ChatBotHomePage() {
     const { userId } = await checkSubscription();

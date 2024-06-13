@@ -7,7 +7,7 @@ import clsx from 'clsx'
 import { DiscordButton } from "../ui/DiscordButton";
 import { Button } from '../Button'
 import { MobileNav } from "./MobileNav";
-import { AcademicCapIcon, BriefcaseIcon, UserGroupIcon, ClipboardDocumentListIcon, ChartBarIcon, HomeIcon, ComputerDesktopIcon, UserIcon } from "@heroicons/react/24/outline";
+import { AcademicCapIcon, BriefcaseIcon, UserGroupIcon, ClipboardDocumentListIcon, ChartBarIcon, HomeIcon, UserIcon, VideoCameraIcon } from "@heroicons/react/24/outline";
 import { Menu } from "@headlessui/react";
 import { pageListType } from "../../helper";
 import { MenuIcon } from "./MenuIcon";
@@ -34,10 +34,10 @@ const linkData = {
       pricingTier: 'PRO',
       icon: AcademicCapIcon,
       subLink: {
-        label: 'Mock Interviews',
+        label: 'Recorded Interviews',
         href: '/mockinterviews',
         pricingTier: 'PRO',
-        icon: ComputerDesktopIcon
+        icon: VideoCameraIcon
       }
     }
   ],

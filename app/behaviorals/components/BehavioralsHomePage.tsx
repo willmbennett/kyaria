@@ -1,9 +1,9 @@
 'use client'
 import { useState } from 'react';
-import { Button } from '../Button';
 import { createQuestionAction } from '../../behaviorals/_action';
 import { useRouter } from 'next/navigation';
-import { IconSpinner } from '../ui/icons'; // Ensure you have a spinner icon component
+import { Button } from '../../components/Button';
+import { IconSpinner } from '../../components/ui/icons';
 
 interface Question {
     id: string;

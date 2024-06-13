@@ -3,7 +3,7 @@
 import { Menu } from '@headlessui/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { Button } from '../Button';
+import { Button } from '../../../components/Button';
 
 interface DropdownInputProps {
     options: string[];

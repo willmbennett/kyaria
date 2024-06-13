@@ -1,10 +1,10 @@
 'use client'
 import { useEffect, useState } from 'react';
-import { Button } from '../Button';
-import { suggestOptions, updateQuestionAction } from '../../behaviorals/_action';
+import { Button } from '../../../components/Button';
+import { suggestOptions, updateQuestionAction } from '../../_action';
 import { usePathname } from 'next/navigation';
-import { ResumeClass } from '../../../models/Resume';
-import { IconSpinner } from '../ui/icons';
+import { ResumeClass } from '../../../../models/Resume';
+import { IconSpinner } from '../../../components/ui/icons';
 
 interface Option {
     accomplishment: string;
