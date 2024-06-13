@@ -1,7 +1,7 @@
 import { checkSubscription } from "../../../lib/hooks/check-subscription";
 import { getJob } from "../../../lib/job-db";
 import { getProfile } from "../../../lib/profile-db";
-import JobDescription from "../../components/apps/pages/JobDescription";
+import JobDescription from "../../apps/[id]/(pages)/jobdescription/components/JobDescription";
 
 export default async function JobPage({ params }: { params: { id: string } }) {
     const { job } = await getJob(params.id)

@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { checkSubscription } from "../../../lib/hooks/check-subscription";
 import { Container } from "../../components/landingpage/Container";
 import { Button } from "../../components/Button";
-import CreateJobApp from "../../components/apps/new/CreateJobApp";
+import CreateJobApp from "./components/CreateJobApp";
 import { createProfile, getProfile } from "../../../lib/profile-db";
 import { ResumeClass } from "../../../models/Resume";
 import { getResumes } from "../../../lib/resume-db";

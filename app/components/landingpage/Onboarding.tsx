@@ -4,7 +4,7 @@ import { Container } from './Container'
 import AuthButton from '../AuthButton'
 import { ResumeUploadForm } from '../resumebuilder/new/ResumeUploadForm'
 import { CheckCircleIcon } from '@heroicons/react/20/solid'
-import JobAppUploader from '../apps/new/JobAppUploader'
+import JobAppUploader from '../../apps/new/components/JobAppUploader'
 
 export default function HomeHero() {
   const resume = localStorage.getItem('onboardingResume')

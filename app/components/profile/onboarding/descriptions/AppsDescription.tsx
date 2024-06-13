@@ -1,4 +1,4 @@
-import CreateJobApp from "../../../apps/new/CreateJobApp";
+import CreateJobApp from "../../../../apps/new/components/CreateJobApp";
 
 interface AppsDescriptionProps {
   userId: string;

@@ -1,9 +1,11 @@
 "use server";
 
+import { cache } from "react";
 import {
     createApp,
     createJobApplication,
     deleteJobApp,
+    getJobApp,
     updateJobApp
 } from "../../lib/app-db";
 import { revalidatePath } from "next/cache";
@@ -43,3 +45,7 @@ export async function deleteJobAppAction({
     await deleteJobApp(id);
     revalidatePath(path);
 }
+
+export const loadJob = cache((id: string) => {
+    return getJobApp(id)
+})
