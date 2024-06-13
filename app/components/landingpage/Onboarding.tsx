@@ -39,7 +39,6 @@ export default function HomeHero() {
               </div>
               : <JobAppUploader
                 userId={'n/a'}
-                profileId={'n/a'}
                 userResume={JSON.parse(resume)}
               />
             }
