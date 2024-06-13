@@ -1,7 +1,8 @@
 import { getJobApp } from "../../../../../lib/app-db";
 import { cache } from "react";
-import { JobAppPageProps, extractAppObjects, getJobAppInterface, stripObojects } from "../../../app-helper";
+import { JobAppPageProps, getJobAppInterface, stripObojects } from "../../../app-helper";
 import Emails from "./components/Emails";
+import { extractAppObjects } from "../../../_action";
 
 const loadJob = cache((id: string) => {
   return getJobApp(id)
@@ -10,7 +11,7 @@ const loadJob = cache((id: string) => {
 export default async function JobAppPage({ params }: JobAppPageProps) {
   const { app } = await loadJob(params.id) as getJobAppInterface
 
-  const { resume, job } = extractAppObjects(app)
+  const { resume, job } = await extractAppObjects(app)
   const jobAppId = app._id.toString()
 
   const { userResumeStripped, jobStripped } = stripObojects(resume, job)

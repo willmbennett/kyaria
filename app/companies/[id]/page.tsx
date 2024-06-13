@@ -39,20 +39,18 @@ export default async function Page({ params }: { params: { id: string } }) {
     const orgPromise = getData(params.id)
 
     return (
-        <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
-            <div className="flex flex-1 w-full flex-col items-center text-center lg:px-4">
-                {/* @ts-expect-error Server Component */}
-                <Await promise={orgPromise}>
-                    {({ companyData }: { companyData: any }) => (<>
-                        {companyData ? (
-                            <CompanyProfile companyData={companyData} />
-                        ) : (
-                            // Render a fallback or loading message when companyData is undefined
-                            <div>We're sorry, The company could not be found</div>
-                        )}
-                    </>)}
-                </Await>
-            </div>
+        <div className="max-w-5xl">
+            {/* @ts-expect-error Server Component */}
+            <Await promise={orgPromise}>
+                {({ companyData }: { companyData: any }) => (<>
+                    {companyData ? (
+                        <CompanyProfile companyData={companyData} />
+                    ) : (
+                        // Render a fallback or loading message when companyData is undefined
+                        <div>We're sorry, The company could not be found</div>
+                    )}
+                </>)}
+            </Await>
         </div>
     )
 }

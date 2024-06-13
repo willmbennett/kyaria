@@ -9,7 +9,7 @@ import { SideBarItem } from '../helper';
 import { getMockInterviews } from '../../lib/mockinterview-db';
 import { MockInterviewClass } from '../../models/MockInterview';
 import { handleChatCreation } from '../eve/_action';
-import { deleteMockInterviewAction, handleMockInterviewDeletion } from './[id]/_action';
+import { handleMockInterviewDeletion } from './[id]/_action';
 
 const title = "Eve: Kyaria.ai's Revolutionary AI Career Coach | Affordable & 24/7 Access";
 const description = "Discover Eve, the world's first virtual career coach. Get personalized, smart career advice 24/7 at just $10/month. Save on career coaching with cutting-edge AI technology. Start your journey to career success with Eve today!";

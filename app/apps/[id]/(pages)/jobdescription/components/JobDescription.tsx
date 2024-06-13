@@ -21,7 +21,6 @@ export default function JobDescription({
     profile,
     topWords,
     companyDiffbotId,
-    activeSubscription,
     currentUserId
 }: {
     jobData: any,
@@ -29,7 +28,6 @@ export default function JobDescription({
     profile?: any,
     topWords: string[],
     companyDiffbotId?: string | null
-    activeSubscription?: boolean,
     currentUserId: string
 }) {
     const router = useRouter()
@@ -117,22 +115,12 @@ export default function JobDescription({
                     {addBoard && (
                         <div className="text-center">
                             {profile ? (
-                                <>
-                                    {activeSubscription ? (
-                                        <form onSubmit={handleSubmit(onSubmit)}>
-                                            <input {...register('board')} placeholder="board" className="hidden" />
-                                            <Button variant="solid" type="submit" size="md">
-                                                Add to Board
-                                            </Button>
-                                        </form>
-                                    ) : (
-                                        <a href="/pricing" className="inline-block">
-                                            <Button size="md">
-                                                Subscribe to add to your board
-                                            </Button>
-                                        </a>
-                                    )}
-                                </>
+                                <form onSubmit={handleSubmit(onSubmit)}>
+                                    <input {...register('board')} placeholder="board" className="hidden" />
+                                    <Button variant="solid" type="submit" size="md">
+                                        Add to Board
+                                    </Button>
+                                </form>
                             ) : (
                                 <Button size="md" variant="solid" onClick={!profile ? () => signIn() : () => signOut()}>
                                     {!profile ? 'Sign In to Add to Board' : 'Sign Out'}
@@ -153,8 +141,8 @@ export default function JobDescription({
                         userCanEdit={edit}
                     />
                     {companyDiffbotId && (
-                        <Button href={activeSubscription ? `/companies/${companyDiffbotId}` : "/pricing"} size="sm" variant="secondary">
-                            {activeSubscription ? `See more about ${company}` : "Subscribe to see company information"}
+                        <Button href={`/companies/${companyDiffbotId}`} size="sm" variant="secondary">
+                            {`See more about ${company}`}
                         </Button>
                     )}
                 </div>

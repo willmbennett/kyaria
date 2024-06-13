@@ -50,8 +50,7 @@ export default async function JobAppPage({ params }: JobAppPageProps) {
     <JobDescription
       jobData={job}
       topWords={job.skills?.map((skill: any) => skill.skill) || []}
-      companyDiffbotId={job.companyDiffbotUri}
-      activeSubscription={true}
+      companyDiffbotId={job.companyDiffbotUri?.replace("http://diffbot.com/entity/", "")}
       currentUserId={userId} />
   );
 }

@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { MockInterviews } from "../../components/mockinterviews/MockInterviews";
 
 export default async function MockInterviewPage({ params }: { params: { id: string } }) {
-    const { userId } = await checkSubscription()
+    const { userId, admin } = await checkSubscription()
     //console.log({ userId, activeSubscription, admin })
 
     if (!userId) {
@@ -24,7 +24,9 @@ export default async function MockInterviewPage({ params }: { params: { id: stri
     if (!MockInterview) {
         return <p>Mock Interview not found</p>
     }
-    //console.log('At Eve, chat ', chat)
+
+    // Make recorded interviews private
+    if (MockInterview.userId != userId && !admin) redirect('/eve')
 
     const messages: Message[] = MockInterview.messages || []
 
