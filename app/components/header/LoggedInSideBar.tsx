@@ -131,7 +131,7 @@ export const DesktopMenu = (pageList: pageListType[], pathname: string, userName
               size="md"
               variant="solid"
               className="w-full"
-              onClick={() => signOut()}
+              onClick={() => signOut({ callbackUrl: '/' })}
             >
               Sign Out
             </Button>

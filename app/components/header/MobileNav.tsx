@@ -68,14 +68,14 @@ export const MobileNav = ({
                                         {link.label}
                                     </Popover.Button>
                                 ))}
-                                {mobileDropDownMenu(userId ? 'More' : 'For Job Seekers', userId ? loggedInMenuLinks : allProductLinks)}
+                                {userId && mobileDropDownMenu(userId ? 'More' : 'For Job Seekers', userId ? loggedInMenuLinks : allProductLinks)}
                             </div>
                             <div className="mt-6">
                                 <Button
                                     size="md"
                                     variant="ghost"
                                     className="w-full"
-                                    onClick={!userId ? () => signIn() : () => signOut()}
+                                    onClick={!userId ? () => signIn("google", { callbackUrl: "/board" }) : () => signOut({ callbackUrl: '/' })}
                                 >
                                     {!userId ? 'Sign In' : 'Sign Out'}
                                 </Button>

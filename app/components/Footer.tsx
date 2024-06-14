@@ -159,6 +159,7 @@ export function Footer({ userId, userName, email }: FooterProps) {
               </div>
             </div>
 
+            {/*
             <div className="col-span-6 md:col-span-3">
               <p className="text-md font-semibold text-white">Solutions</p>
               <div className="mt-4 flex flex-col space-y-3">
@@ -173,6 +174,7 @@ export function Footer({ userId, userName, email }: FooterProps) {
                 ))}
               </div>
             </div>
+              */}
             {/* 
             <div className="col-span-6 md:col-span-3">
               <p className="text-md font-semibold text-white">Integrations</p>

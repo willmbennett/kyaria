@@ -14,6 +14,7 @@ const Onboarding = dynamic(() => import('./components/landingpage/Onboarding'))
 // Data fetching
 import { checkSubscription } from '../lib/hooks/check-subscription'
 import { redirect } from 'next/navigation'
+import { MockInterviewDemo } from './components/landingpage/MarketingDemo';
 
 export default async function HomePage() {
   const { userId } = await checkSubscription()
@@ -22,6 +23,7 @@ export default async function HomePage() {
     return (
       <>
         <HomeHero />
+        <MockInterviewDemo />
         <Onboarding />
         {/*<LogosRow />*/}
         {/*totalResumes && <FeatureBlocks totalResumes={totalResumes} />*/}

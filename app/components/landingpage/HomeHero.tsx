@@ -2,7 +2,8 @@ import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import Image from 'next/image'
 
 //import Avatar from '/public/images/avatars/avatar-will.jpg'
-import homeHeroImg from '/public/images/stock/job-interview2.jpg'
+//import homeHeroImg from '/public/images/stock/job-interview2.jpg'
+import EveImg from "/public/images/eve-1.jpg";
 import { Container } from './Container'
 import AuthButton from '../AuthButton'
 
@@ -31,7 +32,7 @@ export function HomeHero() {
             <li className="flex items-center md:items-start xl:items-center">
               <CheckCircleIcon className="h-5 w-5 shrink-0 text-slate-800 md:h-6 md:w-6 xl:h-5 xl:w-5" />
               <p className="ml-3 text-slate-700 lg:ml-4 xl:ml-5 xl:text-lg">
-                Secure your dream job with tailored application packets, crafted just for you.
+                Organize your job search using our Kanban board.
               </p>
             </li>
           </ul>
@@ -91,10 +92,10 @@ export function HomeHero() {
           </div>
           <div className="absolute bottom-0 right-6 hidden w-1/3 bg-gray-secondary-100 md:block lg:right-12 xl:-right-0 xl:w-full xl:max-w-xl 2xl:-right-32 2xl:max-w-[640px]">
             <Image
-              src={homeHeroImg}
+              src={EveImg}
               className="h-auto w-full object-cover"
               priority
-              alt="Podcaster recording a podcast with Wavvy"
+              alt="AI Career coach Eve"
               sizes="(min-width: 1536px) 40rem, (min-width: 1280px) 36rem, (min-width: 768px) 33.33vw, 0"
             />
           </div>

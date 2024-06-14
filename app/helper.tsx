@@ -25,6 +25,7 @@ export const linkData = {
         { label: 'About', href: '/about' },
         { label: 'Pricing', href: '/pricing' },
         { label: 'Blog', href: '/blog' },
+        { label: 'For Organizations', href: '/organizations' },
     ],
     signedInLinks: [
         {
