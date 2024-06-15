@@ -4,15 +4,13 @@ import { UserVideo } from './UserVideo';
 
 interface VideoDisplayProps {
     videoRef: React.RefObject<HTMLVideoElement>;
-    fillerVideoRef: React.RefObject<HTMLVideoElement>;
     outgoingVideoRef: React.RefObject<HTMLVideoElement>;
     isStreaming: boolean;
-    playFiller: boolean;
     connected: boolean;
 }
 
 export const VideoDisplay = (props: VideoDisplayProps) => {
-    const { videoRef, fillerVideoRef, outgoingVideoRef, isStreaming, playFiller, connected, } = props;
+    const { videoRef, outgoingVideoRef, isStreaming, connected, } = props;
 
 
 
@@ -20,9 +18,7 @@ export const VideoDisplay = (props: VideoDisplayProps) => {
         <div className="relative w-full h-auto max-w-7xl">
             <ChatBotVideo
                 videoRef={videoRef}
-                fillerVideoRef={fillerVideoRef}
                 isStreaming={isStreaming}
-                playFiller={playFiller}
                 connected={connected}
             />
             <UserVideo outgoingVideoRef={outgoingVideoRef} />

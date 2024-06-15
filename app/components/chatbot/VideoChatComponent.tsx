@@ -3,14 +3,11 @@ import { Button } from '../Button';
 import useMediaDevices from '../../../lib/chatbot/use-media-devices';
 import { ControlMenu } from './ControlMenu';
 import { useDIDApi } from '../../../lib/chatbot/use-d-id';
-import { useFillerVideo } from '../../../lib/chatbot/use-filler-video';
 import { useRouter } from 'next/navigation';
 import { VideoDisplay } from './VideoDisplay';
 import { Dispatch, SetStateAction } from 'react';
 
 interface VideoChatComponentProps {
-    toggleTranscript: () => void;
-    showTranscript: boolean;
     numMessages: number;
     submitUserMessage: (input: string) => Promise<void>
     textToSubmit: string;
@@ -19,7 +16,7 @@ interface VideoChatComponentProps {
 }
 
 const VideoChatComponent = (props: VideoChatComponentProps) => {
-    const { textToSubmit, toggleTranscript, showTranscript, numMessages, submitUserMessage, setTextToSubmit, mockInterviewId } = props
+    const { textToSubmit, numMessages, submitUserMessage, setTextToSubmit, mockInterviewId } = props
     const router = useRouter()
 
     const {
@@ -52,16 +49,12 @@ const VideoChatComponent = (props: VideoChatComponentProps) => {
         peakLevel,
     } = useMediaDevices(submitUserMessage, mockInterviewId);
 
-    const { fillerVideoRef, playFiller } = useFillerVideo(numMessages)
-
     return (
         <div className="flex flex-col gap-4 items-center w-full">
             <VideoDisplay
                 videoRef={videoRef}
-                fillerVideoRef={fillerVideoRef}
                 outgoingVideoRef={outgoingVideoRef}
                 isStreaming={isStreaming}
-                playFiller={playFiller}
                 connected={connected}
             />
             {stream ?
@@ -74,8 +67,6 @@ const VideoChatComponent = (props: VideoChatComponentProps) => {
                     setSelectedAudioDeviceId={setSelectedAudioDeviceId}
                     connected={connected}
                     recording={recording}
-                    toggleTranscript={toggleTranscript}
-                    showTranscript={showTranscript}
                     startRecording={startRecording}
                     stopRecording={stopRecording}
                 />

@@ -5,7 +5,6 @@ import { getFirstResume } from "../../lib/resume-db";
 import { Message } from "ai";
 import { ActionItemType } from "../board/job-helper";
 import { openai } from "../openai";
-import { JobClass } from "../../models/Job";
 
 const logging = false
 
@@ -74,9 +73,9 @@ export const handleChatDeletion: ActionItemType = async (chatId: string, path: s
     }
 }
 
-export const handleChatCreation = async ({ userId, jobStripped }: {
+export const handleChatCreation = async ({ userId, interviewdata }: {
     userId: string,
-    jobStripped?: Partial<JobClass>;
+    interviewdata?: any;
 }) => {
     "use server";
 
@@ -85,10 +84,10 @@ export const handleChatCreation = async ({ userId, jobStripped }: {
 
     try {
         const messages: any[] = [] // OpenAI is really funky with their types and definitions not aligning with the api
-        if (jobStripped) {
+        if (interviewdata) {
             const newMessage = {
                 role: 'user',
-                content: `I'm looking to do a mock interview for this position: ${JSON.stringify(jobStripped)}`,
+                content: `Here is my resume ${JSON.stringify(interviewdata.userResume)}. Here is the job position: ${JSON.stringify(interviewdata.jobPosition)}}`,
             }
             messages.push(newMessage)
         }

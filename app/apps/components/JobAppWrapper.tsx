@@ -31,7 +31,7 @@ export const JobAppLayoutWrapper = ({
                     />
                 </div>
                 <div className="flex-grow w-full h-full overflow-y-scroll">
-                    <div className="py-10 w-full flex justify-center">
+                    <div className="py-10 w-full flex h-full justify-center">
                         {children}
                     </div>
                 </div>

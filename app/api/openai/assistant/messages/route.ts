@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { openai } from "../../../../openai";
 
 export const runtime = "nodejs";
-const assistantId = 'asst_DD6NIMYBTWc3jZaFVN9VZz8Z'
+const assistantId = 'asst_MVnfGzdl3EldYW18EjKhxiVp'
 
 // Send a new message to a thread
 export async function POST(req: NextRequest) {

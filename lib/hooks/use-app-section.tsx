@@ -37,7 +37,6 @@ const useAppNavigation = (
     useEffect(() => {
         const allowedPages = filteredPages.map(p => p.section);
         if (currentSection && !allowedPages.includes(currentSection)) {
-            console.log('About to push to new route: ', newRoute)
             router.push(newRoute, { scroll: false });
         }
     }, [currentSection, filteredPages, newRoute, router]);

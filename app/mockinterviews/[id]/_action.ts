@@ -11,19 +11,15 @@ import { ChatCompletionMessageParam } from "openai/resources";
 const logging = false
 
 interface CreateMockInterviewActionProps {
-    userId: string;
-    chatId: string;
-    name: string;
+    data: Partial<MockInterviewClass>
     path: string;
 }
 
 export async function createMockInterviewAction({
-    userId,
-    chatId,
-    name,
+    data,
     path,
 }: CreateMockInterviewActionProps) {
-    const { newMockInterviewId } = await createMockInterview(userId, chatId, name);
+    const { newMockInterviewId } = await createMockInterview(data);
     revalidatePath(path);
     return newMockInterviewId
 }

@@ -1,30 +1,51 @@
 import { Message, nanoid } from "ai";
 import { AssistantStream } from "openai/lib/AssistantStream";
-import { ChatCompletionSnapshot } from "openai/lib/ChatCompletionStream";
 import { AssistantStreamEvent } from "openai/resources/beta/assistants";
-import { Annotation, Text, TextDelta } from "openai/resources/beta/threads/messages";
+import { Text } from "openai/resources/beta/threads/messages";
 import { RequiredActionFunctionToolCall } from "openai/resources/beta/threads/runs/runs";
 import { ToolCall } from "openai/resources/beta/threads/runs/steps";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { updateChatAction } from "../../app/eve/_action";
 import { getInterviewQuestions, parseInterviewArgs } from "../../app/eve/function-helper";
-import { addMockInterviewMessageAction, createMockInterviewAction, updateMockInterviewAction } from "../../app/mockinterviews/[id]/_action";
+import { addMockInterviewMessageAction, createMockInterviewAction } from "../../app/mockinterviews/[id]/_action";
 import { usePathname } from "next/navigation";
+import { format } from "date-fns";
 
-interface UseDIDApiProps {
+interface UseAssistantProps {
     userId: string;
     chatId: string;
     threadId: string;
-    messages: Message[]
+    messages: Message[];
+    initialMessage: string;
+    handleGenerateQuestions?: () => Promise<{
+        questions: string[];
+    } | undefined>;
+    jobTitle?: string
 }
 
-export const useAssistant = ({ userId, chatId, threadId, messages }: UseDIDApiProps) => {
+export const useAssistant = ({ userId, chatId, threadId, messages, initialMessage, handleGenerateQuestions, jobTitle }: UseAssistantProps) => {
     const path = usePathname()
     const [chatMessages, setChatMessages] = useState(messages)
     const [textToSubmit, setTextToSubmit] = useState('')
     const [interviewing, setInterviewing] = useState(false)
     const [interviewName, setInterviewName] = useState('')
+    const [creatingInterviewQuestions, setCreatingInterviewQuestions] = useState(false)
     const [mockInterviewId, setMockInterviewId] = useState('')
+    const [sentInitialMessage, setSentInitialMessage] = useState(messages.length > 0);
+    const initialRender = useRef(true);
+
+    // Send the initial message
+    useEffect(() => {
+        if (initialRender.current) {
+            initialRender.current = false;
+            return;
+        }
+
+        if (!sentInitialMessage && initialMessage) {
+            setSentInitialMessage(true);
+            sendMessage(initialMessage);
+        }
+    }, [initialMessage, sentInitialMessage]);
 
     // Whenever messages update update the state
     useEffect(() => {
@@ -33,7 +54,6 @@ export const useAssistant = ({ userId, chatId, threadId, messages }: UseDIDApiPr
 
     useEffect(() => {
         if (mockInterviewId && textToSubmit) {
-            console.log('Made it to appending assistant message with text: ', textToSubmit)
             const newMessage: Message = { id: nanoid(), role: 'assistant', content: textToSubmit, createdAt: new Date() }
             addMockInterviewMessageAction(mockInterviewId, newMessage, path);
         }
@@ -103,7 +123,6 @@ export const useAssistant = ({ userId, chatId, threadId, messages }: UseDIDApiPr
     };
 
     const functionCallHandler = async (call: RequiredActionFunctionToolCall) => {
-        //console.log('Made it to [functionCallHandler] with function:', call?.function?.name);
         const functionName = call?.function?.name
         const args = JSON.parse(call.function.arguments);
 
@@ -112,18 +131,42 @@ export const useAssistant = ({ userId, chatId, threadId, messages }: UseDIDApiPr
 
         switch (functionName) {
             case 'startMockInterview':
-                const questions = getInterviewQuestions(args.discipline, args.interviewType);
-                setInterviewName(parseInterviewArgs(args.discipline, args.interviewType))
-                const interviewName = parseInterviewArgs(args.discipline, args.interviewType)
-                const newMockInterviewId = await createMockInterviewAction({ chatId, userId, name: interviewName, path })
-                console.log('Created Mock Interview with ID: ', newMockInterviewId)
-                if (newMockInterviewId) {
-                    setMockInterviewId(newMockInterviewId)
-                    setInterviewing(true)
-                    updateMockInterviewAction(newMockInterviewId, { questions: questions.map(q => q.question) }, path)
 
+                let questions = getInterviewQuestions(args.discipline, args.interviewType).map(q => q.question);
+                let interviewName = '';
+
+                if (handleGenerateQuestions) {
+                    setCreatingInterviewQuestions(true);
+                    const res = await handleGenerateQuestions();
+                    setCreatingInterviewQuestions(false);
+
+                    if (res?.questions && res.questions.length >= 5) {
+                        questions = [
+                            questions[0],
+                            questions[1],
+                            ...res.questions,
+                            questions[questions.length - 1]
+                        ];
+                    }
                 }
-                return JSON.stringify(questions)
+
+                if (jobTitle) {
+                    interviewName = jobTitle;
+                    const date = new Date();
+                    setInterviewName(`${jobTitle} - ${format(date, 'LLLL d, yyyy')}`);
+                } else {
+                    interviewName = parseInterviewArgs(args.discipline, args.interviewType);
+                    setInterviewName(interviewName);
+                }
+                const newMockInterviewData = { chatId, userId, name: interviewName, questions };
+                const newMockInterviewId = await createMockInterviewAction({ data: newMockInterviewData, path });
+
+                if (newMockInterviewId) {
+                    setMockInterviewId(newMockInterviewId);
+                    setInterviewing(true);
+                }
+
+                return JSON.stringify(questions);
             case 'endMockInterview':
                 setInterviewing(false)
                 setInterviewName('')
@@ -211,5 +254,5 @@ export const useAssistant = ({ userId, chatId, threadId, messages }: UseDIDApiPr
         updateChatAction(chatId, newMessage, path);
     };
 
-    return { interviewing, interviewName, submitUserMessage, chatMessages, textToSubmit, setTextToSubmit, mockInterviewId }
+    return { interviewing, interviewName, submitUserMessage, chatMessages, textToSubmit, setTextToSubmit, mockInterviewId, creatingInterviewQuestions }
 }
