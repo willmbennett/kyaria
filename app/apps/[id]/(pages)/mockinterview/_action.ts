@@ -31,7 +31,7 @@ export async function createInterviewQuestions(job: Partial<JobClass>, userResum
     //console.log("optimizedData", optimizedData)
     if (optimizedData) {
         const data = JSON.parse(optimizedData);
-        const questions: string[] = data.questions
+        const questions: string[] = data.questions.map((q: { question: string }) => q.question)
         if (data) {
             return { questions }
         }
