@@ -165,7 +165,7 @@ export const MockInterviews = ({ id, name, questions, messages, recordings, inte
                 </div>
             </div>
             <div className="w-96">
-                <Chat messages={messages} showTranscript={true} messageId={currentMessage?.id} handleMessageClick={handleMessageClick} />
+                <Chat messages={messages} messageId={currentMessage?.id} handleMessageClick={handleMessageClick} />
             </div>
         </div>
     );
