@@ -60,7 +60,7 @@ export const MockInterviewCreation = ({ appOptions }: { appOptions: { id: string
                         selectedItem={selectedApp}
                         items={appOptions}
                         onclickAction={handleSelectApp}
-                    />
+                        altTitle={"Jobs"} />
                     <Button size="md" onClick={handleNextStep}>Next</Button>
                 </div>
             )}
@@ -73,6 +73,7 @@ export const MockInterviewCreation = ({ appOptions }: { appOptions: { id: string
                         selectedItem={interviewType}
                         items={interviewTypeOptions}
                         onclickAction={handleSelectInterviewType}
+                        altTitle={"Interview Type"}
                     />
                     <div className="flex gap-2 w-full justify-between">
                         <Button size="md" variant="ghost" onClick={handlePreviousStep}>Back</Button>
