@@ -1,7 +1,5 @@
-import { Metadata } from 'next';
 import { SidebarMobile } from '../components/sidebar/MobileSidebar';
 import { ItemHistory } from '../components/sidebar/ItemHistory';
-import { SidebarDesktop } from '../components/sidebar/SidebarDesktop';
 import { getResumes } from '../../lib/resume-db';
 import { checkSubscription } from '../../lib/hooks/check-subscription';
 import { ResumeClass } from '../../models/Resume';
@@ -9,28 +7,7 @@ import { format } from 'date-fns';
 import { DesktopOpenSideBar } from '../components/sidebar/DesktopOpenSideBar';
 import { ActionItemType } from '../board/job-helper';
 import { deleteResumeAction } from './_action';
-import { redirect } from 'next/navigation';
-
-const title = "Kyaria.ai - Advanced AI Resume Builder for ATS Optimization";
-const description = "Revolutionize your job hunt with Kyaria.ai's AI-powered Resume Builder. Craft ATS-optimized resumes easily and elevate your career prospects.";
-
-export const metadata: Metadata = {
-    metadataBase: new URL('https://www.kyaria.ai/resumebuilder'),
-    title,
-    description,
-    openGraph: {
-        title,
-        description,
-        locale: 'en_US',
-        type: 'website',
-        url: 'https://www.kyaria.ai/resumebuilder'
-    },
-    twitter: {
-        card: 'summary_large_image',
-        title,
-        description,
-    },
-};
+import { SidebarWrapper } from '../components/sidebar/SidebarWrapper';
 
 export default async function AppLayout({
     children,
@@ -74,24 +51,15 @@ export default async function AppLayout({
     }
 
     return (
-        <>
-            <SidebarMobile>
-                <ItemHistory
-                    sideBarTitle={'Session History'}
-                    items={items}
-                    createNew={handleResumeCreation}
-                    newTitle={'New Resume'}
-                    deleteItemAction={handleResumeDeletion}
-                />
-            </SidebarMobile>
-            <DesktopOpenSideBar />
-            <SidebarDesktop
-                sideBarTitle={'Session History'}
-                items={items}
-                createNew={handleResumeCreation}
-                newTitle={'New Resume'}
-                deleteItemAction={handleResumeDeletion}
-            />
+        <SidebarWrapper
+            userId={userId}
+            sideBarTitle={'Session History'}
+            items={items}
+            createNew={handleResumeCreation}
+            newTitle={'New Resume'}
+            deleteItemAction={handleResumeDeletion}
+        >
             {children}
-        </>);
+        </SidebarWrapper>
+    );
 }

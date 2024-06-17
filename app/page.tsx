@@ -37,7 +37,7 @@ export default async function HomePage() {
   }
 
   if (userId) {
-    redirect("/board");
+    redirect("/eve");
   }
 
   return (

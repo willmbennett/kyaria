@@ -7,7 +7,7 @@ import clsx from 'clsx'
 import { DiscordButton } from "../ui/DiscordButton";
 import { Button } from '../Button'
 import { MobileNav } from "./MobileNav";
-import { AcademicCapIcon, BriefcaseIcon, UserGroupIcon, ClipboardDocumentListIcon, ChartBarIcon, HomeIcon, UserIcon, VideoCameraIcon } from "@heroicons/react/24/outline";
+import { AcademicCapIcon, BriefcaseIcon, UserGroupIcon, ClipboardDocumentListIcon, ChartBarIcon, HomeIcon, UserIcon, VideoCameraIcon, ComputerDesktopIcon } from "@heroicons/react/24/outline";
 import { Menu } from "@headlessui/react";
 import { pageListType } from "../../helper";
 import { MenuIcon } from "./MenuIcon";
@@ -23,23 +23,32 @@ const linkData = {
   ],
   signedInLinks: [
     {
+      label: 'AI Career Coach',
+      href: '/eve',
+      pricingTier: 'PRO',
+      icon: AcademicCapIcon,
+      subLinks: [
+        {
+          label: 'Mock Interviews',
+          href: '/mockinterviews',
+          pricingTier: 'PRO',
+          icon: ComputerDesktopIcon,
+          showUrls: ['/eve', '/mockinterviews']
+        },
+        {
+          label: 'Recorded Interviews',
+          href: '/mockinterviews/recordings',
+          pricingTier: 'PRO',
+          icon: VideoCameraIcon,
+          showUrls: ['/eve', '/mockinterviews']
+        }]
+    },
+    {
       label: 'Job Application Tracker',
       href: '/board',
       pricingTier: 'free',
       icon: ClipboardDocumentListIcon
     },
-    {
-      label: 'AI Career Coach',
-      href: '/eve',
-      pricingTier: 'PRO',
-      icon: AcademicCapIcon,
-      subLink: {
-        label: 'Recorded Interviews',
-        href: '/mockinterviews',
-        pricingTier: 'PRO',
-        icon: VideoCameraIcon
-      }
-    }
   ],
   productLinks: [
     {
@@ -142,8 +151,6 @@ export const DesktopMenu = (pageList: pageListType[], pathname: string, userName
   )
 }
 
-
-
 export function LoggedInSideBar({ userId, userName }: { userId: string, userName: string }) {
   const pathname = usePathname()
 
@@ -162,25 +169,27 @@ export function LoggedInSideBar({ userId, userName }: { userId: string, userName
           {MenuItem(linkData.publicLinks.filter(l => l.href == '/')[0], pathname)}
           <Separator className="border-b" />
           <div className="flex flex-col h-full gap-4 justify-start" >
-            <div className="flexflex-col gap-2">
+            <div className="flex flex-col">
               {desktopMenuLinks.map((link) => {
-                const showSublink = pathname.startsWith(link.href) || (link.subLink?.href && pathname.startsWith(link.subLink.href))
                 return (
                   <div key={link.href}>
                     {MenuItem(link, pathname)}
-                    {link.subLink && showSublink && MenuItem(link.subLink, pathname, true)}
+                    {link.subLinks && link.subLinks.map(sub => {
+                      const showSublink = sub.showUrls && sub.showUrls.some(url => pathname.startsWith(url));
+                      if (showSublink) return MenuItem(sub, pathname, true);
+                      return null;
+                    })}
                   </div>
                 )
               })}
             </div>
             <Separator className="border-b" />
-            <div className="flexflex-col gap-2">
+            <div className="flex flex-col">
               {linkData.productLinks.map((link) => (
                 MenuItem(link, pathname)
               ))}
             </div>
           </div>
-          {/*<FeedbackAside />*/}
           <DiscordButton />
           <div className="flex px-2">
             {DesktopMenu(linkData.signedInMenuLinks, pathname, userName)}

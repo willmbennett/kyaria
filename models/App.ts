@@ -10,7 +10,7 @@ import { JobClass } from "./Job";
 import { ProfileClass } from "./Profile";
 import { ResumeClass } from "./Resume";
 import { BoardClass } from "./Board";
-import { ChatClass } from "./Chat";
+import { ChatClass } from "./Exports";
 
 class Emails {
     @prop()

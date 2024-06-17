@@ -1,61 +1,94 @@
-import { checkSubscription } from "../../../lib/hooks/check-subscription";
-import { Message } from "ai";
-import { getMockInterview } from "../../../lib/mockinterview-db";
-import { InterviewScore, Recording } from "../../../models/MockInterview";
-import { redirect } from "next/navigation";
-import { MockInterviews } from "../../components/mockinterviews/MockInterviews";
+import { Message } from "ai"
+import { cache } from "react"
+import { getJobApp } from "../../../lib/app-db"
+import { getChat } from "../../../lib/chat-db"
+import { checkSubscription } from "../../../lib/hooks/check-subscription"
+import { createInterviewQuestions } from "../../apps/[id]/(pages)/mockinterview/_action"
+import { extractAppObjects, updateJobAppAction } from "../../apps/_action"
+import { getJobAppInterface, stripObojects } from "../../apps/app-helper"
+import { VideoChatContainer } from "../../components/chatbot/VideoChatContainer"
+import { handleChatCreation } from "../../eve/_action"
 
-export default async function MockInterviewPage({ params }: { params: { id: string } }) {
-    const { userId, admin } = await checkSubscription()
-    //console.log({ userId, activeSubscription, admin })
 
-    if (!userId) {
-        redirect('/eve')
+const loadJob = cache((id: string) => {
+  return getJobApp(id)
+})
+
+export interface MockInterviewPageProps {
+  params: { id: string }
+  searchParams: { type: string }
+}
+
+export default async function JobAppPage({ params, searchParams }: MockInterviewPageProps) {
+  const { userId, activeSubscription, userName } = await checkSubscription(true)
+  const { app } = await loadJob(params.id) as getJobAppInterface
+  const { resume, job, jobAppId, chatId } = await extractAppObjects(app)
+  const { userResumeStripped, jobStripped } = stripObojects(resume, job)
+
+  let currentChatId: string;
+  let chat;
+
+  const createNewChat = async () => {
+    const interviewdata = { userResume: userResumeStripped, jobPosition: jobStripped }
+    const { chatId } = await handleChatCreation({ userId, interviewdata });
+    if (!chatId) {
+      throw new Error('There was a problem creating a new chat');
+    }
+    const stateUpdate = { chatId };
+    await updateJobAppAction(jobAppId, stateUpdate, '/apps/' + jobAppId);
+
+    const { chat: newChat } = await getChat(chatId);
+    if (!newChat) {
+      throw new Error('There was a problem fetching the newly created chat');
     }
 
-    const MockInterviewId = params.id
+    return { chatId, chat: newChat };
+  };
 
-    if (!MockInterviewId) {
-        return <p>Mock Interview not found</p>
+  if (chatId) {
+    const { chat: currentChat } = await getChat(chatId);
+    if (currentChat) {
+      chat = currentChat;
+      currentChatId = chatId;
+    } else {
+      const newChatData = await createNewChat();
+      chat = newChatData.chat;
+      currentChatId = newChatData.chatId;
     }
+  } else {
+    const newChatData = await createNewChat();
+    chat = newChatData.chat;
+    currentChatId = newChatData.chatId;
+  }
 
-    const { MockInterview } = await getMockInterview(MockInterviewId)
+  if (!chat) {
+    return <p>We're sorry we had an issue waking Eve up.</p>;
+  }
 
-    if (!MockInterview) {
-        return <p>Mock Interview not found</p>
-    }
+  const messages: Message[] = chat.messages
 
-    // Make recorded interviews private
-    if (MockInterview.userId != userId && !admin) redirect('/eve')
+  //console.log('At Eve, messages ', messages)
 
-    const messages: Message[] = MockInterview.messages || []
+  const initialMessage = `Hi! I'm ${userName}. Please welcome me, introduce yourself, and kick off this ${searchParams.type ? searchParams.type : 'behavioral'} mock interview for this job position: ${jobStripped.jobTitle} at ${jobStripped.company}}`
 
-    const recordings: Recording[] = MockInterview.recordings || []
+  const handleGenerateQuestions = async () => {
+    "use server"
+    return createInterviewQuestions(jobStripped, userResumeStripped)
+  }
 
-    const questions: string[] = MockInterview.questions || []
-
-    const interviewScores: InterviewScore[] = MockInterview.interviewScores || []
+  const jobTitle = `${jobStripped.jobTitle} - ${jobStripped.company}`
 
 
-    //console.log('At Eve, messages ', messages)
-
-    return (
-        <div className="w-full h-full sm:p-1 md:p-2 lg:p-3 xl:p-4 overflow-hidden">
-            <MockInterviews
-                id={MockInterview._id.toString()}
-                name={MockInterview.name}
-                questions={questions}
-                messages={messages}
-                recordings={recordings.map(r => ({ link: r.vercelLink, createdTimeStamp: r.createdAt }))}
-                interviewScores={interviewScores.map(v =>
-                ({
-                    question: v.question,
-                    score: v.score,
-                    explanation: v.explanation
-                })
-                )}
-            />
-        </div>
-
-    );
+  return (
+    <VideoChatContainer
+      userId={userId}
+      chatId={chat._id.toString()}
+      initialMessage={initialMessage}
+      threadId={chat.threadId}
+      messages={messages}
+      activeSubscription={activeSubscription}
+      handleGenerateQuestions={handleGenerateQuestions}
+      jobTitle={jobTitle}
+    />
+  );
 }

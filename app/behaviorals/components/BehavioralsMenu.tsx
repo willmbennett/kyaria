@@ -19,7 +19,7 @@ export default function BehavioralsMenu({
     const activeIndex = sections.indexOf(currentSection)
 
     return (
-        <div className="bg-white flex w-full justify-between h-10">
+        <div className="bg-white flex justify-between h-10">
             {sections.map((l, i) => {
                 const handleClick = () => {
                     setCurrentSection(l)

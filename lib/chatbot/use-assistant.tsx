@@ -7,7 +7,7 @@ import { ToolCall } from "openai/resources/beta/threads/runs/steps";
 import { useEffect, useRef, useState } from "react";
 import { updateChatAction } from "../../app/eve/_action";
 import { getInterviewQuestions, parseInterviewArgs } from "../../app/eve/function-helper";
-import { addMockInterviewMessageAction, createMockInterviewAction } from "../../app/mockinterviews/[id]/_action";
+import { addMockInterviewMessageAction, createMockInterviewAction } from "../../app/mockinterviews/recordings/[id]/_action";
 import { usePathname } from "next/navigation";
 import { format } from "date-fns";
 
@@ -132,7 +132,7 @@ export const useAssistant = ({ userId, chatId, threadId, messages, initialMessag
         switch (functionName) {
             case 'startMockInterview':
 
-                let questions = getInterviewQuestions(args.discipline, args.interviewType).map(q => q.question);
+                let questions: string[] = []
                 let interviewName = '';
 
                 if (handleGenerateQuestions) {
@@ -140,16 +140,12 @@ export const useAssistant = ({ userId, chatId, threadId, messages, initialMessag
                     const res = await handleGenerateQuestions();
                     setCreatingInterviewQuestions(false);
 
-                    if (res?.questions && res.questions.length >= 5) {
-                        questions = [
-                            questions[0],
-                            questions[1],
-                            ...res.questions,
-                            questions[questions.length - 1]
-                        ];
+                    if (res?.questions) {
+                        questions = res.questions
                     }
+                } else {
+                    questions = getInterviewQuestions(args.discipline, args.interviewType).map(q => q.question);
                 }
-
                 if (jobTitle) {
                     interviewName = jobTitle;
                     const date = new Date();

@@ -6,7 +6,7 @@ import { VideoPlayer } from './VideoPlayer';
 import { useEffect, useState } from 'react';
 import { cn } from '../../../lib/utils';
 import { InterviewGrades } from './InterviewGrading';
-import { getFeedback } from '../../mockinterviews/[id]/_action';
+import { getFeedback } from '../../mockinterviews/recordings/[id]/_action';
 import { usePathname, useRouter } from 'next/navigation';
 import GradingVisual from './GradingVisual';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -119,13 +119,12 @@ export const MockInterviews = ({ id, name, questions, messages, recordings, inte
     return (
         <div className="flex w-full h-full justify-between gap-4 p-4">
             <div className="flex flex-col w-full h-full">
-                <Link className="text-left font-bold text-lg text-slate-800 mb-4" href={`/mockinterviews/${id}`}>{name}</Link>
                 <div className="flex h-full gap-4">
                     <div className="flex flex-col items-center justify-center h-full gap-4">
                         <div className="w-32">
                             <GradingVisual overallScore={overallScore} />
                         </div>
-                        <div className="flex flex-col border w-96 rounded-xl overflow-y-scroll h-full">
+                        <div className="flex flex-col border w-96 rounded-xl overflow-y-scroll h-full max-h-96">
                             <h3 className="text-xl font-semibold bg-white w-full py-3 text-center">Questions</h3>
                             <div className="flex flex-col p-1 md:p-2 lg:p-3">
                                 {questions.map((q, i) => {

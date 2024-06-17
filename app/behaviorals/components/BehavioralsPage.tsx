@@ -77,18 +77,17 @@ export const BehavioralsPage = ({
     const SectionComponent = sectionComponents[currentSection];
 
     return (
-        <>
-            <div className='absolute top-0 left-0 w-full'>
-                <div className='flex w-full justify-center items-center border-b z-0'>
-                    <BehavioralsMenu
-                        sections={sections}
-                        currentSection={currentSection}
-                        setCurrentSection={handleSectionChange}
-                    />
-                </div>
+
+        <div className='relative w-full h-full overflow-hidden'>
+            <div className='h-12 w-full'>
+                <BehavioralsMenu
+                    sections={sections}
+                    currentSection={currentSection}
+                    setCurrentSection={handleSectionChange}
+                />
             </div>
-            <div className='flex w-full h-full justify-center overflow-y-scroll pt-12'>
-                <div className={`w-full max-w-3xl min-h-full justify-center ${[Sections.Question, Sections.Resume, Sections.Situation, Sections.Details].includes(currentSection) && 'flex items-center'}`}>
+            <div className='w-full h-full flex justify-center overflow-y-scroll'>
+                <div className={`max-w-3xl justify-center ${[Sections.Question, Sections.Resume, Sections.Situation, Sections.Details].includes(currentSection) && 'flex items-center'}`}>
                     {<SectionComponent
                         questionId={questionId}
                         userId={userId}
@@ -105,6 +104,6 @@ export const BehavioralsPage = ({
                     />}
                 </div>
             </div>
-        </>
+        </div>
     );
 };

@@ -1,41 +1,66 @@
 'use client'
 import useAppNavigation from "../../../lib/hooks/use-app-section";
 import ProgressBar from "./ProgressBar";
-import { JobStateType } from "../../board/job-helper";
-import JobMenu from "./JobMenu";
+import { ActionItemType, JobStateType } from "../../board/job-helper";
+import { SidebarWrapper } from "../../components/sidebar/SidebarWrapper";
+import { usePathname, useRouter } from "next/navigation";
+import { deleteJobAppAction } from "../_action";
+import { SideBarItem } from "../../helper";
+import { Button } from "../../components/Button";
 
 export const JobAppLayoutWrapper = ({
+    userId,
     appState,
     appId,
     boardId,
     children
 }: {
+    userId: string;
     appState: JobStateType;
     appId: string;
     boardId?: string;
     children: React.ReactNode;
 }) => {
     const { activeProgressSection, filteredPages } = useAppNavigation(appId, appState);
+    const router = useRouter()
+    const path = usePathname()
+
+    const createNew = async () => {
+        const newUrl = `/apps/new${boardId != 'default' ? `?board=${boardId}` : ''}`
+        router.push(newUrl)
+    }
+
+    const removeApp: ActionItemType = async (id: string) => {
+        await deleteJobAppAction({ id, path })
+        return { url: `board/${boardId}` }
+    }
+
+    const items: SideBarItem[] = filteredPages.map(p => {
+
+        return ({
+            id: p.label,
+            title: p.label,
+            href: `/apps/${appId}/${p.section}?progress=${activeProgressSection}`,
+            editable: false,
+            category: "Apps"
+        })
+    })
+
+
     return (
-        <div className="relative w-full h-full">
-            <ProgressBar
-                activeProgressSection={activeProgressSection}
-            />
-            <div className="flex w-full h-full gap-2 pt-12">
-                <div className="pl-1 md:pl-2 lg:pl-3 xl:pl-4 pt-10">
-                    <JobMenu
-                        appId={appId}
-                        boardId={boardId}
-                        filteredPages={filteredPages}
-                        activeProgressSection={activeProgressSection}
-                    />
-                </div>
-                <div className="flex-grow w-full h-full overflow-y-scroll">
-                    <div className="py-10 w-full flex h-full justify-center">
-                        {children}
-                    </div>
-                </div>
+        <SidebarWrapper
+            userId={userId}
+            sideBarTitle={'Job Applications'}
+            items={items}
+            createNew={createNew}
+            newTitle={'New Application'}
+            deleteItemAction={removeApp}
+            centerElements={<ProgressBar activeProgressSection={activeProgressSection} />}
+            leftElements={<Button size='sm' variant='ghost' href={`/board${boardId ? `/${boardId}` : '/default'}`}>← Back to Board</Button>}
+        >
+            <div className="flex w-full h-full justify-center items-start overflow-y-scroll pt-10">
+                {children}
             </div >
-        </div>
+        </SidebarWrapper>
     );
 }

@@ -1,9 +1,9 @@
 'use client'
-import { useSidebar } from "../../../lib/chatbot/use-sidebar";
 import { ActionItemType } from "../../board/job-helper";
 import { SideBarItem } from "../../helper";
-import { ItemHistory } from "./ItemHistory";
-import { motion, AnimatePresence } from "framer-motion";
+import { NewItemButton } from "./NewItemButton";
+import { DesktopTopMenuSelection } from "./DesktopTopMenuSelection";
+import { DesktopTopMenuItemDeletion } from "./DesktopTopMenuItemDeletion";
 
 interface SidebarDesktopProps {
     items?: SideBarItem[];
@@ -11,30 +11,26 @@ interface SidebarDesktopProps {
     newTitle: string;
     sideBarTitle: string;
     deleteItemAction: ActionItemType;
+    centerElements?: JSX.Element
+    leftElements?: JSX.Element
 }
 
-export const SidebarDesktop = ({ items, createNew, newTitle, sideBarTitle, deleteItemAction }: SidebarDesktopProps) => {
-    const { isSidebarOpen, isLoading } = useSidebar()
-    return (
-        <AnimatePresence>
-            {(isSidebarOpen && !isLoading) && (
-                <motion.div
-                    initial={{ opacity: 0, }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                    className="hidden md:block md:absolute left-60 top-0 h-screen border-r bg-muted lg:w-[250px] xl:w-[300px] z-40 bg-white"
-                >
-                    <ItemHistory
-                        sideBarTitle={sideBarTitle}
-                        items={items}
-                        createNew={createNew}
-                        newTitle={newTitle}
-                        deleteItemAction={deleteItemAction}
-                    />
-                </motion.div>
-            )}
-        </AnimatePresence>
+export const TopMenuDesktop = ({ items, createNew, newTitle, sideBarTitle, deleteItemAction, centerElements, leftElements }: SidebarDesktopProps) => {
 
+    return (
+        <div className="hidden md:block absolute top-0 right-0 w-full py-2 border-b bg-white z-30">
+            <div className="flex justify-between items-center px-2">
+                <div className="flex justify-between items-center gap-2 ">{leftElements && leftElements}
+                    {items && <DesktopTopMenuSelection items={items} sideBarTitle={sideBarTitle} />}
+                </div>
+                {centerElements &&
+                    centerElements
+                }
+                <div className="flex gap-2 items-center">
+                    <NewItemButton createNew={createNew} newTitle={newTitle} />
+                    <DesktopTopMenuItemDeletion items={items} deleteItemAction={deleteItemAction} />
+                </div>
+            </div>
+        </div>
     );
 };

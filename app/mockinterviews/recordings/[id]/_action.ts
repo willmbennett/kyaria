@@ -1,11 +1,11 @@
 "use server";
 import { Message } from "ai";
 import { revalidatePath } from "next/cache";
-import { addMockInterviewMessage, addMockInterviewRecording, createMockInterview, deleteMockInterview, getMockInterview, updateMockInterview } from "../../../lib/mockinterview-db";
-import { InterviewScore, MockInterviewClass, Recording } from "../../../models/MockInterview";
+import { addMockInterviewMessage, addMockInterviewRecording, createMockInterview, deleteMockInterview, getMockInterview, updateMockInterview } from "../../../../lib/mockinterview-db";
+import { InterviewScore, MockInterviewClass, Recording } from "../../../../models/MockInterview";
 import { del, put } from "@vercel/blob";
-import { ActionItemType } from "../../board/job-helper";
-import { openai } from "../../openai";
+import { ActionItemType } from "../../../board/job-helper";
+import { openai } from "../../../openai";
 import { ChatCompletionMessageParam } from "openai/resources";
 
 const logging = false

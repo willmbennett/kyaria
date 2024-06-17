@@ -10,7 +10,7 @@ export async function createInterviewQuestions(job: Partial<JobClass>, userResum
     const chatMessages: ChatCompletionMessageParam[] = [
         {
             role: 'system',
-            content: `You are an expert at giving job interviews. Please create a list of 10 hyper-targeted questions for a mock interview based on the provided job description and resume. Focus on aligning the questions with the candidate's skills, experiences, and the specific requirements of the job position. Return the questions in JSON format as an array with the key "questions".`
+            content: `You are an expert at giving job interviews. Please create a list of 10 hyper-targeted questions for a mock interview based on the provided job description and resume. The first two should be introductory questions, and the final one should be a conclusion question. Focus on aligning the questions with the candidate's skills, experiences, and the specific requirements of the job position. Return the questions in JSON format as an array with the key "questions".`
         },
         {
             role: 'user',

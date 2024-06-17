@@ -21,11 +21,13 @@ export default async function AppLayout({
     children: React.ReactNode;
     params: { id: string };
 }) {
-    await checkSubscription(true)
+    const { userId } = await checkSubscription(true)
 
     const { app } = await loadJob(params.id) as getJobAppInterface
+
     return (
         <JobAppLayoutWrapper
+            userId={userId}
             appState={app.state as JobStateType}
             appId={app._id.toString()}
             boardId={app.boardId?.toString()}
