@@ -1,10 +1,6 @@
 import { Metadata } from 'next';
-import { SidebarMobile } from '../components/sidebar/MobileSidebar';
-import { ItemHistory } from '../components/sidebar/ItemHistory';
 import { checkSubscription } from '../../lib/hooks/check-subscription';
-import { SidebarDesktop } from '../components/sidebar/SidebarDesktop';
 import { cache } from 'react';
-import { DesktopOpenSideBar } from '../components/sidebar/DesktopOpenSideBar';
 import { SideBarItem } from '../helper';
 import { getUserQuestions } from '../../lib/question-db';
 import { QuestionClass } from '../../models/Question';
