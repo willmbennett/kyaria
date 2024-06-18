@@ -9,7 +9,6 @@ import { SignedInHero } from './components/landingpage/SignedInHero'
 //const TestimonialsSlide = dynamic(() => import('./components/landingpage/TestimonialsSlide'))
 //const Faqs = dynamic(() => import('./components/landingpage/Faqs'))
 const CallToAction = dynamic(() => import('./components/landingpage/CallToAction'))
-const Onboarding = dynamic(() => import('./components/landingpage/Onboarding'))
 
 // Data fetching
 import { checkSubscription } from '../lib/hooks/check-subscription'
@@ -24,7 +23,6 @@ export default async function HomePage() {
       <>
         <HomeHero />
         <MockInterviewDemo />
-        <Onboarding />
         {/*<LogosRow />*/}
         {/*totalResumes && <FeatureBlocks totalResumes={totalResumes} />*/}
         {/*<FeaturesGrid /> */}

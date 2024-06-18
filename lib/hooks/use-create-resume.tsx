@@ -6,11 +6,12 @@ import type { PutBlobResult } from '@vercel/blob';
 const LOCAL_STORAGE_KEY = 'onboardingResume'
 
 interface UseSubmitResumeProps {
+    useLocalStorage?: boolean;
     onError?: (error: Error) => void;
     onSuccess?: (resumeId: string) => Promise<void>; // Now clearly async
 }
 
-const useSubmitResume = ({ onError, onSuccess }: UseSubmitResumeProps) => {
+const useSubmitResume = ({ useLocalStorage, onError, onSuccess }: UseSubmitResumeProps) => {
     const [isLoading, setLoading] = useState(false);
 
     const fetchOnboardingResume = localStorage.getItem(LOCAL_STORAGE_KEY)
@@ -63,8 +64,8 @@ const useSubmitResume = ({ onError, onSuccess }: UseSubmitResumeProps) => {
                     throw new Error("Failed to create resume");
                 }
 
-                // If the user isn't logged in (for onboarding flow) store the resumeId in localstorage so we can access it
-                if (userId == 'n/a') {
+                // If we want to use local storage to store it (for onboarding purposes)
+                if (useLocalStorage) {
                     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(resumeId))
                 }
 

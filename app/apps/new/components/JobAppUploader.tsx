@@ -24,12 +24,16 @@ export default function JobAppUploader({
     story = '',
     userResume,
     boardId,
+    autoRedirect = true,
+    onboarding
 }: {
     userId: string;
-    profileId?: string;
+    profileId: string;
     story?: string;
     userResume?: string;
     boardId?: string | null;
+    autoRedirect?: boolean,
+    onboarding?: boolean
 }) {
     const [loading, setLoading] = useState(false);
     const { register, handleSubmit, formState: { errors }, watch } = useForm<FormFields>();
@@ -41,8 +45,8 @@ export default function JobAppUploader({
         emails,
         story,
         userResume,
+        profile: profileId
     };
-    if (profileId) appParams.profile = profileId;
     if (boardId) appParams.boardId = boardId;
 
     const { createApp } = useCreateApp(appParams);
@@ -61,8 +65,8 @@ export default function JobAppUploader({
                     if (appId) {
                         await updateResumeAction(userResume, { appId });
 
-                        // Handle onboarding flow. Set the local storage up
-                        if (userId === 'n/a') {
+                        // Handle onboarding flow.
+                        if (onboarding) {
                             localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(appId));
                         } else {
                             router.push(`/apps/${appId}`);

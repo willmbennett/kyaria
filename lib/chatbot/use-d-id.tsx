@@ -87,7 +87,7 @@ export const useDIDApi = ({ textToSubmit, setTextToSubmit }: UseDIDApiProps) => 
         let newStreamId: string
 
         // Only call connect if videoElement is updated and we are neither connecting nor connected.
-        if (incomingVideo && !state.isConnected && !state.isConnecting && false) {
+        if (incomingVideo && !state.isConnected && !state.isConnecting) {
 
             if (logging) console.log('Conditions met. Calling connect...');
 

@@ -39,7 +39,7 @@ export const MockInterviewCreation = ({ appOptions }: { appOptions: { id: string
 
     const handleSelection = () => {
         if (selectedApp) {
-            router.push(`/mockinterviews/${selectedApp.id}?type=${interviewType.label.toLowerCase()}`)
+            router.push(`/mockinterviews/${selectedApp.id}?type=${interviewType.id}`)
         }
     }
 

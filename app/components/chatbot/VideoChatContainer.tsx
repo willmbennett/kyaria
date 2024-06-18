@@ -78,7 +78,8 @@ export const VideoChatContainer = ({ userId, chatId, threadId, messages, activeS
             <div className='flex flex-col w-full justify-end h-full gap-2'>
                 {interviewName && mockInterviewId && (
                     <div className='flex gap-4'>
-                        <Link className="text-left font-bold text-lg font-slate-800" href={`/mockinterviews/${mockInterviewId}`}>{interviewName}</Link>
+                        <p className="text-left font-bold text-lg font-slate-800">{interviewName}</p>
+                        <Button size='sm' href={`/mockinterviews/recordings/${mockInterviewId}`}>See Results</Button>
                         {recordingPing}
                     </div>
                 )}
