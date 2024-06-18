@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { updateChatAction } from "../../app/eve/_action";
 import { getInterviewQuestions, parseInterviewArgs } from "../../app/eve/function-helper";
 import { addMockInterviewMessageAction, createMockInterviewAction } from "../../app/mockinterviews/recordings/[id]/_action";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { format } from "date-fns";
 
 interface UseAssistantProps {
@@ -16,7 +16,7 @@ interface UseAssistantProps {
     chatId: string;
     threadId: string;
     messages: Message[];
-    initialMessage: string;
+    initialMessage: { message: string, functionCall?: string };
     handleGenerateQuestions?: () => Promise<{
         questions: string[];
     } | undefined>;
@@ -25,6 +25,7 @@ interface UseAssistantProps {
 
 export const useAssistant = ({ userId, chatId, threadId, messages, initialMessage, handleGenerateQuestions, jobTitle }: UseAssistantProps) => {
     const path = usePathname()
+    const [currentChatId, setCurrentChatId] = useState(chatId)
     const [chatMessages, setChatMessages] = useState(messages)
     const [textToSubmit, setTextToSubmit] = useState('')
     const [interviewing, setInterviewing] = useState(false)
@@ -33,6 +34,36 @@ export const useAssistant = ({ userId, chatId, threadId, messages, initialMessag
     const [mockInterviewId, setMockInterviewId] = useState('')
     const [sentInitialMessage, setSentInitialMessage] = useState(messages.length > 0);
     const initialRender = useRef(true);
+    const searchParams = useSearchParams()
+    const interviewType = searchParams.get('type')
+    const messageToAdd = '. I want to do this interview type: ' + interviewType
+    const [initialMessageToSend, setInitialMessageToSend] = useState<{ message: string, functionCall?: string }>({ message: initialMessage.message + messageToAdd, functionCall: initialMessage.functionCall })
+
+    // Reset sending initial message if chatId changes
+    useEffect(() => {
+        if (currentChatId != chatId) {
+            setCurrentChatId(chatId)
+        }
+    }, [chatId]);
+
+    // Reset sending initial message if chatId changes
+    useEffect(() => {
+        setSentInitialMessage(false)
+        setInterviewing(false)
+        setInterviewName('')
+        setInitialMessageToSend(prevState => ({
+            ...prevState,
+            message: initialMessage.message + messageToAdd
+        }));
+    }, [currentChatId]);
+
+    // Listen to updates for the initial message and update the initial message
+    useEffect(() => {
+        setInitialMessageToSend(prevState => ({
+            ...prevState,
+            message: initialMessage.message + messageToAdd
+        }));
+    }, [interviewType, messageToAdd]);
 
     // Send the initial message
     useEffect(() => {
@@ -41,11 +72,15 @@ export const useAssistant = ({ userId, chatId, threadId, messages, initialMessag
             return;
         }
 
-        if (!sentInitialMessage && initialMessage) {
+        if (!sentInitialMessage && initialMessageToSend) {
             setSentInitialMessage(true);
-            sendMessage(initialMessage);
+            sendMessage(initialMessageToSend.message, initialMessageToSend.functionCall);
+            setInitialMessageToSend(prevState => ({
+                ...prevState,
+                message: ''
+            }));
         }
-    }, [initialMessage, sentInitialMessage]);
+    }, [initialMessageToSend, sentInitialMessage]);
 
     // Whenever messages update update the state
     useEffect(() => {
@@ -59,14 +94,15 @@ export const useAssistant = ({ userId, chatId, threadId, messages, initialMessag
         }
     }, [textToSubmit, mockInterviewId]);
 
-    const sendMessage = async (text: string) => {
+    const sendMessage = async (text: string, functionCall?: string) => {
         const response = await fetch(
             `/api/openai/assistant/messages`,
             {
                 method: "POST",
                 body: JSON.stringify({
-                    content: text,
-                    threadId
+                    content: text + 'No Yapping, please reply in 1-2 sentances.',
+                    threadId,
+                    functionCall
                 }),
             }
         );

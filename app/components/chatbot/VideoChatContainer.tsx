@@ -17,7 +17,7 @@ interface VideoChatContainerProps {
     handleGenerateQuestions?: () => Promise<{
         questions: string[];
     } | undefined>
-    initialMessage: string;
+    initialMessage: { message: string, functionCall?: string };
     jobTitle?: string;
 }
 

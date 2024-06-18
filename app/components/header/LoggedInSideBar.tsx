@@ -164,7 +164,7 @@ export function LoggedInSideBar({ userId, userName }: { userId: string, userName
 
   return (
     <>
-      <aside className="hidden md:flex md:flex-none flex-col h-screen w-60 py-5 border-r z-50">
+      <aside className="hidden md:flex md:flex-none flex-col h-screen w-60 py-5 border-r">
         <nav className="h-full flex flex-col justify-between gap-4">
           {MenuItem(linkData.publicLinks.filter(l => l.href == '/')[0], pathname)}
           <Separator className="border-b" />

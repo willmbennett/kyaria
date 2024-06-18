@@ -2,10 +2,11 @@
 import { useEffect, useState } from "react"
 import { SideBarItem } from "../../helper";
 import { DropdownMenu } from "../ui/DropdownMenu";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { DropdownItemType } from "../../types";
 
 export const DesktopTopMenuSelection = ({ items, sideBarTitle }: { items: SideBarItem[], sideBarTitle: string }) => {
+    const searchParams = useSearchParams()
     const pathname = usePathname()
     const router = useRouter()
     const DropDownOptions = items.map(i => ({ id: i.id, label: i.title }))
@@ -18,25 +19,33 @@ export const DesktopTopMenuSelection = ({ items, sideBarTitle }: { items: SideBa
             const newSelectedOption = { id: activeItem.id, label: activeItem.title }
             setSelectedOption(newSelectedOption)
         }
-    }, [pathname])
+    }, [pathname, items])
 
     const handleSelectApp = async (id: string) => {
         const newSelectedApp = DropDownOptions.find(j => j.id == id)
-        const newSelecteditem = items.find(j => j.id == id)
-        if (newSelectedApp && newSelecteditem) {
+        const newSelectedItem = items.find(j => j.id == id)
+
+        if (newSelectedApp && newSelectedItem) {
             setSelectedOption(newSelectedApp)
-            router.push(newSelecteditem.href)
+
+            // Get current search params as a string
+            const currentSearchParams = searchParams.toString()
+
+            // Construct the new URL with the search params
+            const newUrl = currentSearchParams
+                ? `${newSelectedItem.href}&${currentSearchParams}`
+                : newSelectedItem.href
+
+            router.push(newUrl)
         }
     }
 
     return (
-        <div>
-            <DropdownMenu
-                selectedItem={selectedOption}
-                items={DropDownOptions}
-                onclickAction={handleSelectApp}
-                altTitle={sideBarTitle}
-            />
-        </div>
+        <DropdownMenu
+            selectedItem={selectedOption}
+            items={DropDownOptions}
+            onclickAction={handleSelectApp}
+            altTitle={sideBarTitle}
+        />
     )
 }

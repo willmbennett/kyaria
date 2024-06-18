@@ -3,13 +3,7 @@ import { useState } from "react"
 import { DropdownMenu } from "../../components/ui/DropdownMenu"
 import { Button } from "../../components/Button"
 import { useRouter } from "next/navigation"
-
-const interviewTypeOptions = [
-    { id: '1', label: 'Phone Screen' },
-    { id: '2', label: 'Behavioral' },
-    { id: '3', label: 'Technical' },
-    { id: '4', label: 'Case' }
-]
+import { interviewTypeOptions } from "../helper"
 
 export const MockInterviewCreation = ({ appOptions }: { appOptions: { id: string, label: string }[] }) => {
     const router = useRouter()

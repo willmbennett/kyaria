@@ -6,7 +6,7 @@ const assistantId = 'asst_MVnfGzdl3EldYW18EjKhxiVp'
 
 // Send a new message to a thread
 export async function POST(req: NextRequest) {
-    const { content, threadId } = await req.json();
+    const { content, threadId, functionCall } = await req.json();
 
     //console.log({ content, threadId, assistantId })
 
@@ -15,9 +15,17 @@ export async function POST(req: NextRequest) {
         content: content,
     });
 
-    const stream = openai.beta.threads.runs.stream(threadId, {
+    // Prepare the run configuration
+    const runConfig: any = {
         assistant_id: assistantId,
-    });
+    };
+
+    // If functionCall is provided, include it in the run configuration
+    if (functionCall) {
+        runConfig["tool_choice"] = { type: "function", function: { name: functionCall } };
+    }
+
+    const stream = openai.beta.threads.runs.stream(threadId, runConfig);
 
     return new Response(stream.toReadableStream());
 }

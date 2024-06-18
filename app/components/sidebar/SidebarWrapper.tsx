@@ -4,6 +4,19 @@ import { ItemHistory } from "./ItemHistory";
 import { SidebarMobile } from "./MobileSidebar";
 import { TopMenuDesktop } from "./SidebarDesktop";
 
+interface SidebarWrapperProps {
+    userId: string;
+    items?: SideBarItem[];
+    newTitle: string;
+    createNew: () => Promise<any>;
+    sideBarTitle: string;
+    deleteItemAction: ActionItemType;
+    children: React.ReactNode;
+    centerElements?: JSX.Element;
+    leftElements?: JSX.Element;
+    rightElements?: JSX.Element;
+}
+
 export const SidebarWrapper = ({
     userId,
     createNew,
@@ -13,18 +26,9 @@ export const SidebarWrapper = ({
     deleteItemAction,
     children,
     centerElements,
-    leftElements
-}: {
-    userId: string
-    items?: SideBarItem[];
-    newTitle: string
-    createNew: () => Promise<any>;
-    sideBarTitle: string;
-    deleteItemAction: ActionItemType
-    children: React.ReactNode;
-    centerElements?: JSX.Element;
-    leftElements?: JSX.Element
-}) => {
+    leftElements,
+    rightElements
+}: SidebarWrapperProps) => {
     return (
         <div className="relative w-full h-full overflow-hidden">
             {userId &&
@@ -46,6 +50,7 @@ export const SidebarWrapper = ({
                         deleteItemAction={deleteItemAction}
                         centerElements={centerElements}
                         leftElements={leftElements}
+                        rightElements={rightElements}
                     />
                 </>
             }

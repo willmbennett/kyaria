@@ -8,6 +8,8 @@ import { getChat } from "../../../../../lib/chat-db";
 import { Message } from "ai";
 import { VideoChatContainer } from "../../../../components/chatbot/VideoChatContainer";
 import { createInterviewQuestions } from "./_action";
+import { setupMockInterview } from "../../../../mockinterviews/_action";
+import { RestartButton } from "../../../../mockinterviews/components/RestartButton";
 
 const loadJob = cache((id: string) => {
   return getJobApp(id)
@@ -23,20 +25,9 @@ export default async function JobAppPage({ params }: JobAppPageProps) {
   let chat;
 
   const createNewChat = async () => {
+    "use server"
     const interviewdata = { userResume: userResumeStripped, jobPosition: jobStripped }
-    const { chatId } = await handleChatCreation({ userId, interviewdata });
-    if (!chatId) {
-      throw new Error('There was a problem creating a new chat');
-    }
-    const stateUpdate = { chatId };
-    await updateJobAppAction(jobAppId, stateUpdate, '/apps/' + jobAppId);
-
-    const { chat: newChat } = await getChat(chatId);
-    if (!newChat) {
-      throw new Error('There was a problem fetching the newly created chat');
-    }
-
-    return { chatId, chat: newChat };
+    return await setupMockInterview(userId, jobAppId, interviewdata)
   };
 
   if (chatId) {
@@ -63,7 +54,10 @@ export default async function JobAppPage({ params }: JobAppPageProps) {
 
   //console.log('At Eve, messages ', messages)
 
-  const initialMessage = `Hi! I'm ${userName}. Please welcome me, introduce yourself, and kick off this behavioral mock interview for this job position: ${jobStripped.jobTitle}}`
+  const initialMessage = {
+    message: `Hi! I'm ${userName}. Please welcome me, introduce yourself, and kick off this mock interview for this job position: ${jobStripped.jobTitle} at ${jobStripped.company}`,
+    functionCall: "startMockInterview"
+  }
 
   const handleGenerateQuestions = async () => {
     "use server"
@@ -72,17 +66,21 @@ export default async function JobAppPage({ params }: JobAppPageProps) {
 
   const jobTitle = `${jobStripped.jobTitle} - ${jobStripped.company}`
 
-
   return (
-    <VideoChatContainer
-      userId={userId}
-      chatId={chat._id.toString()}
-      initialMessage={initialMessage}
-      threadId={chat.threadId}
-      messages={messages}
-      activeSubscription={activeSubscription}
-      handleGenerateQuestions={handleGenerateQuestions}
-      jobTitle={jobTitle}
-    />
+    <div className="relative w-full h-3/4">
+      <div className="flex w-full justify-end px-2 pb-4">
+        <RestartButton createNewChat={createNewChat} />
+      </div>
+      <VideoChatContainer
+        userId={userId}
+        chatId={chat._id.toString()}
+        initialMessage={initialMessage}
+        threadId={chat.threadId}
+        messages={messages}
+        activeSubscription={activeSubscription}
+        handleGenerateQuestions={handleGenerateQuestions}
+        jobTitle={jobTitle}
+      />
+    </div>
   );
 }

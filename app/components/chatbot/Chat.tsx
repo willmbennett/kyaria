@@ -58,7 +58,7 @@ export function Chat({ messages, messageId, handleMessageClick, loading = false 
                         {messages.length ? (
                             <ChatList messages={messages} handleMessageClick={handleMessageClick} />
                         ) :
-                            FillerCard("Eve is waking up, this may take a moment, especially if you're doing a mock interview.", true)
+                            FillerCard("Eve is waking up, this may take a moment.", true)
                         }
                     </div>
                     {loading && FillerCard("Creating interview questions", true)

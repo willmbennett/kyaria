@@ -13,20 +13,24 @@ interface SidebarDesktopProps {
     deleteItemAction: ActionItemType;
     centerElements?: JSX.Element
     leftElements?: JSX.Element
+    rightElements?: JSX.Element;
 }
 
-export const TopMenuDesktop = ({ items, createNew, newTitle, sideBarTitle, deleteItemAction, centerElements, leftElements }: SidebarDesktopProps) => {
+export const TopMenuDesktop = ({ ...props }: SidebarDesktopProps) => {
+    const { items, createNew, newTitle, sideBarTitle, deleteItemAction, centerElements, leftElements, rightElements } = props
 
     return (
         <div className="hidden md:block absolute top-0 right-0 w-full py-2 border-b bg-white z-30">
             <div className="flex justify-between items-center px-2">
-                <div className="flex justify-between items-center gap-2 ">{leftElements && leftElements}
+                <div className="flex justify-between items-center gap-2 ">
                     {items && <DesktopTopMenuSelection items={items} sideBarTitle={sideBarTitle} />}
+                    {leftElements && leftElements}
                 </div>
                 {centerElements &&
                     centerElements
                 }
                 <div className="flex gap-2 items-center">
+                    {rightElements && rightElements}
                     <NewItemButton createNew={createNew} newTitle={newTitle} />
                     <DesktopTopMenuItemDeletion items={items} deleteItemAction={deleteItemAction} />
                 </div>

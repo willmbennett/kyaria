@@ -25,7 +25,9 @@ export default async function ChatbotPage({ params }: { params: { id: string } }
 
     const messages: Message[] = chat.messages
 
-    const initialMessage = `Please introduce yourself and welcome me to this career coaching session, my name is ${userName}`
+    const initialMessage = {
+        message: `Please introduce yourself and welcome me to this career coaching session, my name is ${userName}`
+    }
 
     return (
         <VideoChatContainer
