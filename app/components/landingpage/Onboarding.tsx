@@ -79,7 +79,6 @@ export default function OnboardingPage({ userId, profileId, resumeId }: Onboardi
                 altTitle={"Interview Type"}
               />
             </div>
-            <p className='text-sm italic'>We'll use this job to generate questions tailored to the job description.</p>
             <div className='flex justify-center'>
               <Button size='md' href={`/mockinterviews/${JSON.parse(application)}?type=${interviewType.id}`}>Start your Interview</Button>
             </div>
