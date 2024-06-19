@@ -65,15 +65,17 @@ export function Header() {
 
           <div>
             <div className="hidden items-center space-x-4 md:flex">
-              <div className="hidden lg:block">
-                <AuthButton
-                  size="md"
-                  variant="solid"
-                  className="w-full"
-                >
-                  Sign In
-                </AuthButton>
-              </div>
+              <AuthButton
+                size="md"
+                variant="ghost"
+                className="border-none"
+                altText="Sign In"
+                callbackUrl="/eve"
+              />
+              <AuthButton
+                size="md"
+                variant="solid"
+              />
             </div>
           </div>
         </nav>

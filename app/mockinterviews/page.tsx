@@ -40,7 +40,7 @@ export default async function MockInterviewPage() {
             deleteItemAction={handleMockInterviewDeletion}
             leftElements={LeftElements}
         >
-            <section className="flex overflow-hidden w-full h-full justify-center items-center">
+            <section className="flex overflow-hidden w-full h-full justify-center items-start pt-5 md:pt-10 lg:mt-15 xl:mt-24">
                 <Container>
                     <div className="w-full max-w-3xl text-center p-4 flex flex-col gap-4">
                         <h1 className="text-4xl font-bold text-gray-800 mb-2">

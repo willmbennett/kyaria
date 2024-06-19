@@ -8,8 +8,8 @@ interface GradingVisualProps {
 }
 
 const getColorForScore = (score: number) => {
-    if (score <= 1) return '#FF0000'; // Red
-    if (score <= 3) return '#FFA500'; // Orange
+    if (score <= 3) return '#FF0000'; // Red
+    if (score <= 6) return '#FFA500'; // Orange
     return '#008000'; // Green
 };
 
@@ -29,7 +29,7 @@ const GradingVisual: React.FC<GradingVisualProps> = ({ overallScore }) => {
                 <CircularProgressbar
                     value={score}
                     minValue={0}
-                    maxValue={5}
+                    maxValue={10}
                     text={textValue}
                     styles={buildStyles({
                         pathColor: color,

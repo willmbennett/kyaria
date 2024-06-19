@@ -115,7 +115,7 @@ export async function getFeedback(id: string, questions: string[], messages: Mes
             public explanation: string;
         
             @prop()
-            public score: 0 | 1 | 2 | 3 | 4 | 5;
+            public score: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
         }
         
         Please return the scores in JSON format.` },

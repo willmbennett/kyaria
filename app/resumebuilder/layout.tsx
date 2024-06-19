@@ -53,7 +53,7 @@ export default async function AppLayout({
     return (
         <SidebarWrapper
             userId={userId}
-            sideBarTitle={'Session History'}
+            sideBarTitle={'Resumes'}
             items={items}
             createNew={handleResumeCreation}
             newTitle={'New Resume'}

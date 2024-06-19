@@ -10,7 +10,7 @@ interface AuthButtonProps {
     callbackUrl?: string
 }
 
-const AuthButton = ({ altText = "Sign in", callbackUrl = '/board', ...props }: AuthButtonProps) => (
+const AuthButton = ({ altText = "Sign up", callbackUrl = '/onboarding', ...props }: AuthButtonProps) => (
     <Button
         onClick={async () => {
             const { signIn } = (await import("next-auth/react"));

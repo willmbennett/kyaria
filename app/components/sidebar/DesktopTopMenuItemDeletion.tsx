@@ -14,7 +14,7 @@ export const DesktopTopMenuItemDeletion = ({
     const pathname = usePathname()
     const activeItem = items?.find(i => i.href == pathname)
 
-    if (!activeItem) return <></>
+    if (!activeItem || !activeItem.editable) return <></>
 
     return (
         <SidebarActions

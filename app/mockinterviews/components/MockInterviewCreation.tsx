@@ -55,7 +55,9 @@ export const MockInterviewCreation = ({ appOptions }: { appOptions: { id: string
                         items={appOptions}
                         onclickAction={handleSelectApp}
                         altTitle={"Jobs"} />
-                    <Button size="md" onClick={handleNextStep}>Next</Button>
+                    <div>
+                        <Button size="md" onClick={handleNextStep}>Next</Button>
+                    </div>
                 </div>
             )}
             {step === 2 && (
@@ -63,13 +65,15 @@ export const MockInterviewCreation = ({ appOptions }: { appOptions: { id: string
                     <p className="text-md text-slate-600">
                         What type of interview do you want to do?
                     </p>
-                    <DropdownMenu
-                        selectedItem={interviewType}
-                        items={interviewTypeOptions}
-                        onclickAction={handleSelectInterviewType}
-                        altTitle={"Interview Type"}
-                    />
-                    <div className="flex gap-2 w-full justify-between">
+                    <div className="mx-auto">
+                        <DropdownMenu
+                            selectedItem={interviewType}
+                            items={interviewTypeOptions}
+                            onclickAction={handleSelectInterviewType}
+                            altTitle={"Interview Type"}
+                        />
+                    </div>
+                    <div className="flex gap-2 w-full justify-center">
                         <Button size="md" variant="ghost" onClick={handlePreviousStep}>Back</Button>
                         <Button size="md" onClick={handleSelection}>Start Interview</Button>
                     </div>
