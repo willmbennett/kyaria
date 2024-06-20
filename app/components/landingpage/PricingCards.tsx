@@ -146,11 +146,16 @@ export function PricingCards({ activeSubscription, userId }: { activeSubscriptio
                         </span>
                         :
                         <>
-                          <span className="text-4xl font-semibold text-slate-900">
-                            ${tier.price}
-                          </span>
-                          <span className="ml-2.5 text-lg font-medium text-slate-500">
-                            / month
+                          <div className="flex items-baseline">
+                            <span className="text-4xl font-semibold text-slate-900">
+                              ${tier.price}
+                            </span>
+                            <span className="ml-2.5 text-lg font-medium text-slate-500">
+                              / month
+                            </span>
+                          </div>
+                          <span className="mt-1 text-sm font-medium text-green-600">
+                            First week free! No credit card required.
                           </span>
                         </>
                       }
@@ -181,7 +186,7 @@ export function PricingCards({ activeSubscription, userId }: { activeSubscriptio
                                   Select Plan
                                 </Button>
                                 :
-                                <AuthButton className="mt-8 w-full" altText="Sign in to subscribe" />
+                                <AuthButton className="mt-8 w-full" altText="Sign in to subscribe" callbackUrl='/pricing' />
                             }
                           </>
                         }
