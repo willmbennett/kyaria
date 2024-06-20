@@ -1,5 +1,4 @@
 'use client'
-import Link from 'next/link';
 import { Chat } from '../chatbot/Chat';
 import { Message } from 'ai';
 import { VideoPlayer } from './VideoPlayer';
@@ -22,9 +21,10 @@ interface MockInterviewsProps {
         explanation: string; // Added explanation field
         score: number
     }[]
+    feedback?: string;
 }
 
-export const MockInterviews = ({ id, name, questions, messages, recordings, interviewScores }: MockInterviewsProps) => {
+export const MockInterviews = ({ id, name, questions, messages, recordings, interviewScores, feedback }: MockInterviewsProps) => {
     const path = usePathname()
     const router = useRouter()
     const numRecordings = recordings.length
@@ -113,7 +113,7 @@ export const MockInterviews = ({ id, name, questions, messages, recordings, inte
         if (interviewScores.length == 0) handleGrading()
     }, [interviewScores]);
 
-    const overallScore = Math.round(interviewScores.reduce((acc, curr) => acc + curr.score, 0) / interviewScores.length);
+    const overallScore = Math.round(interviewScores.reduce((acc, curr) => acc + curr.score, 0) / interviewScores.length * 10) / 10;
 
 
     return (
@@ -121,8 +121,11 @@ export const MockInterviews = ({ id, name, questions, messages, recordings, inte
             <div className="flex flex-col w-full h-full">
                 <div className="flex h-full gap-4">
                     <div className="flex flex-col items-center justify-center h-full gap-4">
-                        <div className="w-32">
-                            <GradingVisual overallScore={overallScore} />
+                        <div className="w-96 flex flex-col rounded-xl border p-1 md:p-2 lg:p-3 items-center justify-center gap-4">
+                            <div className='w-32'>
+                                <GradingVisual overallScore={overallScore} />
+                            </div>
+                            {feedback && <p className='text-slate-800 text-md'>{feedback}</p>}
                         </div>
                         <div className="flex flex-col border w-96 rounded-xl overflow-y-scroll h-full max-h-96">
                             <h3 className="text-xl font-semibold bg-white w-full py-3 text-center">Questions</h3>

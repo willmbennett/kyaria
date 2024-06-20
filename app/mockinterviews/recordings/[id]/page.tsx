@@ -36,6 +36,8 @@ export default async function MockInterviewPage({ params }: { params: { id: stri
 
     const interviewScores: InterviewScore[] = MockInterview.interviewScores || []
 
+    const feedback = MockInterview.feedback
+
 
     //console.log('At Eve, messages ', messages)
 
@@ -53,6 +55,7 @@ export default async function MockInterviewPage({ params }: { params: { id: stri
                 explanation: v.explanation
             })
             )}
+            feedback={feedback}
         />
     );
 }
