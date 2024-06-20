@@ -1,10 +1,9 @@
 'use client'
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import VideoChatComponent from './VideoChatComponent';
 import { Chat } from './Chat';
 import { Message } from 'ai';
 import { Button } from '../Button';
-import { nanoid } from 'nanoid'
 import { useAssistant } from '../../../lib/chatbot/use-assistant';
 import { cn } from '../../../lib/utils';
 import Link from 'next/link';
@@ -15,18 +14,16 @@ interface VideoChatContainerProps {
     threadId: string;
     messages: Message[];
     activeSubscription: boolean;
-    admin: boolean
-    jobId?: string
+    handleGenerateQuestions?: () => Promise<{
+        questions: string[];
+    } | undefined>
+    initialMessage: { message: string, functionCall?: string };
+    jobTitle?: string;
 }
 
-export const VideoChatContainer = ({ userId, chatId, threadId, messages, activeSubscription, admin, jobId }: VideoChatContainerProps) => {
-    const [showTranscript, setShowTranscript] = useState(true);
+export const VideoChatContainer = ({ userId, chatId, threadId, messages, activeSubscription, handleGenerateQuestions,
+    initialMessage, jobTitle }: VideoChatContainerProps) => {
     const numMessages = messages.length
-
-    const toggleTranscript = () => {
-        setShowTranscript(!showTranscript);
-    };
-
     const {
         interviewing,
         interviewName,
@@ -34,15 +31,14 @@ export const VideoChatContainer = ({ userId, chatId, threadId, messages, activeS
         chatMessages,
         textToSubmit,
         setTextToSubmit,
-        mockInterviewId
-    } = useAssistant({ userId, chatId, threadId, messages })
+        mockInterviewId,
+        creatingInterviewQuestions
+    } = useAssistant({ userId, chatId, threadId, messages, initialMessage, handleGenerateQuestions, jobTitle })
 
     const renderVideoChatComponent = <VideoChatComponent
-        toggleTranscript={toggleTranscript}
         submitUserMessage={submitUserMessage}
         textToSubmit={textToSubmit}
         setTextToSubmit={setTextToSubmit}
-        showTranscript={showTranscript}
         numMessages={numMessages}
         mockInterviewId={mockInterviewId}
     />
@@ -82,13 +78,14 @@ export const VideoChatContainer = ({ userId, chatId, threadId, messages, activeS
             <div className='flex flex-col w-full justify-end h-full gap-2'>
                 {interviewName && mockInterviewId && (
                     <div className='flex gap-4'>
-                        <Link className="text-left font-bold text-lg font-slate-800" href={`/mockinterviews/${mockInterviewId}`}>{interviewName}</Link>
+                        <p className="text-left font-bold text-lg font-slate-800">{interviewName}</p>
+                        <Button size='sm' href={`/mockinterviews/recordings/${mockInterviewId}`}>See Results</Button>
                         {recordingPing}
                     </div>
                 )}
                 {handleVideoComponent}
             </div>
-            <Chat messages={chatMessages} showTranscript={showTranscript} />
+            <Chat messages={chatMessages} loading={creatingInterviewQuestions} />
         </div>
     );
 };

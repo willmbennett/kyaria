@@ -5,7 +5,7 @@ import { VideoChatContainer } from "../../components/chatbot/VideoChatContainer"
 import { redirect } from "next/navigation";
 
 export default async function ChatbotPage({ params }: { params: { id: string } }) {
-    const { userId, activeSubscription, admin } = await checkSubscription(true)
+    const { userId, activeSubscription, admin, userName } = await checkSubscription(true)
     //console.log({ userId, activeSubscription, admin })
 
     const chatId = params.id
@@ -25,14 +25,18 @@ export default async function ChatbotPage({ params }: { params: { id: string } }
 
     const messages: Message[] = chat.messages
 
+    const initialMessage = {
+        message: `Please introduce yourself and welcome me to this career coaching session, my name is ${userName}`
+    }
+
     return (
         <VideoChatContainer
             userId={userId}
+            initialMessage={initialMessage}
             chatId={chatId}
             threadId={chat.threadId}
             messages={messages}
             activeSubscription={activeSubscription}
-            admin={admin}
         />
     );
 }

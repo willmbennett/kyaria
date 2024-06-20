@@ -16,7 +16,8 @@ export type pageListType = {
         title?: string | undefined;
         titleId?: string | undefined;
     } & RefAttributes<SVGSVGElement>> | React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>>;
-    subLink?: pageListType
+    subLinks?: pageListType[];
+    showUrls?: string[];
 }
 
 export const linkData = {

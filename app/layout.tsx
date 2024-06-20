@@ -4,7 +4,6 @@ import Script from 'next/script';
 import clsx from 'clsx'
 import { Inter } from 'next/font/google'
 import { Footer } from './components/Footer';
-import { TooltipProvider } from './components/ui/tooltip';
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { checkSubscription } from '../lib/hooks/check-subscription';
 import { Header } from './components/header/Header';
@@ -14,8 +13,8 @@ import { LoggedInSideBar } from './components/header/LoggedInSideBar';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
-const title = 'Kyaria.ai | Launch Your Career with Our Advanced AI Resume Builder';
-const description = "Kickstart your professional journey with Kyaria.ai's innovative AI-powered resume builder. Tailor your resume for success, stand out to employers, and find your dream job. Start now!";
+const title = 'Kyaria.ai | AI Mock Interviews';
+const description = "Unlimited practice interviews with an AI interview expert who has conducted thousands of interviews. Get immediate, objective feedback and see how you compare to others.";
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.kyaria.ai'),

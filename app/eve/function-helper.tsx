@@ -22,12 +22,11 @@ export const getInterviewQuestions = (discipline: Discipline, interviewType: Int
     const questions = InterviewQuestions[discipline][interviewType];
 
     if (!questions) {
-        console.error("Invalid discipline or interview type.");
         return [];
     }
 
     const introQuestions = getRandomQuestionsFromSection(questions.intro, 2); // Adjust the number as needed
-    const mainQuestions = getRandomQuestionsFromSection(questions.main, 3); // Adjust the number as needed
+    const mainQuestions = getRandomQuestionsFromSection(questions.main, 5); // Adjust the number as needed
     const closingQuestions = getRandomQuestionsFromSection(questions.closing, 1); // Adjust the number as needed
 
     const selectedQuestions = [...introQuestions, ...mainQuestions, ...closingQuestions];

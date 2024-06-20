@@ -6,17 +6,12 @@ var transformProps = require('transform-props');
 
 const logging = false;
 
-export const createMockInterview = async (userId: string, chatId: string, name: string) => {
+export const createMockInterview = async (newMockInterviewData: Partial<MockInterviewClass>) => {
     try {
         await connectDB();
 
-        if (logging) console.log(JSON.stringify({ userId }))
+        if (logging) console.log(JSON.stringify(newMockInterviewData))
 
-        const newMockInterviewData: Partial<MockInterviewClass> = {
-            userId,
-            chatId,
-            name
-        }
         if (logging) console.log('Creating new Mock Interview with data: ', newMockInterviewData)
         const newMockInterview = await MockInterviewModel.create(newMockInterviewData);
 
@@ -24,7 +19,6 @@ export const createMockInterview = async (userId: string, chatId: string, name: 
             if (logging) console.log('New chat created successfully:', newMockInterview);
 
             const newMockInterviewId = castToString(newMockInterview._id);
-            if (logging) console.log('Transformed chatId:', chatId); // Log transformed postId
 
             return { newMockInterviewId };
         } else {

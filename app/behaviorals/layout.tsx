@@ -1,16 +1,13 @@
 import { Metadata } from 'next';
-import { SidebarMobile } from '../components/sidebar/MobileSidebar';
-import { ItemHistory } from '../components/sidebar/ItemHistory';
 import { checkSubscription } from '../../lib/hooks/check-subscription';
-import { SidebarDesktop } from '../components/sidebar/SidebarDesktop';
 import { cache } from 'react';
-import { DesktopOpenSideBar } from '../components/sidebar/DesktopOpenSideBar';
 import { SideBarItem } from '../helper';
 import { getUserQuestions } from '../../lib/question-db';
 import { QuestionClass } from '../../models/Question';
 import { createQuestionAction, deleteQuestionAction } from './_action';
 import { ActionItemType } from '../board/job-helper';
 import { redirect } from 'next/navigation';
+import { SidebarWrapper } from '../components/sidebar/SidebarWrapper';
 
 const title = "Ace your Interviews with STAR stories";
 const description = "Answer top behavioral questions with ease using AI! We take your resume and help you figure out how to answer tough questions. Perfectly formatted!";
@@ -71,33 +68,15 @@ export default async function QuestionLayout({
     }
 
     return (
-        <>
-            {userId &&
-                <>
-                    <SidebarMobile>
-                        <ItemHistory
-                            sideBarTitle={'Questions'}
-                            items={items}
-                            createNew={createQuestion}
-                            newTitle={'New Question'}
-                            deleteItemAction={handleQuestionDeletion}
-                        />
-                    </SidebarMobile>
-                    <DesktopOpenSideBar />
-                    <SidebarDesktop
-                        sideBarTitle={'Questions'}
-                        items={items}
-                        createNew={createQuestion}
-                        newTitle={'New Question'}
-                        deleteItemAction={handleQuestionDeletion}
-                    />
-                </>
-            }
-            <div className='relative w-full h-full'>
-                <div className='flex justify-center w-full h-full p-1 md:p-2 lg:p-3 xl:p-4'>
-                    {children}
-                </div>
-            </div>
-        </>
-    )
+        <SidebarWrapper
+            userId={userId}
+            sideBarTitle={'Questions'}
+            items={items}
+            createNew={createQuestion}
+            newTitle={'New Question'}
+            deleteItemAction={handleQuestionDeletion}
+        >
+            {children}
+        </SidebarWrapper>
+    );
 }

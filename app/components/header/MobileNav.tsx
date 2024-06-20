@@ -6,6 +6,7 @@ import { mobileDropDownMenu } from "./MobileMenu"
 import Link from "next/link"
 import { Button } from "../Button"
 import { signIn, signOut } from "next-auth/react"
+import { cn } from "../../../lib/utils"
 
 interface MobileNavProps {
     userId?: string;
@@ -23,7 +24,7 @@ export const MobileNav = ({
     return (
         <Popover>
             <Popover.Button
-                className="group relative mt-2 ml-2 z-50 flex cursor-pointer items-center justify-center border border-gray-secondary-400/75 bg-gray-secondary-50 p-3 transition duration-300 ease-in-out focus:outline-none md:hidden"
+                className={cn("group relative mt-2 ml-2 z-50 flex cursor-pointer items-center justify-center border border-gray-secondary-400/75 bg-gray-secondary-50 p-3 transition duration-300 ease-in-out focus:outline-none md:hidden", userId && "absolute top-2 left-2")}
                 aria-label="Toggle Navigation"
             >
                 {({ open }) => <MenuIcon open={open} />}
@@ -71,13 +72,22 @@ export const MobileNav = ({
                                 {userId && mobileDropDownMenu(userId ? 'More' : 'For Job Seekers', userId ? loggedInMenuLinks : allProductLinks)}
                             </div>
                             <div className="mt-6">
+                                {!userId &&
+                                    <Button
+                                        size="md"
+                                        variant="ghost"
+                                        className="w-full mb-2"
+                                        onClick={() => signIn("google", { callbackUrl: "/eve" })}
+                                    >
+                                        Sign In
+                                    </Button>
+                                }
                                 <Button
                                     size="md"
-                                    variant="ghost"
                                     className="w-full"
-                                    onClick={!userId ? () => signIn("google", { callbackUrl: "/board" }) : () => signOut({ callbackUrl: '/' })}
+                                    onClick={!userId ? () => signIn("google", { callbackUrl: "/onboarding" }) : () => signOut({ callbackUrl: '/' })}
                                 >
-                                    {!userId ? 'Sign In' : 'Sign Out'}
+                                    {!userId ? 'Sign Up' : 'Sign Out'}
                                 </Button>
                             </div>
                         </div>

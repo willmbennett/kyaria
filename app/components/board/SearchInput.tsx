@@ -8,7 +8,7 @@ interface SearchInputProps {
 }
 
 export const SearchInput = ({ searchValue, handleChange }: SearchInputProps) => (
-    <div className="relative md:w-1/6">
+    <div className="relative w-42">
         <div className="absolute inset-y-0 start-0 flex items-center pl-3 pointer-events-none">
             <MagnifyingGlassIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" />
         </div>

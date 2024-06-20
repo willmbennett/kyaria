@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { blobToBase64, createMediaStream } from "../../app/eve/eve-helper";
-import { addMockInterviewMessageAction, addMockInterviewRecordingActions, uploadFile } from "../../app/mockinterviews/[id]/_action";
+import { addMockInterviewMessageAction, addMockInterviewRecordingActions, uploadFile } from "../../app/mockinterviews/recordings/[id]/_action";
 import { Recording } from "../../models/MockInterview";
 import { usePathname } from "next/navigation";
 import { Message, nanoid } from "ai";

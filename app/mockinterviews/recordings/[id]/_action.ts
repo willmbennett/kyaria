@@ -1,29 +1,25 @@
 "use server";
 import { Message } from "ai";
 import { revalidatePath } from "next/cache";
-import { addMockInterviewMessage, addMockInterviewRecording, createMockInterview, deleteMockInterview, getMockInterview, updateMockInterview } from "../../../lib/mockinterview-db";
-import { InterviewScore, MockInterviewClass, Recording } from "../../../models/MockInterview";
+import { addMockInterviewMessage, addMockInterviewRecording, createMockInterview, deleteMockInterview, getMockInterview, updateMockInterview } from "../../../../lib/mockinterview-db";
+import { InterviewScore, MockInterviewClass, Recording } from "../../../../models/MockInterview";
 import { del, put } from "@vercel/blob";
-import { ActionItemType } from "../../board/job-helper";
-import { openai } from "../../openai";
+import { ActionItemType } from "../../../board/job-helper";
+import { openai } from "../../../openai";
 import { ChatCompletionMessageParam } from "openai/resources";
 
 const logging = false
 
 interface CreateMockInterviewActionProps {
-    userId: string;
-    chatId: string;
-    name: string;
+    data: Partial<MockInterviewClass>
     path: string;
 }
 
 export async function createMockInterviewAction({
-    userId,
-    chatId,
-    name,
+    data,
     path,
 }: CreateMockInterviewActionProps) {
-    const { newMockInterviewId } = await createMockInterview(userId, chatId, name);
+    const { newMockInterviewId } = await createMockInterview(data);
     revalidatePath(path);
     return newMockInterviewId
 }
@@ -100,12 +96,17 @@ export async function getFeedback(id: string, questions: string[], messages: Mes
         {
             role: 'system', content:
                 `You are an expert at grading job interviews. Interviews are graded using the following scoring rubric:
-        - 0 No answer given or answer completely irrelevant. No examples given. 
-        1 A few good points but main issues missing. No examples/irrelevant examples given
-        2 Some points covered, not all relevant. Some examples given. 
-        3 Some points covered. Relevant information given. Some examples given.
-        4 Good answer. Relevant information. All or most points covered. Good examples.  
-        5 Perfect answer. All points addressed. All points relevant. Good examples.
+0 No answer given or answer completely irrelevant. No examples given.
+1 Very poor answer. A few points mentioned but most issues missing. No examples/irrelevant examples given.
+2 Poor answer. Some points covered but not all relevant. Few examples given.
+3 Below average answer. Some points covered with some relevant information. Some examples given.
+4 Average answer. Covers some points with relevant information. Examples given but could be improved.
+5 Good answer. Relevant information given. Most points covered. Good examples.
+6 Very good answer. All points addressed. All points relevant. Good examples.
+7 Excellent answer. Comprehensive details and relevant points. All points addressed. Excellent examples.
+8 Exceptional answer. Thorough details and comprehensive points. All points addressed. Outstanding examples.
+9 Outstanding answer. Extensive details and exceptional points. All points addressed. Exemplary examples.
+10 Extraordinary answer. Exhaustive details and unparalleled points. All points addressed. Exceptional examples.
         
         The data will be stored in this format:
         class InterviewScore {
@@ -119,14 +120,18 @@ export async function getFeedback(id: string, questions: string[], messages: Mes
             public explanation: string;
         
             @prop()
-            public score: 0 | 1 | 2 | 3 | 4 | 5;
+            public score: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
         }
+
+        Please also return a paragraph with overall feedback, it will be stored separately in an object:
+
+        @prop()
+        public feedback: string;
         
-        Please return the scores in JSON format.` },
+        Please return the scores in JSON format {feedback: string, interviewScores: InterviewScore[] }.` },
         { role: 'user', content: `I just did a mock interview where I was asked these questions: ${JSON.stringify(questions)}. Please grade my intervew, here is the full text: ${JSON.stringify(messages)}` }
     ]
 
-    //console.log('About to grade this interview: ', chatMessages)
     const completion = await openai.chat.completions.create({
         messages: chatMessages,
         model: "gpt-4o",
@@ -135,10 +140,9 @@ export async function getFeedback(id: string, questions: string[], messages: Mes
 
     // Process the response from OpenAI and format it as needed
     const optimizedData = completion.choices[0].message.content;
-    //console.log("optimizedData", optimizedData)
+
     if (optimizedData) {
         const data = JSON.parse(optimizedData);
-        //console.log('interviewScores: ', data)
         if (data) {
             updateMockInterviewAction(id, data, path)
         }

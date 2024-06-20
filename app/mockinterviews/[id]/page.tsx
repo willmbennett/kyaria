@@ -1,61 +1,116 @@
-import { checkSubscription } from "../../../lib/hooks/check-subscription";
-import { Message } from "ai";
-import { getMockInterview } from "../../../lib/mockinterview-db";
-import { InterviewScore, Recording } from "../../../models/MockInterview";
-import { redirect } from "next/navigation";
-import { MockInterviews } from "../../components/mockinterviews/MockInterviews";
+import { Message } from "ai"
+import { cache } from "react"
+import { getJobApp, getUserJobApps } from "../../../lib/app-db"
+import { getChat } from "../../../lib/chat-db"
+import { checkSubscription } from "../../../lib/hooks/check-subscription"
+import { createInterviewQuestions } from "../../apps/[id]/(pages)/mockinterview/_action"
+import { extractAppObjects, updateJobAppAction } from "../../apps/_action"
+import { getJobAppInterface, stripObojects } from "../../apps/app-helper"
+import { VideoChatContainer } from "../../components/chatbot/VideoChatContainer"
+import { deleteChatAction, handleChatCreation } from "../../eve/_action"
+import { redirect } from "next/navigation"
+import { AppClass } from "../../../models/Exports"
+import { JobClass } from "../../../models/Job"
+import { ActionItemType } from "../../board/job-helper"
+import { SideBarItem } from "../../helper"
+import { SidebarWrapper } from "../../components/sidebar/SidebarWrapper"
+import { createMockInterview, handleMockInterviewDeletion, loadApps, setupMockInterview } from "../_action"
+import { getMockInterviewSidebarItems } from "../helper"
+import { RestartButton } from "../components/RestartButton"
+import { InterviewTypeSelection } from "../components/InterviewTypeSelection"
 
-export default async function MockInterviewPage({ params }: { params: { id: string } }) {
-    const { userId, admin } = await checkSubscription()
-    //console.log({ userId, activeSubscription, admin })
 
-    if (!userId) {
-        redirect('/eve')
+const loadJob = cache((id: string) => {
+  return getJobApp(id)
+})
+
+export interface MockInterviewPageProps {
+  params: { id: string }
+}
+
+export default async function JobAppPage({ params }: MockInterviewPageProps) {
+  const { userId, activeSubscription, userName } = await checkSubscription(true)
+  const { app } = await loadJob(params.id) as getJobAppInterface
+  if (!app) redirect('/mockinterviews')
+  const { resume, job, jobAppId, chatId } = await extractAppObjects(app)
+  const { userResumeStripped, jobStripped } = stripObojects(resume, job)
+
+  let currentChatId: string;
+  let chat;
+
+  const createNewChat = async () => {
+    "use server"
+    const interviewdata = { userResume: userResumeStripped, jobPosition: jobStripped }
+    return await setupMockInterview(userId, jobAppId, interviewdata)
+  };
+
+  if (chatId) {
+    const { chat: currentChat } = await getChat(chatId);
+    if (currentChat) {
+      chat = currentChat;
+      currentChatId = chatId;
+    } else {
+      const newChatData = await createNewChat();
+      chat = newChatData.chat;
+      currentChatId = newChatData.chatId;
     }
+  } else {
+    const newChatData = await createNewChat();
+    chat = newChatData.chat;
+    currentChatId = newChatData.chatId;
+  }
 
-    const MockInterviewId = params.id
+  if (!chat) {
+    return <p>We're sorry we had an issue waking Eve up.</p>;
+  }
 
-    if (!MockInterviewId) {
-        return <p>Mock Interview not found</p>
-    }
+  const messages: Message[] = chat.messages
 
-    const { MockInterview } = await getMockInterview(MockInterviewId)
+  const initialMessage = {
+    message: `Hi! I'm ${userName}. Please welcome me, introduce yourself, and kick off this mock interview for this job position: ${jobStripped.jobTitle} at ${jobStripped.company}`,
+    functionCall: "startMockInterview"
+  }
 
-    if (!MockInterview) {
-        return <p>Mock Interview not found</p>
-    }
+  const handleGenerateQuestions = async () => {
+    "use server"
+    return createInterviewQuestions(jobStripped, userResumeStripped)
+  }
 
-    // Make recorded interviews private
-    if (MockInterview.userId != userId && !admin) redirect('/eve')
+  const jobTitle = `${jobStripped.jobTitle} - ${jobStripped.company}`
 
-    const messages: Message[] = MockInterview.messages || []
+  const filter = {
+    userId
+  }
 
-    const recordings: Recording[] = MockInterview.recordings || []
+  const { jobApps } = await loadApps(filter) as { jobApps: AppClass[] }
 
-    const questions: string[] = MockInterview.questions || []
-
-    const interviewScores: InterviewScore[] = MockInterview.interviewScores || []
+  const items = getMockInterviewSidebarItems(jobApps)
 
 
-    //console.log('At Eve, messages ', messages)
+  const RightElements = <RestartButton createNewChat={createNewChat} />
+  const LeftElements = <InterviewTypeSelection createNewChat={createNewChat} />
 
-    return (
-        <div className="w-full h-full sm:p-1 md:p-2 lg:p-3 xl:p-4 overflow-hidden">
-            <MockInterviews
-                id={MockInterview._id.toString()}
-                name={MockInterview.name}
-                questions={questions}
-                messages={messages}
-                recordings={recordings.map(r => ({ link: r.vercelLink, createdTimeStamp: r.createdAt }))}
-                interviewScores={interviewScores.map(v =>
-                ({
-                    question: v.question,
-                    score: v.score,
-                    explanation: v.explanation
-                })
-                )}
-            />
-        </div>
-
-    );
+  return (
+    <SidebarWrapper
+      userId={userId}
+      sideBarTitle={'Jobs'}
+      items={items}
+      createNew={createMockInterview}
+      newTitle={'New Mock Interview'}
+      deleteItemAction={handleMockInterviewDeletion}
+      rightElements={RightElements}
+      leftElements={LeftElements}
+    >
+      <VideoChatContainer
+        userId={userId}
+        chatId={chat._id.toString()}
+        initialMessage={initialMessage}
+        threadId={chat.threadId}
+        messages={messages}
+        activeSubscription={activeSubscription}
+        handleGenerateQuestions={handleGenerateQuestions}
+        jobTitle={jobTitle}
+      />
+    </SidebarWrapper>
+  );
 }

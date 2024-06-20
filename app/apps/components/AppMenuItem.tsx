@@ -23,7 +23,7 @@ export const AppMenuItem = ({
     const path = usePathname()
     const active = path.includes(section)
     const handleClick = () => {
-        router.push(`${baseRoute}/${section}${activeProgressSection ? `?progress=${activeProgressSection}` : ''}`, { scroll: false })
+        router.push(`${baseRoute}/${section}${activeProgressSection ? `?progress=${activeProgressSection}` : ''}`, { scroll: true })
     };
 
     const baseRoute = `/apps/${appId}`

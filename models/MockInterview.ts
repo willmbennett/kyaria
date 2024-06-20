@@ -29,7 +29,7 @@ class InterviewScore {
     public explanation: string;
 
     @prop()
-    public score: 0 | 1 | 2 | 3 | 4 | 5;
+    public score: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 }
 
 @ModelOptions({
@@ -64,6 +64,9 @@ class MockInterviewClass {
 
     @prop()
     public messages?: Message[];
+
+    @prop()
+    public feedback?: string;
 
     _id: mongoose.Types.ObjectId | string;
     createdAt: Date | string;
