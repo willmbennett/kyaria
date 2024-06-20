@@ -40,6 +40,15 @@ export async function POST(): Promise<NextResponse<any>> {
           quantity: 1,
         },
       ],
+      subscription_data: {
+        trial_settings: {
+          end_behavior: {
+            missing_payment_method: 'cancel',
+          },
+        },
+        trial_period_days: 7,
+      },
+      payment_method_collection: 'if_required',
       allow_promotion_codes: true,
       mode: 'subscription',
       return_url: `${process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'https://kyaria.ai/'}return?session_id={CHECKOUT_SESSION_ID}`,
