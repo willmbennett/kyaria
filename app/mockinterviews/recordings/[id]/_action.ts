@@ -143,7 +143,6 @@ export async function getFeedback(id: string, questions: string[], messages: Mes
 
     if (optimizedData) {
         const data = JSON.parse(optimizedData);
-        console.log(data)
         if (data) {
             updateMockInterviewAction(id, data, path)
         }
