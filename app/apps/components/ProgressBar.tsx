@@ -25,7 +25,7 @@ const ProgressBar = ({ activeProgressSection }: ProgressBarProps) => {
                         key={index}
                         onClick={updateProgress}
                     >
-                        <li className={`relative ${active ? 'text-blue-600 font-bold' : 'text-gray-400'}`}>
+                        <li className={`relative ${active ? 'font-bold' : 'text-purple-dark dark:text-white'}`}>
                             {p.label}
                         </li>
                     </button>

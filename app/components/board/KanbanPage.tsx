@@ -80,7 +80,7 @@ export default function KanbanPage({
             deleteItemAction={deleteItemAction}
             centerElements={centerElements()}
         >
-            <div className="relative w-full h-full overflow-hidden">
+            <div className="relative w-full h-full overflow-hidden bg-white dark:bg-vanilla">
                 <KanbanBoard
                     sensors={sensors}
                     handleDragEnd={handleDragEnd}

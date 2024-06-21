@@ -29,7 +29,7 @@ export default async function AppLayout({
 }) {
 
     return (
-        <section className="relative overflow-hidden bg-slate-100 pt-5 md:pt-10">
+        <section className="relative pt-5 md:pt-10 w-full h-full overflow-y-scroll">
             <Container>
                 <div className="flex flex-col items-center">
                     {children}

@@ -81,7 +81,7 @@ export const Answer = ({
 
     return (
         <div className="w-full flex flex-col gap-3 text-center justify-center">
-            <h2 className="text-2xl font-semibold leading-tight text-slate-900">Generate Your Answer</h2>
+            <h2 className="text-2xl font-semibold leading-tight">Generate Your Answer</h2>
             <ChatWithGPT
                 documentID={questionId}
                 message={message}

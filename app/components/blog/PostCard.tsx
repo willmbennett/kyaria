@@ -10,7 +10,7 @@ export default function BlogPostCard({ post }: { post: PostClass }) {
 
     return (
         <Link href={`/blog/${_id}`}>
-            <div className="text-left my-3 mx-2 border rounded-none bg-white shadow-sm hover:shadow-md transition-shadow duration-300">
+            <div className="text-left my-3 mx-2 border rounded-none bg-vanilla shadow-sm hover:shadow-md transition-shadow duration-300">
                 {featuredImage && (
                     <div
                         className="relative h-64  w-full overflow-hidden bg-cover"

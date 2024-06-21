@@ -74,7 +74,7 @@ export const VideoChatContainer = ({ userId, chatId, threadId, messages, activeS
     </div>
 
     return (
-        <div className={cn(`flex flex-col md:flex-row h-full  w-full justify-center text-center gap-4 sm:p-1 md:p-2 lg:p-3 xl:p-4 overflow-hidden`, interviewing && 'bg-slate-100')}>
+        <div className={cn(`flex flex-col md:flex-row h-full  w-full justify-center text-center gap-4 sm:p-1 md:p-2 lg:p-3 xl:p-4 overflow-hidden`, interviewing && 'bg-vanilla')}>
             <div className='flex flex-col w-full justify-end h-full gap-2'>
                 {interviewName && mockInterviewId && (
                     <div className='flex gap-4'>

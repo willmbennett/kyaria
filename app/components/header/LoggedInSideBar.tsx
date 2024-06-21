@@ -107,7 +107,7 @@ const MenuItem = (link: pageListType, pathname: string, sublink?: boolean) => (
     href={link.href}
     className={clsx(
       (pathname.startsWith(link.href) && link.href != '/')
-        ? 'bg-slate-100'
+        ? 'bg-purple-light'
         : 'text-slate-800 hover:bg-slate-700 hover:text-white',
       'block px-4 py-2 text-sm',
       sublink && 'pl-10'
@@ -132,7 +132,7 @@ export const DesktopMenu = (pageList: pageListType[], pathname: string, userName
             <p className="font-medium">{userName}</p>
             <MenuIcon open={open} />
           </Menu.Button>
-          <Menu.Items className="absolute right-0 bottom-full gap-2 z-50 w-full space-y-1 outline-none drop-shadow filter focus:outline-none bg-white border shadow-xl">
+          <Menu.Items className="absolute right-0 bottom-full bg-white dark:bg-purple-dark gap-2 z-50 w-full space-y-1 outline-none drop-shadow filter focus:outline-none border shadow-xl">
             {pageList.map((link: pageListType, i) => (
               MenuItem(link, pathname)
             ))}
@@ -164,8 +164,8 @@ export function LoggedInSideBar({ userId, userName }: { userId: string, userName
 
   return (
     <>
-      <aside className="hidden md:flex md:flex-none flex-col h-screen w-60 py-5 border-r">
-        <nav className="h-full flex flex-col justify-between gap-4">
+      <aside className="hidden md:flex md:flex-none flex-col h-screen w-60 py-3 border-r">
+        <nav className="h-full flex flex-col justify-between gap-3">
           {MenuItem(linkData.publicLinks.filter(l => l.href == '/')[0], pathname)}
           <Separator className="border-b" />
           <div className="flex flex-col h-full gap-4 justify-start" >

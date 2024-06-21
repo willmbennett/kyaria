@@ -1,10 +1,7 @@
-import { SidebarMobile } from '../components/sidebar/MobileSidebar';
-import { ItemHistory } from '../components/sidebar/ItemHistory';
 import { getResumes } from '../../lib/resume-db';
 import { checkSubscription } from '../../lib/hooks/check-subscription';
 import { ResumeClass } from '../../models/Resume';
 import { format } from 'date-fns';
-import { DesktopOpenSideBar } from '../components/sidebar/DesktopOpenSideBar';
 import { ActionItemType } from '../board/job-helper';
 import { deleteResumeAction } from './_action';
 import { SidebarWrapper } from '../components/sidebar/SidebarWrapper';

@@ -16,7 +16,7 @@ const QuestionnaireDescription = ({ questionnaire, userId, profileId }: { questi
     return (
       <>
         {questionnaire &&
-          <div className="bg-white shadow-sm p-6 rounded-lg space-y-6">
+          <div className="shadow-sm p-6 rounded-lg space-y-6">
             <ul className="list-disc pl-5 space-y-2">
               {questionnaire.desiredRole && (
                 <li><strong>Desired Role:</strong> {questionnaire.desiredRole}</li>

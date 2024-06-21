@@ -27,7 +27,7 @@ export const ResumeBuilder = (
     const [saveStatus, setSaveStatus] = useState<'saving' | 'up to date' | 'error'>('up to date');
 
     return (
-        <div className='w-full md:h-full flex flex-col md:flex-row sm:p-1 md:p-2 lg:p-3 xl:p-4'>
+        <div className='w-full md:h-full flex flex-col md:flex-row sm:p-1 md:p-2 lg:p-3 xl:p-4 dark:bg-vanilla'>
             <div className='flex flex-none flex-col w-full md:w-1/2 h-full overflow-hidden'>
                 {appId &&
                     <div className='pb-3'>

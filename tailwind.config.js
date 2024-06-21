@@ -14,6 +14,9 @@ export const variants = {
     display: ["group-hover"],
   },
 };
+
+export const darkMode = 'class';
+
 export const theme = {
   extend: {
     fontFamily: {
@@ -23,7 +26,7 @@ export const theme = {
       'dartmouth-green': '#00703C',
       'amber-50': '#FFF9EB',
       'amber-100': '#FEF6E1',
-      vanilla: '#FFFEF8',
+      'vanilla': '#FFFEF8',
       'purple-light': '#F3F2F5',
       'purple-dark': '#A59EB2',
       'gray-secondary': {
@@ -67,6 +70,12 @@ export const theme = {
         foreground: 'hsl(var(--card-foreground))'
       }
     },
+    borderColor: theme => ({
+      DEFAULT: 'hsl(var(--border))', // Set the default border color
+      light: 'hsl(265, 10%, 70%)', // Light mode border color
+      dark: 'hsl(210, 50%, 40%)', // Dark mode border color
+      ...theme('colors'), // Include other colors
+    }),
     fontSize: {
       md: '15px',
     },
