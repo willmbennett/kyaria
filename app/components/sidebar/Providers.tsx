@@ -8,10 +8,13 @@ import { TooltipProvider } from '../ui/tooltip'
 
 export function Providers({ children, ...props }: ThemeProviderProps) {
     return (
-        <ThemeProvider attribute="class">
-            <SidebarProvider>
-                <TooltipProvider>{children}</TooltipProvider>
-            </SidebarProvider>
-        </ThemeProvider>
+        <>
+            {/* @ts-ignore */}
+            <ThemeProvider attribute="class">
+                <SidebarProvider>
+                    <TooltipProvider>{children}</TooltipProvider>
+                </SidebarProvider>
+            </ThemeProvider>
+        </>
     )
 }
