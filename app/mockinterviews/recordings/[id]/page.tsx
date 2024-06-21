@@ -38,6 +38,8 @@ export default async function MockInterviewPage({ params }: { params: { id: stri
 
     const feedback = MockInterview.feedback
 
+    const mockInterviewDate = MockInterview.createdAt.toString()
+
 
     //console.log('At Eve, messages ', messages)
 
@@ -48,6 +50,7 @@ export default async function MockInterviewPage({ params }: { params: { id: stri
             questions={questions}
             messages={messages}
             recordings={recordings.map(r => ({ link: r.vercelLink, createdTimeStamp: r.createdAt }))}
+            mockInterviewDate={mockInterviewDate}
             interviewScores={interviewScores.map(v =>
             ({
                 question: v.question,
