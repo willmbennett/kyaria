@@ -28,7 +28,7 @@ export const SortableFormSection = ({ id, sortable = true, children }: ListInput
     return (
         <div
             style={style}
-            className={`rounded-xl px-3 w-full hover:shadow-lg hover:bg-slate-100 transition-all duration-200 ease-in-out ${isDragging ? 'shadow-lg bg-slate-100' : ''}`}
+            className={`rounded-xl px-3 w-full hover:shadow-lg hover:bg-purple-dark transition-all duration-200 ease-in-out ${isDragging ? 'shadow-lg bg-purple-dark' : ''}`}
         >
             <div
                 ref={setNodeRef}
@@ -41,7 +41,7 @@ export const SortableFormSection = ({ id, sortable = true, children }: ListInput
                 </h2>
                 <button
                     type="button"
-                    className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-200 bg-transparent rounded-md p-2 transition-colors duration-150 ease-in-out"
+                    className="text-sm font-medium text-slate-600 hover:text-gray-800 hover:text-slate-200 bg-transparent rounded-md p-2 transition-colors duration-150 ease-in-out"
                     onClick={() => setShowComponent(!showComponent)}
                 >
                     {showComponent ? 'Hide' : 'Edit'}

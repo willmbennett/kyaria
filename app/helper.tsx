@@ -22,7 +22,6 @@ export type pageListType = {
 
 export const linkData = {
     publicLinks: [
-        { label: 'Home', href: '/' },
         { label: 'About', href: '/about' },
         { label: 'Pricing', href: '/pricing' },
         { label: 'Blog', href: '/blog' },

@@ -1,11 +1,7 @@
 import type { Metadata, ResolvingMetadata } from 'next'
-import Script from 'next/script';
-import { Suspense } from 'react'
 import { getPost } from '../../../lib/post-db'
 import { PostClass } from '../../../models/Post';
 import Post from '../../components/blog/Post';
-import Await from '../../jobs/await';
-import Skeleton from './skeleton';
 
 
 export async function generateMetadata(
@@ -48,19 +44,10 @@ export async function generateMetadata(
 export default async function Posts({ params }: { params: { id: string } }) {
     // read route params
     const id = params.id
-    const postPromise = getPost(id);
+    const { post } = await getPost(id) as { post: PostClass }
 
     return (
-        <>
-            <Suspense fallback={<Skeleton />}>
-                {/* @ts-expect-error Server Component */}
-                <Await promise={postPromise}>
-                    {({ post }: { post: PostClass }) => (
-                        <Post post={post} />
-                    )}
-                </Await>
-            </Suspense>
-        </>
+        <Post post={post} />
     );
 }
 

@@ -1,8 +1,4 @@
 import { getPosts } from '../../lib/post-db';
-import { PostClass } from '../../models/Post';
-import { Suspense } from 'react'
-import Await from '../jobs/await';
-import Skeleton from './skeleton';
 import PostList from '../components/blog/PostList';
 import { checkSubscription } from '../../lib/hooks/check-subscription';
 import { Button } from '../components/Button';
@@ -17,7 +13,7 @@ const userIdList = [
 ]
 
 export default async function Posts() {
-    const postPromise = getPosts();
+    const { posts } = await getPosts();
     const { userId } = await checkSubscription()
 
     return (
@@ -27,14 +23,7 @@ export default async function Posts() {
             <p className="mb-4 text-base md:text-lg">We started back in August 2023 and haven't stopped pushing boundaries. Our tools? Things like a resume builder that's smarter than those pesky tracking systems and a job board that makes your search a visual breeze. Our blog? It's all about giving you the newest tips, trends, and hands-on advice to grow your career. From nailing practice interviews to writing networking emails that get responses, we've got you covered. Plus, you'll get sneak peeks at our latest features and beta tests. Come along for the ride as we dive into the cool world of AI and career progress!</p>
             {userIdList.includes(userId) && <Button href='/blog/new'>New Post</Button>}
             <ul>
-                <Suspense fallback={<Skeleton />}>
-                    {/* @ts-expect-error Server Component */}
-                    <Await promise={postPromise}>
-                        {({ posts }: { posts: PostClass[] }) => (
-                            <>{posts && posts.length > 0 && <PostList posts={posts} />}</>
-                        )}
-                    </Await>
-                </Suspense>
+                <>{posts && posts.length > 0 && <PostList posts={posts} />}</>
             </ul>
         </>
     );

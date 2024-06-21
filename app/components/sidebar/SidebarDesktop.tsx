@@ -20,7 +20,7 @@ export const TopMenuDesktop = ({ ...props }: SidebarDesktopProps) => {
     const { items, createNew, newTitle, sideBarTitle, deleteItemAction, centerElements, leftElements, rightElements } = props
 
     return (
-        <div className="hidden md:block absolute top-0 right-0 w-full py-2 border-b bg-white z-30">
+        <div className="hidden md:block absolute top-0 right-0 w-full py-2 border-b z-30 dark:bg-purple-dark">
             <div className="flex justify-between items-center px-2">
                 <div className="flex justify-between items-center gap-2 ">
                     {items && <DesktopTopMenuSelection items={items} sideBarTitle={sideBarTitle} />}

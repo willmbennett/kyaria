@@ -7,7 +7,7 @@ import AuthButton from '../AuthButton'
 
 export default function CallToAction() {
   return (
-    <section className="overflow-hidden bg-white py-20 md:py-28 lg:py-32">
+    <section className="overflow-hidden py-20 md:py-28 lg:py-32">
       <Container className="relative items-center md:grid md:grid-cols-12 md:gap-12">
         <div className="mx-auto max-w-lg md:col-span-6 md:mx-0 lg:pr-12">
           <h2 className="text-center text-4xl font-semibold leading-tight text-slate-900 sm:text-5xl sm:leading-tight md:text-left">

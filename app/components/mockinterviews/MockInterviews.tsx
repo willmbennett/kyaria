@@ -117,7 +117,7 @@ export const MockInterviews = ({ id, name, questions, messages, recordings, inte
 
 
     return (
-        <div className="flex w-full h-full justify-between gap-4 p-4">
+        <div className="flex w-full h-full justify-between gap-4 p-4 dark:bg-vanilla">
             <div className="flex flex-col w-full h-full">
                 <div className="flex h-full gap-4">
                     <div className="flex flex-col items-center justify-center h-full gap-4">
@@ -128,7 +128,7 @@ export const MockInterviews = ({ id, name, questions, messages, recordings, inte
                             {feedback && <p className='text-slate-800 text-md'>{feedback}</p>}
                         </div>
                         <div className="flex flex-col border w-96 rounded-xl overflow-y-scroll h-full max-h-96">
-                            <h3 className="text-xl font-semibold bg-white w-full py-3 text-center">Questions</h3>
+                            <h3 className="text-xl font-semibold bg-white dark:bg-vanilla w-full py-3 text-center">Questions</h3>
                             <div className="flex flex-col p-1 md:p-2 lg:p-3">
                                 {questions.map((q, i) => {
                                     const handleQuestionClick = () => {
@@ -142,7 +142,7 @@ export const MockInterviews = ({ id, name, questions, messages, recordings, inte
                                         }
                                     };
                                     return (
-                                        <button onClick={handleQuestionClick} key={i} className={cn("py-4 border-b text-sm", currentQuestion == i && 'bg-slate-100')}>{q}</button>
+                                        <button onClick={handleQuestionClick} key={i} className={cn("py-4 border-b text-sm", currentQuestion == i && 'bg-purple-dark')}>{q}</button>
                                     );
                                 })}
                             </div>

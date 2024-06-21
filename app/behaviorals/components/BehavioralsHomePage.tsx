@@ -48,10 +48,10 @@ export const BehavioralsHomePage = ({ userId, questionOptions, currentQuestions 
                     </div>
                 ) : (
                     <>
-                        <h2 className="text-lg font-semibold leading-tight text-slate-900">
+                        <h2 className="text-lg font-semibold leading-tight">
                             Select a question:
                         </h2>
-                        <ul className='flex flex-col h-96 overflow-y-scroll p-2 bg-slate-100 border rounded-xl gap-2'>
+                        <ul className='flex flex-col h-96 overflow-y-scroll p-2 bg-vanilla border rounded-xl gap-2'>
                             {filteredOptions.map((option, index) => (
                                 <li
                                     key={index}

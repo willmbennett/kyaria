@@ -34,52 +34,54 @@ export default function KanbanColumn(
         setShowInactive(!showInactive);
     };
 
-    const columnStyle = isOver ? "border-blue-500 bg-blue-100" : "border-gray-300 bg-white";
+    const columnStyle = isOver ? "border-purple-light bg-purple-light" : "border-purple-light bg-white dark:bg-vanilla";
     const transitionItems = isOver ? 'hidden' : 'flex flex-col'
 
     return (
         <div key={index} id={`kanban-column-${index}`} className='flex h-full'>
             <div
                 ref={setNodeRef}
-                className={`relative h-full w-80 overflow-y-scroll ${columnStyle}`}
+                className={`flex flex-col h-full w-80 ${columnStyle}`}
             >
-                <div className='w-full bg-white pb-2 sticky top-0 text-center pt-4 z-10 shadow-sm'>
+                <div className='w-full pb-2 text-center pt-4 z-10'>
                     <h5 className="font-small leading-tight">{state}</h5>
                 </div>
-                <div className={`flex w-full flex-col gap-4 p-1 items-center ${transitionItems}`}>
-                    <KanbanItemList
-                        apps={activeApps}
-                        updateAppState={updateAppState}
-                        state={state}
-                        boards={boards}
-                        removeApp={removeApp}
-                    />
-                    {inActiveApps.length > 0 &&
-                        <div className='text-center w-full'>
-                            <h5 className="text-xl font-medium leading-tight py-2">
-                                Inactive Apps
-                            </h5>
-                            <button
-                                className='inline-flex mb-2 w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50'
-                                onClick={toggleInactive}
-                            > Show Inactive
-                                <svg className="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                    <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
-                                </svg>
-                            </button>
-                            {showInactive &&
-                                <KanbanItemList
-                                    apps={inActiveApps}
-                                    updateAppState={updateAppState}
-                                    state={state}
-                                    boards={boards}
-                                    removeApp={removeApp}
-                                />}
-                        </div>
-                    }
+                <div className='flex-grow h-full overflow-y-scroll'>
+                    <div className={`flex w-full flex-col gap-4 p-1 items-center ${transitionItems}`}>
+                        <KanbanItemList
+                            apps={activeApps}
+                            updateAppState={updateAppState}
+                            state={state}
+                            boards={boards}
+                            removeApp={removeApp}
+                        />
+                        {inActiveApps.length > 0 &&
+                            <div className='text-center w-full'>
+                                <h5 className="text-xl font-medium leading-tight py-2">
+                                    Inactive Apps
+                                </h5>
+                                <button
+                                    className='inline-flex mb-2 w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50'
+                                    onClick={toggleInactive}
+                                > Show Inactive
+                                    <svg className="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
+                                    </svg>
+                                </button>
+                                {showInactive &&
+                                    <KanbanItemList
+                                        apps={inActiveApps}
+                                        updateAppState={updateAppState}
+                                        state={state}
+                                        boards={boards}
+                                        removeApp={removeApp}
+                                    />}
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
-            {index < jobStates.length - 1 && <div className="mt-24 h-full w-1 bg-slate-100 mx-4 shadow-xl"></div>}
+            {index < jobStates.length - 1 && <div className="h-full w-1 bg-slate-100 dark:bg-purple-light mx-4 shadow-xl"></div>}
         </div>
     );
 }

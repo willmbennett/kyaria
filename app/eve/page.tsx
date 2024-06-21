@@ -52,11 +52,7 @@ export default async function ChatBotHomePage() {
                         </ul>
                     </div>
                     <div className="flex flex-col gap-2 justify-center items-center">
-                        <p className="ml-3 text-slate-700 lg:ml-4 xl:ml-5 xl:text-lg">Just feel like chatting...</p>
-                        <div>
-                            <Button href="/mockinterviews" size="md" onClick={createChat} >New Chat</Button>
-                        </div>
-                        <p className="ml-3 text-slate-700 lg:ml-4 xl:ml-5 xl:text-lg">...or want to do a mock interview for one of your job applications?</p>
+                        <p className="ml-3 text-slate-700 lg:ml-4 xl:ml-5 xl:text-lg">Want to do a mock interview for one of your job applications?</p>
                         <div>
                             <Button href="/mockinterviews" size="md" variant="secondary" >Do a mock interview</Button>
                         </div>

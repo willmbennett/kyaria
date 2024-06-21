@@ -7,7 +7,7 @@ import AuthButton from '../AuthButton'
 
 export default function FeatureBlocks() {
   return (
-    <section className="relative overflow-hidden bg-white pb-20 pt-32 lg:pb-28 lg:pt-24">
+    <section className="relative overflow-hidden pb-20 pt-32 lg:pb-28 lg:pt-24">
       <Container>
         <div className="relative mx-auto w-full max-w-lg sm:max-w-xl lg:mx-0 lg:max-w-none">
           <div className="left-0 top-1/2 z-10 w-full lg:absolute lg:w-1/2 lg:-translate-y-1/2">

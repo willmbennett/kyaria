@@ -92,8 +92,8 @@ export const OrganizationsHeader = () => {
           <div className="w-full flex-1 bg-vanilla" />
           <div className="flex-1 bg-vanilla" />
         </div>
-        <Container className='flex w-full justify-center'>
-          <div className="calendly-inline-widget w-full h-[700px] min-h-screen" data-url="https://calendly.com/d/cp5t-w34-rcm/kyaria-ai-product-demo?primary_color=064155"></div>
+        <Container className='flex justify-center'>
+          <div className="calendly-inline-widget w-full h-[700px]" data-url="https://calendly.com/d/cp5t-w34-rcm/kyaria-ai-product-demo?primary_color=064155"></div>
           <Script
             src="https://assets.calendly.com/assets/external/widget.js"
           ></Script>

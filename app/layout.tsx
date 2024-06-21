@@ -10,6 +10,7 @@ import { Header } from './components/header/Header';
 import { Providers } from './components/sidebar/Providers';
 import 'regenerator-runtime/runtime'
 import { LoggedInSideBar } from './components/header/LoggedInSideBar';
+import { DarkModeToggle } from './components/DarkModeToggle';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
@@ -42,8 +43,8 @@ export default async function RootLayout({
   const { userId, userName, email } = await checkSubscription()
 
   return (
-    <html lang="en" className='bg-white' suppressHydrationWarning>
-      <body className={clsx('min-h-screen font-sans', inter.variable, userId && 'h-screen w-screen relative md:flex md:overflow-hidden')}>
+    <html lang="en" suppressHydrationWarning>
+      <body>
         {/*<Script
           id="ze-snippet"
           src="https://static.zdassets.com/ekr/snippet.js?key=135d1136-b2c1-4d54-8610-58a0b79632da"
@@ -100,9 +101,12 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {userId ? <LoggedInSideBar userId={userId} userName={userName} /> : <Header />}
-          {userId ? <div className='md:flex overflow-hidden w-full h-full'>{children}</div> : children}
-          {!userId && <Footer userId={userId} userName={userName} email={email} />}
+          <div className={clsx('min-h-screen font-sans dark:bg-purple-dark text-slate-700 dark:text-slate-900', inter.variable, userId && 'h-screen w-screen relative md:flex md:overflow-hidden')}>
+            {userId ? <LoggedInSideBar userId={userId} userName={userName} /> : <Header />}
+            < DarkModeToggle />
+            {userId ? <div className='md:flex overflow-hidden w-full h-full'>{children}</div> : children}
+            {!userId && <Footer userId={userId} userName={userName} email={email} />}
+          </div>
         </Providers>
         <SpeedInsights />
       </body>

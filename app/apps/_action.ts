@@ -91,7 +91,12 @@ export const extractAppObjects = async (app: AppClass) => {
 
         // use the server action that finds or creates a profile for them
         const { profile: FoundProfile } = await useGetOrCreateProfile(app.userId);
-        if (FoundProfile) profileId = FoundProfile._id.toString()
+
+        if (FoundProfile) {
+            profileId = FoundProfile._id.toString()
+            profile = FoundProfile
+            updateJobAppAction(jobAppId, { profile: profileId })
+        }
         else {
             // If for some reason it's still failing fail gracefully and sent them  to their board
             profileId = ''

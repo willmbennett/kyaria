@@ -22,7 +22,7 @@ export const DropdownItem = forwardRef<HTMLButtonElement, DropdownItemProps>(({ 
             ref={ref}
             key={id}
             onClick={selectOption}
-            className={`flex-grow text-gray-700 w-full block px-4 py-2 max-w-80 text-sm ${id === activeOptionId ? ACTIVE_ROUTE : INACTIVE_ROUTE}`}
+            className={`flex-grow text-gray-700 w-full block px-4 py-2 max-w-72 text-sm ${id === activeOptionId ? ACTIVE_ROUTE : INACTIVE_ROUTE}`}
         >
             {label}
         </button>

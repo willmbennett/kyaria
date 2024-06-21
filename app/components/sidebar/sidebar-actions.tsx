@@ -59,11 +59,12 @@ export function SidebarActions({
                     <TooltipTrigger asChild>
                         <Button
                             variant="ghost"
-                            className="size-7 p-0 hover:bg-background"
+                            size="lg"
+                            className="hover:bg-background hover:dark:text-white hover:text-slate-800"
                             disabled={isRemovePending}
                             onClick={() => setDeleteDialogOpen(true)}
                         >
-                            <IconTrash />
+                            <IconTrash className='size-7 ' />
                             <span className="sr-only">Delete</span>
                         </Button>
                     </TooltipTrigger>
@@ -99,7 +100,7 @@ export function SidebarActions({
                                 startRemoveTransition(async () => {
                                     let url;
                                     let error;
-                                
+
                                     if ('itemUrl' in item && item.itemUrl !== undefined) {
                                         ({ url, error } = await removeItem(item.id, item.href, item.itemUrl));
                                     } else {
