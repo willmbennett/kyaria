@@ -23,7 +23,7 @@ const GradingVisual: React.FC<GradingVisualProps> = ({ overallScore }) => {
         <div className="grading-visual-container">
             <div className="circular-progress flex flex-col justify-center items-center">
                 <div className='flex items-center justify-center gap-2'>
-                    <p className="overall-score-label">{isGrading ? 'Grading' : 'Overall Score'} </p>
+                    <p className="overall-score-label mb-4">{isGrading ? 'Grading' : 'Overall Score'} </p>
                     {isGrading && <IconSpinner />}
                 </div>
                 <CircularProgressbar

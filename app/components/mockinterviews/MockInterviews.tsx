@@ -9,11 +9,13 @@ import { getFeedback } from '../../mockinterviews/recordings/[id]/_action';
 import { usePathname, useRouter } from 'next/navigation';
 import GradingVisual from './GradingVisual';
 import { AnimatePresence, motion } from 'framer-motion';
+import { HoverCardComponent } from './HoverCardComponent';
 
 interface MockInterviewsProps {
     id: string;
     name: string;
     questions: string[];
+    mockInterviewDate: string;
     messages: Message[];
     recordings: { link: string | undefined; createdTimeStamp: string | undefined; }[];
     interviewScores: {
@@ -24,7 +26,7 @@ interface MockInterviewsProps {
     feedback?: string;
 }
 
-export const MockInterviews = ({ id, name, questions, messages, recordings, interviewScores, feedback }: MockInterviewsProps) => {
+export const MockInterviews = ({ id, name, questions, messages, recordings, interviewScores, feedback, mockInterviewDate }: MockInterviewsProps) => {
     const path = usePathname()
     const router = useRouter()
     const numRecordings = recordings.length
@@ -115,7 +117,6 @@ export const MockInterviews = ({ id, name, questions, messages, recordings, inte
 
     const overallScore = Math.round(interviewScores.reduce((acc, curr) => acc + curr.score, 0) / interviewScores.length * 10) / 10;
 
-
     return (
         <div className="flex w-full h-full justify-between gap-4 p-4 dark:bg-vanilla">
             <div className="flex flex-col w-full h-full">
@@ -124,6 +125,15 @@ export const MockInterviews = ({ id, name, questions, messages, recordings, inte
                         <div className="w-96 flex flex-col rounded-xl border p-1 md:p-2 lg:p-3 items-center justify-center gap-4">
                             <div className='w-32'>
                                 <GradingVisual overallScore={overallScore} />
+                            </div>
+                            <div className='flex w-full justify-center gap-2 items-center'>
+                                <p className='text-slate-800 text-md'>Share your results! </p>
+                                <HoverCardComponent
+                                    interviewName={name}
+                                    overallScore={overallScore}
+                                    feedback={feedback ? feedback : ''}
+                                    mockInterviewDate={mockInterviewDate}
+                                />
                             </div>
                             {feedback && <p className='text-slate-800 text-md'>{feedback}</p>}
                         </div>
