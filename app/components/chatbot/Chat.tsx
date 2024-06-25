@@ -40,7 +40,7 @@ export function Chat({ messages, messageId, handleMessageClick, loading = false 
     return (
         <AnimatePresence>
             <motion.div
-                className="group h-full w-96"
+                className="group h-full w-40 md:w-64 xl:w-96"
                 ref={scrollRef}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

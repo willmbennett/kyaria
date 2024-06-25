@@ -45,7 +45,7 @@ export const Controls = ({
     finishedPlaying
 }: ControlsProps) => {
     return (
-        <div className="flex flex-col items-center space-y-2 w-full">
+        <div className="flex flex-col items-center space-y-2 w-full px-5">
             <div className="flex items-center w-full space-x-2">
                 <Slider
                     min={0}
