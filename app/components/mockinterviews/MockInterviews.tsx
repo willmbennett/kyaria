@@ -35,7 +35,6 @@ export const MockInterviews = ({ id, name, questions, messages, recordings, inte
     const defaultMessage = numMessages > 0 ? messages.filter(m => m.role == 'assistant')[0] : null;
     const [currentVideo, setCurrentVideo] = useState(defaultVideo)
     const [currentMessage, setCurrentMessage] = useState(defaultMessage)
-    const [currentGrading, setCurrentGrading] = useState(interviewScores[0])
 
     const questionMessageIndices = questions.map(q => {
         const foundMessage = messages.find(m => m.content.includes(q));
@@ -96,15 +95,6 @@ export const MockInterviews = ({ id, name, questions, messages, recordings, inte
         }
     }, [currentMessage, questionMessageIndices]);
 
-    useEffect(() => {
-
-        const grading = interviewScores.find(s => s.question == questions[currentQuestion])
-        if (grading) {
-            setCurrentGrading(grading)
-        }
-
-    }, [currentQuestion, interviewScores]);
-
 
     const handleGrading = async () => {
         await getFeedback(id, questions, messages, path)
@@ -119,46 +109,24 @@ export const MockInterviews = ({ id, name, questions, messages, recordings, inte
 
     return (
         <div className="flex w-full h-full justify-between gap-4 p-4 dark:bg-vanilla">
-            <div className="flex flex-col w-full h-full">
-                <div className="flex h-full gap-4">
-                    <div className="flex flex-col items-center justify-center h-full gap-4">
-                        <div className="w-96 flex flex-col rounded-xl border p-1 md:p-2 lg:p-3 items-center justify-center gap-4">
-                            <div className='w-32'>
-                                <GradingVisual overallScore={overallScore} />
-                            </div>
-                            <div className='flex w-full justify-center gap-2 items-center'>
-                                <p className='text-slate-800 text-md'>Share your results! </p>
-                                <HoverCardComponent
-                                    interviewName={name}
-                                    overallScore={overallScore}
-                                    feedback={feedback ? feedback : ''}
-                                    mockInterviewDate={mockInterviewDate}
-                                />
-                            </div>
-                            {feedback && <p className='text-slate-800 text-md'>{feedback}</p>}
+            <div className="flex flex-col h-full w-full gap-4">
+                <div className='flex w-full gap-2 md:gap-4 h-2/3'>
+                    <div className="w-96 h-full flex flex-col rounded-xl border p-1 md:p-2 lg:p-3 items-center justify-center gap-4">
+                        <div className='w-32'>
+                            <GradingVisual overallScore={overallScore} />
                         </div>
-                        <div className="flex flex-col border w-96 rounded-xl overflow-y-scroll h-full max-h-96">
-                            <h3 className="text-xl font-semibold bg-white dark:bg-vanilla w-full py-3 text-center">Questions</h3>
-                            <div className="flex flex-col p-1 md:p-2 lg:p-3">
-                                {questions.map((q, i) => {
-                                    const handleQuestionClick = () => {
-                                        const foundMessage = messages.find(m => m.content.includes(q));
-                                        if (foundMessage) {
-                                            setCurrentMessage(foundMessage);
-                                        }
-                                        const foundVideo = recordings.find(r => (r.createdTimeStamp && foundMessage?.createdAt) && new Date(r.createdTimeStamp) > foundMessage?.createdAt);
-                                        if (foundVideo) {
-                                            setCurrentVideo(foundVideo);
-                                        }
-                                    };
-                                    return (
-                                        <button onClick={handleQuestionClick} key={i} className={cn("py-4 border-b text-sm", currentQuestion == i && 'bg-purple-dark')}>{q}</button>
-                                    );
-                                })}
-                            </div>
+                        <div className='flex w-full justify-center gap-2 items-center'>
+                            <p className='text-slate-800 text-md'>Share your results! </p>
+                            <HoverCardComponent
+                                interviewName={name}
+                                overallScore={overallScore}
+                                feedback={feedback ? feedback : ''}
+                                mockInterviewDate={mockInterviewDate}
+                            />
                         </div>
+                        {feedback && <p className='text-slate-800 text-sm'>{feedback}</p>}
                     </div>
-                    <div className="w-full h-full flex flex-col justify-start items-center">
+                    <div className="w-full h-full flex justify-center items-center overflow-hidden">
                         <AnimatePresence mode='wait'>
                             {currentVideo && (
                                 <motion.div
@@ -167,19 +135,51 @@ export const MockInterviews = ({ id, name, questions, messages, recordings, inte
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
                                     transition={{ duration: 0.5 }}
-                                    className="w-full h-full flex flex-col justify-start items-center"
+                                    className="w-full h-full flex flex-col justify-center items-center"
                                 >
                                     <VideoPlayer currentVideo={currentVideo.link || ''} goToNext={goToNext} />
-                                    {currentGrading && <InterviewGrades score={currentGrading} />}
                                 </motion.div>
                             )}
                         </AnimatePresence>
                     </div>
                 </div>
+                <div className="flex flex-col border rounded-xl overflow-y-scroll w-full h-1/3 bg-white dark:bg-vanilla p-2">
+                    <table className="table-auto">
+                        <thead>
+                            <tr>
+                                <th>Question</th>
+                                <th>Explanation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {interviewScores.map((q, i) => {
+                                const { question, explanation } = q
+                                const handleQuestionClick = () => {
+                                    const foundMessage = messages.find(m => m.content.includes(question));
+                                    if (foundMessage) {
+                                        setCurrentMessage(foundMessage);
+                                    }
+                                    const foundVideo = recordings.find(r => (r.createdTimeStamp && foundMessage?.createdAt) && new Date(r.createdTimeStamp) > foundMessage?.createdAt);
+                                    if (foundVideo) {
+                                        setCurrentVideo(foundVideo);
+                                    }
+                                };
+                                return (
+                                    <tr key={i} onClick={handleQuestionClick} className={cn("text-sm border-b border-slate-200", currentQuestion == i && 'bg-purple-dark')}>
+                                        <td className={cn("py-2 px-3 text-start bg-purple-light", currentQuestion == i && 'bg-purple-dark')}>
+                                            <p>{question}</p>
+                                        </td>
+                                        <td className='py-2 px-3'>
+                                            <p>{explanation}</p>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div className="w-96">
-                <Chat messages={messages} messageId={currentMessage?.id} handleMessageClick={handleMessageClick} />
-            </div>
+            <Chat messages={messages} messageId={currentMessage?.id} handleMessageClick={handleMessageClick} />
         </div>
     );
 };

@@ -93,38 +93,42 @@ export const VideoPlayer = ({ currentVideo, goToNext }: VideoPlayerProps) => {
     const formattedDuration = formatTime(duration);
 
     return (
-        <div className="flex flex-col w-full items-center max-w-4xl">
-            <ReactPlayer
-                ref={playerRef}
-                className="aspect-square md:aspect-auto shadow-lg"
-                url={currentVideo}
-                playing={playing}
-                volume={volume}
-                muted={muted}
-                onProgress={progressHandler}
-                onDuration={durationHandler}
-                width="100%"
-                height="100%"
-                controls={false}
-            />
-            <Controls
-                playing={playing}
-                onPlayPause={playPauseHandler}
-                onRewind={rewindHandler}
-                onForward={fastForwardHandler}
-                volume={volume}
-                muted={muted}
-                onVolumeChange={volumeChangeHandler}
-                onVolumeSeekUp={volumeSeekUpHandler}
-                onMute={muteHandler}
-                played={played}
-                onSeek={seekHandler}
-                onSeekMouseUp={seekMouseUpHandler}
-                duration={duration}
-                formattedDuration={formattedDuration}
-                currentTime={currentTime}
-                finishedPlaying={finishedPlaying}
-            />
+        <div className="flex flex-col items-center max-w-4xl">
+            <div className='flex max-h-96 overflow-hidden'>
+                <ReactPlayer
+                    ref={playerRef}
+                    className="aspect-square md:aspect-auto shadow-lg"
+                    url={currentVideo}
+                    playing={playing}
+                    volume={volume}
+                    muted={muted}
+                    onProgress={progressHandler}
+                    onDuration={durationHandler}
+                    width="100%"
+                    height="100%"
+                    controls={false}
+                />
+            </div>
+            <div className='flex w-full'>
+                <Controls
+                    playing={playing}
+                    onPlayPause={playPauseHandler}
+                    onRewind={rewindHandler}
+                    onForward={fastForwardHandler}
+                    volume={volume}
+                    muted={muted}
+                    onVolumeChange={volumeChangeHandler}
+                    onVolumeSeekUp={volumeSeekUpHandler}
+                    onMute={muteHandler}
+                    played={played}
+                    onSeek={seekHandler}
+                    onSeekMouseUp={seekMouseUpHandler}
+                    duration={duration}
+                    formattedDuration={formattedDuration}
+                    currentTime={currentTime}
+                    finishedPlaying={finishedPlaying}
+                />
+            </div>
         </div>
     );
 };
