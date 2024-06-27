@@ -148,12 +148,13 @@ export const MockInterviews = ({ id, name, questions, messages, recordings, inte
                         <thead>
                             <tr>
                                 <th>Question</th>
+                                <th>Score</th>
                                 <th>Explanation</th>
                             </tr>
                         </thead>
                         <tbody>
                             {interviewScores.map((q, i) => {
-                                const { question, explanation } = q
+                                const { question, explanation, score } = q
                                 const handleQuestionClick = () => {
                                     const foundMessage = messages.find(m => m.content.includes(question));
                                     if (foundMessage) {
@@ -168,6 +169,9 @@ export const MockInterviews = ({ id, name, questions, messages, recordings, inte
                                     <tr key={i} onClick={handleQuestionClick} className={cn("text-sm border-b border-slate-200", currentQuestion == i && 'bg-purple-dark')}>
                                         <td className={cn("py-2 px-3 text-start bg-purple-light", currentQuestion == i && 'bg-purple-dark')}>
                                             <p>{question}</p>
+                                        </td>
+                                        <td className='py-2 px-5 font-bold border-x'>
+                                            <p>{score}</p>
                                         </td>
                                         <td className='py-2 px-3'>
                                             <p>{explanation}</p>
