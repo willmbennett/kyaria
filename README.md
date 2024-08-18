@@ -1,7 +1,12 @@
-# [Career Launcher](https://career-launcher-ai-k8og.vercel.app/)
+# [Kyaria.ai](https://www.kyaria.ai/)
+This project is being shut down because I don't have the time to maintain it and it was getting a bit expensive.
 
-This project helps you apply for jobs and prepare for job interviews
+What is currently active:
+- Resume Builder
+- LinkedIn Bio writing
+- Elevator Pitch writing
+- Behavioral interview question prep
 
-## How it works
-
-This project uses the [ChatGPT API](https://openai.com/api/) and the [Vercel AI SDK](https://sdk.vercel.ai/docs) with streaming. It takes the user's profile and a provided job descriptions and builds out resumes, cover letters, question answers, etc.
+What is not currently active:
+- Job board manager, this was using a service called Diffbot to scrape job posts. This could be brought back online if I build a chrome plugin or scraper
+- Virtual career coach, this was using a service called D-ID to do avatar video streaming. This could be brought online if it was switched to just using voice.

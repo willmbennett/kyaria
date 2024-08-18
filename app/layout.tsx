@@ -11,6 +11,7 @@ import { Providers } from './components/sidebar/Providers';
 import 'regenerator-runtime/runtime'
 import { LoggedInSideBar } from './components/header/LoggedInSideBar';
 import { DarkModeToggle } from './components/DarkModeToggle';
+import { Announcement } from './components/landingpage/Announcement';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
@@ -102,7 +103,13 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <div className={clsx('min-h-screen font-sans dark:bg-purple-dark text-slate-700 dark:text-slate-900', inter.variable, userId && 'h-screen w-screen relative md:flex md:overflow-hidden')}>
-            {userId ? <LoggedInSideBar userId={userId} userName={userName} /> : <Header />}
+            {userId ? <LoggedInSideBar userId={userId} userName={userName} /> :
+              (
+                <>
+                  <Header />
+                  <Announcement />
+                </>)
+            }
             < DarkModeToggle />
             {userId ? <div className='md:flex overflow-hidden w-full h-full'>{children}</div> : children}
             {!userId && <Footer userId={userId} userName={userName} email={email} />}
