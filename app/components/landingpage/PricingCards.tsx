@@ -236,7 +236,7 @@ export function PricingCards({ activeSubscription, userId }: { activeSubscriptio
         </>
       }
       {
-        checkout &&
+        false &&
         <div className="bg-vanilla my-3">
           <div className="flex justify-center my-3">
             <Button onClick={() => setCheckout(false)}>
